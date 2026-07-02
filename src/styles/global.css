@@ -1,1 +1,218 @@
-@import "tailwindcss";
+/* ------------------------------------------------------------------ *
+ * Nexow design system — Tailwind v4 + brand tokens
+ *
+ * Fonts (self-hosted via fontsource):
+ *   Space Grotesk — display / headings (geometric, matches the wordmark)
+ *   Inter         — body / UI
+ *   JetBrains Mono — tickers, code, data affordances
+ * ------------------------------------------------------------------ */
+@import '@fontsource-variable/space-grotesk';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+@import 'tailwindcss';
+
+/* Class-based dark mode: sections opt in with `.dark`, the whole doc can too. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Brand — teal (primary, from the app) */
+  --color-brand-50: #eafff9;
+  --color-brand-100: #cbfef0;
+  --color-brand-200: #9dfae2;
+  --color-brand-300: #5cf0d0;
+  --color-brand-400: #2adfba;
+  --color-brand-500: #10c5a3;
+  --color-brand-600: #06a086;
+  --color-brand-700: #0a806d;
+  --color-brand-800: #0d6458;
+  --color-brand-900: #10534a;
+  --color-brand-950: #02322e;
+
+  /* Accent — indigo (from the PWA theme colour #6366f1) */
+  --color-accent-50: #eef1ff;
+  --color-accent-100: #e0e5ff;
+  --color-accent-200: #c6cdff;
+  --color-accent-300: #a3adff;
+  --color-accent-400: #8189fc;
+  --color-accent-500: #6366f1;
+  --color-accent-600: #4f46e5;
+  --color-accent-700: #4338ca;
+  --color-accent-800: #3730a3;
+  --color-accent-900: #312e81;
+  --color-accent-950: #1e1b4b;
+
+  /* Ink — near-black surface for dark sections (cool, slightly blue) */
+  --color-ink-950: #08090d;
+  --color-ink-900: #0b0d13;
+  --color-ink-850: #0f121a;
+  --color-ink-800: #141824;
+  --color-ink-700: #1c2130;
+  --color-ink-600: #2a3040;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem; /* clear the sticky header on anchor jumps */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #ffffff;
+    color: var(--color-ink-900);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand-400) 35%, transparent);
+    color: var(--color-ink-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Components / utilities
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* Reusable page gutter. */
+  .container-page {
+    width: 100%;
+    max-width: 80rem; /* 1280px */
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Brand gradient text (teal → indigo). */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-brand-500),
+      var(--color-accent-500) 85%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Eyebrow / kicker label above headings. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Subtle grid backdrop for dark sections. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  /* Radial glow used behind hero / CTA focal points. */
+  .glow-brand {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-brand-500) 30%, transparent),
+      transparent 70%
+    );
+  }
+}
+
+/* Scroll-reveal. Hiding is gated on `html.js` (set before paint) so that
+ * without JavaScript — and for crawlers that don't execute it — all content
+ * renders normally. `.is-visible` (added by the IntersectionObserver) reveals. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered children when a container gets `.is-visible`. */
+.js .reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo);
+}
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.06s; }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.12s; }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.18s; }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.24s; }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.30s; }
+
+/* Marquee for the connector / ticker strip. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
+}
