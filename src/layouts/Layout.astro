@@ -13,9 +13,11 @@ interface Props {
   type?: 'website' | 'article';
   schema?: Record<string, unknown>[];
   noindex?: boolean;
+  /** Page surface: 'dark' renders the terminal-style dark chrome (home). */
+  theme?: 'light' | 'dark';
 }
 
-const { lang, ...head } = Astro.props;
+const { lang, theme = 'light', ...head } = Astro.props;
 ---
 
 <!doctype html>
@@ -27,7 +29,7 @@ const { lang, ...head } = Astro.props;
     </script>
     <BaseHead lang={lang} {...head} />
   </head>
-  <body class="min-h-dvh bg-white antialiased">
+  <body class:list={['min-h-dvh antialiased', theme === 'dark' ? 'bg-ink-950' : 'bg-white']}>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
@@ -35,7 +37,7 @@ const { lang, ...head } = Astro.props;
       Skip to content
     </a>
 
-    <Header />
+    <Header tone={theme} />
 
     <main id="main">
       <slot />

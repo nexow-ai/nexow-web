@@ -23,22 +23,38 @@ const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
 ---
 
-<section class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-28">
-  <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"></div>
-  <div class="glow-brand pointer-events-none absolute left-1/2 top-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 opacity-60"></div>
+<section class="relative overflow-hidden bg-ink-950 py-28 text-white sm:py-36">
+  <!-- Backdrop: grid + aurora + noise -->
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="hairline-glow absolute inset-x-0 top-0"></div>
+    <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"></div>
+    <div
+      class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-brand-500), transparent 60%)"
+    >
+    </div>
+    <div
+      class="aurora-b absolute left-[30%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-20 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-accent-500), transparent 60%)"
+    >
+    </div>
+    <div class="bg-noise absolute inset-0 opacity-[0.35] mix-blend-overlay"></div>
+  </div>
 
   <div class="container-page relative">
     <div class="reveal mx-auto flex max-w-2xl flex-col items-center text-center">
-      <BrandMark class="size-10 text-brand-400" title="Nexow" />
-      <h2 class="mt-6 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+      <span class="inline-flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-500/20 ring-1 ring-white/10">
+        <BrandMark class="size-9 text-brand-400" title="Nexow" />
+      </span>
+      <h2 class="mt-8 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
         {title}
       </h2>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-300">{subtitle}</p>
-      <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-        <Button href={SITE.appUrl} variant="dark" size="lg" external iconRight="arrow">
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
           {primary}
         </Button>
-        <Button href={secondaryHref} variant="ghost" size="lg" class="!text-ink-200 hover:!bg-white/10">
+        <Button href={secondaryHref} variant="outline" size="lg">
           {secondary}
         </Button>
       </div>

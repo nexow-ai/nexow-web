@@ -11,30 +11,59 @@ interface Props {
   eyebrow?: string;
   title?: string;
   subtitle?: string;
+  /** 'dark' renders the terminal-style variant used on the home page. */
+  tone?: 'light' | 'dark';
 }
-const { lang } = Astro.props;
+const { lang, tone = 'light' } = Astro.props;
 const home = useContent(lang).home.faq;
 const items = Astro.props.items ?? home.items;
 const eyebrow = Astro.props.eyebrow ?? home.eyebrow;
 const title = Astro.props.title ?? home.title;
 const subtitle = Astro.props.subtitle ?? home.subtitle;
+const dark = tone === 'dark';
 ---
 
-<section id="faq" class="py-24 sm:py-32">
+<section id="faq" class:list={['py-24 sm:py-32', dark && 'bg-ink-950 text-white']}>
   <div class="container-page">
-    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} />
+    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} tone={tone} />
 
-    <div class="reveal mx-auto mt-14 max-w-3xl divide-y divide-ink-900/8 rounded-2xl border border-ink-900/8 bg-white">
+    <div
+      class:list={[
+        'reveal mx-auto mt-14 max-w-3xl divide-y rounded-2xl border',
+        dark
+          ? 'divide-white/8 border-white/10 bg-white/[0.02]'
+          : 'divide-ink-900/8 border-ink-900/8 bg-white',
+      ]}
+    >
       {
         items.map((item) => (
           <details class="group px-6">
             <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
-              <span class="font-display text-base font-semibold text-ink-950">{item.q}</span>
-              <span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-ink-900/5 text-ink-500 transition-transform duration-300 group-open:rotate-180">
+              <span
+                class:list={[
+                  'font-display text-base font-semibold',
+                  dark ? 'text-white' : 'text-ink-950',
+                ]}
+              >
+                {item.q}
+              </span>
+              <span
+                class:list={[
+                  'inline-flex size-7 shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-open:rotate-180',
+                  dark ? 'bg-white/8 text-ink-300' : 'bg-ink-900/5 text-ink-500',
+                ]}
+              >
                 <Icon name="chevron" class="size-4" />
               </span>
             </summary>
-            <p class="pb-5 pr-11 text-sm leading-relaxed text-ink-600">{item.a}</p>
+            <p
+              class:list={[
+                'pb-5 pr-11 text-sm leading-relaxed',
+                dark ? 'text-ink-400' : 'text-ink-600',
+              ]}
+            >
+              {item.a}
+            </p>
           </details>
         ))
       }

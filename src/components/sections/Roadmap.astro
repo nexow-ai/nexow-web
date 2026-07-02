@@ -11,42 +11,42 @@ const { lang } = Astro.props;
 const t = useContent(lang).home.roadmap;
 ---
 
-<section id="roadmap" class="py-24 sm:py-32">
+<section id="roadmap" class="relative bg-ink-950 py-24 text-white sm:py-32">
   <div class="container-page">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
 
-    <div class="reveal-stagger mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="reveal-stagger mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         t.items.map((item) => {
           const shipped = item.status === 'shipped';
           return (
             <div
               class:list={[
-                'relative flex flex-col rounded-2xl border p-6',
-                shipped ? 'border-brand-500/20 bg-brand-50/40' : 'border-ink-900/8 bg-white',
+                'card-spotlight relative flex flex-col rounded-2xl border p-6',
+                shipped
+                  ? 'border-brand-400/25 bg-brand-500/[0.06]'
+                  : 'border-white/10 bg-white/[0.02]',
               ]}
             >
               <div class="flex items-center justify-between">
                 <span
                   class:list={[
                     'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium uppercase tracking-wider',
-                    shipped
-                      ? 'bg-brand-500/15 text-brand-700'
-                      : 'bg-accent-500/10 text-accent-700',
+                    shipped ? 'bg-brand-500/15 text-brand-300' : 'bg-accent-500/15 text-accent-300',
                   ]}
                 >
                   <span
                     class:list={[
                       'size-1.5 rounded-full',
-                      shipped ? 'bg-brand-500' : 'animate-pulse bg-accent-500',
+                      shipped ? 'bg-brand-400' : 'animate-pulse bg-accent-400',
                     ]}
                   />
                   {shipped ? t.shipped : t.soon}
                 </span>
-                {shipped && <Icon name="check" class="size-4 text-brand-500" />}
+                {shipped && <Icon name="check" class="size-4 text-brand-400" />}
               </div>
-              <h3 class="mt-4 font-display text-lg font-semibold text-ink-950">{item.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+              <h3 class="mt-4 font-display text-lg font-semibold text-white">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-400">{item.body}</p>
             </div>
           );
         })

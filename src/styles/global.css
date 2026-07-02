@@ -46,7 +46,14 @@
   --color-accent-900: #312e81;
   --color-accent-950: #1e1b4b;
 
-  /* Ink — near-black surface for dark sections (cool, slightly blue) */
+  /* Ink — near-black surface for dark sections (cool, slightly blue).
+   * 100–500 are the light text shades used on those dark surfaces. */
+  --color-ink-50: #f4f6fb;
+  --color-ink-100: #e8ecf5;
+  --color-ink-200: #cdd4e3;
+  --color-ink-300: #a8b1c7;
+  --color-ink-400: #7e88a1;
+  --color-ink-500: #5b6478;
   --color-ink-950: #08090d;
   --color-ink-900: #0b0d13;
   --color-ink-850: #0f121a;
@@ -170,6 +177,97 @@
       transparent 70%
     );
   }
+
+  /* Film-grain noise overlay for large dark surfaces (kills banding). */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  /* Dark glass card used across the terminal-style home page. */
+  .card-dark {
+    border: 1px solid color-mix(in oklab, white 9%, transparent);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, white 4.5%, transparent),
+      color-mix(in oklab, white 2%, transparent)
+    );
+    border-radius: 1rem;
+  }
+
+  /* Mouse-tracking spotlight (JS sets --mx / --my per card). */
+  .card-spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out-expo);
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in oklab, var(--color-brand-400) 9%, transparent),
+      transparent 65%
+    );
+    pointer-events: none;
+  }
+  .card-spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* Thin gradient hairline used as section divider on dark surfaces. */
+  .hairline-glow {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-brand-400) 45%, transparent) 30%,
+      color-mix(in oklab, var(--color-accent-400) 45%, transparent) 70%,
+      transparent
+    );
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Aurora backdrop — two slow-drifting blobs behind the hero.
+ * ------------------------------------------------------------------ */
+@keyframes aurora-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6%, -4%) scale(1.12); }
+  66% { transform: translate(-5%, 5%) scale(0.94); }
+}
+@keyframes aurora-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(-7%, 6%) scale(1.1); }
+  70% { transform: translate(5%, -5%) scale(0.92); }
+}
+.aurora-a { animation: aurora-a 18s ease-in-out infinite; }
+.aurora-b { animation: aurora-b 22s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .aurora-a, .aurora-b { animation: none; }
+}
+
+/* Blinking caret for the typed hero prompt. */
+@keyframes caret-blink {
+  0%, 45% { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+.caret-blink { animation: caret-blink 1.1s steps(1) infinite; }
+
+/* EMA line draw-in when the hero mock reveals. */
+@keyframes draw-line {
+  from { stroke-dashoffset: var(--line-len, 1200); }
+  to { stroke-dashoffset: 0; }
+}
+.draw-line {
+  stroke-dasharray: var(--line-len, 1200);
+  animation: draw-line 2.2s var(--ease-out-expo) 0.4s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .draw-line { animation: none; stroke-dashoffset: 0; }
 }
 
 /* Scroll-reveal. Hiding is gated on `html.js` (set before paint) so that

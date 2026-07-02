@@ -2,12 +2,15 @@
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.how;
+
+const STEP_ICONS = ['wand', 'cpu', 'layers'];
 ---
 
 <section id="how" class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-32">
@@ -23,14 +26,19 @@ const t = useContent(lang).home.how;
           <li class="relative">
             {i < t.steps.length - 1 && (
               <span
-                class="absolute left-[calc(50%+2rem)] right-0 top-8 hidden h-px bg-gradient-to-r from-brand-500/40 to-transparent md:block"
+                class="absolute -right-6 top-10 z-10 hidden text-brand-400/60 md:block"
                 aria-hidden="true"
-              />
-            )}
-            <div class="flex flex-col items-start rounded-2xl border border-white/10 bg-white/[0.03] p-7 backdrop-blur-sm">
-              <span class="inline-flex size-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-500/20 font-display text-2xl font-bold text-brand-300 ring-1 ring-white/10">
-                {step.n}
+              >
+                <Icon name="arrow" class="size-5" />
               </span>
+            )}
+            <div class="card-dark card-spotlight flex h-full flex-col items-start p-7">
+              <div class="flex items-center gap-4">
+                <span class="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-500/20 text-brand-300 ring-1 ring-white/10">
+                  <Icon name={STEP_ICONS[i]} class="size-6" />
+                </span>
+                <span class="font-mono text-sm tracking-[0.2em] text-ink-500">{step.n}</span>
+              </div>
               <h3 class="mt-6 font-display text-xl font-semibold text-white">{step.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-ink-400">{step.body}</p>
             </div>
