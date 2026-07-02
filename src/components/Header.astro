@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../i18n/config';
+import { SITE, languages, type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
 import { getLangFromUrl, getRouteFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
@@ -23,9 +23,7 @@ const links = t.nav.links.map((l) => ({
   active: route === l.href || (l.href !== '/' && route.startsWith(l.href)),
 }));
 
-// Language switch: same route, other locale.
-const otherLang = lang === 'en' ? 'es' : 'en';
-const otherUrl = localizePath(route, otherLang);
+const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
 ---
 
 <header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
@@ -65,17 +63,40 @@ const otherUrl = localizePath(route, otherLang);
       </ul>
 
       <div class="flex items-center gap-2">
-        <a
-          href={otherUrl}
-          class:list={[
-            'hidden items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider transition-colors sm:inline-flex',
-            dark ? 'text-ink-300 hover:text-white' : 'text-ink-600 hover:text-ink-950',
-          ]}
-          aria-label={`Switch language to ${otherLang === 'es' ? 'Español' : 'English'}`}
-        >
-          <Icon name="globe" class="size-4" />
-          {otherLang}
-        </a>
+        <details class="group relative hidden sm:block">
+          <summary
+            class:list={[
+              'flex cursor-pointer list-none items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider transition-colors [&::-webkit-details-marker]:hidden',
+              dark ? 'text-ink-300 hover:text-white' : 'text-ink-600 hover:text-ink-950',
+            ]}
+            aria-label="Switch language"
+          >
+            <Icon name="globe" class="size-4" />
+            {lang}
+          </summary>
+          <ul
+            class:list={[
+              'absolute right-0 top-full z-50 mt-2 min-w-[8rem] overflow-hidden rounded-xl border py-1 shadow-lg',
+              dark ? 'border-white/10 bg-ink-900' : 'border-ink-900/10 bg-white',
+            ]}
+          >
+            {
+              otherLangs.map((l) => (
+                <li>
+                  <a
+                    href={localizePath(route, l)}
+                    class:list={[
+                      'block px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors',
+                      dark ? 'text-ink-300 hover:bg-white/10 hover:text-white' : 'text-ink-600 hover:bg-ink-900/5 hover:text-ink-950',
+                    ]}
+                  >
+                    {languages[l]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </details>
         <Button href={SITE.appUrl} size="sm" external iconRight="arrow" class="hidden sm:inline-flex">
           {t.nav.launch}
         </Button>
@@ -139,16 +160,22 @@ const otherUrl = localizePath(route, otherLang);
         <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
           {t.nav.launch}
         </Button>
-        <a
-          href={otherUrl}
-          class:list={[
-            'inline-flex items-center justify-center gap-2 py-2 font-mono text-sm uppercase tracking-wider',
-            dark ? 'text-ink-300' : 'text-ink-600',
-          ]}
-        >
-          <Icon name="globe" class="size-4" />
-          {otherLang === 'es' ? 'Español' : 'English'}
-        </a>
+        <div class="flex flex-wrap items-center gap-3 py-2">
+          {
+            otherLangs.map((l) => (
+              <a
+                href={localizePath(route, l)}
+                class:list={[
+                  'inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider',
+                  dark ? 'text-ink-300' : 'text-ink-600',
+                ]}
+              >
+                <Icon name="globe" class="size-4" />
+                {languages[l]}
+              </a>
+            ))
+          }
+        </div>
       </div>
     </nav>
   </div>

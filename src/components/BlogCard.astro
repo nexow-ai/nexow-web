@@ -1,7 +1,7 @@
 ---
 import { type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
-import { localizePath } from '../i18n/utils';
+import { localizePath, dateLocale } from '../i18n/utils';
 import Icon from './Icon.astro';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 const { lang, slug, title, description, pubDate, tags, featured = false } = Astro.props;
 const t = useContent(lang).blog;
 const href = localizePath(`/blog/${slug}`, lang);
-const dtFmt = new Intl.DateTimeFormat(lang === 'es' ? 'es-ES' : 'en-US', {
+const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
   year: 'numeric',
   month: 'short',
   day: 'numeric',

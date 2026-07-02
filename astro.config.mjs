@@ -9,10 +9,10 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
   site: 'https://nexow.ai',
 
-  // English is served from the root (/), Spanish from /es/.
+  // English is served from the root (/), other locales from /{lang}/.
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es'],
+    locales: ['en', 'es', 'fr'],
     routing: {
       prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
@@ -30,6 +30,7 @@ export default defineConfig({
         locales: {
           en: 'en',
           es: 'es',
+          fr: 'fr',
         },
       },
     }),

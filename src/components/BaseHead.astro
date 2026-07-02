@@ -1,6 +1,6 @@
 ---
-import { SITE, type Lang } from '../i18n/config';
-import { localizePath, getAlternates, withTrailingSlash } from '../i18n/utils';
+import { SITE, languages, type Lang } from '../i18n/config';
+import { localizePath, getAlternates, withTrailingSlash, ogLocale } from '../i18n/utils';
 import '../styles/global.css';
 
 interface Props {
@@ -32,8 +32,10 @@ const {
 const canonical = withTrailingSlash(new URL(localizePath(route, lang), SITE.url).href);
 const alternates = getAlternates(route, SITE.url);
 const ogImage = new URL(image, SITE.url).href;
-const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
-const altLocale = lang === 'es' ? 'en_US' : 'es_ES';
+const primaryOgLocale = ogLocale(lang);
+const altOgLocales = (Object.keys(languages) as Lang[])
+  .filter((l) => l !== lang)
+  .map((l) => ogLocale(l));
 
 // Baseline Organization schema on every page for GEO / knowledge-graph.
 const orgSchema = {
@@ -58,8 +60,11 @@ const allSchema = [orgSchema, ...schema];
 
 <!-- Canonical + language alternates -->
 <link rel="canonical" href={canonical} />
-<link rel="alternate" hreflang="en" href={alternates.en} />
-<link rel="alternate" hreflang="es" href={alternates.es} />
+{
+  (Object.keys(languages) as Lang[]).map((l) => (
+    <link rel="alternate" hreflang={l} href={alternates[l]} />
+  ))
+}
 <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
 
 <!-- Icons -->
@@ -79,8 +84,8 @@ const allSchema = [orgSchema, ...schema];
 <meta property="og:image" content={ogImage} />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:locale" content={ogLocale} />
-<meta property="og:locale:alternate" content={altLocale} />
+<meta property="og:locale" content={primaryOgLocale} />
+{altOgLocales.map((l) => <meta property="og:locale:alternate" content={l} />)}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
