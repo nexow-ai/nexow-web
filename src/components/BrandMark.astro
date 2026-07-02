@@ -1,0 +1,31 @@
+---
+/**
+ * The Nexow "spike" mark — a bold cross-stroke crossed by an elongated blade
+ * (the lightning of the wordmark's X). Rendered as inline SVG so it stays crisp
+ * at any size and inherits `currentColor`.
+ */
+interface Props {
+  class?: string;
+  title?: string;
+}
+const { class: className, title } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 100 100"
+  fill="currentColor"
+  class={className}
+  role={title ? 'img' : 'presentation'}
+  aria-hidden={title ? undefined : 'true'}
+  aria-label={title}
+>
+  {title && <title>{title}</title>}
+  <!-- Bold counter-stroke (top-left → bottom-right). -->
+  <path
+    d="M30.5 34.5 L40 27 L71.5 66 L62 73.5 Z"
+    fill="currentColor"
+    opacity="0.92"
+  />
+  <!-- Elongated blade (the lightning): thin near-vertical rhombus. -->
+  <path d="M58 2 L63 49 L44 98 L39 51 Z" fill="currentColor" />
+</svg>

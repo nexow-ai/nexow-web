@@ -1,0 +1,22 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import SectionHeading from '../SectionHeading.astro';
+import FeatureCard from '../FeatureCard.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home.features;
+---
+
+<section id="features" class="py-24 sm:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
+
+    <div class="reveal-stagger mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {t.items.map((f) => <FeatureCard icon={f.icon} title={f.title} body={f.body} />)}
+    </div>
+  </div>
+</section>

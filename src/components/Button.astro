@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'dark';
+  size?: 'sm' | 'md' | 'lg';
+  icon?: string;
+  iconRight?: string;
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconRight,
+  external = false,
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-all duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-offset-2 whitespace-nowrap';
+
+const variants: Record<string, string> = {
+  primary:
+    'bg-brand-600 text-white shadow-[0_1px_0_rgba(255,255,255,0.15)_inset,0_8px_24px_-8px_var(--color-brand-600)] hover:bg-brand-500 hover:shadow-[0_1px_0_rgba(255,255,255,0.2)_inset,0_12px_32px_-8px_var(--color-brand-500)] hover:-translate-y-0.5',
+  secondary:
+    'bg-white text-ink-900 ring-1 ring-ink-900/10 hover:ring-ink-900/20 hover:-translate-y-0.5 shadow-sm',
+  dark: 'bg-white text-ink-950 hover:bg-white/90 hover:-translate-y-0.5 shadow-lg shadow-black/20',
+  ghost: 'text-ink-700 hover:text-ink-950 hover:bg-ink-900/5',
+};
+
+const sizes: Record<string, string> = {
+  sm: 'h-9 px-4 text-sm',
+  md: 'h-11 px-5 text-[0.95rem]',
+  lg: 'h-13 px-7 text-base',
+};
+
+const rel = external ? 'noopener noreferrer' : undefined;
+const target = external ? '_blank' : undefined;
+---
+
+<a
+  href={href}
+  class:list={[base, variants[variant], sizes[size], className]}
+  rel={rel}
+  target={target}
+>
+  {icon && <Icon name={icon} class="size-[1.15em] -ml-0.5 shrink-0" />}
+  <slot />
+  {
+    iconRight && (
+      <Icon
+        name={iconRight}
+        class="size-[1.15em] -mr-0.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+      />
+    )
+  }
+</a>

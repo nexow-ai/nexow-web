@@ -1,0 +1,25 @@
+---
+import { SITE, type Lang } from '../i18n/config';
+import { localizePath } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  tone?: 'dark' | 'light'; // dark = black wordmark (for light bg), light = white wordmark
+  class?: string;
+}
+const { lang, tone = 'dark', class: className = 'h-8' } = Astro.props;
+const src = tone === 'light' ? '/logo-white.png' : '/logo-black.png';
+const home = localizePath('/', lang);
+---
+
+<a href={home} class="inline-flex items-center" aria-label={`${SITE.name} — home`}>
+  <img
+    src={src}
+    alt={`${SITE.name}`}
+    width="640"
+    height="393"
+    class:list={['w-auto select-none', className]}
+    loading="eager"
+    decoding="async"
+  />
+</a>

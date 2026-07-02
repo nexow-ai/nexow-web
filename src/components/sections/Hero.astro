@@ -1,0 +1,75 @@
+---
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import WidgetMock from '../WidgetMock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home.hero;
+---
+
+<section class="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-28">
+  <!-- Backdrop -->
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute inset-x-0 top-0 h-[600px] bg-[radial-gradient(60%_50%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70"></div>
+    <div class="absolute -right-40 top-20 size-[500px] rounded-full bg-[radial-gradient(circle,var(--color-accent-200),transparent_65%)] opacity-50 blur-2xl"></div>
+    <div
+      class="absolute inset-0 [mask-image:radial-gradient(70%_50%_at_50%_0%,black,transparent)]"
+      style="background-image:linear-gradient(rgba(15,18,26,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(15,18,26,0.05) 1px,transparent 1px);background-size:48px 48px;"
+    >
+    </div>
+  </div>
+
+  <div class="container-page">
+    <div class="grid items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-8">
+      <!-- Copy -->
+      <div class="max-w-xl">
+        <a
+          href={SITE.appUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-2 rounded-full border border-ink-900/10 bg-white/70 py-1.5 pl-2 pr-3.5 text-sm font-medium text-ink-700 shadow-sm backdrop-blur transition-colors hover:border-brand-500/40"
+        >
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-2 py-0.5 text-xs font-semibold text-brand-700">
+            <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>
+            {t.badge}
+          </span>
+          <Icon name="arrow" class="size-3.5 text-ink-400 transition-transform group-hover:translate-x-0.5" />
+        </a>
+
+        <h1 class="mt-6 font-display text-5xl font-semibold leading-[1.02] tracking-tight text-ink-950 sm:text-6xl lg:text-[4.25rem]">
+          {t.titleLead}<br />
+          <span class="text-gradient">{t.titleGradient}</span><br />
+          {t.titleTail}
+        </h1>
+
+        <p class="mt-6 max-w-lg text-lg leading-relaxed text-ink-600">
+          {t.subtitle}
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+            {t.ctaPrimary}
+          </Button>
+          <Button href="#how" variant="secondary" size="lg" icon="chart">
+            {t.ctaSecondary}
+          </Button>
+        </div>
+
+        <p class="mt-6 font-mono text-xs text-ink-500">
+          {t.note}
+        </p>
+      </div>
+
+      <!-- Product mock -->
+      <div class="reveal lg:pl-6">
+        <WidgetMock promptExample={t.promptExample} promptPlaceholder={t.promptPlaceholder} />
+      </div>
+    </div>
+  </div>
+</section>

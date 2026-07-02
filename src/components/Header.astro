@@ -1,0 +1,156 @@
+---
+import { SITE } from '../i18n/config';
+import { useContent } from '../i18n/content';
+import { getLangFromUrl, getRouteFromUrl, localizePath } from '../i18n/utils';
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const route = getRouteFromUrl(Astro.url);
+const t = useContent(lang);
+
+const links = t.nav.links.map((l) => ({
+  ...l,
+  url: l.href.startsWith('/') ? localizePath(l.href, lang) : l.href,
+  active: route === l.href || (l.href !== '/' && route.startsWith(l.href)),
+}));
+
+// Language switch: same route, other locale.
+const otherLang = lang === 'en' ? 'es' : 'en';
+const otherUrl = localizePath(route, otherLang);
+---
+
+<header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+  <div class="container-page">
+    <nav
+      class="mt-3 flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 pl-4 transition-all duration-300"
+      id="site-nav"
+      aria-label="Primary"
+    >
+      <Logo lang={lang} tone="dark" class="h-7" />
+
+      <!-- Desktop nav -->
+      <ul class="hidden items-center gap-1 md:flex">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.url}
+                class:list={[
+                  'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+                  l.active ? 'text-ink-950' : 'text-ink-600 hover:text-ink-950',
+                ]}
+                aria-current={l.active ? 'page' : undefined}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="flex items-center gap-2">
+        <a
+          href={otherUrl}
+          class="hidden items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider text-ink-600 transition-colors hover:text-ink-950 sm:inline-flex"
+          aria-label={`Switch language to ${otherLang === 'es' ? 'Español' : 'English'}`}
+        >
+          <Icon name="globe" class="size-4" />
+          {otherLang}
+        </a>
+        <Button href={SITE.appUrl} size="sm" external iconRight="arrow" class="hidden sm:inline-flex">
+          {t.nav.launch}
+        </Button>
+
+        <!-- Mobile toggle -->
+        <button
+          type="button"
+          id="menu-toggle"
+          class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 md:hidden"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label={t.nav.menu}
+        >
+          <Icon name="menu" class="size-6" />
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-0 z-40 hidden bg-white/95 backdrop-blur-xl md:hidden"
+    hidden
+  >
+    <div class="container-page flex h-16 items-center justify-between pt-3">
+      <Logo lang={lang} tone="dark" class="h-7" />
+      <button
+        type="button"
+        id="menu-close"
+        class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5"
+        aria-label={t.nav.close}
+      >
+        <Icon name="x" class="size-6" />
+      </button>
+    </div>
+    <nav class="container-page mt-8 flex flex-col gap-1" aria-label="Mobile">
+      {
+        links.map((l) => (
+          <a
+            href={l.url}
+            class="border-b border-ink-900/5 py-4 font-display text-2xl font-semibold text-ink-900"
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <div class="mt-6 flex flex-col gap-3">
+        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+          {t.nav.launch}
+        </Button>
+        <a
+          href={otherUrl}
+          class="inline-flex items-center justify-center gap-2 py-2 font-mono text-sm uppercase tracking-wider text-ink-600"
+        >
+          <Icon name="globe" class="size-4" />
+          {otherLang === 'es' ? 'Español' : 'English'}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Header: solidify on scroll + mobile menu toggle. Vanilla, no framework.
+  const header = document.getElementById('site-header');
+  const nav = document.getElementById('site-nav');
+  const onScroll = () => {
+    const solid = window.scrollY > 8;
+    nav?.classList.toggle('bg-white/80', solid);
+    nav?.classList.toggle('backdrop-blur-xl', solid);
+    nav?.classList.toggle('!border-ink-900/10', solid);
+    nav?.classList.toggle('shadow-sm', solid);
+    header?.classList.toggle('is-scrolled', solid);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const menu = document.getElementById('mobile-menu');
+  const toggle = document.getElementById('menu-toggle');
+  const close = document.getElementById('menu-close');
+  const setMenu = (open: boolean) => {
+    if (!menu) return;
+    menu.hidden = !open;
+    menu.classList.toggle('hidden', !open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  toggle?.addEventListener('click', () => setMenu(true));
+  close?.addEventListener('click', () => setMenu(false));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenu(false);
+  });
+</script>

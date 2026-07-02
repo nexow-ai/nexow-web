@@ -1,0 +1,43 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+  /** Override the FAQ list (used by the pricing page). */
+  items?: { q: string; a: string }[];
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+}
+const { lang } = Astro.props;
+const home = useContent(lang).home.faq;
+const items = Astro.props.items ?? home.items;
+const eyebrow = Astro.props.eyebrow ?? home.eyebrow;
+const title = Astro.props.title ?? home.title;
+const subtitle = Astro.props.subtitle ?? home.subtitle;
+---
+
+<section id="faq" class="py-24 sm:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} />
+
+    <div class="reveal mx-auto mt-14 max-w-3xl divide-y divide-ink-900/8 rounded-2xl border border-ink-900/8 bg-white">
+      {
+        items.map((item) => (
+          <details class="group px-6">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+              <span class="font-display text-base font-semibold text-ink-950">{item.q}</span>
+              <span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-ink-900/5 text-ink-500 transition-transform duration-300 group-open:rotate-180">
+                <Icon name="chevron" class="size-4" />
+              </span>
+            </summary>
+            <p class="pb-5 pr-11 text-sm leading-relaxed text-ink-600">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

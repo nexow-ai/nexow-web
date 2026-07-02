@@ -1,0 +1,69 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../i18n/config';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  route: string;
+  image?: string;
+  type?: 'website' | 'article';
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { lang, ...head } = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth">
+  <head>
+    <script is:inline>
+      // Mark JS-capable before paint so scroll-reveal hiding only applies with JS.
+      document.documentElement.classList.add('js');
+    </script>
+    <BaseHead lang={lang} {...head} />
+  </head>
+  <body class="min-h-dvh bg-white antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+    >
+      Skip to content
+    </a>
+
+    <Header />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      // Scroll-reveal: reveal `.reveal` / `.reveal-stagger` elements as they
+      // enter the viewport. Progressive enhancement — content is visible even
+      // without JS because the CSS only hides once this class list is present.
+      const els = document.querySelectorAll('.reveal, .reveal-stagger');
+      if ('IntersectionObserver' in window && els.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

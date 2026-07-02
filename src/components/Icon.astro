@@ -1,0 +1,58 @@
+---
+/**
+ * Lightweight inline icon set (stroke, 24×24, inherits currentColor).
+ * Only the icons the site actually uses are included to keep markup small.
+ */
+interface Props {
+  name: string;
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+
+const paths: Record<string, string> = {
+  sparkles:
+    'M12 3l1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3zM19 14l.9 2.1 2.1.9-2.1.9L19 20l-.9-2.1-2.1-.9 2.1-.9L19 14zM5 14l.7 1.6 1.6.7-1.6.7L5 18.6l-.7-1.6L2.7 16.3l1.6-.7L5 14z',
+  shield: 'M12 3l7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3z M9 12l2 2 4-4',
+  plug: 'M9 3v5M15 3v5M6 8h12v3a6 6 0 01-12 0V8zM12 17v4',
+  layers: 'M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5',
+  lock: 'M6 11h12v9H6v-9zM8 11V8a4 4 0 118 0v3M12 15v2',
+  history:
+    'M3 12a9 9 0 109-9 9 9 0 00-8 5M3 3v5h5M12 8v4l3 2',
+  wand: 'M15 4V2M15 10V8M12 7h-2M20 7h-2M6 20L18 8M17 4l1 1M13 4l1 1',
+  bolt: 'M13 2L4 14h7l-1 8 9-12h-7l1-8z',
+  globe: 'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c2.5 2.5 3.5 6 3.5 9s-1 6.5-3.5 9M12 3c-2.5 2.5-3.5 6-3.5 9s1 6.5 3.5 9',
+  database:
+    'M12 3c4.4 0 8 1.3 8 3s-3.6 3-8 3-8-1.3-8-3 3.6-3 8-3zM4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6',
+  save: 'M5 3h11l3 3v15H5V3zM8 3v6h7V3M8 15h8',
+  library: 'M4 5v14M9 5v14M13 6l4 13M13 6l4-1 4 13-4 1',
+  users: 'M16 20v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 10a3 3 0 100-6 3 3 0 000 6zM22 20v-2a4 4 0 00-3-3.9M16 4.1a4 4 0 010 7.8',
+  server: 'M4 4h16v6H4V4zM4 14h16v6H4v-6zM7 7h.01M7 17h.01',
+  cpu: 'M6 6h12v12H6V6zM9 9h6v6H9V9zM9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2',
+  code: 'M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14',
+  chart: 'M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-7',
+  check: 'M4 12l5 5L20 6',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  external: 'M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5',
+  chevron: 'M6 9l6 6 6-6',
+  menu: 'M4 7h16M4 12h16M4 17h16',
+  x: 'M6 6l12 12M18 6L6 18',
+  github:
+    'M9 19c-4 1.5-4-2-5-2m10 4v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 00-1.3-3.2 4.3 4.3 0 00-.1-3.2s-1-.3-3.5 1.3a12 12 0 00-6 0C6 2.8 5 3.1 5 3.1a4.3 4.3 0 00-.1 3.2A4.6 4.6 0 003.5 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21',
+  twitter: 'M22 4a10 10 0 01-3 1 4.5 4.5 0 00-7.7 4A12 12 0 013 5s-4 9 5 13a13 13 0 01-7 2c9 5 20 0 20-11.5a4.6 4.6 0 00-.1-.9A7 7 0 0022 4z',
+};
+
+const d = paths[name] ?? '';
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden="true"
+>
+  <path d={d} />
+</svg>
