@@ -1,6 +1,5 @@
 import rss from '@astrojs/rss';
 import { getPosts, slugOf } from '../i18n/blog';
-import { SITE } from '../i18n/config';
 import { useContent } from '../i18n/content';
 
 export async function GET(context) {

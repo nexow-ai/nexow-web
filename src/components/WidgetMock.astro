@@ -8,7 +8,7 @@ interface Props {
   promptPlaceholder: string;
   class?: string;
 }
-const { promptExample, promptPlaceholder, class: className = '' } = Astro.props;
+const { promptExample, class: className = '' } = Astro.props;
 ---
 
 <div class:list={['relative', className]}>
