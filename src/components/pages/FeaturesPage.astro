@@ -1,0 +1,47 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import FeatureCard from '../FeatureCard.astro';
+import Connectors from '../sections/Connectors.astro';
+import CtaBand from '../sections/CtaBand.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).features;
+---
+
+<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
+  <PageHero badge={t.hero.badge} title={t.hero.title} subtitle={t.hero.subtitle} />
+
+  <div class="space-y-24 pb-8 sm:space-y-32">
+    {
+      t.groups.map((group, i) => (
+        <section class="container-page">
+          <div class="grid gap-10 lg:grid-cols-[0.9fr_2fr] lg:gap-14">
+            <div class="reveal lg:sticky lg:top-28 lg:self-start">
+              <span class="eyebrow inline-flex items-center gap-2 text-brand-600">
+                <span class="font-mono text-ink-400">{String(i + 1).padStart(2, '0')}</span>
+                {group.title}
+              </span>
+              <p class="mt-3 font-display text-2xl font-semibold leading-snug text-ink-950">
+                {group.body}
+              </p>
+            </div>
+            <div class="reveal-stagger grid gap-5 sm:grid-cols-2">
+              {group.items.map((f) => (
+                <FeatureCard icon={f.icon} title={f.title} body={f.body} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <Connectors lang={lang} />
+  <CtaBand lang={lang} />
+</Layout>
