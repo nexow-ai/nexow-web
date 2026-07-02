@@ -1,0 +1,39 @@
+# Nexow
+
+> Nexow is an AI-native dashboard builder for financial markets. You describe a
+> widget in plain language — a chart, table, heatmap or signal — and Nexow
+> generates its source code with Anthropic's Claude, runs it in a sandboxed
+> iframe, and streams live market data into it on a free-form canvas. It is
+> private by default: in local mode, codegen runs in your browser with your own
+> Anthropic API key and your widgets persist locally in IndexedDB.
+
+## Key facts
+
+- Category: AI-native dashboard / widget builder for trading and market data.
+- How it works: prompt → AI-generated widget source → sandboxed iframe runtime → live data via connectors → refine in natural language.
+- Privacy: private by default; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many venues connect browser-direct.
+- Connectors (20+): OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Alpha Vantage, Intrinio, IQFeed, Rithmic, LMAX, FXCM, Kalshi, Polymarket, Trading Economics, Postgres, ClickHouse, Qdrant.
+- Markets covered: FX, crypto, equities, futures, options and prediction markets.
+- AI model: Anthropic Claude via the Anthropic SDK.
+- Pricing: preview is free; in private mode you pay only your own Anthropic API usage. Hosted plans (Pro, Teams) are planned.
+- Status: public preview live. Roadmap: trading agents, server components, community.
+- App: https://app.nexow.ai
+
+## Pages
+
+- [Home](https://nexow.ai/): overview, features, connectors, how-it-works, FAQ.
+- [Features](https://nexow.ai/features): generate, run, connect, own.
+- [Pricing](https://nexow.ai/pricing): Private (free), Pro, Teams.
+- [About](https://nexow.ai/about): mission and values.
+- [Blog](https://nexow.ai/blog): guides and deep-dives.
+
+## Blog
+
+- [From prompt to live widget](https://nexow.ai/blog/from-prompt-to-live-widget): how Nexow turns a sentence into a running, data-connected widget.
+- [Build a crypto dashboard with AI](https://nexow.ai/blog/build-crypto-dashboard-with-ai): no-code, step-by-step guide.
+- [Private by default](https://nexow.ai/blog/private-by-default-local-ai): why the workstation runs locally.
+
+## Languages
+
+- English: https://nexow.ai/
+- Español: https://nexow.ai/es/
