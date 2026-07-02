@@ -1,0 +1,97 @@
+---
+import { SITE, type Lang } from '../../i18n/config';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const copy = {
+  en: {
+    badge: 'Privacy',
+    title: 'Privacy Policy',
+    subtitle: 'How Nexow handles your data — short version: as little as possible.',
+    meta: {
+      title: 'Privacy Policy — Nexow',
+      description: 'Nexow is private by default. Learn how we handle data, keys and connections.',
+    },
+    updated: 'Last updated: 1 July 2026',
+    sections: [
+      {
+        h: 'Private by default',
+        p: 'Nexow runs fully local by default. In private mode you supply your own Anthropic API key and widget generation happens entirely in your browser. Your prompts and generated code are sent from your browser directly to Anthropic — not through our servers.',
+      },
+      {
+        h: 'What we store',
+        p: 'Your widgets, versions, logs and library are stored in your browser using IndexedDB. They stay on your device and are not uploaded to Nexow. Clearing your browser storage removes them permanently.',
+      },
+      {
+        h: 'Market-data connections',
+        p: 'Where a venue permits it, Nexow connects to it directly from your browser, and your venue credentials are used only to talk to that venue. Some venues require routing through a thin proxy; in those cases only the data needed to fulfil the request passes through.',
+      },
+      {
+        h: 'This website',
+        p: 'This marketing site is a static site. We keep analytics minimal and privacy-respecting, and we do not sell personal data. Outbound links (such as the app) are clearly labelled.',
+      },
+      {
+        h: 'Contact',
+        p: `Questions about privacy? Email ${SITE.email}.`,
+      },
+    ],
+  },
+  es: {
+    badge: 'Privacidad',
+    title: 'Política de Privacidad',
+    subtitle: 'Cómo trata Nexow tus datos — versión corta: lo mínimo posible.',
+    meta: {
+      title: 'Política de Privacidad — Nexow',
+      description: 'Nexow es privado por defecto. Descubre cómo tratamos los datos, las claves y las conexiones.',
+    },
+    updated: 'Última actualización: 1 de julio de 2026',
+    sections: [
+      {
+        h: 'Privado por defecto',
+        p: 'Nexow corre totalmente local por defecto. En modo privado aportas tu propia clave de la API de Anthropic y la generación de widgets ocurre íntegramente en tu navegador. Tus prompts y el código generado se envían desde tu navegador directo a Anthropic — no a través de nuestros servidores.',
+      },
+      {
+        h: 'Qué guardamos',
+        p: 'Tus widgets, versiones, logs y biblioteca se guardan en tu navegador con IndexedDB. Permanecen en tu dispositivo y no se suben a Nexow. Borrar el almacenamiento de tu navegador los elimina de forma permanente.',
+      },
+      {
+        h: 'Conexiones a datos de mercado',
+        p: 'Donde el venue lo permite, Nexow se conecta directo desde tu navegador, y tus credenciales del venue se usan solo para hablar con ese venue. Algunos venues requieren pasar por un proxy ligero; en esos casos solo pasa la información necesaria para cumplir la petición.',
+      },
+      {
+        h: 'Este sitio web',
+        p: 'Este sitio de marketing es un sitio estático. Mantenemos la analítica al mínimo y respetuosa con la privacidad, y no vendemos datos personales. Los enlaces salientes (como la app) están claramente señalados.',
+      },
+      {
+        h: 'Contacto',
+        p: `¿Dudas sobre privacidad? Escribe a ${SITE.email}.`,
+      },
+    ],
+  },
+}[lang];
+---
+
+<Layout lang={lang} route="/privacy" title={copy.meta.title} description={copy.meta.description}>
+  <PageHero badge={copy.badge} title={copy.title} subtitle={copy.subtitle} />
+
+  <section class="container-page pb-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="font-mono text-sm text-ink-500">{copy.updated}</p>
+      <div class="mt-8 space-y-10">
+        {
+          copy.sections.map((s) => (
+            <div class="reveal">
+              <h2 class="font-display text-xl font-semibold text-ink-950">{s.h}</h2>
+              <p class="mt-3 leading-relaxed text-ink-600">{s.p}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>
