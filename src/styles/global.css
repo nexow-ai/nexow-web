@@ -10,6 +10,7 @@
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 /* Class-based dark mode: sections opt in with `.dark`, the whole doc can too. */
 @custom-variant dark (&:where(.dark, .dark *));
