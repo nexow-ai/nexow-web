@@ -11,8 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "deploy": "astro build && wrangler pages deploy dist --project-name=nexow-web",
-    "cf:serve": "astro build && wrangler pages dev dist"
+    "deploy": "astro build && wrangler deploy",
+    "cf:serve": "astro build && wrangler dev"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.1",

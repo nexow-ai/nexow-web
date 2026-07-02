@@ -1,6 +1,15 @@
-# Cloudflare Pages configuration for the static Astro build.
-# `pages_build_output_dir` lets `wrangler pages deploy` (no dir arg) and the
-# dashboard/CI pick up ./dist automatically.
+# Cloudflare Worker (Static Assets) config for the static Astro build.
+# This is an assets-only Worker: no `main` script — Cloudflare serves the files
+# in ./dist directly, with _headers / _redirects honored and 404.html used for
+# unmatched routes.
+#
+# IMPORTANT: `name` must match the Worker in your Cloudflare dashboard that has
+# nexow.ai attached. If your Worker is named differently, either rename it to
+# `nexow-web` or change the name here to match — otherwise the deploy targets a
+# different Worker and the domain won't update.
 name = "nexow-web"
 compatibility_date = "2026-07-02"
-pages_build_output_dir = "./dist"
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
