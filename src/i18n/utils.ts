@@ -25,11 +25,21 @@ export function localizePath(path: string, lang: Lang): string {
   return `/es${clean}` || '/es/';
 }
 
+/**
+ * Ensure a URL's path ends in a trailing slash to match Astro's directory
+ * output and the generated sitemap, keeping canonical/hreflang consistent.
+ */
+export function withTrailingSlash(href: string): string {
+  const u = new URL(href);
+  if (!u.pathname.endsWith('/')) u.pathname += '/';
+  return u.href;
+}
+
 /** Build the set of alternate-locale URLs for a canonical route (for hreflang). */
 export function getAlternates(route: string, siteUrl: string) {
   return {
-    en: new URL(localizePath(route, 'en'), siteUrl).href,
-    es: new URL(localizePath(route, 'es'), siteUrl).href,
-    'x-default': new URL(localizePath(route, 'en'), siteUrl).href,
+    en: withTrailingSlash(new URL(localizePath(route, 'en'), siteUrl).href),
+    es: withTrailingSlash(new URL(localizePath(route, 'es'), siteUrl).href),
+    'x-default': withTrailingSlash(new URL(localizePath(route, 'en'), siteUrl).href),
   };
 }

@@ -1,6 +1,6 @@
 ---
 import { SITE, type Lang } from '../i18n/config';
-import { localizePath, getAlternates } from '../i18n/utils';
+import { localizePath, getAlternates, withTrailingSlash } from '../i18n/utils';
 import '../styles/global.css';
 
 interface Props {
@@ -29,7 +29,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const canonical = new URL(localizePath(route, lang), SITE.url).href;
+const canonical = withTrailingSlash(new URL(localizePath(route, lang), SITE.url).href);
 const alternates = getAlternates(route, SITE.url);
 const ogImage = new URL(image, SITE.url).href;
 const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
@@ -95,7 +95,7 @@ const allSchema = [orgSchema, ...schema];
 <!-- Structured data (SEO + GEO) -->
 {
   allSchema.map((s) => (
-    <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />
   ))
 }
 
