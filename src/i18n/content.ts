@@ -66,6 +66,14 @@ export interface SiteContent {
     };
     ticker: { label: string };
     trust: string;
+    stats: { n: number; prefix?: string; suffix?: string; label: string }[];
+    showcase: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      generatedBadge: string;
+      tabs: { label: string; prompt: string; caption: string }[];
+    };
     features: {
       eyebrow: string;
       title: string;
@@ -83,6 +91,7 @@ export interface SiteContent {
       title: string;
       subtitle: string;
       note: string;
+      groups: Record<ConnectorGroupKey, string>;
     };
     privacy: {
       eyebrow: string;
@@ -155,30 +164,23 @@ export interface SiteContent {
 /* ------------------------------------------------------------------ *
  * Shared, language-neutral data
  * ------------------------------------------------------------------ */
-export const CONNECTORS = [
-  'OANDA',
-  'Binance',
-  'Coinbase',
-  'Kraken',
-  'Deribit',
-  'BitMEX',
-  'Alpaca',
-  'Interactive Brokers',
-  'TradeStation',
-  'Polygon',
-  'Alpha Vantage',
-  'Intrinio',
-  'IQFeed',
-  'Rithmic',
-  'LMAX',
-  'FXCM',
-  'Kalshi',
-  'Polymarket',
-  'Trading Economics',
-  'Postgres',
-  'ClickHouse',
-  'Qdrant',
+export const CONNECTOR_GROUPS = [
+  { key: 'fx', venues: ['OANDA', 'LMAX', 'FXCM'] },
+  { key: 'crypto', venues: ['Binance', 'Coinbase', 'Kraken', 'Deribit', 'BitMEX'] },
+  {
+    key: 'equities',
+    venues: ['Interactive Brokers', 'Alpaca', 'TradeStation', 'Polygon', 'Rithmic', 'IQFeed'],
+  },
+  { key: 'prediction', venues: ['Kalshi', 'Polymarket'] },
+  {
+    key: 'data',
+    venues: ['Alpha Vantage', 'Intrinio', 'Trading Economics', 'Postgres', 'ClickHouse', 'Qdrant'],
+  },
 ] as const;
+
+export type ConnectorGroupKey = (typeof CONNECTOR_GROUPS)[number]['key'];
+
+export const CONNECTORS = CONNECTOR_GROUPS.flatMap((g) => g.venues);
 
 /* ------------------------------------------------------------------ *
  * English
@@ -248,6 +250,41 @@ const en: SiteContent = {
     },
     ticker: { label: 'Live connectors' },
     trust: 'One canvas for every market — FX, crypto, equities, futures, options & prediction markets.',
+    stats: [
+      { n: 22, suffix: '+', label: 'live market-data connectors' },
+      { n: 6, label: 'asset classes on one canvas' },
+      { n: 0, label: 'bytes sent to our servers in private mode' },
+      { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
+    ],
+    showcase: {
+      eyebrow: 'Showcase',
+      title: 'One sentence. Any widget.',
+      subtitle:
+        'Charts, order books, heatmaps, odds — if you can describe it, Nexow can build it and wire it to live data.',
+      generatedBadge: 'generated & live',
+      tabs: [
+        {
+          label: 'Candles + indicators',
+          prompt: 'Candlestick chart of BTC-USD from Coinbase with 20 & 50 EMA and RSI below.',
+          caption: 'Streaming from Coinbase — EMAs and RSI computed in the widget.',
+        },
+        {
+          label: 'Order-book depth',
+          prompt: 'Live order-book depth for ETH-PERP on Deribit, bids vs asks.',
+          caption: 'Bids and asks aggregated in real time from the Deribit book.',
+        },
+        {
+          label: 'Correlation heatmap',
+          prompt: '30-day correlation heatmap for BTC, ETH, SOL, EURUSD, gold and SPX.',
+          caption: 'Cross-asset correlations recomputed as new closes arrive.',
+        },
+        {
+          label: 'Prediction markets',
+          prompt: 'Kalshi odds of a Fed rate cut at the next FOMC, with 24h change.',
+          caption: 'Event probabilities streamed straight from the Kalshi order book.',
+        },
+      ],
+    },
     features: {
       eyebrow: 'Why Nexow',
       title: 'The dashboard builds itself',
@@ -314,6 +351,13 @@ const en: SiteContent = {
       subtitle:
         'Pluggable connectors stream live prices, order books and reference data straight into your widgets — across FX, crypto, equities, futures, options and prediction markets.',
       note: 'Some venues connect directly from your browser where CORS allows; the rest route through a thin proxy. New connectors are added regularly.',
+      groups: {
+        fx: 'FX',
+        crypto: 'Crypto',
+        equities: 'Equities & futures',
+        prediction: 'Prediction markets',
+        data: 'Data & databases',
+      },
     },
     privacy: {
       eyebrow: 'Private by design',
@@ -625,6 +669,41 @@ const es: SiteContent = {
     },
     ticker: { label: 'Conectores en vivo' },
     trust: 'Un lienzo para todos los mercados — FX, cripto, acciones, futuros, opciones y mercados de predicción.',
+    stats: [
+      { n: 22, suffix: '+', label: 'conectores de datos de mercado en vivo' },
+      { n: 6, label: 'clases de activos en un solo lienzo' },
+      { n: 0, label: 'bytes enviados a nuestros servidores en modo privado' },
+      { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
+    ],
+    showcase: {
+      eyebrow: 'Showcase',
+      title: 'Una frase. Cualquier widget.',
+      subtitle:
+        'Gráficos, order books, mapas de calor, probabilidades — si puedes describirlo, Nexow puede construirlo y conectarlo a datos en vivo.',
+      generatedBadge: 'generado y en vivo',
+      tabs: [
+        {
+          label: 'Velas + indicadores',
+          prompt: 'Gráfico de velas de BTC-USD de Coinbase con EMA 20 y 50 y RSI debajo.',
+          caption: 'En streaming desde Coinbase — EMAs y RSI calculados en el widget.',
+        },
+        {
+          label: 'Profundidad del libro',
+          prompt: 'Profundidad del order book de ETH-PERP en Deribit, bids contra asks.',
+          caption: 'Bids y asks agregados en tiempo real del libro de Deribit.',
+        },
+        {
+          label: 'Mapa de correlación',
+          prompt: 'Mapa de calor de correlación a 30 días de BTC, ETH, SOL, EURUSD, oro y SPX.',
+          caption: 'Correlaciones entre activos recalculadas con cada nuevo cierre.',
+        },
+        {
+          label: 'Mercados de predicción',
+          prompt: 'Probabilidad en Kalshi de un recorte de tipos de la Fed en el próximo FOMC, con cambio a 24h.',
+          caption: 'Probabilidades de eventos directas del order book de Kalshi.',
+        },
+      ],
+    },
     features: {
       eyebrow: 'Por qué Nexow',
       title: 'El dashboard se construye solo',
@@ -691,6 +770,13 @@ const es: SiteContent = {
       subtitle:
         'Conectores conectables transmiten precios en vivo, order books y datos de referencia directo a tus widgets — en FX, cripto, acciones, futuros, opciones y mercados de predicción.',
       note: 'Algunos venues se conectan directo desde tu navegador donde CORS lo permite; el resto pasa por un proxy ligero. Añadimos conectores nuevos con frecuencia.',
+      groups: {
+        fx: 'FX',
+        crypto: 'Cripto',
+        equities: 'Acciones y futuros',
+        prediction: 'Mercados de predicción',
+        data: 'Datos y bases de datos',
+      },
     },
     privacy: {
       eyebrow: 'Privado por diseño',

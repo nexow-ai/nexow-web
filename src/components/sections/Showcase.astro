@@ -1,0 +1,137 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import SectionHeading from '../SectionHeading.astro';
+import BrandMark from '../BrandMark.astro';
+import Icon from '../Icon.astro';
+import CandlestickChart from '../CandlestickChart.astro';
+import DepthChart from '../DepthChart.astro';
+import HeatmapMock from '../HeatmapMock.astro';
+import PredictionMock from '../PredictionMock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home.showcase;
+---
+
+<section id="showcase" class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-32">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(70%_55%_at_50%_45%,black,transparent)]"></div>
+    <div class="glow-brand absolute left-1/2 top-[55%] size-[800px] -translate-x-1/2 -translate-y-1/2 opacity-30"></div>
+  </div>
+
+  <div class="container-page relative">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+
+    <!-- Tabs -->
+    <div
+      class="reveal mx-auto mt-12 flex max-w-3xl flex-wrap justify-center gap-2"
+      role="tablist"
+      aria-label={t.title}
+      data-showcase-tabs
+    >
+      {
+        t.tabs.map((tab, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`showcase-tab-${i}`}
+            aria-controls={`showcase-panel-${i}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-index={i}
+            class:list={[
+              'rounded-full px-4 py-2 font-mono text-xs font-medium transition-all duration-200',
+              i === 0
+                ? 'bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/30'
+                : 'text-ink-400 ring-1 ring-white/10 hover:text-ink-200 hover:ring-white/20',
+            ]}
+          >
+            {tab.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Terminal frame -->
+    <div class="reveal mx-auto mt-8 max-w-4xl">
+      <div class="relative overflow-hidden rounded-2xl bg-ink-900 shadow-2xl shadow-black/60 ring-1 ring-white/10">
+        <div class="bg-grid absolute inset-0 opacity-25"></div>
+
+        <!-- Window chrome -->
+        <div class="relative flex items-center gap-2 border-b border-white/5 px-4 py-3">
+          <span class="size-3 rounded-full bg-rose-500/80"></span>
+          <span class="size-3 rounded-full bg-amber-400/80"></span>
+          <span class="size-3 rounded-full bg-emerald-400/80"></span>
+          <div class="ml-3 flex items-center gap-1.5 text-ink-400">
+            <BrandMark class="size-3.5 text-brand-400" />
+            <span class="font-mono text-xs tracking-tight">nexow · canvas</span>
+          </div>
+          <span class="ml-auto flex items-center gap-1.5 rounded-full bg-brand-500/10 px-2.5 py-1 font-mono text-[0.65rem] text-brand-300">
+            <Icon name="sparkles" class="size-3" /> {t.generatedBadge}
+          </span>
+        </div>
+
+        {
+          t.tabs.map((tab, i) => (
+            <div
+              role="tabpanel"
+              id={`showcase-panel-${i}`}
+              aria-labelledby={`showcase-tab-${i}`}
+              hidden={i !== 0}
+              class="relative"
+            >
+              <!-- Prompt bar -->
+              <div class="px-4 pt-4 sm:px-5">
+                <div class="flex items-center gap-3 rounded-xl border border-white/10 bg-ink-850 px-3.5 py-3">
+                  <BrandMark class="size-4 shrink-0 text-brand-400" />
+                  <p class="min-w-0 flex-1 truncate font-mono text-xs text-ink-200 sm:text-sm">{tab.prompt}</p>
+                </div>
+              </div>
+
+              <!-- Widget body -->
+              <div class="m-4 rounded-xl border border-white/5 bg-ink-850/60 p-4 sm:m-5 sm:p-5">
+                {i === 0 && <CandlestickChart class="h-52 w-full text-white sm:h-64" width={720} height={260} seed={11} />}
+                {i === 1 && <DepthChart class="h-52 w-full text-white sm:h-64" width={720} height={260} />}
+                {i === 2 && <HeatmapMock />}
+                {i === 3 && <PredictionMock />}
+              </div>
+
+              <p class="px-5 pb-5 text-center font-mono text-xs text-ink-500">{tab.caption}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Showcase tab switcher — progressive enhancement over a first-panel default.
+  const root = document.querySelector('[data-showcase-tabs]');
+  if (root) {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const activeCls = ['bg-brand-500/15', 'text-brand-300', 'ring-brand-400/30'];
+    const idleCls = ['text-ink-400', 'ring-white/10', 'hover:text-ink-200', 'hover:ring-white/20'];
+    const select = (idx: number) => {
+      tabs.forEach((tab, i) => {
+        const on = i === idx;
+        tab.setAttribute('aria-selected', String(on));
+        activeCls.forEach((c) => tab.classList.toggle(c, on));
+        idleCls.forEach((c) => tab.classList.toggle(c, !on));
+        const panel = document.getElementById(`showcase-panel-${i}`);
+        if (panel) panel.hidden = !on;
+      });
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+        select(next);
+        tabs[next].focus();
+      });
+    });
+  }
+</script>

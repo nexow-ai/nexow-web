@@ -1,0 +1,48 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home;
+
+/** Static, deterministic tape — decorative market flavour, not live quotes. */
+const TAPE: { sym: string; px: string; chg: string; up: boolean }[] = [
+  { sym: 'BTC-USD', px: '68,420', chg: '+2.14%', up: true },
+  { sym: 'ETH-USD', px: '3,842.5', chg: '+1.62%', up: true },
+  { sym: 'EURUSD', px: '1.0854', chg: '-0.12%', up: false },
+  { sym: 'SPX', px: '5,987.2', chg: '+0.48%', up: true },
+  { sym: 'SOL-USD', px: '188.34', chg: '+4.91%', up: true },
+  { sym: 'XAUUSD', px: '2,412.8', chg: '+0.22%', up: true },
+  { sym: 'NQ', px: '21,544', chg: '-0.31%', up: false },
+  { sym: 'USDJPY', px: '157.42', chg: '+0.09%', up: true },
+  { sym: 'FED-CUT', px: '72¢', chg: '+3¢', up: true },
+  { sym: 'CL', px: '81.15', chg: '-0.87%', up: false },
+  { sym: 'DOGE-USD', px: '0.1421', chg: '+6.23%', up: true },
+  { sym: 'GBPUSD', px: '1.2731', chg: '+0.05%', up: true },
+];
+const loop = [...TAPE, ...TAPE];
+---
+
+<section class="relative border-b border-white/5 bg-ink-950 py-6" aria-label={t.ticker.label}>
+  <div
+    class="relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]"
+  >
+    <div class="flex w-max animate-marquee items-center gap-8" style="animation-duration: 55s;">
+      {
+        loop.map((q) => (
+          <span class="inline-flex shrink-0 items-baseline gap-2.5 font-mono text-sm">
+            <span class="font-semibold text-ink-200">{q.sym}</span>
+            <span class="text-ink-400">{q.px}</span>
+            <span class={q.up ? 'text-emerald-400' : 'text-rose-400'}>
+              {q.up ? '▲' : '▼'} {q.chg}
+            </span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+  <p class="container-page mt-5 text-center text-sm text-ink-500">{t.trust}</p>
+</section>
