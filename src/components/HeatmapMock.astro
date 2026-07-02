@@ -1,0 +1,53 @@
+---
+/**
+ * Decorative correlation heatmap — 6×6 grid of hand-picked, plausible values.
+ * Teal = positive, rose = negative; opacity scales with |ρ|.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const ASSETS = ['BTC', 'ETH', 'SOL', 'EURUSD', 'XAU', 'SPX'];
+const M: number[][] = [
+  [1.0, 0.86, 0.74, 0.12, 0.18, 0.44],
+  [0.86, 1.0, 0.81, 0.09, 0.14, 0.41],
+  [0.74, 0.81, 1.0, 0.05, 0.08, 0.35],
+  [0.12, 0.09, 0.05, 1.0, 0.31, -0.22],
+  [0.18, 0.14, 0.08, 0.31, 1.0, -0.15],
+  [0.44, 0.41, 0.35, -0.22, -0.15, 1.0],
+];
+
+const cellStyle = (v: number) => {
+  const color = v >= 0 ? '16, 197, 163' : '244, 63, 94';
+  const a = Math.max(0.06, Math.abs(v) * 0.75);
+  return `background-color: rgba(${color}, ${a.toFixed(2)})`;
+};
+---
+
+<div class:list={['select-none', className]} aria-hidden="true">
+  <div class="grid grid-cols-[3.5rem_repeat(6,1fr)] gap-1 font-mono text-[0.6rem] sm:text-[0.65rem]">
+    <div></div>
+    {ASSETS.map((a) => <div class="pb-1 text-center text-ink-500">{a}</div>)}
+    {
+      M.map((row, i) => (
+        <>
+          <div class="flex items-center justify-end pr-2 text-ink-500">{ASSETS[i]}</div>
+          {row.map((v) => (
+            <div
+              class="flex aspect-[2/1] items-center justify-center rounded-md text-white/85 sm:aspect-[2.4/1]"
+              style={cellStyle(v)}
+            >
+              {v.toFixed(2)}
+            </div>
+          ))}
+        </>
+      ))
+    }
+  </div>
+  <div class="mt-3 flex items-center justify-end gap-2 font-mono text-[0.6rem] text-ink-500">
+    <span>-1</span>
+    <span class="h-1.5 w-24 rounded-full" style="background:linear-gradient(90deg, rgba(244,63,94,0.8), rgba(255,255,255,0.06), rgba(16,197,163,0.8))"></span>
+    <span>+1</span>
+  </div>
+</div>

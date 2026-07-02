@@ -1,0 +1,86 @@
+---
+/**
+ * Decorative order-book depth chart (cumulative bids vs asks) as inline SVG.
+ * Seeded PRNG keeps the build deterministic. Purely presentational.
+ */
+interface Props {
+  width?: number;
+  height?: number;
+  levels?: number;
+  seed?: number;
+  class?: string;
+}
+const { width = 560, height = 220, levels = 26, seed = 3, class: className } = Astro.props;
+
+let s = seed * 2654435761;
+const rand = () => {
+  s = (s * 1103515245 + 12345) & 0x7fffffff;
+  return s / 0x7fffffff;
+};
+
+// Cumulative size walls, growing away from the mid price.
+const cumulate = () => {
+  const out: number[] = [];
+  let acc = 0;
+  for (let i = 0; i < levels; i++) {
+    acc += 0.4 + rand() * (1 + i * 0.12);
+    out.push(acc);
+  }
+  return out;
+};
+const bids = cumulate();
+const asks = cumulate();
+const maxDepth = Math.max(bids[levels - 1], asks[levels - 1]);
+
+const pad = { top: 14, bottom: 6 };
+const midX = width / 2;
+const gap = 6; // spread gap at the mid
+const ih = height - pad.top - pad.bottom;
+const y = (v: number) => height - pad.bottom - (v / maxDepth) * ih;
+const stepW = (midX - gap) / levels;
+
+// Step-area paths: bids extend left of mid, asks right.
+const wall = (depths: number[], dir: -1 | 1) => {
+  let d = `M ${midX + dir * gap} ${height - pad.bottom}`;
+  depths.forEach((v, i) => {
+    const x0 = midX + dir * (gap + i * stepW);
+    const x1 = midX + dir * (gap + (i + 1) * stepW);
+    d += ` L ${x0.toFixed(1)} ${y(v).toFixed(1)} L ${x1.toFixed(1)} ${y(v).toFixed(1)}`;
+  });
+  d += ` L ${midX + dir * (gap + levels * stepW)} ${height - pad.bottom} Z`;
+  return d;
+};
+---
+
+<svg viewBox={`0 0 ${width} ${height}`} class={className} fill="none" aria-hidden="true" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id={`bid-${seed}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10c5a3" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#10c5a3" stop-opacity="0.06" />
+    </linearGradient>
+    <linearGradient id={`ask-${seed}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.4" />
+      <stop offset="1" stop-color="#f43f5e" stop-opacity="0.06" />
+    </linearGradient>
+  </defs>
+
+  {
+    [0.25, 0.5, 0.75].map((f) => (
+      <line
+        x1="0"
+        x2={width}
+        y1={pad.top + ih * f}
+        y2={pad.top + ih * f}
+        stroke="currentColor"
+        stroke-opacity="0.07"
+        stroke-width="1"
+      />
+    ))
+  }
+
+  <path d={wall(bids, -1)} fill={`url(#bid-${seed})`} stroke="#10c5a3" stroke-width="1.5" stroke-opacity="0.9" />
+  <path d={wall(asks, 1)} fill={`url(#ask-${seed})`} stroke="#f43f5e" stroke-width="1.5" stroke-opacity="0.9" />
+
+  <!-- mid-price marker -->
+  <line x1={midX} x2={midX} y1={pad.top - 4} y2={height - pad.bottom} stroke="white" stroke-opacity="0.25" stroke-dasharray="3 4" />
+</svg>

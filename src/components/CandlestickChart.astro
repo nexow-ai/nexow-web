@@ -9,9 +9,11 @@ interface Props {
   height?: number;
   count?: number;
   seed?: number;
+  /** Animate the EMA overlay drawing in on load. */
+  animate?: boolean;
   class?: string;
 }
-const { width = 520, height = 260, count = 44, seed = 7, class: className } = Astro.props;
+const { width = 520, height = 260, count = 44, seed = 7, animate = false, class: className } = Astro.props;
 
 // Deterministic LCG.
 let s = seed * 2654435761;
@@ -109,5 +111,13 @@ const down = '#f43f5e';
   }
 
   <!-- EMA -->
-  <path d={emaPath} stroke={`url(#ema-${seed})`} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <path
+    d={emaPath}
+    stroke={`url(#ema-${seed})`}
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={animate ? 'draw-line' : undefined}
+    style={animate ? `--line-len:${Math.round(width * 1.4)}` : undefined}
+  />
 </svg>
