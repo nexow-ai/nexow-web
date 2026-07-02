@@ -1,0 +1,41 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPosts, slugOf } from '../../i18n/blog';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import BlogCard from '../BlogCard.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).blog;
+const posts = await getPosts(lang);
+---
+
+<Layout lang={lang} route="/blog" title={t.meta.title} description={t.meta.description}>
+  <PageHero badge={t.title} title={t.title} subtitle={t.subtitle} />
+
+  <section class="container-page pb-24 sm:pb-32">
+    {
+      posts.length === 0 ? (
+        <p class="text-center text-ink-500">—</p>
+      ) : (
+        <div class="reveal-stagger grid gap-5 md:grid-cols-2">
+          {posts.map((post, i) => (
+            <BlogCard
+              lang={lang}
+              slug={slugOf(post)}
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              tags={post.data.tags}
+              featured={i === 0}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Layout>
