@@ -1,0 +1,47 @@
+---
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import Button from '../Button.astro';
+import BrandMark from '../BrandMark.astro';
+
+interface Props {
+  lang: Lang;
+  /** Use the generic home CTA (default) or provide explicit copy. */
+  title?: string;
+  subtitle?: string;
+  primary?: string;
+  secondary?: string;
+  secondaryHref?: string;
+}
+const { lang } = Astro.props;
+const home = useContent(lang).home.cta;
+const title = Astro.props.title ?? home.title;
+const subtitle = Astro.props.subtitle ?? home.subtitle;
+const primary = Astro.props.primary ?? home.primary;
+const secondary = Astro.props.secondary ?? home.secondary;
+const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
+---
+
+<section class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-28">
+  <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"></div>
+  <div class="glow-brand pointer-events-none absolute left-1/2 top-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 opacity-60"></div>
+
+  <div class="container-page relative">
+    <div class="reveal mx-auto flex max-w-2xl flex-col items-center text-center">
+      <BrandMark class="size-10 text-brand-400" title="Nexow" />
+      <h2 class="mt-6 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+        {title}
+      </h2>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-300">{subtitle}</p>
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <Button href={SITE.appUrl} variant="dark" size="lg" external iconRight="arrow">
+          {primary}
+        </Button>
+        <Button href={secondaryHref} variant="ghost" size="lg" class="!text-ink-200 hover:!bg-white/10">
+          {secondary}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
