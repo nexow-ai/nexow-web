@@ -1020,8 +1020,427 @@ const es: SiteContent = {
   },
 };
 
+/* ------------------------------------------------------------------ *
+ * French
+ * ------------------------------------------------------------------ */
+const fr: SiteContent = {
+  nav: {
+    links: [
+      { label: 'Fonctionnalités', href: '/features' },
+      { label: 'Tarifs', href: '/pricing' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'À propos', href: '/about' },
+    ],
+    launch: 'Ouvrir l’app',
+    menu: 'Ouvrir le menu',
+    close: 'Fermer le menu',
+  },
+  footer: {
+    tagline: 'Décrivez un widget. Nexow le construit, le connecte aux données de marché en direct et le place sur votre canvas.',
+    columns: [
+      {
+        title: 'Produit',
+        links: [
+          { label: 'Fonctionnalités', href: '/features' },
+          { label: 'Tarifs', href: '/pricing' },
+          { label: 'Connecteurs', href: '/#connectors' },
+          { label: 'Roadmap', href: '/#roadmap' },
+        ],
+      },
+      {
+        title: 'Entreprise',
+        links: [
+          { label: 'À propos', href: '/about' },
+          { label: 'Blog', href: '/blog' },
+        ],
+      },
+      {
+        title: 'Ressources',
+        links: [
+          { label: 'Ouvrir l’app', href: 'https://app.nexow.ai' },
+          { label: 'Confidentialité', href: '/privacy' },
+        ],
+      },
+    ],
+    rights: 'Tous droits réservés.',
+    disclaimer:
+      'Nexow est une plateforme d’outils et de visualisation. Rien ici ne constitue un conseil financier. Les marchés comportent des risques ; tradez de manière responsable.',
+    builtWith: 'Construit avec Astro. Privé par défaut.',
+  },
+  home: {
+    meta: {
+      title: 'Nexow — Créez des tableaux de bord de marché avec l’IA, en langage naturel',
+      description:
+        'Nexow est un créateur de tableaux de bord natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le génère, l’exécute en sandbox et le connecte aux données en direct de plus de 20 connecteurs de trading et de marché — privé par défaut.',
+    },
+    hero: {
+      badge: 'Preview disponible',
+      titleLead: 'Décrivez-le.',
+      titleGradient: 'Nexow le construit.',
+      titleTail: 'Tradez-le.',
+      subtitle:
+        'Un créateur de tableaux de bord natif IA pour les marchés. Demandez n’importe quel widget en langage naturel — Nexow écrit le code, l’exécute en toute sécurité et diffuse les données en direct de vos venues préférées sur un canvas libre.',
+      ctaPrimary: 'Ouvrir l’app',
+      ctaSecondary: 'Voir comment ça marche',
+      note: 'Sans inscription pour essayer · Fonctionne en privé dans votre navigateur · Apportez votre propre clé',
+      promptExample: 'Affiche un graphique en chandeliers de BTC-USD depuis Coinbase avec EMA 20 et 50 et RSI en dessous.',
+      promptPlaceholder: 'Décrivez un widget…',
+    },
+    ticker: { label: 'Connecteurs en direct' },
+    trust: 'Un canvas pour tous les marchés — FX, crypto, actions, futures, options et marchés de prédiction.',
+    stats: [
+      { n: 22, suffix: '+', label: 'connecteurs de données de marché en direct' },
+      { n: 6, label: 'classes d’actifs sur un seul canvas' },
+      { n: 0, label: 'octets envoyés à nos serveurs en mode privé' },
+      { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
+    ],
+    showcase: {
+      eyebrow: 'Showcase',
+      title: 'Une phrase. N’importe quel widget.',
+      subtitle:
+        'Graphiques, carnets d’ordres, heatmaps, probabilités — si vous pouvez le décrire, Nexow peut le construire et le connecter aux données en direct.',
+      generatedBadge: 'généré et en direct',
+      tabs: [
+        {
+          label: 'Chandeliers + indicateurs',
+          prompt: 'Graphique en chandeliers de BTC-USD depuis Coinbase avec EMA 20 et 50 et RSI en dessous.',
+          caption: 'En streaming depuis Coinbase — EMA et RSI calculés dans le widget.',
+        },
+        {
+          label: 'Profondeur du carnet',
+          prompt: 'Profondeur du carnet d’ordres pour ETH-PERP sur Deribit, bids vs asks.',
+          caption: 'Bids et asks agrégés en temps réel depuis le carnet Deribit.',
+        },
+        {
+          label: 'Heatmap de corrélation',
+          prompt: 'Heatmap de corrélation sur 30 jours pour BTC, ETH, SOL, EURUSD, or et SPX.',
+          caption: 'Corrélations inter-actifs recalculées à chaque nouveau clôture.',
+        },
+        {
+          label: 'Marchés de prédiction',
+          prompt: 'Probabilités Kalshi d’une baisse des taux de la Fed au prochain FOMC, avec variation sur 24h.',
+          caption: 'Probabilités d’événements diffusées directement depuis le carnet Kalshi.',
+        },
+      ],
+    },
+    features: {
+      eyebrow: 'Pourquoi Nexow',
+      title: 'Le tableau de bord se construit tout seul',
+      subtitle:
+        'Arrêtez de câbler les graphiques à la main. Décrivez ce que vous voulez voir et Nexow génère un widget réel et fonctionnel — puis vous l’affinez en langage naturel.',
+      items: [
+        {
+          icon: 'sparkles',
+          title: 'Widgets en langage naturel',
+          body: 'Décrivez un graphique, un tableau, une heatmap ou un signal avec des mots. Nexow écrit le code du widget avec Claude et l’exécute en direct — sans boilerplate ni fichiers de config.',
+        },
+        {
+          icon: 'shield',
+          title: 'Sandboxé et sécurisé',
+          body: 'Chaque widget s’exécute dans un iframe isolé avec une frontière stricte. Le code généré peut rendre et récupérer des données, mais ne touche jamais au reste de votre espace de travail.',
+        },
+        {
+          icon: 'plug',
+          title: 'Plus de 20 connecteurs en direct',
+          body: 'Fournisseurs de données branchables — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket et plus — acheminent les données en temps réel vers vos widgets.',
+        },
+        {
+          icon: 'layers',
+          title: 'Canvas libre',
+          body: 'Glissez, redimensionnez et organisez les widgets sur un canvas infini. Regroupez-les en espaces et écrans pour FX, crypto, recherche — ce que vous tradez.',
+        },
+        {
+          icon: 'lock',
+          title: 'Privé par défaut',
+          body: 'Fonctionne entièrement en local : ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur. Widgets, versions et logs sont stockés dans IndexedDB — rien n’est envoyé à nos serveurs.',
+        },
+        {
+          icon: 'history',
+          title: 'Versions et bibliothèque de widgets',
+          body: 'Chaque modification est versionnée avec des logs que vous pouvez inspecter. Enregistrez des widgets dans votre bibliothèque et réutilisez-les sur n’importe quel tableau de bord en un clic.',
+        },
+      ],
+    },
+    how: {
+      eyebrow: 'Comment ça marche',
+      title: 'D’une phrase à un widget en direct en quelques secondes',
+      subtitle: 'Trois étapes. Pas de config, pas de build, pas de code glue.',
+      steps: [
+        {
+          n: '01',
+          title: 'Décrivez',
+          body: 'Tapez ce que vous voulez en langage naturel — « un graphique de profondeur du carnet d’ordres pour ETH-PERP sur Deribit ».',
+        },
+        {
+          n: '02',
+          title: 'Générez',
+          body: 'Nexow écrit le code du widget avec Claude et l’exécute dans un iframe sandboxé, connecté au connecteur que vous avez choisi.',
+        },
+        {
+          n: '03',
+          title: 'Affinez et organisez',
+          body: 'Ajustez-le en langage naturel, versionnez-le, puis placez-le sur votre canvas à côté de tout ce que vous suivez.',
+        },
+      ],
+    },
+    connectors: {
+      eyebrow: 'Connecteurs',
+      title: 'Branchez-vous à tous les marchés',
+      subtitle:
+        'Des connecteurs branchables diffusent prix en direct, carnets d’ordres et données de référence directement dans vos widgets — FX, crypto, actions, futures, options et marchés de prédiction.',
+      note: 'Certains venues se connectent directement depuis votre navigateur lorsque CORS le permet ; les autres passent par un proxy léger. De nouveaux connecteurs sont ajoutés régulièrement.',
+      groups: {
+        fx: 'FX',
+        crypto: 'Crypto',
+        equities: 'Actions et futures',
+        prediction: 'Marchés de prédiction',
+        data: 'Données et bases de données',
+      },
+    },
+    privacy: {
+      eyebrow: 'Privé par conception',
+      title: 'Vos clés. Vos données. Votre machine.',
+      body: 'Nexow fonctionne entièrement en local par défaut. En mode privé, vous ajoutez votre propre clé API Anthropic et la génération de widgets se fait entièrement dans votre navigateur — rien n’est envoyé à nos serveurs, donc une session non authentifiée ne nous coûte rien et ne fuit rien.',
+      points: [
+        'La génération avec votre propre clé s’exécute côté client',
+        'Widgets, versions et logs sont stockés dans votre navigateur (IndexedDB)',
+        'Les connexions directes aux venues gardent les identifiants hors de notre infrastructure',
+        'Aucun compte requis pour commencer à construire',
+      ],
+      cta: 'Lire l’architecture du mode local',
+    },
+    roadmap: {
+      eyebrow: 'Roadmap',
+      title: 'C’est la preview. Voici la suite.',
+      subtitle:
+        'Nexow a lancé une preview publique du canvas et de la génération de code. Les blocs suivants arrivent bientôt.',
+      shipped: 'Disponible',
+      soon: 'Bientôt',
+      items: [
+        { status: 'shipped', title: 'Génération de widgets par IA', body: 'Widgets en langage naturel exécutés en sandbox sur le canvas.' },
+        { status: 'shipped', title: 'Connecteurs de données de marché', body: 'Plus de 20 venues diffusant des données en direct vers les widgets.' },
+        { status: 'shipped', title: 'Espaces et bibliothèque', body: 'Canvas multi-écrans, versions, logs et une bibliothèque de widgets réutilisable.' },
+        { status: 'soon', title: 'Agents de trading', body: 'Agents autonomes qui surveillent vos widgets et agissent selon les règles que vous décrivez.' },
+        { status: 'soon', title: 'Composants serveur', body: 'Widgets et tâches persistants côté serveur qui continuent de tourner lorsque votre onglet est fermé.' },
+        { status: 'soon', title: 'Communauté', body: 'Partagez widgets et tableaux de bord, forkez ce que d’autres construisent et publiez dans une bibliothèque publique.' },
+      ],
+    },
+    faq: {
+      eyebrow: 'FAQ',
+      title: 'Questions, réponses',
+      subtitle: 'Tout ce qu’il faut savoir avant d’ouvrir l’app.',
+      items: [
+        {
+          q: 'Qu’est-ce que Nexow ?',
+          a: 'Nexow est un créateur de tableaux de bord natif IA pour les marchés financiers. Vous décrivez un widget — un graphique, un tableau, une heatmap ou un signal — en langage naturel, et Nexow génère son code source, l’exécute dans un iframe sandboxé et lui diffuse des données de marché en direct sur un canvas libre.',
+        },
+        {
+          q: 'Dois-je savoir coder ?',
+          a: 'Non. Vous décrivez ce que vous voulez en langage naturel et Nexow écrit et exécute le widget pour vous. Si vous lisez le code, le code source et l’historique des versions de chaque widget sont disponibles pour inspection et affinage.',
+        },
+        {
+          q: 'Mes données sont-elles privées ?',
+          a: 'Oui. Nexow fonctionne entièrement en local par défaut : vous ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur. Vos widgets, versions et logs sont stockés dans l’IndexedDB de votre navigateur, et de nombreux venues se connectent directement depuis le navigateur — vos données et identifiants restent sur votre machine.',
+        },
+        {
+          q: 'Quels marchés et venues sont pris en charge ?',
+          a: 'Nexow inclut plus de 20 connecteurs branchables couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon), marchés de prédiction (Kalshi, Polymarket) et fournisseurs de données (Alpha Vantage, Intrinio, Trading Economics, et bases de données comme Postgres et ClickHouse).',
+        },
+        {
+          q: 'Combien ça coûte ?',
+          a: 'La preview est gratuite à essayer, et en mode privé vous ne payez que votre propre usage de l’API Anthropic. Consultez la page tarifs pour les détails des futurs plans hébergés.',
+        },
+        {
+          q: 'Quel modèle IA alimente Nexow ?',
+          a: 'Nexow génère des widgets avec les modèles Claude d’Anthropic via le SDK Anthropic. En mode privé, vous fournissez votre propre clé pour garder le contrôle total de l’usage et du coût.',
+        },
+        {
+          q: 'Qu’est-ce qui arrive ensuite ?',
+          a: 'Des agents de trading qui agissent selon les règles que vous décrivez, des composants persistants côté serveur et une couche communautaire pour partager et forker widgets et tableaux de bord.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Construisez votre premier widget dans la prochaine minute',
+      subtitle: 'La preview est en ligne et gratuite à essayer. Sans inscription, sans setup — décrivez simplement ce que vous voulez voir.',
+      primary: 'Ouvrir Nexow',
+      secondary: 'Explorer les fonctionnalités',
+    },
+  },
+  features: {
+    meta: {
+      title: 'Fonctionnalités — Nexow',
+      description:
+        'Génération de widgets en langage naturel, runtime sandboxé, plus de 20 connecteurs de données de marché, canvas libre, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+    },
+    hero: {
+      badge: 'Fonctionnalités',
+      title: 'Tout ce qu’il faut pour créer des tableaux de bord de marché avec des mots',
+      subtitle:
+        'Nexow transforme une phrase en widget fonctionnel connecté aux données — puis vous donne le canvas, les connecteurs et le modèle de confidentialité pour construire un vrai poste de travail.',
+    },
+    groups: [
+      {
+        title: 'Générer',
+        body: 'Décrivez ce que vous voulez voir ; Nexow l’écrit et l’exécute.',
+        items: [
+          { icon: 'sparkles', title: 'Codegen en langage naturel', body: 'Décrivez un widget et Nexow génère tout son code avec Claude — graphiques, tableaux, heatmaps, carnets d’ordres, signaux personnalisés.' },
+          { icon: 'wand', title: 'Affiner par conversation', body: 'Changez ce que vous voulez en demandant. « Ajoute une EMA 200 », « passe en échelle log », « colore par funding rate » — Nexow modifie le widget sur place.' },
+          { icon: 'history', title: 'Versionné et inspectable', body: 'Chaque génération est versionnée avec des logs. Revenez en arrière, comparez et lisez le code exact qui tourne dans chaque widget.' },
+        ],
+      },
+      {
+        title: 'Exécuter',
+        body: 'Un runtime sécurisé et rapide pour le code généré.',
+        items: [
+          { icon: 'shield', title: 'Iframes sandboxés', body: 'Les widgets s’exécutent dans des iframes isolés avec une frontière stricte — le code généré peut rendre et récupérer des données, mais ne touche pas votre espace ni les autres widgets.' },
+          { icon: 'bolt', title: 'Données en direct et en streaming', body: 'Les widgets s’abonnent aux prix en temps réel, carnets d’ordres et données de référence avec une latence minimale.' },
+          { icon: 'layers', title: 'Canvas libre et espaces', body: 'Organisez les widgets sur un canvas infini, regroupez-les en espaces et écrans, et changez de configuration instantanément.' },
+        ],
+      },
+      {
+        title: 'Connecter',
+        body: 'Des données branchables depuis les venues que vous utilisez vraiment.',
+        items: [
+          { icon: 'plug', title: 'Plus de 20 connecteurs de marché', body: 'FX, crypto, actions, futures, options et marchés de prédiction — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket et plus.' },
+          { icon: 'globe', title: 'Direct depuis le navigateur', body: 'Lorsque CORS le permet, les appels authentifiés aux venues s’exécutent directement depuis votre navigateur et contournent entièrement notre proxy.' },
+          { icon: 'database', title: 'Bases de données aussi', body: 'Pointez les widgets vers Postgres, ClickHouse ou Qdrant pour mélanger vos propres données avec les marchés en direct.' },
+        ],
+      },
+      {
+        title: 'Posséder',
+        body: 'Privé par défaut, à vous pour toujours.',
+        items: [
+          { icon: 'lock', title: 'Mode local privé', body: 'Apportez votre propre clé Anthropic et générez des widgets côté client. Rien n’est envoyé à nos serveurs.' },
+          { icon: 'save', title: 'Persistance locale', body: 'Widgets, versions, logs et votre bibliothèque vivent dans l’IndexedDB de votre navigateur — disponibles hors ligne, sans compte.' },
+          { icon: 'library', title: 'Bibliothèque réutilisable', body: 'Enregistrez n’importe quel widget dans votre bibliothèque et déposez-le sur n’importe quel tableau de bord en un clic.' },
+        ],
+      },
+    ],
+  },
+  pricing: {
+    meta: {
+      title: 'Tarifs — Nexow',
+      description:
+        'Commencez gratuitement en mode privé avec votre propre clé Anthropic. Des plans hébergés avec composants serveur, agents de trading et communauté arrivent bientôt. Consultez les tarifs Nexow.',
+    },
+    hero: {
+      badge: 'Tarifs',
+      title: 'Commencez gratuitement. Payez uniquement ce que vous utilisez.',
+      subtitle:
+        'La preview fonctionne en privé dans votre navigateur — vous ne payez que votre propre usage Anthropic. Les plans hébergés arrivent avec les agents, les composants serveur et la communauté.',
+    },
+    tiers: [
+      {
+        name: 'Privé',
+        price: '0 €',
+        cadence: 'pour toujours',
+        tagline: 'Entièrement local. Apportez votre propre clé.',
+        cta: 'Ouvrir l’app',
+        ctaHref: 'https://app.nexow.ai',
+        features: [
+          'Génération de widgets en langage naturel',
+          'Runtime sandboxé et canvas libre',
+          'Les plus de 20 connecteurs de marché',
+          'Versions, logs et bibliothèque de widgets',
+          'Fonctionne dans votre navigateur (IndexedDB)',
+          'Vous ne payez que votre usage de l’API Anthropic',
+        ],
+      },
+      {
+        name: 'Pro',
+        price: 'Bientôt',
+        cadence: '',
+        tagline: 'Génération et persistance hébergées.',
+        cta: 'Rejoindre la liste',
+        ctaHref: 'https://app.nexow.ai',
+        featured: true,
+        features: [
+          'Tout ce qui est dans Privé',
+          'Génération gérée — sans clé',
+          'Composants serveur qui continuent de tourner',
+          'Espaces synchronisés dans le cloud',
+          'Connecteurs prioritaires et limites plus élevées',
+          'Support par email',
+        ],
+      },
+      {
+        name: 'Équipes',
+        price: 'Discutons-en',
+        cadence: '',
+        tagline: 'Pour les desks et communautés.',
+        cta: 'Nous contacter',
+        ctaHref: 'mailto:hello@nexow.ai',
+        features: [
+          'Tout ce qui est dans Pro',
+          'Agents de trading et automatisation',
+          'Espaces partagés et bibliothèque communautaire',
+          'SSO et accès par rôles',
+          'Support dédié',
+          'Connecteurs personnalisés',
+        ],
+      },
+    ],
+    faqTitle: 'Questions sur les tarifs',
+    faq: [
+      { q: 'La preview est-elle vraiment gratuite ?', a: 'Oui. Le mode privé est gratuit — vous ne payez que votre propre usage de l’API Anthropic lors de la génération de widgets. Aucun abonnement Nexow n’est requis pour construire sur le canvas aujourd’hui.' },
+      { q: 'Ai-je besoin d’une clé Anthropic ?', a: 'Pour le mode privé, oui — vous ajoutez votre propre clé dans les Paramètres et la génération s’exécute dans votre navigateur. Les plans hébergés proposeront une génération gérée sans clé.' },
+      { q: 'Quand les plans payants arrivent-ils ?', a: 'Pro et Équipes arrivent avec les composants serveur, les agents de trading et la communauté. Rejoignez la liste depuis l’app pour être informé en premier.' },
+      { q: 'Y a-t-il des limites d’usage ?', a: 'En mode privé, votre seule limite est votre propre compte Anthropic. Les plans hébergés publieront des limites claires par niveau.' },
+    ],
+  },
+  about: {
+    meta: {
+      title: 'À propos — Nexow',
+      description:
+        'Nexow construit un poste de travail natif IA pour les marchés : décrivez n’importe quel widget en langage naturel et obtenez un tableau de bord fonctionnel connecté aux données. Privé par défaut. Découvrez notre mission.',
+    },
+    hero: {
+      badge: 'À propos',
+      title: 'Un poste de travail natif IA pour les marchés',
+      subtitle:
+        'Nous pensons que construire un tableau de bord de trading devrait être aussi rapide que de le décrire. Nexow transforme le langage naturel en widgets fonctionnels connectés aux données — et vous garde le contrôle de vos clés et données.',
+    },
+    missionTitle: 'Pourquoi nous construisons Nexow',
+    mission: [
+      'Chaque trader et analyste finit par reconstruire à la main les mêmes graphiques, tableaux et moniteurs — en collant des APIs, en gérant des websockets et en luttant avec la mise en page. Les outils sont puissants mais lents, et les bons sont enfermés derrière des plateformes lourdes.',
+      'Nexow inverse cela. Vous décrivez ce que vous voulez voir et une IA écrit un widget réel et fonctionnel — sandboxé, versionné et connecté aux données en direct des venues que vous utilisez déjà. Le tableau de bord s’assemble tout seul, et vous l’affinez en langage naturel.',
+      'Nous le construisons avec la confidentialité en premier : fonctionnez entièrement en local avec votre propre clé, gardez vos données dans votre navigateur et connectez-vous directement aux venues lorsque c’est possible. À mesure que nous ajoutons des agents de trading, des composants serveur et une couche communautaire, ce principe reste fixe — vos clés, vos données, votre machine.',
+    ],
+    valuesTitle: 'Ce que nous valorisons',
+    values: [
+      { icon: 'lock', title: 'Privé par défaut', body: 'Local d’abord, apportez votre propre clé, aucune donnée ne quitte votre machine sauf si vous le choisissez.' },
+      { icon: 'bolt', title: 'Rapidité vers l’insight', body: 'D’une phrase à un widget en direct en quelques secondes — le chemin le plus court entre une question et un graphique.' },
+      { icon: 'shield', title: 'Sûr par construction', body: 'Le code généré s’exécute en sandbox avec une frontière stricte, pour que la puissance ne signifie jamais le risque.' },
+      { icon: 'globe', title: 'Ouvert à tous les marchés', body: 'FX, crypto, actions, futures, options et marchés de prédiction — un canvas pour tous.' },
+    ],
+    ctaTitle: 'Voyez par vous-même',
+    ctaBody: 'La preview est en ligne. Décrivez un widget et regardez Nexow le construire.',
+    cta: 'Ouvrir l’app',
+  },
+  blog: {
+    meta: {
+      title: 'Blog — Nexow',
+      description:
+        'Guides et analyses approfondies sur la création de tableaux de bord de marché avec l’IA, la connexion de données en direct et les outils de trading — par l’équipe Nexow.',
+    },
+    title: 'Le blog Nexow',
+    subtitle: 'Construire des outils de marché natifs IA — guides, analyses et notes produit.',
+    readMore: 'Lire l’article',
+    backToBlog: 'Retour au blog',
+    published: 'Publié',
+    updated: 'Mis à jour',
+    minRead: 'min de lecture',
+  },
+  notFound: {
+    title: 'Cette page a dérivé hors du canvas',
+    body: 'La page que vous cherchez n’existe pas — mais votre prochain tableau de bord, peut-être.',
+    cta: 'Retour à l’accueil',
+  },
+};
+
 /* ------------------------------------------------------------------ */
-export const content: Record<Lang, SiteContent> = { en, es };
+export const content: Record<Lang, SiteContent> = { en, es, fr };
 
 export function useContent(lang: Lang): SiteContent {
   return content[lang];

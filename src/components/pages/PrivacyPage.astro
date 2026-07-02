@@ -73,6 +73,38 @@ const copy = {
       },
     ],
   },
+  fr: {
+    badge: 'Confidentialité',
+    title: 'Politique de confidentialité',
+    subtitle: 'Comment Nexow traite vos données — version courte : le minimum possible.',
+    meta: {
+      title: 'Politique de confidentialité — Nexow',
+      description: 'Nexow est privé par défaut. Découvrez comment nous traitons les données, les clés et les connexions.',
+    },
+    updated: 'Dernière mise à jour : 1 juillet 2026',
+    sections: [
+      {
+        h: 'Privé par défaut',
+        p: 'Nexow fonctionne entièrement en local par défaut. En mode privé, vous fournissez votre propre clé API Anthropic et la génération de widgets se fait entièrement dans votre navigateur. Vos prompts et le code généré sont envoyés depuis votre navigateur directement à Anthropic — pas via nos serveurs.',
+      },
+      {
+        h: 'Ce que nous stockons',
+        p: 'Vos widgets, versions, logs et bibliothèque sont stockés dans votre navigateur via IndexedDB. Ils restent sur votre appareil et ne sont pas téléversés vers Nexow. Effacer le stockage de votre navigateur les supprime définitivement.',
+      },
+      {
+        h: 'Connexions aux données de marché',
+        p: 'Lorsque le venue le permet, Nexow s’y connecte directement depuis votre navigateur, et vos identifiants du venue ne servent qu’à communiquer avec ce venue. Certains venues nécessitent un proxy léger ; dans ces cas, seules les données nécessaires à la requête passent par ce proxy.',
+      },
+      {
+        h: 'Ce site web',
+        p: 'Ce site marketing est un site statique. Nous gardons l’analytique minimale et respectueuse de la vie privée, et nous ne vendons pas de données personnelles. Les liens sortants (comme l’app) sont clairement indiqués.',
+      },
+      {
+        h: 'Contact',
+        p: `Des questions sur la confidentialité ? Écrivez à ${SITE.email}.`,
+      },
+    ],
+  },
 }[lang];
 ---
 
