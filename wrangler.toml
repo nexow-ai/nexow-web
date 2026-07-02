@@ -1,0 +1,6 @@
+# Cloudflare Pages configuration for the static Astro build.
+# `pages_build_output_dir` lets `wrangler pages deploy` (no dir arg) and the
+# dashboard/CI pick up ./dist automatically.
+name = "nexow-web"
+compatibility_date = "2026-07-02"
+pages_build_output_dir = "./dist"

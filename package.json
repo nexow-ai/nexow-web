@@ -9,7 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check",
+    "deploy": "astro build && wrangler pages deploy dist --project-name=nexow-web",
+    "cf:serve": "astro build && wrangler pages dev dist"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.1",
@@ -24,5 +27,10 @@
     "reading-time": "^1.5.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.106.0"
   }
 }
