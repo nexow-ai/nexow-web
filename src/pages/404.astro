@@ -1,0 +1,25 @@
+---
+import { SITE } from '../i18n/config';
+import { useContent } from '../i18n/content';
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import BrandMark from '../components/BrandMark.astro';
+
+const t = useContent('en').notFound;
+---
+
+<Layout lang="en" route="/404" title={`404 — ${SITE.name}`} description={t.body} noindex>
+  <section class="relative flex min-h-[70vh] items-center overflow-hidden pt-24">
+    <div class="glow-brand pointer-events-none absolute left-1/2 top-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
+    <div class="container-page relative text-center">
+      <BrandMark class="mx-auto size-12 text-brand-500" title="Nexow" />
+      <p class="mt-8 font-mono text-7xl font-bold tracking-tight text-ink-900 sm:text-8xl">404</p>
+      <h1 class="mt-4 font-display text-2xl font-semibold text-ink-950 sm:text-3xl">{t.title}</h1>
+      <p class="mx-auto mt-3 max-w-md text-ink-600">{t.body}</p>
+      <div class="mt-8 flex justify-center gap-3">
+        <Button href="/" size="lg" icon="arrow" class="[&_svg]:rotate-180">{t.cta}</Button>
+        <Button href={SITE.appUrl} variant="secondary" size="lg" external>{useContent('en').nav.launch}</Button>
+      </div>
+    </div>
+  </section>
+</Layout>
