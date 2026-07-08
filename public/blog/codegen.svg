@@ -1,16 +1,16 @@
 <svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prompt to live widget illustration">
   <defs>
     <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
-      <stop stop-color="#10c5a3" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#10c5a3" stop-opacity="0"/>
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
-      <stop stop-color="#6366f1" stop-opacity="0.5"/>
-      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2adfba"/>
-      <stop offset="1" stop-color="#8189fc"/>
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
     </linearGradient>
     <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
       <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
@@ -27,56 +27,56 @@
 
   <!-- wordmark -->
   <g opacity="0.85">
-    <circle cx="1058" cy="59" r="6" fill="#2adfba"/>
-    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#e8ecf5">NEXOW</text>
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
   </g>
 
   <!-- tag chip -->
   <g transform="translate(64 588)">
-    <rect x="0" y="0" width="214" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
-    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#5cf0d0">#how-it-works</text>
+    <rect x="0" y="0" width="192" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#how-it-works</text>
   </g>
 
   <!-- top hairline accent -->
   <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
 
   <g>
-    <ellipse cx="600" cy="330" rx="250" ry="200" fill="#10c5a3" fill-opacity="0.06" filter="url(#soft)"/>
+    <ellipse cx="600" cy="330" rx="250" ry="200" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
     <!-- prompt bar -->
     <rect x="96" y="256" width="420" height="88" rx="24" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
-    <text x="126" y="312" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="34" fill="#5cf0d0">&gt;_</text>
-    <rect x="190" y="288" width="220" height="10" rx="5" fill="#5b6478"/>
-    <rect x="190" y="310" width="140" height="10" rx="5" fill="#5b6478" fill-opacity="0.6"/>
-    <rect x="462" y="276" width="6" height="48" rx="3" fill="#5cf0d0"/>
+    <text x="126" y="312" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="34" fill="#fde68a">&gt;_</text>
+    <rect x="190" y="288" width="220" height="10" rx="5" fill="#8a7b57"/>
+    <rect x="190" y="310" width="140" height="10" rx="5" fill="#8a7b57" fill-opacity="0.6"/>
+    <rect x="462" y="276" width="6" height="48" rx="3" fill="#fde68a"/>
     <!-- arrow -->
     <path d="M560 300 h96" stroke="url(#edge)" stroke-width="5" stroke-linecap="round"/>
-    <path d="M646 284 l20 16 l-20 16" fill="none" stroke="#8189fc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M646 284 l20 16 l-20 16" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- chart panel -->
-    <rect x="700" y="150" width="404" height="300" rx="22" fill="#08090d" stroke="#8189fc" stroke-opacity="0.4" stroke-width="2"/>
-    <line x1="732" y1="292" x2="732" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="724" y="322" width="16" height="70" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="762" y1="332" x2="762" y2="406" stroke="#8189fc" stroke-width="2.5"/>
-    <rect x="754" y="352" width="16" height="40" rx="3" fill="#8189fc" fill-opacity="0.85"/>
-    <line x1="792" y1="256" x2="792" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="784" y="296" width="16" height="96" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="822" y1="314" x2="822" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="814" y="338" width="16" height="54" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="852" y1="228" x2="852" y2="406" stroke="#8189fc" stroke-width="2.5"/>
-    <rect x="844" y="272" width="16" height="120" rx="3" fill="#8189fc" fill-opacity="0.85"/>
-    <line x1="882" y1="330" x2="882" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="874" y="348" width="16" height="44" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="912" y1="270" x2="912" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="904" y="304" width="16" height="88" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="942" y1="306" x2="942" y2="406" stroke="#8189fc" stroke-width="2.5"/>
-    <rect x="934" y="332" width="16" height="60" rx="3" fill="#8189fc" fill-opacity="0.85"/>
-    <line x1="972" y1="258" x2="972" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="964" y="288" width="16" height="104" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="1002" y1="322" x2="1002" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="994" y="342" width="16" height="50" rx="3" fill="#2adfba" fill-opacity="0.85"/>
-    <line x1="1032" y1="274" x2="1032" y2="406" stroke="#8189fc" stroke-width="2.5"/>
-    <rect x="1024" y="314" width="16" height="78" rx="3" fill="#8189fc" fill-opacity="0.85"/>
-    <line x1="1062" y1="302" x2="1062" y2="406" stroke="#2adfba" stroke-width="2.5"/>
-    <rect x="1054" y="326" width="16" height="66" rx="3" fill="#2adfba" fill-opacity="0.85"/>
+    <rect x="700" y="150" width="404" height="300" rx="22" fill="#08090d" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+    <line x1="732" y1="292" x2="732" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="724" y="322" width="16" height="70" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="762" y1="332" x2="762" y2="406" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect x="754" y="352" width="16" height="40" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+    <line x1="792" y1="256" x2="792" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="784" y="296" width="16" height="96" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="822" y1="314" x2="822" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="814" y="338" width="16" height="54" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="852" y1="228" x2="852" y2="406" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect x="844" y="272" width="16" height="120" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+    <line x1="882" y1="330" x2="882" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="874" y="348" width="16" height="44" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="912" y1="270" x2="912" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="904" y="304" width="16" height="88" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="942" y1="306" x2="942" y2="406" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect x="934" y="332" width="16" height="60" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+    <line x1="972" y1="258" x2="972" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="964" y="288" width="16" height="104" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="1002" y1="322" x2="1002" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="994" y="342" width="16" height="50" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
+    <line x1="1032" y1="274" x2="1032" y2="406" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect x="1024" y="314" width="16" height="78" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+    <line x1="1062" y1="302" x2="1062" y2="406" stroke="#fbbf24" stroke-width="2.5"/>
+    <rect x="1054" y="326" width="16" height="66" rx="3" fill="#fbbf24" fill-opacity="0.85"/>
     <path d="M736 340 C 800 290, 880 330, 940 270 S 1060 210, 1088 230" fill="none" stroke="url(#edge)" stroke-width="4" stroke-linecap="round"/>
   </g>
 </svg>
