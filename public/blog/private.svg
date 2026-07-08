@@ -1,0 +1,57 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Privacy shield over a browser illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#10c5a3" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#10c5a3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#6366f1" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2adfba"/>
+      <stop offset="1" stop-color="#8189fc"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#2adfba"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#e8ecf5">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="119.5" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#5cf0d0">#privacy</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="322" rx="240" ry="210" fill="#10c5a3" fill-opacity="0.06" filter="url(#soft)"/>
+    <!-- browser frame behind -->
+    <rect x="350" y="172" width="500" height="320" rx="20" fill="#08090d" stroke="#8189fc" stroke-opacity="0.35" stroke-width="2"/>
+    <line x1="350" y1="214" x2="850" y2="214" stroke="#8189fc" stroke-opacity="0.3" stroke-width="2"/>
+    <circle cx="374" cy="193" r="7" fill="#5b6478"/>
+    <circle cx="398" cy="193" r="7" fill="#5b6478"/>
+    <circle cx="422" cy="193" r="7" fill="#5b6478"/>
+    <!-- shield -->
+    <path d="M600 214 l108 40 v70 c0 78 -54 128 -108 152 c-54 -24 -108 -74 -108 -152 v-70 z" fill="#10c5a3" fill-opacity="0.14" stroke="url(#edge)" stroke-width="3"/>
+    <!-- keyhole -->
+    <circle cx="600" cy="328" r="26" fill="none" stroke="#5cf0d0" stroke-width="6"/>
+    <path d="M600 342 l0 42" stroke="#5cf0d0" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>

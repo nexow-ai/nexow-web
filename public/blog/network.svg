@@ -1,0 +1,58 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cloud sync across devices illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#10c5a3" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#10c5a3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#6366f1" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2adfba"/>
+      <stop offset="1" stop-color="#8189fc"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#2adfba"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#e8ecf5">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="119.5" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#5cf0d0">#network</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="330" rx="250" ry="210" fill="#6366f1" fill-opacity="0.06" filter="url(#soft)"/>
+    <!-- cloud -->
+    <path d="M450 270 a70 70 0 0 1 40 -132 a86 86 0 0 1 168 22 a62 62 0 0 1 -8 122 z" fill="#10c5a3" fill-opacity="0.12" stroke="url(#edge)" stroke-width="2.5"/>
+    <path d="M540 206 l26 26 l52 -56" fill="none" stroke="#5cf0d0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- sync ring -->
+    <path d="M504 346 a96 96 0 0 1 192 0" fill="none" stroke="#2adfba" stroke-width="3" stroke-opacity="0.6" stroke-dasharray="3 10" stroke-linecap="round"/>
+    <!-- devices -->
+    <rect x="350" y="440" width="150" height="100" rx="12" fill="#10c5a3" fill-opacity="0.18" stroke="#2adfba" stroke-opacity="0.55" stroke-width="2"/>
+    <rect x="540" y="430" width="120" height="120" rx="12" fill="#6366f1" fill-opacity="0.1" stroke="#8189fc" stroke-opacity="0.55" stroke-width="2"/>
+    <rect x="720" y="448" width="80" height="92" rx="12" fill="#10c5a3" fill-opacity="0.18" stroke="#2adfba" stroke-opacity="0.55" stroke-width="2"/>
+    <line x1="425" y1="440" x2="540" y2="290" stroke="url(#edge)" stroke-opacity="0.5" stroke-width="2"/>
+    <line x1="600" y1="430" x2="600" y2="346" stroke="url(#edge)" stroke-opacity="0.5" stroke-width="2"/>
+    <line x1="760" y1="448" x2="660" y2="290" stroke="url(#edge)" stroke-opacity="0.5" stroke-width="2"/>
+  </g>
+</svg>
