@@ -183,6 +183,22 @@ export interface SiteContent {
     faqTitle: string;
     faq: Faq[];
   };
+  connectorsPage: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    searchPlaceholder: string;
+    all: string;
+    categories: { finance: string; data: string; socials: string };
+    status: { all: string; live: string; soon: string };
+    kinds: Record<string, string>;
+    assets: Record<string, string>;
+    visit: string;
+    /** Result count; contains a `{n}` placeholder. */
+    results: string;
+    empty: string;
+    /** Homepage connectors-section CTA to the full gallery. */
+    exploreCta: string;
+  };
   about: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
@@ -240,6 +256,7 @@ const en: SiteContent = {
   nav: {
     links: [
       { label: 'Features', href: '/features' },
+      { label: 'Connectors', href: '/connectors' },
       { label: 'Pricing', href: '/pricing' },
       { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
@@ -256,7 +273,7 @@ const en: SiteContent = {
         links: [
           { label: 'Features', href: '/features' },
           { label: 'Pricing', href: '/pricing' },
-          { label: 'Connectors', href: '/#connectors' },
+          { label: 'Connectors', href: '/connectors' },
           { label: 'Automations', href: '/#automate' },
           { label: 'Community', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
@@ -732,6 +749,54 @@ const en: SiteContent = {
       { q: 'Can I pay yearly?', a: 'Yes. Yearly billing gives you two months free versus paying monthly. You can switch between monthly and yearly at any time.' },
     ],
   },
+  connectorsPage: {
+    meta: {
+      title: 'Connectors — Nexow',
+      description:
+        'Browse every Nexow connector — 28 live and 56 in the catalog. Brokers, exchanges, DEXs, prediction markets, data providers, databases and social feeds. Search, filter and connect.',
+    },
+    hero: {
+      badge: 'Connectors',
+      title: 'Every market, one canvas',
+      subtitle:
+        'Search the full catalog of venues Nexow connects to — brokers, exchanges, data providers, databases and socials. Live connectors work today; the rest are landing soon.',
+    },
+    searchPlaceholder: 'Search connectors…',
+    all: 'All',
+    categories: { finance: 'Finance', data: 'Data', socials: 'Socials' },
+    status: { all: 'All', live: 'Live', soon: 'Soon' },
+    kinds: {
+      broker: 'Broker',
+      exchange: 'Exchange',
+      prediction: 'Prediction market',
+      dex: 'DEX',
+      aggregator: 'Aggregator',
+      data: 'Market data',
+      sql: 'SQL database',
+      nosql: 'NoSQL database',
+      warehouse: 'Data warehouse',
+      vector: 'Vector database',
+      messaging: 'Messaging',
+      social: 'Social network',
+      video: 'Video',
+      community: 'Community',
+      music: 'Music',
+    },
+    assets: {
+      equities: 'Equities',
+      indices: 'Indices',
+      fixed_income: 'Fixed income',
+      fx: 'FX',
+      commodities: 'Commodities',
+      crypto: 'Crypto',
+      volatility: 'Volatility',
+      prediction_markets: 'Prediction',
+    },
+    visit: 'Visit site',
+    results: '{n} connectors',
+    empty: 'No connectors match your search.',
+    exploreCta: 'Explore all connectors',
+  },
   about: {
     meta: {
       title: 'About — Nexow',
@@ -789,6 +854,7 @@ const es: SiteContent = {
   nav: {
     links: [
       { label: 'Funciones', href: '/features' },
+      { label: 'Conectores', href: '/connectors' },
       { label: 'Precios', href: '/pricing' },
       { label: 'Blog', href: '/blog' },
       { label: 'Nosotros', href: '/about' },
@@ -805,7 +871,7 @@ const es: SiteContent = {
         links: [
           { label: 'Funciones', href: '/features' },
           { label: 'Precios', href: '/pricing' },
-          { label: 'Conectores', href: '/#connectors' },
+          { label: 'Conectores', href: '/connectors' },
           { label: 'Automatizaciones', href: '/#automate' },
           { label: 'Comunidad', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
@@ -1281,6 +1347,54 @@ const es: SiteContent = {
       { q: '¿Puedo pagar anual?', a: 'Sí. La facturación anual te da dos meses gratis frente al pago mensual. Puedes cambiar entre mensual y anual cuando quieras.' },
     ],
   },
+  connectorsPage: {
+    meta: {
+      title: 'Conectores — Nexow',
+      description:
+        'Explora todos los conectores de Nexow — 28 en vivo y 56 en el catálogo. Brokers, exchanges, DEX, mercados de predicción, proveedores de datos, bases de datos y redes sociales. Busca, filtra y conecta.',
+    },
+    hero: {
+      badge: 'Conectores',
+      title: 'Todos los mercados, un solo lienzo',
+      subtitle:
+        'Busca en el catálogo completo de venues a los que Nexow se conecta — brokers, exchanges, proveedores de datos, bases de datos y redes. Los conectores en vivo ya funcionan; el resto llega pronto.',
+    },
+    searchPlaceholder: 'Buscar conectores…',
+    all: 'Todos',
+    categories: { finance: 'Finanzas', data: 'Datos', socials: 'Redes' },
+    status: { all: 'Todos', live: 'En vivo', soon: 'Pronto' },
+    kinds: {
+      broker: 'Broker',
+      exchange: 'Exchange',
+      prediction: 'Mercado de predicción',
+      dex: 'DEX',
+      aggregator: 'Agregador',
+      data: 'Datos de mercado',
+      sql: 'Base de datos SQL',
+      nosql: 'Base de datos NoSQL',
+      warehouse: 'Data warehouse',
+      vector: 'Base de datos vectorial',
+      messaging: 'Mensajería',
+      social: 'Red social',
+      video: 'Vídeo',
+      community: 'Comunidad',
+      music: 'Música',
+    },
+    assets: {
+      equities: 'Acciones',
+      indices: 'Índices',
+      fixed_income: 'Renta fija',
+      fx: 'FX',
+      commodities: 'Materias primas',
+      crypto: 'Cripto',
+      volatility: 'Volatilidad',
+      prediction_markets: 'Predicción',
+    },
+    visit: 'Visitar sitio',
+    results: '{n} conectores',
+    empty: 'Ningún conector coincide con tu búsqueda.',
+    exploreCta: 'Explorar todos los conectores',
+  },
   about: {
     meta: {
       title: 'Nosotros — Nexow',
@@ -1338,6 +1452,7 @@ const fr: SiteContent = {
   nav: {
     links: [
       { label: 'Fonctionnalités', href: '/features' },
+      { label: 'Connecteurs', href: '/connectors' },
       { label: 'Tarifs', href: '/pricing' },
       { label: 'Blog', href: '/blog' },
       { label: 'À propos', href: '/about' },
@@ -1354,7 +1469,7 @@ const fr: SiteContent = {
         links: [
           { label: 'Fonctionnalités', href: '/features' },
           { label: 'Tarifs', href: '/pricing' },
-          { label: 'Connecteurs', href: '/#connectors' },
+          { label: 'Connecteurs', href: '/connectors' },
           { label: 'Automatisations', href: '/#automate' },
           { label: 'Communauté', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
@@ -1829,6 +1944,54 @@ const fr: SiteContent = {
       { q: 'Quand les plans payants arrivent-ils ?', a: 'Supporter et Sponsor sont déjà définis et affichés dans l’app, mais le paiement arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.' },
       { q: 'Puis-je payer à l’année ?', a: 'Oui. La facturation annuelle vous offre deux mois gratuits par rapport au paiement mensuel. Vous pouvez basculer entre mensuel et annuel à tout moment.' },
     ],
+  },
+  connectorsPage: {
+    meta: {
+      title: 'Connecteurs — Nexow',
+      description:
+        'Parcourez tous les connecteurs Nexow — 28 en direct et 56 au catalogue. Brokers, exchanges, DEX, marchés de prédiction, fournisseurs de données, bases de données et réseaux sociaux. Cherchez, filtrez et connectez.',
+    },
+    hero: {
+      badge: 'Connecteurs',
+      title: 'Tous les marchés, un seul canvas',
+      subtitle:
+        'Cherchez dans le catalogue complet des venues auxquels Nexow se connecte — brokers, exchanges, fournisseurs de données, bases de données et réseaux. Les connecteurs en direct fonctionnent déjà ; le reste arrive bientôt.',
+    },
+    searchPlaceholder: 'Rechercher des connecteurs…',
+    all: 'Tous',
+    categories: { finance: 'Finance', data: 'Données', socials: 'Réseaux' },
+    status: { all: 'Tous', live: 'En direct', soon: 'Bientôt' },
+    kinds: {
+      broker: 'Broker',
+      exchange: 'Exchange',
+      prediction: 'Marché de prédiction',
+      dex: 'DEX',
+      aggregator: 'Agrégateur',
+      data: 'Données de marché',
+      sql: 'Base de données SQL',
+      nosql: 'Base de données NoSQL',
+      warehouse: 'Data warehouse',
+      vector: 'Base de données vectorielle',
+      messaging: 'Messagerie',
+      social: 'Réseau social',
+      video: 'Vidéo',
+      community: 'Communauté',
+      music: 'Musique',
+    },
+    assets: {
+      equities: 'Actions',
+      indices: 'Indices',
+      fixed_income: 'Taux',
+      fx: 'FX',
+      commodities: 'Matières premières',
+      crypto: 'Crypto',
+      volatility: 'Volatilité',
+      prediction_markets: 'Prédiction',
+    },
+    visit: 'Visiter le site',
+    results: '{n} connecteurs',
+    empty: 'Aucun connecteur ne correspond à votre recherche.',
+    exploreCta: 'Explorer tous les connecteurs',
   },
   about: {
     meta: {
