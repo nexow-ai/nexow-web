@@ -33,7 +33,7 @@
 
   <!-- tag chip -->
   <g transform="translate(64 588)">
-    <rect x="0" y="0" width="119.5" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
+    <rect x="0" y="0" width="141.5" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
     <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#5cf0d0">#roadmap</text>
   </g>
 
