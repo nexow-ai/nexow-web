@@ -39,7 +39,7 @@ const bg = `
   <!-- subline -->
   <text x="${W / 2}" y="480" text-anchor="middle"
     font-family="'DejaVu Sans','Liberation Sans',Arial,sans-serif" font-size="24" fill="#8b93a7">
-    Plain-language widgets · 20+ live connectors · private by default</text>
+    Plain-language widgets · 28+ live connectors · private by default</text>
   <!-- url -->
   <text x="${W / 2}" y="560" text-anchor="middle"
     font-family="'DejaVu Sans Mono','Liberation Mono',monospace" font-size="20" fill="#5b6472">nexow.ai</text>
