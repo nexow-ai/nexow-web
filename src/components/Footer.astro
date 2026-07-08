@@ -13,7 +13,7 @@ const localize = (href: string) =>
   href.startsWith('/') ? localizePath(href, lang) : href;
 ---
 
-<footer class="relative overflow-hidden bg-ink-950 text-ink-300">
+<footer transition:animate="none" class="relative overflow-hidden bg-ink-950 text-ink-300">
   <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(80%_60%_at_50%_0%,black,transparent)]">
   </div>
   <div class="container-page relative py-16">

@@ -115,8 +115,16 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
 </section>
 
 <script>
-  const root = document.getElementById('plans-billing');
-  if (root) {
+  let plansAbort: AbortController | undefined;
+
+  function initPlansBilling() {
+    plansAbort?.abort();
+    plansAbort = new AbortController();
+    const { signal } = plansAbort;
+
+    const root = document.getElementById('plans-billing');
+    if (!root) return;
+
     const scope = root.closest('section') ?? document;
     const btns = root.querySelectorAll<HTMLButtonElement>('[data-billing]');
     const apply = (mode: string) => {
@@ -125,6 +133,8 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
       scope.querySelectorAll<HTMLElement>('[data-price="yearly"]').forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
       scope.querySelectorAll<HTMLElement>('[data-billed]').forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
     };
-    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.billing ?? 'monthly')));
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.billing ?? 'monthly'), { signal }));
   }
+
+  document.addEventListener('astro:page-load', initPlansBilling);
 </script>

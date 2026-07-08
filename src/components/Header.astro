@@ -1,6 +1,7 @@
 ---
 import { SITE, languages, type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
+import { getNavIcon } from '../i18n/nav-icons';
 import { getLangFromUrl, getRouteFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
@@ -19,6 +20,7 @@ const t = useContent(lang);
 
 const links = t.nav.links.map((l) => ({
   ...l,
+  icon: getNavIcon(l.href),
   url: l.href.startsWith('/') ? localizePath(l.href, lang) : l.href,
   active: route === l.href || (l.href !== '/' && route.startsWith(l.href)),
 }));
@@ -26,10 +28,10 @@ const links = t.nav.links.map((l) => ({
 const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
 ---
 
-<header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+<header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
   <div class="container-page">
     <nav
-      class="mt-3 flex h-16 items-center justify-between rounded-2xl border border-transparent px-3 pl-4 transition-all duration-300"
+      class="mt-3 flex h-16 items-center justify-between rounded-full border border-transparent px-3 pl-4 transition-all duration-300"
       id="site-nav"
       data-tone={tone}
       aria-label="Primary"
@@ -44,7 +46,7 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
               <a
                 href={l.url}
                 class:list={[
-                  'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+                  'inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
                   dark
                     ? l.active
                       ? 'text-brand-300'
@@ -55,6 +57,7 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
                 ]}
                 aria-current={l.active ? 'page' : undefined}
               >
+                {l.active && l.icon && <Icon name={l.icon} class="size-4 shrink-0" />}
                 {l.label}
               </a>
             </li>
@@ -148,10 +151,15 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
           <a
             href={l.url}
             class:list={[
-              'py-4 font-display text-2xl font-semibold',
+              'flex items-center gap-3 py-4 font-display text-2xl font-semibold',
               dark ? 'border-b border-white/10 text-white' : 'border-b border-ink-900/5 text-ink-900',
+              l.active && (dark ? 'text-brand-300' : 'text-brand-600'),
             ]}
+            aria-current={l.active ? 'page' : undefined}
           >
+            {l.active && l.icon ? (
+              <Icon name={l.icon} class="size-6 shrink-0" />
+            ) : null}
             {l.label}
           </a>
         ))
@@ -182,35 +190,58 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
 </header>
 
 <script>
-  // Header: solidify on scroll + mobile menu toggle. Vanilla, no framework.
-  const header = document.getElementById('site-header');
-  const nav = document.getElementById('site-nav');
-  const darkNav = nav?.dataset.tone === 'dark';
-  const solidClasses = darkNav
-    ? ['bg-ink-900/75', 'backdrop-blur-xl', '!border-white/10', 'shadow-lg', 'shadow-black/20']
-    : ['bg-white/80', 'backdrop-blur-xl', '!border-ink-900/10', 'shadow-sm'];
-  const onScroll = () => {
-    const solid = window.scrollY > 8;
-    solidClasses.forEach((c) => nav?.classList.toggle(c, solid));
-    header?.classList.toggle('is-scrolled', solid);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  // Header: solidify on scroll + mobile menu toggle. Re-inits on view transitions.
+  let headerAbort: AbortController | undefined;
 
-  const menu = document.getElementById('mobile-menu');
-  const toggle = document.getElementById('menu-toggle');
-  const close = document.getElementById('menu-close');
-  const setMenu = (open: boolean) => {
-    if (!menu) return;
-    menu.hidden = !open;
-    menu.classList.toggle('hidden', !open);
-    toggle?.setAttribute('aria-expanded', String(open));
-    document.body.style.overflow = open ? 'hidden' : '';
-  };
-  toggle?.addEventListener('click', () => setMenu(true));
-  close?.addEventListener('click', () => setMenu(false));
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setMenu(false);
+  function initHeader() {
+    headerAbort?.abort();
+    headerAbort = new AbortController();
+    const { signal } = headerAbort;
+
+    const header = document.getElementById('site-header');
+    const nav = document.getElementById('site-nav');
+    if (!header || !nav) return;
+
+    const darkNav = nav.dataset.tone === 'dark';
+    const solidClasses = darkNav
+      ? ['bg-ink-900/75', 'backdrop-blur-xl', '!border-white/10', 'shadow-lg', 'shadow-black/20']
+      : ['bg-white/80', 'backdrop-blur-xl', '!border-ink-900/10', 'shadow-sm'];
+    const onScroll = () => {
+      const solid = window.scrollY > 8;
+      solidClasses.forEach((c) => nav.classList.toggle(c, solid));
+      header.classList.toggle('is-scrolled', solid);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+
+    const menu = document.getElementById('mobile-menu');
+    const toggle = document.getElementById('menu-toggle');
+    const close = document.getElementById('menu-close');
+    const setMenu = (open: boolean) => {
+      if (!menu) return;
+      menu.hidden = !open;
+      menu.classList.toggle('hidden', !open);
+      toggle?.setAttribute('aria-expanded', String(open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    toggle?.addEventListener('click', () => setMenu(true), { signal });
+    close?.addEventListener('click', () => setMenu(false), { signal });
+    menu?.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => setMenu(false), { signal }),
+    );
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setMenu(false);
+    }, { signal });
+  }
+
+  document.addEventListener('astro:before-preparation', () => {
+    document.body.style.overflow = '';
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+      menu.hidden = true;
+      menu.classList.add('hidden');
+      document.getElementById('menu-toggle')?.setAttribute('aria-expanded', 'false');
+    }
   });
+  document.addEventListener('astro:page-load', initHeader);
 </script>

@@ -132,16 +132,22 @@ const { promptExample, class: className = '' } = Astro.props;
 </div>
 
 <script>
-  // Type the example prompt once when the mock scrolls into view.
-  // Without JS the full prompt renders statically — nothing is lost.
-  const typed = document.querySelector<HTMLElement>('[data-typed]');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (typed && !reduced) {
+  let typedObserver: IntersectionObserver | null = null;
+
+  function initWidgetTyped() {
+    typedObserver?.disconnect();
+    typedObserver = null;
+
+    const typed = document.querySelector<HTMLElement>('[data-typed]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!typed || reduced) return;
+
     const text = typed.dataset.text ?? '';
-    const io = new IntersectionObserver(
+    typedObserver = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return;
-        io.disconnect();
+        typedObserver?.disconnect();
+        typedObserver = null;
         typed.textContent = '';
         let i = 0;
         const tick = () => {
@@ -150,8 +156,10 @@ const { promptExample, class: className = '' } = Astro.props;
         };
         setTimeout(tick, 350);
       },
-      { threshold: 0.4 }
+      { threshold: 0.4 },
     );
-    io.observe(typed);
+    typedObserver.observe(typed);
   }
+
+  document.addEventListener('astro:page-load', initWidgetTyped);
 </script>

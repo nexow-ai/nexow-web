@@ -250,6 +250,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    transition: background-color 0.35s var(--ease-out-expo);
   }
 
   h1,
@@ -554,4 +555,20 @@
 .animate-glow { animation: glow-pulse 6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .animate-glow { animation: none; opacity: 0.35; }
+}
+
+/* ------------------------------------------------------------------ *
+ * View transitions — only main content fades; header/footer swap instantly.
+ * ------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }

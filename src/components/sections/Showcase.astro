@@ -108,9 +108,16 @@ const t = useContent(lang).home.showcase;
 </section>
 
 <script>
-  // Showcase tab switcher — progressive enhancement over a first-panel default.
-  const root = document.querySelector('[data-showcase-tabs]');
-  if (root) {
+  let showcaseAbort: AbortController | undefined;
+
+  function initShowcaseTabs() {
+    showcaseAbort?.abort();
+    showcaseAbort = new AbortController();
+    const { signal } = showcaseAbort;
+
+    const root = document.querySelector('[data-showcase-tabs]');
+    if (!root) return;
+
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
     const activeCls = ['bg-brand-500/15', 'text-brand-300', 'ring-brand-400/30'];
     const idleCls = ['text-ink-400', 'ring-white/10', 'hover:text-ink-200', 'hover:ring-white/20'];
@@ -125,13 +132,15 @@ const t = useContent(lang).home.showcase;
       });
     };
     tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('click', () => select(i), { signal });
       tab.addEventListener('keydown', (e) => {
         if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
         const next = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
         select(next);
         tabs[next].focus();
-      });
+      }, { signal });
     });
   }
+
+  document.addEventListener('astro:page-load', initShowcaseTabs);
 </script>

@@ -138,8 +138,16 @@ const itemListSchema = {
 </Layout>
 
 <script>
-  const root = document.getElementById('connectors-app');
-  if (root) {
+  let connectorsAbort: AbortController | undefined;
+
+  function initConnectorsApp() {
+    connectorsAbort?.abort();
+    connectorsAbort = new AbortController();
+    const { signal } = connectorsAbort;
+
+    const root = document.getElementById('connectors-app');
+    if (!root) return;
+
     const cards = Array.from(root.querySelectorAll<HTMLElement>('.connector-card'));
     const searchEl = root.querySelector<HTMLInputElement>('#connector-search');
     const countEl = root.querySelector<HTMLElement>('#connector-count');
@@ -169,20 +177,22 @@ const itemListSchema = {
     searchEl?.addEventListener('input', () => {
       query = (searchEl.value ?? '').trim().toLowerCase();
       apply();
-    });
+    }, { signal });
     catBtns.forEach((b) =>
       b.addEventListener('click', () => {
         category = b.dataset.filterCategory ?? 'all';
         catBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         apply();
-      }),
+      }, { signal }),
     );
     statusBtns.forEach((b) =>
       b.addEventListener('click', () => {
         status = b.dataset.filterStatus ?? 'all';
         statusBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         apply();
-      }),
+      }, { signal }),
     );
   }
+
+  document.addEventListener('astro:page-load', initConnectorsApp);
 </script>
