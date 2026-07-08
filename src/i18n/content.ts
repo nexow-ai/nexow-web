@@ -113,6 +113,10 @@ export interface SiteContent {
       liveLabel: string;
       soonLabel: string;
       items: PillarItem[];
+      /** Decorative agent-harness chips shown on the Agents card. */
+      harnessChips: string[];
+      /** Decorative example prompts shown on the Copilot card. */
+      copilotPrompts: string[];
     };
     connectors: {
       eyebrow: string;
@@ -204,6 +208,9 @@ export interface SiteContent {
     empty: string;
     /** Homepage connectors-section CTA to the full gallery. */
     exploreCta: string;
+    /** Hero count line labels: "{n} live · {m} in the catalog". */
+    countLive: string;
+    countCatalog: string;
   };
   about: {
     meta: { title: string; description: string };
@@ -310,7 +317,7 @@ const en: SiteContent = {
     meta: {
       title: 'Nexow — Build market dashboards with AI, in plain language',
       description:
-        'Nexow is an AI-native workspace for markets. Describe a widget in plain English and Nexow builds it, wires it to live data from 28+ connectors, and adds cloud bots, agents and a maker community — private by default, free to start.',
+        'Nexow is an AI-native workspace for markets. Describe a widget in plain English and Nexow builds it, wires it to live data from 28+ connectors, and adds cloud bots, AI agents, a maker community and XP rewards — private by default, free to start.',
     },
     hero: {
       badge: 'Preview now live',
@@ -321,7 +328,7 @@ const en: SiteContent = {
         'An AI-native workspace for markets. Ask for any widget in plain language — Nexow writes the code, runs it safely, and streams live data onto a free-form canvas. Automate it with cloud bots and agents, then plug into a community of makers.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'See how it works',
-      note: 'No sign-up to try · Private in your browser · Or a free account with 10K credits',
+      note: 'No sign-up to try · Private in your browser · Or a free account with 10K credits reserved',
       promptExample: 'Show a candlestick chart of BTC-USD from Coinbase with 20 & 50 EMA and RSI below.',
       promptPlaceholder: 'Describe a widget…',
     },
@@ -330,7 +337,7 @@ const en: SiteContent = {
     stats: [
       { n: 28, suffix: '+', label: 'live market-data connectors' },
       { n: 6, label: 'asset classes on one canvas' },
-      { n: 10, suffix: 'K', label: 'free AI credits on sign-up' },
+      { n: 10, suffix: 'K', label: 'free AI credits reserved on sign-up' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
     ],
     showcase: {
@@ -386,7 +393,7 @@ const en: SiteContent = {
         {
           icon: 'layers',
           title: 'Free-form canvas',
-          body: 'Drag, resize and arrange widgets on an infinite canvas. Group them into workspaces and screens for FX, crypto, research — whatever you trade.',
+          body: 'Drag, resize and arrange widgets on a free-form canvas with workspaces and screens for FX, crypto, research — whatever you trade. Group widgets together and pipe live data between them with Links.',
         },
         {
           icon: 'lock',
@@ -433,13 +440,13 @@ const en: SiteContent = {
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Cloud automations that watch your data and fire signals and alerts to your widgets. Describe an alert in plain words — “tell me when BTC drops 5% in an hour” — or wire it visually with thresholds, % change, MA crossovers and digests.',
+          body: 'Cloud automations that watch your data and fire signals and alerts to your widgets. Describe an alert in plain words — “tell me when BTC drops 5% in an hour” — or wire it visually with thresholds, % change, MA crossovers and digests. Bots can even watch a connected broker account for new trades.',
           status: 'live',
         },
         {
           icon: 'cpu',
           title: 'Agents',
-          body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers — running in the cloud. Give an agent a job and let it watch, reason and act.',
+          body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers. Give an agent a job and let it watch, reason and act — design yours in the visual harness builder today; cloud deploy is coming soon.',
           status: 'soon',
         },
         {
@@ -449,6 +456,8 @@ const en: SiteContent = {
           status: 'soon',
         },
       ],
+      harnessChips: ['model', 'memory', 'skills', 'tools', 'knowledge', 'triggers'],
+      copilotPrompts: ['Explain this chart', 'Summarize this data', 'What should I watch next?'],
     },
     connectors: {
       eyebrow: 'Connectors',
@@ -478,13 +487,13 @@ const en: SiteContent = {
         {
           icon: 'users',
           title: 'Community',
-          body: 'Discover and follow makers, share dashboards and widgets, and fork what others build. A social feed for market builders.',
-          status: 'soon',
+          body: 'Discover and follow makers, like and comment in a social feed for market builders, and share widgets others can add straight to their library — with public maker profiles.',
+          status: 'live',
         },
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publish widgets others can drop straight onto their canvas — and pick up ready-made ones for yours.',
+          body: 'Widget sharing is live in the community — next comes a marketplace to buy and sell ready-made widgets, and earn on what you build.',
           status: 'soon',
         },
         {
@@ -493,15 +502,21 @@ const en: SiteContent = {
           body: 'Publish audited track records, subscribe to signals from makers you trust, and earn on the strategies you run.',
           status: 'soon',
         },
+        {
+          icon: 'trophy',
+          title: 'XP & rewards',
+          body: 'A gamified account — every widget, bot and share earns XP. Level up, unlock badges for achievements, and turn them into reward credits.',
+          status: 'soon',
+        },
       ],
       accountBadge: 'Free account',
       accountTitle: 'One free account unlocks the network',
       accountBody: 'No credit card. Keep building locally whenever you want — an account is always optional.',
       accountPoints: [
-        '10,000 free AI credits on sign-up',
+        '10,000 free AI credits reserved at sign-up',
         'Cross-device cloud sync for workspaces & widgets',
         'Community, marketplace & the widget library',
-        'Earn XP and rewards as you build',
+        'XP, badges & reward credits as you build (coming soon)',
       ],
       accountCta: 'Create your free account',
     },
@@ -509,7 +524,7 @@ const en: SiteContent = {
       eyebrow: 'Plans',
       title: 'Start free. Grow when you’re ready.',
       subtitle:
-        'Build for free forever — locally with your own key, or with 10,000 credits on a free account. Upgrade for more credits, bots and agents.',
+        'Build for free forever — locally with your own key, or with 10,000 credits reserved on a free account. Upgrade for more credits, bots and agents.',
       cta: 'Compare all plans',
     },
     privacy: {
@@ -528,16 +543,18 @@ const en: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'This is the preview. Here’s what’s next.',
       subtitle:
-        'Nexow shipped a public preview of the canvas, codegen, cloud bots and accounts. The building blocks below are landing next.',
+        'Nexow shipped a public preview of the canvas, codegen, cloud bots, accounts and the community feed. The building blocks below are landing next.',
       shipped: 'Shipped',
       soon: 'Coming soon',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Natural-language widgets running sandboxed on the canvas.' },
         { status: 'shipped', title: '28+ market-data connectors', body: 'Brokers, exchanges, data providers, databases and socials streaming live.' },
         { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
-        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts, 10K credits, and workspaces synced across every device.' },
+        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
+        { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
         { status: 'soon', title: 'Agents & Copilot', body: 'Deploy cloud agents with a full harness, and a Copilot for your workspace.' },
         { status: 'soon', title: 'Marketplace & signals', body: 'Buy and sell widgets, and publish audited strategy signals you can earn on.' },
+        { status: 'soon', title: 'XP, badges & rewards', body: 'A gamified account — earn XP and badges for achievements, and convert them into reward credits.' },
       ],
     },
     faq: {
@@ -563,15 +580,19 @@ const en: SiteContent = {
         },
         {
           q: 'What are bots and agents?',
-          a: 'Bots are cloud automations that watch your data and fire signals and alerts to your widgets even when your tab is closed — describe an alert in plain words or wire it visually with thresholds, % change and moving-average crossovers. Agents are AI with a full harness (model, memory, skills, tools, triggers) that run in the cloud; agent deploy and the Copilot assistant are coming soon.',
+          a: 'Bots are cloud automations that watch your data and fire signals and alerts to your widgets even when your tab is closed — describe an alert in plain words or wire it visually with thresholds, % change, moving-average crossovers and new trades in a connected broker account. Agents are AI with a full harness (model, memory, skills, tools, knowledge, triggers) — design yours in the visual harness builder today; cloud deploy and the Copilot assistant are coming soon.',
         },
         {
           q: 'Is there a community and marketplace?',
-          a: 'Yes — a free account plugs you into the network: follow makers, share and fork dashboards and widgets, publish to a marketplace, and follow audited strategy signals you can earn on. Community and marketplace features are rolling out now.',
+          a: 'The community is live — create a free account, claim your public @handle, follow makers, post to the feed, and share widgets others can add straight to their library. A marketplace for buying and selling widgets and audited strategy signals you can earn on are coming next.',
+        },
+        {
+          q: 'What are XP and rewards?',
+          a: 'Nexow is adding a gamified layer to accounts: building widgets, running bots and sharing with the community will earn XP and unlock badges for achievements — and achievements will convert into reward credits you can spend on AI usage. It is rolling out soon; early accounts are first in line.',
         },
         {
           q: 'How much does it cost?',
-          a: 'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Paid plans (Supporter and Sponsor) add monthly credits and higher bot and agent limits, and Partner is for teams that need private infrastructure. Paid checkout is coming soon; see the plans page.',
+          a: 'Free forever to build — locally with your own key, or with 10,000 AI credits reserved on a free account. Paid plans (Supporter and Sponsor) add monthly credits and higher bot and agent limits, and Partner is for teams that need private infrastructure. Paid checkout is coming soon; see the plans page.',
         },
         {
           q: 'Which AI model powers Nexow?',
@@ -590,11 +611,11 @@ const en: SiteContent = {
     meta: {
       title: 'Features — Nexow',
       description:
-        'Natural-language widget generation, a sandboxed runtime, 28+ market-data connectors, cloud bots and agents, a maker community and marketplace, private local-mode and a versioned widget library. Explore everything Nexow does.',
+        'Natural-language widget generation, a sandboxed runtime, a free-form canvas with groups and links, 28+ market-data connectors, cloud bots and agents, a maker community with XP rewards, private local-mode and a versioned widget library. Explore everything Nexow does.',
     },
     hero: {
       badge: 'Features',
-      title: 'Everything you need to build markets dashboards with words',
+      title: 'Everything you need to build market dashboards with words',
       subtitle:
         'Nexow turns a sentence into a running, data-connected widget — then gives you the canvas, connectors, cloud automations and network to build a real workstation.',
     },
@@ -614,7 +635,8 @@ const en: SiteContent = {
         items: [
           { icon: 'shield', title: 'Sandboxed iframes', body: 'Widgets execute in isolated iframes with a strict boundary — generated code can render and fetch, but can’t touch your workspace or other widgets.' },
           { icon: 'bolt', title: 'Live, streaming data', body: 'Widgets subscribe to real-time prices, order books and reference data with minimal latency.' },
-          { icon: 'layers', title: 'Free-form canvas & workspaces', body: 'Arrange widgets on an infinite canvas, group them into workspaces and screens, and switch between setups instantly.' },
+          { icon: 'layers', title: 'Free-form canvas & workspaces', body: 'Arrange widgets on a free-form canvas, group them into workspaces and screens, and switch between setups instantly.' },
+          { icon: 'link', title: 'Groups & Links', body: 'Bundle widgets into groups with mosaic or tab layouts, and wire widgets together with Links — one-way or two-way pipes that stream one widget’s data into another.' },
         ],
       },
       {
@@ -630,8 +652,8 @@ const en: SiteContent = {
         title: 'Automate',
         body: 'Cloud automations and AI that act while you’re away.',
         items: [
-          { icon: 'bot', title: 'Cloud bots', body: 'Describe an alert or wire it visually — thresholds, % change, MA crossovers, digests. Bots run on a cloud heartbeat and push signals to your widgets, tab closed.' },
-          { icon: 'cpu', title: 'AI agents', body: 'Agents with a full harness — model, memory, skills, tools, knowledge and triggers — running in the cloud. Deploy coming soon.' },
+          { icon: 'bot', title: 'Cloud bots', body: 'Describe an alert or wire it visually — thresholds, % change, MA crossovers, digests, or new trades in a connected broker account. Bots run on a cloud heartbeat and push signals to your widgets, tab closed.' },
+          { icon: 'cpu', title: 'AI agents', body: 'Agents with a full harness — model, memory, skills, tools, knowledge and triggers. Design yours in the visual harness builder today — cloud deploy is coming soon.' },
           { icon: 'chat', title: 'Copilot', body: 'An assistant for your workspace: attach a widget’s screenshot or data and ask it to explain, summarize or suggest what to watch next. Coming soon.' },
         ],
       },
@@ -639,9 +661,10 @@ const en: SiteContent = {
         title: 'Network',
         body: 'Build alongside a world of makers.',
         items: [
-          { icon: 'users', title: 'Community', body: 'Follow makers, share and fork dashboards and widgets, and discover what others build in a social feed for markets.' },
-          { icon: 'store', title: 'Marketplace', body: 'Publish widgets others can drop onto their canvas, and pick up ready-made ones for yours.' },
-          { icon: 'signal', title: 'Strategy signals', body: 'Publish audited track records, subscribe to signals you trust, and earn on the strategies you run.' },
+          { icon: 'users', title: 'Community', body: 'Follow makers, post to the feed, and share widgets others can add straight to their library — live today, with public maker profiles.' },
+          { icon: 'store', title: 'Marketplace', body: 'Buy and sell ready-made widgets, and earn on what you build. Coming soon — sharing already works in the community.' },
+          { icon: 'signal', title: 'Strategy signals', body: 'Publish audited track records, subscribe to signals you trust, and earn on the strategies you run. Coming soon.' },
+          { icon: 'trophy', title: 'XP & rewards', body: 'Earn XP for building, unlock badges for achievements, and convert them into reward credits. Coming soon.' },
         ],
       },
       {
@@ -659,23 +682,23 @@ const en: SiteContent = {
     meta: {
       title: 'Plans — Nexow',
       description:
-        'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Compare Free, Supporter, Sponsor and Partner for credits, bots, agents and customization.',
+        'Free forever to build — locally with your own key, or with 10,000 AI credits reserved on a free account. Compare Free, Supporter, Sponsor and Partner for credits, bots, agents and customization.',
     },
     hero: {
       badge: 'Plans',
       title: 'Free to start. Room to grow.',
       subtitle:
-        'Build for free — run local with your own key, or sign up for 10,000 AI credits. Upgrade when you need more capacity, automation and polish.',
+        'Build for free — run local with your own key, or sign up to reserve 10,000 AI credits. Upgrade when you need more capacity, automation and polish.',
     },
     comingSoon:
-      'Supporter & Sponsor checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.',
+      'Supporter & Sponsor checkout is coming soon, and platform credits launch alongside it. Everyone is on Free today — create an account to be first when billing opens.',
     highlights: {
       title: 'What scales with your plan',
       items: [
         {
           icon: 'coins',
           title: 'AI credits',
-          body: 'Power widget generation, Copilot replies and bot logic. Free includes 10K to start; paid plans refresh monthly.',
+          body: 'Power widget generation, Copilot replies and bot logic. Free reserves 10K to start; paid plans refresh monthly.',
         },
         {
           icon: 'bot',
@@ -695,7 +718,7 @@ const en: SiteContent = {
         'Unlimited screens, workspaces & widgets',
         '28+ live market-data connectors',
         'Sandboxed widget runtime',
-        'Global Copilot',
+        'Global Copilot (coming soon)',
         'Community & marketplace access',
       ],
     },
@@ -711,11 +734,11 @@ const en: SiteContent = {
         cta: 'Get started free',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          '10,000 AI credits on sign-up',
+          '10,000 AI credits reserved at sign-up',
           'Unlimited screens, workspaces & widgets',
           'Unlimited browser connections',
           'Cross-device cloud sync',
-          'Global Copilot',
+          'Global Copilot (coming soon)',
           'Community & marketplace access',
         ],
       },
@@ -782,8 +805,8 @@ const en: SiteContent = {
     ],
     faqTitle: 'Plan questions',
     faq: [
-      { q: 'Is Nexow really free?', a: 'Yes. You can build for free forever — run fully local with your own Anthropic key (you only pay your own API usage), or create a free account and get 10,000 AI credits so no key of your own is needed.' },
-      { q: 'What are credits?', a: 'Credits meter AI usage — generating widgets, links, bots and Copilot replies. The free account includes 10,000 to start, and paid plans grant a monthly allowance (50K on Supporter, 800K on Sponsor). You can buy more anytime.' },
+      { q: 'Is Nexow really free?', a: 'Yes. You can build for free forever — run fully local with your own Anthropic key (you only pay your own API usage), or create a free account that reserves 10,000 AI credits for when platform mode opens, so no key of your own is needed.' },
+      { q: 'What are credits?', a: 'Credits meter AI usage — generating widgets, links, bots and Copilot replies. The free account reserves 10,000 to start, and paid plans grant a monthly allowance (50K on Supporter, 800K on Sponsor). Credit metering goes live with platform mode, and you can buy more anytime.' },
       { q: 'When do paid plans launch?', a: 'Supporter and Sponsor are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.' },
       { q: 'Can I pay yearly?', a: 'Yes. Yearly billing gives you two months free versus paying monthly. You can switch between monthly and yearly at any time.' },
     ],
@@ -835,6 +858,8 @@ const en: SiteContent = {
     results: '{n} connectors',
     empty: 'No connectors match your search.',
     exploreCta: 'Explore all connectors',
+    countLive: 'live',
+    countCatalog: 'in the catalog',
   },
   about: {
     meta: {
@@ -941,7 +966,7 @@ const es: SiteContent = {
     meta: {
       title: 'Nexow — Crea dashboards de mercado con IA, en lenguaje natural',
       description:
-        'Nexow es un espacio de trabajo nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo crea, lo conecta a datos en vivo de más de 28 conectores y suma bots en la nube, agentes y una comunidad de makers — privado por defecto, gratis para empezar.',
+        'Nexow es un espacio de trabajo nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo crea, lo conecta a datos en vivo de más de 28 conectores y suma bots en la nube, agentes de IA, una comunidad de makers y recompensas XP — privado por defecto, gratis para empezar.',
     },
     hero: {
       badge: 'Preview ya disponible',
@@ -952,7 +977,7 @@ const es: SiteContent = {
         'Un espacio de trabajo nativo de IA para mercados. Pide cualquier widget en lenguaje natural — Nexow escribe el código, lo ejecuta de forma segura y transmite datos en vivo a un lienzo libre. Automatízalo con bots y agentes en la nube, y conéctate a una comunidad de makers.',
       ctaPrimary: 'Abrir la app',
       ctaSecondary: 'Ver cómo funciona',
-      note: 'Sin registro para probar · Privado en tu navegador · O cuenta gratis con 10K créditos',
+      note: 'Sin registro para probar · Privado en tu navegador · O cuenta gratis con 10K créditos reservados',
       promptExample: 'Muestra un gráfico de velas de BTC-USD de Coinbase con EMA 20 y 50 y RSI debajo.',
       promptPlaceholder: 'Describe un widget…',
     },
@@ -961,7 +986,7 @@ const es: SiteContent = {
     stats: [
       { n: 28, suffix: '+', label: 'conectores de datos de mercado en vivo' },
       { n: 6, label: 'clases de activos en un solo lienzo' },
-      { n: 10, suffix: 'K', label: 'créditos de IA gratis al registrarte' },
+      { n: 10, suffix: 'K', label: 'créditos de IA reservados al registrarte' },
       { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
     ],
     showcase: {
@@ -1017,7 +1042,7 @@ const es: SiteContent = {
         {
           icon: 'layers',
           title: 'Lienzo libre',
-          body: 'Arrastra, redimensiona y organiza widgets en un lienzo infinito. Agrúpalos en espacios y pantallas para FX, cripto, research — lo que operes.',
+          body: 'Arrastra, redimensiona y organiza widgets en un lienzo libre con espacios y pantallas para FX, cripto, research — lo que operes. Agrupa widgets y conecta sus datos en vivo con Links.',
         },
         {
           icon: 'lock',
@@ -1064,13 +1089,13 @@ const es: SiteContent = {
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets. Describe una alerta con palabras — «avísame cuando BTC caiga 5% en una hora» — o constrúyela visualmente con umbrales, % de cambio, cruces de medias y resúmenes.',
+          body: 'Automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets. Describe una alerta con palabras — «avísame cuando BTC caiga 5% en una hora» — o constrúyela visualmente con umbrales, % de cambio, cruces de medias y resúmenes. Los bots pueden incluso vigilar una cuenta de broker conectada y avisar de operaciones nuevas.',
           status: 'live',
         },
         {
           icon: 'cpu',
           title: 'Agentes',
-          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores — corriendo en la nube. Dale un trabajo a un agente y deja que vigile, razone y actúe.',
+          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores. Dale un trabajo a un agente y deja que vigile, razone y actúe — diseña el tuyo hoy en el editor visual del harness; el despliegue en la nube llega pronto.',
           status: 'soon',
         },
         {
@@ -1080,6 +1105,8 @@ const es: SiteContent = {
           status: 'soon',
         },
       ],
+      harnessChips: ['modelo', 'memoria', 'skills', 'herramientas', 'conocimiento', 'disparadores'],
+      copilotPrompts: ['Explica este gráfico', 'Resume estos datos', '¿Qué debería vigilar ahora?'],
     },
     connectors: {
       eyebrow: 'Conectores',
@@ -1109,13 +1136,13 @@ const es: SiteContent = {
         {
           icon: 'users',
           title: 'Comunidad',
-          body: 'Descubre y sigue makers, comparte dashboards y widgets, y haz fork de lo que otros crean. Un feed social para constructores de mercados.',
-          status: 'soon',
+          body: 'Descubre y sigue makers, da like y comenta en un feed social para constructores de mercados, y comparte widgets que otros pueden añadir directo a su biblioteca — con perfiles públicos de maker.',
+          status: 'live',
         },
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publica widgets que otros pueden soltar directo en su lienzo — y toma los que ya están hechos para el tuyo.',
+          body: 'Compartir widgets ya funciona en la comunidad — lo siguiente es un marketplace para comprar y vender widgets listos, y ganar con lo que construyes.',
           status: 'soon',
         },
         {
@@ -1124,15 +1151,21 @@ const es: SiteContent = {
           body: 'Publica historiales auditados, suscríbete a señales de makers de confianza y gana con las estrategias que ejecutas.',
           status: 'soon',
         },
+        {
+          icon: 'trophy',
+          title: 'XP y recompensas',
+          body: 'Una cuenta gamificada — cada widget, bot y publicación da XP. Sube de nivel, desbloquea insignias por logros y conviértelos en créditos de recompensa.',
+          status: 'soon',
+        },
       ],
       accountBadge: 'Cuenta gratis',
       accountTitle: 'Una cuenta gratis desbloquea la red',
       accountBody: 'Sin tarjeta. Sigue construyendo en local cuando quieras — la cuenta siempre es opcional.',
       accountPoints: [
-        '10.000 créditos de IA gratis al registrarte',
+        '10.000 créditos de IA reservados al registrarte',
         'Sincronización en la nube de espacios y widgets entre dispositivos',
         'Comunidad, marketplace y biblioteca de widgets',
-        'Gana XP y recompensas mientras construyes',
+        'XP, insignias y créditos de recompensa al construir (próximamente)',
       ],
       accountCta: 'Crea tu cuenta gratis',
     },
@@ -1140,7 +1173,7 @@ const es: SiteContent = {
       eyebrow: 'Planes',
       title: 'Empieza gratis. Crece cuando quieras.',
       subtitle:
-        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos en una cuenta gratis. Sube de plan para más créditos, bots y agentes.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos reservados en una cuenta gratis. Sube de plan para más créditos, bots y agentes.',
       cta: 'Comparar todos los planes',
     },
     privacy: {
@@ -1159,16 +1192,18 @@ const es: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Esto es la preview. Esto es lo que viene.',
       subtitle:
-        'Nexow lanzó una preview pública del lienzo, la generación de código, los bots en la nube y las cuentas. Los siguientes bloques están por llegar.',
+        'Nexow lanzó una preview pública del lienzo, la generación de código, los bots en la nube, las cuentas y el feed de la comunidad. Los siguientes bloques están por llegar.',
       shipped: 'Disponible',
       soon: 'Próximamente',
       items: [
         { status: 'shipped', title: 'Generación de widgets con IA', body: 'Widgets en lenguaje natural corriendo aislados en el lienzo.' },
         { status: 'shipped', title: 'Más de 28 conectores', body: 'Brokers, exchanges, proveedores de datos, bases de datos y redes sociales en vivo.' },
         { status: 'shipped', title: 'Bots y alertas en la nube', body: 'Automatizaciones que vigilan tus datos y envían señales a tus widgets, con la pestaña cerrada.' },
-        { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis, 10K créditos y espacios sincronizados en todos tus dispositivos.' },
+        { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis con espacios sincronizados en todos tus dispositivos — 10K créditos reservados para el lanzamiento de la plataforma.' },
+        { status: 'shipped', title: 'Comunidad: feed y perfiles', body: 'Sigue makers, comparte widgets en el feed y reclama tu @usuario público.' },
         { status: 'soon', title: 'Agentes y Copilot', body: 'Despliega agentes en la nube con un harness completo, y un Copilot para tu espacio.' },
         { status: 'soon', title: 'Marketplace y señales', body: 'Compra y vende widgets, y publica señales de estrategia auditadas con las que ganar.' },
+        { status: 'soon', title: 'XP, insignias y recompensas', body: 'Una cuenta gamificada — gana XP e insignias por logros y conviértelos en créditos de recompensa.' },
       ],
     },
     faq: {
@@ -1194,15 +1229,19 @@ const es: SiteContent = {
         },
         {
           q: '¿Qué son los bots y los agentes?',
-          a: 'Los bots son automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets aunque tengas la pestaña cerrada — describe una alerta con palabras o constrúyela visualmente con umbrales, % de cambio y cruces de medias. Los agentes son IA con un harness completo (modelo, memoria, skills, herramientas, disparadores) que corren en la nube; el despliegue de agentes y el asistente Copilot llegan pronto.',
+          a: 'Los bots son automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets aunque tengas la pestaña cerrada — describe una alerta con palabras o constrúyela visualmente con umbrales, % de cambio, cruces de medias y operaciones nuevas en una cuenta de broker conectada. Los agentes son IA con un harness completo (modelo, memoria, skills, herramientas, conocimiento, disparadores) — diseña el tuyo hoy en el editor visual; el despliegue en la nube y el asistente Copilot llegan pronto.',
         },
         {
           q: '¿Hay comunidad y marketplace?',
-          a: 'Sí — una cuenta gratis te conecta a la red: sigue makers, comparte y haz fork de dashboards y widgets, publica en un marketplace y sigue señales de estrategia auditadas con las que ganar. La comunidad y el marketplace se están desplegando ahora.',
+          a: 'La comunidad ya está en vivo — crea una cuenta gratis, reclama tu @usuario público, sigue makers, publica en el feed y comparte widgets que otros pueden añadir directo a su biblioteca. El marketplace para comprar y vender widgets y las señales de estrategia auditadas llegan pronto.',
+        },
+        {
+          q: '¿Qué son los XP y las recompensas?',
+          a: 'Nexow está añadiendo una capa gamificada a las cuentas: crear widgets, ejecutar bots y compartir con la comunidad dará XP y desbloqueará insignias por logros — y los logros se convertirán en créditos de recompensa que podrás gastar en uso de IA. Llega pronto; las cuentas tempranas serán las primeras.',
         },
         {
           q: '¿Cuánto cuesta?',
-          a: 'Gratis para siempre para construir — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Los planes de pago (Supporter y Sponsor) suman créditos mensuales y límites más altos de bots y agentes, y Partner es para equipos que necesitan infraestructura privada. El pago llega pronto; consulta la página de precios.',
+          a: 'Gratis para siempre para construir — en local con tu propia clave, o con 10.000 créditos de IA reservados en una cuenta gratis. Los planes de pago (Supporter y Sponsor) suman créditos mensuales y límites más altos de bots y agentes, y Partner es para equipos que necesitan infraestructura privada. El pago llega pronto; consulta la página de precios.',
         },
         {
           q: '¿Qué modelo de IA usa Nexow?',
@@ -1221,7 +1260,7 @@ const es: SiteContent = {
     meta: {
       title: 'Funciones — Nexow',
       description:
-        'Generación de widgets en lenguaje natural, runtime aislado, más de 28 conectores de datos de mercado, bots y agentes en la nube, comunidad y marketplace de makers, modo local privado y biblioteca de widgets versionada. Descubre todo lo que hace Nexow.',
+        'Generación de widgets en lenguaje natural, runtime aislado, lienzo libre con grupos y links, más de 28 conectores de datos de mercado, bots y agentes en la nube, comunidad de makers con recompensas XP, modo local privado y biblioteca de widgets versionada. Descubre todo lo que hace Nexow.',
     },
     hero: {
       badge: 'Funciones',
@@ -1245,7 +1284,8 @@ const es: SiteContent = {
         items: [
           { icon: 'shield', title: 'Iframes aislados', body: 'Los widgets se ejecutan en iframes aislados con una frontera estricta — el código generado puede renderizar y obtener datos, pero no toca tu espacio ni otros widgets.' },
           { icon: 'bolt', title: 'Datos en vivo y en streaming', body: 'Los widgets se suscriben a precios en tiempo real, order books y datos de referencia con mínima latencia.' },
-          { icon: 'layers', title: 'Lienzo libre y espacios', body: 'Organiza widgets en un lienzo infinito, agrúpalos en espacios y pantallas, y cambia de configuración al instante.' },
+          { icon: 'layers', title: 'Lienzo libre y espacios', body: 'Organiza widgets en un lienzo libre, agrúpalos en espacios y pantallas, y cambia de configuración al instante.' },
+          { icon: 'link', title: 'Grupos y Links', body: 'Reúne widgets en grupos con diseño de mosaico o pestañas, y conéctalos con Links — tuberías de un sentido o bidireccionales que llevan los datos de un widget a otro.' },
         ],
       },
       {
@@ -1261,8 +1301,8 @@ const es: SiteContent = {
         title: 'Automatiza',
         body: 'Automatizaciones en la nube e IA que actúan sin ti.',
         items: [
-          { icon: 'bot', title: 'Bots en la nube', body: 'Describe una alerta o constrúyela visualmente — umbrales, % de cambio, cruces de medias, resúmenes. Los bots corren en un latido en la nube y envían señales a tus widgets, con la pestaña cerrada.' },
-          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores — corriendo en la nube. Despliegue próximamente.' },
+          { icon: 'bot', title: 'Bots en la nube', body: 'Describe una alerta o constrúyela visualmente — umbrales, % de cambio, cruces de medias, resúmenes u operaciones nuevas en una cuenta de broker conectada. Los bots corren en un latido en la nube y envían señales a tus widgets, con la pestaña cerrada.' },
+          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores. Diseña el tuyo hoy en el editor visual del harness — el despliegue en la nube llega pronto.' },
           { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir qué vigilar. Próximamente.' },
         ],
       },
@@ -1270,9 +1310,10 @@ const es: SiteContent = {
         title: 'Red',
         body: 'Construye junto a un mundo de makers.',
         items: [
-          { icon: 'users', title: 'Comunidad', body: 'Sigue makers, comparte y haz fork de dashboards y widgets, y descubre lo que otros crean en un feed social para mercados.' },
-          { icon: 'store', title: 'Marketplace', body: 'Publica widgets que otros pueden soltar en su lienzo, y toma los que ya están hechos para el tuyo.' },
-          { icon: 'signal', title: 'Señales de estrategia', body: 'Publica historiales auditados, suscríbete a señales de confianza y gana con las estrategias que ejecutas.' },
+          { icon: 'users', title: 'Comunidad', body: 'Sigue makers, publica en el feed y comparte widgets que otros pueden añadir directo a su biblioteca — en vivo hoy, con perfiles públicos de maker.' },
+          { icon: 'store', title: 'Marketplace', body: 'Compra y vende widgets listos, y gana con lo que construyes. Próximamente — compartir ya funciona en la comunidad.' },
+          { icon: 'signal', title: 'Señales de estrategia', body: 'Publica historiales auditados, suscríbete a señales de confianza y gana con las estrategias que ejecutas. Próximamente.' },
+          { icon: 'trophy', title: 'XP y recompensas', body: 'Gana XP por construir, desbloquea insignias por logros y conviértelas en créditos de recompensa. Próximamente.' },
         ],
       },
       {
@@ -1290,23 +1331,23 @@ const es: SiteContent = {
     meta: {
       title: 'Planes — Nexow',
       description:
-        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA reservados en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
     },
     hero: {
       badge: 'Planes',
       title: 'Gratis para empezar. Espacio para crecer.',
       subtitle:
-        'Construye gratis — en local con tu propia clave, o regístrate con 10.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
+        'Construye gratis — en local con tu propia clave, o regístrate y reserva 10.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
     },
     comingSoon:
-      'El pago de Supporter y Sponsor llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
+      'El pago de Supporter y Sponsor llega pronto, y los créditos de la plataforma se activan con él. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
     highlights: {
       title: 'Qué escala con tu plan',
       items: [
         {
           icon: 'coins',
           title: 'Créditos de IA',
-          body: 'Impulsan la generación de widgets, respuestas de Copilot y lógica de bots. Free incluye 10K para empezar; los planes de pago se renuevan cada mes.',
+          body: 'Impulsan la generación de widgets, respuestas de Copilot y lógica de bots. Free reserva 10K para empezar; los planes de pago se renuevan cada mes.',
         },
         {
           icon: 'bot',
@@ -1326,7 +1367,7 @@ const es: SiteContent = {
         'Pantallas, espacios y widgets ilimitados',
         '28+ conectores de datos de mercado en vivo',
         'Runtime de widgets en sandbox',
-        'Copilot global',
+        'Copilot global (próximamente)',
         'Acceso a comunidad y marketplace',
       ],
     },
@@ -1342,11 +1383,11 @@ const es: SiteContent = {
         cta: 'Empezar gratis',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          '10.000 créditos de IA al registrarte',
+          '10.000 créditos de IA reservados al registrarte',
           'Pantallas, espacios y widgets ilimitados',
           'Conexiones de navegador ilimitadas',
           'Sync en la nube entre dispositivos',
-          'Copilot global',
+          'Copilot global (próximamente)',
           'Acceso a comunidad y marketplace',
         ],
       },
@@ -1413,8 +1454,8 @@ const es: SiteContent = {
     ],
     faqTitle: 'Preguntas sobre los planes',
     faq: [
-      { q: '¿Nexow es de verdad gratis?', a: 'Sí. Puedes construir gratis para siempre — totalmente local con tu propia clave de Anthropic (solo pagas tu uso de la API), o crea una cuenta gratis y recibe 10.000 créditos de IA sin necesidad de clave propia.' },
-      { q: '¿Qué son los créditos?', a: 'Los créditos miden el uso de IA — generar widgets, links, bots y respuestas de Copilot. La cuenta gratis incluye 10.000 para empezar, y los planes de pago dan una asignación mensual (50K en Supporter, 800K en Sponsor). Puedes comprar más cuando quieras.' },
+      { q: '¿Nexow es de verdad gratis?', a: 'Sí. Puedes construir gratis para siempre — totalmente local con tu propia clave de Anthropic (solo pagas tu uso de la API), o crea una cuenta gratis que reserva 10.000 créditos de IA para cuando se abra el modo plataforma, sin necesidad de clave propia.' },
+      { q: '¿Qué son los créditos?', a: 'Los créditos miden el uso de IA — generar widgets, links, bots y respuestas de Copilot. La cuenta gratis reserva 10.000 para empezar, y los planes de pago dan una asignación mensual (50K en Supporter, 800K en Sponsor). La medición de créditos se activa con el modo plataforma, y puedes comprar más cuando quieras.' },
       { q: '¿Cuándo salen los planes de pago?', a: 'Supporter y Sponsor ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.' },
       { q: '¿Puedo pagar anual?', a: 'Sí. La facturación anual te da dos meses gratis frente al pago mensual. Puedes cambiar entre mensual y anual cuando quieras.' },
     ],
@@ -1466,6 +1507,8 @@ const es: SiteContent = {
     results: '{n} conectores',
     empty: 'Ningún conector coincide con tu búsqueda.',
     exploreCta: 'Explorar todos los conectores',
+    countLive: 'en vivo',
+    countCatalog: 'en el catálogo',
   },
   about: {
     meta: {
@@ -1572,7 +1615,7 @@ const fr: SiteContent = {
     meta: {
       title: 'Nexow — Créez des tableaux de bord de marché avec l’IA, en langage naturel',
       description:
-        'Nexow est un espace de travail natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le construit, le connecte aux données en direct de plus de 28 connecteurs et ajoute bots cloud, agents et une communauté de makers — privé par défaut, gratuit pour démarrer.',
+        'Nexow est un espace de travail natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le construit, le connecte aux données en direct de plus de 28 connecteurs et ajoute bots cloud, agents IA, une communauté de makers et des récompenses XP — privé par défaut, gratuit pour démarrer.',
     },
     hero: {
       badge: 'Preview disponible',
@@ -1583,7 +1626,7 @@ const fr: SiteContent = {
         'Un espace de travail natif IA pour les marchés. Demandez n’importe quel widget en langage naturel — Nexow écrit le code, l’exécute en toute sécurité et diffuse les données en direct sur un canvas libre. Automatisez-le avec des bots et des agents cloud, puis branchez-vous à une communauté de makers.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir comment ça marche',
-      note: 'Sans inscription pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits',
+      note: 'Sans inscription pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits réservés',
       promptExample: 'Affiche un graphique en chandeliers de BTC-USD depuis Coinbase avec EMA 20 et 50 et RSI en dessous.',
       promptPlaceholder: 'Décrivez un widget…',
     },
@@ -1592,7 +1635,7 @@ const fr: SiteContent = {
     stats: [
       { n: 28, suffix: '+', label: 'connecteurs de données de marché en direct' },
       { n: 6, label: 'classes d’actifs sur un seul canvas' },
-      { n: 10, suffix: 'K', label: 'crédits IA gratuits à l’inscription' },
+      { n: 10, suffix: 'K', label: 'crédits IA réservés à l’inscription' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
     ],
     showcase: {
@@ -1648,7 +1691,7 @@ const fr: SiteContent = {
         {
           icon: 'layers',
           title: 'Canvas libre',
-          body: 'Glissez, redimensionnez et organisez les widgets sur un canvas infini. Regroupez-les en espaces et écrans pour FX, crypto, recherche — ce que vous tradez.',
+          body: 'Glissez, redimensionnez et organisez les widgets sur un canvas libre, avec espaces et écrans pour FX, crypto, recherche — ce que vous tradez. Groupez les widgets et reliez leurs données en direct avec des Links.',
         },
         {
           icon: 'lock',
@@ -1695,13 +1738,13 @@ const fr: SiteContent = {
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets. Décrivez une alerte avec des mots — « préviens-moi quand BTC chute de 5% en une heure » — ou construisez-la visuellement avec seuils, % de variation, croisements de moyennes et digests.',
+          body: 'Des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets. Décrivez une alerte avec des mots — « préviens-moi quand BTC chute de 5% en une heure » — ou construisez-la visuellement avec seuils, % de variation, croisements de moyennes et digests. Les bots peuvent même surveiller un compte broker connecté et signaler les nouveaux trades.',
           status: 'live',
         },
         {
           icon: 'cpu',
           title: 'Agents',
-          body: 'Des agents IA avec un vrai harnais — modèle, mémoire, skills, outils, connaissances et déclencheurs — tournant dans le cloud. Confiez un travail à un agent et laissez-le surveiller, raisonner et agir.',
+          body: 'Des agents IA avec un vrai harnais — modèle, mémoire, skills, outils, connaissances et déclencheurs. Confiez un travail à un agent et laissez-le surveiller, raisonner et agir — concevez le vôtre dès aujourd’hui dans l’éditeur visuel du harnais ; le déploiement cloud arrive bientôt.',
           status: 'soon',
         },
         {
@@ -1711,6 +1754,8 @@ const fr: SiteContent = {
           status: 'soon',
         },
       ],
+      harnessChips: ['modèle', 'mémoire', 'skills', 'outils', 'connaissances', 'déclencheurs'],
+      copilotPrompts: ['Explique ce graphique', 'Résume ces données', 'Que surveiller ensuite ?'],
     },
     connectors: {
       eyebrow: 'Connecteurs',
@@ -1740,13 +1785,13 @@ const fr: SiteContent = {
         {
           icon: 'users',
           title: 'Communauté',
-          body: 'Découvrez et suivez des makers, partagez tableaux de bord et widgets, et forkez ce que d’autres construisent. Un fil social pour les bâtisseurs de marchés.',
-          status: 'soon',
+          body: 'Découvrez et suivez des makers, likez et commentez dans un fil social pour bâtisseurs de marchés, et partagez des widgets que d’autres ajoutent directement à leur bibliothèque — avec des profils publics de maker.',
+          status: 'live',
         },
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publiez des widgets que d’autres déposent directement sur leur canvas — et récupérez ceux déjà prêts pour le vôtre.',
+          body: 'Le partage de widgets est déjà en direct dans la communauté — vient ensuite un marketplace pour acheter et vendre des widgets prêts à l’emploi, et gagner sur ce que vous construisez.',
           status: 'soon',
         },
         {
@@ -1755,15 +1800,21 @@ const fr: SiteContent = {
           body: 'Publiez des historiques audités, abonnez-vous aux signaux de makers de confiance et gagnez sur les stratégies que vous exécutez.',
           status: 'soon',
         },
+        {
+          icon: 'trophy',
+          title: 'XP et récompenses',
+          body: 'Un compte gamifié — chaque widget, bot et partage rapporte de l’XP. Montez de niveau, débloquez des badges pour vos succès et convertissez-les en crédits de récompense.',
+          status: 'soon',
+        },
       ],
       accountBadge: 'Compte gratuit',
       accountTitle: 'Un compte gratuit débloque le réseau',
       accountBody: 'Sans carte bancaire. Continuez à construire en local quand vous voulez — le compte reste toujours optionnel.',
       accountPoints: [
-        '10 000 crédits IA gratuits à l’inscription',
+        '10 000 crédits IA réservés à l’inscription',
         'Sync cloud des espaces et widgets sur tous vos appareils',
         'Communauté, marketplace et bibliothèque de widgets',
-        'Gagnez de l’XP et des récompenses en construisant',
+        'XP, badges et crédits de récompense en construisant (bientôt)',
       ],
       accountCta: 'Créez votre compte gratuit',
     },
@@ -1771,7 +1822,7 @@ const fr: SiteContent = {
       eyebrow: 'Plans',
       title: 'Commencez gratuitement. Évoluez quand vous voulez.',
       subtitle:
-        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits sur un compte gratuit. Montez en gamme pour plus de crédits, de bots et d’agents.',
+        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits réservés sur un compte gratuit. Montez en gamme pour plus de crédits, de bots et d’agents.',
       cta: 'Comparer tous les plans',
     },
     privacy: {
@@ -1790,16 +1841,18 @@ const fr: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'C’est la preview. Voici la suite.',
       subtitle:
-        'Nexow a lancé une preview publique du canvas, de la génération de code, des bots cloud et des comptes. Les blocs suivants arrivent bientôt.',
+        'Nexow a lancé une preview publique du canvas, de la génération de code, des bots cloud, des comptes et du fil communautaire. Les blocs suivants arrivent bientôt.',
       shipped: 'Disponible',
       soon: 'Bientôt',
       items: [
         { status: 'shipped', title: 'Génération de widgets par IA', body: 'Widgets en langage naturel exécutés en sandbox sur le canvas.' },
         { status: 'shipped', title: 'Plus de 28 connecteurs', body: 'Brokers, exchanges, fournisseurs de données, bases de données et réseaux sociaux en direct.' },
         { status: 'shipped', title: 'Bots et alertes cloud', body: 'Des automatisations qui surveillent vos données et envoient des signaux à vos widgets, onglet fermé.' },
-        { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits, 10K crédits et espaces synchronisés sur tous vos appareils.' },
+        { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits avec espaces synchronisés sur tous vos appareils — 10K crédits réservés pour le lancement de la plateforme.' },
+        { status: 'shipped', title: 'Communauté : fil et profils', body: 'Suivez des makers, partagez des widgets dans le fil et réclamez votre @pseudo public.' },
         { status: 'soon', title: 'Agents et Copilot', body: 'Déployez des agents cloud avec un harnais complet, et un Copilot pour votre espace.' },
         { status: 'soon', title: 'Marketplace et signaux', body: 'Achetez et vendez des widgets, et publiez des signaux de stratégie audités pour gagner.' },
+        { status: 'soon', title: 'XP, badges et récompenses', body: 'Un compte gamifié — gagnez XP et badges pour vos succès et convertissez-les en crédits de récompense.' },
       ],
     },
     faq: {
