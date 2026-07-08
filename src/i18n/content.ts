@@ -220,6 +220,7 @@ export interface SiteContent {
     meta: { title: string; description: string };
     title: string;
     subtitle: string;
+    latest: string;
     readMore: string;
     backToBlog: string;
     published: string;
@@ -872,6 +873,7 @@ const en: SiteContent = {
     },
     title: 'The Nexow blog',
     subtitle: 'Building AI-native market tooling — guides, deep-dives and product notes.',
+    latest: 'Latest',
     readMore: 'Read article',
     backToBlog: 'Back to blog',
     published: 'Published',
@@ -1502,6 +1504,7 @@ const es: SiteContent = {
     },
     title: 'El blog de Nexow',
     subtitle: 'Construyendo herramientas de mercado nativas de IA — guías, análisis y notas de producto.',
+    latest: 'Novedad',
     readMore: 'Leer artículo',
     backToBlog: 'Volver al blog',
     published: 'Publicado',
@@ -2132,6 +2135,7 @@ const fr: SiteContent = {
     },
     title: 'Le blog Nexow',
     subtitle: 'Construire des outils de marché natifs IA — guides, analyses et notes produit.',
+    latest: 'Nouveau',
     readMore: 'Lire l’article',
     backToBlog: 'Retour au blog',
     published: 'Publié',
