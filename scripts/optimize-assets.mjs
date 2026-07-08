@@ -19,7 +19,7 @@ async function main() {
     await sharp(buf).toFile(p(`${name}.png`));
   }
 
-  // Favicons — regenerate via scripts/make-favicon.mjs (rounded-square spike mark).
+  // Favicon size variants from public/favicon.png (sources are never overwritten).
   const { execSync } = await import('node:child_process');
   execSync('bun run scripts/make-favicon.mjs', { stdio: 'inherit' });
 
