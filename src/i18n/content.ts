@@ -1996,7 +1996,7 @@ const fr: SiteContent = {
         {
           icon: 'coins',
           title: 'Crédits IA',
-          body: 'Alimentent la génération de widgets, les réponses Copilot et la logique des bots. Free inclut 10K pour démarrer ; les plans payants se renouvellent chaque mois.',
+          body: 'Alimentent la génération de widgets, les réponses Copilot et la logique des bots. Free réserve 10K pour démarrer ; les plans payants se renouvellent chaque mois.',
         },
         {
           icon: 'bot',
@@ -2016,7 +2016,7 @@ const fr: SiteContent = {
         'Écrans, espaces et widgets illimités',
         '28+ connecteurs de données de marché en direct',
         'Runtime de widgets en bac à sable',
-        'Copilot global',
+        'Copilot global (bientôt)',
         'Accès communauté et marketplace',
       ],
     },
@@ -2032,11 +2032,11 @@ const fr: SiteContent = {
         cta: 'Démarrer gratuitement',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          '10 000 crédits IA à l’inscription',
+          '10 000 crédits IA réservés à l’inscription',
           'Écrans, espaces et widgets illimités',
           'Connexions navigateur illimitées',
           'Sync cloud multi-appareils',
-          'Copilot global',
+          'Copilot global (bientôt)',
           'Accès communauté et marketplace',
         ],
       },
@@ -2103,8 +2103,8 @@ const fr: SiteContent = {
     ],
     faqTitle: 'Questions sur les plans',
     faq: [
-      { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Vous pouvez construire gratuitement pour toujours — entièrement en local avec votre propre clé Anthropic (vous ne payez que votre usage de l’API), ou créez un compte gratuit et recevez 10 000 crédits IA sans clé à vous.' },
-      { q: 'Que sont les crédits ?', a: 'Les crédits mesurent l’usage de l’IA — génération de widgets, liens, bots et réponses de Copilot. Le compte gratuit inclut 10 000 pour démarrer, et les plans payants offrent une allocation mensuelle (50K sur Supporter, 800K sur Sponsor). Vous pouvez en acheter davantage à tout moment.' },
+      { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Vous pouvez construire gratuitement pour toujours — entièrement en local avec votre propre clé Anthropic (vous ne payez que votre usage de l’API), ou créez un compte gratuit qui réserve 10 000 crédits IA pour l’ouverture du mode plateforme, sans clé à vous.' },
+      { q: 'Que sont les crédits ?', a: 'Les crédits mesurent l’usage de l’IA — génération de widgets, liens, bots et réponses de Copilot. Le compte gratuit réserve 10 000 pour démarrer, et les plans payants offrent une allocation mensuelle (50K sur Supporter, 800K sur Sponsor). Le décompte des crédits s’active avec le mode plateforme, et vous pouvez en acheter davantage à tout moment.' },
       { q: 'Quand les plans payants arrivent-ils ?', a: 'Supporter et Sponsor sont déjà définis et affichés dans l’app, mais le paiement arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.' },
       { q: 'Puis-je payer à l’année ?', a: 'Oui. La facturation annuelle vous offre deux mois gratuits par rapport au paiement mensuel. Vous pouvez basculer entre mensuel et annuel à tout moment.' },
     ],
