@@ -2,6 +2,7 @@
 title: 'Privé par défaut : pourquoi votre poste de travail IA pour les marchés devrait tourner en local'
 description: 'Nexow fonctionne entièrement en local par défaut — génération avec votre propre clé dans le navigateur, persistance IndexedDB et connexions directes aux venues. Voici ce que signifie privé par défaut et pourquoi c’est important pour les traders.'
 pubDate: 2026-07-01
+heroImage: '/blog/private.svg'
 tags: ['privacy', 'architecture', 'security']
 ---
 
