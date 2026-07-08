@@ -11,9 +11,10 @@ interface Props {
   description: string;
   pubDate: Date;
   tags: string[];
+  heroImage?: string;
   featured?: boolean;
 }
-const { lang, slug, title, description, pubDate, tags, featured = false } = Astro.props;
+const { lang, slug, title, description, pubDate, tags, heroImage, featured = false } = Astro.props;
 const t = useContent(lang).blog;
 const href = localizePath(`/blog/${slug}`, lang);
 const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
@@ -25,11 +26,41 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
 
 <article
   class:list={[
-    'group relative flex flex-col rounded-2xl border border-ink-900/8 bg-white p-7 transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-900/5',
-    featured && 'md:col-span-2 md:flex-row md:items-center md:gap-8',
+    'group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/8 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-900/5',
+    featured && 'md:col-span-2 md:flex-row',
   ]}
 >
-  <div class={featured ? 'md:flex-1' : ''}>
+  {
+    heroImage && (
+      <div
+        class:list={[
+          'relative shrink-0 overflow-hidden bg-ink-950',
+          featured && 'md:w-[46%]',
+        ]}
+      >
+        <img
+          src={heroImage}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width="1200"
+          height="675"
+          class:list={[
+            'w-full object-cover transition-transform duration-[600ms] ease-out-expo group-hover:scale-[1.04]',
+            featured ? 'aspect-[16/10] md:h-full md:aspect-auto' : 'aspect-[16/9]',
+          ]}
+        />
+        <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5" />
+        {featured && (
+          <span class="absolute left-4 top-4 rounded-full bg-ink-950/70 px-2.5 py-1 font-mono text-[0.65rem] font-medium uppercase tracking-wider text-brand-300 ring-1 ring-white/10 backdrop-blur">
+            {t.latest}
+          </span>
+        )}
+      </div>
+    )
+  }
+
+  <div class:list={['flex flex-1 flex-col p-7', featured && 'md:justify-center md:p-10']}>
     <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-ink-500">
       <time datetime={pubDate.toISOString()}>{dtFmt.format(pubDate)}</time>
       {tags[0] && (
@@ -50,7 +81,14 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
         {title}
       </a>
     </h2>
-    <p class="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-600">{description}</p>
+    <p
+      class:list={[
+        'mt-3 line-clamp-3 leading-relaxed text-ink-600',
+        featured ? 'text-sm md:text-base' : 'text-sm',
+      ]}
+    >
+      {description}
+    </p>
     <span class="mt-5 inline-flex items-center gap-1.5 font-mono text-sm font-medium text-brand-700">
       {t.readMore}
       <Icon name="arrow" class="size-4 transition-transform group-hover:translate-x-0.5" />
