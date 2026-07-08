@@ -1878,15 +1878,19 @@ const fr: SiteContent = {
         },
         {
           q: 'Que sont les bots et les agents ?',
-          a: 'Les bots sont des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets même onglet fermé — décrivez une alerte avec des mots ou construisez-la visuellement avec seuils, % de variation et croisements de moyennes. Les agents sont de l’IA avec un harnais complet (modèle, mémoire, skills, outils, déclencheurs) tournant dans le cloud ; le déploiement des agents et l’assistant Copilot arrivent bientôt.',
+          a: 'Les bots sont des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets même onglet fermé — décrivez une alerte avec des mots ou construisez-la visuellement avec seuils, % de variation, croisements de moyennes et nouveaux trades sur un compte broker connecté. Les agents sont de l’IA avec un harnais complet (modèle, mémoire, skills, outils, connaissances, déclencheurs) — concevez le vôtre dès aujourd’hui dans l’éditeur visuel ; le déploiement cloud et l’assistant Copilot arrivent bientôt.',
         },
         {
           q: 'Y a-t-il une communauté et un marketplace ?',
-          a: 'Oui — un compte gratuit vous branche au réseau : suivez des makers, partagez et forkez tableaux de bord et widgets, publiez sur un marketplace et suivez des signaux de stratégie audités pour gagner. La communauté et le marketplace se déploient en ce moment.',
+          a: 'La communauté est en direct — créez un compte gratuit, réclamez votre @pseudo public, suivez des makers, publiez dans le fil et partagez des widgets que d’autres ajoutent directement à leur bibliothèque. Le marketplace pour acheter et vendre des widgets et les signaux de stratégie audités arrivent ensuite.',
+        },
+        {
+          q: 'Que sont les XP et les récompenses ?',
+          a: 'Nexow ajoute une couche gamifiée aux comptes : créer des widgets, faire tourner des bots et partager avec la communauté rapportera de l’XP et débloquera des badges pour vos succès — et les succès se convertiront en crédits de récompense à dépenser en usage IA. Déploiement bientôt ; les premiers comptes seront servis en premier.',
         },
         {
           q: 'Combien ça coûte ?',
-          a: 'Gratuit pour toujours pour construire — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Les plans payants (Supporter et Sponsor) ajoutent des crédits mensuels et des limites de bots et d’agents plus élevées, et Partner s’adresse aux équipes qui ont besoin d’une infrastructure privée. Le paiement arrive bientôt ; voir la page tarifs.',
+          a: 'Gratuit pour toujours pour construire — en local avec votre propre clé, ou avec 10 000 crédits IA réservés sur un compte gratuit. Les plans payants (Supporter et Sponsor) ajoutent des crédits mensuels et des limites de bots et d’agents plus élevées, et Partner s’adresse aux équipes qui ont besoin d’une infrastructure privée. Le paiement arrive bientôt ; voir la page tarifs.',
         },
         {
           q: 'Quel modèle IA alimente Nexow ?',
@@ -1905,7 +1909,7 @@ const fr: SiteContent = {
     meta: {
       title: 'Fonctionnalités — Nexow',
       description:
-        'Génération de widgets en langage naturel, runtime sandboxé, plus de 28 connecteurs de données de marché, bots et agents cloud, communauté et marketplace de makers, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 28 connecteurs de données de marché, bots et agents cloud, communauté de makers avec récompenses XP, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
     },
     hero: {
       badge: 'Fonctionnalités',
