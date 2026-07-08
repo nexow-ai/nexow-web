@@ -29,7 +29,7 @@ const accent = getPageAccent(route);
       // Mark JS-capable before paint so scroll-reveal hiding only applies with JS.
       document.documentElement.classList.add('js');
     </script>
-    <BaseHead lang={lang} {...head} />
+    <BaseHead lang={lang} route={route} {...head} />
   </head>
   <body class:list={['min-h-dvh antialiased', theme === 'dark' ? 'bg-ink-950' : 'bg-white']}>
     <a
