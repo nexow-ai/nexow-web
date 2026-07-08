@@ -27,9 +27,20 @@ const offerSchema = {
     priceCurrency: 'USD',
   })),
 };
+
+// Plan FAQ structured data (SEO / GEO), mirroring the home page's FAQPage.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: t.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
 ---
 
-<Layout lang={lang} route="/plans" title={t.meta.title} description={t.meta.description} schema={[offerSchema]}>
+<Layout lang={lang} route="/plans" title={t.meta.title} description={t.meta.description} schema={[offerSchema, faqSchema]}>
   <PageHero badge={t.hero.badge} title={t.hero.title} subtitle={t.hero.subtitle} />
 
   <!-- Coming soon notice -->
