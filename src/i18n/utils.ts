@@ -2,6 +2,16 @@ import { defaultLang, languages, type Lang } from './config';
 
 const prefixedLangs = Object.keys(languages).filter((l) => l !== defaultLang) as Lang[];
 
+/** BCP 47 tags (Intl) and Open Graph locale codes, keyed by locale. */
+const LOCALE_TAGS: Record<string, string> = {
+  en: 'en-US', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', de: 'de-DE',
+  pt: 'pt-PT', zh: 'zh-CN', ja: 'ja-JP', ar: 'ar', he: 'he-IL',
+};
+const OG_LOCALES: Record<string, string> = {
+  en: 'en_US', es: 'es_ES', fr: 'fr_FR', it: 'it_IT', de: 'de_DE',
+  pt: 'pt_PT', zh: 'zh_CN', ja: 'ja_JP', ar: 'ar_AR', he: 'he_IL',
+};
+
 /** Detect the active locale from a URL pathname (`/es/...` → `es`). */
 export function getLangFromUrl(url: URL): Lang {
   const [, seg] = url.pathname.split('/');
@@ -38,14 +48,22 @@ export function withTrailingSlash(href: string): string {
   return u.href;
 }
 
+/** Right-to-left locales. */
+const RTL_LANGS = ['ar', 'he'];
+
+/** Text direction for a locale — `rtl` for Arabic & Hebrew, else `ltr`. */
+export function dir(lang: Lang): 'ltr' | 'rtl' {
+  return RTL_LANGS.includes(lang) ? 'rtl' : 'ltr';
+}
+
 /** BCP 47 locale tag for Intl formatters. */
 export function dateLocale(lang: Lang): string {
-  return { en: 'en-US', es: 'es-ES', fr: 'fr-FR' }[lang];
+  return LOCALE_TAGS[lang];
 }
 
 /** Open Graph locale code. */
 export function ogLocale(lang: Lang): string {
-  return { en: 'en_US', es: 'es_ES', fr: 'fr_FR' }[lang];
+  return OG_LOCALES[lang];
 }
 
 /** Build the set of alternate-locale URLs for a canonical route (for hreflang). */

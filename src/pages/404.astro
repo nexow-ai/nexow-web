@@ -1,6 +1,7 @@
 ---
-import { SITE } from '../i18n/config';
+import { SITE, languages, defaultLang, type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
+import { dir } from '../i18n/utils';
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import BrandMark from '../components/BrandMark.astro';
@@ -8,11 +9,15 @@ import BrandMark from '../components/BrandMark.astro';
 const t = useContent('en').notFound;
 
 // Cloudflare Pages serves this single 404.html for every missing path, including
-// /es/* and /fr/* — so we ship all locales and swap client-side by URL prefix.
-const variants = {
-  es: { ...useContent('es').notFound, launch: useContent('es').nav.launch, home: '/es/' },
-  fr: { ...useContent('fr').notFound, launch: useContent('fr').nav.launch, home: '/fr/' },
-};
+// /<lang>/* — so we ship every non-default locale and swap client-side by URL prefix.
+const variants = Object.fromEntries(
+  (Object.keys(languages) as Lang[])
+    .filter((l) => l !== defaultLang)
+    .map((l) => [
+      l,
+      { ...useContent(l).notFound, launch: useContent(l).nav.launch, home: `/${l}/`, dir: dir(l) },
+    ]),
+);
 ---
 
 <Layout lang="en" route="/404" title={`404 — ${SITE.name}`} description={t.body} noindex>
@@ -36,6 +41,7 @@ const variants = {
   const v = variants[prefix];
   if (v) {
     document.documentElement.lang = prefix;
+    document.documentElement.dir = v.dir;
     document.getElementById('nf-title').textContent = v.title;
     document.getElementById('nf-body').textContent = v.body;
     const home = document.getElementById('nf-home');

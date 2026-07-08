@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { ClientRouter, fade } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
 import { getPageAccent } from '../i18n/accent';
+import { dir } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -26,7 +27,7 @@ const mainFade = fade({ duration: '0.32s' });
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth" data-accent={accent}>
+<html lang={lang} dir={dir(lang)} class="scroll-smooth" data-accent={accent}>
   <head>
     <script is:inline>
       // Mark JS-capable before paint so scroll-reveal hiding only applies with JS.
