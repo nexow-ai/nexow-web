@@ -15,7 +15,7 @@ export const SITE = {
   domain: 'nexow.ai',
   url: 'https://nexow.ai',
   appUrl: 'https://x.nexow.ai',
-  docsUrl: 'https://app.nexow.ai',
+  docsUrl: 'https://x.nexow.ai',
   email: 'hello@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
   x: '@nexow_ai',
