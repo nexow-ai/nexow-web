@@ -126,8 +126,8 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
   <div
     id="mobile-menu"
     class:list={[
-      'fixed inset-0 z-40 hidden backdrop-blur-xl md:hidden',
-      dark ? 'bg-ink-950/95' : 'bg-white/95',
+      'fixed inset-0 z-40 hidden backdrop-blur-md md:hidden',
+      dark ? 'bg-ink-950/98' : 'bg-white/98',
     ]}
     hidden
   >
@@ -204,8 +204,8 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
 
     const darkNav = nav.dataset.tone === 'dark';
     const solidClasses = darkNav
-      ? ['bg-ink-900/75', 'backdrop-blur-xl', '!border-white/10', 'shadow-lg', 'shadow-black/20']
-      : ['bg-white/80', 'backdrop-blur-xl', '!border-ink-900/10', 'shadow-sm'];
+      ? ['bg-ink-900/92', 'backdrop-blur-md', '!border-white/10', 'shadow-lg', 'shadow-black/20']
+      : ['bg-white/95', 'backdrop-blur-md', '!border-ink-900/10', 'shadow-sm'];
     const onScroll = () => {
       const solid = window.scrollY > 8;
       solidClasses.forEach((c) => nav.classList.toggle(c, solid));
