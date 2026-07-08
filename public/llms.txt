@@ -1,29 +1,34 @@
 # Nexow
 
-> Nexow is an AI-native dashboard builder for financial markets. You describe a
-> widget in plain language — a chart, table, heatmap or signal — and Nexow
-> generates its source code with Anthropic's Claude, runs it in a sandboxed
-> iframe, and streams live market data into it on a free-form canvas. It is
-> private by default: in local mode, codegen runs in your browser with your own
-> Anthropic API key and your widgets persist locally in IndexedDB.
+> Nexow is an AI-native workspace for financial markets. You describe a widget in
+> plain language — a chart, table, heatmap or signal — and Nexow generates its
+> source code with Anthropic's Claude, runs it in a sandboxed iframe, and streams
+> live market data onto a free-form canvas. Around the canvas it adds cloud bots,
+> AI agents, a Copilot and a maker community. It is private by default: in local
+> mode, codegen runs in your browser with your own Anthropic API key and your
+> widgets persist locally in IndexedDB — no account required. A free account is
+> optional and unlocks AI credits, cloud sync and the network.
 
 ## Key facts
 
-- Category: AI-native dashboard / widget builder for trading and market data.
+- Category: AI-native workspace / dashboard & widget builder for trading and market data, with cloud automations and a community.
 - How it works: prompt → AI-generated widget source → sandboxed iframe runtime → live data via connectors → refine in natural language.
-- Privacy: private by default; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many venues connect browser-direct.
-- Connectors (20+): OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Alpha Vantage, Intrinio, IQFeed, Rithmic, LMAX, FXCM, Kalshi, Polymarket, Trading Economics, Postgres, ClickHouse, Qdrant.
+- Structure: Workspaces contain Screens, which hold Widgets on a free-form canvas; Links pipe data between widgets.
+- Privacy: private by default and no account required; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many venues connect browser-direct.
+- Automate: Bots are cloud automations (thresholds, % change, MA crossovers, digests) that fire signals and alerts to widgets even with the tab closed; Agents run a full harness (model, memory, skills, tools, knowledge, triggers) in the cloud (deploy coming soon); Copilot is a workspace AI assistant (coming soon).
+- Network: a free account adds a community feed, a widget marketplace, audited strategy signals you can subscribe to and earn on, cross-device cloud sync, and XP & rewards.
+- Connectors (28 live, 56 in catalog): OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Alpha Vantage, Intrinio, IQFeed, Rithmic, LMAX, FXCM, Kalshi, Polymarket, Trading Economics, Postgres, ClickHouse, Qdrant, plus socials (X, YouTube, Discord, Telegram, Spotify).
 - Markets covered: FX, crypto, equities, futures, options and prediction markets.
-- AI model: Anthropic Claude via the Anthropic SDK.
-- Pricing: preview is free; in private mode you pay only your own Anthropic API usage. Hosted plans (Pro, Teams) are planned.
-- Status: public preview live. Roadmap: trading agents, server components, community.
+- AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
+- Pricing: free forever to build (locally with your own key, or 10,000 AI credits on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout is coming soon.
+- Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync). Roadmap: agent deploy, Copilot, marketplace and strategy signals.
 - App: https://app.nexow.ai
 
 ## Pages
 
-- [Home](https://nexow.ai/): overview, features, connectors, how-it-works, FAQ.
-- [Features](https://nexow.ai/features): generate, run, connect, own.
-- [Pricing](https://nexow.ai/pricing): Private (free), Pro, Teams.
+- [Home](https://nexow.ai/): overview, features, automations, connectors, network, pricing, FAQ.
+- [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
+- [Pricing](https://nexow.ai/pricing): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
 
@@ -37,3 +42,4 @@
 
 - English: https://nexow.ai/
 - Español: https://nexow.ai/es/
+- Français: https://nexow.ai/fr/
