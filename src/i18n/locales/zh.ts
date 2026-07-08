@@ -37,7 +37,7 @@ export const zh: SiteContent = {
       {
         title: '资源',
         links: [
-          { label: '启动应用', href: 'https://x.nexow.app' },
+          { label: '启动应用', href: 'https://x.nexow.ai' },
           { label: '隐私', href: '/privacy' },
         ],
       },
@@ -466,7 +466,7 @@ export const zh: SiteContent = {
         cadence: '永久',
         stats: ['10K 积分', '10 个机器人', '3 个智能体'],
         cta: '免费开始',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '注册即预留 10,000 AI 积分',
           '无限屏幕、工作区和组件',
@@ -487,7 +487,7 @@ export const zh: SiteContent = {
         stats: ['50K 积分/月', '30 个机器人', '10 个智能体'],
         note: '包含 Free 的一切，另加：',
         cta: '成为 Supporter',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '每月 50,000 积分',
           '最多 30 个机器人和 10 个智能体',
@@ -507,7 +507,7 @@ export const zh: SiteContent = {
         stats: ['800K 积分/月', '300 个机器人', '100 个智能体'],
         note: '包含 Supporter 的一切，另加：',
         cta: '成为 Sponsor',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
           '每月 800,000 积分',

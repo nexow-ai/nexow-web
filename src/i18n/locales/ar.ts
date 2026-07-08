@@ -37,7 +37,7 @@ export const ar: SiteContent = {
       {
         title: 'الموارد',
         links: [
-          { label: 'تشغيل التطبيق', href: 'https://x.nexow.app' },
+          { label: 'تشغيل التطبيق', href: 'https://x.nexow.ai' },
           { label: 'الخصوصية', href: '/privacy' },
         ],
       },
@@ -466,7 +466,7 @@ export const ar: SiteContent = {
         cadence: 'إلى الأبد',
         stats: ['10K رصيد', '10 بوتات', '3 وكلاء'],
         cta: 'ابدأ مجاناً',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '10,000 رصيد ذكاء اصطناعي محجوز عند التسجيل',
           'شاشات ومساحات عمل وأدوات بلا حدود',
@@ -487,7 +487,7 @@ export const ar: SiteContent = {
         stats: ['50K رصيد/شهر', '30 بوتاً', '10 وكلاء'],
         note: 'كل ما في Free، بالإضافة إلى:',
         cta: 'كن Supporter',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '50,000 رصيد كل شهر',
           'حتى 30 بوتاً و10 وكلاء',
@@ -507,7 +507,7 @@ export const ar: SiteContent = {
         stats: ['800K رصيد/شهر', '300 بوت', '100 وكيل'],
         note: 'كل ما في Supporter، بالإضافة إلى:',
         cta: 'كن Sponsor',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
           '800,000 رصيد كل شهر',
