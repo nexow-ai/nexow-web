@@ -54,7 +54,7 @@ const statusLabel = (s: 'live' | 'soon') => (s === 'live' ? t.liveLabel : t.soon
         <p class="mt-2 text-sm leading-relaxed text-ink-400">{agents.body}</p>
         <!-- harness orbit chips -->
         <div class="mt-5 flex flex-wrap gap-2" aria-hidden="true">
-          {['model', 'memory', 'skills', 'tools', 'knowledge', 'triggers'].map((h) => (
+          {t.harnessChips.map((h) => (
             <span class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{h}</span>
           ))}
         </div>
@@ -75,7 +75,7 @@ const statusLabel = (s: 'live' | 'soon') => (s === 'live' ? t.liveLabel : t.soon
         <p class="mt-2 text-sm leading-relaxed text-ink-400">{copilot.body}</p>
         <!-- prompt chips -->
         <div class="mt-5 flex flex-col gap-2" aria-hidden="true">
-          {['Explain this chart', 'Summarize this data', 'What should I watch next?'].map((q) => (
+          {t.copilotPrompts.map((q) => (
             <span class="inline-flex items-center gap-2 rounded-lg border border-white/8 bg-ink-950/70 px-3 py-1.5 font-mono text-[0.7rem] text-ink-300">
               <span class="text-brand-400">❯</span> {q}
             </span>

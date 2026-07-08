@@ -2,6 +2,7 @@
 title: 'Cómo crear un dashboard de trading de cripto con IA — sin programar'
 description: 'Una guía paso a paso para crear un dashboard de cripto en vivo con IA: pide un gráfico de velas, añade profundidad del order book y funding rates, y organízalo todo en un lienzo — sin escribir código.'
 pubDate: 2026-06-28
+heroImage: '/blog/crypto.svg'
 tags: ['guía', 'cripto', 'tutorial']
 ---
 
@@ -21,7 +22,7 @@ Un solo lienzo que sigue un par de cripto de principio a fin:
 
 ## Paso 1 — Abre la app y elige el modo privado
 
-[Abre Nexow](https://app.nexow.ai) y añade tu propia clave de la API de Anthropic
+[Abre Nexow](https://x.nexow.app) y añade tu propia clave de la API de Anthropic
 en Ajustes. En modo privado, la generación de widgets corre íntegramente en tu
 navegador y nada se envía a nuestros servidores — solo pagas tu propio uso de la
 API.
@@ -80,4 +81,4 @@ uso de la API de Anthropic.
 ---
 
 Eso es un dashboard de cripto completo sin tocar una línea de código.
-[Pruébalo ahora](https://app.nexow.ai) y crea tu primer widget.
+[Pruébalo ahora](https://x.nexow.app) y crea tu primer widget.

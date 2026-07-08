@@ -3,32 +3,36 @@
 > Nexow is an AI-native workspace for financial markets. You describe a widget in
 > plain language — a chart, table, heatmap or signal — and Nexow generates its
 > source code with Anthropic's Claude, runs it in a sandboxed iframe, and streams
-> live market data onto a free-form canvas. Around the canvas it adds cloud bots,
-> AI agents, a Copilot and a maker community. It is private by default: in local
-> mode, codegen runs in your browser with your own Anthropic API key and your
-> widgets persist locally in IndexedDB — no account required. A free account is
-> optional and unlocks AI credits, cloud sync and the network.
+> live market data onto a free-form canvas. Around the canvas it adds cloud bots
+> (live today), AI agents with a visual harness builder (cloud deploy coming soon),
+> a workspace Copilot (coming soon) and a live maker community. It is private by
+> default: in local mode, codegen runs in your browser with your own Anthropic API
+> key and your widgets persist locally in IndexedDB — no account required. A free
+> account is optional and unlocks cloud sync and the community today, with platform
+> AI credits, a widget marketplace and XP rewards rolling out next.
 
 ## Key facts
 
-- Category: AI-native workspace / dashboard & widget builder for trading and market data, with cloud automations and a community.
+- Category: AI-native workspace / dashboard & widget builder for trading and market data, with cloud automations (bots, sometimes described as cloud workers) and a maker community.
 - How it works: prompt → AI-generated widget source → sandboxed iframe runtime → live data via connectors → refine in natural language.
-- Structure: Workspaces contain Screens, which hold Widgets on a free-form canvas; Links pipe data between widgets.
+- Structure: Workspaces contain Screens, which hold Widgets on a free-form canvas. Groups bundle widgets with mosaic or tab layouts; Links pipe data between widgets, one-way or two-way.
 - Privacy: private by default and no account required; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many venues connect browser-direct.
-- Automate: Bots are cloud automations (thresholds, % change, MA crossovers, digests) that fire signals and alerts to widgets even with the tab closed; Agents run a full harness (model, memory, skills, tools, knowledge, triggers) in the cloud (deploy coming soon); Copilot is a workspace AI assistant (coming soon).
-- Network: a free account adds a community feed, a widget marketplace, audited strategy signals you can subscribe to and earn on, cross-device cloud sync, and XP & rewards.
+- Automate — Bots (LIVE): cloud automations that watch your data and fire signals and alerts to widgets with the tab closed — thresholds, % change, MA crossovers, digests, and new trades in a connected broker account; build them by describing in plain words or in a visual builder. Agents (harness builder LIVE, cloud deploy COMING SOON): design an agent with a full harness — model, memory, skills, tools, knowledge, triggers — in a visual radial builder. Copilot (COMING SOON): a workspace AI assistant that explains charts and summarizes widget data.
+- Network — Community (LIVE): a social feed with follows, likes, comments, public maker profiles (@handles), and widget sharing others can add straight to their library. Marketplace for buying and selling widgets (COMING SOON — free sharing already works). Audited strategy signals (COMING SOON). XP & rewards (COMING SOON): earn XP and badges for achievements and convert them into reward credits.
+- Accounts: free, no credit card. Cross-device cloud sync is LIVE; 10,000 AI credits are reserved at sign-up and activate when platform mode opens.
 - Connectors (28 live, 56 in catalog): OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Alpha Vantage, Intrinio, IQFeed, Rithmic, LMAX, FXCM, Kalshi, Polymarket, Trading Economics, Postgres, ClickHouse, Qdrant, plus socials (X, YouTube, Discord, Telegram, Spotify).
 - Markets covered: FX, crypto, equities, futures, options and prediction markets.
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
-- Pricing: free forever to build (locally with your own key, or 10,000 AI credits on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout is coming soon.
-- Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync). Roadmap: agent deploy, Copilot, marketplace and strategy signals.
-- App: https://app.nexow.ai
+- Plans: free forever to build (locally with your own key, or with 10,000 AI credits reserved on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout and platform credits are coming soon.
+- Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync, community feed). Roadmap: agent deploy, Copilot, marketplace, strategy signals, XP & rewards.
+- App: https://x.nexow.app
 
 ## Pages
 
-- [Home](https://nexow.ai/): overview, features, automations, connectors, network, pricing, FAQ.
+- [Home](https://nexow.ai/): overview, features, automations, connectors, network, plans, FAQ.
 - [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
-- [Pricing](https://nexow.ai/pricing): Free, Supporter, Sponsor, Partner (monthly or yearly).
+- [Connectors](https://nexow.ai/connectors): searchable gallery of all 56 venues — 28 live today.
+- [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
 
@@ -37,6 +41,10 @@
 - [From prompt to live widget](https://nexow.ai/blog/from-prompt-to-live-widget): how Nexow turns a sentence into a running, data-connected widget.
 - [Build a crypto dashboard with AI](https://nexow.ai/blog/build-crypto-dashboard-with-ai): no-code, step-by-step guide.
 - [Private by default](https://nexow.ai/blog/private-by-default-local-ai): why the workstation runs locally.
+- [Cloud bots](https://nexow.ai/blog/cloud-bots-alerts-that-watch-the-market): set an alert in a sentence and let it watch the market for you.
+- [Free accounts, credits & cloud sync](https://nexow.ai/blog/free-accounts-credits-cloud-sync): what a free account unlocks.
+- [The connector gallery](https://nexow.ai/blog/connector-gallery-explore-every-venue): explore every venue Nexow connects to.
+- [What we're building next](https://nexow.ai/blog/whats-next-agents-copilot-marketplace): agents, a workspace Copilot and the marketplace.
 
 ## Languages
 

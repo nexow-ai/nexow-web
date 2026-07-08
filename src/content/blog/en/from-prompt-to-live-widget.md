@@ -2,6 +2,7 @@
 title: 'From prompt to live widget: how Nexow turns a sentence into a trading dashboard'
 description: 'A look under the hood at how Nexow generates a running, data-connected market widget from a plain-language prompt — codegen, sandboxing and live connectors explained.'
 pubDate: 2026-06-24
+heroImage: '/blog/codegen.svg'
 tags: ['product', 'ai', 'how-it-works']
 ---
 
@@ -70,5 +71,5 @@ measured in seconds, and the artifact you get is a real, inspectable widget — 
 a black box. The dashboard assembles itself, and you stay in control of the code,
 the data and the keys.
 
-Ready to try it? [Launch the app](https://app.nexow.ai) and describe your first
+Ready to try it? [Launch the app](https://x.nexow.app) and describe your first
 widget.

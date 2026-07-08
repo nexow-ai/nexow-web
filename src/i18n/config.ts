@@ -14,9 +14,19 @@ export const SITE = {
   name: 'Nexow',
   domain: 'nexow.ai',
   url: 'https://nexow.ai',
-  appUrl: 'https://app.nexow.ai',
+  appUrl: 'https://x.nexow.app',
   docsUrl: 'https://app.nexow.ai',
   email: 'hello@nexow.ai',
-  twitter: '@nexow_ai',
-  github: 'https://github.com/nexow-ai',
+  /** @username for Open Graph / meta tags (X). */
+  x: '@nexow_ai',
 } as const;
+
+/** Footer + schema social links (icon names match `Icon.astro`). */
+export const SOCIALS = [
+  { label: 'X', href: 'https://x.com/nexow_ai', icon: 'x-logo' },
+  { label: 'TikTok', href: 'https://tiktok.com/@nexow_ai', icon: 'tiktok' },
+  { label: 'Instagram', href: 'https://instagram.com/nexow_ai', icon: 'instagram' },
+  { label: 'YouTube', href: 'https://youtube.com/@nexow_ai', icon: 'youtube' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/company/nexow-ai', icon: 'linkedin' },
+  { label: 'GitHub', href: 'https://github.com/nexow-ai', icon: 'github' },
+] as const;

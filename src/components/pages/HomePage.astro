@@ -38,9 +38,14 @@ const softwareSchema = {
     lowPrice: '0',
     highPrice: '69.99',
     priceCurrency: 'USD',
-    offerCount: c.pricing.tiers.length,
+    offerCount: c.plansPage.tiers.length,
   },
-  featureList: t.features.items.map((f) => f.title),
+  featureList: [
+    ...t.features.items.map((f) => f.title),
+    ...t.automate.items.map((i) => i.title),
+    ...t.network.items.map((i) => i.title),
+    `${t.connectors.count}+ ${t.connectors.countLabel}`,
+  ],
 };
 
 const faqSchema = {

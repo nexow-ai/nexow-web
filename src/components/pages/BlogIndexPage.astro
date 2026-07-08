@@ -31,6 +31,7 @@ const posts = await getPosts(lang);
               description={post.data.description}
               pubDate={post.data.pubDate}
               tags={post.data.tags}
+              heroImage={post.data.heroImage}
               featured={i === 0}
             />
           ))}

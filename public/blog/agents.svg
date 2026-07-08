@@ -1,0 +1,80 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI agent chip and roadmap illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="119.5" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#roadmap</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="560" cy="310" rx="240" ry="210" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+    <ellipse cx="560" cy="310" rx="168" ry="151.20000000000002" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="2 9"/>
+    <line x1="509" y1="235" x2="509" y2="213" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="509" y1="385" x2="509" y2="407" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="485" y1="259" x2="463" y2="259" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="635" y1="259" x2="657" y2="259" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="534.5" y1="235" x2="534.5" y2="213" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="534.5" y1="385" x2="534.5" y2="407" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="485" y1="284.5" x2="463" y2="284.5" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="635" y1="284.5" x2="657" y2="284.5" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="560" y1="235" x2="560" y2="213" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="560" y1="385" x2="560" y2="407" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="485" y1="310" x2="463" y2="310" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="635" y1="310" x2="657" y2="310" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="585.5" y1="235" x2="585.5" y2="213" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="585.5" y1="385" x2="585.5" y2="407" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="485" y1="335.5" x2="463" y2="335.5" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="635" y1="335.5" x2="657" y2="335.5" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="611" y1="235" x2="611" y2="213" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="611" y1="385" x2="611" y2="407" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="485" y1="361" x2="463" y2="361" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <line x1="635" y1="361" x2="657" y2="361" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+    <rect x="485" y="235" width="150" height="150" rx="26" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+    <rect x="485" y="235" width="150" height="150" rx="26" fill="#f59e0b" fill-opacity="0.12"/>
+    <rect x="526" y="276" width="68" height="68" rx="14" fill="none" stroke="#fde68a" stroke-width="4"/>
+    <circle cx="560" cy="310" r="10" fill="#fde68a"/>
+    <circle cx="625.4" cy="155.3" r="10" fill="#fde68a"/>
+    <circle cx="714.7" cy="375.4" r="10" fill="#f59e0b"/>
+    <circle cx="494.6" cy="464.7" r="10" fill="#fde68a"/>
+    <circle cx="405.3" cy="244.6" r="10" fill="#f59e0b"/>
+    <!-- roadmap -->
+    <line x1="820" y1="310" x2="1110" y2="310" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+    <circle cx="838" cy="310" r="12" fill="#fbbf24"/>
+    <circle cx="946" cy="310" r="10" fill="#d97706" stroke="#f59e0b" stroke-width="3"/>
+    <circle cx="1054" cy="310" r="10" fill="none" stroke="#8a7b57" stroke-width="3"/>
+  </g>
+</svg>

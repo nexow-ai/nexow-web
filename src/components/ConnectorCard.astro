@@ -1,0 +1,71 @@
+---
+import type { Connector } from '../data/connectors';
+import type { SiteContent } from '../i18n/content';
+import Icon from './Icon.astro';
+
+interface Props {
+  c: Connector;
+  t: SiteContent['connectorsPage'];
+}
+const { c, t } = Astro.props;
+
+const kindLabel = t.kinds[c.kind] ?? c.kind;
+const catLabel = t.categories[c.category as 'finance' | 'data' | 'socials'] ?? c.category;
+const assetLabels = c.assets.map((a) => t.assets[a] ?? a);
+const shown = assetLabels.slice(0, 3);
+const more = assetLabels.length - shown.length;
+// Lowercased haystack for the client-side search (matches localized terms too).
+const search = [c.name, kindLabel, catLabel, ...assetLabels].join(' ').toLowerCase();
+---
+
+<a
+  href={c.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    'connector-card card-spotlight group relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-5 transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-400/30 hover:bg-white/[0.05]',
+    c.status === 'soon' && 'opacity-70 hover:opacity-100',
+  ]}
+  data-category={c.category}
+  data-status={c.status}
+  data-search={search}
+>
+  <div class="flex items-start justify-between gap-2">
+    <span class="inline-flex size-12 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5 ring-1 ring-white/10">
+      <img
+        src={c.logo}
+        alt={`${c.name} logo`}
+        loading="lazy"
+        decoding="async"
+        width="40"
+        height="40"
+        class="size-full object-contain"
+      />
+    </span>
+    <span class="badge-status" data-status={c.status}>
+      <span class:list={['size-1.5 rounded-full', c.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
+      {c.status === 'live' ? t.status.live : t.status.soon}
+    </span>
+  </div>
+
+  <h3 class="mt-4 font-display text-base font-semibold text-white">{c.name}</h3>
+  <p class="mt-0.5 text-xs text-ink-400">{kindLabel}</p>
+
+  {
+    shown.length > 0 && (
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        {shown.map((a) => (
+          <span class="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-300">{a}</span>
+        ))}
+        {more > 0 && (
+          <span class="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-400">+{more}</span>
+        )}
+      </div>
+    )
+  }
+
+  <span class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-brand-300 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+    {t.visit}
+    <Icon name="external" class="size-3.5" />
+  </span>
+</a>

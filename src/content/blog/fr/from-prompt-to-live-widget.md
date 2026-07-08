@@ -2,6 +2,7 @@
 title: 'Du prompt au widget en direct : comment Nexow transforme une phrase en tableau de bord de trading'
 description: 'Un regard sous le capot sur la façon dont Nexow génère un widget de marché fonctionnel et connecté aux données à partir d’un prompt en langage naturel — codegen, sandboxing et connecteurs en direct expliqués.'
 pubDate: 2026-06-24
+heroImage: '/blog/codegen.svg'
 tags: ['product', 'ai', 'how-it-works']
 ---
 
@@ -41,4 +42,4 @@ La première génération est rarement la dernière. Tout reste modifiable par c
 
 Le chemin traditionnel de l’idée au graphique se mesure en heures. Avec Nexow, c’est en secondes, et l’artefact que vous obtenez est un vrai widget inspectable — pas une boîte noire. Le tableau de bord s’assemble tout seul, et vous gardez le contrôle du code, des données et des clés.
 
-Prêt à essayer ? [Ouvrez l’app](https://app.nexow.ai) et décrivez votre premier widget.
+Prêt à essayer ? [Ouvrez l’app](https://x.nexow.app) et décrivez votre premier widget.
