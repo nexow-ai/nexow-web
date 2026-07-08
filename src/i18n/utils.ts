@@ -10,7 +10,7 @@ export function getLangFromUrl(url: URL): Lang {
 
 /**
  * The locale-agnostic route for a URL — the path with any locale prefix removed.
- * `/es/features` → `/features`, `/es` → `/`, `/pricing` → `/pricing`.
+ * `/es/features` → `/features`, `/es` → `/`, `/plans` → `/plans`.
  */
 export function getRouteFromUrl(url: URL): string {
   const prefix = prefixedLangs.join('|');

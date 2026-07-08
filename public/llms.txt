@@ -20,15 +20,15 @@
 - Connectors (28 live, 56 in catalog): OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Alpha Vantage, Intrinio, IQFeed, Rithmic, LMAX, FXCM, Kalshi, Polymarket, Trading Economics, Postgres, ClickHouse, Qdrant, plus socials (X, YouTube, Discord, Telegram, Spotify).
 - Markets covered: FX, crypto, equities, futures, options and prediction markets.
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
-- Pricing: free forever to build (locally with your own key, or 10,000 AI credits on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout is coming soon.
+- Plans: free forever to build (locally with your own key, or 10,000 AI credits on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout is coming soon.
 - Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync). Roadmap: agent deploy, Copilot, marketplace and strategy signals.
 - App: https://app.nexow.ai
 
 ## Pages
 
-- [Home](https://nexow.ai/): overview, features, automations, connectors, network, pricing, FAQ.
+- [Home](https://nexow.ai/): overview, features, automations, connectors, network, plans, FAQ.
 - [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
-- [Pricing](https://nexow.ai/pricing): Free, Supporter, Sponsor, Partner (monthly or yearly).
+- [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
 

@@ -11,7 +11,7 @@ interface Props {
 const { lang } = Astro.props;
 const c = useContent(lang);
 const t = c.home.plans;
-const { tiers, billing } = c.pricing;
+const { tiers, billing } = c.plansPage;
 const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
 ---
 
@@ -106,7 +106,7 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
     </div>
 
     <div class="reveal mt-8 text-center">
-      <a href={localize('/pricing')} class="inline-flex items-center gap-1.5 font-medium text-brand-300 transition-colors hover:text-brand-200">
+      <a href={localize('/plans')} class="inline-flex items-center gap-1.5 font-medium text-brand-300 transition-colors hover:text-brand-200">
         {t.cta}
         <Icon name="arrow" class="size-4" />
       </a>

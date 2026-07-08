@@ -25,7 +25,7 @@ export interface Faq {
   a: string;
 }
 
-export interface PricingTier {
+export interface PlanTier {
   name: string;
   tagline: string;
   /** Per-month price billed monthly, e.g. '$9.99'. Free uses '$0', custom uses 'Custom'. */
@@ -175,11 +175,17 @@ export interface SiteContent {
     hero: { badge: string; title: string; subtitle: string };
     groups: { title: string; body: string; items: Feature[] }[];
   };
-  pricing: {
+  plansPage: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
+    comingSoon: string;
+    highlights: {
+      title: string;
+      items: { icon: string; title: string; body: string }[];
+    };
+    included: { title: string; items: string[] };
     billing: { monthly: string; yearly: string; save: string };
-    tiers: PricingTier[];
+    tiers: PlanTier[];
     faqTitle: string;
     faq: Faq[];
   };
@@ -257,7 +263,7 @@ const en: SiteContent = {
     links: [
       { label: 'Features', href: '/features' },
       { label: 'Connectors', href: '/connectors' },
-      { label: 'Pricing', href: '/pricing' },
+      { label: 'Plans', href: '/plans' },
       { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
     ],
@@ -272,7 +278,7 @@ const en: SiteContent = {
         title: 'Product',
         links: [
           { label: 'Features', href: '/features' },
-          { label: 'Pricing', href: '/pricing' },
+          { label: 'Plans', href: '/plans' },
           { label: 'Connectors', href: '/connectors' },
           { label: 'Automations', href: '/#automate' },
           { label: 'Community', href: '/#network' },
@@ -564,7 +570,7 @@ const en: SiteContent = {
         },
         {
           q: 'How much does it cost?',
-          a: 'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Paid plans (Supporter and Sponsor) add monthly credits and higher bot and agent limits, and Partner is for teams that need private infrastructure. Paid checkout is coming soon; see the pricing page.',
+          a: 'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Paid plans (Supporter and Sponsor) add monthly credits and higher bot and agent limits, and Partner is for teams that need private infrastructure. Paid checkout is coming soon; see the plans page.',
         },
         {
           q: 'Which AI model powers Nexow?',
@@ -648,17 +654,49 @@ const en: SiteContent = {
       },
     ],
   },
-  pricing: {
+  plansPage: {
     meta: {
-      title: 'Pricing — Nexow',
+      title: 'Plans — Nexow',
       description:
-        'Build free forever — locally with your own key, or with 10,000 AI credits on a free account. Supporter and Sponsor add monthly credits, bots and agents; Partner is for teams. See Nexow pricing.',
+        'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Compare Free, Supporter, Sponsor and Partner for credits, bots, agents and customization.',
     },
     hero: {
-      badge: 'Pricing',
-      title: 'Start free. Grow when you’re ready.',
+      badge: 'Plans',
+      title: 'Free to start. Room to grow.',
       subtitle:
-        'Build for free — locally with your own key, or with 10,000 credits on a free account. Upgrade for more monthly credits, bots and agents. Paid plans are coming soon.',
+        'Build for free — run local with your own key, or sign up for 10,000 AI credits. Upgrade when you need more capacity, automation and polish.',
+    },
+    comingSoon:
+      'Supporter & Sponsor checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.',
+    highlights: {
+      title: 'What scales with your plan',
+      items: [
+        {
+          icon: 'coins',
+          title: 'AI credits',
+          body: 'Power widget generation, Copilot replies and bot logic. Free includes 10K to start; paid plans refresh monthly.',
+        },
+        {
+          icon: 'bot',
+          title: 'Bots & agents',
+          body: 'Bots watch markets and trigger actions. Agents run multi-step workflows. Higher plans raise concurrent limits.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Customization',
+          body: 'Accent colors, logos and premium UI unlock as you upgrade — make Nexow feel like yours.',
+        },
+      ],
+    },
+    included: {
+      title: 'Included in every plan',
+      items: [
+        'Unlimited screens, workspaces & widgets',
+        '28+ live market-data connectors',
+        'Sandboxed widget runtime',
+        'Global Copilot',
+        'Community & marketplace access',
+      ],
     },
     billing: { monthly: 'Monthly', yearly: 'Yearly', save: '2 months free' },
     tiers: [
@@ -741,7 +779,7 @@ const en: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Pricing questions',
+    faqTitle: 'Plan questions',
     faq: [
       { q: 'Is Nexow really free?', a: 'Yes. You can build for free forever — run fully local with your own Anthropic key (you only pay your own API usage), or create a free account and get 10,000 AI credits so no key of your own is needed.' },
       { q: 'What are credits?', a: 'Credits meter AI usage — generating widgets, links, bots and Copilot replies. The free account includes 10,000 to start, and paid plans grant a monthly allowance (50K on Supporter, 800K on Sponsor). You can buy more anytime.' },
@@ -855,7 +893,7 @@ const es: SiteContent = {
     links: [
       { label: 'Funciones', href: '/features' },
       { label: 'Conectores', href: '/connectors' },
-      { label: 'Precios', href: '/pricing' },
+      { label: 'Planes', href: '/plans' },
       { label: 'Blog', href: '/blog' },
       { label: 'Nosotros', href: '/about' },
     ],
@@ -870,7 +908,7 @@ const es: SiteContent = {
         title: 'Producto',
         links: [
           { label: 'Funciones', href: '/features' },
-          { label: 'Precios', href: '/pricing' },
+          { label: 'Planes', href: '/plans' },
           { label: 'Conectores', href: '/connectors' },
           { label: 'Automatizaciones', href: '/#automate' },
           { label: 'Comunidad', href: '/#network' },
@@ -1246,17 +1284,49 @@ const es: SiteContent = {
       },
     ],
   },
-  pricing: {
+  plansPage: {
     meta: {
-      title: 'Precios — Nexow',
+      title: 'Planes — Nexow',
       description:
-        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Supporter y Sponsor suman créditos mensuales, bots y agentes; Partner es para equipos. Consulta los precios de Nexow.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
     },
     hero: {
-      badge: 'Precios',
-      title: 'Empieza gratis. Crece cuando quieras.',
+      badge: 'Planes',
+      title: 'Gratis para empezar. Espacio para crecer.',
       subtitle:
-        'Construye gratis — en local con tu propia clave, o con 10.000 créditos en una cuenta gratis. Sube de plan para más créditos mensuales, bots y agentes. Los planes de pago llegan pronto.',
+        'Construye gratis — en local con tu propia clave, o regístrate con 10.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
+    },
+    comingSoon:
+      'El pago de Supporter y Sponsor llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
+    highlights: {
+      title: 'Qué escala con tu plan',
+      items: [
+        {
+          icon: 'coins',
+          title: 'Créditos de IA',
+          body: 'Impulsan la generación de widgets, respuestas de Copilot y lógica de bots. Free incluye 10K para empezar; los planes de pago se renuevan cada mes.',
+        },
+        {
+          icon: 'bot',
+          title: 'Bots y agentes',
+          body: 'Los bots vigilan mercados y disparan acciones. Los agentes ejecutan flujos de varios pasos. Los planes superiores suben los límites concurrentes.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Personalización',
+          body: 'Colores de acento, logos y UI premium se desbloquean al subir de plan — haz que Nexow se sienta tuyo.',
+        },
+      ],
+    },
+    included: {
+      title: 'Incluido en todos los planes',
+      items: [
+        'Pantallas, espacios y widgets ilimitados',
+        '28+ conectores de datos de mercado en vivo',
+        'Runtime de widgets en sandbox',
+        'Copilot global',
+        'Acceso a comunidad y marketplace',
+      ],
     },
     billing: { monthly: 'Mensual', yearly: 'Anual', save: '2 meses gratis' },
     tiers: [
@@ -1339,7 +1409,7 @@ const es: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Preguntas sobre precios',
+    faqTitle: 'Preguntas sobre los planes',
     faq: [
       { q: '¿Nexow es de verdad gratis?', a: 'Sí. Puedes construir gratis para siempre — totalmente local con tu propia clave de Anthropic (solo pagas tu uso de la API), o crea una cuenta gratis y recibe 10.000 créditos de IA sin necesidad de clave propia.' },
       { q: '¿Qué son los créditos?', a: 'Los créditos miden el uso de IA — generar widgets, links, bots y respuestas de Copilot. La cuenta gratis incluye 10.000 para empezar, y los planes de pago dan una asignación mensual (50K en Supporter, 800K en Sponsor). Puedes comprar más cuando quieras.' },
@@ -1453,7 +1523,7 @@ const fr: SiteContent = {
     links: [
       { label: 'Fonctionnalités', href: '/features' },
       { label: 'Connecteurs', href: '/connectors' },
-      { label: 'Tarifs', href: '/pricing' },
+      { label: 'Plans', href: '/plans' },
       { label: 'Blog', href: '/blog' },
       { label: 'À propos', href: '/about' },
     ],
@@ -1468,7 +1538,7 @@ const fr: SiteContent = {
         title: 'Produit',
         links: [
           { label: 'Fonctionnalités', href: '/features' },
-          { label: 'Tarifs', href: '/pricing' },
+          { label: 'Plans', href: '/plans' },
           { label: 'Connecteurs', href: '/connectors' },
           { label: 'Automatisations', href: '/#automate' },
           { label: 'Communauté', href: '/#network' },
@@ -1844,17 +1914,49 @@ const fr: SiteContent = {
       },
     ],
   },
-  pricing: {
+  plansPage: {
     meta: {
-      title: 'Tarifs — Nexow',
+      title: 'Plans — Nexow',
       description:
-        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Supporter et Sponsor ajoutent crédits mensuels, bots et agents ; Partner est pour les équipes. Consultez les tarifs Nexow.',
+        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Comparez Free, Supporter, Sponsor et Partner pour crédits, bots, agents et personnalisation.',
     },
     hero: {
-      badge: 'Tarifs',
-      title: 'Commencez gratuitement. Évoluez quand vous voulez.',
+      badge: 'Plans',
+      title: 'Gratuit pour démarrer. De la place pour grandir.',
       subtitle:
-        'Construisez gratuitement — en local avec votre propre clé, ou avec 10 000 crédits sur un compte gratuit. Montez en gamme pour plus de crédits mensuels, de bots et d’agents. Les plans payants arrivent bientôt.',
+        'Construisez gratuitement — en local avec votre propre clé, ou inscrivez-vous avec 10 000 crédits IA. Montez en gamme quand vous avez besoin de plus de capacité, d’automatisation et de finition.',
+    },
+    comingSoon:
+      'Le paiement Supporter et Sponsor arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.',
+    highlights: {
+      title: 'Ce qui évolue avec votre plan',
+      items: [
+        {
+          icon: 'coins',
+          title: 'Crédits IA',
+          body: 'Alimentent la génération de widgets, les réponses Copilot et la logique des bots. Free inclut 10K pour démarrer ; les plans payants se renouvellent chaque mois.',
+        },
+        {
+          icon: 'bot',
+          title: 'Bots et agents',
+          body: 'Les bots surveillent les marchés et déclenchent des actions. Les agents exécutent des workflows en plusieurs étapes. Les plans supérieurs augmentent les limites concurrentes.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Personnalisation',
+          body: 'Couleurs d’accent, logos et UI premium se débloquent en montant de gamme — faites de Nexow le vôtre.',
+        },
+      ],
+    },
+    included: {
+      title: 'Inclus dans chaque plan',
+      items: [
+        'Écrans, espaces et widgets illimités',
+        '28+ connecteurs de données de marché en direct',
+        'Runtime de widgets en bac à sable',
+        'Copilot global',
+        'Accès communauté et marketplace',
+      ],
     },
     billing: { monthly: 'Mensuel', yearly: 'Annuel', save: '2 mois offerts' },
     tiers: [
@@ -1937,7 +2039,7 @@ const fr: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Questions sur les tarifs',
+    faqTitle: 'Questions sur les plans',
     faq: [
       { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Vous pouvez construire gratuitement pour toujours — entièrement en local avec votre propre clé Anthropic (vous ne payez que votre usage de l’API), ou créez un compte gratuit et recevez 10 000 crédits IA sans clé à vous.' },
       { q: 'Que sont les crédits ?', a: 'Les crédits mesurent l’usage de l’IA — génération de widgets, liens, bots et réponses de Copilot. Le compte gratuit inclut 10 000 pour démarrer, et les plans payants offrent une allocation mensuelle (50K sur Supporter, 800K sur Sponsor). Vous pouvez en acheter davantage à tout moment.' },
