@@ -2,6 +2,7 @@
 title: 'Private by default: why your AI market workstation should run locally'
 description: 'Nexow runs fully local by default — bring-your-own-key codegen in the browser, IndexedDB persistence, and direct-to-venue connections. Here is what private-by-default means and why it matters for traders.'
 pubDate: 2026-07-01
+heroImage: '/blog/private.svg'
 tags: ['privacy', 'architecture', 'security']
 ---
 

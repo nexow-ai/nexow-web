@@ -2,6 +2,7 @@
 title: 'Cómo crear un dashboard de trading de cripto con IA — sin programar'
 description: 'Una guía paso a paso para crear un dashboard de cripto en vivo con IA: pide un gráfico de velas, añade profundidad del order book y funding rates, y organízalo todo en un lienzo — sin escribir código.'
 pubDate: 2026-06-28
+heroImage: '/blog/crypto.svg'
 tags: ['guía', 'cripto', 'tutorial']
 ---
 

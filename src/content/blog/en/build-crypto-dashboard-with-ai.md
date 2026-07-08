@@ -2,6 +2,7 @@
 title: 'How to build a crypto trading dashboard with AI — no code required'
 description: 'A step-by-step guide to building a live crypto dashboard using AI: prompt a candlestick chart, add order-book depth and funding rates, and arrange it all on one canvas — without writing code.'
 pubDate: 2026-06-28
+heroImage: '/blog/crypto.svg'
 tags: ['guide', 'crypto', 'tutorial']
 ---
 
