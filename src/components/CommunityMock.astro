@@ -1,0 +1,55 @@
+---
+/**
+ * Decorative community/marketplace mock: a maker's shared dashboard post with a
+ * mini chart thumbnail, engagement counts and a marketplace price, plus an
+ * audited-strategy row. Purely illustrative (aria-hidden), deterministic markup.
+ */
+import Icon from './Icon.astro';
+---
+
+<div
+  class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-2xl shadow-black/40"
+  aria-hidden="true"
+>
+  <div class="flex items-center gap-2 border-b border-white/5 px-4 py-3">
+    <Icon name="users" class="size-4 text-accent-400" />
+    <span class="font-mono text-xs text-ink-300">community · discover</span>
+    <span class="ml-auto rounded-full bg-accent-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-accent-300">feed</span>
+  </div>
+
+  <div class="space-y-4 p-5">
+    <!-- Shared dashboard post -->
+    <div class="rounded-xl border border-white/8 bg-white/[0.03] p-3">
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 font-display text-xs font-bold text-white">Q</span>
+        <div class="leading-tight">
+          <p class="font-mono text-xs text-ink-100">@quanta</p>
+          <p class="font-mono text-[0.6rem] text-ink-500">shared a dashboard</p>
+        </div>
+        <span class="ml-auto inline-flex items-center gap-1 rounded-full bg-white/5 px-2 py-0.5 font-mono text-[0.6rem] text-ink-300">
+          <Icon name="store" class="size-3 text-brand-300" /> $12
+        </span>
+      </div>
+
+      <!-- mini chart thumbnail -->
+      <div class="mt-3 flex h-16 items-end gap-1 rounded-lg border border-white/8 bg-ink-950/70 p-2">
+        {[38, 52, 44, 61, 50, 72, 66, 84, 70, 90].map((v) => (
+          <span class="w-full rounded-sm bg-brand-400/55" style={`height:${v}%`}></span>
+        ))}
+      </div>
+
+      <div class="mt-3 flex items-center gap-4 font-mono text-[0.65rem] text-ink-400">
+        <span class="inline-flex items-center gap-1.5 text-rose-400"><Icon name="check" class="size-3.5" /> 128</span>
+        <span class="inline-flex items-center gap-1.5"><Icon name="chat" class="size-3.5" /> 24</span>
+        <span class="inline-flex items-center gap-1.5"><Icon name="arrow" class="size-3.5" /> fork</span>
+      </div>
+    </div>
+
+    <!-- Audited strategy row -->
+    <div class="flex items-center gap-2.5 rounded-xl border border-accent-400/25 bg-accent-500/[0.06] px-3 py-2.5">
+      <Icon name="signal" class="size-4 shrink-0 text-accent-300" />
+      <span class="font-mono text-xs text-ink-200">@ada published a strategy</span>
+      <span class="ml-auto font-mono text-[0.65rem] text-emerald-400">+18.4% · audited</span>
+    </div>
+  </div>
+</div>

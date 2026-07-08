@@ -178,6 +178,37 @@
     );
   }
 
+  /* Indigo companion glow — used behind the network / community focal points. */
+  .glow-accent {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-accent-500) 28%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Status pill for product pillars (Automate / Network) — live vs coming soon. */
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+  .badge-status[data-status='live'] {
+    background: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+    color: var(--color-brand-300);
+  }
+  .badge-status[data-status='soon'] {
+    background: color-mix(in oklab, var(--color-accent-500) 15%, transparent);
+    color: var(--color-accent-300);
+  }
+
   /* Film-grain noise overlay for large dark surfaces (kills banding). */
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
