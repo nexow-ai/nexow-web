@@ -2156,6 +2156,8 @@ const fr: SiteContent = {
     results: '{n} connecteurs',
     empty: 'Aucun connecteur ne correspond à votre recherche.',
     exploreCta: 'Explorer tous les connecteurs',
+    countLive: 'en direct',
+    countCatalog: 'au catalogue',
   },
   about: {
     meta: {
