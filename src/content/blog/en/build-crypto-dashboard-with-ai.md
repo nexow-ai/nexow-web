@@ -2,6 +2,7 @@
 title: 'How to build a crypto trading dashboard with AI — no code required'
 description: 'A step-by-step guide to building a live crypto dashboard using AI: prompt a candlestick chart, add order-book depth and funding rates, and arrange it all on one canvas — without writing code.'
 pubDate: 2026-06-28
+heroImage: '/blog/crypto.svg'
 tags: ['guide', 'crypto', 'tutorial']
 ---
 
@@ -21,7 +22,7 @@ A single canvas that tracks a crypto pair end to end:
 
 ## Step 1 — Open the app and pick private mode
 
-[Launch Nexow](https://app.nexow.ai) and add your own Anthropic API key in
+[Launch Nexow](https://x.nexow.app) and add your own Anthropic API key in
 Settings. In private mode, widget generation runs entirely in your browser and
 nothing is sent to our servers — you only pay for your own API usage.
 
@@ -77,4 +78,4 @@ own Anthropic API usage.
 ---
 
 That's a full crypto dashboard without touching a line of code.
-[Try it now](https://app.nexow.ai) and build your first widget.
+[Try it now](https://x.nexow.app) and build your first widget.

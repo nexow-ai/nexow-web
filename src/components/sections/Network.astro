@@ -1,0 +1,76 @@
+---
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+import Button from '../Button.astro';
+import CommunityMock from '../CommunityMock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home.network;
+---
+
+<section id="network" class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-32">
+  <div class="glow-accent pointer-events-none absolute -right-40 top-24 size-[560px] opacity-40 blur-2xl"></div>
+  <div class="container-page relative">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+
+    <div class="mt-14 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <!-- Community visual -->
+      <div class="reveal">
+        <CommunityMock />
+      </div>
+
+      <!-- Free-account highlight -->
+      <div class="reveal">
+        <span class="inline-flex items-center gap-2 rounded-full bg-accent-500/15 px-3 py-1 font-mono text-[0.7rem] font-medium uppercase tracking-wider text-accent-300">
+          <Icon name="sparkles" class="size-3.5" />
+          {t.accountBadge}
+        </span>
+        <h3 class="mt-4 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+          {t.accountTitle}
+        </h3>
+        <p class="mt-3 text-base leading-relaxed text-ink-300">{t.accountBody}</p>
+        <ul class="mt-6 space-y-3">
+          {
+            t.accountPoints.map((p) => (
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-accent-500/20 text-accent-300">
+                  <Icon name="check" class="size-3.5" />
+                </span>
+                <span class="text-sm leading-relaxed text-ink-200">{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-7">
+          <Button href={SITE.appUrl} external iconRight="arrow">{t.accountCta}</Button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Network pillars -->
+    <div class="reveal-stagger mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        t.items.map((item) => (
+          <div class="card-dark card-spotlight flex flex-col p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex size-10 items-center justify-center rounded-xl bg-accent-500/15 text-accent-300 ring-1 ring-accent-400/20">
+                <Icon name={item.icon} class="size-5" />
+              </span>
+              <span class="badge-status" data-status={item.status}>
+                <span class:list={['size-1.5 rounded-full', item.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']} />
+                {item.status === 'live' ? t.liveLabel : t.soonLabel}
+              </span>
+            </div>
+            <h3 class="mt-4 font-display text-lg font-semibold text-white">{item.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-400">{item.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,242 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import Faq from '../sections/Faq.astro';
+import CtaBand from '../sections/CtaBand.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).plansPage;
+const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
+
+const offerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: t.meta.title,
+  itemListElement: t.tiers.map((tier) => ({
+    '@type': 'Offer',
+    name: tier.name,
+    description: tier.tagline,
+    price: tier.priceMonthly === 'Custom' || tier.priceMonthly === 'A medida' || tier.priceMonthly === 'Sur mesure' ? '0' : tier.priceMonthly.replace(/[^0-9.]/g, '') || '0',
+    priceCurrency: 'USD',
+  })),
+};
+
+// Plan FAQ structured data (SEO / GEO), mirroring the home page's FAQPage.
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: t.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Layout lang={lang} route="/plans" title={t.meta.title} description={t.meta.description} schema={[offerSchema, faqSchema]}>
+  <PageHero badge={t.hero.badge} title={t.hero.title} subtitle={t.hero.subtitle} />
+
+  <!-- Coming soon notice -->
+  <div class="container-page -mt-4 pb-8">
+    <p class="reveal mx-auto flex max-w-2xl items-start gap-3 rounded-2xl border border-brand-500/20 bg-brand-50 px-5 py-4 text-sm leading-relaxed text-ink-600">
+      <Icon name="sparkles" class="mt-0.5 size-4 shrink-0 text-brand-600" />
+      <span>{t.comingSoon}</span>
+    </p>
+  </div>
+
+  <!-- Highlights -->
+  <section class="pb-12">
+    <div class="container-page">
+      <h2 class="reveal text-center font-display text-2xl font-semibold text-ink-950 sm:text-3xl">{t.highlights.title}</h2>
+      <div class="reveal-stagger mt-10 grid gap-4 sm:grid-cols-3">
+        {
+          t.highlights.items.map((item) => (
+            <div class="rounded-2xl border border-ink-900/10 bg-white p-6 shadow-sm">
+              <span class="inline-flex size-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-500/15">
+                <Icon name={item.icon} class="size-5" />
+              </span>
+              <h3 class="mt-4 font-display text-lg font-semibold text-ink-950">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Billing toggle -->
+  <div id="plans-billing" data-mode="monthly" class="container-page flex justify-center pb-10">
+    <div class="inline-flex items-center rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+      <button
+        type="button"
+        data-billing="monthly"
+        aria-pressed="true"
+        class="rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+      >
+        {t.billing.monthly}
+      </button>
+      <button
+        type="button"
+        data-billing="yearly"
+        aria-pressed="false"
+        class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+      >
+        {t.billing.yearly}
+        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600">{t.billing.save}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Plan cards -->
+  <section class="container-page pb-12">
+    <div class="reveal-stagger grid items-start gap-5 lg:grid-cols-4">
+      {
+        t.tiers.map((tier) => {
+          const featured = tier.featured;
+          const isExternal = tier.ctaHref.startsWith('http') || tier.ctaHref.startsWith('mailto');
+          return (
+            <div
+              class:list={[
+                'relative flex flex-col rounded-3xl border p-7',
+                featured
+                  ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-brand-500/30 lg:-mt-4 lg:mb-4'
+                  : 'border-ink-900/10 bg-white',
+              ]}
+            >
+              {featured && tier.badge && (
+                <span class="absolute -top-3 left-7 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-500 to-accent-500 px-3 py-1 text-xs font-semibold text-white">
+                  <Icon name="sparkles" class="size-3.5" /> {tier.badge}
+                </span>
+              )}
+              <div class="flex items-center justify-between gap-2">
+                <h3 class:list={['font-display text-xl font-semibold', featured ? 'text-white' : 'text-ink-950']}>
+                  {tier.name}
+                </h3>
+                {!featured && tier.badge && (
+                  <span class="rounded-full bg-accent-500/10 px-2 py-0.5 font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
+                    {tier.badge}
+                  </span>
+                )}
+              </div>
+              <p class:list={['mt-1 text-sm', featured ? 'text-ink-300' : 'text-ink-500']}>{tier.tagline}</p>
+
+              <div class="mt-5 flex items-baseline gap-1.5">
+                <span class:list={['font-display text-4xl font-bold', featured ? 'text-white' : 'text-ink-950']}>
+                  <span data-price="monthly">{tier.priceMonthly}</span>
+                  <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
+                </span>
+                {tier.cadence && (
+                  <span class:list={['text-sm', featured ? 'text-ink-400' : 'text-ink-500']}>{tier.cadence}</span>
+                )}
+              </div>
+              <p
+                data-billed
+                class:list={['mt-1 hidden font-mono text-[0.7rem]', featured ? 'text-ink-400' : 'text-ink-500']}
+              >
+                {tier.billedYearly ?? ' '}
+              </p>
+
+              {tier.stats && (
+                <div class="mt-4 flex flex-wrap gap-1.5">
+                  {tier.stats.map((s) => (
+                    <span
+                      class:list={[
+                        'rounded-md border px-2 py-0.5 font-mono text-[0.65rem]',
+                        featured
+                          ? 'border-white/10 bg-white/[0.04] text-ink-200'
+                          : 'border-ink-900/10 bg-ink-50 text-ink-600',
+                      ]}
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <a
+                href={localize(tier.ctaHref)}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                class:list={[
+                  'mt-6 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-all hover:-translate-y-0.5',
+                  featured
+                    ? 'bg-white text-ink-950 hover:bg-white/90'
+                    : 'bg-brand-600 text-white hover:bg-brand-500',
+                ]}
+              >
+                {tier.cta}
+              </a>
+
+              {tier.note && (
+                <p class:list={['mt-6 text-xs font-medium', featured ? 'text-ink-300' : 'text-ink-500']}>{tier.note}</p>
+              )}
+              <ul class="mt-3 space-y-3">
+                {tier.features.map((f) => (
+                  <li class="flex items-start gap-2.5 text-sm">
+                    <Icon
+                      name="check"
+                      class:list={['mt-0.5 size-4 shrink-0', featured ? 'text-brand-400' : 'text-brand-500']}
+                    />
+                    <span class={featured ? 'text-ink-200' : 'text-ink-700'}>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <!-- Included in every plan -->
+  <section class="border-t border-ink-900/8 bg-ink-50 py-16">
+    <div class="container-page">
+      <h2 class="reveal text-center font-display text-xl font-semibold text-ink-950 sm:text-2xl">{t.included.title}</h2>
+      <ul class="reveal-stagger mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-8 gap-y-3">
+        {
+          t.included.items.map((item) => (
+            <li class="flex items-center gap-2 text-sm text-ink-600">
+              <Icon name="check" class="size-4 shrink-0 text-brand-500" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Faq lang={lang} items={t.faq} eyebrow="FAQ" title={t.faqTitle} subtitle="" />
+  <CtaBand lang={lang} />
+</Layout>
+
+<script>
+  let plansPageAbort: AbortController | undefined;
+
+  function initPlansPageBilling() {
+    plansPageAbort?.abort();
+    plansPageAbort = new AbortController();
+    const { signal } = plansPageAbort;
+
+    const root = document.getElementById('plans-billing');
+    if (!root) return;
+
+    const scope = root.closest('main') ?? document;
+    const btns = root.querySelectorAll<HTMLButtonElement>('[data-billing]');
+    const apply = (mode: string) => {
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.billing === mode)));
+      scope.querySelectorAll<HTMLElement>('[data-price="monthly"]').forEach((el) => el.classList.toggle('hidden', mode !== 'monthly'));
+      scope.querySelectorAll<HTMLElement>('[data-price="yearly"]').forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
+      scope.querySelectorAll<HTMLElement>('[data-billed]').forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
+    };
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.billing ?? 'monthly'), { signal }));
+  }
+
+  document.addEventListener('astro:page-load', initPlansPageBilling);
+</script>

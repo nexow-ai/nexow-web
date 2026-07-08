@@ -2,6 +2,7 @@
 title: 'Del prompt al widget en vivo: cómo Nexow convierte una frase en un dashboard de trading'
 description: 'Una mirada por dentro a cómo Nexow genera un widget de mercado funcionando y conectado a datos a partir de un prompt en lenguaje natural — generación de código, aislamiento y conectores en vivo explicados.'
 pubDate: 2026-06-24
+heroImage: '/blog/codegen.svg'
 tags: ['producto', 'ia', 'cómo-funciona']
 ---
 
@@ -70,5 +71,5 @@ segundos, y lo que obtienes es un widget real e inspeccionable — no una caja
 negra. El dashboard se arma solo y tú mantienes el control del código, los datos
 y las claves.
 
-¿Listo para probarlo? [Abre la app](https://app.nexow.ai) y describe tu primer
+¿Listo para probarlo? [Abre la app](https://x.nexow.app) y describe tu primer
 widget.

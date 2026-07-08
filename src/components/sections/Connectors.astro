@@ -1,8 +1,11 @@
 ---
 import { type Lang } from '../../i18n/config';
-import { useContent, CONNECTOR_GROUPS, CONNECTORS } from '../../i18n/content';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
 import SectionHeading from '../SectionHeading.astro';
+import Button from '../Button.astro';
 import Icon from '../Icon.astro';
+import { CONNECTORS } from '../../data/connectors';
 
 interface Props {
   lang: Lang;
@@ -11,14 +14,12 @@ interface Props {
 }
 const { lang, tone = 'light' } = Astro.props;
 const t = useContent(lang).home.connectors;
-const count = CONNECTORS.length;
+const explore = useContent(lang).connectorsPage.exploreCta;
 const dark = tone === 'dark';
+const live = CONNECTORS.filter((c) => c.status === 'live');
 ---
 
-<section
-  id="connectors"
-  class:list={['relative py-24 sm:py-32', dark && 'bg-ink-950 text-white']}
->
+<section id="connectors" class:list={['relative py-24 sm:py-32', dark && 'bg-ink-950 text-white']}>
   {
     !dark && (
       <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 bg-[radial-gradient(50%_100%_at_50%_0%,var(--color-accent-50),transparent)]" />
@@ -34,52 +35,42 @@ const dark = tone === 'dark';
           dark ? 'text-ink-400' : 'text-ink-500',
         ]}
       >
-        <span class="text-gradient text-3xl font-bold">{count}+</span>
-        {t.eyebrow.toLowerCase()}
+        <span class="text-gradient text-3xl font-bold">{t.count}+</span>
+        {t.countLabel}
       </span>
     </div>
 
-    <div class="reveal-stagger mx-auto mt-12 max-w-4xl space-y-8">
+    <!-- Logo wall of live connectors -->
+    <div class="reveal-stagger mx-auto mt-12 flex max-w-5xl flex-wrap justify-center gap-2.5">
       {
-        CONNECTOR_GROUPS.map((group) => (
-          <div>
-            <h3
-              class:list={[
-                'eyebrow flex items-center gap-3',
-                dark ? 'text-brand-400' : 'text-brand-600',
-              ]}
-            >
-              {t.groups[group.key]}
-              <span class:list={['h-px flex-1', dark ? 'bg-white/10' : 'bg-ink-900/10']} />
-            </h3>
-            <div class="mt-4 flex flex-wrap gap-2.5">
-              {group.venues.map((name) => (
-                <span
-                  class:list={[
-                    'inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-[0.8rem] font-medium transition-all duration-200 hover:-translate-y-0.5',
-                    dark
-                      ? 'border-white/10 bg-white/[0.03] text-ink-200 hover:border-brand-400/40 hover:bg-white/[0.06]'
-                      : 'border-ink-900/8 bg-white text-ink-800 shadow-sm hover:border-brand-500/30 hover:shadow-md',
-                  ]}
-                >
-                  <span class="size-1.5 rounded-full bg-brand-500/80" />
-                  {name}
-                </span>
-              ))}
-            </div>
-          </div>
+        live.map((c) => (
+          <span
+            title={c.name}
+            class:list={[
+              'inline-flex items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-4 transition-all duration-200 hover:-translate-y-0.5',
+              dark
+                ? 'border-white/10 bg-white/[0.03] text-ink-200 hover:border-brand-400/40 hover:bg-white/[0.06]'
+                : 'border-ink-900/8 bg-white text-ink-800 shadow-sm hover:border-brand-500/30 hover:shadow-md',
+            ]}
+          >
+            <span class="inline-flex size-6 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-black/5">
+              <img src={c.logo} alt="" loading="lazy" decoding="async" width="20" height="20" class="size-full object-contain p-0.5" />
+            </span>
+            <span class="font-mono text-[0.8rem] font-medium">{c.name}</span>
+          </span>
         ))
       }
     </div>
 
-    <p
-      class:list={[
-        'reveal mx-auto mt-10 flex max-w-2xl items-start justify-center gap-2 text-center text-sm',
-        dark ? 'text-ink-500' : 'text-ink-500',
-      ]}
-    >
+    <p class="reveal mx-auto mt-10 flex max-w-2xl items-start justify-center gap-2 text-center text-sm text-ink-500">
       <Icon name="globe" class="mt-0.5 size-4 shrink-0 opacity-60" />
       {t.note}
     </p>
+
+    <div class="reveal mt-8 flex justify-center">
+      <Button href={localizePath('/connectors', lang)} variant="primary" iconRight="arrow">
+        {explore}
+      </Button>
+    </div>
   </div>
 </section>

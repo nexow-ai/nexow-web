@@ -46,6 +46,67 @@
   --color-accent-900: #312e81;
   --color-accent-950: #1e1b4b;
 
+  /* Gold — premium accent for light marketing surfaces */
+  --color-gold-50: #fdfaf3;
+  --color-gold-100: #f6edd6;
+  --color-gold-200: #ecd9a8;
+  --color-gold-300: #dfc06a;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c9a227;
+  --color-gold-600: #a8871e;
+  --color-gold-700: #876b18;
+  --color-gold-800: #6b5414;
+  --color-gold-900: #4f3e10;
+
+  /* Page accent palettes (swapped onto brand/accent tokens per route) */
+  --color-sky-50: #eff9ff;
+  --color-sky-100: #dff2ff;
+  --color-sky-200: #b8e4ff;
+  --color-sky-300: #78cfff;
+  --color-sky-400: #38b8ff;
+  --color-sky-500: #0ea5e9;
+  --color-sky-600: #0284c7;
+  --color-sky-700: #0369a1;
+  --color-sky-800: #075985;
+  --color-sky-900: #0c4a6e;
+  --color-sky-950: #082f49;
+
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+  --color-violet-950: #2e1065;
+
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+  --color-amber-950: #451a03;
+
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+  --color-rose-950: #4c0519;
+
   /* Ink — near-black surface for dark sections (cool, slightly blue).
    * 100–500 are the light text shades used on those dark surfaces. */
   --color-ink-50: #f4f6fb;
@@ -63,6 +124,100 @@
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Per-page accent — remaps brand/accent tokens (see src/i18n/accent.ts).
+ * Set `data-accent` on <html> from Layout.
+ * ------------------------------------------------------------------ */
+[data-accent='gold'] {
+  --color-brand-50: var(--color-gold-50);
+  --color-brand-100: var(--color-gold-100);
+  --color-brand-200: var(--color-gold-200);
+  --color-brand-300: var(--color-gold-300);
+  --color-brand-400: var(--color-gold-400);
+  --color-brand-500: var(--color-gold-500);
+  --color-brand-600: var(--color-gold-600);
+  --color-brand-700: var(--color-gold-700);
+  --color-brand-800: var(--color-gold-800);
+  --color-brand-900: var(--color-gold-900);
+  --color-brand-950: var(--color-gold-900);
+  --color-accent-300: var(--color-gold-300);
+  --color-accent-400: var(--color-gold-400);
+  --color-accent-500: var(--color-gold-600);
+  --color-accent-600: var(--color-gold-700);
+}
+
+[data-accent='sky'] {
+  --color-brand-50: var(--color-sky-50);
+  --color-brand-100: var(--color-sky-100);
+  --color-brand-200: var(--color-sky-200);
+  --color-brand-300: var(--color-sky-300);
+  --color-brand-400: var(--color-sky-400);
+  --color-brand-500: var(--color-sky-500);
+  --color-brand-600: var(--color-sky-600);
+  --color-brand-700: var(--color-sky-700);
+  --color-brand-800: var(--color-sky-800);
+  --color-brand-900: var(--color-sky-900);
+  --color-brand-950: var(--color-sky-950);
+  --color-accent-300: var(--color-sky-300);
+  --color-accent-400: var(--color-sky-400);
+  --color-accent-500: var(--color-sky-600);
+  --color-accent-600: var(--color-sky-700);
+}
+
+[data-accent='violet'] {
+  --color-brand-50: var(--color-violet-50);
+  --color-brand-100: var(--color-violet-100);
+  --color-brand-200: var(--color-violet-200);
+  --color-brand-300: var(--color-violet-300);
+  --color-brand-400: var(--color-violet-400);
+  --color-brand-500: var(--color-violet-500);
+  --color-brand-600: var(--color-violet-600);
+  --color-brand-700: var(--color-violet-700);
+  --color-brand-800: var(--color-violet-800);
+  --color-brand-900: var(--color-violet-900);
+  --color-brand-950: var(--color-violet-950);
+  --color-accent-300: var(--color-violet-300);
+  --color-accent-400: var(--color-violet-400);
+  --color-accent-500: var(--color-violet-600);
+  --color-accent-600: var(--color-violet-700);
+}
+
+[data-accent='amber'] {
+  --color-brand-50: var(--color-amber-50);
+  --color-brand-100: var(--color-amber-100);
+  --color-brand-200: var(--color-amber-200);
+  --color-brand-300: var(--color-amber-300);
+  --color-brand-400: var(--color-amber-400);
+  --color-brand-500: var(--color-amber-500);
+  --color-brand-600: var(--color-amber-600);
+  --color-brand-700: var(--color-amber-700);
+  --color-brand-800: var(--color-amber-800);
+  --color-brand-900: var(--color-amber-900);
+  --color-brand-950: var(--color-amber-950);
+  --color-accent-300: var(--color-amber-300);
+  --color-accent-400: var(--color-amber-400);
+  --color-accent-500: var(--color-amber-600);
+  --color-accent-600: var(--color-amber-700);
+}
+
+[data-accent='rose'] {
+  --color-brand-50: var(--color-rose-50);
+  --color-brand-100: var(--color-rose-100);
+  --color-brand-200: var(--color-rose-200);
+  --color-brand-300: var(--color-rose-300);
+  --color-brand-400: var(--color-rose-400);
+  --color-brand-500: var(--color-rose-500);
+  --color-brand-600: var(--color-rose-600);
+  --color-brand-700: var(--color-rose-700);
+  --color-brand-800: var(--color-rose-800);
+  --color-brand-900: var(--color-rose-900);
+  --color-brand-950: var(--color-rose-950);
+  --color-accent-300: var(--color-rose-300);
+  --color-accent-400: var(--color-rose-400);
+  --color-accent-500: var(--color-rose-600);
+  --color-accent-600: var(--color-rose-700);
 }
 
 /* ------------------------------------------------------------------ *
@@ -95,6 +250,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    transition: background-color 0.35s var(--ease-out-expo);
   }
 
   h1,
@@ -178,6 +334,54 @@
     );
   }
 
+  /* Indigo companion glow — used behind the network / community focal points. */
+  .glow-accent {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-accent-500) 28%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Warm gold glow for light premium surfaces. */
+  .glow-gold {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-brand-400) 28%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Gold gradient text. */
+  .text-gold-gradient {
+    background-image: linear-gradient(100deg, var(--color-brand-600), var(--color-brand-400) 85%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Status pill for product pillars (Automate / Network) — live vs coming soon. */
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+  .badge-status[data-status='live'] {
+    background: color-mix(in oklab, var(--color-brand-500) 15%, transparent);
+    color: var(--color-brand-300);
+  }
+  .badge-status[data-status='soon'] {
+    background: color-mix(in oklab, var(--color-accent-500) 15%, transparent);
+    color: var(--color-accent-300);
+  }
+
   /* Film-grain noise overlay for large dark surfaces (kills banding). */
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
@@ -226,6 +430,18 @@
       transparent,
       color-mix(in oklab, var(--color-brand-400) 45%, transparent) 30%,
       color-mix(in oklab, var(--color-accent-400) 45%, transparent) 70%,
+      transparent
+    );
+  }
+
+  /* Gold hairline for light surfaces. */
+  .hairline-gold {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-brand-300) 55%, transparent) 30%,
+      color-mix(in oklab, var(--color-brand-500) 55%, transparent) 70%,
       transparent
     );
   }
@@ -312,6 +528,47 @@
 .animate-marquee {
   animation: marquee 40s linear infinite;
 }
+/* Second row scrolls the other way. */
+.animate-marquee-reverse {
+  animation: marquee 44s linear infinite reverse;
+}
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee { animation: none; }
+  .animate-marquee,
+  .animate-marquee-reverse { animation: none; }
+}
+
+/* Gentle float — makes product mocks feel alive on the features page. */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float { animation: float 7s var(--ease-out-expo) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-float { animation: none; }
+}
+
+/* Soft pulsing glow for focal visuals. */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.28; }
+  50% { opacity: 0.5; }
+}
+.animate-glow { animation: glow-pulse 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-glow { animation: none; opacity: 0.35; }
+}
+
+/* ------------------------------------------------------------------ *
+ * View transitions — only main content fades; header/footer swap instantly.
+ * ------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }

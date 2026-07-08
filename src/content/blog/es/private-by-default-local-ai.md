@@ -2,6 +2,7 @@
 title: 'Privado por defecto: por qué tu estación de mercado con IA debería correr en local'
 description: 'Nexow corre totalmente local por defecto — generación de código con tu propia clave en el navegador, persistencia en IndexedDB y conexiones directas a los venues. Esto es lo que significa privado por defecto y por qué importa a los traders.'
 pubDate: 2026-07-01
+heroImage: '/blog/private.svg'
 tags: ['privacidad', 'arquitectura', 'seguridad']
 ---
 
@@ -58,4 +59,4 @@ A medida que añadimos planes gestionados, agentes de trading y componentes de
 servidor, el principio no cambia: **tus claves, tus datos, tu máquina** — salvo
 que optes explícitamente por la nube.
 
-[Abre Nexow](https://app.nexow.ai) y comprueba el modo privado por ti mismo.
+[Abre Nexow](https://x.nexow.app) y comprueba el modo privado por ti mismo.

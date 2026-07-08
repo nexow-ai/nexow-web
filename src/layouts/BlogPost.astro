@@ -15,9 +15,11 @@ interface Props {
   updatedDate?: Date;
   author: string;
   tags: string[];
+  heroImage?: string;
   minutes: number;
 }
-const { lang, slug, title, description, pubDate, updatedDate, author, tags, minutes } = Astro.props;
+const { lang, slug, title, description, pubDate, updatedDate, author, tags, heroImage, minutes } =
+  Astro.props;
 const t = useContent(lang).blog;
 const route = `/blog/${slug}`;
 
@@ -95,6 +97,24 @@ const articleSchema = {
         </div>
       </div>
     </div>
+
+    {
+      heroImage && (
+        <div class="container-page mt-10">
+          <figure class="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-ink-900/8 bg-ink-950 shadow-xl shadow-brand-900/5">
+            <img
+              src={heroImage}
+              alt={title}
+              width="1200"
+              height="675"
+              fetchpriority="high"
+              decoding="async"
+              class="aspect-[16/9] w-full object-cover"
+            />
+          </figure>
+        </div>
+      )
+    }
 
     <div class="container-page mt-10">
       <div

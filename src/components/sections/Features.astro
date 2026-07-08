@@ -121,13 +121,21 @@ const [codegen, sandbox, connectors, canvas, privacy, versions] = t.items;
 </section>
 
 <script>
-  // Mouse-tracking spotlight for .card-spotlight cards (sets --mx/--my).
-  const cards = document.querySelectorAll<HTMLElement>('.card-spotlight');
-  cards.forEach((card) => {
-    card.addEventListener('pointermove', (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+  let featuresAbort: AbortController | undefined;
+
+  function initFeatureSpotlight() {
+    featuresAbort?.abort();
+    featuresAbort = new AbortController();
+    const { signal } = featuresAbort;
+
+    document.querySelectorAll<HTMLElement>('.card-spotlight').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      }, { signal });
     });
-  });
+  }
+
+  document.addEventListener('astro:page-load', initFeatureSpotlight);
 </script>

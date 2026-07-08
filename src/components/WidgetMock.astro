@@ -27,7 +27,7 @@ const { promptExample, class: className = '' } = Astro.props;
       <span class="size-3 rounded-full bg-amber-400/80"></span>
       <span class="size-3 rounded-full bg-emerald-400/80"></span>
       <div class="ml-3 flex items-center gap-1.5 text-ink-400">
-        <BrandMark class="size-3.5 text-brand-400" />
+        <BrandMark class="h-3.5 w-auto" />
         <span class="font-mono text-xs tracking-tight">nexow · canvas</span>
       </div>
       <span class="ml-auto flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 font-mono text-[0.65rem] text-ink-400">
@@ -40,7 +40,7 @@ const { promptExample, class: className = '' } = Astro.props;
       <div
         class="flex items-center gap-3 rounded-xl border border-white/10 bg-ink-850 px-3.5 py-3 ring-1 ring-brand-500/0 transition-shadow"
       >
-        <BrandMark class="size-4 shrink-0 text-brand-400" />
+        <BrandMark class="h-4 w-auto shrink-0" />
         <p class="min-w-0 flex-1 truncate text-sm text-ink-200">
           <span data-typed data-text={promptExample}>{promptExample}</span><span
             class="caret-blink ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-brand-400"></span>
@@ -132,16 +132,22 @@ const { promptExample, class: className = '' } = Astro.props;
 </div>
 
 <script>
-  // Type the example prompt once when the mock scrolls into view.
-  // Without JS the full prompt renders statically — nothing is lost.
-  const typed = document.querySelector<HTMLElement>('[data-typed]');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (typed && !reduced) {
+  let typedObserver: IntersectionObserver | null = null;
+
+  function initWidgetTyped() {
+    typedObserver?.disconnect();
+    typedObserver = null;
+
+    const typed = document.querySelector<HTMLElement>('[data-typed]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!typed || reduced) return;
+
     const text = typed.dataset.text ?? '';
-    const io = new IntersectionObserver(
+    typedObserver = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return;
-        io.disconnect();
+        typedObserver?.disconnect();
+        typedObserver = null;
         typed.textContent = '';
         let i = 0;
         const tick = () => {
@@ -150,8 +156,10 @@ const { promptExample, class: className = '' } = Astro.props;
         };
         setTimeout(tick, 350);
       },
-      { threshold: 0.4 }
+      { threshold: 0.4 },
     );
-    io.observe(typed);
+    typedObserver.observe(typed);
   }
+
+  document.addEventListener('astro:page-load', initWidgetTyped);
 </script>

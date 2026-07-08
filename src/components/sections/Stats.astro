@@ -32,15 +32,21 @@ const stats = useContent(lang).home.stats;
 </section>
 
 <script>
-  // Count-up on first reveal. Static numbers render without JS.
-  const els = document.querySelectorAll<HTMLElement>('[data-countup]');
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (els.length && !reduced && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(
+  let statsObserver: IntersectionObserver | null = null;
+
+  function initStatsCountup() {
+    statsObserver?.disconnect();
+    statsObserver = null;
+
+    const els = document.querySelectorAll<HTMLElement>('[data-countup]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!els.length || reduced || !('IntersectionObserver' in window)) return;
+
+    statsObserver = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
-          io.unobserve(e.target);
+          statsObserver?.unobserve(e.target);
           const el = e.target as HTMLElement;
           const target = Number(el.dataset.target ?? '0');
           const dur = 1400;
@@ -54,8 +60,10 @@ const stats = useContent(lang).home.stats;
           requestAnimationFrame(frame);
         }
       },
-      { threshold: 0.6 }
+      { threshold: 0.6 },
     );
-    els.forEach((el) => io.observe(el));
+    els.forEach((el) => statsObserver!.observe(el));
   }
+
+  document.addEventListener('astro:page-load', initStatsCountup);
 </script>

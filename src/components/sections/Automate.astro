@@ -1,0 +1,87 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+import BotFlowMock from '../BotFlowMock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).home.automate;
+const [bots, agents, copilot] = t.items;
+const statusLabel = (s: 'live' | 'soon') => (s === 'live' ? t.liveLabel : t.soonLabel);
+---
+
+<section id="automate" class="relative bg-ink-950 py-24 text-white sm:py-32">
+  <div class="container-page">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+
+    <div class="reveal-stagger mt-14 grid gap-4 lg:grid-cols-2">
+      <!-- Bots — featured card with the flow mock -->
+      <div class="card-dark card-spotlight flex flex-col gap-6 p-7 sm:flex-row sm:items-start lg:col-span-2">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+              <Icon name={bots.icon} class="size-5.5" />
+            </span>
+            <span class="badge-status" data-status={bots.status}>
+              <span class:list={['size-1.5 rounded-full', bots.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
+              {statusLabel(bots.status)}
+            </span>
+          </div>
+          <h3 class="mt-5 font-display text-xl font-semibold text-white">{bots.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-400">{bots.body}</p>
+        </div>
+        <div class="min-w-0 flex-1 self-stretch">
+          <BotFlowMock />
+        </div>
+      </div>
+
+      <!-- Agents -->
+      <div class="card-dark card-spotlight flex flex-col p-7">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+            <Icon name={agents.icon} class="size-5.5" />
+          </span>
+          <span class="badge-status" data-status={agents.status}>
+            <span class:list={['size-1.5 rounded-full', agents.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
+            {statusLabel(agents.status)}
+          </span>
+        </div>
+        <h3 class="mt-5 font-display text-xl font-semibold text-white">{agents.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-400">{agents.body}</p>
+        <!-- harness orbit chips -->
+        <div class="mt-5 flex flex-wrap gap-2" aria-hidden="true">
+          {t.harnessChips.map((h) => (
+            <span class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{h}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Copilot -->
+      <div class="card-dark card-spotlight flex flex-col p-7">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+            <Icon name={copilot.icon} class="size-5.5" />
+          </span>
+          <span class="badge-status" data-status={copilot.status}>
+            <span class:list={['size-1.5 rounded-full', copilot.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
+            {statusLabel(copilot.status)}
+          </span>
+        </div>
+        <h3 class="mt-5 font-display text-xl font-semibold text-white">{copilot.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-400">{copilot.body}</p>
+        <!-- prompt chips -->
+        <div class="mt-5 flex flex-col gap-2" aria-hidden="true">
+          {t.copilotPrompts.map((q) => (
+            <span class="inline-flex items-center gap-2 rounded-lg border border-white/8 bg-ink-950/70 px-3 py-1.5 font-mono text-[0.7rem] text-ink-300">
+              <span class="text-brand-400">❯</span> {q}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

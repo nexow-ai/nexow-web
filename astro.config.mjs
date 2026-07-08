@@ -36,4 +36,10 @@ export default defineConfig({
     }),
     mdx(),
   ],
+
+  redirects: {
+    '/pricing': '/plans',
+    '/es/pricing': '/es/plans',
+    '/fr/pricing': '/fr/plans',
+  },
 });

@@ -1,25 +1,53 @@
 ---
-import { SITE } from '../i18n/config';
+import { SITE, languages, defaultLang, type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
+import { dir } from '../i18n/utils';
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import BrandMark from '../components/BrandMark.astro';
 
 const t = useContent('en').notFound;
+
+// Cloudflare Pages serves this single 404.html for every missing path, including
+// /<lang>/* — so we ship every non-default locale and swap client-side by URL prefix.
+const variants = Object.fromEntries(
+  (Object.keys(languages) as Lang[])
+    .filter((l) => l !== defaultLang)
+    .map((l) => [
+      l,
+      { ...useContent(l).notFound, launch: useContent(l).nav.launch, home: `/${l}/`, dir: dir(l) },
+    ]),
+);
 ---
 
 <Layout lang="en" route="/404" title={`404 — ${SITE.name}`} description={t.body} noindex>
   <section class="relative flex min-h-[70vh] items-center overflow-hidden pt-24">
     <div class="glow-brand pointer-events-none absolute left-1/2 top-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
     <div class="container-page relative text-center">
-      <BrandMark class="mx-auto size-12 text-brand-500" title="Nexow" />
+      <BrandMark class="mx-auto h-12 w-auto" title="Nexow" tone="dark" />
       <p class="mt-8 font-mono text-7xl font-bold tracking-tight text-ink-900 sm:text-8xl">404</p>
-      <h1 class="mt-4 font-display text-2xl font-semibold text-ink-950 sm:text-3xl">{t.title}</h1>
-      <p class="mx-auto mt-3 max-w-md text-ink-600">{t.body}</p>
+      <h1 id="nf-title" class="mt-4 font-display text-2xl font-semibold text-ink-950 sm:text-3xl">{t.title}</h1>
+      <p id="nf-body" class="mx-auto mt-3 max-w-md text-ink-600">{t.body}</p>
       <div class="mt-8 flex justify-center gap-3">
-        <Button href="/" size="lg" icon="arrow" class="[&_svg]:rotate-180">{t.cta}</Button>
-        <Button href={SITE.appUrl} variant="secondary" size="lg" external>{useContent('en').nav.launch}</Button>
+        <Button href="/" size="lg" icon="arrow" class="[&_svg]:rotate-180"><span id="nf-home">{t.cta}</span></Button>
+        <Button href={SITE.appUrl} variant="secondary" size="lg" external><span id="nf-launch">{useContent('en').nav.launch}</span></Button>
       </div>
     </div>
   </section>
 </Layout>
+
+<script is:inline define:vars={{ variants }}>
+  const prefix = location.pathname.split('/')[1];
+  const v = variants[prefix];
+  if (v) {
+    document.documentElement.lang = prefix;
+    document.documentElement.dir = v.dir;
+    document.getElementById('nf-title').textContent = v.title;
+    document.getElementById('nf-body').textContent = v.body;
+    const home = document.getElementById('nf-home');
+    home.textContent = v.cta;
+    const homeLink = home.closest('a');
+    if (homeLink) homeLink.setAttribute('href', v.home);
+    document.getElementById('nf-launch').textContent = v.launch;
+  }
+</script>
