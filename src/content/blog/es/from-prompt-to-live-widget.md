@@ -71,5 +71,5 @@ segundos, y lo que obtienes es un widget real e inspeccionable — no una caja
 negra. El dashboard se arma solo y tú mantienes el control del código, los datos
 y las claves.
 
-¿Listo para probarlo? [Abre la app](https://app.nexow.ai) y describe tu primer
+¿Listo para probarlo? [Abre la app](https://x.nexow.app) y describe tu primer
 widget.

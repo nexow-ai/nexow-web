@@ -47,5 +47,5 @@ Una cuenta gratis es la rampa de *construir solo* a *construir con otros*: sigue
 makers, forkea dashboards, publica widgets y — pronto — suscríbete a señales de
 estrategia auditadas. Optas por la parte de la red que quieras, paso a paso.
 
-[Crea tu cuenta gratis](https://app.nexow.ai) — o sigue construyendo en local.
+[Crea tu cuenta gratis](https://x.nexow.app) — o sigue construyendo en local.
 Ambas son gratis, y ambas son tuyas.

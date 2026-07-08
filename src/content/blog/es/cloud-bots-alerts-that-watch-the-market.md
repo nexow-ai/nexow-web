@@ -56,4 +56,4 @@ herramientas y triggers que puede vigilar, razonar y actuar por su cuenta — y 
 **Copilot** para tu workspace. Los bots están en vivo ahora; el resto llega
 pronto.
 
-[Abre Nexow](https://app.nexow.ai) y define tu primera alerta en una frase.
+[Abre Nexow](https://x.nexow.app) y define tu primera alerta en una frase.

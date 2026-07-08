@@ -71,5 +71,5 @@ measured in seconds, and the artifact you get is a real, inspectable widget — 
 a black box. The dashboard assembles itself, and you stay in control of the code,
 the data and the keys.
 
-Ready to try it? [Launch the app](https://app.nexow.ai) and describe your first
+Ready to try it? [Launch the app](https://x.nexow.app) and describe your first
 widget.

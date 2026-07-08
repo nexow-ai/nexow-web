@@ -59,4 +59,4 @@ Nexow wires each widget to the connector you named and streams it straight onto
 the canvas.
 
 [Browse the connector gallery](https://nexow.ai/connectors) or
-[launch the app](https://app.nexow.ai) and plug into your first market.
+[launch the app](https://x.nexow.app) and plug into your first market.

@@ -39,4 +39,4 @@ La galerie est le moyen le plus rapide de répondre à « puis-je construire ça
 
 Nexow branche chaque widget au connecteur que vous avez nommé et le diffuse directement sur le canvas.
 
-[Parcourez la galerie de connecteurs](https://nexow.ai/fr/connectors) ou [lancez l’app](https://app.nexow.ai) et branchez-vous à votre premier marché.
+[Parcourez la galerie de connecteurs](https://nexow.ai/fr/connectors) ou [lancez l’app](https://x.nexow.app) et branchez-vous à votre premier marché.

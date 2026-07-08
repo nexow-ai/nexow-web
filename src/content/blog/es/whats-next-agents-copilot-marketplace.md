@@ -52,5 +52,5 @@ defecto, con **Sonnet 4.6** y **Haiku 4.5** para builds más rápidos y baratos 
 en modo privado aportas tu propia clave, así que mantienes el control del uso y el
 coste.
 
-¿Quieres influir en lo que sale después? [Abre Nexow](https://app.nexow.ai),
+¿Quieres influir en lo que sale después? [Abre Nexow](https://x.nexow.app),
 empieza a construir y dinos qué necesitas.
