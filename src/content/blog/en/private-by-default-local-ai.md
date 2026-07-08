@@ -57,4 +57,4 @@ As we add hosted plans, trading agents and server components, the principle
 stays fixed: **your keys, your data, your machine** — unless you explicitly opt
 into the cloud.
 
-[Launch Nexow](https://x.nexow.app) and see private mode for yourself.
+[Launch Nexow](https://x.nexow.ai) and see private mode for yourself.

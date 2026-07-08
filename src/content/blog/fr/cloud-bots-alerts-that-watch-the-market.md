@@ -41,4 +41,4 @@ Quand un bot se déclenche, le signal repart directement vers vos widgets — le
 
 Les bots sont le premier pas pour mettre votre workspace en pilote automatique. Viennent ensuite les **agents** — une IA avec un harnais complet de modèle, mémoire, skills, outils et triggers qui peut surveiller, raisonner et agir de lui-même — et un **Copilot** pour votre workspace. Les bots sont en direct maintenant ; le reste arrive bientôt.
 
-[Lancez Nexow](https://x.nexow.app) et définissez votre première alerte en une phrase.
+[Lancez Nexow](https://x.nexow.ai) et définissez votre première alerte en une phrase.

@@ -50,5 +50,5 @@ Under the hood, generation runs on Anthropic's Claude — **Opus 4.8** by defaul
 with **Sonnet 4.6** and **Haiku 4.5** for faster, cheaper builds — and in private
 mode you supply your own key, so you stay in control of usage and cost.
 
-Want to shape what ships next? [Launch Nexow](https://x.nexow.app), start
+Want to shape what ships next? [Launch Nexow](https://x.nexow.ai), start
 building, and tell us what you need.

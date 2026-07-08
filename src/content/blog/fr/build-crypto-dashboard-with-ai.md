@@ -19,7 +19,7 @@ Un canvas unique qui suit une paire crypto de bout en bout :
 
 ## Étape 1 — Ouvrez l’app et choisissez le mode privé
 
-[Lancez Nexow](https://x.nexow.app) et ajoutez votre propre clé API Anthropic dans les Paramètres. En mode privé, la génération de widgets s’exécute entièrement dans votre navigateur et rien n’est envoyé à nos serveurs — vous ne payez que votre propre usage de l’API.
+[Lancez Nexow](https://x.nexow.ai) et ajoutez votre propre clé API Anthropic dans les Paramètres. En mode privé, la génération de widgets s’exécute entièrement dans votre navigateur et rien n’est envoyé à nos serveurs — vous ne payez que votre propre usage de l’API.
 
 ## Étape 2 — Demandez votre graphique principal
 
@@ -60,4 +60,4 @@ Glissez vos widgets dans une mise en page qui vous convient, et regroupez les vu
 ---
 
 Voilà un tableau de bord crypto complet sans toucher une ligne de code.
-[Essayez maintenant](https://x.nexow.app) et construisez votre premier widget.
+[Essayez maintenant](https://x.nexow.ai) et construisez votre premier widget.

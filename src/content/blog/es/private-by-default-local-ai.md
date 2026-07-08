@@ -59,4 +59,4 @@ A medida que añadimos planes gestionados, agentes de trading y componentes de
 servidor, el principio no cambia: **tus claves, tus datos, tu máquina** — salvo
 que optes explícitamente por la nube.
 
-[Abre Nexow](https://x.nexow.app) y comprueba el modo privado por ti mismo.
+[Abre Nexow](https://x.nexow.ai) y comprueba el modo privado por ti mismo.

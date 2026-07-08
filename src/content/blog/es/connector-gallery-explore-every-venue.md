@@ -61,4 +61,4 @@ Nexow conecta cada widget al conector que nombraste y lo transmite directo al
 lienzo.
 
 [Explora la galería de conectores](https://nexow.ai/es/connectors) o
-[abre la app](https://x.nexow.app) y enchúfate a tu primer mercado.
+[abre la app](https://x.nexow.ai) y enchúfate a tu primer mercado.

@@ -35,4 +35,4 @@ Le local d’abord n’est pas sans compromis. Certains venues n’autorisent pa
 
 À mesure que nous ajoutons des plans hébergés, des agents de trading et des composants serveur, le principe reste fixe : **vos clés, vos données, votre machine** — sauf si vous optez explicitement pour le cloud.
 
-[Lancez Nexow](https://x.nexow.app) et découvrez le mode privé par vous-même.
+[Lancez Nexow](https://x.nexow.ai) et découvrez le mode privé par vous-même.

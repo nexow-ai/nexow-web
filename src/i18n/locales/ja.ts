@@ -37,7 +37,7 @@ export const ja: SiteContent = {
       {
         title: 'リソース',
         links: [
-          { label: 'アプリを起動', href: 'https://x.nexow.app' },
+          { label: 'アプリを起動', href: 'https://x.nexow.ai' },
           { label: 'プライバシー', href: '/privacy' },
         ],
       },
@@ -466,7 +466,7 @@ export const ja: SiteContent = {
         cadence: '永久',
         stats: ['10K クレジット', '10 ボット', '3 エージェント'],
         cta: '無料で始める',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           'サインアップ時に確保される 10,000 AI クレジット',
           '無制限のスクリーン、ワークスペース、ウィジェット',
@@ -487,7 +487,7 @@ export const ja: SiteContent = {
         stats: ['50K クレジット/月', '30 ボット', '10 エージェント'],
         note: 'Free のすべてに加えて：',
         cta: 'Supporter になる',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '毎月 50,000 クレジット',
           '最大 30 ボットと 10 エージェント',
@@ -507,7 +507,7 @@ export const ja: SiteContent = {
         stats: ['800K クレジット/月', '300 ボット', '100 エージェント'],
         note: 'Supporter のすべてに加えて：',
         cta: 'Sponsor になる',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
           '毎月 800,000 クレジット',

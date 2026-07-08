@@ -22,7 +22,7 @@ A single canvas that tracks a crypto pair end to end:
 
 ## Step 1 — Open the app and pick private mode
 
-[Launch Nexow](https://x.nexow.app) and add your own Anthropic API key in
+[Launch Nexow](https://x.nexow.ai) and add your own Anthropic API key in
 Settings. In private mode, widget generation runs entirely in your browser and
 nothing is sent to our servers — you only pay for your own API usage.
 
@@ -78,4 +78,4 @@ own Anthropic API usage.
 ---
 
 That's a full crypto dashboard without touching a line of code.
-[Try it now](https://x.nexow.app) and build your first widget.
+[Try it now](https://x.nexow.ai) and build your first widget.

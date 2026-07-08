@@ -1,6 +1,6 @@
 # nexow-web
 
-Marketing site & landing page for [Nexow](https://x.nexow.app) — the AI-native
+Marketing site & landing page for [Nexow](https://x.nexow.ai) — the AI-native
 dashboard builder for markets. Built with **Astro** (static output), **Tailwind
 CSS v4**, and self-hosted fonts. Optimized for SEO and GEO (generative /
 answer-engine optimization).

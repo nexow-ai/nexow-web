@@ -25,7 +25,7 @@
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
 - Plans: free forever to build (locally with your own key, or with 10,000 AI credits reserved on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout and platform credits are coming soon.
 - Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync, community feed). Roadmap: agent deploy, Copilot, marketplace, strategy signals, XP & rewards.
-- App: https://x.nexow.app
+- App: https://x.nexow.ai
 
 ## Pages
 

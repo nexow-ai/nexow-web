@@ -37,7 +37,7 @@ export const it: SiteContent = {
       {
         title: 'Risorse',
         links: [
-          { label: 'Avvia l’app', href: 'https://x.nexow.app' },
+          { label: 'Avvia l’app', href: 'https://x.nexow.ai' },
           { label: 'Privacy', href: '/privacy' },
         ],
       },
@@ -466,7 +466,7 @@ export const it: SiteContent = {
         cadence: 'per sempre',
         stats: ['10K crediti', '10 bot', '3 agenti'],
         cta: 'Inizia gratis',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '10.000 crediti AI riservati alla registrazione',
           'Schermate, workspace e widget illimitati',
@@ -487,7 +487,7 @@ export const it: SiteContent = {
         stats: ['50K crediti/mese', '30 bot', '10 agenti'],
         note: 'Tutto ciò che c’è in Free, più:',
         cta: 'Diventa Supporter',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '50.000 crediti ogni mese',
           'Fino a 30 bot e 10 agenti',
@@ -507,7 +507,7 @@ export const it: SiteContent = {
         stats: ['800K crediti/mese', '300 bot', '100 agenti'],
         note: 'Tutto ciò che c’è in Supporter, più:',
         cta: 'Diventa Sponsor',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
           '800.000 crediti ogni mese',
