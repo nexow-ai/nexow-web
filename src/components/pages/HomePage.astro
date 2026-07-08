@@ -40,7 +40,12 @@ const softwareSchema = {
     priceCurrency: 'USD',
     offerCount: c.plansPage.tiers.length,
   },
-  featureList: t.features.items.map((f) => f.title),
+  featureList: [
+    ...t.features.items.map((f) => f.title),
+    ...t.automate.items.map((i) => i.title),
+    ...t.network.items.map((i) => i.title),
+    `${t.connectors.count}+ ${t.connectors.countLabel}`,
+  ],
 };
 
 const faqSchema = {
