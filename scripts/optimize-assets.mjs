@@ -19,10 +19,9 @@ async function main() {
     await sharp(buf).toFile(p(`${name}.png`));
   }
 
-  // Favicons from the spike mark.
-  await sharp(p('favicon.png')).resize(32, 32).png().toFile(p('favicon-32.png'));
-  await sharp(p('favicon.png')).resize(16, 16).png().toFile(p('favicon-16.png'));
-  await sharp(p('favicon.png')).resize(180, 180).png().toFile(p('apple-touch-icon.png'));
+  // Favicons — regenerate via scripts/make-favicon.mjs (rounded-square spike mark).
+  const { execSync } = await import('node:child_process');
+  execSync('bun run scripts/make-favicon.mjs', { stdio: 'inherit' });
 
   console.log('assets optimized');
 }
