@@ -1959,9 +1959,10 @@ const fr: SiteContent = {
         title: 'Réseau',
         body: 'Construisez aux côtés d’un monde de makers.',
         items: [
-          { icon: 'users', title: 'Communauté', body: 'Suivez des makers, partagez et forkez tableaux de bord et widgets, et découvrez ce que d’autres construisent dans un fil social pour les marchés.' },
-          { icon: 'store', title: 'Marketplace', body: 'Publiez des widgets que d’autres déposent sur leur canvas, et récupérez ceux déjà prêts pour le vôtre.' },
-          { icon: 'signal', title: 'Signaux de stratégie', body: 'Publiez des historiques audités, abonnez-vous aux signaux de confiance et gagnez sur les stratégies que vous exécutez.' },
+          { icon: 'users', title: 'Communauté', body: 'Suivez des makers, publiez dans le fil et partagez des widgets que d’autres ajoutent directement à leur bibliothèque — en direct dès aujourd’hui, avec des profils publics de maker.' },
+          { icon: 'store', title: 'Marketplace', body: 'Achetez et vendez des widgets prêts à l’emploi, et gagnez sur ce que vous construisez. Bientôt — le partage fonctionne déjà dans la communauté.' },
+          { icon: 'signal', title: 'Signaux de stratégie', body: 'Publiez des historiques audités, abonnez-vous aux signaux de confiance et gagnez sur les stratégies que vous exécutez. Bientôt.' },
+          { icon: 'trophy', title: 'XP et récompenses', body: 'Gagnez de l’XP en construisant, débloquez des badges pour vos succès et convertissez-les en crédits de récompense. Bientôt.' },
         ],
       },
       {
@@ -1979,16 +1980,16 @@ const fr: SiteContent = {
     meta: {
       title: 'Plans — Nexow',
       description:
-        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Comparez Free, Supporter, Sponsor et Partner pour crédits, bots, agents et personnalisation.',
+        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA réservés sur un compte gratuit. Comparez Free, Supporter, Sponsor et Partner pour crédits, bots, agents et personnalisation.',
     },
     hero: {
       badge: 'Plans',
       title: 'Gratuit pour démarrer. De la place pour grandir.',
       subtitle:
-        'Construisez gratuitement — en local avec votre propre clé, ou inscrivez-vous avec 10 000 crédits IA. Montez en gamme quand vous avez besoin de plus de capacité, d’automatisation et de finition.',
+        'Construisez gratuitement — en local avec votre propre clé, ou inscrivez-vous pour réserver 10 000 crédits IA. Montez en gamme quand vous avez besoin de plus de capacité, d’automatisation et de finition.',
     },
     comingSoon:
-      'Le paiement Supporter et Sponsor arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.',
+      'Le paiement Supporter et Sponsor arrive bientôt, et les crédits de la plateforme se lancent avec lui. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.',
     highlights: {
       title: 'Ce qui évolue avec votre plan',
       items: [
