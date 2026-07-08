@@ -8,6 +8,16 @@ import { CONNECTORS } from '../data/connectors';
 
 const mid = Math.ceil(CONNECTORS.length / 2);
 const rows = [CONNECTORS.slice(0, mid), CONNECTORS.slice(mid)];
+interface Props {
+  /** `light` uses gold-tinted borders for white page backgrounds. */
+  tone?: 'dark' | 'light';
+}
+
+const { tone = 'dark' } = Astro.props;
+const tile =
+  tone === 'light'
+    ? 'border-gold-200/80 bg-white shadow-sm ring-1 ring-gold-100/60 hover:ring-gold-300/50'
+    : 'border-white/10 bg-white ring-1 ring-black/5';
 ---
 
 <div class="relative flex flex-col gap-3" aria-hidden="true">
@@ -23,7 +33,10 @@ const rows = [CONNECTORS.slice(0, mid), CONNECTORS.slice(mid)];
           {[...row, ...row].map((c) => (
             <span
               title={c.name}
-              class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white p-2.5 shadow-sm ring-1 ring-black/5 transition-transform duration-200 hover:scale-110"
+              class:list={[
+                'inline-flex size-14 shrink-0 items-center justify-center rounded-2xl p-2.5 transition-transform duration-200 hover:scale-110',
+                tile,
+              ]}
             >
               <img src={c.logo} alt="" width="36" height="36" loading="lazy" decoding="async" class="size-full object-contain" />
             </span>

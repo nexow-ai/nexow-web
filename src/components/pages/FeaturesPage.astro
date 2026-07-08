@@ -23,52 +23,65 @@ const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
 ---
 
-<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description} theme="dark">
+<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-ink-950 pt-32 pb-16 text-white sm:pt-40">
+  <section class="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-40">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div class="aurora-a absolute -top-40 left-[10%] h-[520px] w-[520px] rounded-full opacity-25 blur-3xl" style="background:radial-gradient(circle at 40% 40%, var(--color-brand-500), transparent 65%)"></div>
-      <div class="aurora-b absolute -top-28 right-[6%] h-[600px] w-[600px] rounded-full opacity-20 blur-3xl" style="background:radial-gradient(circle at 60% 40%, var(--color-accent-500), transparent 65%)"></div>
-      <div class="bg-grid absolute inset-0 opacity-50 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"></div>
-      <div class="bg-noise absolute inset-0 opacity-[0.3] mix-blend-overlay"></div>
+      <div
+        class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-gold-100), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-40 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-gold-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-35 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-gold-100), transparent 65%)"
+      >
+      </div>
+      <div
+        class="absolute inset-0 opacity-30 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"
+        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-gold-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-gold-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
+      >
+      </div>
     </div>
 
     <div class="container-page relative text-center">
-      <span class="eyebrow inline-flex items-center gap-2 text-brand-400">
-        <span class="h-px w-6 bg-brand-400/50"></span>
+      <span class="inline-flex items-center gap-2 rounded-full border border-gold-300/40 bg-gold-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-gold-700">
         {t.hero.badge}
-        <span class="h-px w-6 bg-brand-400/50"></span>
       </span>
-      <h1 class="mx-auto mt-5 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
+      <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
         {t.hero.title}
       </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-300">{t.hero.subtitle}</p>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
         <Button href={SITE.appUrl} size="lg" external iconRight="arrow">{home.ctaPrimary}</Button>
-        <Button href={localizePath('/connectors', lang)} variant="outline" size="lg" icon="plug">{explore}</Button>
+        <Button href={localizePath('/connectors', lang)} variant="secondary" size="lg" icon="plug">{explore}</Button>
       </div>
     </div>
 
     <!-- Live connector marquee -->
     <div class="relative mt-16">
-      <ConnectorMarquee />
+      <ConnectorMarquee tone="light" />
     </div>
-    <div class="hairline-glow absolute inset-x-0 bottom-0"></div>
+    <div class="hairline-gold absolute inset-x-0 bottom-0"></div>
   </section>
 
   <!-- Feature pillars (zig-zag, each paired with an animated visual) -->
-  <div class="bg-ink-950">
+  <div class="bg-white">
     {
       t.groups.map((group, i) => {
         const reverse = i % 2 === 1;
         return (
-          <section class="relative overflow-hidden py-16 sm:py-24">
+          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-gold-100/80']}>
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
               <div
                 class:list={[
-                  'animate-glow absolute top-1/2 size-[460px] -translate-y-1/2 blur-2xl',
+                  'animate-glow absolute top-1/2 size-[460px] -translate-y-1/2 blur-2xl glow-gold',
                   reverse ? '-left-40' : '-right-40',
-                  reverse ? 'glow-accent' : 'glow-brand',
                 ]}
               />
             </div>
@@ -76,22 +89,22 @@ const explore = useContent(lang).connectorsPage.exploreCta;
               <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                 <!-- Copy -->
                 <div class:list={['reveal', reverse && 'lg:order-2']}>
-                  <span class="eyebrow inline-flex items-center gap-3 text-brand-400">
-                    <span class="font-mono text-2xl font-bold text-white/15">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="eyebrow inline-flex items-center gap-3 text-gold-600">
+                    <span class="font-mono text-2xl font-bold text-gold-200">{String(i + 1).padStart(2, '0')}</span>
                     {group.title}
                   </span>
-                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.5rem] md:leading-[1.1]">
+                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1]">
                     {group.body}
                   </h2>
                   <ul class="mt-8 space-y-5">
                     {group.items.map((f) => (
                       <li class="flex gap-4">
-                        <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+                        <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-gold-50 text-gold-600 ring-1 ring-gold-200/80">
                           <Icon name={f.icon} class="size-5" />
                         </span>
                         <div>
-                          <h3 class="font-display text-base font-semibold text-white">{f.title}</h3>
-                          <p class="mt-1 text-sm leading-relaxed text-ink-400">{f.body}</p>
+                          <h3 class="font-display text-base font-semibold text-ink-950">{f.title}</h3>
+                          <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
                         </div>
                       </li>
                     ))}
@@ -100,7 +113,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
 
                 <!-- Visual -->
                 <div class:list={['reveal', reverse && 'lg:order-1']}>
-                  <div class="animate-float">
+                  <div class="animate-float rounded-3xl ring-1 ring-gold-200/60 ring-offset-4 ring-offset-white">
                     {i === 0 && <WidgetMock promptExample={home.promptExample} promptPlaceholder={home.promptPlaceholder} />}
                     {i === 1 && <CanvasMock />}
                     {i === 2 && <ConnectMock lang={lang} />}
