@@ -1933,7 +1933,8 @@ const fr: SiteContent = {
         items: [
           { icon: 'shield', title: 'Iframes sandboxés', body: 'Les widgets s’exécutent dans des iframes isolés avec une frontière stricte — le code généré peut rendre et récupérer des données, mais ne touche pas votre espace ni les autres widgets.' },
           { icon: 'bolt', title: 'Données en direct et en streaming', body: 'Les widgets s’abonnent aux prix en temps réel, carnets d’ordres et données de référence avec une latence minimale.' },
-          { icon: 'layers', title: 'Canvas libre et espaces', body: 'Organisez les widgets sur un canvas infini, regroupez-les en espaces et écrans, et changez de configuration instantanément.' },
+          { icon: 'layers', title: 'Canvas libre et espaces', body: 'Organisez les widgets sur un canvas libre, regroupez-les en espaces et écrans, et changez de configuration instantanément.' },
+          { icon: 'link', title: 'Groupes et Links', body: 'Regroupez les widgets en groupes avec des dispositions mosaïque ou onglets, et câblez-les avec des Links — des tuyaux à sens unique ou bidirectionnels qui font passer les données d’un widget à l’autre.' },
         ],
       },
       {
@@ -1949,8 +1950,8 @@ const fr: SiteContent = {
         title: 'Automatiser',
         body: 'Des automatisations cloud et de l’IA qui agissent en votre absence.',
         items: [
-          { icon: 'bot', title: 'Bots cloud', body: 'Décrivez une alerte ou construisez-la visuellement — seuils, % de variation, croisements de moyennes, digests. Les bots tournent sur un battement cloud et poussent des signaux vers vos widgets, onglet fermé.' },
-          { icon: 'cpu', title: 'Agents IA', body: 'Des agents avec un harnais complet — modèle, mémoire, skills, outils, connaissances et déclencheurs — tournant dans le cloud. Déploiement bientôt.' },
+          { icon: 'bot', title: 'Bots cloud', body: 'Décrivez une alerte ou construisez-la visuellement — seuils, % de variation, croisements de moyennes, digests ou nouveaux trades sur un compte broker connecté. Les bots tournent sur un battement cloud et poussent des signaux vers vos widgets, onglet fermé.' },
+          { icon: 'cpu', title: 'Agents IA', body: 'Des agents avec un harnais complet — modèle, mémoire, skills, outils, connaissances et déclencheurs. Concevez le vôtre dès aujourd’hui dans l’éditeur visuel du harnais — le déploiement cloud arrive bientôt.' },
           { icon: 'chat', title: 'Copilot', body: 'Un assistant pour votre espace : joignez la capture d’un widget ou ses données et demandez-lui d’expliquer, résumer ou suggérer quoi surveiller. Bientôt.' },
         ],
       },
