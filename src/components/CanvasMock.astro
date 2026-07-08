@@ -1,0 +1,58 @@
+---
+/**
+ * Decorative "free-form canvas" mock — a window with several live-looking
+ * widgets (candles, order-book depth, a ticker tile). Reuses the seeded chart
+ * mocks. Purely presentational (aria-hidden).
+ */
+import CandlestickChart from './CandlestickChart.astro';
+import DepthChart from './DepthChart.astro';
+import Icon from './Icon.astro';
+---
+
+<div
+  class="relative mx-auto w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-2xl shadow-black/40"
+  aria-hidden="true"
+>
+  <div class="flex items-center gap-2 border-b border-white/5 px-4 py-3">
+    <span class="flex gap-1.5">
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+      <span class="size-2.5 rounded-full bg-white/15"></span>
+    </span>
+    <span class="ml-2 font-mono text-xs text-ink-400">canvas · macro desk</span>
+    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-brand-300">
+      <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>live
+    </span>
+  </div>
+
+  <div class="grid grid-cols-3 gap-2 p-3">
+    <!-- Candles -->
+    <div class="col-span-2 rounded-xl border border-white/8 bg-white/[0.02] p-3">
+      <div class="mb-2 flex items-center justify-between font-mono text-[0.65rem]">
+        <span class="text-ink-200">BTC-USD · Coinbase</span>
+        <span class="text-emerald-400">+2.4%</span>
+      </div>
+      <div class="h-24 w-full text-ink-300">
+        <CandlestickChart animate seed={11} class="h-full w-full" />
+      </div>
+    </div>
+
+    <!-- Ticker tile -->
+    <div class="col-span-1 flex flex-col justify-between rounded-xl border border-white/8 bg-white/[0.02] p-3 font-mono">
+      <span class="text-[0.65rem] text-ink-400">EURUSD</span>
+      <span class="text-lg font-bold text-white">1.0854</span>
+      <span class="inline-flex items-center gap-1 text-[0.65rem] text-emerald-400"><Icon name="arrow" class="size-3 -rotate-45" /> +0.32%</span>
+    </div>
+
+    <!-- Depth -->
+    <div class="col-span-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
+      <div class="mb-2 flex items-center justify-between font-mono text-[0.65rem]">
+        <span class="text-ink-200">ETH-PERP · Deribit — order book</span>
+        <span class="text-ink-500">depth</span>
+      </div>
+      <div class="h-20 w-full text-ink-300">
+        <DepthChart seed={5} class="h-full w-full" />
+      </div>
+    </div>
+  </div>
+</div>

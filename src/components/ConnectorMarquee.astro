@@ -1,0 +1,35 @@
+---
+/**
+ * Two rows of connector logos scrolling in opposite directions. Decorative.
+ * Tracks duplicate their content so the -50% marquee loop is seamless; each row
+ * pauses on hover. Respects prefers-reduced-motion (animation disabled in CSS).
+ */
+import { CONNECTORS } from '../data/connectors';
+
+const mid = Math.ceil(CONNECTORS.length / 2);
+const rows = [CONNECTORS.slice(0, mid), CONNECTORS.slice(mid)];
+---
+
+<div class="relative flex flex-col gap-3" aria-hidden="true">
+  {
+    rows.map((row, i) => (
+      <div class="group flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]">
+        <div
+          class:list={[
+            'flex w-max shrink-0 gap-3 pr-3 group-hover:[animation-play-state:paused]',
+            i === 0 ? 'animate-marquee' : 'animate-marquee-reverse',
+          ]}
+        >
+          {[...row, ...row].map((c) => (
+            <span
+              title={c.name}
+              class="inline-flex size-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white p-2.5 shadow-sm ring-1 ring-black/5 transition-transform duration-200 hover:scale-110"
+            >
+              <img src={c.logo} alt="" width="36" height="36" loading="lazy" decoding="async" class="size-full object-contain" />
+            </span>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>
