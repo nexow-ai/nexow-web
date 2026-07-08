@@ -1,5 +1,5 @@
 ---
-import { SITE, languages, type Lang } from '../i18n/config';
+import { SITE, SOCIALS, languages, type Lang } from '../i18n/config';
 import { localizePath, getAlternates, withTrailingSlash, ogLocale } from '../i18n/utils';
 import '../styles/global.css';
 
@@ -44,7 +44,7 @@ const orgSchema = {
   name: SITE.name,
   url: SITE.url,
   logo: new URL('/logo-black.png', SITE.url).href,
-  sameAs: [`https://twitter.com/${SITE.twitter.replace('@', '')}`, SITE.github],
+  sameAs: SOCIALS.map((s) => s.href),
 };
 const allSchema = [orgSchema, ...schema];
 ---
@@ -89,7 +89,7 @@ const allSchema = [orgSchema, ...schema];
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content={SITE.twitter} />
+<meta name="twitter:site" content={SITE.x} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
