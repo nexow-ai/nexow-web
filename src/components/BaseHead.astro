@@ -67,14 +67,27 @@ const allSchema = [orgSchema, ...schema];
 }
 <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
 
-<!-- Icons — Nexow spike mark (public/favicon.png + favicon-black.png) -->
+<!-- Icons — system color scheme: black mark (light), white mark (dark) -->
+<link id="site-favicon" rel="icon" href="/favicon-black.png" type="image/png" />
 <link rel="icon" href="/favicon-black.png" type="image/png" media="(prefers-color-scheme: light)" />
 <link rel="icon" href="/favicon.png" type="image/png" media="(prefers-color-scheme: dark)" />
-<link rel="icon" href="/favicon.png" type="image/png" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32-black.png" media="(prefers-color-scheme: light)" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" media="(prefers-color-scheme: dark)" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16-black.png" media="(prefers-color-scheme: light)" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" media="(prefers-color-scheme: dark)" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script is:inline>
+  (function () {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function apply() {
+      const link = document.getElementById('site-favicon');
+      if (!link) return;
+      link.href = mq.matches ? '/favicon.png' : '/favicon-black.png';
+    }
+    apply();
+    mq.addEventListener('change', apply);
+  })();
+</script>
 <meta name="theme-color" content="#06a086" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#08090d" media="(prefers-color-scheme: dark)" />
 
