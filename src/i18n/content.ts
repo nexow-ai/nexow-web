@@ -27,13 +27,33 @@ export interface Faq {
 
 export interface PricingTier {
   name: string;
-  price: string;
-  cadence: string;
   tagline: string;
+  /** Per-month price billed monthly, e.g. '$9.99'. Free uses '$0', custom uses 'Custom'. */
+  priceMonthly: string;
+  /** Per-month price when billed yearly (2 months free), e.g. '$8.33'. */
+  priceYearly: string;
+  /** Annual total shown as a caption on the yearly toggle, e.g. '$99.90 billed yearly'. */
+  billedYearly?: string;
+  /** Trailing unit after the price, e.g. 'forever', '/mo'. Empty for custom tiers. */
+  cadence: string;
+  /** Optional ribbon: 'Best return' (featured) or 'Coming soon' (paid, pre-launch). */
+  badge?: string;
+  /** Small mono stat line, e.g. ['10K credits', '10 bots', '3 agents']. */
+  stats?: string[];
+  /** Lead-in above the feature list, e.g. 'Everything in Free, plus:'. */
+  note?: string;
   cta: string;
   ctaHref: string;
   featured?: boolean;
   features: string[];
+}
+
+/** A product pillar card with a live / coming-soon status (Automate & Network sections). */
+export interface PillarItem {
+  icon: string;
+  title: string;
+  body: string;
+  status: 'live' | 'soon';
 }
 
 export interface SiteContent {
@@ -86,12 +106,41 @@ export interface SiteContent {
       subtitle: string;
       steps: Step[];
     };
+    automate: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      liveLabel: string;
+      soonLabel: string;
+      items: PillarItem[];
+    };
     connectors: {
       eyebrow: string;
       title: string;
       subtitle: string;
       note: string;
+      count: number;
+      countLabel: string;
       groups: Record<ConnectorGroupKey, string>;
+    };
+    network: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      liveLabel: string;
+      soonLabel: string;
+      items: PillarItem[];
+      accountBadge: string;
+      accountTitle: string;
+      accountBody: string;
+      accountPoints: string[];
+      accountCta: string;
+    };
+    plans: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      cta: string;
     };
     privacy: {
       eyebrow: string;
@@ -129,6 +178,7 @@ export interface SiteContent {
   pricing: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
+    billing: { monthly: string; yearly: string; save: string };
     tiers: PricingTier[];
     faqTitle: string;
     faq: Faq[];
@@ -176,6 +226,7 @@ export const CONNECTOR_GROUPS = [
     key: 'data',
     venues: ['Alpha Vantage', 'Intrinio', 'Trading Economics', 'Postgres', 'ClickHouse', 'Qdrant'],
   },
+  { key: 'socials', venues: ['X', 'YouTube', 'Discord', 'Telegram', 'Spotify'] },
 ] as const;
 
 export type ConnectorGroupKey = (typeof CONNECTOR_GROUPS)[number]['key'];
@@ -206,6 +257,8 @@ const en: SiteContent = {
           { label: 'Features', href: '/features' },
           { label: 'Pricing', href: '/pricing' },
           { label: 'Connectors', href: '/#connectors' },
+          { label: 'Automations', href: '/#automate' },
+          { label: 'Community', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
         ],
       },
@@ -233,7 +286,7 @@ const en: SiteContent = {
     meta: {
       title: 'Nexow — Build market dashboards with AI, in plain language',
       description:
-        'Nexow is an AI-native dashboard builder for markets. Describe a widget in plain English and Nexow generates it, runs it sandboxed, and wires it to live data from 20+ trading and market-data connectors — private by default.',
+        'Nexow is an AI-native workspace for markets. Describe a widget in plain English and Nexow builds it, wires it to live data from 28+ connectors, and adds cloud bots, agents and a maker community — private by default, free to start.',
     },
     hero: {
       badge: 'Preview now live',
@@ -241,19 +294,19 @@ const en: SiteContent = {
       titleGradient: 'Nexow builds it.',
       titleTail: 'Trade it.',
       subtitle:
-        'An AI-native dashboard builder for markets. Ask for any widget in plain language — Nexow writes the code, runs it safely, and streams live data from your favorite venues onto a free-form canvas.',
+        'An AI-native workspace for markets. Ask for any widget in plain language — Nexow writes the code, runs it safely, and streams live data onto a free-form canvas. Automate it with cloud bots and agents, then plug into a community of makers.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'See how it works',
-      note: 'No sign-up to try · Runs private in your browser · Bring your own key',
+      note: 'No sign-up to try · Private in your browser · Or a free account with 10K credits',
       promptExample: 'Show a candlestick chart of BTC-USD from Coinbase with 20 & 50 EMA and RSI below.',
       promptPlaceholder: 'Describe a widget…',
     },
     ticker: { label: 'Live connectors' },
     trust: 'One canvas for every market — FX, crypto, equities, futures, options & prediction markets.',
     stats: [
-      { n: 22, suffix: '+', label: 'live market-data connectors' },
+      { n: 28, suffix: '+', label: 'live market-data connectors' },
       { n: 6, label: 'asset classes on one canvas' },
-      { n: 0, label: 'bytes sent to our servers in private mode' },
+      { n: 10, suffix: 'K', label: 'free AI credits on sign-up' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
     ],
     showcase: {
@@ -303,7 +356,7 @@ const en: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '20+ live data connectors',
+          title: '28+ live data connectors',
           body: 'Pluggable market-data providers — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket and more — route real-time data to your widgets.',
         },
         {
@@ -345,19 +398,95 @@ const en: SiteContent = {
         },
       ],
     },
+    automate: {
+      eyebrow: 'Automate',
+      title: 'Put your workspace on autopilot',
+      subtitle:
+        'Widgets show you the market. Bots, agents and Copilot act on it — cloud automations and AI that keep working when your tab is closed.',
+      liveLabel: 'Live',
+      soonLabel: 'Coming soon',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Bots',
+          body: 'Cloud automations that watch your data and fire signals and alerts to your widgets. Describe an alert in plain words — “tell me when BTC drops 5% in an hour” — or wire it visually with thresholds, % change, MA crossovers and digests.',
+          status: 'live',
+        },
+        {
+          icon: 'cpu',
+          title: 'Agents',
+          body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers — running in the cloud. Give an agent a job and let it watch, reason and act.',
+          status: 'soon',
+        },
+        {
+          icon: 'chat',
+          title: 'Copilot',
+          body: 'An AI assistant for your whole workspace. Attach a widget’s screenshot or its live data and ask — “explain this chart”, “summarize this”, “what should I watch next?”',
+          status: 'soon',
+        },
+      ],
+    },
     connectors: {
       eyebrow: 'Connectors',
       title: 'Plug into every market',
       subtitle:
-        'Pluggable connectors stream live prices, order books and reference data straight into your widgets — across FX, crypto, equities, futures, options and prediction markets.',
-      note: 'Some venues connect directly from your browser where CORS allows; the rest route through a thin proxy. New connectors are added regularly.',
+        'Pluggable connectors stream live prices, order books and reference data straight into your widgets — across FX, crypto, equities, futures, options, prediction markets, databases and social feeds.',
+      note: '28 connectors are live today and 56 sit in the catalog — brokers, exchanges, data providers, databases and socials. Many stream straight from your browser; the rest route through a thin proxy.',
+      count: 28,
+      countLabel: 'live connectors',
       groups: {
         fx: 'FX',
         crypto: 'Crypto',
         equities: 'Equities & futures',
         prediction: 'Prediction markets',
         data: 'Data & databases',
+        socials: 'Socials',
       },
+    },
+    network: {
+      eyebrow: 'The network',
+      title: 'Build alone. Or plug into the network.',
+      subtitle:
+        'Stay fully local and private, or create a free account and join a world of makers building, sharing and trading dashboards alongside you.',
+      liveLabel: 'Live',
+      soonLabel: 'Coming soon',
+      items: [
+        {
+          icon: 'users',
+          title: 'Community',
+          body: 'Discover and follow makers, share dashboards and widgets, and fork what others build. A social feed for market builders.',
+          status: 'soon',
+        },
+        {
+          icon: 'store',
+          title: 'Marketplace',
+          body: 'Publish widgets others can drop straight onto their canvas — and pick up ready-made ones for yours.',
+          status: 'soon',
+        },
+        {
+          icon: 'signal',
+          title: 'Strategy signals',
+          body: 'Publish audited track records, subscribe to signals from makers you trust, and earn on the strategies you run.',
+          status: 'soon',
+        },
+      ],
+      accountBadge: 'Free account',
+      accountTitle: 'One free account unlocks the network',
+      accountBody: 'No credit card. Keep building locally whenever you want — an account is always optional.',
+      accountPoints: [
+        '10,000 free AI credits on sign-up',
+        'Cross-device cloud sync for workspaces & widgets',
+        'Community, marketplace & the widget library',
+        'Earn XP and rewards as you build',
+      ],
+      accountCta: 'Create your free account',
+    },
+    plans: {
+      eyebrow: 'Plans',
+      title: 'Start free. Grow when you’re ready.',
+      subtitle:
+        'Build for free forever — locally with your own key, or with 10,000 credits on a free account. Upgrade for more credits, bots and agents.',
+      cta: 'Compare all plans',
     },
     privacy: {
       eyebrow: 'Private by design',
@@ -375,16 +504,16 @@ const en: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'This is the preview. Here’s what’s next.',
       subtitle:
-        'Nexow shipped a public preview of the canvas and codegen. The building blocks below are landing next.',
+        'Nexow shipped a public preview of the canvas, codegen, cloud bots and accounts. The building blocks below are landing next.',
       shipped: 'Shipped',
       soon: 'Coming soon',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Natural-language widgets running sandboxed on the canvas.' },
-        { status: 'shipped', title: 'Market-data connectors', body: '20+ venues streaming live data into widgets.' },
-        { status: 'shipped', title: 'Workspaces & library', body: 'Multi-screen canvas, versions, logs and a reusable widget library.' },
-        { status: 'soon', title: 'Trading agents', body: 'Autonomous agents that watch your widgets and act on rules you describe.' },
-        { status: 'soon', title: 'Server components', body: 'Persistent server-side widgets and jobs that keep running when your tab is closed.' },
-        { status: 'soon', title: 'Community', body: 'Share widgets and dashboards, fork what others build, and publish to a public library.' },
+        { status: 'shipped', title: '28+ market-data connectors', body: 'Brokers, exchanges, data providers, databases and socials streaming live.' },
+        { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
+        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts, 10K credits, and workspaces synced across every device.' },
+        { status: 'soon', title: 'Agents & Copilot', body: 'Deploy cloud agents with a full harness, and a Copilot for your workspace.' },
+        { status: 'soon', title: 'Marketplace & signals', body: 'Buy and sell widgets, and publish audited strategy signals you can earn on.' },
       ],
     },
     faq: {
@@ -394,31 +523,35 @@ const en: SiteContent = {
       items: [
         {
           q: 'What is Nexow?',
-          a: 'Nexow is an AI-native dashboard builder for financial markets. You describe a widget — a chart, table, heatmap or signal — in plain language, and Nexow generates its source code, runs it in a sandboxed iframe, and streams live market data into it on a free-form canvas.',
+          a: 'Nexow is an AI-native workspace for markets. You describe a widget — a chart, table, heatmap or signal — in plain language, and Nexow generates its source code, runs it in a sandboxed iframe, and streams live market data onto a free-form canvas. Around that it adds cloud bots, AI agents, a Copilot and a maker community.',
         },
         {
           q: 'Do I need to know how to code?',
           a: 'No. You describe what you want in natural language and Nexow writes and runs the widget for you. If you do read code, every widget’s source and version history is available to inspect and refine.',
         },
         {
-          q: 'Is my data private?',
-          a: 'Yes. Nexow runs fully local by default: you add your own Anthropic API key and widget generation happens in your browser. Your widgets, versions and logs are stored in your browser’s IndexedDB, and many venues connect directly from the browser — so your data and credentials stay on your machine.',
+          q: 'Is my data private? Do I need an account?',
+          a: 'No account is required. Nexow runs fully local by default: add your own Anthropic API key and widget generation happens in your browser, with widgets, versions and logs stored in IndexedDB. A free account is always optional — it adds AI credits, cloud sync and the community, but you can keep building 100% locally.',
         },
         {
           q: 'Which markets and venues are supported?',
-          a: 'Nexow ships 20+ pluggable connectors spanning FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), equities and futures (Interactive Brokers, Alpaca, TradeStation, Polygon), prediction markets (Kalshi, Polymarket) and data providers (Alpha Vantage, Intrinio, Trading Economics, and databases like Postgres and ClickHouse).',
+          a: 'Nexow has 28 live connectors (56 in the catalog) spanning FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), equities and futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), prediction markets (Kalshi, Polymarket), data providers and databases (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) and social feeds (X, YouTube, Discord, Telegram, Spotify).',
+        },
+        {
+          q: 'What are bots and agents?',
+          a: 'Bots are cloud automations that watch your data and fire signals and alerts to your widgets even when your tab is closed — describe an alert in plain words or wire it visually with thresholds, % change and moving-average crossovers. Agents are AI with a full harness (model, memory, skills, tools, triggers) that run in the cloud; agent deploy and the Copilot assistant are coming soon.',
+        },
+        {
+          q: 'Is there a community and marketplace?',
+          a: 'Yes — a free account plugs you into the network: follow makers, share and fork dashboards and widgets, publish to a marketplace, and follow audited strategy signals you can earn on. Community and marketplace features are rolling out now.',
         },
         {
           q: 'How much does it cost?',
-          a: 'The preview is free to try, and in private mode you only pay for your own Anthropic API usage. See the pricing page for details on future hosted plans.',
+          a: 'Free forever to build — locally with your own key, or with 10,000 AI credits on a free account. Paid plans (Supporter and Sponsor) add monthly credits and higher bot and agent limits, and Partner is for teams that need private infrastructure. Paid checkout is coming soon; see the pricing page.',
         },
         {
           q: 'Which AI model powers Nexow?',
-          a: 'Nexow generates widgets using Anthropic’s Claude models via the Anthropic SDK. In private mode you supply your own key so you stay in full control of usage and cost.',
-        },
-        {
-          q: 'What’s coming next?',
-          a: 'Trading agents that act on rules you describe, persistent server-side components, and a community layer to share and fork widgets and dashboards.',
+          a: 'Nexow generates with Anthropic’s Claude models via the Anthropic SDK — Claude Opus 4.8 by default, with Sonnet 4.6 and Haiku 4.5 for faster, cheaper generation. In private mode you supply your own key, so you stay in full control of usage and cost.',
         },
       ],
     },
@@ -433,13 +566,13 @@ const en: SiteContent = {
     meta: {
       title: 'Features — Nexow',
       description:
-        'Natural-language widget generation, a sandboxed runtime, 20+ market-data connectors, a free-form canvas, private local-mode and a versioned widget library. Explore everything Nexow does.',
+        'Natural-language widget generation, a sandboxed runtime, 28+ market-data connectors, cloud bots and agents, a maker community and marketplace, private local-mode and a versioned widget library. Explore everything Nexow does.',
     },
     hero: {
       badge: 'Features',
       title: 'Everything you need to build markets dashboards with words',
       subtitle:
-        'Nexow turns a sentence into a running, data-connected widget — then gives you the canvas, connectors and privacy model to build a real workstation.',
+        'Nexow turns a sentence into a running, data-connected widget — then gives you the canvas, connectors, cloud automations and network to build a real workstation.',
     },
     groups: [
       {
@@ -464,17 +597,35 @@ const en: SiteContent = {
         title: 'Connect',
         body: 'Pluggable data from the venues you actually use.',
         items: [
-          { icon: 'plug', title: '20+ market-data connectors', body: 'FX, crypto, equities, futures, options and prediction markets — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket and more.' },
+          { icon: 'plug', title: '28+ market-data connectors', body: 'FX, crypto, equities, futures, options and prediction markets — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket and more.' },
           { icon: 'globe', title: 'Browser-direct where possible', body: 'Where CORS allows, authenticated venue calls run straight from your browser and bypass our proxy entirely.' },
-          { icon: 'database', title: 'Databases too', body: 'Point widgets at Postgres, ClickHouse or Qdrant to blend your own data with live markets.' },
+          { icon: 'database', title: 'Databases & socials too', body: 'Point widgets at Postgres, ClickHouse or Qdrant, or pull from X, YouTube, Discord and Telegram alongside live markets.' },
+        ],
+      },
+      {
+        title: 'Automate',
+        body: 'Cloud automations and AI that act while you’re away.',
+        items: [
+          { icon: 'bot', title: 'Cloud bots', body: 'Describe an alert or wire it visually — thresholds, % change, MA crossovers, digests. Bots run on a cloud heartbeat and push signals to your widgets, tab closed.' },
+          { icon: 'cpu', title: 'AI agents', body: 'Agents with a full harness — model, memory, skills, tools, knowledge and triggers — running in the cloud. Deploy coming soon.' },
+          { icon: 'chat', title: 'Copilot', body: 'An assistant for your workspace: attach a widget’s screenshot or data and ask it to explain, summarize or suggest what to watch next. Coming soon.' },
+        ],
+      },
+      {
+        title: 'Network',
+        body: 'Build alongside a world of makers.',
+        items: [
+          { icon: 'users', title: 'Community', body: 'Follow makers, share and fork dashboards and widgets, and discover what others build in a social feed for markets.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publish widgets others can drop onto their canvas, and pick up ready-made ones for yours.' },
+          { icon: 'signal', title: 'Strategy signals', body: 'Publish audited track records, subscribe to signals you trust, and earn on the strategies you run.' },
         ],
       },
       {
         title: 'Own',
         body: 'Private by default, yours to keep.',
         items: [
-          { icon: 'lock', title: 'Private local mode', body: 'Bring your own Anthropic key and generate widgets client-side. Nothing is sent to our servers.' },
-          { icon: 'save', title: 'Local persistence', body: 'Widgets, versions, logs and your library live in your browser’s IndexedDB — available offline, tied to no account.' },
+          { icon: 'lock', title: 'Private local mode', body: 'Bring your own Anthropic key and generate widgets client-side. Nothing is sent to our servers — no account required.' },
+          { icon: 'sync', title: 'Optional cloud sync', body: 'Create a free account to sync workspaces, widgets and settings across every device — with an encrypted credential vault.' },
           { icon: 'library', title: 'Reusable library', body: 'Save any widget to your library and drop it into any dashboard in one click.' },
         ],
       },
@@ -484,71 +635,101 @@ const en: SiteContent = {
     meta: {
       title: 'Pricing — Nexow',
       description:
-        'Start free in private mode with your own Anthropic key. Hosted plans with server components, trading agents and community features are coming. See Nexow pricing.',
+        'Build free forever — locally with your own key, or with 10,000 AI credits on a free account. Supporter and Sponsor add monthly credits, bots and agents; Partner is for teams. See Nexow pricing.',
     },
     hero: {
       badge: 'Pricing',
-      title: 'Start free. Pay only for what you use.',
+      title: 'Start free. Grow when you’re ready.',
       subtitle:
-        'The preview runs private in your browser — you only pay your own Anthropic usage. Hosted plans arrive as agents, server components and community land.',
+        'Build for free — locally with your own key, or with 10,000 credits on a free account. Upgrade for more monthly credits, bots and agents. Paid plans are coming soon.',
     },
+    billing: { monthly: 'Monthly', yearly: 'Yearly', save: '2 months free' },
     tiers: [
       {
-        name: 'Private',
-        price: '$0',
+        name: 'Free',
+        tagline: 'Everything you need to build.',
+        priceMonthly: '$0',
+        priceYearly: '$0',
         cadence: 'forever',
-        tagline: 'Fully local. Bring your own key.',
-        cta: 'Launch app',
+        stats: ['10K credits', '10 bots', '3 agents'],
+        cta: 'Get started free',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          'Natural-language widget codegen',
-          'Sandboxed runtime & free-form canvas',
-          'All 20+ market-data connectors',
-          'Versions, logs & widget library',
-          'Runs in your browser (IndexedDB)',
-          'You pay only your Anthropic API usage',
+          '10,000 AI credits on sign-up',
+          'Unlimited screens, workspaces & widgets',
+          'Unlimited browser connections',
+          'Cross-device cloud sync',
+          'Global Copilot',
+          'Community & marketplace access',
         ],
       },
       {
-        name: 'Pro',
-        price: 'Coming soon',
-        cadence: '',
-        tagline: 'Hosted codegen & persistence.',
-        cta: 'Join the waitlist',
+        name: 'Supporter',
+        tagline: 'For makers who want more room.',
+        priceMonthly: '$9.99',
+        priceYearly: '$8.33',
+        billedYearly: '$99.90 billed yearly',
+        cadence: '/mo',
+        badge: 'Coming soon',
+        stats: ['50K credits/mo', '30 bots', '10 agents'],
+        note: 'Everything in Free, plus:',
+        cta: 'Become a Supporter',
+        ctaHref: 'https://app.nexow.ai',
+        features: [
+          '50,000 credits every month',
+          'Up to 30 bots & 10 agents',
+          'A Copilot per workspace',
+          'Second accent color (gradient)',
+          'Exclusive UI & appearance options',
+        ],
+      },
+      {
+        name: 'Sponsor',
+        tagline: 'For power users going pro.',
+        priceMonthly: '$69.99',
+        priceYearly: '$58.33',
+        billedYearly: '$699.90 billed yearly',
+        cadence: '/mo',
+        badge: 'Best return',
+        stats: ['800K credits/mo', '300 bots', '100 agents'],
+        note: 'Everything in Supporter, plus:',
+        cta: 'Become a Sponsor',
         ctaHref: 'https://app.nexow.ai',
         featured: true,
         features: [
-          'Everything in Private',
-          'Managed codegen — no key needed',
-          'Server components that keep running',
-          'Cloud-synced workspaces',
-          'Priority connectors & higher limits',
-          'Email support',
+          '800,000 credits every month',
+          'Up to 300 bots & 100 agents',
+          'Custom connections (Connector Builder)',
+          'A Copilot per screen',
+          'Upload your own logo',
+          'Premium UI customizations',
         ],
       },
       {
-        name: 'Teams',
-        price: 'Let’s talk',
+        name: 'Partner',
+        tagline: 'For teams that need it all.',
+        priceMonthly: 'Custom',
+        priceYearly: 'Custom',
         cadence: '',
-        tagline: 'For desks & communities.',
+        stats: ['Private infra', 'White-glove', 'SLA'],
+        note: 'Everything in Sponsor, plus:',
         cta: 'Contact us',
-        ctaHref: 'mailto:hello@nexow.ai',
+        ctaHref: 'mailto:partners@nexow.ai',
         features: [
-          'Everything in Pro',
-          'Trading agents & automation',
-          'Shared workspaces & community library',
-          'SSO & role-based access',
+          'Private infrastructure',
+          'White-glove setup',
+          'First-class custom development',
+          'Bespoke branding & personalization',
           'Dedicated support',
-          'Custom connectors',
         ],
       },
     ],
     faqTitle: 'Pricing questions',
     faq: [
-      { q: 'Is the preview really free?', a: 'Yes. Private mode is free to use — you only pay for your own Anthropic API usage when generating widgets. There’s no Nexow subscription required to build on the canvas today.' },
-      { q: 'Do I need an Anthropic key?', a: 'For private mode, yes — you add your own key in Settings and codegen runs in your browser. Hosted plans will offer managed codegen so no key is needed.' },
-      { q: 'When do paid plans launch?', a: 'Pro and Teams land alongside server components, trading agents and community features. Join the waitlist from the app to hear first.' },
-      { q: 'Are there usage limits?', a: 'In private mode your only limit is your own Anthropic account. Hosted plans will publish clear limits per tier.' },
+      { q: 'Is Nexow really free?', a: 'Yes. You can build for free forever — run fully local with your own Anthropic key (you only pay your own API usage), or create a free account and get 10,000 AI credits so no key of your own is needed.' },
+      { q: 'What are credits?', a: 'Credits meter AI usage — generating widgets, links, bots and Copilot replies. The free account includes 10,000 to start, and paid plans grant a monthly allowance (50K on Supporter, 800K on Sponsor). You can buy more anytime.' },
+      { q: 'When do paid plans launch?', a: 'Supporter and Sponsor are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.' },
+      { q: 'Can I pay yearly?', a: 'Yes. Yearly billing gives you two months free versus paying monthly. You can switch between monthly and yearly at any time.' },
     ],
   },
   about: {
@@ -625,6 +806,8 @@ const es: SiteContent = {
           { label: 'Funciones', href: '/features' },
           { label: 'Precios', href: '/pricing' },
           { label: 'Conectores', href: '/#connectors' },
+          { label: 'Automatizaciones', href: '/#automate' },
+          { label: 'Comunidad', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
         ],
       },
@@ -652,7 +835,7 @@ const es: SiteContent = {
     meta: {
       title: 'Nexow — Crea dashboards de mercado con IA, en lenguaje natural',
       description:
-        'Nexow es un creador de dashboards nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo genera, lo ejecuta de forma aislada y lo conecta a datos en vivo de más de 20 conectores de trading y mercado — privado por defecto.',
+        'Nexow es un espacio de trabajo nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo crea, lo conecta a datos en vivo de más de 28 conectores y suma bots en la nube, agentes y una comunidad de makers — privado por defecto, gratis para empezar.',
     },
     hero: {
       badge: 'Preview ya disponible',
@@ -660,19 +843,19 @@ const es: SiteContent = {
       titleGradient: 'Nexow lo crea.',
       titleTail: 'Opéralo.',
       subtitle:
-        'Un creador de dashboards nativo de IA para mercados. Pide cualquier widget en lenguaje natural — Nexow escribe el código, lo ejecuta de forma segura y transmite datos en vivo de tus venues favoritos a un lienzo libre.',
+        'Un espacio de trabajo nativo de IA para mercados. Pide cualquier widget en lenguaje natural — Nexow escribe el código, lo ejecuta de forma segura y transmite datos en vivo a un lienzo libre. Automatízalo con bots y agentes en la nube, y conéctate a una comunidad de makers.',
       ctaPrimary: 'Abrir la app',
       ctaSecondary: 'Ver cómo funciona',
-      note: 'Sin registro para probar · Corre privado en tu navegador · Usa tu propia clave',
+      note: 'Sin registro para probar · Privado en tu navegador · O cuenta gratis con 10K créditos',
       promptExample: 'Muestra un gráfico de velas de BTC-USD de Coinbase con EMA 20 y 50 y RSI debajo.',
       promptPlaceholder: 'Describe un widget…',
     },
     ticker: { label: 'Conectores en vivo' },
     trust: 'Un lienzo para todos los mercados — FX, cripto, acciones, futuros, opciones y mercados de predicción.',
     stats: [
-      { n: 22, suffix: '+', label: 'conectores de datos de mercado en vivo' },
+      { n: 28, suffix: '+', label: 'conectores de datos de mercado en vivo' },
       { n: 6, label: 'clases de activos en un solo lienzo' },
-      { n: 0, label: 'bytes enviados a nuestros servidores en modo privado' },
+      { n: 10, suffix: 'K', label: 'créditos de IA gratis al registrarte' },
       { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
     ],
     showcase: {
@@ -722,7 +905,7 @@ const es: SiteContent = {
         },
         {
           icon: 'plug',
-          title: 'Más de 20 conectores en vivo',
+          title: 'Más de 28 conectores en vivo',
           body: 'Proveedores de datos conectables — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket y más — llevan datos en tiempo real a tus widgets.',
         },
         {
@@ -764,19 +947,95 @@ const es: SiteContent = {
         },
       ],
     },
+    automate: {
+      eyebrow: 'Automatiza',
+      title: 'Pon tu espacio en piloto automático',
+      subtitle:
+        'Los widgets te muestran el mercado. Los bots, agentes y Copilot actúan sobre él — automatizaciones en la nube e IA que siguen trabajando con la pestaña cerrada.',
+      liveLabel: 'En vivo',
+      soonLabel: 'Próximamente',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Bots',
+          body: 'Automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets. Describe una alerta con palabras — «avísame cuando BTC caiga 5% en una hora» — o constrúyela visualmente con umbrales, % de cambio, cruces de medias y resúmenes.',
+          status: 'live',
+        },
+        {
+          icon: 'cpu',
+          title: 'Agentes',
+          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores — corriendo en la nube. Dale un trabajo a un agente y deja que vigile, razone y actúe.',
+          status: 'soon',
+        },
+        {
+          icon: 'chat',
+          title: 'Copilot',
+          body: 'Un asistente de IA para todo tu espacio. Adjunta la captura de un widget o sus datos en vivo y pregunta — «explica este gráfico», «resume esto», «¿qué debería vigilar ahora?».',
+          status: 'soon',
+        },
+      ],
+    },
     connectors: {
       eyebrow: 'Conectores',
       title: 'Conéctate a todos los mercados',
       subtitle:
-        'Conectores conectables transmiten precios en vivo, order books y datos de referencia directo a tus widgets — en FX, cripto, acciones, futuros, opciones y mercados de predicción.',
-      note: 'Algunos venues se conectan directo desde tu navegador donde CORS lo permite; el resto pasa por un proxy ligero. Añadimos conectores nuevos con frecuencia.',
+        'Conectores conectables transmiten precios en vivo, order books y datos de referencia directo a tus widgets — en FX, cripto, acciones, futuros, opciones, mercados de predicción, bases de datos y feeds sociales.',
+      note: 'Hoy hay 28 conectores en vivo y 56 en el catálogo — brokers, exchanges, proveedores de datos, bases de datos y redes sociales. Muchos transmiten directo desde tu navegador; el resto pasa por un proxy ligero.',
+      count: 28,
+      countLabel: 'conectores en vivo',
       groups: {
         fx: 'FX',
         crypto: 'Cripto',
         equities: 'Acciones y futuros',
         prediction: 'Mercados de predicción',
         data: 'Datos y bases de datos',
+        socials: 'Redes sociales',
       },
+    },
+    network: {
+      eyebrow: 'La red',
+      title: 'Construye solo. O conéctate a la red.',
+      subtitle:
+        'Quédate totalmente local y privado, o crea una cuenta gratis y únete a un mundo de makers que construyen, comparten y operan dashboards a tu lado.',
+      liveLabel: 'En vivo',
+      soonLabel: 'Próximamente',
+      items: [
+        {
+          icon: 'users',
+          title: 'Comunidad',
+          body: 'Descubre y sigue makers, comparte dashboards y widgets, y haz fork de lo que otros crean. Un feed social para constructores de mercados.',
+          status: 'soon',
+        },
+        {
+          icon: 'store',
+          title: 'Marketplace',
+          body: 'Publica widgets que otros pueden soltar directo en su lienzo — y toma los que ya están hechos para el tuyo.',
+          status: 'soon',
+        },
+        {
+          icon: 'signal',
+          title: 'Señales de estrategia',
+          body: 'Publica historiales auditados, suscríbete a señales de makers de confianza y gana con las estrategias que ejecutas.',
+          status: 'soon',
+        },
+      ],
+      accountBadge: 'Cuenta gratis',
+      accountTitle: 'Una cuenta gratis desbloquea la red',
+      accountBody: 'Sin tarjeta. Sigue construyendo en local cuando quieras — la cuenta siempre es opcional.',
+      accountPoints: [
+        '10.000 créditos de IA gratis al registrarte',
+        'Sincronización en la nube de espacios y widgets entre dispositivos',
+        'Comunidad, marketplace y biblioteca de widgets',
+        'Gana XP y recompensas mientras construyes',
+      ],
+      accountCta: 'Crea tu cuenta gratis',
+    },
+    plans: {
+      eyebrow: 'Planes',
+      title: 'Empieza gratis. Crece cuando quieras.',
+      subtitle:
+        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos en una cuenta gratis. Sube de plan para más créditos, bots y agentes.',
+      cta: 'Comparar todos los planes',
     },
     privacy: {
       eyebrow: 'Privado por diseño',
@@ -794,16 +1053,16 @@ const es: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Esto es la preview. Esto es lo que viene.',
       subtitle:
-        'Nexow lanzó una preview pública del lienzo y la generación de código. Los siguientes bloques están por llegar.',
+        'Nexow lanzó una preview pública del lienzo, la generación de código, los bots en la nube y las cuentas. Los siguientes bloques están por llegar.',
       shipped: 'Disponible',
       soon: 'Próximamente',
       items: [
         { status: 'shipped', title: 'Generación de widgets con IA', body: 'Widgets en lenguaje natural corriendo aislados en el lienzo.' },
-        { status: 'shipped', title: 'Conectores de datos de mercado', body: 'Más de 20 venues transmitiendo datos en vivo a los widgets.' },
-        { status: 'shipped', title: 'Espacios y biblioteca', body: 'Lienzo multipantalla, versiones, logs y una biblioteca de widgets reutilizable.' },
-        { status: 'soon', title: 'Agentes de trading', body: 'Agentes autónomos que vigilan tus widgets y actúan según las reglas que describas.' },
-        { status: 'soon', title: 'Componentes de servidor', body: 'Widgets y trabajos persistentes en el servidor que siguen corriendo con la pestaña cerrada.' },
-        { status: 'soon', title: 'Comunidad', body: 'Comparte widgets y dashboards, haz fork de lo que otros crean y publica en una biblioteca pública.' },
+        { status: 'shipped', title: 'Más de 28 conectores', body: 'Brokers, exchanges, proveedores de datos, bases de datos y redes sociales en vivo.' },
+        { status: 'shipped', title: 'Bots y alertas en la nube', body: 'Automatizaciones que vigilan tus datos y envían señales a tus widgets, con la pestaña cerrada.' },
+        { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis, 10K créditos y espacios sincronizados en todos tus dispositivos.' },
+        { status: 'soon', title: 'Agentes y Copilot', body: 'Despliega agentes en la nube con un harness completo, y un Copilot para tu espacio.' },
+        { status: 'soon', title: 'Marketplace y señales', body: 'Compra y vende widgets, y publica señales de estrategia auditadas con las que ganar.' },
       ],
     },
     faq: {
@@ -813,31 +1072,35 @@ const es: SiteContent = {
       items: [
         {
           q: '¿Qué es Nexow?',
-          a: 'Nexow es un creador de dashboards nativo de IA para los mercados financieros. Describes un widget — un gráfico, tabla, mapa de calor o señal — en lenguaje natural, y Nexow genera su código, lo ejecuta en un iframe aislado y le transmite datos de mercado en vivo sobre un lienzo libre.',
+          a: 'Nexow es un espacio de trabajo nativo de IA para mercados. Describes un widget — un gráfico, tabla, mapa de calor o señal — en lenguaje natural, y Nexow genera su código, lo ejecuta en un iframe aislado y le transmite datos de mercado en vivo sobre un lienzo libre. Alrededor suma bots en la nube, agentes de IA, un Copilot y una comunidad de makers.',
         },
         {
           q: '¿Necesito saber programar?',
           a: 'No. Describes lo que quieres en lenguaje natural y Nexow escribe y ejecuta el widget por ti. Si lees código, el código fuente y el historial de versiones de cada widget están disponibles para inspeccionar y refinar.',
         },
         {
-          q: '¿Mis datos son privados?',
-          a: 'Sí. Nexow corre totalmente local por defecto: añades tu propia clave de Anthropic y la generación ocurre en tu navegador. Tus widgets, versiones y logs se guardan en el IndexedDB de tu navegador, y muchos venues se conectan directo desde el navegador — así tus datos y credenciales se quedan en tu máquina.',
+          q: '¿Mis datos son privados? ¿Necesito cuenta?',
+          a: 'No hace falta cuenta. Nexow corre totalmente local por defecto: añades tu propia clave de Anthropic y la generación ocurre en tu navegador, con widgets, versiones y logs en IndexedDB. Una cuenta gratis siempre es opcional — suma créditos de IA, sync en la nube y comunidad, pero puedes seguir construyendo 100% en local.',
         },
         {
           q: '¿Qué mercados y venues soporta?',
-          a: 'Nexow incluye más de 20 conectores conectables que abarcan FX (OANDA, LMAX, FXCM), cripto (Binance, Coinbase, Kraken, Deribit, BitMEX), acciones y futuros (Interactive Brokers, Alpaca, TradeStation, Polygon), mercados de predicción (Kalshi, Polymarket) y proveedores de datos (Alpha Vantage, Intrinio, Trading Economics, y bases de datos como Postgres y ClickHouse).',
+          a: 'Nexow tiene 28 conectores en vivo (56 en el catálogo) que abarcan FX (OANDA, LMAX, FXCM), cripto (Binance, Coinbase, Kraken, Deribit, BitMEX), acciones y futuros (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), mercados de predicción (Kalshi, Polymarket), proveedores de datos y bases de datos (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) y feeds sociales (X, YouTube, Discord, Telegram, Spotify).',
+        },
+        {
+          q: '¿Qué son los bots y los agentes?',
+          a: 'Los bots son automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets aunque tengas la pestaña cerrada — describe una alerta con palabras o constrúyela visualmente con umbrales, % de cambio y cruces de medias. Los agentes son IA con un harness completo (modelo, memoria, skills, herramientas, disparadores) que corren en la nube; el despliegue de agentes y el asistente Copilot llegan pronto.',
+        },
+        {
+          q: '¿Hay comunidad y marketplace?',
+          a: 'Sí — una cuenta gratis te conecta a la red: sigue makers, comparte y haz fork de dashboards y widgets, publica en un marketplace y sigue señales de estrategia auditadas con las que ganar. La comunidad y el marketplace se están desplegando ahora.',
         },
         {
           q: '¿Cuánto cuesta?',
-          a: 'La preview es gratis para probar, y en modo privado solo pagas tu propio uso de la API de Anthropic. Consulta la página de precios para los detalles de los futuros planes gestionados.',
+          a: 'Gratis para siempre para construir — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Los planes de pago (Supporter y Sponsor) suman créditos mensuales y límites más altos de bots y agentes, y Partner es para equipos que necesitan infraestructura privada. El pago llega pronto; consulta la página de precios.',
         },
         {
           q: '¿Qué modelo de IA usa Nexow?',
-          a: 'Nexow genera widgets con los modelos Claude de Anthropic mediante el SDK de Anthropic. En modo privado aportas tu propia clave, así mantienes el control total del uso y el coste.',
-        },
-        {
-          q: '¿Qué viene después?',
-          a: 'Agentes de trading que actúan según las reglas que describas, componentes persistentes del lado del servidor y una capa de comunidad para compartir y hacer fork de widgets y dashboards.',
+          a: 'Nexow genera con los modelos Claude de Anthropic mediante el SDK de Anthropic — Claude Opus 4.8 por defecto, con Sonnet 4.6 y Haiku 4.5 para una generación más rápida y económica. En modo privado aportas tu propia clave, así mantienes el control total del uso y el coste.',
         },
       ],
     },
@@ -852,13 +1115,13 @@ const es: SiteContent = {
     meta: {
       title: 'Funciones — Nexow',
       description:
-        'Generación de widgets en lenguaje natural, runtime aislado, más de 20 conectores de datos de mercado, lienzo libre, modo local privado y biblioteca de widgets versionada. Descubre todo lo que hace Nexow.',
+        'Generación de widgets en lenguaje natural, runtime aislado, más de 28 conectores de datos de mercado, bots y agentes en la nube, comunidad y marketplace de makers, modo local privado y biblioteca de widgets versionada. Descubre todo lo que hace Nexow.',
     },
     hero: {
       badge: 'Funciones',
       title: 'Todo lo que necesitas para crear dashboards de mercado con palabras',
       subtitle:
-        'Nexow convierte una frase en un widget funcionando y conectado a datos — y te da el lienzo, los conectores y el modelo de privacidad para armar una estación de trabajo real.',
+        'Nexow convierte una frase en un widget funcionando y conectado a datos — y te da el lienzo, los conectores, las automatizaciones en la nube y la red para armar una estación de trabajo real.',
     },
     groups: [
       {
@@ -883,17 +1146,35 @@ const es: SiteContent = {
         title: 'Conecta',
         body: 'Datos conectables de los venues que de verdad usas.',
         items: [
-          { icon: 'plug', title: 'Más de 20 conectores', body: 'FX, cripto, acciones, futuros, opciones y mercados de predicción — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket y más.' },
+          { icon: 'plug', title: 'Más de 28 conectores', body: 'FX, cripto, acciones, futuros, opciones y mercados de predicción — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket y más.' },
           { icon: 'globe', title: 'Directo desde el navegador', body: 'Donde CORS lo permite, las llamadas autenticadas a los venues corren directo desde tu navegador y evitan por completo nuestro proxy.' },
-          { icon: 'database', title: 'También bases de datos', body: 'Apunta widgets a Postgres, ClickHouse o Qdrant para mezclar tus propios datos con mercados en vivo.' },
+          { icon: 'database', title: 'Bases de datos y redes', body: 'Apunta widgets a Postgres, ClickHouse o Qdrant, o trae X, YouTube, Discord y Telegram junto a los mercados en vivo.' },
+        ],
+      },
+      {
+        title: 'Automatiza',
+        body: 'Automatizaciones en la nube e IA que actúan sin ti.',
+        items: [
+          { icon: 'bot', title: 'Bots en la nube', body: 'Describe una alerta o constrúyela visualmente — umbrales, % de cambio, cruces de medias, resúmenes. Los bots corren en un latido en la nube y envían señales a tus widgets, con la pestaña cerrada.' },
+          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores — corriendo en la nube. Despliegue próximamente.' },
+          { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir qué vigilar. Próximamente.' },
+        ],
+      },
+      {
+        title: 'Red',
+        body: 'Construye junto a un mundo de makers.',
+        items: [
+          { icon: 'users', title: 'Comunidad', body: 'Sigue makers, comparte y haz fork de dashboards y widgets, y descubre lo que otros crean en un feed social para mercados.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publica widgets que otros pueden soltar en su lienzo, y toma los que ya están hechos para el tuyo.' },
+          { icon: 'signal', title: 'Señales de estrategia', body: 'Publica historiales auditados, suscríbete a señales de confianza y gana con las estrategias que ejecutas.' },
         ],
       },
       {
         title: 'Controla',
         body: 'Privado por defecto, tuyo para siempre.',
         items: [
-          { icon: 'lock', title: 'Modo local privado', body: 'Usa tu propia clave de Anthropic y genera widgets en el cliente. Nada se envía a nuestros servidores.' },
-          { icon: 'save', title: 'Persistencia local', body: 'Widgets, versiones, logs y tu biblioteca viven en el IndexedDB de tu navegador — disponibles offline y sin cuenta.' },
+          { icon: 'lock', title: 'Modo local privado', body: 'Usa tu propia clave de Anthropic y genera widgets en el cliente. Nada se envía a nuestros servidores — sin cuenta.' },
+          { icon: 'sync', title: 'Sync opcional en la nube', body: 'Crea una cuenta gratis para sincronizar espacios, widgets y ajustes entre dispositivos — con un baúl de credenciales cifrado.' },
           { icon: 'library', title: 'Biblioteca reutilizable', body: 'Guarda cualquier widget en tu biblioteca y colócalo en cualquier dashboard con un clic.' },
         ],
       },
@@ -903,71 +1184,101 @@ const es: SiteContent = {
     meta: {
       title: 'Precios — Nexow',
       description:
-        'Empieza gratis en modo privado con tu propia clave de Anthropic. Llegan planes gestionados con componentes de servidor, agentes de trading y comunidad. Consulta los precios de Nexow.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA en una cuenta gratis. Supporter y Sponsor suman créditos mensuales, bots y agentes; Partner es para equipos. Consulta los precios de Nexow.',
     },
     hero: {
       badge: 'Precios',
-      title: 'Empieza gratis. Paga solo por lo que uses.',
+      title: 'Empieza gratis. Crece cuando quieras.',
       subtitle:
-        'La preview corre privada en tu navegador — solo pagas tu propio uso de Anthropic. Los planes gestionados llegan con los agentes, los componentes de servidor y la comunidad.',
+        'Construye gratis — en local con tu propia clave, o con 10.000 créditos en una cuenta gratis. Sube de plan para más créditos mensuales, bots y agentes. Los planes de pago llegan pronto.',
     },
+    billing: { monthly: 'Mensual', yearly: 'Anual', save: '2 meses gratis' },
     tiers: [
       {
-        name: 'Privado',
-        price: '0 €',
+        name: 'Free',
+        tagline: 'Todo lo que necesitas para construir.',
+        priceMonthly: '0 €',
+        priceYearly: '0 €',
         cadence: 'para siempre',
-        tagline: 'Totalmente local. Con tu propia clave.',
-        cta: 'Abrir la app',
+        stats: ['10K créditos', '10 bots', '3 agentes'],
+        cta: 'Empezar gratis',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          'Generación de widgets en lenguaje natural',
-          'Runtime aislado y lienzo libre',
-          'Los más de 20 conectores de mercado',
-          'Versiones, logs y biblioteca de widgets',
-          'Corre en tu navegador (IndexedDB)',
-          'Solo pagas tu uso de la API de Anthropic',
+          '10.000 créditos de IA al registrarte',
+          'Pantallas, espacios y widgets ilimitados',
+          'Conexiones de navegador ilimitadas',
+          'Sync en la nube entre dispositivos',
+          'Copilot global',
+          'Acceso a comunidad y marketplace',
         ],
       },
       {
-        name: 'Pro',
-        price: 'Próximamente',
-        cadence: '',
-        tagline: 'Generación y persistencia gestionadas.',
-        cta: 'Únete a la lista',
+        name: 'Supporter',
+        tagline: 'Para makers que quieren más espacio.',
+        priceMonthly: '9,99 €',
+        priceYearly: '8,33 €',
+        billedYearly: '99,90 € al año',
+        cadence: '/mes',
+        badge: 'Próximamente',
+        stats: ['50K créditos/mes', '30 bots', '10 agentes'],
+        note: 'Todo lo de Free, y además:',
+        cta: 'Hazte Supporter',
+        ctaHref: 'https://app.nexow.ai',
+        features: [
+          '50.000 créditos cada mes',
+          'Hasta 30 bots y 10 agentes',
+          'Un Copilot por espacio de trabajo',
+          'Segundo color de acento (gradiente)',
+          'Opciones de UI y apariencia exclusivas',
+        ],
+      },
+      {
+        name: 'Sponsor',
+        tagline: 'Para power users que van en serio.',
+        priceMonthly: '69,99 €',
+        priceYearly: '58,33 €',
+        billedYearly: '699,90 € al año',
+        cadence: '/mes',
+        badge: 'Mejor relación',
+        stats: ['800K créditos/mes', '300 bots', '100 agentes'],
+        note: 'Todo lo de Supporter, y además:',
+        cta: 'Hazte Sponsor',
         ctaHref: 'https://app.nexow.ai',
         featured: true,
         features: [
-          'Todo lo de Privado',
-          'Generación gestionada — sin clave',
-          'Componentes de servidor que siguen corriendo',
-          'Espacios sincronizados en la nube',
-          'Conectores prioritarios y límites más altos',
-          'Soporte por email',
+          '800.000 créditos cada mes',
+          'Hasta 300 bots y 100 agentes',
+          'Conexiones a medida (Connector Builder)',
+          'Un Copilot por pantalla',
+          'Sube tu propio logo',
+          'Personalizaciones premium de UI',
         ],
       },
       {
-        name: 'Equipos',
-        price: 'Hablemos',
+        name: 'Partner',
+        tagline: 'Para equipos que lo necesitan todo.',
+        priceMonthly: 'A medida',
+        priceYearly: 'A medida',
         cadence: '',
-        tagline: 'Para mesas y comunidades.',
+        stats: ['Infra privada', 'A tu lado', 'SLA'],
+        note: 'Todo lo de Sponsor, y además:',
         cta: 'Contáctanos',
-        ctaHref: 'mailto:hello@nexow.ai',
+        ctaHref: 'mailto:partners@nexow.ai',
         features: [
-          'Todo lo de Pro',
-          'Agentes de trading y automatización',
-          'Espacios compartidos y biblioteca comunitaria',
-          'SSO y acceso por roles',
+          'Infraestructura privada',
+          'Puesta en marcha guiada',
+          'Desarrollo a medida de primera',
+          'Marca y personalización a medida',
           'Soporte dedicado',
-          'Conectores a medida',
         ],
       },
     ],
     faqTitle: 'Preguntas sobre precios',
     faq: [
-      { q: '¿La preview es de verdad gratis?', a: 'Sí. El modo privado es gratis — solo pagas tu propio uso de la API de Anthropic al generar widgets. Hoy no hace falta ninguna suscripción de Nexow para construir en el lienzo.' },
-      { q: '¿Necesito una clave de Anthropic?', a: 'Para el modo privado, sí — añades tu propia clave en Ajustes y la generación corre en tu navegador. Los planes gestionados ofrecerán generación sin necesidad de clave.' },
-      { q: '¿Cuándo salen los planes de pago?', a: 'Pro y Equipos llegan junto a los componentes de servidor, los agentes de trading y la comunidad. Únete a la lista desde la app para enterarte primero.' },
-      { q: '¿Hay límites de uso?', a: 'En modo privado tu único límite es tu propia cuenta de Anthropic. Los planes gestionados publicarán límites claros por nivel.' },
+      { q: '¿Nexow es de verdad gratis?', a: 'Sí. Puedes construir gratis para siempre — totalmente local con tu propia clave de Anthropic (solo pagas tu uso de la API), o crea una cuenta gratis y recibe 10.000 créditos de IA sin necesidad de clave propia.' },
+      { q: '¿Qué son los créditos?', a: 'Los créditos miden el uso de IA — generar widgets, links, bots y respuestas de Copilot. La cuenta gratis incluye 10.000 para empezar, y los planes de pago dan una asignación mensual (50K en Supporter, 800K en Sponsor). Puedes comprar más cuando quieras.' },
+      { q: '¿Cuándo salen los planes de pago?', a: 'Supporter y Sponsor ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.' },
+      { q: '¿Puedo pagar anual?', a: 'Sí. La facturación anual te da dos meses gratis frente al pago mensual. Puedes cambiar entre mensual y anual cuando quieras.' },
     ],
   },
   about: {
@@ -1044,6 +1355,8 @@ const fr: SiteContent = {
           { label: 'Fonctionnalités', href: '/features' },
           { label: 'Tarifs', href: '/pricing' },
           { label: 'Connecteurs', href: '/#connectors' },
+          { label: 'Automatisations', href: '/#automate' },
+          { label: 'Communauté', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
         ],
       },
@@ -1071,7 +1384,7 @@ const fr: SiteContent = {
     meta: {
       title: 'Nexow — Créez des tableaux de bord de marché avec l’IA, en langage naturel',
       description:
-        'Nexow est un créateur de tableaux de bord natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le génère, l’exécute en sandbox et le connecte aux données en direct de plus de 20 connecteurs de trading et de marché — privé par défaut.',
+        'Nexow est un espace de travail natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le construit, le connecte aux données en direct de plus de 28 connecteurs et ajoute bots cloud, agents et une communauté de makers — privé par défaut, gratuit pour démarrer.',
     },
     hero: {
       badge: 'Preview disponible',
@@ -1079,19 +1392,19 @@ const fr: SiteContent = {
       titleGradient: 'Nexow le construit.',
       titleTail: 'Tradez-le.',
       subtitle:
-        'Un créateur de tableaux de bord natif IA pour les marchés. Demandez n’importe quel widget en langage naturel — Nexow écrit le code, l’exécute en toute sécurité et diffuse les données en direct de vos venues préférées sur un canvas libre.',
+        'Un espace de travail natif IA pour les marchés. Demandez n’importe quel widget en langage naturel — Nexow écrit le code, l’exécute en toute sécurité et diffuse les données en direct sur un canvas libre. Automatisez-le avec des bots et des agents cloud, puis branchez-vous à une communauté de makers.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir comment ça marche',
-      note: 'Sans inscription pour essayer · Fonctionne en privé dans votre navigateur · Apportez votre propre clé',
+      note: 'Sans inscription pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits',
       promptExample: 'Affiche un graphique en chandeliers de BTC-USD depuis Coinbase avec EMA 20 et 50 et RSI en dessous.',
       promptPlaceholder: 'Décrivez un widget…',
     },
     ticker: { label: 'Connecteurs en direct' },
     trust: 'Un canvas pour tous les marchés — FX, crypto, actions, futures, options et marchés de prédiction.',
     stats: [
-      { n: 22, suffix: '+', label: 'connecteurs de données de marché en direct' },
+      { n: 28, suffix: '+', label: 'connecteurs de données de marché en direct' },
       { n: 6, label: 'classes d’actifs sur un seul canvas' },
-      { n: 0, label: 'octets envoyés à nos serveurs en mode privé' },
+      { n: 10, suffix: 'K', label: 'crédits IA gratuits à l’inscription' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
     ],
     showcase: {
@@ -1141,7 +1454,7 @@ const fr: SiteContent = {
         },
         {
           icon: 'plug',
-          title: 'Plus de 20 connecteurs en direct',
+          title: 'Plus de 28 connecteurs en direct',
           body: 'Fournisseurs de données branchables — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket et plus — acheminent les données en temps réel vers vos widgets.',
         },
         {
@@ -1183,19 +1496,95 @@ const fr: SiteContent = {
         },
       ],
     },
+    automate: {
+      eyebrow: 'Automatisez',
+      title: 'Mettez votre espace en pilote automatique',
+      subtitle:
+        'Les widgets vous montrent le marché. Les bots, agents et Copilot agissent dessus — des automatisations cloud et de l’IA qui continuent de travailler onglet fermé.',
+      liveLabel: 'En direct',
+      soonLabel: 'Bientôt',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Bots',
+          body: 'Des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets. Décrivez une alerte avec des mots — « préviens-moi quand BTC chute de 5% en une heure » — ou construisez-la visuellement avec seuils, % de variation, croisements de moyennes et digests.',
+          status: 'live',
+        },
+        {
+          icon: 'cpu',
+          title: 'Agents',
+          body: 'Des agents IA avec un vrai harnais — modèle, mémoire, skills, outils, connaissances et déclencheurs — tournant dans le cloud. Confiez un travail à un agent et laissez-le surveiller, raisonner et agir.',
+          status: 'soon',
+        },
+        {
+          icon: 'chat',
+          title: 'Copilot',
+          body: 'Un assistant IA pour tout votre espace. Joignez la capture d’un widget ou ses données en direct et demandez — « explique ce graphique », « résume ceci », « que surveiller ensuite ? ».',
+          status: 'soon',
+        },
+      ],
+    },
     connectors: {
       eyebrow: 'Connecteurs',
       title: 'Branchez-vous à tous les marchés',
       subtitle:
-        'Des connecteurs branchables diffusent prix en direct, carnets d’ordres et données de référence directement dans vos widgets — FX, crypto, actions, futures, options et marchés de prédiction.',
-      note: 'Certains venues se connectent directement depuis votre navigateur lorsque CORS le permet ; les autres passent par un proxy léger. De nouveaux connecteurs sont ajoutés régulièrement.',
+        'Des connecteurs branchables diffusent prix en direct, carnets d’ordres et données de référence directement dans vos widgets — FX, crypto, actions, futures, options, marchés de prédiction, bases de données et flux sociaux.',
+      note: '28 connecteurs sont en direct aujourd’hui et 56 figurent au catalogue — brokers, exchanges, fournisseurs de données, bases de données et réseaux sociaux. Beaucoup diffusent directement depuis votre navigateur ; les autres passent par un proxy léger.',
+      count: 28,
+      countLabel: 'connecteurs en direct',
       groups: {
         fx: 'FX',
         crypto: 'Crypto',
         equities: 'Actions et futures',
         prediction: 'Marchés de prédiction',
         data: 'Données et bases de données',
+        socials: 'Réseaux sociaux',
       },
+    },
+    network: {
+      eyebrow: 'Le réseau',
+      title: 'Construisez seul. Ou branchez-vous au réseau.',
+      subtitle:
+        'Restez entièrement local et privé, ou créez un compte gratuit et rejoignez un monde de makers qui construisent, partagent et tradent des tableaux de bord à vos côtés.',
+      liveLabel: 'En direct',
+      soonLabel: 'Bientôt',
+      items: [
+        {
+          icon: 'users',
+          title: 'Communauté',
+          body: 'Découvrez et suivez des makers, partagez tableaux de bord et widgets, et forkez ce que d’autres construisent. Un fil social pour les bâtisseurs de marchés.',
+          status: 'soon',
+        },
+        {
+          icon: 'store',
+          title: 'Marketplace',
+          body: 'Publiez des widgets que d’autres déposent directement sur leur canvas — et récupérez ceux déjà prêts pour le vôtre.',
+          status: 'soon',
+        },
+        {
+          icon: 'signal',
+          title: 'Signaux de stratégie',
+          body: 'Publiez des historiques audités, abonnez-vous aux signaux de makers de confiance et gagnez sur les stratégies que vous exécutez.',
+          status: 'soon',
+        },
+      ],
+      accountBadge: 'Compte gratuit',
+      accountTitle: 'Un compte gratuit débloque le réseau',
+      accountBody: 'Sans carte bancaire. Continuez à construire en local quand vous voulez — le compte reste toujours optionnel.',
+      accountPoints: [
+        '10 000 crédits IA gratuits à l’inscription',
+        'Sync cloud des espaces et widgets sur tous vos appareils',
+        'Communauté, marketplace et bibliothèque de widgets',
+        'Gagnez de l’XP et des récompenses en construisant',
+      ],
+      accountCta: 'Créez votre compte gratuit',
+    },
+    plans: {
+      eyebrow: 'Plans',
+      title: 'Commencez gratuitement. Évoluez quand vous voulez.',
+      subtitle:
+        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits sur un compte gratuit. Montez en gamme pour plus de crédits, de bots et d’agents.',
+      cta: 'Comparer tous les plans',
     },
     privacy: {
       eyebrow: 'Privé par conception',
@@ -1213,16 +1602,16 @@ const fr: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'C’est la preview. Voici la suite.',
       subtitle:
-        'Nexow a lancé une preview publique du canvas et de la génération de code. Les blocs suivants arrivent bientôt.',
+        'Nexow a lancé une preview publique du canvas, de la génération de code, des bots cloud et des comptes. Les blocs suivants arrivent bientôt.',
       shipped: 'Disponible',
       soon: 'Bientôt',
       items: [
         { status: 'shipped', title: 'Génération de widgets par IA', body: 'Widgets en langage naturel exécutés en sandbox sur le canvas.' },
-        { status: 'shipped', title: 'Connecteurs de données de marché', body: 'Plus de 20 venues diffusant des données en direct vers les widgets.' },
-        { status: 'shipped', title: 'Espaces et bibliothèque', body: 'Canvas multi-écrans, versions, logs et une bibliothèque de widgets réutilisable.' },
-        { status: 'soon', title: 'Agents de trading', body: 'Agents autonomes qui surveillent vos widgets et agissent selon les règles que vous décrivez.' },
-        { status: 'soon', title: 'Composants serveur', body: 'Widgets et tâches persistants côté serveur qui continuent de tourner lorsque votre onglet est fermé.' },
-        { status: 'soon', title: 'Communauté', body: 'Partagez widgets et tableaux de bord, forkez ce que d’autres construisent et publiez dans une bibliothèque publique.' },
+        { status: 'shipped', title: 'Plus de 28 connecteurs', body: 'Brokers, exchanges, fournisseurs de données, bases de données et réseaux sociaux en direct.' },
+        { status: 'shipped', title: 'Bots et alertes cloud', body: 'Des automatisations qui surveillent vos données et envoient des signaux à vos widgets, onglet fermé.' },
+        { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits, 10K crédits et espaces synchronisés sur tous vos appareils.' },
+        { status: 'soon', title: 'Agents et Copilot', body: 'Déployez des agents cloud avec un harnais complet, et un Copilot pour votre espace.' },
+        { status: 'soon', title: 'Marketplace et signaux', body: 'Achetez et vendez des widgets, et publiez des signaux de stratégie audités pour gagner.' },
       ],
     },
     faq: {
@@ -1232,31 +1621,35 @@ const fr: SiteContent = {
       items: [
         {
           q: 'Qu’est-ce que Nexow ?',
-          a: 'Nexow est un créateur de tableaux de bord natif IA pour les marchés financiers. Vous décrivez un widget — un graphique, un tableau, une heatmap ou un signal — en langage naturel, et Nexow génère son code source, l’exécute dans un iframe sandboxé et lui diffuse des données de marché en direct sur un canvas libre.',
+          a: 'Nexow est un espace de travail natif IA pour les marchés. Vous décrivez un widget — un graphique, un tableau, une heatmap ou un signal — en langage naturel, et Nexow génère son code source, l’exécute dans un iframe sandboxé et lui diffuse des données de marché en direct sur un canvas libre. Autour, il ajoute des bots cloud, des agents IA, un Copilot et une communauté de makers.',
         },
         {
           q: 'Dois-je savoir coder ?',
           a: 'Non. Vous décrivez ce que vous voulez en langage naturel et Nexow écrit et exécute le widget pour vous. Si vous lisez le code, le code source et l’historique des versions de chaque widget sont disponibles pour inspection et affinage.',
         },
         {
-          q: 'Mes données sont-elles privées ?',
-          a: 'Oui. Nexow fonctionne entièrement en local par défaut : vous ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur. Vos widgets, versions et logs sont stockés dans l’IndexedDB de votre navigateur, et de nombreux venues se connectent directement depuis le navigateur — vos données et identifiants restent sur votre machine.',
+          q: 'Mes données sont-elles privées ? Faut-il un compte ?',
+          a: 'Aucun compte requis. Nexow fonctionne entièrement en local par défaut : ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur, avec widgets, versions et logs dans IndexedDB. Un compte gratuit reste toujours optionnel — il ajoute des crédits IA, la sync cloud et la communauté, mais vous pouvez continuer à construire 100% en local.',
         },
         {
           q: 'Quels marchés et venues sont pris en charge ?',
-          a: 'Nexow inclut plus de 20 connecteurs branchables couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon), marchés de prédiction (Kalshi, Polymarket) et fournisseurs de données (Alpha Vantage, Intrinio, Trading Economics, et bases de données comme Postgres et ClickHouse).',
+          a: 'Nexow compte 28 connecteurs en direct (56 au catalogue) couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), marchés de prédiction (Kalshi, Polymarket), fournisseurs de données et bases de données (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) et flux sociaux (X, YouTube, Discord, Telegram, Spotify).',
+        },
+        {
+          q: 'Que sont les bots et les agents ?',
+          a: 'Les bots sont des automatisations cloud qui surveillent vos données et envoient signaux et alertes à vos widgets même onglet fermé — décrivez une alerte avec des mots ou construisez-la visuellement avec seuils, % de variation et croisements de moyennes. Les agents sont de l’IA avec un harnais complet (modèle, mémoire, skills, outils, déclencheurs) tournant dans le cloud ; le déploiement des agents et l’assistant Copilot arrivent bientôt.',
+        },
+        {
+          q: 'Y a-t-il une communauté et un marketplace ?',
+          a: 'Oui — un compte gratuit vous branche au réseau : suivez des makers, partagez et forkez tableaux de bord et widgets, publiez sur un marketplace et suivez des signaux de stratégie audités pour gagner. La communauté et le marketplace se déploient en ce moment.',
         },
         {
           q: 'Combien ça coûte ?',
-          a: 'La preview est gratuite à essayer, et en mode privé vous ne payez que votre propre usage de l’API Anthropic. Consultez la page tarifs pour les détails des futurs plans hébergés.',
+          a: 'Gratuit pour toujours pour construire — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Les plans payants (Supporter et Sponsor) ajoutent des crédits mensuels et des limites de bots et d’agents plus élevées, et Partner s’adresse aux équipes qui ont besoin d’une infrastructure privée. Le paiement arrive bientôt ; voir la page tarifs.',
         },
         {
           q: 'Quel modèle IA alimente Nexow ?',
-          a: 'Nexow génère des widgets avec les modèles Claude d’Anthropic via le SDK Anthropic. En mode privé, vous fournissez votre propre clé pour garder le contrôle total de l’usage et du coût.',
-        },
-        {
-          q: 'Qu’est-ce qui arrive ensuite ?',
-          a: 'Des agents de trading qui agissent selon les règles que vous décrivez, des composants persistants côté serveur et une couche communautaire pour partager et forker widgets et tableaux de bord.',
+          a: 'Nexow génère avec les modèles Claude d’Anthropic via le SDK Anthropic — Claude Opus 4.8 par défaut, avec Sonnet 4.6 et Haiku 4.5 pour une génération plus rapide et économique. En mode privé, vous fournissez votre propre clé pour garder le contrôle total de l’usage et du coût.',
         },
       ],
     },
@@ -1271,13 +1664,13 @@ const fr: SiteContent = {
     meta: {
       title: 'Fonctionnalités — Nexow',
       description:
-        'Génération de widgets en langage naturel, runtime sandboxé, plus de 20 connecteurs de données de marché, canvas libre, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+        'Génération de widgets en langage naturel, runtime sandboxé, plus de 28 connecteurs de données de marché, bots et agents cloud, communauté et marketplace de makers, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
     },
     hero: {
       badge: 'Fonctionnalités',
       title: 'Tout ce qu’il faut pour créer des tableaux de bord de marché avec des mots',
       subtitle:
-        'Nexow transforme une phrase en widget fonctionnel connecté aux données — puis vous donne le canvas, les connecteurs et le modèle de confidentialité pour construire un vrai poste de travail.',
+        'Nexow transforme une phrase en widget fonctionnel connecté aux données — puis vous donne le canvas, les connecteurs, les automatisations cloud et le réseau pour construire un vrai poste de travail.',
     },
     groups: [
       {
@@ -1302,17 +1695,35 @@ const fr: SiteContent = {
         title: 'Connecter',
         body: 'Des données branchables depuis les venues que vous utilisez vraiment.',
         items: [
-          { icon: 'plug', title: 'Plus de 20 connecteurs de marché', body: 'FX, crypto, actions, futures, options et marchés de prédiction — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket et plus.' },
+          { icon: 'plug', title: 'Plus de 28 connecteurs de marché', body: 'FX, crypto, actions, futures, options et marchés de prédiction — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket et plus.' },
           { icon: 'globe', title: 'Direct depuis le navigateur', body: 'Lorsque CORS le permet, les appels authentifiés aux venues s’exécutent directement depuis votre navigateur et contournent entièrement notre proxy.' },
-          { icon: 'database', title: 'Bases de données aussi', body: 'Pointez les widgets vers Postgres, ClickHouse ou Qdrant pour mélanger vos propres données avec les marchés en direct.' },
+          { icon: 'database', title: 'Bases de données et réseaux', body: 'Pointez les widgets vers Postgres, ClickHouse ou Qdrant, ou tirez de X, YouTube, Discord et Telegram aux côtés des marchés en direct.' },
+        ],
+      },
+      {
+        title: 'Automatiser',
+        body: 'Des automatisations cloud et de l’IA qui agissent en votre absence.',
+        items: [
+          { icon: 'bot', title: 'Bots cloud', body: 'Décrivez une alerte ou construisez-la visuellement — seuils, % de variation, croisements de moyennes, digests. Les bots tournent sur un battement cloud et poussent des signaux vers vos widgets, onglet fermé.' },
+          { icon: 'cpu', title: 'Agents IA', body: 'Des agents avec un harnais complet — modèle, mémoire, skills, outils, connaissances et déclencheurs — tournant dans le cloud. Déploiement bientôt.' },
+          { icon: 'chat', title: 'Copilot', body: 'Un assistant pour votre espace : joignez la capture d’un widget ou ses données et demandez-lui d’expliquer, résumer ou suggérer quoi surveiller. Bientôt.' },
+        ],
+      },
+      {
+        title: 'Réseau',
+        body: 'Construisez aux côtés d’un monde de makers.',
+        items: [
+          { icon: 'users', title: 'Communauté', body: 'Suivez des makers, partagez et forkez tableaux de bord et widgets, et découvrez ce que d’autres construisent dans un fil social pour les marchés.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publiez des widgets que d’autres déposent sur leur canvas, et récupérez ceux déjà prêts pour le vôtre.' },
+          { icon: 'signal', title: 'Signaux de stratégie', body: 'Publiez des historiques audités, abonnez-vous aux signaux de confiance et gagnez sur les stratégies que vous exécutez.' },
         ],
       },
       {
         title: 'Posséder',
         body: 'Privé par défaut, à vous pour toujours.',
         items: [
-          { icon: 'lock', title: 'Mode local privé', body: 'Apportez votre propre clé Anthropic et générez des widgets côté client. Rien n’est envoyé à nos serveurs.' },
-          { icon: 'save', title: 'Persistance locale', body: 'Widgets, versions, logs et votre bibliothèque vivent dans l’IndexedDB de votre navigateur — disponibles hors ligne, sans compte.' },
+          { icon: 'lock', title: 'Mode local privé', body: 'Apportez votre propre clé Anthropic et générez des widgets côté client. Rien n’est envoyé à nos serveurs — sans compte.' },
+          { icon: 'sync', title: 'Sync cloud optionnelle', body: 'Créez un compte gratuit pour synchroniser espaces, widgets et réglages sur tous vos appareils — avec un coffre d’identifiants chiffré.' },
           { icon: 'library', title: 'Bibliothèque réutilisable', body: 'Enregistrez n’importe quel widget dans votre bibliothèque et déposez-le sur n’importe quel tableau de bord en un clic.' },
         ],
       },
@@ -1322,71 +1733,101 @@ const fr: SiteContent = {
     meta: {
       title: 'Tarifs — Nexow',
       description:
-        'Commencez gratuitement en mode privé avec votre propre clé Anthropic. Des plans hébergés avec composants serveur, agents de trading et communauté arrivent bientôt. Consultez les tarifs Nexow.',
+        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA sur un compte gratuit. Supporter et Sponsor ajoutent crédits mensuels, bots et agents ; Partner est pour les équipes. Consultez les tarifs Nexow.',
     },
     hero: {
       badge: 'Tarifs',
-      title: 'Commencez gratuitement. Payez uniquement ce que vous utilisez.',
+      title: 'Commencez gratuitement. Évoluez quand vous voulez.',
       subtitle:
-        'La preview fonctionne en privé dans votre navigateur — vous ne payez que votre propre usage Anthropic. Les plans hébergés arrivent avec les agents, les composants serveur et la communauté.',
+        'Construisez gratuitement — en local avec votre propre clé, ou avec 10 000 crédits sur un compte gratuit. Montez en gamme pour plus de crédits mensuels, de bots et d’agents. Les plans payants arrivent bientôt.',
     },
+    billing: { monthly: 'Mensuel', yearly: 'Annuel', save: '2 mois offerts' },
     tiers: [
       {
-        name: 'Privé',
-        price: '0 €',
+        name: 'Free',
+        tagline: 'Tout ce qu’il faut pour construire.',
+        priceMonthly: '0 €',
+        priceYearly: '0 €',
         cadence: 'pour toujours',
-        tagline: 'Entièrement local. Apportez votre propre clé.',
-        cta: 'Ouvrir l’app',
+        stats: ['10K crédits', '10 bots', '3 agents'],
+        cta: 'Démarrer gratuitement',
         ctaHref: 'https://app.nexow.ai',
         features: [
-          'Génération de widgets en langage naturel',
-          'Runtime sandboxé et canvas libre',
-          'Les plus de 20 connecteurs de marché',
-          'Versions, logs et bibliothèque de widgets',
-          'Fonctionne dans votre navigateur (IndexedDB)',
-          'Vous ne payez que votre usage de l’API Anthropic',
+          '10 000 crédits IA à l’inscription',
+          'Écrans, espaces et widgets illimités',
+          'Connexions navigateur illimitées',
+          'Sync cloud multi-appareils',
+          'Copilot global',
+          'Accès communauté et marketplace',
         ],
       },
       {
-        name: 'Pro',
-        price: 'Bientôt',
-        cadence: '',
-        tagline: 'Génération et persistance hébergées.',
-        cta: 'Rejoindre la liste',
+        name: 'Supporter',
+        tagline: 'Pour les makers qui veulent plus d’espace.',
+        priceMonthly: '9,99 €',
+        priceYearly: '8,33 €',
+        billedYearly: '99,90 € par an',
+        cadence: '/mois',
+        badge: 'Bientôt',
+        stats: ['50K crédits/mois', '30 bots', '10 agents'],
+        note: 'Tout ce qui est dans Free, plus :',
+        cta: 'Devenir Supporter',
+        ctaHref: 'https://app.nexow.ai',
+        features: [
+          '50 000 crédits chaque mois',
+          'Jusqu’à 30 bots et 10 agents',
+          'Un Copilot par espace de travail',
+          'Deuxième couleur d’accent (dégradé)',
+          'Options d’UI et d’apparence exclusives',
+        ],
+      },
+      {
+        name: 'Sponsor',
+        tagline: 'Pour les power users qui passent au pro.',
+        priceMonthly: '69,99 €',
+        priceYearly: '58,33 €',
+        billedYearly: '699,90 € par an',
+        cadence: '/mois',
+        badge: 'Meilleur rapport',
+        stats: ['800K crédits/mois', '300 bots', '100 agents'],
+        note: 'Tout ce qui est dans Supporter, plus :',
+        cta: 'Devenir Sponsor',
         ctaHref: 'https://app.nexow.ai',
         featured: true,
         features: [
-          'Tout ce qui est dans Privé',
-          'Génération gérée — sans clé',
-          'Composants serveur qui continuent de tourner',
-          'Espaces synchronisés dans le cloud',
-          'Connecteurs prioritaires et limites plus élevées',
-          'Support par email',
+          '800 000 crédits chaque mois',
+          'Jusqu’à 300 bots et 100 agents',
+          'Connexions sur mesure (Connector Builder)',
+          'Un Copilot par écran',
+          'Importez votre propre logo',
+          'Personnalisations d’UI premium',
         ],
       },
       {
-        name: 'Équipes',
-        price: 'Discutons-en',
+        name: 'Partner',
+        tagline: 'Pour les équipes qui ont besoin de tout.',
+        priceMonthly: 'Sur mesure',
+        priceYearly: 'Sur mesure',
         cadence: '',
-        tagline: 'Pour les desks et communautés.',
+        stats: ['Infra privée', 'À vos côtés', 'SLA'],
+        note: 'Tout ce qui est dans Sponsor, plus :',
         cta: 'Nous contacter',
-        ctaHref: 'mailto:hello@nexow.ai',
+        ctaHref: 'mailto:partners@nexow.ai',
         features: [
-          'Tout ce qui est dans Pro',
-          'Agents de trading et automatisation',
-          'Espaces partagés et bibliothèque communautaire',
-          'SSO et accès par rôles',
+          'Infrastructure privée',
+          'Mise en place accompagnée',
+          'Développement sur mesure de premier ordre',
+          'Marque et personnalisation sur mesure',
           'Support dédié',
-          'Connecteurs personnalisés',
         ],
       },
     ],
     faqTitle: 'Questions sur les tarifs',
     faq: [
-      { q: 'La preview est-elle vraiment gratuite ?', a: 'Oui. Le mode privé est gratuit — vous ne payez que votre propre usage de l’API Anthropic lors de la génération de widgets. Aucun abonnement Nexow n’est requis pour construire sur le canvas aujourd’hui.' },
-      { q: 'Ai-je besoin d’une clé Anthropic ?', a: 'Pour le mode privé, oui — vous ajoutez votre propre clé dans les Paramètres et la génération s’exécute dans votre navigateur. Les plans hébergés proposeront une génération gérée sans clé.' },
-      { q: 'Quand les plans payants arrivent-ils ?', a: 'Pro et Équipes arrivent avec les composants serveur, les agents de trading et la communauté. Rejoignez la liste depuis l’app pour être informé en premier.' },
-      { q: 'Y a-t-il des limites d’usage ?', a: 'En mode privé, votre seule limite est votre propre compte Anthropic. Les plans hébergés publieront des limites claires par niveau.' },
+      { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Vous pouvez construire gratuitement pour toujours — entièrement en local avec votre propre clé Anthropic (vous ne payez que votre usage de l’API), ou créez un compte gratuit et recevez 10 000 crédits IA sans clé à vous.' },
+      { q: 'Que sont les crédits ?', a: 'Les crédits mesurent l’usage de l’IA — génération de widgets, liens, bots et réponses de Copilot. Le compte gratuit inclut 10 000 pour démarrer, et les plans payants offrent une allocation mensuelle (50K sur Supporter, 800K sur Sponsor). Vous pouvez en acheter davantage à tout moment.' },
+      { q: 'Quand les plans payants arrivent-ils ?', a: 'Supporter et Sponsor sont déjà définis et affichés dans l’app, mais le paiement arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.' },
+      { q: 'Puis-je payer à l’année ?', a: 'Oui. La facturation annuelle vous offre deux mois gratuits par rapport au paiement mensuel. Vous pouvez basculer entre mensuel et annuel à tout moment.' },
     ],
   },
   about: {

@@ -1,6 +1,6 @@
 ---
 import { type Lang } from '../../i18n/config';
-import { useContent, CONNECTOR_GROUPS, CONNECTORS } from '../../i18n/content';
+import { useContent, CONNECTOR_GROUPS } from '../../i18n/content';
 import SectionHeading from '../SectionHeading.astro';
 import Icon from '../Icon.astro';
 
@@ -11,7 +11,7 @@ interface Props {
 }
 const { lang, tone = 'light' } = Astro.props;
 const t = useContent(lang).home.connectors;
-const count = CONNECTORS.length;
+const count = t.count;
 const dark = tone === 'dark';
 ---
 
@@ -35,7 +35,7 @@ const dark = tone === 'dark';
         ]}
       >
         <span class="text-gradient text-3xl font-bold">{count}+</span>
-        {t.eyebrow.toLowerCase()}
+        {t.countLabel}
       </span>
     </div>
 

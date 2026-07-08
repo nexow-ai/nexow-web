@@ -8,8 +8,11 @@ import Stats from '../sections/Stats.astro';
 import Showcase from '../sections/Showcase.astro';
 import Features from '../sections/Features.astro';
 import HowItWorks from '../sections/HowItWorks.astro';
+import Automate from '../sections/Automate.astro';
 import Connectors from '../sections/Connectors.astro';
+import Network from '../sections/Network.astro';
 import Privacy from '../sections/Privacy.astro';
+import Plans from '../sections/Plans.astro';
 import Roadmap from '../sections/Roadmap.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
@@ -18,7 +21,8 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).home;
+const c = useContent(lang);
+const t = c.home;
 
 // Structured data for SEO + GEO (LLM answer engines).
 const softwareSchema = {
@@ -30,9 +34,11 @@ const softwareSchema = {
   url: SITE.url,
   description: t.meta.description,
   offers: {
-    '@type': 'Offer',
-    price: '0',
+    '@type': 'AggregateOffer',
+    lowPrice: '0',
+    highPrice: '69.99',
     priceCurrency: 'USD',
+    offerCount: c.pricing.tiers.length,
   },
   featureList: t.features.items.map((f) => f.title),
 };
@@ -70,8 +76,11 @@ const websiteSchema = {
   <Showcase lang={lang} />
   <Features lang={lang} />
   <HowItWorks lang={lang} />
+  <Automate lang={lang} />
   <Connectors lang={lang} tone="dark" />
+  <Network lang={lang} />
   <Privacy lang={lang} />
+  <Plans lang={lang} />
   <Roadmap lang={lang} />
   <Faq lang={lang} tone="dark" />
   <CtaBand lang={lang} />
