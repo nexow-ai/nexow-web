@@ -1,7 +1,5 @@
 ---
 import { SITE, SOCIALS, languages, type Lang } from '../i18n/config';
-import type { PageAccent } from '../i18n/accent';
-import { faviconDataUri } from '../lib/favicon';
 import { localizePath, getAlternates, withTrailingSlash, ogLocale } from '../i18n/utils';
 import '../styles/global.css';
 
@@ -11,8 +9,6 @@ interface Props {
   lang: Lang;
   /** Canonical, English-shaped route this page maps to, e.g. `/features`. */
   route: string;
-  /** Page accent — favicon matches the CtaBand tile on this route. */
-  accent: PageAccent;
   /** OG image path relative to site root. */
   image?: string;
   type?: 'website' | 'article';
@@ -27,14 +23,11 @@ const {
   description,
   lang,
   route,
-  accent,
   image = '/og.png',
   type = 'website',
   schema = [],
   noindex = false,
 } = Astro.props;
-
-const iconSvg = faviconDataUri(accent);
 
 const canonical = withTrailingSlash(new URL(localizePath(route, lang), SITE.url).href);
 const alternates = getAlternates(route, SITE.url);
@@ -74,8 +67,10 @@ const allSchema = [orgSchema, ...schema];
 }
 <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
 
-<!-- Icons — accent-aware tile (matches CtaBand on each route) -->
-<link rel="icon" href={iconSvg} type="image/svg+xml" />
+<!-- Icons — Nexow spike mark (public/favicon.png + favicon-black.png) -->
+<link rel="icon" href="/favicon-black.png" type="image/png" media="(prefers-color-scheme: light)" />
+<link rel="icon" href="/favicon.png" type="image/png" media="(prefers-color-scheme: dark)" />
+<link rel="icon" href="/favicon.png" type="image/png" />
 <link rel="icon" href="/favicon.ico" sizes="32x32" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
