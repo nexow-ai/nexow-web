@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { Lang } from '../i18n/config';
+import { getPageAccent } from '../i18n/accent';
 
 interface Props {
   title: string;
@@ -17,11 +18,12 @@ interface Props {
   theme?: 'light' | 'dark';
 }
 
-const { lang, theme = 'light', ...head } = Astro.props;
+const { lang, theme = 'light', route, ...head } = Astro.props;
+const accent = getPageAccent(route);
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html lang={lang} class="scroll-smooth" data-accent={accent}>
   <head>
     <script is:inline>
       // Mark JS-capable before paint so scroll-reveal hiding only applies with JS.

@@ -58,6 +58,55 @@
   --color-gold-800: #6b5414;
   --color-gold-900: #4f3e10;
 
+  /* Page accent palettes (swapped onto brand/accent tokens per route) */
+  --color-sky-50: #eff9ff;
+  --color-sky-100: #dff2ff;
+  --color-sky-200: #b8e4ff;
+  --color-sky-300: #78cfff;
+  --color-sky-400: #38b8ff;
+  --color-sky-500: #0ea5e9;
+  --color-sky-600: #0284c7;
+  --color-sky-700: #0369a1;
+  --color-sky-800: #075985;
+  --color-sky-900: #0c4a6e;
+  --color-sky-950: #082f49;
+
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-300: #c4b5fd;
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-violet-700: #6d28d9;
+  --color-violet-800: #5b21b6;
+  --color-violet-900: #4c1d95;
+  --color-violet-950: #2e1065;
+
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+  --color-amber-950: #451a03;
+
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-200: #fecdd3;
+  --color-rose-300: #fda4af;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-rose-700: #be123c;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+  --color-rose-950: #4c0519;
+
   /* Ink — near-black surface for dark sections (cool, slightly blue).
    * 100–500 are the light text shades used on those dark surfaces. */
   --color-ink-50: #f4f6fb;
@@ -75,6 +124,100 @@
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Per-page accent — remaps brand/accent tokens (see src/i18n/accent.ts).
+ * Set `data-accent` on <html> from Layout.
+ * ------------------------------------------------------------------ */
+[data-accent='gold'] {
+  --color-brand-50: var(--color-gold-50);
+  --color-brand-100: var(--color-gold-100);
+  --color-brand-200: var(--color-gold-200);
+  --color-brand-300: var(--color-gold-300);
+  --color-brand-400: var(--color-gold-400);
+  --color-brand-500: var(--color-gold-500);
+  --color-brand-600: var(--color-gold-600);
+  --color-brand-700: var(--color-gold-700);
+  --color-brand-800: var(--color-gold-800);
+  --color-brand-900: var(--color-gold-900);
+  --color-brand-950: var(--color-gold-900);
+  --color-accent-300: var(--color-gold-300);
+  --color-accent-400: var(--color-gold-400);
+  --color-accent-500: var(--color-gold-600);
+  --color-accent-600: var(--color-gold-700);
+}
+
+[data-accent='sky'] {
+  --color-brand-50: var(--color-sky-50);
+  --color-brand-100: var(--color-sky-100);
+  --color-brand-200: var(--color-sky-200);
+  --color-brand-300: var(--color-sky-300);
+  --color-brand-400: var(--color-sky-400);
+  --color-brand-500: var(--color-sky-500);
+  --color-brand-600: var(--color-sky-600);
+  --color-brand-700: var(--color-sky-700);
+  --color-brand-800: var(--color-sky-800);
+  --color-brand-900: var(--color-sky-900);
+  --color-brand-950: var(--color-sky-950);
+  --color-accent-300: var(--color-sky-300);
+  --color-accent-400: var(--color-sky-400);
+  --color-accent-500: var(--color-sky-600);
+  --color-accent-600: var(--color-sky-700);
+}
+
+[data-accent='violet'] {
+  --color-brand-50: var(--color-violet-50);
+  --color-brand-100: var(--color-violet-100);
+  --color-brand-200: var(--color-violet-200);
+  --color-brand-300: var(--color-violet-300);
+  --color-brand-400: var(--color-violet-400);
+  --color-brand-500: var(--color-violet-500);
+  --color-brand-600: var(--color-violet-600);
+  --color-brand-700: var(--color-violet-700);
+  --color-brand-800: var(--color-violet-800);
+  --color-brand-900: var(--color-violet-900);
+  --color-brand-950: var(--color-violet-950);
+  --color-accent-300: var(--color-violet-300);
+  --color-accent-400: var(--color-violet-400);
+  --color-accent-500: var(--color-violet-600);
+  --color-accent-600: var(--color-violet-700);
+}
+
+[data-accent='amber'] {
+  --color-brand-50: var(--color-amber-50);
+  --color-brand-100: var(--color-amber-100);
+  --color-brand-200: var(--color-amber-200);
+  --color-brand-300: var(--color-amber-300);
+  --color-brand-400: var(--color-amber-400);
+  --color-brand-500: var(--color-amber-500);
+  --color-brand-600: var(--color-amber-600);
+  --color-brand-700: var(--color-amber-700);
+  --color-brand-800: var(--color-amber-800);
+  --color-brand-900: var(--color-amber-900);
+  --color-brand-950: var(--color-amber-950);
+  --color-accent-300: var(--color-amber-300);
+  --color-accent-400: var(--color-amber-400);
+  --color-accent-500: var(--color-amber-600);
+  --color-accent-600: var(--color-amber-700);
+}
+
+[data-accent='rose'] {
+  --color-brand-50: var(--color-rose-50);
+  --color-brand-100: var(--color-rose-100);
+  --color-brand-200: var(--color-rose-200);
+  --color-brand-300: var(--color-rose-300);
+  --color-brand-400: var(--color-rose-400);
+  --color-brand-500: var(--color-rose-500);
+  --color-brand-600: var(--color-rose-600);
+  --color-brand-700: var(--color-rose-700);
+  --color-brand-800: var(--color-rose-800);
+  --color-brand-900: var(--color-rose-900);
+  --color-brand-950: var(--color-rose-950);
+  --color-accent-300: var(--color-rose-300);
+  --color-accent-400: var(--color-rose-400);
+  --color-accent-500: var(--color-rose-600);
+  --color-accent-600: var(--color-rose-700);
 }
 
 /* ------------------------------------------------------------------ *
@@ -203,14 +346,14 @@
   .glow-gold {
     background: radial-gradient(
       60% 60% at 50% 40%,
-      color-mix(in oklab, var(--color-gold-400) 28%, transparent),
+      color-mix(in oklab, var(--color-brand-400) 28%, transparent),
       transparent 70%
     );
   }
 
   /* Gold gradient text. */
   .text-gold-gradient {
-    background-image: linear-gradient(100deg, var(--color-gold-600), var(--color-gold-400) 85%);
+    background-image: linear-gradient(100deg, var(--color-brand-600), var(--color-brand-400) 85%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -296,8 +439,8 @@
     background: linear-gradient(
       90deg,
       transparent,
-      color-mix(in oklab, var(--color-gold-300) 55%, transparent) 30%,
-      color-mix(in oklab, var(--color-gold-500) 55%, transparent) 70%,
+      color-mix(in oklab, var(--color-brand-300) 55%, transparent) 30%,
+      color-mix(in oklab, var(--color-brand-500) 55%, transparent) 70%,
       transparent
     );
   }

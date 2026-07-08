@@ -47,10 +47,10 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
                   'rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
                   dark
                     ? l.active
-                      ? 'text-white'
+                      ? 'text-brand-300'
                       : 'text-ink-300 hover:text-white'
                     : l.active
-                      ? 'text-ink-950'
+                      ? 'text-brand-600'
                       : 'text-ink-600 hover:text-ink-950',
                 ]}
                 aria-current={l.active ? 'page' : undefined}

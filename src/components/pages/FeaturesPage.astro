@@ -29,28 +29,28 @@ const explore = useContent(lang).connectorsPage.exploreCta;
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-gold-100), transparent 65%)"
+        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
       >
       </div>
       <div
         class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-40 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-gold-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
       >
       </div>
       <div
         class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-35 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-gold-100), transparent 65%)"
+        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
       >
       </div>
       <div
         class="absolute inset-0 opacity-30 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"
-        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-gold-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-gold-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
+        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
       >
       </div>
     </div>
 
     <div class="container-page relative text-center">
-      <span class="inline-flex items-center gap-2 rounded-full border border-gold-300/40 bg-gold-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-gold-700">
+      <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700">
         {t.hero.badge}
       </span>
       <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
@@ -76,11 +76,11 @@ const explore = useContent(lang).connectorsPage.exploreCta;
       t.groups.map((group, i) => {
         const reverse = i % 2 === 1;
         return (
-          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-gold-100/80']}>
+          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80']}>
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
               <div
                 class:list={[
-                  'animate-glow absolute top-1/2 size-[460px] -translate-y-1/2 blur-2xl glow-gold',
+                  'animate-glow absolute top-1/2 size-[460px] -translate-y-1/2 blur-2xl glow-brand',
                   reverse ? '-left-40' : '-right-40',
                 ]}
               />
@@ -89,8 +89,8 @@ const explore = useContent(lang).connectorsPage.exploreCta;
               <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                 <!-- Copy -->
                 <div class:list={['reveal', reverse && 'lg:order-2']}>
-                  <span class="eyebrow inline-flex items-center gap-3 text-gold-600">
-                    <span class="font-mono text-2xl font-bold text-gold-200">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="eyebrow inline-flex items-center gap-3 text-brand-600">
+                    <span class="font-mono text-2xl font-bold text-brand-200">{String(i + 1).padStart(2, '0')}</span>
                     {group.title}
                   </span>
                   <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1]">
@@ -99,7 +99,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
                   <ul class="mt-8 space-y-5">
                     {group.items.map((f) => (
                       <li class="flex gap-4">
-                        <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-gold-50 text-gold-600 ring-1 ring-gold-200/80">
+                        <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80">
                           <Icon name={f.icon} class="size-5" />
                         </span>
                         <div>
@@ -113,7 +113,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
 
                 <!-- Visual -->
                 <div class:list={['reveal', reverse && 'lg:order-1']}>
-                  <div class="animate-float rounded-3xl ring-1 ring-gold-200/60 ring-offset-4 ring-offset-white">
+                  <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white">
                     {i === 0 && <WidgetMock promptExample={home.promptExample} promptPlaceholder={home.promptPlaceholder} />}
                     {i === 1 && <CanvasMock />}
                     {i === 2 && <ConnectMock lang={lang} />}
