@@ -31,4 +31,4 @@ La sync est opt-in et par workspace. Ce que vous synchronisez vit dans le cloud 
 
 Un compte gratuit est la rampe d’accès de *construire seul* à *construire avec les autres* : suivez des makers, forkez des tableaux de bord, publiez des widgets et — bientôt — abonnez-vous à des signaux de stratégie audités. Vous optez pour autant du réseau que vous voulez, une étape à la fois.
 
-[Créez votre compte gratuit](https://x.nexow.app) — ou continuez à construire en local. Les deux sont gratuits, et les deux sont à vous.
+[Créez votre compte gratuit](https://x.nexow.ai) — ou continuez à construire en local. Les deux sont gratuits, et les deux sont à vous.

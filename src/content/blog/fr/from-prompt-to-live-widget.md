@@ -42,4 +42,4 @@ La première génération est rarement la dernière. Tout reste modifiable par c
 
 Le chemin traditionnel de l’idée au graphique se mesure en heures. Avec Nexow, c’est en secondes, et l’artefact que vous obtenez est un vrai widget inspectable — pas une boîte noire. Le tableau de bord s’assemble tout seul, et vous gardez le contrôle du code, des données et des clés.
 
-Prêt à essayer ? [Ouvrez l’app](https://x.nexow.app) et décrivez votre premier widget.
+Prêt à essayer ? [Ouvrez l’app](https://x.nexow.ai) et décrivez votre premier widget.

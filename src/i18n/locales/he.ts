@@ -37,7 +37,7 @@ export const he: SiteContent = {
       {
         title: 'משאבים',
         links: [
-          { label: 'הפעלת האפליקציה', href: 'https://x.nexow.app' },
+          { label: 'הפעלת האפליקציה', href: 'https://x.nexow.ai' },
           { label: 'פרטיות', href: '/privacy' },
         ],
       },
@@ -466,7 +466,7 @@ export const he: SiteContent = {
         cadence: 'לתמיד',
         stats: ['10K קרדיטים', '10 בוטים', '3 סוכנים'],
         cta: 'התחילו בחינם',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '10,000 קרדיטים של AI שמורים בהרשמה',
           'מסכים, סביבות עבודה וווידג׳טים ללא הגבלה',
@@ -487,7 +487,7 @@ export const he: SiteContent = {
         stats: ['50K קרדיטים/חודש', '30 בוטים', '10 סוכנים'],
         note: 'כל מה שב-Free, ובנוסף:',
         cta: 'הפכו ל-Supporter',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         features: [
           '50,000 קרדיטים בכל חודש',
           'עד 30 בוטים ו-10 סוכנים',
@@ -507,7 +507,7 @@ export const he: SiteContent = {
         stats: ['800K קרדיטים/חודש', '300 בוטים', '100 סוכנים'],
         note: 'כל מה שב-Supporter, ובנוסף:',
         cta: 'הפכו ל-Sponsor',
-        ctaHref: 'https://x.nexow.app',
+        ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
           '800,000 קרדיטים בכל חודש',

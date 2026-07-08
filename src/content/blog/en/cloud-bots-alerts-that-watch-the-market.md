@@ -54,4 +54,4 @@ Bots are the first step in putting your workspace on autopilot. Next come
 that can watch, reason and act on their own — and a workspace **Copilot**. Bots
 are live now; the rest is landing soon.
 
-[Launch Nexow](https://x.nexow.app) and set your first alert in a sentence.
+[Launch Nexow](https://x.nexow.ai) and set your first alert in a sentence.

@@ -47,5 +47,5 @@ follow makers, fork dashboards, publish widgets, and — soon — subscribe to a
 strategy signals. You opt into as much of the network as you want, one step at a
 time.
 
-[Create your free account](https://x.nexow.app) — or keep building locally. Both
+[Create your free account](https://x.nexow.ai) — or keep building locally. Both
 are free, and both are yours.

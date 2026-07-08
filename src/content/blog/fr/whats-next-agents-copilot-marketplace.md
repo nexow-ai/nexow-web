@@ -32,4 +32,4 @@ De nouvelles surfaces, la même règle : **privé par défaut.** Le mode local �
 
 Sous le capot, la génération tourne sur Claude d’Anthropic — **Opus 4.8** par défaut, avec **Sonnet 4.6** et **Haiku 4.5** pour des builds plus rapides et moins chers — et en mode privé vous fournissez votre propre clé, vous gardez donc le contrôle de l’usage et du coût.
 
-Envie d’influencer ce qui sort ensuite ? [Lancez Nexow](https://x.nexow.app), commencez à construire, et dites-nous ce dont vous avez besoin.
+Envie d’influencer ce qui sort ensuite ? [Lancez Nexow](https://x.nexow.ai), commencez à construire, et dites-nous ce dont vous avez besoin.
