@@ -2,7 +2,7 @@
 title: 'Cloud bots: set an alert in a sentence and let it watch the market for you'
 description: 'Widgets show you the market; cloud bots act on it. Describe an alert in plain words or wire one visually, and Nexow watches your data and fires signals to your canvas — even with your tab closed.'
 pubDate: 2026-07-07
-heroImage: '/blog/bots.svg'
+heroImage: ../../../assets/blog/bots.svg
 tags: ['product', 'automation', 'bots']
 ---
 

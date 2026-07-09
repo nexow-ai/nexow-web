@@ -2,7 +2,7 @@
 title: 'Lo que viene: agentes, un Copilot para tu workspace y el marketplace'
 description: 'El preview trajo el lienzo, la generación de código, 28+ conectores, bots en la nube y cuentas. Esto es lo que llega ahora — agentes de IA con un harness completo, un Copilot para tu workspace y un marketplace con señales de estrategia.'
 pubDate: 2026-07-03
-heroImage: '/blog/agents.svg'
+heroImage: ../../../assets/blog/agents.svg
 tags: ['roadmap', 'agentes', 'producto']
 ---
 

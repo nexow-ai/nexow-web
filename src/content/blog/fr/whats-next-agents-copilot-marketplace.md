@@ -2,7 +2,7 @@
 title: 'La suite : des agents, un Copilot pour votre workspace et le marketplace'
 description: 'Le preview a livré le canvas, la génération de code, 28+ connecteurs, les bots cloud et les comptes. Voici ce qui arrive maintenant — des agents IA avec un harnais complet, un Copilot pour votre workspace et un marketplace avec des signaux de stratégie.'
 pubDate: 2026-07-03
-heroImage: '/blog/agents.svg'
+heroImage: ../../../assets/blog/agents.svg
 tags: ['roadmap', 'agents', 'product']
 ---
 

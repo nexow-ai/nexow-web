@@ -5,6 +5,7 @@ import { localizePath, dateLocale } from '../i18n/utils';
 import Layout from './Layout.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   lang: Lang;
@@ -15,7 +16,7 @@ interface Props {
   updatedDate?: Date;
   author: string;
   tags: string[];
-  heroImage?: string;
+  heroImage?: ImageMetadata;
   minutes: number;
 }
 const { lang, slug, title, description, pubDate, updatedDate, author, tags, heroImage, minutes } =
@@ -103,10 +104,10 @@ const articleSchema = {
         <div class="container-page mt-10">
           <figure class="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-ink-900/8 bg-ink-950 shadow-xl shadow-brand-900/5">
             <img
-              src={heroImage}
+              src={heroImage.src}
               alt={title}
-              width="1200"
-              height="675"
+              width={heroImage.width}
+              height={heroImage.height}
               fetchpriority="high"
               decoding="async"
               class="aspect-[16/9] w-full object-cover"

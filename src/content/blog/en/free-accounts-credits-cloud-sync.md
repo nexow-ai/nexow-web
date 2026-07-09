@@ -2,7 +2,7 @@
 title: 'From local to networked: free accounts, 10,000 credits and cloud sync'
 description: 'Nexow stays private and local by default — but one free account adds 10,000 AI credits, cross-device cloud sync, and the maker network. No credit card, always optional.'
 pubDate: 2026-07-05
-heroImage: '/blog/network.svg'
+heroImage: ../../../assets/blog/network.svg
 tags: ['product', 'accounts', 'network']
 ---
 
