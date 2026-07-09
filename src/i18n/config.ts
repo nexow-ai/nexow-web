@@ -10,6 +10,9 @@ export const languages = {
   ja: '日本語',
   ar: 'العربية',
   he: 'עברית',
+  ko: '한국어',
+  ru: 'Русский',
+  uk: 'Українська',
 } as const;
 
 export type Lang = keyof typeof languages;

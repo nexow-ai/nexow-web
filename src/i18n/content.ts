@@ -282,8 +282,11 @@ import { zh } from './locales/zh';
 import { ja } from './locales/ja';
 import { ar } from './locales/ar';
 import { he } from './locales/he';
+import { ko } from './locales/ko';
+import { ru } from './locales/ru';
+import { uk } from './locales/uk';
 
-export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, pt, zh, ja, ar, he };
+export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, pt, zh, ja, ar, he, ko, ru, uk };
 
 export function useContent(lang: Lang): SiteContent {
   return content[lang];
