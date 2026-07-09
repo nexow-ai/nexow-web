@@ -2,7 +2,7 @@
 title: 'Comment construire un tableau de bord crypto avec l’IA — sans coder'
 description: 'Un guide pas à pas pour construire un tableau de bord crypto en direct avec l’IA : demandez un graphique en chandeliers, ajoutez la profondeur du carnet et les funding rates, et organisez le tout sur un canvas — sans écrire de code.'
 pubDate: 2026-06-28
-heroImage: '/blog/crypto.svg'
+heroImage: ../../../assets/blog/crypto.svg
 tags: ['guide', 'crypto', 'tutorial']
 ---
 

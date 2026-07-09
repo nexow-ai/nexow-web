@@ -2,7 +2,7 @@
 title: 'Explora todos los mercados: la nueva galería de conectores'
 description: 'Explora y busca cada venue que Nexow puede transmitir — 28 conectores en vivo hoy y 56 en el catálogo, entre FX, cripto, acciones, mercados de predicción, bases de datos y redes sociales.'
 pubDate: 2026-07-08
-heroImage: '/blog/connectors.svg'
+heroImage: ../../../assets/blog/connectors.svg
 tags: ['producto', 'conectores', 'datos']
 ---
 

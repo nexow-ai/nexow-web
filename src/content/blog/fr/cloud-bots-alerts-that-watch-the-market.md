@@ -2,7 +2,7 @@
 title: 'Bots cloud : définissez une alerte en une phrase et laissez-la surveiller le marché'
 description: 'Les widgets vous montrent le marché ; les bots cloud agissent dessus. Décrivez une alerte en langage naturel ou montez-la visuellement, et Nexow surveille vos données et envoie des signaux à votre canvas — même avec l’onglet fermé.'
 pubDate: 2026-07-07
-heroImage: '/blog/bots.svg'
+heroImage: ../../../assets/blog/bots.svg
 tags: ['product', 'automation', 'bots']
 ---
 

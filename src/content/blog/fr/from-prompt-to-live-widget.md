@@ -2,7 +2,7 @@
 title: 'Du prompt au widget en direct : comment Nexow transforme une phrase en tableau de bord de trading'
 description: 'Un regard sous le capot sur la façon dont Nexow génère un widget de marché fonctionnel et connecté aux données à partir d’un prompt en langage naturel — codegen, sandboxing et connecteurs en direct expliqués.'
 pubDate: 2026-06-24
-heroImage: '/blog/codegen.svg'
+heroImage: ../../../assets/blog/codegen.svg
 tags: ['product', 'ai', 'how-it-works']
 ---
 

@@ -2,7 +2,7 @@
 title: 'Explore every market: the new connector gallery'
 description: 'Browse and search every venue Nexow can stream — 28 connectors live today and 56 in the catalog, across FX, crypto, equities, prediction markets, databases and socials.'
 pubDate: 2026-07-08
-heroImage: '/blog/connectors.svg'
+heroImage: ../../../assets/blog/connectors.svg
 tags: ['product', 'connectors', 'data']
 ---
 

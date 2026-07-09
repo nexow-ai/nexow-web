@@ -2,7 +2,7 @@
 title: 'De local a en red: cuentas gratis, 10.000 créditos y sync en la nube'
 description: 'Nexow es privado y local por defecto — pero una cuenta gratis añade 10.000 créditos de IA, sincronización entre dispositivos y la red de makers. Sin tarjeta, siempre opcional.'
 pubDate: 2026-07-05
-heroImage: '/blog/network.svg'
+heroImage: ../../../assets/blog/network.svg
 tags: ['producto', 'cuentas', 'red']
 ---
 

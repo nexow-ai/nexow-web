@@ -2,7 +2,7 @@
 title: 'Bots en la nube: define una alerta en una frase y deja que vigile el mercado por ti'
 description: 'Los widgets te muestran el mercado; los bots en la nube actúan sobre él. Describe una alerta en lenguaje natural o móntala visualmente, y Nexow vigila tus datos y dispara señales a tu lienzo — incluso con la pestaña cerrada.'
 pubDate: 2026-07-07
-heroImage: '/blog/bots.svg'
+heroImage: ../../../assets/blog/bots.svg
 tags: ['producto', 'automatización', 'bots']
 ---
 

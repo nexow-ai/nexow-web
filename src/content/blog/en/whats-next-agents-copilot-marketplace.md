@@ -2,7 +2,7 @@
 title: 'What we’re building next: agents, a workspace Copilot and the marketplace'
 description: 'The preview shipped the canvas, codegen, 28+ connectors, cloud bots and accounts. Here’s what’s landing next — AI agents with a full harness, a Copilot for your workspace, and a marketplace with strategy signals.'
 pubDate: 2026-07-03
-heroImage: '/blog/agents.svg'
+heroImage: ../../../assets/blog/agents.svg
 tags: ['roadmap', 'agents', 'product']
 ---
 
