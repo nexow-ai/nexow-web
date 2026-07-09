@@ -12,7 +12,7 @@ export default defineConfig({
   // English is served from the root (/), other locales from /{lang}/.
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es', 'fr'],
+    locales: ['en', 'es', 'fr', 'it', 'de', 'pt', 'zh', 'ja', 'ar', 'he'],
     routing: {
       prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
@@ -31,6 +31,13 @@ export default defineConfig({
           en: 'en',
           es: 'es',
           fr: 'fr',
+          it: 'it',
+          de: 'de',
+          pt: 'pt',
+          zh: 'zh',
+          ja: 'ja',
+          ar: 'ar',
+          he: 'he',
         },
       },
     }),
@@ -41,5 +48,12 @@ export default defineConfig({
     '/pricing': '/plans',
     '/es/pricing': '/es/plans',
     '/fr/pricing': '/fr/plans',
+    '/it/pricing': '/it/plans',
+    '/de/pricing': '/de/plans',
+    '/pt/pricing': '/pt/plans',
+    '/zh/pricing': '/zh/plans',
+    '/ja/pricing': '/ja/plans',
+    '/ar/pricing': '/ar/plans',
+    '/he/pricing': '/he/plans',
   },
 });

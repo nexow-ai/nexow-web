@@ -275,8 +275,15 @@ export const CONNECTORS = CONNECTOR_GROUPS.flatMap((g) => g.venues);
 import { en } from './locales/en';
 import { es } from './locales/es';
 import { fr } from './locales/fr';
+import { it } from './locales/it';
+import { de } from './locales/de';
+import { pt } from './locales/pt';
+import { zh } from './locales/zh';
+import { ja } from './locales/ja';
+import { ar } from './locales/ar';
+import { he } from './locales/he';
 
-export const content: Record<Lang, SiteContent> = { en, es, fr };
+export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, pt, zh, ja, ar, he };
 
 export function useContent(lang: Lang): SiteContent {
   return content[lang];
