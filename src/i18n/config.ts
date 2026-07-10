@@ -4,8 +4,9 @@ export const languages = {
   es: 'Español',
   fr: 'Français',
   it: 'Italiano',
-  de: 'Deutsch',
   pt: 'Português',
+  de: 'Deutsch',
+  nl: 'Nederlands',
   zh: '中文',
   ja: '日本語',
   ar: 'العربية',
@@ -13,6 +14,9 @@ export const languages = {
   ko: '한국어',
   ru: 'Русский',
   uk: 'Українська',
+  ms: 'Bahasa Melayu',
+  el: 'Ελληνικά',
+  tr: 'Türkçe',
 } as const;
 
 export type Lang = keyof typeof languages;

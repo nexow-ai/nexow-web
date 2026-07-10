@@ -277,6 +277,7 @@ import { es } from './locales/es';
 import { fr } from './locales/fr';
 import { it } from './locales/it';
 import { de } from './locales/de';
+import { nl } from './locales/nl';
 import { pt } from './locales/pt';
 import { zh } from './locales/zh';
 import { ja } from './locales/ja';
@@ -285,8 +286,11 @@ import { he } from './locales/he';
 import { ko } from './locales/ko';
 import { ru } from './locales/ru';
 import { uk } from './locales/uk';
+import { ms } from './locales/ms';
+import { el } from './locales/el';
+import { tr } from './locales/tr';
 
-export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, pt, zh, ja, ar, he, ko, ru, uk };
+export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, nl, pt, zh, ja, ar, he, ko, ru, uk, ms, el, tr };
 
 export function useContent(lang: Lang): SiteContent {
   return content[lang];

@@ -5,13 +5,13 @@ const prefixedLangs = Object.keys(languages).filter((l) => l !== defaultLang) as
 /** BCP 47 tags (Intl) and Open Graph locale codes, keyed by locale. */
 const LOCALE_TAGS: Record<string, string> = {
   en: 'en-US', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', de: 'de-DE',
-  pt: 'pt-PT', zh: 'zh-CN', ja: 'ja-JP', ar: 'ar', he: 'he-IL',
-  ko: 'ko-KR', ru: 'ru-RU', uk: 'uk-UA',
+  nl: 'nl-NL', pt: 'pt-PT', zh: 'zh-CN', ja: 'ja-JP', ar: 'ar', he: 'he-IL',
+  ko: 'ko-KR', ru: 'ru-RU', uk: 'uk-UA', ms: 'ms-MY', el: 'el-GR', tr: 'tr-TR',
 };
 const OG_LOCALES: Record<string, string> = {
   en: 'en_US', es: 'es_ES', fr: 'fr_FR', it: 'it_IT', de: 'de_DE',
-  pt: 'pt_PT', zh: 'zh_CN', ja: 'ja_JP', ar: 'ar_AR', he: 'he_IL',
-  ko: 'ko_KR', ru: 'ru_RU', uk: 'uk_UA',
+  nl: 'nl_NL', pt: 'pt_PT', zh: 'zh_CN', ja: 'ja_JP', ar: 'ar_AR', he: 'he_IL',
+  ko: 'ko_KR', ru: 'ru_RU', uk: 'uk_UA', ms: 'ms_MY', el: 'el_GR', tr: 'tr_TR',
 };
 
 /** Detect the active locale from a URL pathname (`/es/...` → `es`). */
