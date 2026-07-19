@@ -6,22 +6,22 @@
 import Icon from './Icon.astro';
 
 const nodes = [
-  { tag: 'source', label: 'Coinbase · BTC-USD', icon: 'plug' },
-  { tag: 'trigger', label: '% change · 1h window', icon: 'bolt' },
-  { tag: 'processor', label: 'drop greater than 5%', icon: 'cpu' },
-  { tag: 'output', label: 'Inbox · Widget', icon: 'bell' },
+  { tag: 'source', label: 'Habit tracker · today', icon: 'check' },
+  { tag: 'trigger', label: 'streak at risk · 9pm', icon: 'bolt' },
+  { tag: 'processor', label: 'summarize missing actions', icon: 'cpu' },
+  { tag: 'output', label: 'Planner · Widget', icon: 'bell' },
 ];
 ---
 
 <div
-  class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-2xl shadow-black/40"
+  class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10"
   aria-hidden="true"
 >
-  <div class="flex items-center gap-2 border-b border-white/5 px-4 py-3">
-    <Icon name="bot" class="size-4 text-brand-400" />
-    <span class="font-mono text-xs text-ink-300">bots · flow</span>
-    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-brand-300">
-      <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>running
+  <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
+    <Icon name="bot" class="size-4 text-brand-600" />
+    <span class="font-mono text-xs text-ink-500">bots · flow</span>
+    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700">
+      <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>running
     </span>
   </div>
 
@@ -30,26 +30,26 @@ const nodes = [
       {
         nodes.map((n, i) => (
           <li>
-            <div class="flex items-center gap-3 rounded-xl border border-white/8 bg-white/[0.03] px-3 py-2.5">
-              <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+            <div class="flex items-center gap-3 rounded-xl border border-ink-900/10 bg-[#f7fbfb] px-3 py-2.5">
+              <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
                 <Icon name={n.icon} class="size-4" />
               </span>
               <div class="min-w-0">
-                <p class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-500">{n.tag}</p>
-                <p class="truncate font-mono text-xs text-ink-200">{n.label}</p>
+                <p class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">{n.tag}</p>
+                <p class="truncate font-mono text-xs text-ink-700">{n.label}</p>
               </div>
             </div>
             {i < nodes.length - 1 && (
-              <div class="ml-[1.85rem] flex h-5 w-px flex-col bg-gradient-to-b from-brand-400/50 to-accent-400/40" />
+              <div class="ml-[1.85rem] flex h-5 w-px flex-col bg-gradient-to-b from-brand-300/70 to-sky-300/70" />
             )}
           </li>
         ))
       }
     </ol>
 
-    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-brand-400/25 bg-brand-500/[0.06] px-3 py-2.5">
-      <Icon name="bell" class="size-4 shrink-0 text-brand-400" />
-      <span class="font-mono text-xs text-ink-200">BTC-USD dropped <span class="text-rose-400">5.2%</span> in 1h</span>
+    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-brand-200 bg-brand-50 px-3 py-2.5">
+      <Icon name="bell" class="size-4 shrink-0 text-brand-600" />
+      <span class="font-mono text-xs text-ink-700">2 habits still open before <span class="text-brand-700">9pm</span></span>
       <span class="ml-auto font-mono text-[0.6rem] text-ink-500">now</span>
     </div>
   </div>

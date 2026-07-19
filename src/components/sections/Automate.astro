@@ -14,74 +14,57 @@ const [bots, agents, copilot] = t.items;
 const statusLabel = (s: 'live' | 'soon') => (s === 'live' ? t.liveLabel : t.soonLabel);
 ---
 
-<section id="automate" class="relative bg-ink-950 py-24 text-white sm:py-32">
+<section id="automate" class="relative overflow-hidden bg-white py-20 text-ink-950 sm:py-24">
   <div class="container-page">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
-    <div class="reveal-stagger mt-14 grid gap-4 lg:grid-cols-2">
-      <!-- Bots — featured card with the flow mock -->
-      <div class="card-dark card-spotlight flex flex-col gap-6 p-7 sm:flex-row sm:items-start lg:col-span-2">
+    <div class="reveal-stagger mt-10 grid gap-4 lg:grid-cols-2">
+      <div class="flex flex-col gap-6 rounded-2xl border border-ink-900/10 bg-white p-7 shadow-sm shadow-ink-950/[0.03] sm:flex-row sm:items-start lg:col-span-2">
         <div class="max-w-sm">
           <div class="flex items-center gap-3">
-            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
+            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
               <Icon name={bots.icon} class="size-5.5" />
             </span>
             <span class="badge-status" data-status={bots.status}>
-              <span class:list={['size-1.5 rounded-full', bots.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
+              <span class:list={['size-1.5 rounded-full', bots.status === 'live' ? 'animate-pulse bg-brand-500' : 'bg-accent-500']}></span>
               {statusLabel(bots.status)}
             </span>
           </div>
-          <h3 class="mt-5 font-display text-xl font-semibold text-white">{bots.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-ink-400">{bots.body}</p>
+          <h3 class="mt-5 font-display text-xl font-semibold text-ink-950">{bots.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-600">{bots.body}</p>
         </div>
         <div class="min-w-0 flex-1 self-stretch">
           <BotFlowMock />
         </div>
       </div>
 
-      <!-- Agents -->
-      <div class="card-dark card-spotlight flex flex-col p-7">
-        <div class="flex items-center gap-3">
-          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-            <Icon name={agents.icon} class="size-5.5" />
-          </span>
-          <span class="badge-status" data-status={agents.status}>
-            <span class:list={['size-1.5 rounded-full', agents.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
-            {statusLabel(agents.status)}
-          </span>
-        </div>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{agents.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{agents.body}</p>
-        <!-- harness orbit chips -->
-        <div class="mt-5 flex flex-wrap gap-2" aria-hidden="true">
-          {t.harnessChips.map((h) => (
-            <span class="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{h}</span>
-          ))}
-        </div>
-      </div>
-
-      <!-- Copilot -->
-      <div class="card-dark card-spotlight flex flex-col p-7">
-        <div class="flex items-center gap-3">
-          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-            <Icon name={copilot.icon} class="size-5.5" />
-          </span>
-          <span class="badge-status" data-status={copilot.status}>
-            <span class:list={['size-1.5 rounded-full', copilot.status === 'live' ? 'animate-pulse bg-brand-400' : 'bg-accent-400']}></span>
-            {statusLabel(copilot.status)}
-          </span>
-        </div>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{copilot.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{copilot.body}</p>
-        <!-- prompt chips -->
-        <div class="mt-5 flex flex-col gap-2" aria-hidden="true">
-          {t.copilotPrompts.map((q) => (
-            <span class="inline-flex items-center gap-2 rounded-lg border border-white/8 bg-ink-950/70 px-3 py-1.5 font-mono text-[0.7rem] text-ink-300">
-              <span class="text-brand-400">❯</span> {q}
+      {[agents, copilot].map((item, idx) => (
+        <div class="flex flex-col rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-7 shadow-sm shadow-ink-950/[0.03]">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
+              <Icon name={item.icon} class="size-5.5" />
             </span>
-          ))}
+            <span class="badge-status" data-status={item.status}>
+              <span class:list={['size-1.5 rounded-full', item.status === 'live' ? 'animate-pulse bg-brand-500' : 'bg-accent-500']}></span>
+              {statusLabel(item.status)}
+            </span>
+          </div>
+          <h3 class="mt-5 font-display text-xl font-semibold text-ink-950">{item.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+
+          <div class:list={['mt-5', idx === 0 ? 'flex flex-wrap gap-2' : 'flex flex-col gap-2']} aria-hidden="true">
+            {idx === 0
+              ? t.harnessChips.map((h) => (
+                  <span class="rounded-full border border-ink-900/10 bg-white px-2.5 py-1 font-mono text-[0.65rem] text-ink-600">{h}</span>
+                ))
+              : t.copilotPrompts.map((q) => (
+                  <span class="inline-flex items-center gap-2 rounded-lg border border-ink-900/10 bg-white px-3 py-1.5 font-mono text-[0.7rem] text-ink-600">
+                    <span class="text-brand-600">›</span> {q}
+                  </span>
+                ))}
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

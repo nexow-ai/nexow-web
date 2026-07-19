@@ -13,34 +13,28 @@ const t = useContent(lang).home.how;
 const STEP_ICONS = ['wand', 'cpu', 'layers'];
 ---
 
-<section id="how" class="relative overflow-hidden bg-ink-950 py-24 text-white sm:py-32">
-  <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(70%_60%_at_50%_40%,black,transparent)]"></div>
-  <div class="glow-brand pointer-events-none absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
-
+<section id="how" class="relative overflow-hidden bg-[#f7fbfb] py-20 text-ink-950 sm:py-24">
   <div class="container-page relative">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
-    <ol class="reveal-stagger mt-16 grid gap-6 md:grid-cols-3">
+    <ol class="reveal-stagger mt-10 grid gap-5 md:grid-cols-3">
       {
         t.steps.map((step, i) => (
           <li class="relative">
             {i < t.steps.length - 1 && (
-              <span
-                class="absolute -right-6 top-10 z-10 hidden text-brand-400/60 md:block"
-                aria-hidden="true"
-              >
+              <span class="absolute -right-6 top-10 z-10 hidden text-brand-500/60 md:block" aria-hidden="true">
                 <Icon name="arrow" class="size-5" />
               </span>
             )}
-            <div class="card-dark card-spotlight flex h-full flex-col items-start p-7">
+            <div class="flex h-full flex-col items-start rounded-2xl border border-ink-900/10 bg-white p-7 shadow-sm shadow-ink-950/[0.03]">
               <div class="flex items-center gap-4">
-                <span class="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500/20 to-accent-500/20 text-brand-300 ring-1 ring-white/10">
+                <span class="inline-flex size-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
                   <Icon name={STEP_ICONS[i]} class="size-6" />
                 </span>
-                <span class="font-mono text-sm tracking-[0.2em] text-ink-500">{step.n}</span>
+                <span class="font-mono text-sm tracking-[0.2em] text-ink-400">{step.n}</span>
               </div>
-              <h3 class="mt-6 font-display text-xl font-semibold text-white">{step.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-400">{step.body}</p>
+              <h3 class="mt-6 font-display text-xl font-semibold text-ink-950">{step.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">{step.body}</p>
             </div>
           </li>
         ))

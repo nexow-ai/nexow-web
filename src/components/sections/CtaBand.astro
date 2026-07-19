@@ -23,22 +23,24 @@ const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
 ---
 
-<section class="relative overflow-hidden bg-ink-950 py-28 text-white sm:py-36">
-  <!-- Backdrop: grid + aurora + noise -->
+<section class="relative overflow-hidden bg-white py-20 text-ink-950 sm:py-28">
+  <!-- Backdrop: soft grid + wash -->
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <div class="hairline-glow absolute inset-x-0 top-0"></div>
-    <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"></div>
+    <div class="hairline-gold absolute inset-x-0 top-0 opacity-70"></div>
     <div
-      class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-brand-500), transparent 60%)"
+      class="absolute inset-0 opacity-35 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"
+      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 10%, transparent) 1px, transparent 1px); background-size:56px 56px"
+    ></div>
+    <div
+      class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-45 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-brand-100), transparent 60%)"
     >
     </div>
     <div
-      class="aurora-b absolute left-[30%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-20 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-accent-500), transparent 60%)"
+      class="aurora-b absolute left-[30%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-30 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-sky-100), transparent 60%)"
     >
     </div>
-    <div class="bg-noise absolute inset-0 opacity-[0.35] mix-blend-overlay"></div>
   </div>
 
   <div class="container-page relative">
@@ -47,12 +49,12 @@ const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lan
       <h2 class="mt-8 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
         {title}
       </h2>
-      <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-300">{subtitle}</p>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600">{subtitle}</p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
         <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
           {primary}
         </Button>
-        <Button href={secondaryHref} variant="outline" size="lg">
+        <Button href={secondaryHref} variant="secondary" size="lg">
           {secondary}
         </Button>
       </div>

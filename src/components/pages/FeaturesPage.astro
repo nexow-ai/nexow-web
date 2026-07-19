@@ -5,8 +5,7 @@ import { localizePath } from '../../i18n/utils';
 import Layout from '../../layouts/Layout.astro';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
-import ConnectorMarquee from '../ConnectorMarquee.astro';
-import WidgetMock from '../WidgetMock.astro';
+import PlaygroundMock from '../PlaygroundMock.astro';
 import CanvasMock from '../CanvasMock.astro';
 import ConnectMock from '../ConnectMock.astro';
 import BotFlowMock from '../BotFlowMock.astro';
@@ -62,11 +61,6 @@ const explore = useContent(lang).connectorsPage.exploreCta;
         <Button href={localizePath('/connectors', lang)} variant="secondary" size="lg" icon="plug">{explore}</Button>
       </div>
     </div>
-
-    <!-- Live connector marquee -->
-    <div class="relative mt-16">
-      <ConnectorMarquee tone="light" />
-    </div>
     <div class="hairline-gold absolute inset-x-0 bottom-0"></div>
   </section>
 
@@ -114,7 +108,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
                 <!-- Visual -->
                 <div class:list={['reveal', reverse && 'lg:order-1']}>
                   <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white">
-                    {i === 0 && <WidgetMock promptExample={home.promptExample} promptPlaceholder={home.promptPlaceholder} />}
+                    {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
                     {i === 1 && <CanvasMock />}
                     {i === 2 && <ConnectMock lang={lang} />}
                     {i === 3 && <BotFlowMock />}
