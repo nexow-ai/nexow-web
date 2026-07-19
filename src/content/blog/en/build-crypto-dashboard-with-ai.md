@@ -20,11 +20,10 @@ A single canvas that tracks a crypto pair end to end:
 3. A funding-rate monitor for perpetuals
 4. A compact watchlist of related pairs
 
-## Step 1 — Open the app and pick private mode
+## Step 1 — Open the app
 
-[Launch Nexow](https://x.nexow.ai) and add your own Anthropic API key in
-Settings. In private mode, widget generation runs entirely in your browser and
-nothing is sent to our servers — you only pay for your own API usage.
+[Launch Nexow](https://x.nexow.ai), open a workspace, and start with the widget
+you need most. Free includes starter credits for generating and editing widgets.
 
 ## Step 2 — Prompt your main chart
 
@@ -68,12 +67,11 @@ available to inspect.
 Kraken, Deribit, BitMEX and more, alongside FX, equities and prediction-market
 venues — 20+ in total.
 
-**Is my data private?** Yes. In private mode, codegen runs in your browser, your
-widgets persist locally in IndexedDB, and many venues connect directly from the
-browser — so your keys and data stay on your machine.
+**Is my data private?** Nexow runs generated widgets in a sandbox, scopes
+connector access, and keeps widget history attached to your workspace.
 
-**How much does it cost?** The preview is free; in private mode you only pay your
-own Anthropic API usage.
+**How much does it cost?** Free includes the core canvas, sync, reusable widgets
+and starter AI credits. Paid plans add more capacity later.
 
 ---
 

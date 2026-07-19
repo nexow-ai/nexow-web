@@ -41,14 +41,12 @@ signals you trust, and earn on the strategies you run.
 
 ## The principle stays fixed
 
-New surfaces, same rule: **private by default.** Local mode — bring-your-own-key
-codegen, browser persistence, direct-to-venue connections — isn't going away as we
-add hosted agents and server components. The cloud is always something you opt
-into, never the default.
+New surfaces, same rule: generated software needs clear boundaries. Sandboxed
+widgets, scoped connector access, version history and portable libraries remain
+the foundation as we add hosted agents and server components.
 
 Under the hood, generation runs on Anthropic's Claude — **Opus 4.8** by default,
-with **Sonnet 4.6** and **Haiku 4.5** for faster, cheaper builds — and in private
-mode you supply your own key, so you stay in control of usage and cost.
+with **Sonnet 4.6** and **Haiku 4.5** for faster, cheaper builds.
 
 Want to shape what ships next? [Launch Nexow](https://x.nexow.ai), start
 building, and tell us what you need.

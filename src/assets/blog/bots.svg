@@ -1,5 +1,15 @@
 <svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cloud bot with alert and pulse illustration">
   <defs>
+    <style>
+      *[fill="#08090d"] { fill: #ffffff; }
+      *[stroke="#08090d"] { stroke: #ffffff; }
+      *[fill="#f59e0b"], *[fill="#d97706"], *[fill="#fbbf24"], *[fill="#fde68a"] { fill: #14b8a6; }
+      *[stroke="#f59e0b"], *[stroke="#d97706"], *[stroke="#fbbf24"], *[stroke="#fde68a"] { stroke: #14b8a6; }
+      *[fill="#fdf3d8"] { fill: #0f172a; }
+      *[fill="#8a7b57"] { fill: #64748b; }
+      *[stroke="#ffffff"] { stroke: #0f766e; stroke-opacity: 0.08; }
+      stop[stop-color="#f59e0b"], stop[stop-color="#d97706"], stop[stop-color="#fbbf24"] { stop-color: #5eead4; }
+    </style>
     <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
       <stop stop-color="#f59e0b" stop-opacity="0.55"/>
       <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
