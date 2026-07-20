@@ -17,9 +17,9 @@ Un canvas unique qui suit une paire crypto de bout en bout :
 3. Un moniteur de funding rate pour les perpétuels
 4. Une watchlist compacte de paires associées
 
-## Étape 1 — Ouvrez l’app et choisissez le mode privé
+## Étape 1 — Ouvrez l’app
 
-[Lancez Nexow](https://x.nexow.ai) et ajoutez votre propre clé API Anthropic dans les Paramètres. En mode privé, la génération de widgets s’exécute entièrement dans votre navigateur et rien n’est envoyé à nos serveurs — vous ne payez que votre propre usage de l’API.
+[Lancez Nexow](https://x.nexow.ai), ouvrez un espace et commencez par le widget dont vous avez le plus besoin. Free inclut des crédits de départ pour générer et éditer des widgets.
 
 ## Étape 2 — Demandez votre graphique principal
 
@@ -53,9 +53,9 @@ Glissez vos widgets dans une mise en page qui vous convient, et regroupez les vu
 
 **Quels exchanges sont pris en charge ?** Nexow inclut des connecteurs pour Binance, Coinbase, Kraken, Deribit, BitMEX et plus, aux côtés de FX, actions et marchés de prédiction — plus de 20 au total.
 
-**Mes données sont-elles privées ?** Oui. En mode privé, la génération s’exécute dans votre navigateur, vos widgets persistent localement dans IndexedDB, et de nombreux venues se connectent directement depuis le navigateur — vos clés et données restent sur votre machine.
+**Mes données sont-elles privées ?** Nexow exécute les widgets générés en sandbox, limite les accès connecteurs et garde l’historique attaché à votre espace.
 
-**Combien ça coûte ?** La preview est gratuite ; en mode privé, vous ne payez que votre propre usage de l’API Anthropic.
+**Combien ça coûte ?** Free inclut le canvas principal, la sync, les widgets réutilisables et des crédits IA de départ. Les plans payants ajoutent plus de capacité ensuite.
 
 ---
 

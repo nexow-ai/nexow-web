@@ -3,11 +3,11 @@ export type PageAccent = 'brand' | 'gold' | 'sky' | 'violet' | 'amber' | 'rose';
 
 /** Longest-prefix wins. Home & misc pages use `brand` (teal). */
 const ROUTE_ACCENTS: { prefix: string; accent: PageAccent }[] = [
-  { prefix: '/features', accent: 'gold' },
-  { prefix: '/connectors', accent: 'sky' },
-  { prefix: '/plans', accent: 'violet' },
-  { prefix: '/blog', accent: 'amber' },
-  { prefix: '/about', accent: 'rose' },
+  { prefix: '/features', accent: 'brand' },
+  { prefix: '/connectors', accent: 'brand' },
+  { prefix: '/plans', accent: 'brand' },
+  { prefix: '/blog', accent: 'brand' },
+  { prefix: '/about', accent: 'brand' },
 ];
 
 export function getPageAccent(route: string): PageAccent {

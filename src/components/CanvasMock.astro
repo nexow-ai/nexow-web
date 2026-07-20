@@ -1,58 +1,96 @@
 ---
 /**
- * Decorative "free-form canvas" mock — a window with several live-looking
- * widgets (candles, order-book depth, a ticker tile). Reuses the seeded chart
- * mocks. Purely presentational (aria-hidden).
+ * Presentational free-form canvas mock. It mirrors the real Nexow dashboard
+ * mechanics: workspace rail, screen tabs, absolute widget boxes, link port,
+ * grouped widgets, resize affordances, and a library drop target.
  */
-import CandlestickChart from './CandlestickChart.astro';
-import DepthChart from './DepthChart.astro';
 import Icon from './Icon.astro';
 ---
 
 <div
-  class="relative mx-auto w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-2xl shadow-black/40"
+  class="relative mx-auto w-full max-w-lg overflow-hidden rounded-lg border border-white/10 bg-ink-950 shadow-2xl shadow-black/40"
   aria-hidden="true"
 >
-  <div class="flex items-center gap-2 border-b border-white/5 px-4 py-3">
-    <span class="flex gap-1.5">
-      <span class="size-2.5 rounded-full bg-white/15"></span>
-      <span class="size-2.5 rounded-full bg-white/15"></span>
-      <span class="size-2.5 rounded-full bg-white/15"></span>
+  <div class="flex h-10 items-center gap-2 border-b border-white/6 bg-ink-950/80 px-3">
+    <span class="flex size-6 items-center justify-center rounded-md border border-brand-400/25 bg-brand-500/15 font-mono text-[0.62rem] text-brand-300">
+      M
     </span>
-    <span class="ml-2 font-mono text-xs text-ink-400">canvas · macro desk</span>
-    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-brand-300">
+    <div class="flex items-center gap-1 rounded-md border border-white/8 bg-white/[0.03] p-0.5">
+      {['Create', 'Plan'].map((screen, i) => (
+        <span class:list={[
+          'rounded px-2 py-1 font-mono text-[0.56rem]',
+          i === 0 ? 'bg-white/8 text-ink-100' : 'text-ink-500',
+        ]}>{screen}</span>
+      ))}
+    </div>
+    <span class="ml-auto inline-flex items-center gap-1.5 rounded-md bg-brand-500/10 px-2 py-1 font-mono text-[0.58rem] text-brand-300">
       <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>live
     </span>
   </div>
 
-  <div class="grid grid-cols-3 gap-2 p-3">
-    <!-- Candles -->
-    <div class="col-span-2 rounded-xl border border-white/8 bg-white/[0.02] p-3">
-      <div class="mb-2 flex items-center justify-between font-mono text-[0.65rem]">
-        <span class="text-ink-200">BTC-USD · Coinbase</span>
-        <span class="text-emerald-400">+2.4%</span>
-      </div>
-      <div class="h-24 w-full text-ink-300">
-        <CandlestickChart animate seed={11} class="h-full w-full" />
-      </div>
-    </div>
+  <div class="relative h-80 overflow-hidden bg-ink-950/60">
+    <div class="bg-grid absolute inset-0 opacity-35"></div>
+    <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/35" viewBox="0 0 520 320" preserveAspectRatio="none">
+      <path d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 5" />
+    </svg>
 
-    <!-- Ticker tile -->
-    <div class="col-span-1 flex flex-col justify-between rounded-xl border border-white/8 bg-white/[0.02] p-3 font-mono">
-      <span class="text-[0.65rem] text-ink-400">EURUSD</span>
-      <span class="text-lg font-bold text-white">1.0854</span>
-      <span class="inline-flex items-center gap-1 text-[0.65rem] text-emerald-400"><Icon name="arrow" class="size-3 -rotate-45" /> +0.32%</span>
-    </div>
+    <section class="absolute left-4 top-4 h-36 w-[58%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+      <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
+        <span class="truncate font-mono text-[0.6rem] font-semibold text-white">Moodboard · launch</span>
+        <span class="ml-auto text-emerald-400">saved</span>
+      </div>
+      <div class="h-[calc(100%-2rem)] p-2.5">
+        <div class="grid h-full grid-cols-4 grid-rows-3 gap-1.5">
+          <span class="col-span-2 row-span-2 rounded-md bg-[linear-gradient(135deg,#10c5a3,#6366f1)]"></span>
+          <span class="rounded-md bg-[linear-gradient(135deg,#f59e0b,#f43f5e)]"></span>
+          <span class="rounded-md border border-white/10 bg-white/[0.06]"></span>
+          <span class="rounded-md border border-white/10 bg-white/[0.04]"></span>
+          <span class="col-span-2 rounded-md bg-[linear-gradient(135deg,#eafff9,#a3adff)]"></span>
+          <span class="rounded-md border border-white/10 bg-brand-500/15"></span>
+        </div>
+      </div>
+      <span class="absolute -bottom-1 -right-1 size-3 rounded-sm border border-white/20 bg-ink-800"></span>
+      <span class="absolute bottom-0 left-1/2 size-2 -translate-x-1/2 translate-y-1/2 rotate-45 rounded-[2px] border border-brand-300 bg-ink-850"></span>
+    </section>
 
-    <!-- Depth -->
-    <div class="col-span-3 rounded-xl border border-white/8 bg-white/[0.02] p-3">
-      <div class="mb-2 flex items-center justify-between font-mono text-[0.65rem]">
-        <span class="text-ink-200">ETH-PERP · Deribit — order book</span>
-        <span class="text-ink-500">depth</span>
+    <section class="absolute right-4 top-7 h-28 w-[31%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+      <div class="flex h-8 items-center border-b border-white/6 px-2.5 font-mono text-[0.58rem] text-white">
+        Habits
       </div>
-      <div class="h-20 w-full text-ink-300">
-        <DepthChart seed={5} class="h-full w-full" />
+      <div class="flex h-[calc(100%-2rem)] flex-col justify-center px-3 font-mono">
+        <span class="text-xl font-bold text-white">6/8</span>
+        <span class="inline-flex items-center gap-1 text-[0.62rem] text-emerald-400">
+          <Icon name="check" class="size-3" /> streak active
+        </span>
       </div>
-    </div>
+    </section>
+
+    <section class="absolute bottom-4 left-4 h-28 w-[36%] rounded-lg border border-brand-400/25 bg-ink-850/95 shadow-lg shadow-black/30">
+      <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
+        <Icon name="sparkles" class="size-3.5 text-brand-300" />
+        <span class="font-mono text-[0.58rem] font-semibold text-white">Prompt</span>
+      </div>
+      <div class="space-y-1.5 p-2.5 font-mono text-[0.55rem]">
+        <p class="rounded bg-ink-950/70 px-2 py-1.5 text-ink-300">make a daily planner with streaks</p>
+        <p class="text-brand-300">write_widget · v4</p>
+      </div>
+    </section>
+
+    <section class="absolute bottom-4 right-4 h-28 w-[54%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+      <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
+        <span class="font-mono text-[0.58rem] font-semibold text-white">Social widget</span>
+        <span class="ml-auto rounded bg-white/5 px-1.5 py-0.5 font-mono text-[0.5rem] text-ink-500">shared</span>
+      </div>
+      <div class="space-y-1.5 p-2.5 font-mono text-[0.55rem]">
+        <div class="flex items-center gap-2 rounded-md border border-white/8 bg-white/[0.03] px-2 py-1.5">
+          <span class="size-5 rounded-full bg-brand-400/70"></span>
+          <span class="min-w-0 flex-1 text-ink-300">Maya saved your moodboard</span>
+        </div>
+        <div class="flex items-center gap-2 rounded-md border border-white/8 bg-white/[0.03] px-2 py-1.5">
+          <span class="size-5 rounded-full bg-accent-400/70"></span>
+          <span class="min-w-0 flex-1 text-ink-300">New mini-game remix</span>
+        </div>
+      </div>
+    </section>
   </div>
 </div>

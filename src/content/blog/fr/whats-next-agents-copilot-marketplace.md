@@ -28,8 +28,8 @@ Le réseau se dote d’une économie. Dans le **marketplace**, publiez des widge
 
 ## Le principe reste fixe
 
-De nouvelles surfaces, la même règle : **privé par défaut.** Le mode local — génération avec votre propre clé, persistance dans le navigateur, connexions directes aux venues — ne disparaît pas à mesure que nous ajoutons des agents hébergés et des composants serveur. Le cloud est toujours quelque chose que vous choisissez, jamais le défaut.
+De nouvelles surfaces, la même règle : le logiciel généré a besoin de limites claires. Widgets sandboxés, accès connecteurs limités, historique de versions et bibliothèques portables restent la fondation à mesure que nous ajoutons agents hébergés et composants serveur.
 
-Sous le capot, la génération tourne sur Claude d’Anthropic — **Opus 4.8** par défaut, avec **Sonnet 4.6** et **Haiku 4.5** pour des builds plus rapides et moins chers — et en mode privé vous fournissez votre propre clé, vous gardez donc le contrôle de l’usage et du coût.
+Sous le capot, la génération tourne sur Claude d’Anthropic — **Opus 4.8** par défaut, avec **Sonnet 4.6** et **Haiku 4.5** pour des builds plus rapides et moins chers.
 
 Envie d’influencer ce qui sort ensuite ? [Lancez Nexow](https://x.nexow.ai), commencez à construire, et dites-nous ce dont vous avez besoin.

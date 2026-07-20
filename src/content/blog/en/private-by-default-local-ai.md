@@ -1,31 +1,28 @@
 ---
-title: 'Private by default: why your AI market workstation should run locally'
-description: 'Nexow runs fully local by default — bring-your-own-key codegen in the browser, IndexedDB persistence, and direct-to-venue connections. Here is what private-by-default means and why it matters for traders.'
+title: 'Workspace security: how Nexow keeps generated widgets contained'
+description: 'How Nexow uses sandboxed widgets, scoped connectors and workspace history to keep generated trading tools understandable and controlled.'
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacy', 'architecture', 'security']
 ---
 
-Most AI tools ship your data to a server by default. For a market workstation —
-where your keys, positions and strategies are the whole game — that default is
-backwards. Nexow inverts it: **private by default, local by design.**
+Market workstations deal with sensitive context: keys, positions, strategies,
+alerts and custom workflows. Generated software only works here if the boundaries
+are easy to understand.
 
 Here's what that actually means.
 
-## Bring-your-own-key codegen, in the browser
+## Sandboxed generated widgets
 
-In private mode you add your own Anthropic API key, and widget generation runs
-client-side. When you prompt a widget, the request goes from your browser to
-Anthropic with your key — not through Nexow's infrastructure. An unauthenticated
-session costs us nothing to run because there's nothing to run: the work happens
-on your machine.
+Every generated widget runs inside a sandboxed runtime. The widget can render its
+interface, keep its own state, and use the connector capabilities it has been
+given, without turning the rest of your workspace into an open surface.
 
-## Your widgets live in your browser
+## Your widgets keep a history
 
 Every widget you build, every version, every log, and your entire widget library
-persist in your browser's **IndexedDB**. They're available offline and tied to no
-account. Clear your storage and they're gone — there's no server-side copy
-because there was never a server-side upload.
+stay attached to the workspace. You can inspect generated code, compare versions,
+roll back experiments, and keep a reusable library as your canvas evolves.
 
 ## Direct-to-venue connections
 
@@ -37,24 +34,22 @@ smaller trust surface.
 ## Why private-by-default matters
 
 - **Security.** The fewer parties that touch your keys, the fewer places they can
-  leak. Local-first removes us from the path entirely in private mode.
+  leak. Scoped connectors and sandboxed widgets reduce that surface.
 - **Latency.** Direct connections skip a network hop, which matters when you're
   watching an order book.
-- **Ownership.** Your dashboards are yours. No lock-in, no export dance — they
-  live on your machine.
-- **Cost.** You pay only for your own model usage, with no markup and no
-  subscription required to build on the canvas today.
+- **Ownership.** Your dashboards are yours. Version history and reusable widgets
+  keep the work portable.
+- **Cost.** Free includes starter credits; paid plans add more capacity when the
+  workspace needs it.
 
 ## The trade-offs, honestly
 
-Local-first isn't free of trade-offs. Some venues don't allow browser-direct
-connections and must route through a thin proxy. Local persistence means your
-work is tied to a browser profile until you choose to sync it. And running your
-own key means managing your own usage. We think those are the right trade-offs
-for a tool that sits this close to your money.
+Security design is not free of trade-offs. Some venues require routing through a
+thin proxy, some workflows need background cloud services, and shared/community
+features require identity and sync. The important part is keeping those
+boundaries explicit.
 
-As we add hosted plans, trading agents and server components, the principle
-stays fixed: **your keys, your data, your machine** — unless you explicitly opt
-into the cloud.
+As we add hosted plans, trading agents and server components, the principle stays
+fixed: **your tools, your data, your control**.
 
-[Launch Nexow](https://x.nexow.ai) and see private mode for yourself.
+[Launch Nexow](https://x.nexow.ai) and build your first workspace.

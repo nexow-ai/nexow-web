@@ -1,7 +1,6 @@
 ---
 /**
- * Decorative "private mode" settings terminal — reinforces the local-first,
- * bring-your-own-key story. Purely presentational (aria-hidden).
+ * Decorative workspace security terminal. Purely presentational (aria-hidden).
  */
 import Icon from './Icon.astro';
 ---
@@ -12,31 +11,31 @@ import Icon from './Icon.astro';
 >
   <div class="flex items-center gap-2 border-b border-white/5 px-4 py-3">
     <Icon name="lock" class="size-4 text-brand-400" />
-    <span class="font-mono text-xs text-ink-300">settings · private mode</span>
-    <span class="ml-auto rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-brand-300">local</span>
+    <span class="font-mono text-xs text-ink-300">settings · workspace security</span>
+    <span class="ml-auto rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.65rem] text-brand-300">scoped</span>
   </div>
   <div class="space-y-3 p-5 font-mono text-xs">
     <div class="flex items-center justify-between">
-      <span class="text-ink-500">anthropic_api_key</span>
-      <span class="text-ink-300">sk-ant-••••••••••••</span>
+      <span class="text-ink-500">credential vault</span>
+      <span class="text-ink-300">encrypted</span>
     </div>
     <div class="h-px bg-white/5"></div>
     <div class="flex items-center justify-between">
-      <span class="text-ink-500">codegen</span>
-      <span class="inline-flex items-center gap-1.5 text-brand-300"><span class="size-1.5 rounded-full bg-brand-400"></span>your browser</span>
+      <span class="text-ink-500">widget runtime</span>
+      <span class="inline-flex items-center gap-1.5 text-brand-300"><span class="size-1.5 rounded-full bg-brand-400"></span>sandboxed</span>
     </div>
     <div class="flex items-center justify-between">
       <span class="text-ink-500">widgets · versions · logs</span>
-      <span class="text-ink-300">IndexedDB</span>
+      <span class="text-ink-300">workspace history</span>
     </div>
     <div class="flex items-center justify-between">
       <span class="text-ink-500">cloud sync</span>
-      <span class="text-ink-300">optional</span>
+      <span class="text-ink-300">ready</span>
     </div>
     <div class="h-px bg-white/5"></div>
     <div class="flex items-center justify-between">
-      <span class="text-ink-400">bytes sent to nexow servers</span>
-      <span class="text-lg font-bold text-brand-400">0</span>
+      <span class="text-ink-400">connector access</span>
+      <span class="text-lg font-bold text-brand-400">scoped</span>
     </div>
   </div>
 </div>

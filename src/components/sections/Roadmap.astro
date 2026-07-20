@@ -9,44 +9,45 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.roadmap;
+// The full list reads like an inventory on the home page: keep the three
+// strongest shipped proofs and the two nearest milestones.
+const items = [
+  ...t.items.filter((i) => i.status === 'shipped').slice(0, 3),
+  ...t.items.filter((i) => i.status === 'soon').slice(0, 2),
+];
 ---
 
-<section id="roadmap" class="relative bg-ink-950 py-24 text-white sm:py-32">
+<section id="roadmap" class="relative bg-[#f7fbfb] py-24 text-ink-950 sm:py-32">
   <div class="container-page">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
     <div class="reveal-stagger mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
-        t.items.map((item) => {
+        items.map((item) => {
           const shipped = item.status === 'shipped';
           return (
             <div
               class:list={[
-                'card-spotlight relative flex flex-col rounded-2xl border p-6',
+                'relative flex flex-col rounded-2xl border p-6 shadow-sm shadow-ink-950/[0.03]',
                 shipped
-                  ? 'border-brand-400/25 bg-brand-500/[0.06]'
-                  : 'border-white/10 bg-white/[0.02]',
+                  ? 'border-brand-200 bg-white'
+                  : 'border-ink-900/10 bg-white',
               ]}
             >
               <div class="flex items-center justify-between">
                 <span
                   class:list={[
                     'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium uppercase tracking-wider',
-                    shipped ? 'bg-brand-500/15 text-brand-300' : 'bg-accent-500/15 text-accent-300',
+                    shipped ? 'bg-brand-50 text-brand-700' : 'bg-sky-50 text-sky-700',
                   ]}
                 >
-                  <span
-                    class:list={[
-                      'size-1.5 rounded-full',
-                      shipped ? 'bg-brand-400' : 'animate-pulse bg-accent-400',
-                    ]}
-                  />
+                  <span class:list={['size-1.5 rounded-full', shipped ? 'bg-brand-500' : 'animate-pulse bg-sky-500']} />
                   {shipped ? t.shipped : t.soon}
                 </span>
-                {shipped && <Icon name="check" class="size-4 text-brand-400" />}
+                {shipped && <Icon name="check" class="size-4 text-brand-600" />}
               </div>
-              <h3 class="mt-4 font-display text-lg font-semibold text-white">{item.title}</h3>
-              <p class="mt-2 text-sm leading-relaxed text-ink-400">{item.body}</p>
+              <h3 class="mt-4 font-display text-lg font-semibold text-ink-950">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
             </div>
           );
         })

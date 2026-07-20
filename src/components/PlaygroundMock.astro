@@ -1,0 +1,302 @@
+---
+/**
+ * Friendly hero mock inspired by a clean playground: type a prompt, get a few
+ * visible widgets. Light, readable, and less "trading terminal" than the full
+ * product chrome.
+ */
+import BrandMark from './BrandMark.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  promptExample: string;
+}
+const { promptExample } = Astro.props;
+const playgroundExamples = [
+  {
+    prompt: promptExample,
+    primary: 'Moodboard',
+    secondary: 'Habits',
+    secondaryMeta: '6/8',
+    tertiary: 'Mini game',
+    note: 'calm\nclear',
+  },
+  {
+    prompt: 'Build a trading desk with a live watchlist, risk notes and two alerts.',
+    primary: 'Watchlist',
+    secondary: 'Risk',
+    secondaryMeta: '2 alerts',
+    tertiary: 'Signals',
+    note: 'BTC +2.4%\nrisk 2%',
+  },
+  {
+    prompt: 'Create a project command center with sprint tasks and blockers by owner.',
+    primary: 'Sprint board',
+    secondary: 'Blockers',
+    secondaryMeta: '3 open',
+    tertiary: 'Timeline',
+    note: 'design\nlaunch',
+  },
+  {
+    prompt: 'Make a founder dashboard with warm leads, launch tasks and content ideas.',
+    primary: 'Lead pipeline',
+    secondary: 'Launch',
+    secondaryMeta: '12 leads',
+    tertiary: 'Content',
+    note: 'demo\nquote',
+  },
+];
+const initialExample = playgroundExamples[0];
+---
+
+<div class="relative" data-playground-mock data-examples={JSON.stringify(playgroundExamples)}>
+  <div class="pointer-events-none absolute -inset-8 rounded-[2rem] bg-[radial-gradient(circle_at_35%_20%,rgba(16,197,163,0.18),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(14,165,233,0.16),transparent_42%)]"></div>
+
+  <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10">
+    <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
+      <BrandMark class="h-4 w-auto" />
+      <span class="font-mono text-xs text-ink-500">nexow playground</span>
+      <span class="ml-auto rounded-full bg-brand-50 px-2.5 py-1 font-mono text-[0.65rem] text-brand-700">
+        local preview
+      </span>
+    </div>
+
+    <div class="p-4 sm:p-5">
+      <div class="rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+            <Icon name="sparkles" class="size-4" />
+          </span>
+          <p class="min-w-0 flex-1 font-mono text-xs leading-relaxed text-ink-700 sm:text-sm">
+            <span data-typed data-text={initialExample.prompt}>{initialExample.prompt}</span><span data-caret class="caret-blink ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-brand-500"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 grid gap-3 sm:grid-cols-[1.12fr_0.88fr]" data-generated-widgets>
+        <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h3 data-widget-title="primary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.primary}</h3>
+            <Icon name="layers" class="size-4 text-brand-600" />
+          </div>
+          <div class="mt-3 grid h-40 grid-cols-5 grid-rows-4 gap-2">
+            <div class="col-span-3 row-span-3 rounded-lg bg-[linear-gradient(135deg,#7dd3fc,#99f6e4)]"></div>
+            <div class="col-span-2 rounded-lg bg-[linear-gradient(135deg,#fcd34d,#fda4af)]"></div>
+            <div class="rounded-lg border border-ink-900/10 bg-ink-50"></div>
+            <div class="rounded-lg border border-ink-900/10 bg-sky-50"></div>
+            <div data-widget-note class="col-span-2 overflow-hidden whitespace-pre-line break-words rounded-lg border border-ink-900/10 bg-brand-50 p-2 font-mono text-[0.52rem] leading-tight text-ink-500 [overflow-wrap:anywhere]">
+              {initialExample.note}
+            </div>
+            <div class="col-span-2 flex items-end gap-1 rounded-lg border border-ink-900/10 bg-white p-2">
+              {[42, 70, 35, 82, 55].map((v) => (
+                <span class="w-full rounded-sm bg-brand-400/70" style={`height:${v}%`}></span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div class="grid gap-3">
+          <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h3 data-widget-title="secondary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.secondary}</h3>
+              <span data-widget-meta class="rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700">{initialExample.secondaryMeta}</span>
+            </div>
+            <div class="mt-3 grid grid-cols-7 gap-1.5">
+              {Array.from({ length: 21 }).map((_, i) => (
+                <span
+                  class:list={[
+                    'aspect-square rounded-md border',
+                    [0, 1, 2, 4, 7, 8, 10, 14, 15, 16, 18].includes(i)
+                      ? 'border-brand-200 bg-brand-100'
+                      : 'border-ink-900/8 bg-ink-50',
+                  ]}
+                ></span>
+              ))}
+            </div>
+          </section>
+
+          <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h3 data-widget-title="tertiary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.tertiary}</h3>
+              <Icon name="trophy" class="size-4 text-sky-600" />
+            </div>
+            <div class="mt-3 grid grid-cols-5 gap-1.5">
+              {Array.from({ length: 15 }).map((_, i) => (
+                <span
+                  class:list={[
+                    'aspect-square rounded-md border',
+                    [1, 8, 12].includes(i)
+                      ? 'border-sky-200 bg-sky-200'
+                      : [4, 6, 13].includes(i)
+                        ? 'border-brand-200 bg-brand-200'
+                        : 'border-ink-900/8 bg-ink-50',
+                  ]}
+                ></span>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :global(.js) [data-playground-mock] [data-generated-widgets] {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(4px);
+    transition:
+      opacity 0.55s var(--ease-out-expo),
+      transform 0.55s var(--ease-out-expo),
+      filter 0.55s var(--ease-out-expo);
+  }
+
+  :global(.js) [data-playground-mock].is-generated [data-generated-widgets] {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+
+  :global(.js) [data-playground-mock] [data-generated-widgets] > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.45s var(--ease-out-expo),
+      transform 0.45s var(--ease-out-expo);
+  }
+
+  :global(.js) [data-playground-mock].is-generated [data-generated-widgets] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(.js) [data-playground-mock].is-generated [data-generated-widgets] > *:nth-child(2) {
+    transition-delay: 0.08s;
+  }
+
+  :global(.js) [data-playground-mock].is-generated [data-caret] {
+    opacity: 0;
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) [data-playground-mock] [data-generated-widgets],
+    :global(.js) [data-playground-mock] [data-generated-widgets] > * {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  let typedObserver: IntersectionObserver | null = null;
+  let playgroundTimers: number[] = [];
+
+  interface PlaygroundExample {
+    prompt: string;
+    primary: string;
+    secondary: string;
+    secondaryMeta: string;
+    tertiary: string;
+    note: string;
+  }
+
+  function clearPlaygroundTimers() {
+    playgroundTimers.forEach((timer) => window.clearTimeout(timer));
+    playgroundTimers = [];
+  }
+
+  function later(callback: () => void, delay: number) {
+    const timer = window.setTimeout(callback, delay);
+    playgroundTimers.push(timer);
+  }
+
+  function setText(root: HTMLElement, selector: string, value: string) {
+    const el = root.querySelector<HTMLElement>(selector);
+    if (el) el.textContent = value;
+  }
+
+  function applyPlaygroundExample(root: HTMLElement, typed: HTMLElement, example: PlaygroundExample) {
+    typed.dataset.text = example.prompt;
+    setText(root, '[data-widget-title="primary"]', example.primary);
+    setText(root, '[data-widget-title="secondary"]', example.secondary);
+    setText(root, '[data-widget-title="tertiary"]', example.tertiary);
+    setText(root, '[data-widget-meta]', example.secondaryMeta);
+    setText(root, '[data-widget-note]', example.note);
+  }
+
+  function initPlaygroundTyped() {
+    typedObserver?.disconnect();
+    typedObserver = null;
+    clearPlaygroundTimers();
+
+    const roots = document.querySelectorAll<HTMLElement>('[data-playground-mock]');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!roots.length) return;
+
+    if (reduced) {
+      roots.forEach((root) => root.classList.add('is-generated'));
+      return;
+    }
+
+    const typed = roots[0].querySelector<HTMLElement>('[data-typed]');
+    const root = roots[0];
+    if (!typed) return;
+
+    let examples: PlaygroundExample[] = [];
+    try {
+      examples = JSON.parse(root.dataset.examples ?? '[]') as PlaygroundExample[];
+    } catch {
+      examples = [];
+    }
+    if (!examples.length) {
+      examples = [{
+        prompt: typed.dataset.text ?? '',
+        primary: 'Moodboard',
+        secondary: 'Habits',
+        secondaryMeta: '6/8',
+        tertiary: 'Mini game',
+        note: 'calm\nsoft\nclear',
+      }];
+    }
+
+    typedObserver = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        typedObserver?.disconnect();
+        typedObserver = null;
+
+        let exampleIndex = 0;
+        const runExample = () => {
+          const example = examples[exampleIndex % examples.length];
+          exampleIndex += 1;
+          root.classList.remove('is-generated');
+
+          later(() => {
+            applyPlaygroundExample(root, typed, example);
+            typed.textContent = '';
+            let i = 0;
+            const tick = () => {
+              typed.textContent = example.prompt.slice(0, ++i);
+              if (i < example.prompt.length) {
+                later(tick, 16 + Math.random() * 28);
+              } else {
+                later(() => root.classList.add('is-generated'), 180);
+                later(runExample, 3600);
+              }
+            };
+            tick();
+          }, root.classList.contains('is-generated') ? 520 : 250);
+        };
+
+        runExample();
+      },
+      { threshold: 0.4 },
+    );
+    typedObserver.observe(typed);
+  }
+
+  document.addEventListener('astro:page-load', initPlaygroundTyped);
+</script>

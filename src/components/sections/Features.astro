@@ -10,132 +10,62 @@ interface Props {
 const { lang } = Astro.props;
 const t = useContent(lang).home.features;
 
-// Bento placement: hero card (codegen) + wide canvas card, rest are compact.
-const [codegen, sandbox, connectors, canvas, privacy, versions] = t.items;
+const items = t.items;
 ---
 
-<section id="features" class="relative bg-ink-950 py-24 text-white sm:py-32">
-  <div class="container-page">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} tone="dark" />
+<section id="features" class="relative overflow-hidden bg-[#f7fbfb] py-20 text-ink-950 sm:py-24">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div
+      class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_20%,black,transparent)]"
+      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 10%, transparent) 1px, transparent 1px); background-size:56px 56px"
+    ></div>
+  </div>
 
-    <div class="reveal-stagger mt-14 grid gap-4 lg:grid-cols-6">
-      <!-- Codegen — hero card with prompt→code visual -->
-      <div class="card-dark card-spotlight flex flex-col p-7 lg:col-span-4">
-        <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-          <div class="max-w-sm">
-            <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-              <Icon name={codegen.icon} class="size-5.5" />
-            </span>
-            <h3 class="mt-5 font-display text-xl font-semibold text-white">{codegen.title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink-400">{codegen.body}</p>
-          </div>
-          <!-- mini prompt→code visual -->
-          <div class="min-w-0 flex-1 self-stretch" aria-hidden="true">
-            <div class="flex h-full flex-col rounded-xl border border-white/8 bg-ink-950/70 p-4 font-mono text-[0.7rem] leading-relaxed">
-              <p class="truncate text-ink-300">
-                <span class="text-brand-400">❯</span> heatmap of ES futures by strike…
-              </p>
-              <div class="my-3 h-px bg-white/5"></div>
-              <p><span class="text-accent-400">const</span> <span class="text-ink-200">grid</span> <span class="text-ink-500">=</span> <span class="text-brand-300">useLiveData</span><span class="text-ink-500">(</span><span class="text-amber-300/80">'CME:ES'</span><span class="text-ink-500">)</span></p>
-              <p><span class="text-accent-400">render</span><span class="text-ink-500">(</span><span class="text-ink-200">heatmap</span><span class="text-ink-500">(</span><span class="text-ink-200">grid</span><span class="text-ink-500">))</span></p>
-              <p class="mt-auto pt-3">
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-400 ring-1 ring-emerald-400/20">
-                  <Icon name="check" class="size-3" /> widget live
-                </span>
-              </p>
+  <div class="container-page relative">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
+
+    <div class="reveal-stagger mt-10 grid gap-4 md:grid-cols-2">
+      {
+        items.map((item, i) => (
+          <article class:list={[
+            'rounded-2xl border border-ink-900/10 bg-white p-6 shadow-sm shadow-ink-950/[0.03]',
+            i === 0 && 'md:col-span-2 lg:col-span-1',
+          ]}>
+            <div class="flex items-start gap-4">
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
+                <Icon name={item.icon} class="size-5.5" />
+              </span>
+              <div>
+                <h3 class="font-display text-xl font-semibold text-ink-950">{item.title}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Sandbox -->
-      <div class="card-dark card-spotlight flex flex-col p-7 lg:col-span-2">
-        <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-          <Icon name={sandbox.icon} class="size-5.5" />
-        </span>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{sandbox.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{sandbox.body}</p>
-      </div>
+            {i === 0 && (
+              <div class="mt-6 rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-4 font-mono text-[0.72rem] leading-relaxed text-ink-700">
+                <p><span class="text-brand-700">prompt</span> make a soft habit planner with streaks</p>
+                <div class="my-3 h-px bg-ink-900/8"></div>
+                <p><span class="text-sky-700">widget</span> generated · sandboxed · saved to library</p>
+              </div>
+            )}
 
-      <!-- Connectors -->
-      <div class="card-dark card-spotlight flex flex-col p-7 lg:col-span-2">
-        <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-          <Icon name={connectors.icon} class="size-5.5" />
-        </span>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{connectors.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{connectors.body}</p>
-      </div>
-
-      <!-- Versions -->
-      <div class="card-dark card-spotlight flex flex-col p-7 lg:col-span-2">
-        <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-          <Icon name={versions.icon} class="size-5.5" />
-        </span>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{versions.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{versions.body}</p>
-      </div>
-
-      <!-- Privacy -->
-      <div class="card-dark card-spotlight flex flex-col p-7 lg:col-span-2">
-        <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-          <Icon name={privacy.icon} class="size-5.5" />
-        </span>
-        <h3 class="mt-5 font-display text-xl font-semibold text-white">{privacy.title}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-400">{privacy.body}</p>
-      </div>
-
-      <!-- Canvas — wide card with mini canvas visual -->
-      <div class="card-dark card-spotlight flex flex-col gap-6 p-7 sm:flex-row sm:items-center lg:col-span-4">
-        <div class="max-w-sm">
-          <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20">
-            <Icon name={canvas.icon} class="size-5.5" />
-          </span>
-          <h3 class="mt-5 font-display text-xl font-semibold text-white">{canvas.title}</h3>
-          <p class="mt-2 text-sm leading-relaxed text-ink-400">{canvas.body}</p>
-        </div>
-        <!-- mini canvas visual -->
-        <div class="min-w-0 flex-1" aria-hidden="true">
-          <div class="grid grid-cols-3 gap-2 rounded-xl border border-white/8 bg-ink-950/70 p-3">
-            <div class="col-span-2 flex h-16 items-end gap-1 rounded-lg border border-brand-400/30 bg-brand-500/5 p-2">
-              {[35, 55, 40, 70, 52, 80, 64, 90].map((v) => (
-                <span class="w-full rounded-sm bg-brand-400/60" style={`height:${v}%`}></span>
-              ))}
-            </div>
-            <div class="flex h-16 flex-col justify-between rounded-lg border border-white/10 bg-white/[0.03] p-2 font-mono text-[0.55rem] text-ink-500">
-              <span class="text-ink-300">EURUSD</span>
-              <span class="text-emerald-400">1.0854 ▲</span>
-            </div>
-            <div class="flex h-14 items-center justify-center rounded-lg border border-dashed border-white/15 font-mono text-[0.6rem] text-ink-500">
-              + widget
-            </div>
-            <div class="col-span-2 flex h-14 items-center rounded-lg border border-white/10 bg-white/[0.03] px-2">
-              <svg viewBox="0 0 120 24" class="h-6 w-full text-accent-400" fill="none" preserveAspectRatio="none">
-                <path d="M0 18 L15 14 L30 16 L45 9 L60 12 L75 6 L90 10 L105 4 L120 7" stroke="currentColor" stroke-width="1.5" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+            {i === 3 && (
+              <div class="mt-6 grid grid-cols-3 gap-2 rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
+                <div class="col-span-2 flex h-14 items-end gap-1 rounded-lg bg-white p-2">
+                  {[35, 55, 40, 70, 52, 80].map((v) => (
+                    <span class="w-full rounded-sm bg-brand-300" style={`height:${v}%`}></span>
+                  ))}
+                </div>
+                <div class="rounded-lg bg-sky-100"></div>
+                <div class="rounded-lg border border-dashed border-ink-900/15 p-2 text-center font-mono text-[0.6rem] text-ink-500">
+                  + widget
+                </div>
+                <div class="col-span-2 rounded-lg bg-brand-100"></div>
+              </div>
+            )}
+          </article>
+        ))
+      }
     </div>
   </div>
 </section>
-
-<script>
-  let featuresAbort: AbortController | undefined;
-
-  function initFeatureSpotlight() {
-    featuresAbort?.abort();
-    featuresAbort = new AbortController();
-    const { signal } = featuresAbort;
-
-    document.querySelectorAll<HTMLElement>('.card-spotlight').forEach((card) => {
-      card.addEventListener('pointermove', (e) => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-        card.style.setProperty('--my', `${e.clientY - r.top}px`);
-      }, { signal });
-    });
-  }
-
-  document.addEventListener('astro:page-load', initFeatureSpotlight);
-</script>

@@ -1,34 +1,34 @@
 ---
-title: 'Du local au réseau : comptes gratuits, 10 000 crédits et sync cloud'
-description: 'Nexow est privé et local par défaut — mais un compte gratuit ajoute 10 000 crédits IA, la synchronisation entre appareils et le réseau de makers. Sans carte bancaire, toujours optionnel.'
+title: 'Compte gratuit, 10 000 crédits et sync cloud'
+description: 'Un compte Nexow gratuit apporte 10 000 crédits IA, la synchronisation entre appareils et le réseau de makers. Sans carte bancaire.'
 pubDate: 2026-07-05
 heroImage: ../../../assets/blog/network.svg
 tags: ['product', 'accounts', 'network']
 ---
 
-Nexow a été conçu pour tourner sur votre machine. En mode privé, vous apportez votre propre clé Anthropic, vous générez des widgets dans le navigateur et vous gardez tout dans le stockage local — pas de compte, rien d’envoyé à nos serveurs. C’est le défaut, et il ne va nulle part.
+Nexow est construit autour d’un espace de travail que vous pouvez faire grandir : widgets, versions, connecteurs, crédits, sync et communauté vivent au même endroit.
 
-Mais parfois, vous voulez vos tableaux de bord sur chaque appareil, des crédits sans configurer de clé, et une communauté avec qui construire. C’est ce que débloque un **compte gratuit**.
+Parfois, vous voulez vos tableaux de bord sur chaque appareil, des crédits prêts à l’emploi et une communauté avec qui construire. C’est ce que débloque un **compte gratuit**.
 
-## Toujours privé par défaut
+## Conçu pour garder le contrôle
 
-Un compte est toujours *optionnel*. Vous pouvez continuer à construire 100 % en local aussi longtemps que vous le souhaitez — génération avec votre propre clé, persistance IndexedDB, connexions directes aux venues, toute la pile local-first. S’inscrire ne change pas cela ; cela ajoute simplement une couche réseau par-dessus quand vous la voulez.
+Les widgets restent versionnés et portables, les accès connecteurs sont limités aux services que vous connectez, et la sync cloud rend vos espaces disponibles sur plusieurs appareils. L’objectif est simple : votre espace doit rester le vôtre à mesure qu’il devient plus puissant.
 
 ## Ce qu’ajoute un compte gratuit
 
 Créez un compte — sans carte bancaire — et vous obtenez :
 
-- **10 000 crédits IA gratuits** à l’inscription, pour générer des widgets sans fournir votre propre clé.
+- **10 000 crédits IA de départ** pour générer et éditer des widgets rapidement.
 - **La synchronisation cloud entre appareils** pour vos workspaces et widgets — commencez sur le bureau, reprenez sur le portable.
 - **Le réseau de makers** — le fil de la communauté, le marketplace et une bibliothèque de widgets partagée, à mesure que ces fonctionnalités se déploient.
 - **De l’XP et des récompenses** à mesure que vous construisez, partagez et publiez.
 
 ## Sync cloud, sans renoncer à la propriété
 
-La sync est opt-in et par workspace. Ce que vous synchronisez vit dans le cloud pour vous suivre d’une machine à l’autre ; ce que vous gardez en local reste local. Vous décidez où vit chaque tableau de bord — pas d’interrupteur tout ou rien, pas de danse d’export pour récupérer votre travail.
+La sync garde votre espace actif disponible entre machines, avec historique de widgets, bibliothèque et réglages qui suivent le travail. Pas besoin d’exporter pour retrouver votre dashboard.
 
 ## La rampe d’accès au réseau
 
 Un compte gratuit est la rampe d’accès de *construire seul* à *construire avec les autres* : suivez des makers, forkez des tableaux de bord, publiez des widgets et — bientôt — abonnez-vous à des signaux de stratégie audités. Vous optez pour autant du réseau que vous voulez, une étape à la fois.
 
-[Créez votre compte gratuit](https://x.nexow.ai) — ou continuez à construire en local. Les deux sont gratuits, et les deux sont à vous.
+[Créez votre compte gratuit](https://x.nexow.ai) et construisez votre premier espace.

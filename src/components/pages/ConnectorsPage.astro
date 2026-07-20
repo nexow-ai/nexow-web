@@ -46,33 +46,39 @@ const itemListSchema = {
   title={t.meta.title}
   description={t.meta.description}
   schema={[itemListSchema]}
-  theme="dark"
+  theme="light"
 >
-  <section class="relative overflow-hidden bg-ink-950 pt-32 pb-12 text-white sm:pt-40">
+  <section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-12 text-ink-950 sm:pt-40">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-      <div class="glow-brand absolute -top-24 left-1/2 size-[680px] -translate-x-1/2 opacity-30 blur-2xl"></div>
-      <div class="bg-grid absolute inset-0 opacity-50 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"></div>
+      <div
+        class="absolute -top-28 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-65 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+      ></div>
+      <div
+        class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"
+        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 10%, transparent) 1px, transparent 1px); background-size:56px 56px"
+      ></div>
     </div>
     <div class="container-page relative text-center">
-      <span class="eyebrow inline-flex items-center gap-2 text-brand-400">
-        <span class="h-px w-6 bg-brand-400/50"></span>
+      <span class="eyebrow inline-flex items-center gap-2 text-brand-700">
+        <span class="h-px w-6 bg-brand-500/50"></span>
         {t.hero.badge}
-        <span class="h-px w-6 bg-brand-400/50"></span>
+        <span class="h-px w-6 bg-brand-500/50"></span>
       </span>
-      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl">
+      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
         {t.hero.title}
       </h1>
-      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-ink-300">{t.hero.subtitle}</p>
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>
       <p class="mt-6 font-mono text-sm text-ink-500">
-        <span class="text-gradient text-lg font-bold">{CONNECTOR_LIVE_COUNT}</span> {t.countLive} · <span class="text-ink-300">{CONNECTOR_COUNT}</span> {t.countCatalog}
+        <span class="text-gradient text-lg font-bold">{CONNECTOR_LIVE_COUNT}</span> {t.countLive} · <span class="text-ink-700">{CONNECTOR_COUNT}</span> {t.countCatalog}
       </p>
     </div>
   </section>
 
-  <section id="connectors-app" class="bg-ink-950 pb-24 text-white sm:pb-32">
+  <section id="connectors-app" class="bg-[#f7fbfb] pb-24 text-ink-950 sm:pb-32">
     <div class="container-page">
       <!-- Controls -->
-      <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-white/5 bg-ink-950/80 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8">
+      <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <!-- Search -->
           <div class="relative w-full lg:max-w-xs">
@@ -83,34 +89,34 @@ const itemListSchema = {
               autocomplete="off"
               placeholder={t.searchPlaceholder}
               aria-label={t.searchPlaceholder}
-              class="h-11 w-full rounded-full border border-white/10 bg-white/[0.03] pl-10 pr-4 text-sm text-white placeholder:text-ink-500 focus:border-brand-400/40 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+              class="h-11 w-full rounded-full border border-ink-900/10 bg-white pl-10 pr-4 text-sm text-ink-950 placeholder:text-ink-400 focus:border-brand-400/40 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
 
           <!-- Filters -->
           <div class="flex flex-wrap items-center gap-4">
-            <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+            <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
               {
                 categoryFilters.map((f) => (
                   <button
                     type="button"
                     data-filter-category={f.key}
                     aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                    class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-300 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950"
+                    class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
                   >
                     {f.label}
                   </button>
                 ))
               }
             </div>
-            <div class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+            <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
               {
                 statusFilters.map((f) => (
                   <button
                     type="button"
                     data-filter-status={f.key}
                     aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                    class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-300 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950"
+                    class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
                   >
                     {f.label}
                   </button>
@@ -130,7 +136,7 @@ const itemListSchema = {
       </div>
 
       <!-- Empty state -->
-      <p id="connector-empty" class="hidden py-16 text-center text-sm text-ink-400">{t.empty}</p>
+      <p id="connector-empty" class="hidden py-16 text-center text-sm text-ink-500">{t.empty}</p>
     </div>
   </section>
 
