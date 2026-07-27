@@ -1,0 +1,78 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Copilot chat bubbles with parallel conversation tabs illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="126" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#copilot</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="330" rx="300" ry="220" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- conversation tab strip: three tabs, one active -->
+    <g>
+      <rect x="330" y="180" width="170" height="46" rx="14" fill="#f59e0b" fill-opacity="0.16" stroke="url(#edge)" stroke-width="2.5"/>
+      <circle cx="358" cy="203" r="7" fill="#fbbf24"/>
+      <rect x="376" y="198" width="100" height="10" rx="5" fill="#fde68a" fill-opacity="0.85"/>
+      <rect x="516" y="180" width="170" height="46" rx="14" fill="#f59e0b" fill-opacity="0.07" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="2"/>
+      <circle cx="544" cy="203" r="7" fill="#d97706"/>
+      <rect x="562" y="198" width="100" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+      <rect x="702" y="180" width="170" height="46" rx="14" fill="#f59e0b" fill-opacity="0.07" stroke="#8a7b57" stroke-opacity="0.4" stroke-width="2"/>
+      <circle cx="730" cy="203" r="7" fill="none" stroke="#8a7b57" stroke-width="3"/>
+      <rect x="748" y="198" width="100" height="10" rx="5" fill="#8a7b57" fill-opacity="0.7"/>
+    </g>
+
+    <!-- user bubble -->
+    <g>
+      <path d="M352 276 h336 a20 20 0 0 1 20 20 v64 a20 20 0 0 1 -20 20 h-296 l-40 34 v-118 a20 20 0 0 1 20 -20 z" transform="translate(-16 0)" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.7" stroke-width="2.5"/>
+      <rect x="368" y="304" width="240" height="10" rx="5" fill="#fde68a" fill-opacity="0.5"/>
+      <rect x="368" y="330" width="180" height="10" rx="5" fill="#fde68a" fill-opacity="0.35"/>
+    </g>
+
+    <!-- copilot bubble with spark -->
+    <g>
+      <path d="M512 416 h336 a20 20 0 0 1 20 20 v64 a20 20 0 0 1 -20 20 h-296 v34 l-40 -34 a20 20 0 0 1 -20 -20 v-64 a20 20 0 0 1 20 -20 z" fill="#f59e0b" fill-opacity="0.12" stroke="url(#edge)" stroke-width="2.5"/>
+      <path d="M540 452 l7 16 16 7 -16 7 -7 16 -7 -16 -16 -7 16 -7 z" fill="#fbbf24"/>
+      <rect x="580" y="444" width="240" height="10" rx="5" fill="#fde68a" fill-opacity="0.85"/>
+      <rect x="580" y="470" width="190" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+    </g>
+
+    <!-- background build still running -->
+    <circle cx="920" cy="330" r="34" fill="none" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="3" stroke-dasharray="8 10" stroke-linecap="round"/>
+    <circle cx="920" cy="330" r="10" fill="#fbbf24"/>
+  </g>
+</svg>
