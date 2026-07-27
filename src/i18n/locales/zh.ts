@@ -347,7 +347,7 @@ export const zh: SiteContent = {
     meta: {
       title: '功能 — Nexow',
       description:
-        '自然语言组件生成、沙箱化运行时、带编组和链接的自由画布、28+ 个市场数据连接器、云端机器人和智能体、带 XP 奖励的创作者社区、私密本地模式，以及带版本管理的组件库。探索 Nexow 的一切。',
+        '自然语言组件生成、沙箱化运行时、带编组和链接的自由画布、45+ 个市场数据连接器、云端机器人和智能体、带 XP 奖励的创作者社区、私密本地模式，以及带版本管理的组件库。探索 Nexow 的一切。',
     },
     hero: {
       badge: '功能',
@@ -379,7 +379,7 @@ export const zh: SiteContent = {
         title: '连接',
         body: '来自你实际使用的交易场所的可插拔数据。',
         items: [
-          { icon: 'plug', title: '28+ 个市场数据连接器', body: 'FX、加密货币、股票、期货、期权和预测市场——OANDA、Binance、Coinbase、IBKR、Polygon、Kalshi、Polymarket 等。' },
+          { icon: 'plug', title: '45+ 个市场数据连接器', body: '数据库、社交信息流、市场、钱包和网络服务——Postgres、ClickHouse、Qdrant、X、YouTube、Discord、OANDA、Binance、Coinbase、MetaMask、Ledger、Polygon、Kalshi 等。' },
           { icon: 'globe', title: '尽可能浏览器直连', body: '在 CORS 允许的地方，已认证的交易场所调用直接从你的浏览器运行，完全绕过我们的代理。' },
           { icon: 'database', title: '也支持数据库与社交平台', body: '让组件指向 Postgres、ClickHouse 或 Qdrant，或在实时市场之外从 X、YouTube、Discord 和 Telegram 拉取数据。' },
         ],
@@ -452,7 +452,7 @@ export const zh: SiteContent = {
       title: '每个方案都包含',
       items: [
         '无限屏幕、工作区和组件',
-        '28+ 个实时市场数据连接器',
+        '45+ 个实时市场数据连接器',
         '沙箱化组件运行时',
         '全局 Copilot（即将推出）',
         '社区与市场访问权',
@@ -551,7 +551,7 @@ export const zh: SiteContent = {
     meta: {
       title: '连接器 — Nexow',
       description:
-        '浏览 Nexow 的每一个连接器——28 个已上线，目录中共 56 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
+        '浏览 Nexow 的每一个连接器——45 个已上线，目录中共 83 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
     },
     hero: {
       badge: '连接器',
@@ -562,7 +562,7 @@ export const zh: SiteContent = {
     searchPlaceholder: '搜索连接器……',
     filters: '筛选',
     all: '全部',
-    categories: { finance: '金融', data: '数据', socials: '社交' },
+    categories: { finance: '金融', wallets: '钱包', services: '服务', data: '数据', socials: '社交' },
     status: { all: '全部', live: '已上线', soon: '即将' },
     kinds: {
       broker: '券商',

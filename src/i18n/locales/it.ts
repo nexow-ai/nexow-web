@@ -452,7 +452,7 @@ export const it: SiteContent = {
       title: 'Incluso in ogni piano',
       items: [
         'Schermate, workspace e widget illimitati',
-        'Oltre 28 connettori di dati di mercato attivi',
+        'Oltre 45 connettori di dati di mercato attivi',
         'Runtime dei widget in sandbox',
         'Copilot globale (in arrivo)',
         'Accesso a community e marketplace',
@@ -551,7 +551,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Connettori — Nexow',
       description:
-        'Sfoglia ogni connettore Nexow — 28 attivi e 56 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
+        'Sfoglia ogni connettore Nexow — 45 attivi e 83 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
     },
     hero: {
       badge: 'Connettori',
@@ -562,7 +562,7 @@ export const it: SiteContent = {
     searchPlaceholder: 'Cerca connettori…',
     filters: 'Filtri',
     all: 'Tutti',
-    categories: { finance: 'Finanza', data: 'Dati', socials: 'Social' },
+    categories: { finance: 'Finanza', wallets: 'Wallet', services: 'Servizi', data: 'Dati', socials: 'Social' },
     status: { all: 'Tutti', live: 'Attivi', soon: 'In arrivo' },
     kinds: {
       broker: 'Broker',
@@ -580,6 +580,15 @@ export const it: SiteContent = {
       video: 'Video',
       community: 'Community',
       music: 'Musica',
+      wallet: 'Wallet crypto',
+      browser: 'Automazione browser',
+      scraping: 'Web scraping',
+      search: 'Ricerca web',
+      weather: 'Meteo e aria',
+      open_data: 'Dati aperti',
+      knowledge: 'Conoscenza',
+      news: 'Notizie',
+      geo: 'Geo e trasporti',
     },
     assets: {
       equities: 'Azioni',
