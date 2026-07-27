@@ -85,6 +85,20 @@ export interface SiteContent {
       promptPlaceholder: string;
     };
     ticker: { label: string };
+    /**
+     * Real-screenshot demo section. Optional: locales without a translation
+     * fall back to the English strings built into AppShowcase.astro.
+     * `shots` must keep the component's order: trading desk, project board, founder HQ.
+     */
+    appShowcase?: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      badge: string;
+      cta: string;
+      ctaNote: string;
+      shots: { label: string; prompt: string; alt: string; chip: string; caption: string }[];
+    };
     trust: string;
     stats: { n: number; prefix?: string; suffix?: string; label: string }[];
     showcase: {

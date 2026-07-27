@@ -45,33 +45,64 @@ export const fr: SiteContent = {
     rights: 'Tous droits réservés.',
     disclaimer:
       'Nexow est une plateforme d’outils et de visualisation. Rien ici ne constitue un conseil financier. Les marchés comportent des risques ; tradez de manière responsable.',
-    builtWith: 'Construit avec Astro. Privé par défaut.',
+    builtWith: 'Construit avec Astro.',
   },
   home: {
     meta: {
       title: 'Nexow — Créez des tableaux de bord de marché avec l’IA, en langage naturel',
       description:
-        'Nexow est un espace de travail natif IA pour les marchés. Décrivez un widget en langage naturel et Nexow le construit, le connecte aux données en direct de plus de 28 connecteurs et ajoute bots cloud, agents IA, une communauté de makers et des récompenses XP — privé par défaut, gratuit pour démarrer.',
+        'Nexow transforme vos idées en widgets vivants sur un canvas. Créez moodboards, planners, mini-jeux, widgets sociaux, dashboards de marché ou outils personnalisés sans repartir de zéro.',
     },
     hero: {
       badge: 'Preview disponible',
-      titleLead: 'Décrivez-le.',
-      titleGradient: 'Nexow le construit.',
-      titleTail: 'Tradez-le.',
+      titleLead: 'Décrivez.',
+      titleGradient: 'Obtenez un widget.',
+      titleTail: 'Organisez.',
       subtitle:
-        'Un espace de travail natif IA pour les marchés. Demandez n’importe quel widget en langage naturel — Nexow écrit le code, l’exécute en toute sécurité et diffuse les données en direct sur un canvas libre. Automatisez-le avec des bots et des agents cloud, puis branchez-vous à une communauté de makers.',
+        'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
       ctaPrimary: 'Ouvrir l’app',
-      ctaSecondary: 'Voir comment ça marche',
-      note: 'Sans inscription pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits réservés',
-      promptExample: 'Affiche un graphique en chandeliers de BTC-USD depuis Coinbase avec EMA 20 et 50 et RSI en dessous.',
+      ctaSecondary: 'Voir la démo',
+      note: 'Preview en ligne · 28+ connecteurs · 10K crédits de départ',
+      promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
     },
-    ticker: { label: 'Connecteurs en direct' },
-    trust: 'Un canvas pour tous les marchés — FX, crypto, actions, futures, options et marchés de prédiction.',
+    ticker: { label: 'Ce que les gens construisent' },
+    appShowcase: {
+      eyebrow: 'Directement depuis l’app',
+      title: 'Pas une maquette — c’est Nexow',
+      subtitle: 'De vrais espaces de travail, capturés sur le canvas. Une phrase en entrée, un ensemble de widgets connectés en sortie.',
+      badge: 'vraie capture',
+      cta: 'Essayez vous-même',
+      ctaNote: 'gratuit · sans carte bancaire · dans votre navigateur',
+      shots: [
+        {
+          label: 'Desk de trading',
+          prompt: 'Construis-moi un desk crypto : graphique en chandeliers, watchlist, profondeur du carnet, heatmap et dérivés.',
+          alt: 'Espace Nexow avec graphique en chandeliers BTC, watchlist crypto, profondeur de carnet d’ordres, heatmap de marché, dérivés et marchés de prédiction',
+          chip: 'Données live · Binance, BitMEX, Kalshi',
+          caption: 'Pensé pour les traders : chaque widget diffuse de vraies données de marché depuis des APIs publiques — rien à configurer à la main.',
+        },
+        {
+          label: 'Board projet',
+          prompt: 'Crée un poste de pilotage projet : kanban, timeline Gantt, KPIs, risques et charge d’équipe.',
+          alt: 'Espace Nexow avec kanban projet, timeline Gantt, tableau de KPIs, registre des risques, charge d’équipe et burndown de sprint',
+          chip: '38 tâches · 7 personnes · un canvas',
+          caption: 'Pour les leads projet : sprint board, burndown et registre des risques générés ensemble, disposés comme votre équipe les lit.',
+        },
+        {
+          label: 'QG de fondateur',
+          prompt: 'Construis un dashboard de fondateur solo : pipeline de leads, checklist de lancement, calendrier de contenu, courbe de MRR et notes.',
+          alt: 'Espace Nexow avec pipeline de leads, dashboard de revenus avec MRR et churn, checklist de lancement produit, calendrier de contenu hebdomadaire et bloc-notes',
+          chip: 'Pipeline, MRR, plan de lancement · un prompt',
+          caption: 'Pour les fondateurs solo : cinq widgets à partir d’un seul prompt — pipeline, KPIs de revenus, plan de lancement, calendrier de contenu et notes.',
+        },
+      ],
+    },
+    trust: 'Un canvas pour tout ce que vous pouvez décrire — moodboards, planners, jeux, widgets sociaux, outils data et marchés.',
     stats: [
-      { n: 28, suffix: '+', label: 'connecteurs de données de marché en direct' },
-      { n: 6, label: 'classes d’actifs sur un seul canvas' },
-      { n: 10, suffix: 'K', label: 'crédits IA réservés à l’inscription' },
+      { n: 28, suffix: '+', label: 'connecteurs live pour données, réseaux sociaux et marchés' },
+      { n: 6, label: 'exemples d’espaces depuis un même canvas' },
+      { n: 10, suffix: 'K', label: 'crédits IA de départ sur Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
     ],
     showcase: {
@@ -131,8 +162,8 @@ export const fr: SiteContent = {
         },
         {
           icon: 'lock',
-          title: 'Privé par défaut',
-          body: 'Fonctionne entièrement en local : ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur. Widgets, versions et logs sont stockés dans IndexedDB — rien n’est envoyé à nos serveurs.',
+          title: 'Sécurisé par conception',
+          body: 'Les widgets générés tournent en sandbox, les accès connecteurs restent limités à ce dont chaque widget a besoin, et l’historique reste attaché à votre espace.',
         },
         {
           icon: 'history',
@@ -212,9 +243,9 @@ export const fr: SiteContent = {
     },
     network: {
       eyebrow: 'Le réseau',
-      title: 'Construisez seul. Ou branchez-vous au réseau.',
+      title: 'Construisez votre espace. Branchez-vous au réseau.',
       subtitle:
-        'Restez entièrement local et privé, ou créez un compte gratuit et rejoignez un monde de makers qui construisent, partagent et tradent des tableaux de bord à vos côtés.',
+        'Rejoignez un monde de makers qui construisent, remixent et partagent des widgets à vos côtés, avec espaces synchronisés et crédits prêts pour l’app.',
       liveLabel: 'En direct',
       soonLabel: 'Bientôt',
       items: [
@@ -245,9 +276,9 @@ export const fr: SiteContent = {
       ],
       accountBadge: 'Compte gratuit',
       accountTitle: 'Un compte gratuit débloque le réseau',
-      accountBody: 'Sans carte bancaire. Continuez à construire en local quand vous voulez — le compte reste toujours optionnel.',
+      accountBody: 'Sans carte bancaire. Vos widgets, crédits, sync et outils communautaires restent ensemble quand votre espace grandit.',
       accountPoints: [
-        '10 000 crédits IA réservés à l’inscription',
+        '10 000 crédits IA de départ sur Free',
         'Sync cloud des espaces et widgets sur tous vos appareils',
         'Communauté, marketplace et bibliothèque de widgets',
         'XP, badges et crédits de récompense en construisant (bientôt)',
@@ -258,20 +289,20 @@ export const fr: SiteContent = {
       eyebrow: 'Plans',
       title: 'Commencez gratuitement. Évoluez quand vous voulez.',
       subtitle:
-        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits réservés sur un compte gratuit. Montez en gamme pour plus de crédits, de bots et d’agents.',
+        'Démarrez avec les crédits Free, la sync et le canvas de widgets. Montez en gamme quand vous avez besoin de plus de capacité.',
       cta: 'Comparer tous les plans',
     },
     privacy: {
-      eyebrow: 'Privé par conception',
-      title: 'Vos clés. Vos données. Votre machine.',
-      body: 'Nexow fonctionne entièrement en local par défaut. En mode privé, vous ajoutez votre propre clé API Anthropic et la génération de widgets se fait entièrement dans votre navigateur — rien n’est envoyé à nos serveurs, donc une session non authentifiée ne nous coûte rien et ne fuit rien.',
+      eyebrow: 'Sécurisé par conception',
+      title: 'Votre espace a des limites claires',
+      body: 'Nexow garde le code généré, les identifiants, les versions et les logs dans le périmètre de votre espace. Les widgets tournent en sandbox, les connecteurs sont limités à ce dont chaque widget a besoin, et la sync est pensée autour du contrôle.',
       points: [
-        'La génération avec votre propre clé s’exécute côté client',
-        'Widgets, versions et logs sont stockés dans votre navigateur (IndexedDB)',
-        'Les connexions directes aux venues gardent les identifiants hors de notre infrastructure',
-        'Aucun compte requis pour commencer à construire',
+        'Les widgets générés s’exécutent dans un runtime sandboxé',
+        'Versions et logs restent attachés à l’historique de l’espace',
+        'Les identifiants de connecteurs sont limités aux services connectés',
+        'La sync cloud rend vos espaces disponibles sur vos appareils',
       ],
-      cta: 'Lire l’architecture du mode local',
+      cta: 'Lire l’architecture de confidentialité',
     },
     roadmap: {
       eyebrow: 'Roadmap',
@@ -305,8 +336,8 @@ export const fr: SiteContent = {
           a: 'Non. Vous décrivez ce que vous voulez en langage naturel et Nexow écrit et exécute le widget pour vous. Si vous lisez le code, le code source et l’historique des versions de chaque widget sont disponibles pour inspection et affinage.',
         },
         {
-          q: 'Mes données sont-elles privées ? Faut-il un compte ?',
-          a: 'Aucun compte requis. Nexow fonctionne entièrement en local par défaut : ajoutez votre propre clé Anthropic et la génération se fait dans votre navigateur, avec widgets, versions et logs dans IndexedDB. Un compte gratuit reste toujours optionnel — il ajoute des crédits IA, la sync cloud et la communauté, mais vous pouvez continuer à construire 100% en local.',
+          q: 'Comment Nexow gère-t-il la confidentialité ?',
+          a: 'Les widgets générés tournent en sandbox, les accès connecteurs sont limités, et l’historique reste attaché à l’espace concerné. La sync, les crédits et les fonctions communautaires sont conçus pour garder vos widgets portables et sous votre contrôle.',
         },
         {
           q: 'Quels marchés et venues sont pris en charge ?',
@@ -326,17 +357,17 @@ export const fr: SiteContent = {
         },
         {
           q: 'Combien ça coûte ?',
-          a: 'Gratuit pour toujours pour construire — en local avec votre propre clé, ou avec 10 000 crédits IA réservés sur un compte gratuit. Les plans payants (Supporter et Sponsor) ajoutent des crédits mensuels et des limites de bots et d’agents plus élevées, et Partner s’adresse aux équipes qui ont besoin d’une infrastructure privée. Le paiement arrive bientôt ; voir la page tarifs.',
+          a: 'Vous pouvez commencer gratuitement avec les crédits de départ, la sync et le canvas principal. Les plans payants (Supporter et Sponsor) ajoutent des crédits mensuels et des limites de bots et d’agents plus élevées, et Partner s’adresse aux équipes qui ont besoin d’une infrastructure dédiée. Le paiement arrive bientôt ; voir la page tarifs.',
         },
         {
           q: 'Quel modèle IA alimente Nexow ?',
-          a: 'Nexow génère avec les modèles Claude d’Anthropic via le SDK Anthropic — Claude Opus 4.8 par défaut, avec Sonnet 4.6 et Haiku 4.5 pour une génération plus rapide et économique. En mode privé, vous fournissez votre propre clé pour garder le contrôle total de l’usage et du coût.',
+          a: 'Nexow génère avec les modèles Claude d’Anthropic via le SDK Anthropic — Claude Opus 4.8 par défaut, avec Sonnet 4.6 et Haiku 4.5 pour une génération plus rapide et économique.',
         },
       ],
     },
     cta: {
       title: 'Construisez votre premier widget dans la prochaine minute',
-      subtitle: 'La preview est en ligne et gratuite à essayer. Sans inscription, sans setup — décrivez simplement ce que vous voulez voir.',
+      subtitle: 'La preview est en ligne. Décrivez une chose utile et placez-la sur votre canvas.',
       primary: 'Ouvrir Nexow',
       secondary: 'Explorer les fonctionnalités',
     },
@@ -345,7 +376,7 @@ export const fr: SiteContent = {
     meta: {
       title: 'Fonctionnalités — Nexow',
       description:
-        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 28 connecteurs de données de marché, bots et agents cloud, communauté de makers avec récompenses XP, mode local privé et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 28 connecteurs, bots et agents cloud, communauté de makers avec récompenses XP et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
     },
     hero: {
       badge: 'Fonctionnalités',
@@ -403,10 +434,10 @@ export const fr: SiteContent = {
       },
       {
         title: 'Posséder',
-        body: 'Privé par défaut, à vous pour toujours.',
+        body: 'Sécurisé par conception, à vous pour toujours.',
         items: [
-          { icon: 'lock', title: 'Mode local privé', body: 'Apportez votre propre clé Anthropic et générez des widgets côté client. Rien n’est envoyé à nos serveurs — sans compte.' },
-          { icon: 'sync', title: 'Sync cloud optionnelle', body: 'Créez un compte gratuit pour synchroniser espaces, widgets et réglages sur tous vos appareils — avec un coffre d’identifiants chiffré.' },
+          { icon: 'lock', title: 'Limites d’espace', body: 'Les widgets générés tournent en sandbox, avec un accès connecteur limité aux services et données dont ils ont besoin.' },
+          { icon: 'sync', title: 'Sync cloud', body: 'Synchronisez espaces, widgets et réglages sur tous vos appareils — avec un coffre d’identifiants chiffré.' },
           { icon: 'library', title: 'Bibliothèque réutilisable', body: 'Enregistrez n’importe quel widget dans votre bibliothèque et déposez-le sur n’importe quel tableau de bord en un clic.' },
         ],
       },
@@ -416,13 +447,13 @@ export const fr: SiteContent = {
     meta: {
       title: 'Plans — Nexow',
       description:
-        'Construisez gratuitement pour toujours — en local avec votre propre clé, ou avec 10 000 crédits IA réservés sur un compte gratuit. Comparez Free, Supporter, Sponsor et Partner pour crédits, bots, agents et personnalisation.',
+        'Commencez gratuitement avec Nexow. Construisez avec des crédits de départ et la sync, puis montez en gamme quand vos espaces de widgets ont besoin de plus de capacité.',
     },
     hero: {
       badge: 'Plans',
       title: 'Gratuit pour démarrer. De la place pour grandir.',
       subtitle:
-        'Construisez gratuitement — en local avec votre propre clé, ou inscrivez-vous pour réserver 10 000 crédits IA. Montez en gamme quand vous avez besoin de plus de capacité, d’automatisation et de finition.',
+        'Essayez le canvas sans réfléchir aux plans. Free inclut les crédits de départ, la sync et l’espace principal. Les plans payants ajoutent de la capacité ensuite.',
     },
     comingSoon:
       'Le paiement Supporter et Sponsor arrive bientôt, et les crédits de la plateforme se lancent avec lui. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.',
@@ -539,7 +570,7 @@ export const fr: SiteContent = {
     ],
     faqTitle: 'Questions sur les plans',
     faq: [
-      { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Vous pouvez construire gratuitement pour toujours — entièrement en local avec votre propre clé Anthropic (vous ne payez que votre usage de l’API), ou créez un compte gratuit qui réserve 10 000 crédits IA pour l’ouverture du mode plateforme, sans clé à vous.' },
+      { q: 'Nexow est-il vraiment gratuit ?', a: 'Oui. Free inclut le canvas de widgets, la bibliothèque réutilisable, la sync cloud et 10 000 crédits IA de départ. Les plans payants ajoutent plus de crédits mensuels et des limites plus hautes quand votre espace en a besoin.' },
       { q: 'Que sont les crédits ?', a: 'Les crédits mesurent l’usage de l’IA — génération de widgets, liens, bots et réponses de Copilot. Le compte gratuit réserve 10 000 pour démarrer, et les plans payants offrent une allocation mensuelle (50K sur Supporter, 800K sur Sponsor). Le décompte des crédits s’active avec le mode plateforme, et vous pouvez en acheter davantage à tout moment.' },
       { q: 'Quand les plans payants arrivent-ils ?', a: 'Supporter et Sponsor sont déjà définis et affichés dans l’app, mais le paiement arrive bientôt. Tout le monde est sur Free aujourd’hui — créez un compte pour être parmi les premiers à l’ouverture.' },
       { q: 'Puis-je payer à l’année ?', a: 'Oui. La facturation annuelle vous offre deux mois gratuits par rapport au paiement mensuel. Vous pouvez basculer entre mensuel et annuel à tout moment.' },
@@ -600,23 +631,23 @@ export const fr: SiteContent = {
     meta: {
       title: 'À propos — Nexow',
       description:
-        'Nexow construit un poste de travail natif IA pour les marchés : décrivez n’importe quel widget en langage naturel et obtenez un tableau de bord fonctionnel connecté aux données. Privé par défaut. Découvrez notre mission.',
+        'Nexow est un canvas de widgets parti des desks de trading et devenu une façon de créer n’importe quel espace utile en langage naturel.',
     },
     hero: {
       badge: 'À propos',
-      title: 'Un poste de travail natif IA pour les marchés',
+      title: 'Des desks de trading à tout espace de widgets',
       subtitle:
-        'Nous pensons que construire un tableau de bord de trading devrait être aussi rapide que de le décrire. Nexow transforme le langage naturel en widgets fonctionnels connectés aux données — et vous garde le contrôle de vos clés et données.',
+        'Nous avons commencé là où les dashboards sont les plus difficiles : données live, décisions rapides et workflows désordonnés. La même idée fonctionne maintenant pour moodboards, planners, jeux, outils sociaux et dashboards de marché.',
     },
     missionTitle: 'Pourquoi nous construisons Nexow',
     mission: [
       'Chaque trader et analyste finit par reconstruire à la main les mêmes graphiques, tableaux et moniteurs — en collant des APIs, en gérant des websockets et en luttant avec la mise en page. Les outils sont puissants mais lents, et les bons sont enfermés derrière des plateformes lourdes.',
       'Nexow inverse cela. Vous décrivez ce que vous voulez voir et une IA écrit un widget réel et fonctionnel — sandboxé, versionné et connecté aux données en direct des venues que vous utilisez déjà. Le tableau de bord s’assemble tout seul, et vous l’affinez en langage naturel.',
-      'Nous le construisons avec la confidentialité en premier : fonctionnez entièrement en local avec votre propre clé, gardez vos données dans votre navigateur et connectez-vous directement aux venues lorsque c’est possible. À mesure que nous ajoutons des agents de trading, des composants serveur et une couche communautaire, ce principe reste fixe — vos clés, vos données, votre machine.',
+      'Nous le construisons avec des limites de propriété claires : vos widgets sont versionnés, portables et rattachés à leur espace. À mesure que nous ajoutons workflows cloud, bibliothèques partagées et communauté, ce principe reste fixe — vos outils, vos données, votre contrôle.',
     ],
     valuesTitle: 'Ce que nous valorisons',
     values: [
-      { icon: 'lock', title: 'Privé par défaut', body: 'Local d’abord, apportez votre propre clé, aucune donnée ne quitte votre machine sauf si vous le choisissez.' },
+      { icon: 'lock', title: 'Limites claires', body: 'Widgets sandboxés, accès connecteurs limités et contrôle au niveau de l’espace sur ce que vous construisez.' },
       { icon: 'bolt', title: 'Rapidité vers l’insight', body: 'D’une phrase à un widget en direct en quelques secondes — le chemin le plus court entre une question et un graphique.' },
       { icon: 'shield', title: 'Sûr par construction', body: 'Le code généré s’exécute en sandbox avec une frontière stricte, pour que la puissance ne signifie jamais le risque.' },
       { icon: 'globe', title: 'Ouvert à tous les marchés', body: 'FX, crypto, actions, futures, options et marchés de prédiction — un canvas pour tous.' },
@@ -651,12 +682,12 @@ export const fr: SiteContent = {
     subtitle: 'Comment Nexow traite vos données — version courte : le minimum possible.',
     meta: {
       title: 'Politique de confidentialité — Nexow',
-      description: 'Nexow est privé par défaut. Découvrez comment nous traitons les données, les clés et les connexions.',
+      description: 'Découvrez comment Nexow traite les données, les clés et les connexions.',
     },
     updated: 'Dernière mise à jour : 1 juillet 2026',
     sections: [
-      { h: 'Privé par défaut', p: 'Nexow fonctionne entièrement en local par défaut. En mode privé, vous fournissez votre propre clé API Anthropic et la génération de widgets se fait entièrement dans votre navigateur. Vos prompts et le code généré sont envoyés depuis votre navigateur directement à Anthropic — pas via nos serveurs.' },
-      { h: 'Ce que nous stockons', p: 'Vos widgets, versions, logs et bibliothèque sont stockés dans votre navigateur via IndexedDB. Ils restent sur votre appareil et ne sont pas téléversés vers Nexow. Effacer le stockage de votre navigateur les supprime définitivement.' },
+      { h: 'Données d’espace', p: 'Nexow stocke les données nécessaires au fonctionnement de l’app : widgets, versions, logs, éléments de bibliothèque, réglages du compte, état de sync et métadonnées associées.' },
+      { h: 'Widgets générés', p: 'Le code généré s’exécute dans un runtime sandboxé. Prompts, code généré et historique de versions restent attachés à l’espace auquel ils appartiennent.' },
       { h: 'Connexions aux données de marché', p: 'Lorsque le venue le permet, Nexow s’y connecte directement depuis votre navigateur, et vos identifiants du venue ne servent qu’à communiquer avec ce venue. Certains venues nécessitent un proxy léger ; dans ces cas, seules les données nécessaires à la requête passent par ce proxy.' },
       { h: 'Ce site web', p: 'Ce site marketing est un site statique. Nous gardons l’analytique minimale et respectueuse de la vie privée, et nous ne vendons pas de données personnelles. Les liens sortants (comme l’app) sont clairement indiqués.' },
       { h: 'Contact', p: 'Des questions sur la confidentialité ? Écrivez à hello@nexow.ai.' },

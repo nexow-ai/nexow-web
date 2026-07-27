@@ -1,0 +1,194 @@
+---
+/**
+ * Real product screenshots framed as a live demo: pick a workspace, see the
+ * prompt that created it and the actual canvas it produced.
+ */
+import { Image } from 'astro:assets';
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { en } from '../../i18n/locales/en';
+import BrandMark from '../BrandMark.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import founderDesk from '../../assets/app/founder-desk.png';
+import projectBoard from '../../assets/app/project-board.png';
+import tradingDesk from '../../assets/app/trading-desk.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+// Locales without a translation fall back to the English strings.
+const t = useContent(lang).home.appShowcase ?? en.home.appShowcase!;
+
+// Images and icons pair with t.shots by position: trading, project, founder.
+const SHOT_MEDIA = [
+  { icon: 'chart', image: tradingDesk },
+  { icon: 'layers', image: projectBoard },
+  { icon: 'sparkles', image: founderDesk },
+];
+const shots = t.shots.map((shot, i) => ({ ...shot, ...SHOT_MEDIA[i] }));
+---
+
+<section id="app-showcase" class="relative overflow-hidden bg-white py-20 text-ink-950 sm:py-24">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div
+      class="absolute -top-32 left-[8%] h-[520px] w-[520px] rounded-full opacity-30 blur-3xl"
+      style="background:radial-gradient(circle at 45% 40%, color-mix(in oklab, var(--color-brand-200) 70%, white), transparent 68%)"
+    ></div>
+    <div
+      class="absolute -bottom-40 right-[4%] h-[560px] w-[560px] rounded-full opacity-25 blur-3xl"
+      style="background:radial-gradient(circle at 55% 45%, color-mix(in oklab, var(--color-sky-200) 68%, white), transparent 68%)"
+    ></div>
+    <div
+      class="absolute inset-0 opacity-25 [mask-image:radial-gradient(70%_55%_at_50%_40%,black,transparent)]"
+      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 10%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 9%, transparent) 1px, transparent 1px); background-size:56px 56px"
+    ></div>
+  </div>
+
+  <div class="container-page relative">
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <span class="eyebrow text-brand-700">{t.eyebrow}</span>
+      <h2 class="mt-3 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+        {t.title}
+      </h2>
+      <p class="mt-4 text-lg leading-relaxed text-ink-600">
+        {t.subtitle}
+      </p>
+    </div>
+
+    <div
+      class="reveal mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-2"
+      role="tablist"
+      aria-label="App screenshots"
+      data-appshot-tabs
+    >
+      {
+        shots.map((shot, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`appshot-tab-${i}`}
+            aria-controls={`appshot-panel-${i}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-index={i}
+            class:list={[
+              'inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
+              i === 0
+                ? 'bg-brand-500/15 text-brand-700 ring-1 ring-brand-400/30'
+                : 'text-ink-500 ring-1 ring-ink-900/10 hover:text-ink-700 hover:ring-ink-900/20',
+            ]}
+          >
+            <Icon name={shot.icon} class="size-4" />
+            {shot.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="reveal mx-auto mt-7 max-w-6xl">
+      <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10">
+        <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
+          <span class="size-3 rounded-full bg-rose-500/80"></span>
+          <span class="size-3 rounded-full bg-amber-400/80"></span>
+          <span class="size-3 rounded-full bg-emerald-400/80"></span>
+          <div class="ml-3 flex items-center gap-1.5 text-ink-500">
+            <BrandMark class="h-3.5 w-auto" />
+            <span class="font-mono text-xs tracking-tight">nexow · canvas</span>
+          </div>
+          <span class="ml-auto flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 font-mono text-[0.65rem] text-brand-700">
+            <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>
+            {t.badge}
+          </span>
+        </div>
+
+        {
+          shots.map((shot, i) => (
+            <div
+              role="tabpanel"
+              id={`appshot-panel-${i}`}
+              aria-labelledby={`appshot-tab-${i}`}
+              hidden={i !== 0}
+            >
+              <div class="px-4 pt-4 sm:px-5">
+                <div class="flex items-center gap-3 rounded-xl border border-ink-900/10 bg-[#f7fbfb] px-3.5 py-3">
+                  <span class="flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+                    <Icon name="sparkles" class="size-3.5" />
+                  </span>
+                  <p class="min-w-0 flex-1 truncate font-mono text-xs text-ink-700 sm:text-sm">{shot.prompt}</p>
+                </div>
+              </div>
+
+              <div class="p-4 sm:p-5">
+                <div class="group relative overflow-hidden rounded-xl border border-ink-900/10 bg-[#fbfdfd]">
+                  <div class="aspect-[16/10] sm:aspect-[1.84/1]">
+                    <Image
+                      src={shot.image}
+                      alt={shot.alt}
+                      widths={[640, 1080, 1600, shot.image.width]}
+                      sizes="(min-width: 1280px) 1104px, 100vw"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      class="h-full w-full object-cover object-left-top transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                    />
+                  </div>
+                  <span class="pointer-events-none absolute bottom-3 left-3 rounded-full border border-ink-900/10 bg-white/90 px-3 py-1.5 font-mono text-[0.65rem] text-ink-700 shadow-sm backdrop-blur">
+                    {shot.chip}
+                  </span>
+                </div>
+              </div>
+
+              <p class="px-5 pb-5 text-center font-mono text-xs text-ink-500">{shot.caption}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+          {t.cta}
+        </Button>
+        <p class="w-full text-center font-mono text-xs text-ink-500 sm:w-auto sm:text-left">
+          {t.ctaNote}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let appshotAbort: AbortController | undefined;
+
+  function initAppshotTabs() {
+    appshotAbort?.abort();
+    appshotAbort = new AbortController();
+    const { signal } = appshotAbort;
+
+    const root = document.querySelector('[data-appshot-tabs]');
+    if (!root) return;
+
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const activeCls = ['bg-brand-500/15', 'text-brand-700', 'ring-brand-400/30'];
+    const idleCls = ['text-ink-500', 'ring-ink-900/10', 'hover:text-ink-700', 'hover:ring-ink-900/20'];
+    const select = (idx: number) => {
+      tabs.forEach((tab, i) => {
+        const on = i === idx;
+        tab.setAttribute('aria-selected', String(on));
+        activeCls.forEach((c) => tab.classList.toggle(c, on));
+        idleCls.forEach((c) => tab.classList.toggle(c, !on));
+        const panel = document.getElementById(`appshot-panel-${i}`);
+        if (panel) panel.hidden = !on;
+      });
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i), { signal });
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+        select(next);
+        tabs[next].focus();
+      }, { signal });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAppshotTabs);
+</script>
