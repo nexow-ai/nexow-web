@@ -343,7 +343,7 @@ export const fr: SiteContent = {
         },
         {
           q: 'Quels marchés et venues sont pris en charge ?',
-          a: 'Nexow compte 28 connecteurs en direct (56 au catalogue) couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), marchés de prédiction (Kalshi, Polymarket), fournisseurs de données et bases de données (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) et flux sociaux (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow compte 45 connecteurs en direct (83 au catalogue) couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), marchés de prédiction (Kalshi, Polymarket), fournisseurs de données et bases de données (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) et flux sociaux (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Que sont les bots et les agents ?',
@@ -378,7 +378,7 @@ export const fr: SiteContent = {
     meta: {
       title: 'Fonctionnalités — Nexow',
       description:
-        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 28 connecteurs, bots et agents cloud, communauté de makers avec récompenses XP et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 45 connecteurs, bots et agents cloud, communauté de makers avec récompenses XP et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
     },
     hero: {
       badge: 'Fonctionnalités',
@@ -410,7 +410,7 @@ export const fr: SiteContent = {
         title: 'Connecter',
         body: 'Des données branchables depuis les venues que vous utilisez vraiment.',
         items: [
-          { icon: 'plug', title: 'Plus de 28 connecteurs de marché', body: 'FX, crypto, actions, futures, options et marchés de prédiction — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket et plus.' },
+          { icon: 'plug', title: 'Plus de 45 connecteurs de marché', body: 'Bases de données, flux sociaux, marchés, wallets et services web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi et plus.' },
           { icon: 'globe', title: 'Direct depuis le navigateur', body: 'Lorsque CORS le permet, les appels authentifiés aux venues s’exécutent directement depuis votre navigateur et contournent entièrement notre proxy.' },
           { icon: 'database', title: 'Bases de données et réseaux', body: 'Pointez les widgets vers Postgres, ClickHouse ou Qdrant, ou tirez de X, YouTube, Discord et Telegram aux côtés des marchés en direct.' },
         ],
@@ -483,7 +483,7 @@ export const fr: SiteContent = {
       title: 'Inclus dans chaque plan',
       items: [
         'Écrans, espaces et widgets illimités',
-        '28+ connecteurs de données de marché en direct',
+        '45+ connecteurs de données de marché en direct',
         'Runtime de widgets en bac à sable',
         'Copilot global (bientôt)',
         'Accès communauté et marketplace',

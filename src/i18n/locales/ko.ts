@@ -282,7 +282,7 @@ export const ko: SiteContent = {
       soon: '곧 출시',
       items: [
         { status: 'shipped', title: 'AI 위젯 코드 생성', body: '캔버스에서 샌드박스로 실행되는 자연어 위젯.' },
-        { status: 'shipped', title: '28개 이상의 마켓 데이터 커넥터', body: '브로커, 거래소, 데이터 제공자, 데이터베이스 및 소셜에서 라이브 스트리밍.' },
+        { status: 'shipped', title: '45개 이상의 마켓 데이터 커넥터', body: '데이터베이스, 소셜, 브로커, 거래소, 지갑, 오픈 데이터 및 웹 서비스에서 라이브 스트리밍.' },
         { status: 'shipped', title: '클라우드 봇 & 경고', body: '데이터를 감시하고 위젯에 신호를 발송하는 자동화, 탭 닫음.' },
         { status: 'shipped', title: '계정 & 클라우드 동기화', body: '모든 기기에서 동기화된 워크스페이스가 있는 무료 계정 — 플랫폼 시작 시 10K 크레딧 예약.' },
         { status: 'shipped', title: '커뮤니티 피드 & 프로필', body: '메이커 팔로우, 위젯을 피드에 공유, 공개 @핸들 신청.' },
@@ -312,7 +312,7 @@ export const ko: SiteContent = {
         },
         {
           q: '어떤 마켓과 베뉴가 지원됩니까?',
-          a: 'Nexow는 28개의 라이브 커넥터 (카탈로그에 56개)가 있으며 FX (OANDA, LMAX, FXCM), 암호화폐 (Binance, Coinbase, Kraken, Deribit, BitMEX), 주식 및 선물 (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), 예측 마켓 (Kalshi, Polymarket), 데이터 제공자 및 데이터베이스 (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) 및 소셜 피드 (X, YouTube, Discord, Telegram, Spotify)가 포함됩니다.',
+          a: 'Nexow는 45개의 라이브 커넥터 (카탈로그에 83개)가 있으며 FX (OANDA, LMAX, FXCM), 암호화폐 (Binance, Coinbase, Kraken, Deribit, BitMEX), 주식 및 선물 (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), 예측 마켓 (Kalshi, Polymarket), 데이터 제공자 및 데이터베이스 (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) 및 소셜 피드 (X, YouTube, Discord, Telegram, Spotify)가 포함됩니다.',
         },
         {
           q: '봇과 에이전트란 무엇입니까?',
@@ -347,7 +347,7 @@ export const ko: SiteContent = {
     meta: {
       title: '기능 — Nexow',
       description:
-        '자연어 위젯 생성, 샌드박스 런타임, 그룹 및 링크가 있는 자유형 캔버스, 28개 이상의 마켓 데이터 커넥터, 클라우드 봇 및 에이전트, XP 보상이 있는 메이커 커뮤니티, 개인 로컬 모드 및 버전 관리 위젯 라이브러리. Nexow가 수행하는 모든 작업을 살펴보세요.',
+        '자연어 위젯 생성, 샌드박스 런타임, 그룹 및 링크가 있는 자유형 캔버스, 45개 이상의 마켓 데이터 커넥터, 클라우드 봇 및 에이전트, XP 보상이 있는 메이커 커뮤니티, 개인 로컬 모드 및 버전 관리 위젯 라이브러리. Nexow가 수행하는 모든 작업을 살펴보세요.',
     },
     hero: {
       badge: '기능',
