@@ -379,7 +379,7 @@ export const it: SiteContent = {
         title: 'Connetti',
         body: 'Dati modulari dai venue che usi davvero.',
         items: [
-          { icon: 'plug', title: 'Oltre 28 connettori di dati di mercato', body: 'FX, crypto, azioni, futures, opzioni e prediction market — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket e altri.' },
+          { icon: 'plug', title: 'Oltre 45 connettori di dati di mercato', body: 'Database, feed social, mercati, wallet e servizi web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi e altri.' },
           { icon: 'globe', title: 'Diretto dal browser dove possibile', body: 'Dove il CORS lo consente, le chiamate autenticate ai venue partono direttamente dal tuo browser e bypassano completamente il nostro proxy.' },
           { icon: 'database', title: 'Anche database e social', body: 'Punta i widget su Postgres, ClickHouse o Qdrant, oppure attingi da X, YouTube, Discord e Telegram accanto ai mercati in tempo reale.' },
         ],

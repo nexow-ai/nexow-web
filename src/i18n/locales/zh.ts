@@ -312,7 +312,7 @@ export const zh: SiteContent = {
         },
         {
           q: '支持哪些市场和交易场所？',
-          a: 'Nexow 拥有 28 个实时连接器（目录中共 56 个），覆盖 FX（OANDA、LMAX、FXCM）、加密货币（Binance、Coinbase、Kraken、Deribit、BitMEX）、股票和期货（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、预测市场（Kalshi、Polymarket）、数据提供方和数据库（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）以及社交信息流（X、YouTube、Discord、Telegram、Spotify）。',
+          a: 'Nexow 拥有 45 个实时连接器（目录中共 83 个），覆盖 FX（OANDA、LMAX、FXCM）、加密货币（Binance、Coinbase、Kraken、Deribit、BitMEX）、股票和期货（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、预测市场（Kalshi、Polymarket）、数据提供方和数据库（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）以及社交信息流（X、YouTube、Discord、Telegram、Spotify）。',
         },
         {
           q: '机器人和智能体是什么？',
