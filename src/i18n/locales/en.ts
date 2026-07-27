@@ -60,7 +60,7 @@ export const en: SiteContent = {
         'Type what you need — a trading desk, a project board, a founder dashboard, a habit tracker. Nexow generates real working widgets, plugs in live data and lays them out on a canvas you control.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'See it live',
-      note: 'Preview live · 28+ connectors · 10K starter credits',
+      note: 'Preview live · 45+ connectors · 10K starter credits',
       promptExample: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
       promptPlaceholder: 'Describe a widget…',
     },
@@ -98,7 +98,7 @@ export const en: SiteContent = {
     },
     trust: 'One canvas for anything you can describe — moodboards, planners, games, social widgets, data tools and markets.',
     stats: [
-      { n: 28, suffix: '+', label: 'live connectors for data, socials and markets' },
+      { n: 45, suffix: '+', label: 'live connectors for data, wallets, socials and markets' },
       { n: 6, label: 'example workspaces from one canvas' },
       { n: 10, suffix: 'K', label: 'starter AI credits on Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
@@ -217,8 +217,8 @@ export const en: SiteContent = {
       title: 'Trading-grade data, optional everywhere',
       subtitle:
         'Nexow started with trading, so live APIs and data connectors are built into the base. Use them for markets, databases, social feeds or any widget that needs live information.',
-      note: '28 connectors are live today and 56 sit in the catalog — trading venues, market data APIs, databases and social sources.',
-      count: 28,
+      note: '45 connectors are live today and 83 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
+      count: 45,
       countLabel: 'live connectors',
       groups: {
         fx: 'FX',
@@ -301,7 +301,7 @@ export const en: SiteContent = {
       soon: 'Coming soon',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Natural-language widgets running sandboxed on the canvas.' },
-        { status: 'shipped', title: '28+ connectors', body: 'Databases, socials, brokers, exchanges and data providers streaming live.' },
+        { status: 'shipped', title: '45+ connectors', body: 'Databases, socials, brokers, exchanges, wallets, open data and web services streaming live.' },
         { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
@@ -386,7 +386,7 @@ export const en: SiteContent = {
         title: 'Connect',
         body: 'Trading-grade APIs, generalized for every live-data widget.',
         items: [
-          { icon: 'plug', title: '28+ live connectors', body: 'Databases, social feeds and markets — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, Polygon, Kalshi and more.' },
+          { icon: 'plug', title: '45+ live connectors', body: 'Databases, social feeds, markets, wallets and web services — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi and more.' },
           { icon: 'globe', title: 'Browser-direct where possible', body: 'Where CORS allows, authenticated calls run straight from your browser and bypass our proxy entirely.' },
           { icon: 'database', title: 'Local state too', body: 'Many widgets need no external data at all: games, planners, moodboards and private trackers can live in the browser until you choose to sync.' },
         ],
@@ -459,7 +459,7 @@ export const en: SiteContent = {
       title: 'Included in every plan',
       items: [
         'Unlimited screens, workspaces & widgets',
-        '28+ live connectors',
+        '45+ live connectors',
         'Sandboxed widget runtime',
         'Cross-device cloud sync',
         'Reusable widget library',
@@ -569,7 +569,7 @@ export const en: SiteContent = {
     searchPlaceholder: 'Search connectors…',
     filters: 'Filters',
     all: 'All',
-    categories: { finance: 'Finance', data: 'Data', socials: 'Socials' },
+    categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Data', socials: 'Socials' },
     status: { all: 'All', live: 'Live', soon: 'Soon' },
     kinds: {
       broker: 'Broker',
@@ -587,6 +587,15 @@ export const en: SiteContent = {
       video: 'Video',
       community: 'Community',
       music: 'Music',
+      wallet: 'Crypto wallet',
+      browser: 'Browser automation',
+      scraping: 'Web scraping',
+      search: 'Web search',
+      weather: 'Weather & air',
+      open_data: 'Open data',
+      knowledge: 'Knowledge',
+      news: 'News',
+      geo: 'Geo & transit',
     },
     assets: {
       equities: 'Equities',
