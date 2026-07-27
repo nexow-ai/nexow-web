@@ -277,7 +277,7 @@ export const ms: SiteContent = {
       eyebrow: 'Peta Jalan',
       title: 'Ini pratonton. Berikut apa yang akan datang.',
       subtitle:
-        'Nexow menghantar pratonton awam kanvas, penghasilan, bot awan, akaun dan suapan komuniti. Bongkah binaan di bawah mendarat seterusnya.',
+        'Nexow menghantar kanvas, penghasilan, bot awan, ejen, Copilot, pasaran, akaun dan komuniti. Kanvas aplikasi yang lebih luas terus mendarat melalui bongkah binaan di bawah.',
       shipped: 'Dihantar',
       soon: 'Segera hadir',
       items: [
@@ -286,9 +286,11 @@ export const ms: SiteContent = {
         { status: 'shipped', title: 'Bot & amaran awan', body: 'Automasi yang memantau data anda dan menembak isyarat ke widget anda, tab ditutup.' },
         { status: 'shipped', title: 'Akaun & segerak awan', body: 'Akaun percuma dengan ruang kerja disegerak ke setiap peranti — 10K kredit dikhaskan untuk pelancaran platform.' },
         { status: 'shipped', title: 'Suapan komuniti & profil', body: 'Ikuti pembuat, kongsi widget ke suapan, dan tuntut @handle awam anda.' },
-        { status: 'soon', title: 'Ejen & Copilot', body: 'Gunakan ejen awan dengan tali kendali lengkap, dan Copilot untuk ruang kerja anda.' },
-        { status: 'soon', title: 'Pasaran & isyarat', body: 'Beli dan jual widget, dan terbitkan isyarat strategi yang diaudit yang boleh anda menang ke atas.' },
-        { status: 'soon', title: 'XP, lencana & ganjaran', body: 'Akaun gamifikasi — menang XP dan lencana untuk pencapaian, dan ubahnya menjadi kredit ganjaran.' },
+        { status: 'shipped', title: 'Ejen & Copilot', body: 'Ejen awan dengan tali kendali lengkap, disebarkan dengan kebenaran alatan dan sejarah larian — serta Copilot yang membina dan menyusun ruang kerja anda.' },
+        { status: 'shipped', title: 'Pasaran', body: 'Terbitkan dan pasang widget, tema, skrin dan bot — dengan salasilah yang memberi kredit kepada setiap buatan semula.' },
+        { status: 'shipped', title: 'Reputasi & pingat', body: 'Mata, pencapaian berperingkat, pingat jarang dan tahap untuk apa yang anda bina dan kongsi.' },
+        { status: 'soon', title: 'Widget premium & isyarat', body: 'Terbitkan widget premium dan isyarat strategi, biarkan orang lain melanggan, dan peroleh daripada apa yang anda jalankan.' },
+        { status: 'soon', title: 'Pelan berbayar & kredit ganjaran', body: 'Pembayaran Supporter dan Sponsor, kredit platform, dan menukar reputasi menjadi kredit ganjaran.' },
       ],
     },
     faq: {

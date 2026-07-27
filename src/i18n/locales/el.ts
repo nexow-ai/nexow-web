@@ -277,7 +277,7 @@ export const el: SiteContent = {
       eyebrow: 'Χάρτης δρόμου',
       title: 'Αυτή είναι η προεπισκόπηση. Εδώ είναι τι έρχεται.',
       subtitle:
-        'Το Nexow αποστείλει μια δημόσια προεπισκόπηση του canvas, codegen, cloud bots, λογαριασμών και του κοινοτικού feed. Τα δομικά στοιχεία παρακάτω έρχονται στη συνέχεια.',
+        'Το Nexow αποστείλει το canvas, codegen, cloud bots, agents, Copilot, την marketplace, λογαριασμούς και την κοινότητα. Το ευρύτερο canvas εφαρμογών συνεχίζει να έρχεται μέσα από τα δομικά στοιχεία παρακάτω.',
       shipped: 'Αποστολή',
       soon: 'Σύντομα',
       items: [
@@ -286,9 +286,11 @@ export const el: SiteContent = {
         { status: 'shipped', title: 'Cloud bots & ειδοποιήσεις', body: 'Αυτοματισμός που παρακολουθεί τα δεδομένα σας και εκπέμπει σήματα στα widgets σας, tab κλειστή.' },
         { status: 'shipped', title: 'Λογαριασμοί & cloud sync', body: 'Δωρεάν λογαριασμοί με χώρους εργασίας συγχρονισμένοι σε κάθε συσκευή — 10K credits δεσμευμένα για την εκκίνηση πλατφόρμας.' },
         { status: 'shipped', title: 'Κοινοτικό feed & προφίλ', body: 'Ακολουθήστε δημιουργούς, μοιραστείτε widgets στο feed, και ζητήστε το δημόσιο @handle σας.' },
-        { status: 'soon', title: 'Agents & Copilot', body: 'Ανάπτυξη cloud agents με ένα πλήρες harness, και ένα Copilot για τον χώρο εργασίας σας.' },
-        { status: 'soon', title: 'Marketplace & σήματα', body: 'Αγοράστε και πουλήστε widgets, και δημοσιεύστε ελεγχμένα σήματα στρατηγικής που μπορείτε να κερδίσετε.' },
-        { status: 'soon', title: 'XP, σήματα & rewards', body: 'Ένας gamified λογαριασμός — κερδίστε XP και σήματα για επιτεύγματα, και μετατρέψτε τα σε σήματα credit.' },
+        { status: 'shipped', title: 'Agents & Copilot', body: 'Cloud agents με ένα πλήρες harness, αναπτυγμένοι με άδειες εργαλείων και ιστορικό εκτελέσεων — συν ένα Copilot που κατασκευάζει και τακτοποιεί τον χώρο εργασίας σας.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Δημοσιεύστε και εγκαταστήστε widgets, θέματα, οθόνες και bots — με γενεαλογία που αποδίδει τα εύσημα σε κάθε remake.' },
+        { status: 'shipped', title: 'Φήμη & μετάλλια', body: 'Πόντοι, κλιμακωτά επιτεύγματα, σπάνια μετάλλια και επίπεδα για όσα κατασκευάζετε και μοιράζεστε.' },
+        { status: 'soon', title: 'Premium widgets & σήματα', body: 'Δημοσιεύστε premium widgets και σήματα στρατηγικής, αφήστε άλλους να εγγραφούν, και κερδίστε σε όσα εκτελείτε.' },
+        { status: 'soon', title: 'Σχέδια επί πληρωμή & credits ανταμοιβής', body: 'Πληρωμή Supporter και Sponsor, credits πλατφόρμας, και μετατροπή της φήμης σε credits ανταμοιβής.' },
       ],
     },
     faq: {
