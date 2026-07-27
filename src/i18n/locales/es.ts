@@ -250,7 +250,7 @@ export const es: SiteContent = {
         '10.000 créditos de IA reservados al registrarte',
         'Sincronización en la nube de espacios y widgets entre dispositivos',
         'Comunidad, marketplace y biblioteca de widgets',
-        'XP, insignias y créditos de recompensa al construir (próximamente)',
+        'Puntos de reputación, medallas y niveles al construir y compartir',
       ],
       accountCta: 'Crea tu cuenta gratis',
     },
@@ -277,7 +277,7 @@ export const es: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Esto es la preview. Esto es lo que viene.',
       subtitle:
-        'Nexow lanzó una preview pública del lienzo, la generación de código, los bots en la nube, las cuentas y el feed de la comunidad. Los siguientes bloques están por llegar.',
+        'Nexow lanzó el lienzo, la generación de código, los bots en la nube, los agentes, Copilot, el marketplace, las cuentas y la comunidad. El lienzo de apps más amplio sigue llegando a través de los bloques de abajo.',
       shipped: 'Disponible',
       soon: 'Próximamente',
       items: [
