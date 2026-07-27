@@ -1,0 +1,79 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Widget build card with version chips and a passing check illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="126" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#widgets</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="330" rx="300" ry="220" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- widget build card -->
+    <g>
+      <rect x="380" y="190" width="440" height="280" rx="24" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <rect x="380" y="190" width="440" height="280" rx="24" fill="#f59e0b" fill-opacity="0.10"/>
+      <!-- code lines -->
+      <rect x="412" y="226" width="180" height="10" rx="5" fill="#fde68a" fill-opacity="0.8"/>
+      <rect x="432" y="252" width="240" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+      <rect x="432" y="278" width="200" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+      <rect x="412" y="304" width="140" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+      <!-- lint note bubble -->
+      <rect x="412" y="344" width="260" height="52" rx="14" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="2"/>
+      <circle cx="438" cy="370" r="9" fill="none" stroke="#fbbf24" stroke-width="3"/>
+      <line x1="438" y1="365" x2="438" y2="371" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="438" cy="376" r="1.6" fill="#fbbf24"/>
+      <rect x="458" y="364" width="180" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+      <!-- passing check seal -->
+      <circle cx="796" cy="214" r="30" fill="#08090d" stroke="url(#edge)" stroke-width="3"/>
+      <path d="M782 214 l10 11 l20 -22" stroke="#fbbf24" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- version chips: genesis to now -->
+    <line x1="400" y1="516" x2="800" y2="516" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+    <g>
+      <rect x="376" y="496" width="66" height="40" rx="20" fill="#f59e0b" fill-opacity="0.16" stroke="url(#edge)" stroke-width="2.5"/>
+      <text x="409" y="522" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">v1</text>
+      <rect x="500" y="496" width="66" height="40" rx="20" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+      <text x="533" y="522" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a" fill-opacity="0.8">v2</text>
+      <rect x="624" y="496" width="66" height="40" rx="20" fill="#f59e0b" fill-opacity="0.08" stroke="#8a7b57" stroke-opacity="0.5" stroke-width="2"/>
+      <text x="657" y="522" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">v3</text>
+      <rect x="748" y="496" width="66" height="40" rx="20" fill="#fbbf24" fill-opacity="0.9"/>
+      <text x="781" y="522" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" font-weight="700" fill="#08090d">v4</text>
+    </g>
+  </g>
+</svg>

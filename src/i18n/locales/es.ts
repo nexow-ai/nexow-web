@@ -180,14 +180,14 @@ export const es: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agentes',
-          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores. Dale un trabajo a un agente y deja que vigile, razone y actúe — diseña el tuyo hoy en el editor visual del harness; el despliegue en la nube llega pronto.',
-          status: 'soon',
+          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores. Dale un trabajo a un agente y deja que vigile, razone y actúe — construye el tuyo en el editor visual del harness y despliégalo en la nube, con permisos de herramientas, memoria entre ejecuciones y un historial de ejecuciones en vivo.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Un asistente de IA para todo tu espacio. Adjunta la captura de un widget o sus datos en vivo y pregunta — «explica este gráfico», «resume esto», «¿qué debería vigilar ahora?».',
-          status: 'soon',
+          body: 'Un asistente de IA para todo tu espacio. Chatea en pestañas paralelas, deja que construya widgets en segundo plano y organice tu lienzo, y pregunta — «explica este tablero», «resume esto», «¿qué debería cambiar ahora?».',
+          status: 'live',
         },
       ],
       harnessChips: ['modelo', 'memoria', 'skills', 'herramientas', 'conocimiento', 'disparadores'],
@@ -227,8 +227,8 @@ export const es: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Compartir widgets ya funciona en la comunidad — lo siguiente es un marketplace para comprar y vender widgets listos, y ganar con lo que construyes.',
-          status: 'soon',
+          body: 'Publica widgets, temas, pantallas y bots desde tu biblioteca, e instala lo que otros comparten — con un linaje que da crédito a cada remake. Comprar y vender es lo siguiente.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const es: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP y recompensas',
-          body: 'Una cuenta gamificada — cada widget, bot y publicación da XP. Sube de nivel, desbloquea insignias por logros y conviértelos en créditos de recompensa.',
-          status: 'soon',
+          title: 'Reputación y medallas',
+          body: 'Cada widget, bot y publicación da reputación — puntos, logros escalonados, medallas raras y niveles en tu perfil público. Convertirlos en créditos de recompensa es lo siguiente.',
+          status: 'live',
         },
       ],
       accountBadge: 'Cuenta gratis',
@@ -250,7 +250,7 @@ export const es: SiteContent = {
         '10.000 créditos de IA reservados al registrarte',
         'Sincronización en la nube de espacios y widgets entre dispositivos',
         'Comunidad, marketplace y biblioteca de widgets',
-        'XP, insignias y créditos de recompensa al construir (próximamente)',
+        'Puntos de reputación, medallas y niveles al construir y compartir',
       ],
       accountCta: 'Crea tu cuenta gratis',
     },
@@ -277,7 +277,7 @@ export const es: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Esto es la preview. Esto es lo que viene.',
       subtitle:
-        'Nexow lanzó una preview pública del lienzo, la generación de código, los bots en la nube, las cuentas y el feed de la comunidad. Los siguientes bloques están por llegar.',
+        'Nexow lanzó el lienzo, la generación de código, los bots en la nube, los agentes, Copilot, el marketplace, las cuentas y la comunidad. El lienzo de apps más amplio sigue llegando a través de los bloques de abajo.',
       shipped: 'Disponible',
       soon: 'Próximamente',
       items: [
@@ -286,9 +286,11 @@ export const es: SiteContent = {
         { status: 'shipped', title: 'Bots y alertas en la nube', body: 'Automatizaciones que vigilan tus datos y envían señales a tus widgets, con la pestaña cerrada.' },
         { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis con espacios sincronizados en todos tus dispositivos — 10K créditos reservados para el lanzamiento de la plataforma.' },
         { status: 'shipped', title: 'Comunidad: feed y perfiles', body: 'Sigue makers, comparte widgets en el feed y reclama tu @usuario público.' },
-        { status: 'soon', title: 'Agentes y Copilot', body: 'Despliega agentes en la nube con un harness completo, y un Copilot para tu espacio.' },
-        { status: 'soon', title: 'Marketplace y señales', body: 'Compra y vende widgets, y publica señales de estrategia auditadas con las que ganar.' },
-        { status: 'soon', title: 'XP, insignias y recompensas', body: 'Una cuenta gamificada — gana XP e insignias por logros y conviértelos en créditos de recompensa.' },
+        { status: 'shipped', title: 'Agentes y Copilot', body: 'Agentes en la nube con un harness completo, desplegados con permisos de herramientas e historial de ejecuciones — más un Copilot que construye y organiza tu espacio.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Publica e instala widgets, temas, pantallas y bots — con un linaje que da crédito a cada remake.' },
+        { status: 'shipped', title: 'Reputación y medallas', body: 'Puntos, logros escalonados, medallas raras y niveles por lo que construyes y compartes.' },
+        { status: 'soon', title: 'Widgets premium y señales', body: 'Publica widgets premium y señales de estrategia, deja que otros se suscriban y gana con lo que ejecutas.' },
+        { status: 'soon', title: 'Planes de pago y créditos de recompensa', body: 'Checkout de Supporter y Sponsor, créditos de plataforma y conversión de reputación en créditos de recompensa.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const es: SiteContent = {
         body: 'Automatizaciones en la nube e IA que actúan sin ti.',
         items: [
           { icon: 'bot', title: 'Bots en la nube', body: 'Describe una alerta o constrúyela visualmente — umbrales, % de cambio, cruces de medias, resúmenes u operaciones nuevas en una cuenta de broker conectada. Los bots corren en un latido en la nube y envían señales a tus widgets, con la pestaña cerrada.' },
-          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores. Diseña el tuyo hoy en el editor visual del harness — el despliegue en la nube llega pronto.' },
-          { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir qué vigilar. Próximamente.' },
+          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores. Construye el tuyo en el editor visual del harness y despliégalo en la nube — con permisos de herramientas y un historial de ejecuciones en vivo.' },
+          { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir el próximo cambio — en conversaciones paralelas que siguen construyendo en segundo plano.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const es: SiteContent = {
         body: 'Construye junto a un mundo de makers.',
         items: [
           { icon: 'users', title: 'Comunidad', body: 'Sigue makers, publica en el feed y comparte widgets que otros pueden añadir directo a su biblioteca — en vivo hoy, con perfiles públicos de maker.' },
-          { icon: 'store', title: 'Marketplace', body: 'Compra y vende widgets listos, y gana con lo que construyes. Próximamente — compartir ya funciona en la comunidad.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publica e instala widgets listos, temas, pantallas y bots — en vivo hoy, con un linaje que da crédito a cada remake. Comprar y vender es lo siguiente.' },
           { icon: 'signal', title: 'Señales de estrategia', body: 'Publica historiales auditados, suscríbete a señales de confianza y gana con las estrategias que ejecutas. Próximamente.' },
-          { icon: 'trophy', title: 'XP y recompensas', body: 'Gana XP por construir, desbloquea insignias por logros y conviértelas en créditos de recompensa. Próximamente.' },
+          { icon: 'trophy', title: 'Reputación y medallas', body: 'Gana puntos de reputación por construir y compartir, desbloquea logros escalonados y medallas raras — en vivo hoy. Los créditos de recompensa llegan después.' },
         ],
       },
       {

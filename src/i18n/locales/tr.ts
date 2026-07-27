@@ -180,14 +180,14 @@ export const tr: SiteContent = {
         {
           icon: 'cpu',
           title: 'Ajanlar',
-          body: 'Gerçek araç gereç ile yapay zeka ajanları — model, hafıza, beceriler, araçlar, bilgi ve tetikleyiciler. Bir ajana bir iş verin ve izlemeye, akıl yürütmeye ve harekete geçmeye izin verin — bugün görsel araç yöneticisinde sizinle tasarlayın; bulut dağıtımı yakında gelecek.',
-          status: 'soon',
+          body: 'Gerçek araç gereç ile yapay zeka ajanları — model, hafıza, beceriler, araçlar, bilgi ve tetikleyiciler. Bir ajana bir iş verin ve izlemeye, akıl yürütmeye ve harekete geçmeye izin verin — kendi ajanınızı görsel araç yöneticisinde oluşturun ve araç izinleri, çalıştırmalar arası hafıza ve canlı çalıştırma geçmişi ile buluta dağıtın.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Tüm çalışma alanınız için yapay zeka asistanı. Bir widget\'in ekran görüntüsünü veya canlı verilerini ekleyin ve sorun — "bu grafiği açıkla", "bunu özetle", "sonra ne izlemeliyim?"',
-          status: 'soon',
+          body: 'Tüm çalışma alanınız için yapay zeka asistanı. Paralel sekmelerde sohbet edin, arka planda widget\'ler yapmasına ve tuvalinizi düzenlemesine izin verin ve sorun — "bu grafiği açıkla", "bunu özetle", "sonra ne izlemeliyim?"',
+          status: 'live',
         },
       ],
       harnessChips: ['model', 'hafıza', 'beceriler', 'araçlar', 'bilgi', 'tetikleyiciler'],
@@ -227,8 +227,8 @@ export const tr: SiteContent = {
         {
           icon: 'store',
           title: 'Pazaryeri',
-          body: 'Widget paylaşımı toplulukta canlı — sonra hazır kullanıma yönelik widget\'ler satın almak ve satmak için bir pazaryeri gelir ve yaptıklarında para kazanın.',
-          status: 'soon',
+          body: 'Kütüphanenizden widget\'ler, temalar, ekranlar ve botlar yayınlayın ve başkalarının paylaştıklarını yükleyin — her yeniden yapımın kaynağını gösteren soy kaydı ile. Alım satım sırada.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const tr: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP ve Ödüller',
-          body: 'Oyunlaştırılmış bir hesap — her widget, bot ve paylaşım XP kazanır. Yükseltin, başarılar için rozetler açın ve bunları ödül kredilerine dönüştürün.',
-          status: 'soon',
+          title: 'İtibar ve Madalyalar',
+          body: 'Her widget, bot ve paylaşım itibar kazanır — herkese açık profilinizde puanlar, kademeli başarılar, nadir madalyalar ve seviyeler. Bunları ödül kredilerine dönüştürmek sırada.',
+          status: 'live',
         },
       ],
       accountBadge: 'Ücretsiz Hesap',
@@ -250,7 +250,7 @@ export const tr: SiteContent = {
         'Kayıt sırasında 10.000 ücretsiz yapay zeka kredisi ayrılmıştır',
         'Çalışma alanları ve widget\'ler için cihazlar arası bulut senkronizasyonu',
         'Topluluk, pazaryeri ve widget kütüphanesi',
-        'Yaparken XP, rozetler ve ödül kredileri (yakında)',
+        'Yapıp paylaştıkça itibar puanları, madalyalar ve seviyeler',
       ],
       accountCta: 'Ücretsiz hesabınızı oluşturun',
     },
@@ -277,7 +277,7 @@ export const tr: SiteContent = {
       eyebrow: 'Yol Haritası',
       title: 'Bu ön izleme. İşte sonrası.',
       subtitle:
-        'Nexow tuval, kod oluşturma, bulut botları, hesaplar ve topluluk beslemesinin herkese açık ön izlemesini yayınladı. Aşağıdaki yapı blokları yakında geliyor.',
+        'Nexow tuvali, kod oluşturmayı, bulut botlarını, ajanları, Copilot\'u, pazaryerini, hesapları ve topluluğu yayınladı. Daha geniş uygulama tuvali aşağıdaki yapı blokları aracılığıyla gelmeye devam ediyor.',
       shipped: 'Gönderildi',
       soon: 'Yakında',
       items: [
@@ -286,9 +286,11 @@ export const tr: SiteContent = {
         { status: 'shipped', title: 'Bulut botları ve uyarıları', body: 'Verilerinizi izleyen ve widget\'lerinize sinyaller gönderen otomasyonlar, sekme kapalı.' },
         { status: 'shipped', title: 'Hesaplar ve bulut senkronizasyonu', body: 'Her cihaz genelinde senkronize edilen çalışma alanları olan ücretsiz hesaplar — platform başlatılması için ayrılmış 10K kredi.' },
         { status: 'shipped', title: 'Topluluk beslemesi ve profilleri', body: 'Yapıcıları takip edin, beslemede widget\'ler paylaşın ve herkese açık @handle\'inizi talep edin.' },
-        { status: 'soon', title: 'Ajanlar ve Copilot', body: 'Tam araç gereç ile bulut ajanlarını dağıtın ve çalışma alanınız için bir Copilot.' },
-        { status: 'soon', title: 'Pazaryeri ve Sinyaller', body: 'Widget\'ler satın alıp satın ve para kazanabileceğiniz denetlenmiş strateji sinyalleri yayınlayın.' },
-        { status: 'soon', title: 'XP, Rozetler ve Ödüller', body: 'Oyunlaştırılmış hesap — başarılar için XP ve rozetler kazanın ve bunları ödül kredilerine dönüştürün.' },
+        { status: 'shipped', title: 'Ajanlar ve Copilot', body: 'Araç izinleri ve çalıştırma geçmişi ile dağıtılan, tam araç gereçli bulut ajanları — artı çalışma alanınızı yapan ve düzenleyen bir Copilot.' },
+        { status: 'shipped', title: 'Pazaryeri', body: 'Widget\'ler, temalar, ekranlar ve botlar yayınlayın ve yükleyin — her yeniden yapımın kaynağını gösteren soy kaydı ile.' },
+        { status: 'shipped', title: 'İtibar ve Madalyalar', body: 'Yaptıklarınız ve paylaştıklarınız için puanlar, kademeli başarılar, nadir madalyalar ve seviyeler.' },
+        { status: 'soon', title: 'Premium Widget\'ler ve Sinyaller', body: 'Premium widget\'ler ve strateji sinyalleri yayınlayın, başkalarının abone olmasına izin verin ve çalıştırdıklarınızda para kazanın.' },
+        { status: 'soon', title: 'Ücretli Planlar ve Ödül Kredileri', body: 'Supporter ve Sponsor ödemesi, platform kredileri ve itibarı ödül kredilerine dönüştürme.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const tr: SiteContent = {
         body: 'Uzaktayken hareket eden bulut otomasyonları ve yapay zeka.',
         items: [
           { icon: 'bot', title: 'Bulut Botları', body: 'Bir uyarı açıklayın veya görsel bağlama yapın — eşikler, % değişim, MA kesişmeleri, özetler veya bağlı bir broker hesabında yeni işlemler. Botlar bulut kalp atışında çalışır ve sekmeleriniz kapalı olduğunda widget\'lerinize sinyaller gönderir.' },
-          { icon: 'cpu', title: 'Yapay Zeka Ajanları', body: 'Tam araç gereç ile ajanlar — model, hafıza, beceriler, araçlar, bilgi ve tetikleyiciler. Bugün görsel araç yöneticisinde tasarlayın — bulut dağıtımı yakında gelecek.' },
-          { icon: 'chat', title: 'Copilot', body: 'Çalışma alanınız için asistan: widget\'in ekran görüntüsünü veya verilerini ekleyin ve açıklamasını, özetini veya sonra ne izleyeceğini vermesini isteyin. Yakında.' },
+          { icon: 'cpu', title: 'Yapay Zeka Ajanları', body: 'Tam araç gereç ile ajanlar — model, hafıza, beceriler, araçlar, bilgi ve tetikleyiciler. Görsel araç yöneticisinde tasarlayın ve araç izinleri ve canlı çalıştırma geçmişi ile buluta dağıtın.' },
+          { icon: 'chat', title: 'Copilot', body: 'Çalışma alanınız için asistan: widget\'in ekran görüntüsünü veya verilerini ekleyin ve açıklamasını, özetini veya sonra ne izleyeceğini vermesini isteyin — arka planda yapmaya devam eden paralel sohbetlerde.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const tr: SiteContent = {
         body: 'Yapıcılar dünyası ile bir araya yapın.',
         items: [
           { icon: 'users', title: 'Topluluk', body: 'Yapıcıları takip edin, beslemede yayınlayın ve widget\'leri başkalarının doğrudan kütüphanelerine ekleyebilmeleri için paylaşın — canlı, herkese açık yapıcı profilleri ile.' },
-          { icon: 'store', title: 'Pazaryeri', body: 'Hazır widget\'ler satın ve satın ve yaptıklarında para kazanın. Yakında — paylaşım zaten toplulukta çalışıyor.' },
+          { icon: 'store', title: 'Pazaryeri', body: 'Hazır widget\'ler, temalar, ekranlar ve botlar yayınlayın ve yükleyin — bugün canlı, her yeniden yapımın kaynağını gösteren soy kaydı ile. Alım satım sırada.' },
           { icon: 'signal', title: 'Strateji Sinyalleri', body: 'Denetlenmiş geçmiş kayıtları yayınlayın, güvendiğiniz sinyallere abone olun ve çalıştırdığınız stratejilerde para kazanın. Yakında.' },
-          { icon: 'trophy', title: 'XP ve Ödüller', body: 'Yapıp rozetler başarılar için açın ve bunları ödül kredilerine dönüştürün XP kazanın. Yakında.' },
+          { icon: 'trophy', title: 'İtibar ve Madalyalar', body: 'Yapıp paylaşarak itibar puanları kazanın, kademeli başarılar ve nadir madalyalar açın — bugün canlı. Ödül kredileri sırada.' },
         ],
       },
       {

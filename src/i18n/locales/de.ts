@@ -180,14 +180,14 @@ export const de: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agenten',
-          body: 'KI-Agenten mit einem echten Harness — Modell, Speicher, Skills, Tools, Wissen und Trigger. Gib einem Agenten eine Aufgabe und lass ihn beobachten, schlussfolgern und handeln — entwirf deinen heute im visuellen Harness-Builder; Cloud-Deployment kommt demnächst.',
-          status: 'soon',
+          body: 'KI-Agenten mit einem echten Harness — Modell, Speicher, Skills, Tools, Wissen und Trigger. Gib einem Agenten eine Aufgabe und lass ihn beobachten, schlussfolgern und handeln — baue deinen im visuellen Harness-Builder und deploye ihn in die Cloud, mit Tool-Freigaben, Speicher zwischen den Läufen und einer Live-Laufhistorie.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Ein KI-Assistent für deinen gesamten Workspace. Hänge den Screenshot eines Widgets oder seine Live-Daten an und frag — „erklär diesen Chart“, „fass das zusammen“, „was sollte ich als Nächstes beobachten?“',
-          status: 'soon',
+          body: 'Ein KI-Assistent für deinen gesamten Workspace. Chatte in parallelen Tabs, lass ihn im Hintergrund Widgets bauen und deinen Canvas anordnen und frag — „erklär dieses Board“, „fass das zusammen“, „was sollte ich als Nächstes ändern?“',
+          status: 'live',
         },
       ],
       harnessChips: ['Modell', 'Speicher', 'Skills', 'Tools', 'Wissen', 'Trigger'],
@@ -227,8 +227,8 @@ export const de: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Das Teilen von Widgets ist in der Community bereits live — als Nächstes kommt ein Marketplace, um fertige Widgets zu kaufen und zu verkaufen und mit dem zu verdienen, was du baust.',
-          status: 'soon',
+          body: 'Veröffentliche Widgets, Themes, Screens und Bots aus deiner Bibliothek und installiere, was andere teilen — mit einer Lineage, die jedes Remake würdigt. Kaufen und Verkaufen kommt als Nächstes.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const de: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP & Belohnungen',
-          body: 'Ein spielerisches Konto — jedes Widget, jeder Bot und jedes Teilen bringt XP. Steige auf, schalte Badges für Erfolge frei und verwandle sie in Belohnungs-Credits.',
-          status: 'soon',
+          title: 'Reputation & Medaillen',
+          body: 'Jedes Widget, jeder Bot und jedes Teilen bringt Reputation — Punkte, gestufte Erfolge, seltene Medaillen und Level auf deinem öffentlichen Profil. Die Umwandlung in Belohnungs-Credits kommt als Nächstes.',
+          status: 'live',
         },
       ],
       accountBadge: 'Kostenloses Konto',
@@ -250,7 +250,7 @@ export const de: SiteContent = {
         '10.000 kostenlose KI-Credits bei der Anmeldung reserviert',
         'Geräteübergreifende Cloud-Synchronisierung für Workspaces & Widgets',
         'Community, Marketplace & die Widget-Bibliothek',
-        'XP, Badges & Belohnungs-Credits beim Bauen (demnächst)',
+        'Reputationspunkte, Medaillen & Level beim Bauen und Teilen',
       ],
       accountCta: 'Erstelle dein kostenloses Konto',
     },
@@ -277,7 +277,7 @@ export const de: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Das ist die Preview. Und so geht es weiter.',
       subtitle:
-        'Nexow hat eine öffentliche Preview des Canvas, der Codegenerierung, der Cloud-Bots, der Konten und des Community-Feeds ausgeliefert. Die folgenden Bausteine landen als Nächstes.',
+        'Nexow hat den Canvas, die Codegenerierung, Cloud-Bots, Agenten, Copilot, den Marketplace, Konten und die Community ausgeliefert. Der breitere App-Canvas landet weiter über die folgenden Bausteine.',
       shipped: 'Ausgeliefert',
       soon: 'Demnächst',
       items: [
@@ -286,9 +286,11 @@ export const de: SiteContent = {
         { status: 'shipped', title: 'Cloud-Bots & Alerts', body: 'Automatisierungen, die deine Daten beobachten und Signale an deine Widgets senden, auch bei geschlossenem Tab.' },
         { status: 'shipped', title: 'Konten & Cloud-Sync', body: 'Kostenlose Konten mit geräteübergreifend synchronisierten Workspaces — 10.000 Credits für den Plattform-Launch reserviert.' },
         { status: 'shipped', title: 'Community-Feed & Profile', body: 'Folge Makern, teile Widgets im Feed und sichere dir dein öffentliches @handle.' },
-        { status: 'soon', title: 'Agenten & Copilot', body: 'Deploye Cloud-Agenten mit einem vollständigen Harness und einen Copilot für deinen Workspace.' },
-        { status: 'soon', title: 'Marketplace & Signale', body: 'Kaufe und verkaufe Widgets und veröffentliche geprüfte Strategie-Signale, mit denen du verdienen kannst.' },
-        { status: 'soon', title: 'XP, Badges & Belohnungen', body: 'Ein spielerisches Konto — verdiene XP und Badges für Erfolge und wandle sie in Belohnungs-Credits um.' },
+        { status: 'shipped', title: 'Agenten & Copilot', body: 'Cloud-Agenten mit einem vollständigen Harness, deployt mit Tool-Freigaben und Laufhistorie — plus ein Copilot, der deinen Workspace baut und anordnet.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Veröffentliche und installiere Widgets, Themes, Screens und Bots — mit einer Lineage, die jedes Remake würdigt.' },
+        { status: 'shipped', title: 'Reputation & Medaillen', body: 'Punkte, gestufte Erfolge, seltene Medaillen und Level für das, was du baust und teilst.' },
+        { status: 'soon', title: 'Premium-Widgets & Signale', body: 'Veröffentliche Premium-Widgets und Strategie-Signale, lass andere abonnieren und verdiene mit dem, was du fährst.' },
+        { status: 'soon', title: 'Bezahlte Tarife & Belohnungs-Credits', body: 'Supporter- und Sponsor-Checkout, Plattform-Credits und die Umwandlung von Reputation in Belohnungs-Credits.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const de: SiteContent = {
         body: 'Cloud-Automatisierungen und KI, die handeln, während du weg bist.',
         items: [
           { icon: 'bot', title: 'Cloud-Bots', body: 'Beschreibe einen Alert oder verdrahte ihn visuell — Schwellenwerte, prozentuale Veränderung, MA-Kreuzungen, Digests oder neue Trades in einem verbundenen Broker-Konto. Bots laufen auf einem Cloud-Heartbeat und pushen Signale an deine Widgets, bei geschlossenem Tab.' },
-          { icon: 'cpu', title: 'KI-Agenten', body: 'Agenten mit einem vollständigen Harness — Modell, Speicher, Skills, Tools, Wissen und Trigger. Entwirf deinen heute im visuellen Harness-Builder — Cloud-Deployment kommt demnächst.' },
-          { icon: 'chat', title: 'Copilot', body: 'Ein Assistent für deinen Workspace: Hänge den Screenshot oder die Daten eines Widgets an und bitte ihn, zu erklären, zusammenzufassen oder vorzuschlagen, was du als Nächstes beobachten solltest. Demnächst.' },
+          { icon: 'cpu', title: 'KI-Agenten', body: 'Agenten mit einem vollständigen Harness — Modell, Speicher, Skills, Tools, Wissen und Trigger. Baue deinen im visuellen Harness-Builder und deploye ihn in die Cloud — mit Tool-Freigaben und einer Live-Laufhistorie.' },
+          { icon: 'chat', title: 'Copilot', body: 'Ein Assistent für deinen Workspace: Hänge den Screenshot oder die Daten eines Widgets an und bitte ihn, zu erklären, zusammenzufassen oder die nächste Änderung vorzuschlagen — in parallelen Unterhaltungen, die im Hintergrund weiterbauen.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const de: SiteContent = {
         body: 'Baue neben einer Welt von Makern.',
         items: [
           { icon: 'users', title: 'Community', body: 'Folge Makern, poste in den Feed und teile Widgets, die andere direkt in ihre Bibliothek übernehmen können — heute schon live, mit öffentlichen Maker-Profilen.' },
-          { icon: 'store', title: 'Marketplace', body: 'Kaufe und verkaufe fertige Widgets und verdiene mit dem, was du baust. Demnächst — das Teilen funktioniert in der Community bereits.' },
+          { icon: 'store', title: 'Marketplace', body: 'Veröffentliche und installiere fertige Widgets, Themes, Screens und Bots — heute schon live, mit einer Lineage, die jedes Remake würdigt. Kaufen und Verkaufen kommt als Nächstes.' },
           { icon: 'signal', title: 'Strategie-Signale', body: 'Veröffentliche geprüfte Track Records, abonniere Signale, denen du vertraust, und verdiene mit den Strategien, die du fährst. Demnächst.' },
-          { icon: 'trophy', title: 'XP & Belohnungen', body: 'Verdiene XP fürs Bauen, schalte Badges für Erfolge frei und wandle sie in Belohnungs-Credits um. Demnächst.' },
+          { icon: 'trophy', title: 'Reputation & Medaillen', body: 'Verdiene Reputationspunkte fürs Bauen und Teilen, schalte gestufte Erfolge und seltene Medaillen frei — heute schon live. Belohnungs-Credits kommen als Nächstes.' },
         ],
       },
       {

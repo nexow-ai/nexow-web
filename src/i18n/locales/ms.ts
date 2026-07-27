@@ -180,14 +180,14 @@ export const ms: SiteContent = {
         {
           icon: 'cpu',
           title: 'Ejen',
-          body: 'Ejen AI dengan tali kendali sebenar — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Berikan pekerjaan ejen dan biarkannya memantau, membuat alasan dan bertindak — reka bentuk anda hari ini dalam pembina tali kendali visual; penyebaran awan akan datang segera.',
-          status: 'soon',
+          body: 'Ejen AI dengan tali kendali sebenar — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Berikan pekerjaan ejen dan biarkannya memantau, membuat alasan dan bertindak — bina ejen anda dalam pembina tali kendali visual dan sebarkannya ke awan, dengan kebenaran alatan, memori antara larian dan sejarah larian langsung.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Pembantu AI untuk seluruh ruang kerja anda. Pasangkan tangkapan layar atau data langsung widget dan tanya — "terangkan carta ini", "ringkaskan ini", "apa yang harus saya pantau seterusnya?"',
-          status: 'soon',
+          body: 'Pembantu AI untuk seluruh ruang kerja anda. Sembang dalam tab selari, biarkannya membina widget di latar belakang, menyusun kanvas anda, dan tanya — "terangkan carta ini", "ringkaskan ini", "apa yang harus saya pantau seterusnya?"',
+          status: 'live',
         },
       ],
       harnessChips: ['model', 'memori', 'kemahiran', 'alatan', 'pengetahuan', 'pencetus'],
@@ -227,8 +227,8 @@ export const ms: SiteContent = {
         {
           icon: 'store',
           title: 'Pasaran',
-          body: 'Perkongsian widget langsung dalam komuniti — seterusnya datang pasaran untuk membeli dan menjual widget siap pakai, dan menang di apa yang anda bina.',
-          status: 'soon',
+          body: 'Terbitkan widget, tema, skrin dan bot daripada perpustakaan anda, dan pasang apa yang dikongsi orang lain — dengan salasilah yang memberi kredit kepada setiap buatan semula. Membeli dan menjual datang seterusnya.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const ms: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP & ganjaran',
-          body: 'Akaun gamifikasi — setiap widget, bot dan bahagian menang XP. Tingkat naik, buka lencana untuk pencapaian, dan ubahnya menjadi kredit ganjaran.',
-          status: 'soon',
+          title: 'Reputasi & pingat',
+          body: 'Setiap widget, bot dan perkongsian memperoleh reputasi — mata, pencapaian berperingkat, pingat jarang dan tahap pada profil awam anda. Menukarnya menjadi kredit ganjaran datang seterusnya.',
+          status: 'live',
         },
       ],
       accountBadge: 'Akaun percuma',
@@ -250,7 +250,7 @@ export const ms: SiteContent = {
         '10,000 kredit AI percuma dikhaskan semasa mendaftar',
         'Segerak awan merentasi peranti untuk ruang kerja & widget',
         'Komuniti, pasaran & perpustakaan widget',
-        'XP, lencana & kredit ganjaran semasa anda membina (segera hadir)',
+        'Mata reputasi, pingat & tahap semasa anda membina dan berkongsi',
       ],
       accountCta: 'Buat akaun percuma anda',
     },
@@ -277,7 +277,7 @@ export const ms: SiteContent = {
       eyebrow: 'Peta Jalan',
       title: 'Ini pratonton. Berikut apa yang akan datang.',
       subtitle:
-        'Nexow menghantar pratonton awam kanvas, penghasilan, bot awan, akaun dan suapan komuniti. Bongkah binaan di bawah mendarat seterusnya.',
+        'Nexow menghantar kanvas, penghasilan, bot awan, ejen, Copilot, pasaran, akaun dan komuniti. Kanvas aplikasi yang lebih luas terus mendarat melalui bongkah binaan di bawah.',
       shipped: 'Dihantar',
       soon: 'Segera hadir',
       items: [
@@ -286,9 +286,11 @@ export const ms: SiteContent = {
         { status: 'shipped', title: 'Bot & amaran awan', body: 'Automasi yang memantau data anda dan menembak isyarat ke widget anda, tab ditutup.' },
         { status: 'shipped', title: 'Akaun & segerak awan', body: 'Akaun percuma dengan ruang kerja disegerak ke setiap peranti — 10K kredit dikhaskan untuk pelancaran platform.' },
         { status: 'shipped', title: 'Suapan komuniti & profil', body: 'Ikuti pembuat, kongsi widget ke suapan, dan tuntut @handle awam anda.' },
-        { status: 'soon', title: 'Ejen & Copilot', body: 'Gunakan ejen awan dengan tali kendali lengkap, dan Copilot untuk ruang kerja anda.' },
-        { status: 'soon', title: 'Pasaran & isyarat', body: 'Beli dan jual widget, dan terbitkan isyarat strategi yang diaudit yang boleh anda menang ke atas.' },
-        { status: 'soon', title: 'XP, lencana & ganjaran', body: 'Akaun gamifikasi — menang XP dan lencana untuk pencapaian, dan ubahnya menjadi kredit ganjaran.' },
+        { status: 'shipped', title: 'Ejen & Copilot', body: 'Ejen awan dengan tali kendali lengkap, disebarkan dengan kebenaran alatan dan sejarah larian — serta Copilot yang membina dan menyusun ruang kerja anda.' },
+        { status: 'shipped', title: 'Pasaran', body: 'Terbitkan dan pasang widget, tema, skrin dan bot — dengan salasilah yang memberi kredit kepada setiap buatan semula.' },
+        { status: 'shipped', title: 'Reputasi & pingat', body: 'Mata, pencapaian berperingkat, pingat jarang dan tahap untuk apa yang anda bina dan kongsi.' },
+        { status: 'soon', title: 'Widget premium & isyarat', body: 'Terbitkan widget premium dan isyarat strategi, biarkan orang lain melanggan, dan peroleh daripada apa yang anda jalankan.' },
+        { status: 'soon', title: 'Pelan berbayar & kredit ganjaran', body: 'Pembayaran Supporter dan Sponsor, kredit platform, dan menukar reputasi menjadi kredit ganjaran.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const ms: SiteContent = {
         body: 'Automasi awan dan AI yang bertindak semasa anda pergi.',
         items: [
           { icon: 'bot', title: 'Bot awan', body: 'Terangkan amaran atau sambungkan secara visual — ambang, perubahan %, persilangan MA, ringkasan, atau perdagangan baru dalam akaun broker yang disambungkan. Bot berjalan pada degup jantung awan dan tolak isyarat ke widget anda, tab ditutup.' },
-          { icon: 'cpu', title: 'Ejen AI', body: 'Ejen dengan tali kendali lengkap — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Reka bentuk anda hari ini dalam pembina tali kendali visual — penyebaran awan akan datang segera.' },
-          { icon: 'chat', title: 'Copilot', body: 'Pembantu untuk ruang kerja anda: pasangkan tangkapan layar atau data widget dan tanya ia untuk menjelaskan, meringkaskan atau mencadangkan apa yang hendak dipantau seterusnya. Akan datang segera.' },
+          { icon: 'cpu', title: 'Ejen AI', body: 'Ejen dengan tali kendali lengkap — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Bina dalam pembina tali kendali visual dan sebarkan ke awan dengan kebenaran alatan dan sejarah larian langsung.' },
+          { icon: 'chat', title: 'Copilot', body: 'Pembantu untuk ruang kerja anda: pasangkan tangkapan layar atau data widget dan tanya ia untuk menjelaskan, meringkaskan atau mencadangkan apa yang hendak dipantau seterusnya — dalam perbualan selari yang terus membina di latar belakang.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const ms: SiteContent = {
         body: 'Bina bersama dunia pembuat.',
         items: [
           { icon: 'users', title: 'Komuniti', body: 'Ikuti pembuat, pos ke suapan, dan kongsi widget yang boleh ditambah oleh orang lain terus ke perpustakaan mereka — langsung hari ini, dengan profil pembuat awam.' },
-          { icon: 'store', title: 'Pasaran', body: 'Beli dan jual widget siap pakai, dan menang apa yang anda bina. Akan datang segera — perkongsian sudah bekerja dalam komuniti.' },
+          { icon: 'store', title: 'Pasaran', body: 'Terbitkan dan pasang widget, tema, skrin dan bot siap pakai — langsung hari ini, dengan salasilah yang memberi kredit kepada setiap buatan semula. Membeli dan menjual datang seterusnya.' },
           { icon: 'signal', title: 'Isyarat strategi', body: 'Terbitkan rekod jejak yang diaudit, melanggan isyarat yang anda percayai, dan menang dalam strategi yang anda jalankan. Akan datang segera.' },
-          { icon: 'trophy', title: 'XP & ganjaran', body: 'Menang XP untuk membina, buka lencana untuk pencapaian, dan ubahnya menjadi kredit ganjaran. Akan datang segera.' },
+          { icon: 'trophy', title: 'Reputasi & pingat', body: 'Peroleh mata reputasi untuk membina dan berkongsi, buka pencapaian berperingkat dan pingat jarang — langsung hari ini. Kredit ganjaran datang seterusnya.' },
         ],
       },
       {

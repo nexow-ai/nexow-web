@@ -180,14 +180,14 @@ export const pt: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agentes',
-          body: 'Agentes de IA com um verdadeiro harness — modelo, memória, competências, ferramentas, conhecimento e gatilhos. Dê uma tarefa a um agente e deixe-o observar, raciocinar e agir — desenhe o seu no construtor visual de harness hoje; o deploy na cloud chega em breve.',
-          status: 'soon',
+          body: 'Agentes de IA com um verdadeiro harness — modelo, memória, competências, ferramentas, conhecimento e gatilhos. Dê uma tarefa a um agente e deixe-o observar, raciocinar e agir — construa o seu no construtor visual de harness e faça deploy na cloud, com permissões de ferramentas, memória entre execuções e um histórico de execuções em tempo real.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Um assistente de IA para todo o seu workspace. Anexe a captura de ecrã de um widget ou os seus dados em tempo real e pergunte — “explica este gráfico”, “resume isto”, “o que devo acompanhar a seguir?”',
-          status: 'soon',
+          body: 'Um assistente de IA para todo o seu workspace. Converse em separadores paralelos, deixe-o construir widgets em segundo plano, organizar o seu canvas, e pergunte — “explica este gráfico”, “resume isto”, “o que devo acompanhar a seguir?”',
+          status: 'live',
         },
       ],
       harnessChips: ['modelo', 'memória', 'competências', 'ferramentas', 'conhecimento', 'gatilhos'],
@@ -227,8 +227,8 @@ export const pt: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'A partilha de widgets já está disponível na comunidade — a seguir chega um marketplace para comprar e vender widgets prontos a usar e ganhar com o que constrói.',
-          status: 'soon',
+          body: 'Publique widgets, temas, ecrãs e bots da sua biblioteca, e instale o que outros partilham — com linhagem que credita cada remake. A compra e venda chega a seguir.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const pt: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP e recompensas',
-          body: 'Uma conta gamificada — cada widget, bot e partilha ganha XP. Suba de nível, desbloqueie distintivos por conquistas e converta-os em créditos de recompensa.',
-          status: 'soon',
+          title: 'Reputação e medalhas',
+          body: 'Cada widget, bot e partilha ganha reputação — pontos, conquistas por escalões, medalhas raras e níveis no seu perfil público. A conversão em créditos de recompensa chega a seguir.',
+          status: 'live',
         },
       ],
       accountBadge: 'Conta grátis',
@@ -250,7 +250,7 @@ export const pt: SiteContent = {
         '10 000 créditos de IA grátis reservados no registo',
         'Sincronização na cloud entre dispositivos para workspaces e widgets',
         'Comunidade, marketplace e a biblioteca de widgets',
-        'XP, distintivos e créditos de recompensa à medida que constrói (em breve)',
+        'Pontos de reputação, medalhas e níveis à medida que constrói e partilha',
       ],
       accountCta: 'Crie a sua conta grátis',
     },
@@ -277,7 +277,7 @@ export const pt: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Isto é a pré-visualização. Eis o que vem a seguir.',
       subtitle:
-        'O Nexow lançou uma pré-visualização pública do canvas, da geração de código, dos bots na cloud, das contas e do feed da comunidade. Os blocos abaixo chegam a seguir.',
+        'O Nexow lançou o canvas, a geração de código, os bots na cloud, os agentes, o Copilot, o marketplace, as contas e a comunidade. O canvas de apps mais amplo continua a chegar através dos blocos abaixo.',
       shipped: 'Lançado',
       soon: 'Em breve',
       items: [
@@ -286,9 +286,11 @@ export const pt: SiteContent = {
         { status: 'shipped', title: 'Bots e alertas na cloud', body: 'Automações que vigiam os seus dados e disparam sinais para os seus widgets, mesmo com o separador fechado.' },
         { status: 'shipped', title: 'Contas e sincronização na cloud', body: 'Contas grátis com workspaces sincronizados em todos os dispositivos — 10 mil créditos reservados para o lançamento da plataforma.' },
         { status: 'shipped', title: 'Feed e perfis da comunidade', body: 'Siga criadores, partilhe widgets no feed e reivindique o seu @handle público.' },
-        { status: 'soon', title: 'Agentes e Copilot', body: 'Faça deploy de agentes na cloud com um harness completo, e um Copilot para o seu workspace.' },
-        { status: 'soon', title: 'Marketplace e sinais', body: 'Compre e venda widgets, e publique sinais de estratégia auditados com que pode ganhar.' },
-        { status: 'soon', title: 'XP, distintivos e recompensas', body: 'Uma conta gamificada — ganhe XP e distintivos por conquistas e converta-os em créditos de recompensa.' },
+        { status: 'shipped', title: 'Agentes e Copilot', body: 'Agentes na cloud com um harness completo, implementados com permissões de ferramentas e histórico de execuções — e um Copilot que constrói e organiza o seu workspace.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Publique e instale widgets, temas, ecrãs e bots — com linhagem que credita cada remake.' },
+        { status: 'shipped', title: 'Reputação e medalhas', body: 'Pontos, conquistas por escalões, medalhas raras e níveis pelo que constrói e partilha.' },
+        { status: 'soon', title: 'Widgets premium e sinais', body: 'Publique widgets premium e sinais de estratégia, deixe outros subscrever e ganhe com o que executa.' },
+        { status: 'soon', title: 'Planos pagos e créditos de recompensa', body: 'Checkout Supporter e Sponsor, créditos da plataforma e conversão de reputação em créditos de recompensa.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const pt: SiteContent = {
         body: 'Automações na cloud e IA que agem enquanto está ausente.',
         items: [
           { icon: 'bot', title: 'Bots na cloud', body: 'Descreva um alerta ou monte-o visualmente — limites, variação em %, cruzamentos de MA, resumos, ou novas negociações numa conta de corretora ligada. Os bots correm num heartbeat na cloud e enviam sinais para os seus widgets, com o separador fechado.' },
-          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes com um harness completo — modelo, memória, competências, ferramentas, conhecimento e gatilhos. Desenhe o seu no construtor visual de harness hoje — o deploy na cloud chega em breve.' },
-          { icon: 'chat', title: 'Copilot', body: 'Um assistente para o seu workspace: anexe a captura de ecrã ou os dados de um widget e peça-lhe para explicar, resumir ou sugerir o que acompanhar a seguir. Em breve.' },
+          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes com um harness completo — modelo, memória, competências, ferramentas, conhecimento e gatilhos. Desenhe o seu no construtor visual de harness e faça deploy na cloud, com permissões de ferramentas e um histórico de execuções em tempo real.' },
+          { icon: 'chat', title: 'Copilot', body: 'Um assistente para o seu workspace: anexe a captura de ecrã ou os dados de um widget e peça-lhe para explicar, resumir ou sugerir o que acompanhar a seguir — em conversas paralelas que continuam a construir em segundo plano.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const pt: SiteContent = {
         body: 'Construa ao lado de um mundo de criadores.',
         items: [
           { icon: 'users', title: 'Comunidade', body: 'Siga criadores, publique no feed e partilhe widgets que outros podem adicionar diretamente à sua biblioteca — disponível hoje, com perfis públicos de criadores.' },
-          { icon: 'store', title: 'Marketplace', body: 'Compre e venda widgets prontos a usar, e ganhe com o que constrói. Em breve — a partilha já funciona na comunidade.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publique e instale widgets, temas, ecrãs e bots prontos a usar — disponível hoje, com linhagem que credita cada remake. A compra e venda chega a seguir.' },
           { icon: 'signal', title: 'Sinais de estratégia', body: 'Publique históricos auditados, subscreva sinais em que confia e ganhe com as estratégias que executa. Em breve.' },
-          { icon: 'trophy', title: 'XP e recompensas', body: 'Ganhe XP por construir, desbloqueie distintivos por conquistas e converta-os em créditos de recompensa. Em breve.' },
+          { icon: 'trophy', title: 'Reputação e medalhas', body: 'Ganhe pontos de reputação por construir e partilhar, desbloqueie conquistas por escalões e medalhas raras — disponível hoje. Os créditos de recompensa chegam a seguir.' },
         ],
       },
       {
