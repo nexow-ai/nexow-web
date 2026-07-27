@@ -198,8 +198,8 @@ export const el: SiteContent = {
       title: 'Συνδεθείτε σε κάθε αγορά',
       subtitle:
         'Σύνδεσμοι που μπορούν να συνδεθούν ρέουν ζωντανές τιμές, βιβλία παραγγελιών και δεδομένα αναφοράς κατευθείαν στα widgets σας — σε FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα, αγορές πρόβλεψης, βάσεις δεδομένων και ροές κοινωνικών μέσων.',
-      note: '28 σύνδεσμοι είναι ζωντανοί σήμερα και 56 κάθονται στο κατάλογο — broker, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικές μέσα. Πολλά ρέουν κατευθείαν από το πρόγραμμα περιήγησής σας· τα υπόλοιπα δρομολογούνται μέσα από ένα λεπτό proxy.',
-      count: 28,
+      note: '45 σύνδεσμοι είναι ζωντανοί σήμερα και 83 κάθονται στο κατάλογο — broker, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων, κοινωνικές πηγές, πορτοφόλια κρύπτο και υπηρεσίες web. Πολλά ρέουν κατευθείαν από το πρόγραμμα περιήγησής σας· τα υπόλοιπα δρομολογούνται μέσα από ένα λεπτό proxy.',
+      count: 45,
       countLabel: 'ζωντανοί σύνδεσμοι',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const el: SiteContent = {
       soon: 'Σύντομα',
       items: [
         { status: 'shipped', title: 'Δημιουργία widget AI', body: 'Widgets σε απλά ελληνικά που τρέχουν sandbox στο canvas.' },
-        { status: 'shipped', title: '28+ σύνδεσμοι δεδομένων αγοράς', body: 'Brokers, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικά ρέουν ζωντανά.' },
+        { status: 'shipped', title: '45+ σύνδεσμοι δεδομένων αγοράς', body: 'Βάσεις δεδομένων, κοινωνικά, brokers, ανταλλαγές, πορτοφόλια, ανοιχτά δεδομένα και υπηρεσίες web ρέουν ζωντανά.' },
         { status: 'shipped', title: 'Cloud bots & ειδοποιήσεις', body: 'Αυτοματισμός που παρακολουθεί τα δεδομένα σας και εκπέμπει σήματα στα widgets σας, tab κλειστή.' },
         { status: 'shipped', title: 'Λογαριασμοί & cloud sync', body: 'Δωρεάν λογαριασμοί με χώρους εργασίας συγχρονισμένοι σε κάθε συσκευή — 10K credits δεσμευμένα για την εκκίνηση πλατφόρμας.' },
         { status: 'shipped', title: 'Κοινοτικό feed & προφίλ', body: 'Ακολουθήστε δημιουργούς, μοιραστείτε widgets στο feed, και ζητήστε το δημόσιο @handle σας.' },
@@ -312,7 +312,7 @@ export const el: SiteContent = {
         },
         {
           q: 'Ποιες αγορές και χώρες είναι υποστηριζόμενες;',
-          a: 'Το Nexow έχει 28 ζωντανούς συνδέσμους (56 στο κατάλογο) σε FX (OANDA, LMAX, FXCM), κρυπτονόμισμα (Binance, Coinbase, Kraken, Deribit, BitMEX), μετοχές και futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), αγορές πρόβλεψης (Kalshi, Polymarket), προμηθευτές δεδομένων και βάσεις δεδομένων (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) και κοινωνικά feeds (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Το Nexow έχει 45 ζωντανούς συνδέσμους (83 στο κατάλογο) σε FX (OANDA, LMAX, FXCM), κρυπτονόμισμα (Binance, Coinbase, Kraken, Deribit, BitMEX), μετοχές και futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), αγορές πρόβλεψης (Kalshi, Polymarket), προμηθευτές δεδομένων και βάσεις δεδομένων (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) και κοινωνικά feeds (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Τι είναι τα bots και τα agents;',
@@ -347,7 +347,7 @@ export const el: SiteContent = {
     meta: {
       title: 'Χαρακτηριστικά — Nexow',
       description:
-        'Δημιουργία widget σε απλά ελληνικά, sandbox runtime, canvas ελεύθερης μορφής με ομάδες και συνδέσμους, 28+ σύνδεσμοι δεδομένων αγοράς, cloud bots και agents, κοινότητα δημιουργών με XP rewards, ιδιωτικό τοπικό λειτουργία και έκδοση βιβλιοθήκης widget. Εξερευνήστε όλα όσα κάνει το Nexow.',
+        'Δημιουργία widget σε απλά ελληνικά, sandbox runtime, canvas ελεύθερης μορφής με ομάδες και συνδέσμους, 45+ σύνδεσμοι δεδομένων αγοράς, cloud bots και agents, κοινότητα δημιουργών με XP rewards, ιδιωτικό τοπικό λειτουργία και έκδοση βιβλιοθήκης widget. Εξερευνήστε όλα όσα κάνει το Nexow.',
     },
     hero: {
       badge: 'Χαρακτηριστικά',

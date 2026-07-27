@@ -51,7 +51,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Nexow — Costruisci dashboard di mercato con l’AI, in linguaggio naturale',
       description:
-        'Nexow è un workspace AI-native per i mercati. Descrivi un widget in linguaggio naturale e Nexow lo costruisce, lo collega ai dati in tempo reale di oltre 28 connettori e aggiunge bot cloud, agenti AI, una community di maker e ricompense XP — privato di default, gratis per iniziare.',
+        'Nexow è un workspace AI-native per i mercati. Descrivi un widget in linguaggio naturale e Nexow lo costruisce, lo collega ai dati in tempo reale di oltre 45 connettori e aggiunge bot cloud, agenti AI, una community di maker e ricompense XP — privato di default, gratis per iniziare.',
     },
     hero: {
       badge: 'Anteprima ora disponibile',
@@ -69,7 +69,7 @@ export const it: SiteContent = {
     ticker: { label: 'Connettori attivi' },
     trust: 'Un canvas per ogni mercato — FX, crypto, azioni, futures, opzioni e prediction market.',
     stats: [
-      { n: 28, suffix: '+', label: 'connettori di dati di mercato attivi' },
+      { n: 45, suffix: '+', label: 'connettori attivi per dati, wallet, social e mercati' },
       { n: 6, label: 'classi di asset su un unico canvas' },
       { n: 10, suffix: 'K', label: 'crediti AI gratuiti riservati alla registrazione' },
       { n: 30, prefix: '<', suffix: 's', label: 'dalla frase al widget in esecuzione' },
@@ -121,7 +121,7 @@ export const it: SiteContent = {
         },
         {
           icon: 'plug',
-          title: 'Oltre 28 connettori di dati in tempo reale',
+          title: 'Oltre 45 connettori di dati in tempo reale',
           body: 'Provider di dati di mercato modulari — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket e altri — instradano i dati in tempo reale ai tuoi widget.',
         },
         {
@@ -198,8 +198,8 @@ export const it: SiteContent = {
       title: 'Collegati a ogni mercato',
       subtitle:
         'Connettori modulari trasmettono prezzi, order book e dati di riferimento in tempo reale direttamente nei tuoi widget — su FX, crypto, azioni, futures, opzioni, prediction market, database e feed social.',
-      note: '28 connettori sono attivi oggi e 56 sono nel catalogo — broker, exchange, provider di dati, database e social. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
-      count: 28,
+      note: '45 connettori sono attivi oggi e 83 sono nel catalogo — venue di trading, API di dati di mercato, database, fonti social, wallet crypto e servizi web. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
+      count: 45,
       countLabel: 'connettori attivi',
       groups: {
         fx: 'FX',

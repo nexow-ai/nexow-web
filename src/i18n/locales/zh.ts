@@ -51,7 +51,7 @@ export const zh: SiteContent = {
     meta: {
       title: 'Nexow — 用自然语言，借助 AI 构建市场仪表盘',
       description:
-        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 28+ 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
+        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 45+ 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
     },
     hero: {
       badge: '预览版现已上线',
@@ -69,7 +69,7 @@ export const zh: SiteContent = {
     ticker: { label: '实时连接器' },
     trust: '一块画布，覆盖每个市场——FX、加密货币、股票、期货、期权与预测市场。',
     stats: [
-      { n: 28, suffix: '+', label: '个实时市场数据连接器' },
+      { n: 45, suffix: '+', label: '个覆盖数据、钱包、社交与市场的实时连接器' },
       { n: 6, label: '类资产同处一块画布' },
       { n: 10, suffix: 'K', label: '注册即预留的免费 AI 积分' },
       { n: 30, prefix: '<', suffix: 's', label: '从一句话到运行中的组件' },
@@ -121,7 +121,7 @@ export const zh: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ 个实时数据连接器',
+          title: '45+ 个实时数据连接器',
           body: '可插拔的市场数据提供方——OANDA、Binance、Coinbase、Kraken、Polygon、Interactive Brokers、Kalshi、Polymarket 等——将实时数据路由到你的组件。',
         },
         {
