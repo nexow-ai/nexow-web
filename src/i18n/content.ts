@@ -214,7 +214,7 @@ export interface SiteContent {
     /** Mobile toggle label for the category/status filter panel. */
     filters: string;
     all: string;
-    categories: { finance: string; data: string; socials: string };
+    categories: { finance: string; wallets: string; services: string; data: string; socials: string };
     status: { all: string; live: string; soon: string };
     kinds: Record<string, string>;
     assets: Record<string, string>;

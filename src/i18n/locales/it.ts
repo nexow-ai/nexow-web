@@ -398,9 +398,9 @@ export const it: SiteContent = {
         body: 'Costruisci insieme a un mondo di maker.',
         items: [
           { icon: 'users', title: 'Community', body: 'Segui i maker, pubblica nel feed e condividi widget che altri possono aggiungere direttamente alla loro libreria — attivo oggi, con profili maker pubblici.' },
-          { icon: 'store', title: 'Marketplace', body: 'Compra e vendi widget pronti all’uso e guadagna su ciò che crei. In arrivo — la condivisione funziona già nella community.' },
+          { icon: 'store', title: 'Marketplace', body: 'Pubblica e installa widget pronti all’uso, temi, schermate e bot — attivo oggi, con una lineage che dà credito a ogni remake. Comprare e vendere arriva dopo.' },
           { icon: 'signal', title: 'Segnali di strategia', body: 'Pubblica track record verificati, abbonati ai segnali di cui ti fidi e guadagna sulle strategie che esegui. In arrivo.' },
-          { icon: 'trophy', title: 'XP e ricompense', body: 'Guadagna XP costruendo, sblocca badge per i traguardi e convertili in crediti ricompensa. In arrivo.' },
+          { icon: 'trophy', title: 'Reputazione e medaglie', body: 'Guadagna punti reputazione costruendo e condividendo, sblocca traguardi progressivi e medaglie rare — attivo oggi. I crediti ricompensa arrivano dopo.' },
         ],
       },
       {
