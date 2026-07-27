@@ -558,6 +558,7 @@ export const pt: SiteContent = {
         'Pesquise o catálogo completo de plataformas a que o Nexow se liga — corretoras, exchanges, fornecedores de dados, bases de dados e redes sociais. Os conectores ativos funcionam hoje; os restantes chegam em breve.',
     },
     searchPlaceholder: 'Pesquisar conectores…',
+    filters: 'Filtros',
     all: 'Todos',
     categories: { finance: 'Finanças', data: 'Dados', socials: 'Redes sociais' },
     status: { all: 'Todos', live: 'Disponível', soon: 'Em breve' },

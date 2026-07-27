@@ -558,6 +558,7 @@ export const nl: SiteContent = {
         'Zoek in de volledige catalogus van venues waarmee Nexow verbindt — makelaars, beurzen, gegevensleveranciers, databases en sociaal. Live connectoren werken vandaag; de rest komen binnenkort.',
     },
     searchPlaceholder: 'Zoek connectoren…',
+    filters: 'Filters',
     all: 'Alles',
     categories: { finance: 'Financiën', data: 'Gegevens', socials: 'Sociaal' },
     status: { all: 'Alles', live: 'Live', soon: 'Binnenkort' },

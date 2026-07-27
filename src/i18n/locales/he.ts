@@ -558,6 +558,7 @@ export const he: SiteContent = {
         'חפשו את קטלוג מלא של בורסות Nexow מחברים — ברוקרים, בורסות, ספקי נתונים, מסדי נתונים וחברתיות. מחברים חיים עובדים כיום; השאר נוחתים בקרוב.',
     },
     searchPlaceholder: 'חפשו מחברים…',
+    filters: 'מסננים',
     all: 'הכל',
     categories: { finance: 'מימון', data: 'נתונים', socials: 'חברתיות' },
     status: { all: 'הכל', live: 'חי', soon: 'בקרוב' },

@@ -558,6 +558,7 @@ export const zh: SiteContent = {
         '搜索 Nexow 连接的全部交易场所目录——券商、交易所、数据提供方、数据库和社交平台。实时连接器如今即可使用；其余即将落地。',
     },
     searchPlaceholder: '搜索连接器……',
+    filters: '筛选',
     all: '全部',
     categories: { finance: '金融', data: '数据', socials: '社交' },
     status: { all: '全部', live: '已上线', soon: '即将' },

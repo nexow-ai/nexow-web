@@ -558,6 +558,7 @@ export const tr: SiteContent = {
         'Nexow\'un Bağlandığı Tüm Mekan Kataloğunu Ara — Aracılar, Borsalar, Veri Sağlayıcıları, Veritabanları ve Sosyal Ortamlar. Canlı Bağlantılar Bugün Çalışır; Geri Kalanları Yakında Gelecek.',
     },
     searchPlaceholder: 'Bağlantıları Ara…',
+    filters: 'Filtreler',
     all: 'Tümü',
     categories: { finance: 'Finans', data: 'Veri', socials: 'Sosyal Ortamlar' },
     status: { all: 'Tümü', live: 'Canlı', soon: 'Yakında' },
