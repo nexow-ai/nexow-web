@@ -51,7 +51,7 @@ export const ms: SiteContent = {
     meta: {
       title: 'Nexow — Bina papan pemuka pasaran dengan AI, dalam bahasa biasa',
       description:
-        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 28+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
+        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 45+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
     },
     hero: {
       badge: 'Pratonton kini langsung',
@@ -69,7 +69,7 @@ export const ms: SiteContent = {
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',
     stats: [
-      { n: 28, suffix: '+', label: 'penyambung data pasaran langsung' },
+      { n: 45, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
       { n: 6, label: 'kelas aset pada satu kanvas' },
       { n: 10, suffix: 'K', label: 'kredit AI percuma yang dikhaskan semasa mendaftar' },
       { n: 30, prefix: '<', suffix: 's', label: 'daripada ayat kepada widget yang berjalan' },
@@ -121,7 +121,7 @@ export const ms: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ penyambung data langsung',
+          title: '45+ penyambung data langsung',
           body: 'Pembekal data pasaran yang boleh pasang — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket dan banyak lagi — laluan data masa nyata ke widget anda.',
         },
         {
