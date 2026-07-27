@@ -51,7 +51,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Nexow — Bouw marktdashboards met AI, in normaal Nederlands',
       description:
-        'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 28+ connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
+        'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 45+ connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
     },
     hero: {
       badge: 'Preview nu live',
@@ -69,7 +69,7 @@ export const nl: SiteContent = {
     ticker: { label: 'Live connectoren' },
     trust: 'Één canvas voor elke markt — FX, crypto, aandelen, futures, opties & voorspellingsmarkten.',
     stats: [
-      { n: 28, suffix: '+', label: 'live marktgegevenscommunicatoren' },
+      { n: 45, suffix: '+', label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
       { n: 6, label: 'activaklassen op één canvas' },
       { n: 10, suffix: 'K', label: 'gratis AI-credits gereserveerd bij aanmelding' },
       { n: 30, prefix: '<', suffix: 's', label: 'van zin tot werkende widget' },
@@ -121,7 +121,7 @@ export const nl: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ live gegevensverbindingen',
+          title: '45+ live gegevensverbindingen',
           body: 'Pluggable marktgegevensleveranciers — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket en meer — sturen real-time gegevens naar uw widgets.',
         },
         {
@@ -198,8 +198,8 @@ export const nl: SiteContent = {
       title: 'Plug in elke markt',
       subtitle:
         'Pluggable connectoren streamen live prijzen, orderboeken en referentiegegevens rechtstreeks in je widgets — over FX, crypto, aandelen, futures, opties, voorspellingsmarkten, databases en social feeds.',
-      note: '28 connectoren zijn vandaag live en 56 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases en sociale media. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
-      count: 28,
+      note: '45 connectoren zijn vandaag live en 83 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
+      count: 45,
       countLabel: 'live connectoren',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const nl: SiteContent = {
       soon: 'Komt binnenkort',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Widgets in normaal Nederlands draaiend in sandbox op het canvas.' },
-        { status: 'shipped', title: '28+ marktgegevenscommunicatoren', body: 'Makelaars, beurzen, gegevensleveranciers, databases en social media streamen live.' },
+        { status: 'shipped', title: '45+ marktgegevenscommunicatoren', body: 'Databases, sociale media, makelaars, beurzen, wallets, open data en webdiensten streamen live.' },
         { status: 'shipped', title: 'Cloud bots & waarschuwingen', body: 'Automatisering die je gegevens bewaakt en signalen naar je widgets stuurt, tab gesloten.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Gratis accounts met werkruimten gesynchroniseerd op elk apparaat — 10K credits gereserveerd voor platformlancering.' },
         { status: 'shipped', title: 'Community feed & profielen', body: 'Volg makers, deel widgets naar de feed, en claim je openbare @handle.' },
@@ -312,7 +312,7 @@ export const nl: SiteContent = {
         },
         {
           q: 'Welke markten en venues worden ondersteund?',
-          a: 'Nexow heeft 28 live connectoren (56 in de catalogus) over FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), aandelen en futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), voorspellingsmarkten (Kalshi, Polymarket), gegevensleveranciers en databases (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) en social feeds (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow heeft 45 live connectoren (83 in de catalogus) over FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), aandelen en futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), voorspellingsmarkten (Kalshi, Polymarket), gegevensleveranciers en databases (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) en social feeds (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Wat zijn bots en agenten?',
@@ -347,7 +347,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Functies — Nexow',
       description:
-        'Gegenereerde widgets in normaal Nederlands, een sandbox runtime, een canvas met vrije vorm met groepen en koppelingen, 28+ marktgegevenscommunicatoren, cloud bots en agenten, een maker-gemeenschap met XP-beloningen, privé lokale modus en een versioned widgetbibliotheek. Verken alles wat Nexow doet.',
+        'Gegenereerde widgets in normaal Nederlands, een sandbox runtime, een canvas met vrije vorm met groepen en koppelingen, 45+ marktgegevenscommunicatoren, cloud bots en agenten, een maker-gemeenschap met XP-beloningen, privé lokale modus en een versioned widgetbibliotheek. Verken alles wat Nexow doet.',
     },
     hero: {
       badge: 'Functies',
@@ -379,7 +379,7 @@ export const nl: SiteContent = {
         title: 'Verbind',
         body: 'Pluggable gegevens van de venues waar je eigenlijk gebruikt.',
         items: [
-          { icon: 'plug', title: '28+ marktgegevenscommunicatoren', body: 'FX, crypto, aandelen, futures, opties en voorspellingsmarkten — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket en meer.' },
+          { icon: 'plug', title: '45+ marktgegevenscommunicatoren', body: 'Databases, social feeds, markten, wallets en webdiensten — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi en meer.' },
           { icon: 'globe', title: 'Browser-direct waar mogelijk', body: 'Waar CORS toestaat, draaien geverifieerde venue-oproepen rechtstreeks vanuit je browser en passeren onze proxy volledig.' },
           { icon: 'database', title: 'Databases & sociaal ook', body: 'Wijs widgets naar Postgres, ClickHouse of Qdrant, of trek uit X, YouTube, Discord en Telegram naast live markten.' },
         ],
@@ -452,7 +452,7 @@ export const nl: SiteContent = {
       title: 'Inbegrepen in elk plan',
       items: [
         'Onbeperkte schermen, werkruimten & widgets',
-        '28+ live marktgegevenscommunicatoren',
+        '45+ live marktgegevenscommunicatoren',
         'Sandbox widget runtime',
         'Globale Copilot (komt binnenkort)',
         'Toegang tot gemeenschap & marketplace',
@@ -551,7 +551,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Connectoren — Nexow',
       description:
-        'Blader door elke Nexow-connector — 28 live en 56 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
+        'Blader door elke Nexow-connector — 45 live en 83 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
     },
     hero: {
       badge: 'Connectoren',
@@ -562,7 +562,7 @@ export const nl: SiteContent = {
     searchPlaceholder: 'Zoek connectoren…',
     filters: 'Filters',
     all: 'Alles',
-    categories: { finance: 'Financiën', data: 'Gegevens', socials: 'Sociaal' },
+    categories: { finance: 'Financiën', wallets: 'Wallets', services: 'Diensten', data: 'Gegevens', socials: 'Sociaal' },
     status: { all: 'Alles', live: 'Live', soon: 'Binnenkort' },
     kinds: {
       broker: 'Makelaar',
@@ -580,6 +580,15 @@ export const nl: SiteContent = {
       video: 'Video',
       community: 'Gemeenschap',
       music: 'Muziek',
+      wallet: 'Cryptowallet',
+      browser: 'Browserautomatisering',
+      scraping: 'Webscraping',
+      search: 'Webzoeken',
+      weather: 'Weer & lucht',
+      open_data: 'Open data',
+      knowledge: 'Kennis',
+      news: 'Nieuws',
+      geo: 'Geo & vervoer',
     },
     assets: {
       equities: 'Aandelen',

@@ -51,7 +51,7 @@ export const pt: SiteContent = {
     meta: {
       title: 'Nexow — Crie dashboards de mercado com IA, em linguagem natural',
       description:
-        'O Nexow é um workspace nativo de IA para mercados. Descreva um widget em linguagem natural e o Nexow constrói-o, liga-o a dados em tempo real de mais de 28 conectores e acrescenta bots na cloud, agentes de IA, uma comunidade de criadores e recompensas em XP — privado por predefinição, grátis para começar.',
+        'O Nexow é um workspace nativo de IA para mercados. Descreva um widget em linguagem natural e o Nexow constrói-o, liga-o a dados em tempo real de mais de 45 conectores e acrescenta bots na cloud, agentes de IA, uma comunidade de criadores e recompensas em XP — privado por predefinição, grátis para começar.',
     },
     hero: {
       badge: 'Pré-visualização já disponível',
@@ -69,7 +69,7 @@ export const pt: SiteContent = {
     ticker: { label: 'Conectores ativos' },
     trust: 'Um canvas para todos os mercados — FX, cripto, ações, futuros, opções e mercados de previsão.',
     stats: [
-      { n: 28, suffix: '+', label: 'conectores de dados de mercado ativos' },
+      { n: 45, suffix: '+', label: 'conectores ativos para dados, carteiras, redes sociais e mercados' },
       { n: 6, label: 'classes de ativos num só canvas' },
       { n: 10, suffix: 'K', label: 'créditos de IA grátis reservados no registo' },
       { n: 30, prefix: '<', suffix: 's', label: 'da frase ao widget em funcionamento' },
@@ -121,7 +121,7 @@ export const pt: SiteContent = {
         },
         {
           icon: 'plug',
-          title: 'Mais de 28 conectores de dados em tempo real',
+          title: 'Mais de 45 conectores de dados em tempo real',
           body: 'Fornecedores de dados de mercado plugáveis — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket e mais — encaminham dados em tempo real para os seus widgets.',
         },
         {
@@ -198,8 +198,8 @@ export const pt: SiteContent = {
       title: 'Ligue-se a todos os mercados',
       subtitle:
         'Conectores plugáveis transmitem preços em tempo real, order books e dados de referência diretamente para os seus widgets — em FX, cripto, ações, futuros, opções, mercados de previsão, bases de dados e feeds sociais.',
-      note: '28 conectores estão disponíveis hoje e 56 fazem parte do catálogo — corretoras, exchanges, fornecedores de dados, bases de dados e redes sociais. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
-      count: 28,
+      note: '45 conectores estão disponíveis hoje e 83 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
+      count: 45,
       countLabel: 'conectores ativos',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const pt: SiteContent = {
       soon: 'Em breve',
       items: [
         { status: 'shipped', title: 'Geração de widgets com IA', body: 'Widgets em linguagem natural a correr isolados no canvas.' },
-        { status: 'shipped', title: 'Mais de 28 conectores de dados de mercado', body: 'Corretoras, exchanges, fornecedores de dados, bases de dados e redes sociais a transmitir em tempo real.' },
+        { status: 'shipped', title: 'Mais de 45 conectores de dados de mercado', body: 'Bases de dados, redes sociais, corretoras, exchanges, carteiras, dados abertos e serviços web a transmitir em tempo real.' },
         { status: 'shipped', title: 'Bots e alertas na cloud', body: 'Automações que vigiam os seus dados e disparam sinais para os seus widgets, mesmo com o separador fechado.' },
         { status: 'shipped', title: 'Contas e sincronização na cloud', body: 'Contas grátis com workspaces sincronizados em todos os dispositivos — 10 mil créditos reservados para o lançamento da plataforma.' },
         { status: 'shipped', title: 'Feed e perfis da comunidade', body: 'Siga criadores, partilhe widgets no feed e reivindique o seu @handle público.' },
@@ -312,7 +312,7 @@ export const pt: SiteContent = {
         },
         {
           q: 'Que mercados e plataformas são suportados?',
-          a: 'O Nexow tem 28 conectores ativos (56 no catálogo) que abrangem FX (OANDA, LMAX, FXCM), cripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ações e futuros (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), mercados de previsão (Kalshi, Polymarket), fornecedores de dados e bases de dados (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) e feeds sociais (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'O Nexow tem 45 conectores ativos (83 no catálogo) que abrangem FX (OANDA, LMAX, FXCM), cripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ações e futuros (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), mercados de previsão (Kalshi, Polymarket), fornecedores de dados e bases de dados (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) e feeds sociais (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'O que são bots e agentes?',
@@ -347,7 +347,7 @@ export const pt: SiteContent = {
     meta: {
       title: 'Funcionalidades — Nexow',
       description:
-        'Geração de widgets em linguagem natural, um runtime isolado, um canvas livre com grupos e links, mais de 28 conectores de dados de mercado, bots e agentes na cloud, uma comunidade de criadores com recompensas em XP, modo local privado e uma biblioteca de widgets versionada. Explore tudo o que o Nexow faz.',
+        'Geração de widgets em linguagem natural, um runtime isolado, um canvas livre com grupos e links, mais de 45 conectores de dados de mercado, bots e agentes na cloud, uma comunidade de criadores com recompensas em XP, modo local privado e uma biblioteca de widgets versionada. Explore tudo o que o Nexow faz.',
     },
     hero: {
       badge: 'Funcionalidades',
@@ -379,7 +379,7 @@ export const pt: SiteContent = {
         title: 'Ligar',
         body: 'Dados plugáveis das plataformas que realmente usa.',
         items: [
-          { icon: 'plug', title: 'Mais de 28 conectores de dados de mercado', body: 'FX, cripto, ações, futuros, opções e mercados de previsão — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket e mais.' },
+          { icon: 'plug', title: 'Mais de 45 conectores de dados de mercado', body: 'Bases de dados, feeds sociais, mercados, carteiras e serviços web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi e mais.' },
           { icon: 'globe', title: 'Direto do navegador quando possível', body: 'Onde o CORS permite, as chamadas autenticadas às plataformas correm diretamente do seu navegador e contornam totalmente o nosso proxy.' },
           { icon: 'database', title: 'Bases de dados e redes sociais também', body: 'Aponte widgets para o Postgres, ClickHouse ou Qdrant, ou puxe dados de X, YouTube, Discord e Telegram a par dos mercados em tempo real.' },
         ],
@@ -452,7 +452,7 @@ export const pt: SiteContent = {
       title: 'Incluído em todos os planos',
       items: [
         'Ecrãs, workspaces e widgets ilimitados',
-        'Mais de 28 conectores de dados de mercado ativos',
+        'Mais de 45 conectores de dados de mercado ativos',
         'Runtime de widgets isolado',
         'Copilot global (em breve)',
         'Acesso à comunidade e ao marketplace',
@@ -551,7 +551,7 @@ export const pt: SiteContent = {
     meta: {
       title: 'Conectores — Nexow',
       description:
-        'Explore todos os conectores do Nexow — 28 ativos e 56 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
+        'Explore todos os conectores do Nexow — 45 ativos e 83 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
     },
     hero: {
       badge: 'Conectores',
@@ -562,7 +562,7 @@ export const pt: SiteContent = {
     searchPlaceholder: 'Pesquisar conectores…',
     filters: 'Filtros',
     all: 'Todos',
-    categories: { finance: 'Finanças', data: 'Dados', socials: 'Redes sociais' },
+    categories: { finance: 'Finanças', wallets: 'Carteiras', services: 'Serviços', data: 'Dados', socials: 'Redes sociais' },
     status: { all: 'Todos', live: 'Disponível', soon: 'Em breve' },
     kinds: {
       broker: 'Corretora',
@@ -580,6 +580,15 @@ export const pt: SiteContent = {
       video: 'Vídeo',
       community: 'Comunidade',
       music: 'Música',
+      wallet: 'Carteira cripto',
+      browser: 'Automação de navegador',
+      scraping: 'Web scraping',
+      search: 'Pesquisa web',
+      weather: 'Clima e ar',
+      open_data: 'Dados abertos',
+      knowledge: 'Conhecimento',
+      news: 'Notícias',
+      geo: 'Geo e transportes',
     },
     assets: {
       equities: 'Ações',

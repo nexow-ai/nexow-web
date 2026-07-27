@@ -62,7 +62,7 @@ export const fr: SiteContent = {
         'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir la démo',
-      note: 'Preview en ligne · 28+ connecteurs · 10K crédits de départ',
+      note: 'Preview en ligne · 45+ connecteurs · 10K crédits de départ',
       promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
     },
@@ -100,7 +100,7 @@ export const fr: SiteContent = {
     },
     trust: 'Un canvas pour tout ce que vous pouvez décrire — moodboards, planners, jeux, widgets sociaux, outils data et marchés.',
     stats: [
-      { n: 28, suffix: '+', label: 'connecteurs live pour données, réseaux sociaux et marchés' },
+      { n: 45, suffix: '+', label: 'connecteurs live pour données, wallets, réseaux sociaux et marchés' },
       { n: 6, label: 'exemples d’espaces depuis un même canvas' },
       { n: 10, suffix: 'K', label: 'crédits IA de départ sur Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
@@ -152,7 +152,7 @@ export const fr: SiteContent = {
         },
         {
           icon: 'plug',
-          title: 'Plus de 28 connecteurs en direct',
+          title: 'Plus de 45 connecteurs en direct',
           body: 'Fournisseurs de données branchables — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket et plus — acheminent les données en temps réel vers vos widgets.',
         },
         {
@@ -229,8 +229,8 @@ export const fr: SiteContent = {
       title: 'Branchez-vous à tous les marchés',
       subtitle:
         'Des connecteurs branchables diffusent prix en direct, carnets d’ordres et données de référence directement dans vos widgets — FX, crypto, actions, futures, options, marchés de prédiction, bases de données et flux sociaux.',
-      note: '28 connecteurs sont en direct aujourd’hui et 56 figurent au catalogue — brokers, exchanges, fournisseurs de données, bases de données et réseaux sociaux. Beaucoup diffusent directement depuis votre navigateur ; les autres passent par un proxy léger.',
-      count: 28,
+      note: '45 connecteurs sont en direct aujourd’hui et 83 figurent au catalogue — venues de trading, APIs de données de marché, bases de données, sources sociales, wallets crypto et services web. Beaucoup diffusent directement depuis votre navigateur ; les autres passent par un proxy léger.',
+      count: 45,
       countLabel: 'connecteurs en direct',
       groups: {
         fx: 'FX',
@@ -313,7 +313,7 @@ export const fr: SiteContent = {
       soon: 'Bientôt',
       items: [
         { status: 'shipped', title: 'Génération de widgets par IA', body: 'Widgets en langage naturel exécutés en sandbox sur le canvas.' },
-        { status: 'shipped', title: 'Plus de 28 connecteurs', body: 'Brokers, exchanges, fournisseurs de données, bases de données et réseaux sociaux en direct.' },
+        { status: 'shipped', title: 'Plus de 45 connecteurs', body: 'Bases de données, réseaux sociaux, brokers, exchanges, wallets, données ouvertes et services web en direct.' },
         { status: 'shipped', title: 'Bots et alertes cloud', body: 'Des automatisations qui surveillent vos données et envoient des signaux à vos widgets, onglet fermé.' },
         { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits avec espaces synchronisés sur tous vos appareils — 10K crédits réservés pour le lancement de la plateforme.' },
         { status: 'shipped', title: 'Communauté : fil et profils', body: 'Suivez des makers, partagez des widgets dans le fil et réclamez votre @pseudo public.' },
@@ -343,7 +343,7 @@ export const fr: SiteContent = {
         },
         {
           q: 'Quels marchés et venues sont pris en charge ?',
-          a: 'Nexow compte 28 connecteurs en direct (56 au catalogue) couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), marchés de prédiction (Kalshi, Polymarket), fournisseurs de données et bases de données (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) et flux sociaux (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow compte 45 connecteurs en direct (83 au catalogue) couvrant FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), actions et futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), marchés de prédiction (Kalshi, Polymarket), fournisseurs de données et bases de données (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) et flux sociaux (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Que sont les bots et les agents ?',
@@ -378,7 +378,7 @@ export const fr: SiteContent = {
     meta: {
       title: 'Fonctionnalités — Nexow',
       description:
-        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 28 connecteurs, bots et agents cloud, communauté de makers avec récompenses XP et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
+        'Génération de widgets en langage naturel, runtime sandboxé, canvas libre avec groupes et links, plus de 45 connecteurs, bots et agents cloud, communauté de makers avec récompenses XP et bibliothèque de widgets versionnée. Découvrez tout ce que fait Nexow.',
     },
     hero: {
       badge: 'Fonctionnalités',
@@ -410,7 +410,7 @@ export const fr: SiteContent = {
         title: 'Connecter',
         body: 'Des données branchables depuis les venues que vous utilisez vraiment.',
         items: [
-          { icon: 'plug', title: 'Plus de 28 connecteurs de marché', body: 'FX, crypto, actions, futures, options et marchés de prédiction — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket et plus.' },
+          { icon: 'plug', title: 'Plus de 45 connecteurs de marché', body: 'Bases de données, flux sociaux, marchés, wallets et services web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi et plus.' },
           { icon: 'globe', title: 'Direct depuis le navigateur', body: 'Lorsque CORS le permet, les appels authentifiés aux venues s’exécutent directement depuis votre navigateur et contournent entièrement notre proxy.' },
           { icon: 'database', title: 'Bases de données et réseaux', body: 'Pointez les widgets vers Postgres, ClickHouse ou Qdrant, ou tirez de X, YouTube, Discord et Telegram aux côtés des marchés en direct.' },
         ],
@@ -483,7 +483,7 @@ export const fr: SiteContent = {
       title: 'Inclus dans chaque plan',
       items: [
         'Écrans, espaces et widgets illimités',
-        '28+ connecteurs de données de marché en direct',
+        '45+ connecteurs de données de marché en direct',
         'Runtime de widgets en bac à sable',
         'Copilot global (bientôt)',
         'Accès communauté et marketplace',
@@ -582,7 +582,7 @@ export const fr: SiteContent = {
     meta: {
       title: 'Connecteurs — Nexow',
       description:
-        'Parcourez tous les connecteurs Nexow — 28 en direct et 56 au catalogue. Brokers, exchanges, DEX, marchés de prédiction, fournisseurs de données, bases de données et réseaux sociaux. Cherchez, filtrez et connectez.',
+        'Parcourez tous les connecteurs Nexow — 45 en direct et 83 au catalogue. Brokers, exchanges, DEX, marchés de prédiction, fournisseurs de données, bases de données et réseaux sociaux. Cherchez, filtrez et connectez.',
     },
     hero: {
       badge: 'Connecteurs',
@@ -593,7 +593,7 @@ export const fr: SiteContent = {
     searchPlaceholder: 'Rechercher des connecteurs…',
     filters: 'Filtres',
     all: 'Tous',
-    categories: { finance: 'Finance', data: 'Données', socials: 'Réseaux' },
+    categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Données', socials: 'Réseaux' },
     status: { all: 'Tous', live: 'En direct', soon: 'Bientôt' },
     kinds: {
       broker: 'Broker',
@@ -611,6 +611,15 @@ export const fr: SiteContent = {
       video: 'Vidéo',
       community: 'Communauté',
       music: 'Musique',
+      wallet: 'Wallet crypto',
+      browser: 'Automatisation du navigateur',
+      scraping: 'Web scraping',
+      search: 'Recherche web',
+      weather: 'Météo et air',
+      open_data: 'Données ouvertes',
+      knowledge: 'Connaissances',
+      news: 'Actualités',
+      geo: 'Géo et transports',
     },
     assets: {
       equities: 'Actions',

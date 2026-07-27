@@ -51,7 +51,7 @@ export const el: SiteContent = {
     meta: {
       title: 'Nexow — Δημιουργήστε ταμπλό αγοράς με τεχνητή νοημοσύνη, στα απλά ελληνικά',
       description:
-        'Το Nexow είναι ένας χώρος εργασίας AI-native για αγορές. Περιγράψτε ένα widget σε απλά ελληνικά και το Nexow το κατασκευάζει, το συνδέει με ζωντανά δεδομένα από 28+ συνδέσμους, και προσθέτει cloud bots, AI agents, κοινότητα δημιουργών και XP rewards — ιδιωτικό από προεπιλογή, δωρεάν για να ξεκινήσετε.',
+        'Το Nexow είναι ένας χώρος εργασίας AI-native για αγορές. Περιγράψτε ένα widget σε απλά ελληνικά και το Nexow το κατασκευάζει, το συνδέει με ζωντανά δεδομένα από 45+ συνδέσμους, και προσθέτει cloud bots, AI agents, κοινότητα δημιουργών και XP rewards — ιδιωτικό από προεπιλογή, δωρεάν για να ξεκινήσετε.',
     },
     hero: {
       badge: 'Προεπισκόπηση τώρα ζωντανή',
@@ -69,7 +69,7 @@ export const el: SiteContent = {
     ticker: { label: 'Ζωντανοί σύνδεσμοι' },
     trust: 'Ένα canvas για κάθε αγορά — FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα & αγορές πρόβλεψης.',
     stats: [
-      { n: 28, suffix: '+', label: 'ζωντανοί σύνδεσμοι δεδομένων αγοράς' },
+      { n: 45, suffix: '+', label: 'ζωντανοί σύνδεσμοι για δεδομένα, πορτοφόλια, κοινωνικά και αγορές' },
       { n: 6, label: 'κατηγορίες περιουσίας σε ένα canvas' },
       { n: 10, suffix: 'K', label: 'δωρεάν πιστώσεις AI που είναι δεσμευμένα κατά την εγγραφή' },
       { n: 30, prefix: '<', suffix: 's', label: 'από πρόταση σε λειτουργικό widget' },
@@ -121,7 +121,7 @@ export const el: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ ζωντανοί σύνδεσμοι δεδομένων',
+          title: '45+ ζωντανοί σύνδεσμοι δεδομένων',
           body: 'Προμηθευτές δεδομένων αγοράς που μπορούν να συνδεθούν — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket και άλλα — δρομολογούν ζωντανά δεδομένα στα widgets σας.',
         },
         {
@@ -198,8 +198,8 @@ export const el: SiteContent = {
       title: 'Συνδεθείτε σε κάθε αγορά',
       subtitle:
         'Σύνδεσμοι που μπορούν να συνδεθούν ρέουν ζωντανές τιμές, βιβλία παραγγελιών και δεδομένα αναφοράς κατευθείαν στα widgets σας — σε FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα, αγορές πρόβλεψης, βάσεις δεδομένων και ροές κοινωνικών μέσων.',
-      note: '28 σύνδεσμοι είναι ζωντανοί σήμερα και 56 κάθονται στο κατάλογο — broker, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικές μέσα. Πολλά ρέουν κατευθείαν από το πρόγραμμα περιήγησής σας· τα υπόλοιπα δρομολογούνται μέσα από ένα λεπτό proxy.',
-      count: 28,
+      note: '45 σύνδεσμοι είναι ζωντανοί σήμερα και 83 κάθονται στο κατάλογο — broker, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων, κοινωνικές πηγές, πορτοφόλια κρύπτο και υπηρεσίες web. Πολλά ρέουν κατευθείαν από το πρόγραμμα περιήγησής σας· τα υπόλοιπα δρομολογούνται μέσα από ένα λεπτό proxy.',
+      count: 45,
       countLabel: 'ζωντανοί σύνδεσμοι',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const el: SiteContent = {
       soon: 'Σύντομα',
       items: [
         { status: 'shipped', title: 'Δημιουργία widget AI', body: 'Widgets σε απλά ελληνικά που τρέχουν sandbox στο canvas.' },
-        { status: 'shipped', title: '28+ σύνδεσμοι δεδομένων αγοράς', body: 'Brokers, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικά ρέουν ζωντανά.' },
+        { status: 'shipped', title: '45+ σύνδεσμοι δεδομένων αγοράς', body: 'Βάσεις δεδομένων, κοινωνικά, brokers, ανταλλαγές, πορτοφόλια, ανοιχτά δεδομένα και υπηρεσίες web ρέουν ζωντανά.' },
         { status: 'shipped', title: 'Cloud bots & ειδοποιήσεις', body: 'Αυτοματισμός που παρακολουθεί τα δεδομένα σας και εκπέμπει σήματα στα widgets σας, tab κλειστή.' },
         { status: 'shipped', title: 'Λογαριασμοί & cloud sync', body: 'Δωρεάν λογαριασμοί με χώρους εργασίας συγχρονισμένοι σε κάθε συσκευή — 10K credits δεσμευμένα για την εκκίνηση πλατφόρμας.' },
         { status: 'shipped', title: 'Κοινοτικό feed & προφίλ', body: 'Ακολουθήστε δημιουργούς, μοιραστείτε widgets στο feed, και ζητήστε το δημόσιο @handle σας.' },
@@ -312,7 +312,7 @@ export const el: SiteContent = {
         },
         {
           q: 'Ποιες αγορές και χώρες είναι υποστηριζόμενες;',
-          a: 'Το Nexow έχει 28 ζωντανούς συνδέσμους (56 στο κατάλογο) σε FX (OANDA, LMAX, FXCM), κρυπτονόμισμα (Binance, Coinbase, Kraken, Deribit, BitMEX), μετοχές και futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), αγορές πρόβλεψης (Kalshi, Polymarket), προμηθευτές δεδομένων και βάσεις δεδομένων (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) και κοινωνικά feeds (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Το Nexow έχει 45 ζωντανούς συνδέσμους (83 στο κατάλογο) σε FX (OANDA, LMAX, FXCM), κρυπτονόμισμα (Binance, Coinbase, Kraken, Deribit, BitMEX), μετοχές και futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), αγορές πρόβλεψης (Kalshi, Polymarket), προμηθευτές δεδομένων και βάσεις δεδομένων (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) και κοινωνικά feeds (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Τι είναι τα bots και τα agents;',
@@ -347,7 +347,7 @@ export const el: SiteContent = {
     meta: {
       title: 'Χαρακτηριστικά — Nexow',
       description:
-        'Δημιουργία widget σε απλά ελληνικά, sandbox runtime, canvas ελεύθερης μορφής με ομάδες και συνδέσμους, 28+ σύνδεσμοι δεδομένων αγοράς, cloud bots και agents, κοινότητα δημιουργών με XP rewards, ιδιωτικό τοπικό λειτουργία και έκδοση βιβλιοθήκης widget. Εξερευνήστε όλα όσα κάνει το Nexow.',
+        'Δημιουργία widget σε απλά ελληνικά, sandbox runtime, canvas ελεύθερης μορφής με ομάδες και συνδέσμους, 45+ σύνδεσμοι δεδομένων αγοράς, cloud bots και agents, κοινότητα δημιουργών με XP rewards, ιδιωτικό τοπικό λειτουργία και έκδοση βιβλιοθήκης widget. Εξερευνήστε όλα όσα κάνει το Nexow.',
     },
     hero: {
       badge: 'Χαρακτηριστικά',
@@ -379,7 +379,7 @@ export const el: SiteContent = {
         title: 'Συνδεθείτε',
         body: 'Δεδομένα που μπορούν να συνδεθούν από τα venue που όντως χρησιμοποιείτε.',
         items: [
-          { icon: 'plug', title: '28+ σύνδεσμοι δεδομένων αγοράς', body: 'FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα και αγορές πρόβλεψης — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket και άλλα.' },
+          { icon: 'plug', title: '45+ σύνδεσμοι δεδομένων αγοράς', body: 'Βάσεις δεδομένων, κοινωνικά feeds, αγορές, πορτοφόλια και υπηρεσίες web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi και άλλα.' },
           { icon: 'globe', title: 'Browser-direct όπου δυνατό', body: 'Όπου επιτρέπει το CORS, οι αυθεντικοποιημένες κλήσεις venue εκτελούνται κατευθείαν από το πρόγραμμα περιήγησής σας και παρακάμπτουν πλήρως το proxy μας.' },
           { icon: 'database', title: 'Βάσεις δεδομένων & κοινωνικά επίσης', body: 'Δείξτε widgets σε Postgres, ClickHouse ή Qdrant, ή τραβήξτε από X, YouTube, Discord και Telegram δίπλα σε ζωντανές αγορές.' },
         ],
@@ -452,7 +452,7 @@ export const el: SiteContent = {
       title: 'Περιλαμβάνεται σε κάθε σχέδιο',
       items: [
         'Απεριόριστες οθόνες, χώροι εργασίας & widgets',
-        '28+ ζωντανοί σύνδεσμοι δεδομένων αγοράς',
+        '45+ ζωντανοί σύνδεσμοι δεδομένων αγοράς',
         'Sandbox widget runtime',
         'Global Copilot (σύντομα)',
         'Προσβάσεις κοινότητας & marketplace',
@@ -551,7 +551,7 @@ export const el: SiteContent = {
     meta: {
       title: 'Σύνδεσμοι — Nexow',
       description:
-        'Περιηγηθείτε σε κάθε σύνδεσμο Nexow — 28 ζωντανοί και 56 στο κατάλογο. Brokers, ανταλλαγές, DEXs, αγορές πρόβλεψης, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικά feeds. Αναζήτηση, φίλτρο και σύνδεση.',
+        'Περιηγηθείτε σε κάθε σύνδεσμο Nexow — 45 ζωντανοί και 83 στο κατάλογο. Brokers, ανταλλαγές, DEXs, αγορές πρόβλεψης, προμηθευτές δεδομένων, βάσεις δεδομένων και κοινωνικά feeds. Αναζήτηση, φίλτρο και σύνδεση.',
     },
     hero: {
       badge: 'Σύνδεσμοι',
@@ -562,7 +562,7 @@ export const el: SiteContent = {
     searchPlaceholder: 'Αναζήτηση συνδέσμων…',
     filters: 'Φίλτρα',
     all: 'Όλα',
-    categories: { finance: 'Χρηματοοικονομικά', data: 'Δεδομένα', socials: 'Κοινωνικά' },
+    categories: { finance: 'Χρηματοοικονομικά', wallets: 'Πορτοφόλια', services: 'Υπηρεσίες', data: 'Δεδομένα', socials: 'Κοινωνικά' },
     status: { all: 'Όλα', live: 'Ζωντανό', soon: 'Σύντομα' },
     kinds: {
       broker: 'Μεσίτης',
@@ -580,6 +580,15 @@ export const el: SiteContent = {
       video: 'Βίντεο',
       community: 'Κοινότητα',
       music: 'Μουσική',
+      wallet: 'Πορτοφόλι κρύπτο',
+      browser: 'Αυτοματισμός browser',
+      scraping: 'Web scraping',
+      search: 'Αναζήτηση ιστού',
+      weather: 'Καιρός & αέρας',
+      open_data: 'Ανοιχτά δεδομένα',
+      knowledge: 'Γνώση',
+      news: 'Ειδήσεις',
+      geo: 'Γεω & μεταφορές',
     },
     assets: {
       equities: 'Μετοχές',

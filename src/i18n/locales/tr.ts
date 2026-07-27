@@ -51,7 +51,7 @@ export const tr: SiteContent = {
     meta: {
       title: 'Nexow — Yapay Zeka ile Sade Dilde Pazar Panolarını Yapın',
       description:
-        'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade İngilizce ile bir widget açıklayın ve Nexow onu kurar, 28+ bağlantıdan canlı verilere bağlar ve bulut botları, yapay zeka ajanları, bir yapıcı topluluğu ve XP ödülü ekler — varsayılan olarak özel, başlangıç için ücretsiz.',
+        'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade İngilizce ile bir widget açıklayın ve Nexow onu kurar, 45+ bağlantıdan canlı verilere bağlar ve bulut botları, yapay zeka ajanları, bir yapıcı topluluğu ve XP ödülü ekler — varsayılan olarak özel, başlangıç için ücretsiz.',
     },
     hero: {
       badge: 'Ön izleme şimdi canlı',
@@ -69,7 +69,7 @@ export const tr: SiteContent = {
     ticker: { label: 'Canlı bağlantılar' },
     trust: 'Her pazar için bir tuval — Döviz, kripto, hisse senedi, vadeli işlem, opsiyon ve tahmin piyasaları.',
     stats: [
-      { n: 28, suffix: '+', label: 'canlı pazar veri bağlantısı' },
+      { n: 45, suffix: '+', label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
       { n: 6, label: 'bir tuval üzerinde varlık sınıfı' },
       { n: 10, suffix: 'K', label: 'kayıt sırasında ayrılmış ücretsiz yapay zeka kredisi' },
       { n: 30, prefix: '<', suffix: 's', label: 'cümleden çalışan widgete kadar' },
@@ -121,7 +121,7 @@ export const tr: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ canlı veri bağlantısı',
+          title: '45+ canlı veri bağlantısı',
           body: 'Bağlanabilir pazar veri sağlayıcıları — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket ve daha fazlası — gerçek zamanlı verileri widget\'lerinize yönlendirir.',
         },
         {
@@ -198,8 +198,8 @@ export const tr: SiteContent = {
       title: 'Her piyasaya bağlanın',
       subtitle:
         'Bağlanabilir bağlantılar, canlı fiyatları, emir defterlerini ve referans verilerini widget\'lerinize doğrudan akış yapılır — döviz, kripto, hisse senedi, vadeli işlem, opsiyon, tahmin piyasaları, veritabanları ve sosyal ortam kaynakları arasında.',
-      note: '28 bağlantı bugün canlı ve 56 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları ve sosyal ortamlar. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
-      count: 28,
+      note: '45 bağlantı bugün canlı ve 83 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları, sosyal ortamlar, kripto cüzdanları ve web hizmetleri. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
+      count: 45,
       countLabel: 'canlı bağlantı',
       groups: {
         fx: 'Döviz',
@@ -282,7 +282,7 @@ export const tr: SiteContent = {
       soon: 'Yakında',
       items: [
         { status: 'shipped', title: 'Yapay zeka widget kod oluşturma', body: 'Tuval üzerinde çalışan sade dil widget\'leri.' },
-        { status: 'shipped', title: '28+ pazar veri bağlantısı', body: 'Aracılar, borsalar, veri sağlayıcıları, veritabanları ve sosyal ortamlar canlı akış yapılır.' },
+        { status: 'shipped', title: '45+ pazar veri bağlantısı', body: 'Veritabanları, sosyal ortamlar, aracılar, borsalar, cüzdanlar, açık veri ve web hizmetleri canlı akış yapılır.' },
         { status: 'shipped', title: 'Bulut botları ve uyarıları', body: 'Verilerinizi izleyen ve widget\'lerinize sinyaller gönderen otomasyonlar, sekme kapalı.' },
         { status: 'shipped', title: 'Hesaplar ve bulut senkronizasyonu', body: 'Her cihaz genelinde senkronize edilen çalışma alanları olan ücretsiz hesaplar — platform başlatılması için ayrılmış 10K kredi.' },
         { status: 'shipped', title: 'Topluluk beslemesi ve profilleri', body: 'Yapıcıları takip edin, beslemede widget\'ler paylaşın ve herkese açık @handle\'inizi talep edin.' },
@@ -312,7 +312,7 @@ export const tr: SiteContent = {
         },
         {
           q: 'Hangi Piyasalar ve Mekanlar Destekleniyor?',
-          a: 'Nexow 28 canlı bağlantıya (katalogda 56) sahiptir; döviz (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), hisse senedi ve vadeli işlem (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), tahmin piyasaları (Kalshi, Polymarket), veri sağlayıcıları ve veritabanları (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) ve sosyal ortam kaynakları (X, YouTube, Discord, Telegram, Spotify) yayılır.',
+          a: 'Nexow 45 canlı bağlantıya (katalogda 83) sahiptir; döviz (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), hisse senedi ve vadeli işlem (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), tahmin piyasaları (Kalshi, Polymarket), veri sağlayıcıları ve veritabanları (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) ve sosyal ortam kaynakları (X, YouTube, Discord, Telegram, Spotify) yayılır.',
         },
         {
           q: 'Botlar ve Ajanlar Nedir?',
@@ -347,7 +347,7 @@ export const tr: SiteContent = {
     meta: {
       title: 'Özellikler — Nexow',
       description:
-        'Sade dil widget oluşturma, korumalı çalışma zamanı, gruplar ve bağlantılar ile serbest biçimli tuval, 28+ pazar veri bağlantısı, bulut botları ve ajanları, XP ödülleri ile yapıcı topluluğu, özel yerel mod ve sürümlü widget kütüphanesi. Nexow\'un yaptığı her şeyi keşfedin.',
+        'Sade dil widget oluşturma, korumalı çalışma zamanı, gruplar ve bağlantılar ile serbest biçimli tuval, 45+ pazar veri bağlantısı, bulut botları ve ajanları, XP ödülleri ile yapıcı topluluğu, özel yerel mod ve sürümlü widget kütüphanesi. Nexow\'un yaptığı her şeyi keşfedin.',
     },
     hero: {
       badge: 'Özellikler',
@@ -379,7 +379,7 @@ export const tr: SiteContent = {
         title: 'Bağlan',
         body: 'Gerçekten kullandığınız mekanlardan bağlanabilir veri.',
         items: [
-          { icon: 'plug', title: '28+ pazar veri bağlantısı', body: 'Döviz, kripto, hisse senedi, vadeli işlem, opsiyon ve tahmin piyasaları — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket ve daha fazlası.' },
+          { icon: 'plug', title: '45+ pazar veri bağlantısı', body: 'Veritabanları, sosyal akışlar, piyasalar, cüzdanlar ve web hizmetleri — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi ve daha fazlası.' },
           { icon: 'globe', title: 'Mümkün Olduğunca Tarayıcı-Doğrudan', body: 'CORS izni verdiğinde, kimliği doğrulanmış mekan çağrıları doğrudan tarayıcınızdan çalışır ve vekili tamamen atlayır.' },
           { icon: 'database', title: 'Veritabanları ve Sosyal Ortamlar da', body: 'Widget\'leri Postgres, ClickHouse veya Qdrant\'a işaret edin veya canlı piyasalarla birlikte X, YouTube, Discord ve Telegram\'dan çekin.' },
         ],
@@ -452,7 +452,7 @@ export const tr: SiteContent = {
       title: 'Her Planda Dahil',
       items: [
         'Sınırsız Ekran, Çalışma Alanı ve Widget',
-        '28+ canlı pazar veri bağlantısı',
+        '45+ canlı pazar veri bağlantısı',
         'Korumalı Widget Çalışma Zamanı',
         'Genel Copilot (yakında)',
         'Topluluk ve Pazaryeri Erişimi',
@@ -551,7 +551,7 @@ export const tr: SiteContent = {
     meta: {
       title: 'Bağlantılar — Nexow',
       description:
-        'Her Nexow Bağlantısını Gözden Geçir — 28 Canlı ve 56 Katalogda. Aracılar, Borsalar, DEX\'ler, Tahmin Piyasaları, Veri Sağlayıcıları, Veritabanları ve Sosyal Ortam Kaynakları. Ara, Filtrele ve Bağlan.',
+        'Her Nexow Bağlantısını Gözden Geçir — 45 Canlı ve 83 Katalogda. Aracılar, Borsalar, DEX\'ler, Tahmin Piyasaları, Veri Sağlayıcıları, Veritabanları ve Sosyal Ortam Kaynakları. Ara, Filtrele ve Bağlan.',
     },
     hero: {
       badge: 'Bağlantılar',
@@ -562,7 +562,7 @@ export const tr: SiteContent = {
     searchPlaceholder: 'Bağlantıları Ara…',
     filters: 'Filtreler',
     all: 'Tümü',
-    categories: { finance: 'Finans', data: 'Veri', socials: 'Sosyal Ortamlar' },
+    categories: { finance: 'Finans', wallets: 'Cüzdanlar', services: 'Hizmetler', data: 'Veri', socials: 'Sosyal Ortamlar' },
     status: { all: 'Tümü', live: 'Canlı', soon: 'Yakında' },
     kinds: {
       broker: 'Aracı',
@@ -580,6 +580,15 @@ export const tr: SiteContent = {
       video: 'Video',
       community: 'Topluluk',
       music: 'Müzik',
+      wallet: 'Kripto Cüzdanı',
+      browser: 'Tarayıcı Otomasyonu',
+      scraping: 'Web Kazıma',
+      search: 'Web Araması',
+      weather: 'Hava Durumu ve Hava Kalitesi',
+      open_data: 'Açık Veri',
+      knowledge: 'Bilgi',
+      news: 'Haberler',
+      geo: 'Coğrafya ve Ulaşım',
     },
     assets: {
       equities: 'Hisse Senedi',

@@ -51,7 +51,7 @@ export const ko: SiteContent = {
     meta: {
       title: 'Nexow — AI를 활용해 자연어로 마켓 대시보드 구축하기',
       description:
-        'Nexow는 마켓을 위한 AI 네이티브 워크스페이스입니다. 위젯을 자연어로 설명하면 Nexow가 만들고, 28개 이상의 커넥터에서 실시간 데이터를 연결한 후 클라우드 봇, AI 에이전트, 메이커 커뮤니티 및 XP 보상을 추가합니다 — 기본적으로 개인정보 보호, 무료로 시작.',
+        'Nexow는 마켓을 위한 AI 네이티브 워크스페이스입니다. 위젯을 자연어로 설명하면 Nexow가 만들고, 45개 이상의 커넥터에서 실시간 데이터를 연결한 후 클라우드 봇, AI 에이전트, 메이커 커뮤니티 및 XP 보상을 추가합니다 — 기본적으로 개인정보 보호, 무료로 시작.',
     },
     hero: {
       badge: '미리보기 현재 라이브',
@@ -69,7 +69,7 @@ export const ko: SiteContent = {
     ticker: { label: '라이브 커넥터' },
     trust: '모든 마켓을 위한 하나의 캔버스 — FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓.',
     stats: [
-      { n: 28, suffix: '+', label: '라이브 마켓 데이터 커넥터' },
+      { n: 45, suffix: '+', label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
       { n: 6, label: '하나의 캔버스에서 자산 클래스' },
       { n: 10, suffix: 'K', label: '가입 시 무료 AI 크레딧 예약' },
       { n: 30, prefix: '<', suffix: 's', label: '문장에서 실행 중인 위젯까지' },
@@ -121,7 +121,7 @@ export const ko: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28개 이상의 라이브 데이터 커넥터',
+          title: '45개 이상의 라이브 데이터 커넥터',
           body: '플러그형 마켓 데이터 제공자 — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket 등 — 실시간 데이터를 위젯으로 라우팅합니다.',
         },
         {
@@ -198,8 +198,8 @@ export const ko: SiteContent = {
       title: '모든 마켓에 연결',
       subtitle:
         '플러그형 커넥터는 실시간 가격, 오더북 및 참조 데이터를 위젯으로 직접 스트리밍합니다 — FX, 암호화폐, 주식, 선물, 옵션, 예측 마켓, 데이터베이스 및 소셜 피드 전체.',
-      note: '28개의 커넥터가 오늘 라이브이고 56개는 카탈로그에 있습니다 — 브로커, 거래소, 데이터 제공자, 데이터베이스 및 소셜입니다. 많은 커넥터가 브라우저에서 직접 스트리밍되고, 나머지는 얇은 프록시를 통해 라우팅됩니다.',
-      count: 28,
+      note: '45개의 커넥터가 오늘 라이브이고 83개는 카탈로그에 있습니다 — 거래소, 마켓 데이터 API, 데이터베이스, 소셜 소스, 암호화폐 지갑 및 웹 서비스입니다. 많은 커넥터가 브라우저에서 직접 스트리밍되고, 나머지는 얇은 프록시를 통해 라우팅됩니다.',
+      count: 45,
       countLabel: '라이브 커넥터',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const ko: SiteContent = {
       soon: '곧 출시',
       items: [
         { status: 'shipped', title: 'AI 위젯 코드 생성', body: '캔버스에서 샌드박스로 실행되는 자연어 위젯.' },
-        { status: 'shipped', title: '28개 이상의 마켓 데이터 커넥터', body: '브로커, 거래소, 데이터 제공자, 데이터베이스 및 소셜에서 라이브 스트리밍.' },
+        { status: 'shipped', title: '45개 이상의 마켓 데이터 커넥터', body: '데이터베이스, 소셜, 브로커, 거래소, 지갑, 오픈 데이터 및 웹 서비스에서 라이브 스트리밍.' },
         { status: 'shipped', title: '클라우드 봇 & 경고', body: '데이터를 감시하고 위젯에 신호를 발송하는 자동화, 탭 닫음.' },
         { status: 'shipped', title: '계정 & 클라우드 동기화', body: '모든 기기에서 동기화된 워크스페이스가 있는 무료 계정 — 플랫폼 시작 시 10K 크레딧 예약.' },
         { status: 'shipped', title: '커뮤니티 피드 & 프로필', body: '메이커 팔로우, 위젯을 피드에 공유, 공개 @핸들 신청.' },
@@ -312,7 +312,7 @@ export const ko: SiteContent = {
         },
         {
           q: '어떤 마켓과 베뉴가 지원됩니까?',
-          a: 'Nexow는 28개의 라이브 커넥터 (카탈로그에 56개)가 있으며 FX (OANDA, LMAX, FXCM), 암호화폐 (Binance, Coinbase, Kraken, Deribit, BitMEX), 주식 및 선물 (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), 예측 마켓 (Kalshi, Polymarket), 데이터 제공자 및 데이터베이스 (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) 및 소셜 피드 (X, YouTube, Discord, Telegram, Spotify)가 포함됩니다.',
+          a: 'Nexow는 45개의 라이브 커넥터 (카탈로그에 83개)가 있으며 FX (OANDA, LMAX, FXCM), 암호화폐 (Binance, Coinbase, Kraken, Deribit, BitMEX), 주식 및 선물 (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), 예측 마켓 (Kalshi, Polymarket), 데이터 제공자 및 데이터베이스 (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) 및 소셜 피드 (X, YouTube, Discord, Telegram, Spotify)가 포함됩니다.',
         },
         {
           q: '봇과 에이전트란 무엇입니까?',
@@ -347,7 +347,7 @@ export const ko: SiteContent = {
     meta: {
       title: '기능 — Nexow',
       description:
-        '자연어 위젯 생성, 샌드박스 런타임, 그룹 및 링크가 있는 자유형 캔버스, 28개 이상의 마켓 데이터 커넥터, 클라우드 봇 및 에이전트, XP 보상이 있는 메이커 커뮤니티, 개인 로컬 모드 및 버전 관리 위젯 라이브러리. Nexow가 수행하는 모든 작업을 살펴보세요.',
+        '자연어 위젯 생성, 샌드박스 런타임, 그룹 및 링크가 있는 자유형 캔버스, 45개 이상의 마켓 데이터 커넥터, 클라우드 봇 및 에이전트, XP 보상이 있는 메이커 커뮤니티, 개인 로컬 모드 및 버전 관리 위젯 라이브러리. Nexow가 수행하는 모든 작업을 살펴보세요.',
     },
     hero: {
       badge: '기능',
@@ -379,7 +379,7 @@ export const ko: SiteContent = {
         title: '연결',
         body: '실제로 사용하는 베뉴의 플러그형 데이터.',
         items: [
-          { icon: 'plug', title: '28개 이상의 마켓 데이터 커넥터', body: 'FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓 — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket 등.' },
+          { icon: 'plug', title: '45개 이상의 마켓 데이터 커넥터', body: '데이터베이스, 소셜 피드, 마켓, 지갑 및 웹 서비스 — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi 등.' },
           { icon: 'globe', title: '가능한 경우 브라우저 직접', body: 'CORS를 허용하는 경우 인증된 베뉴 호출이 브라우저에서 직접 실행되고 프록시를 완전히 우회합니다.' },
           { icon: 'database', title: '데이터베이스 & 소셜도', body: '위젯을 Postgres, ClickHouse 또는 Qdrant로 지정하거나 X, YouTube, Discord 및 Telegram을 라이브 마켓과 함께 가져오세요.' },
         ],
@@ -452,7 +452,7 @@ export const ko: SiteContent = {
       title: '모든 요금제에 포함',
       items: [
         '무제한 화면, 워크스페이스 & 위젯',
-        '28개 이상의 라이브 마켓 데이터 커넥터',
+        '45개 이상의 라이브 마켓 데이터 커넥터',
         '샌드박스 위젯 런타임',
         '글로벌 Copilot (곧 출시)',
         '커뮤니티 & 마켓플레이스 접근',
@@ -551,7 +551,7 @@ export const ko: SiteContent = {
     meta: {
       title: '커넥터 — Nexow',
       description:
-        '모든 Nexow 커넥터 찾아보기 — 28개 라이브 및 56개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
+        '모든 Nexow 커넥터 찾아보기 — 45개 라이브 및 83개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
     },
     hero: {
       badge: '커넥터',
@@ -562,7 +562,7 @@ export const ko: SiteContent = {
     searchPlaceholder: '커넥터 검색…',
     filters: '필터',
     all: '전부',
-    categories: { finance: '금융', data: '데이터', socials: '소셜' },
+    categories: { finance: '금융', wallets: '지갑', services: '서비스', data: '데이터', socials: '소셜' },
     status: { all: '전부', live: '라이브', soon: '곧' },
     kinds: {
       broker: '브로커',
@@ -580,6 +580,15 @@ export const ko: SiteContent = {
       video: '비디오',
       community: '커뮤니티',
       music: '음악',
+      wallet: '암호화폐 지갑',
+      browser: '브라우저 자동화',
+      scraping: '웹 스크레이핑',
+      search: '웹 검색',
+      weather: '날씨 & 대기',
+      open_data: '오픈 데이터',
+      knowledge: '지식',
+      news: '뉴스',
+      geo: '지리 & 교통',
     },
     assets: {
       equities: '주식',

@@ -51,7 +51,7 @@ export const zh: SiteContent = {
     meta: {
       title: 'Nexow — 用自然语言，借助 AI 构建市场仪表盘',
       description:
-        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 28+ 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
+        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 45+ 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
     },
     hero: {
       badge: '预览版现已上线',
@@ -69,7 +69,7 @@ export const zh: SiteContent = {
     ticker: { label: '实时连接器' },
     trust: '一块画布，覆盖每个市场——FX、加密货币、股票、期货、期权与预测市场。',
     stats: [
-      { n: 28, suffix: '+', label: '个实时市场数据连接器' },
+      { n: 45, suffix: '+', label: '个覆盖数据、钱包、社交与市场的实时连接器' },
       { n: 6, label: '类资产同处一块画布' },
       { n: 10, suffix: 'K', label: '注册即预留的免费 AI 积分' },
       { n: 30, prefix: '<', suffix: 's', label: '从一句话到运行中的组件' },
@@ -121,7 +121,7 @@ export const zh: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ 个实时数据连接器',
+          title: '45+ 个实时数据连接器',
           body: '可插拔的市场数据提供方——OANDA、Binance、Coinbase、Kraken、Polygon、Interactive Brokers、Kalshi、Polymarket 等——将实时数据路由到你的组件。',
         },
         {
@@ -198,8 +198,8 @@ export const zh: SiteContent = {
       title: '接入每一个市场',
       subtitle:
         '可插拔的连接器将实时价格、订单簿和参考数据直接流式送入你的组件——覆盖 FX、加密货币、股票、期货、期权、预测市场、数据库和社交信息流。',
-      note: '如今已有 28 个连接器上线，另有 56 个在目录中——券商、交易所、数据提供方、数据库和社交平台。许多直接从你的浏览器流式传输；其余则通过一层轻量代理路由。',
-      count: 28,
+      note: '如今已有 45 个连接器上线，另有 83 个在目录中——交易场所、市场数据 API、数据库、社交来源、加密钱包和网络服务。许多直接从你的浏览器流式传输；其余则通过一层轻量代理路由。',
+      count: 45,
       countLabel: '个实时连接器',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const zh: SiteContent = {
       soon: '即将推出',
       items: [
         { status: 'shipped', title: 'AI 组件代码生成', body: '自然语言组件在画布上沙箱化运行。' },
-        { status: 'shipped', title: '28+ 个市场数据连接器', body: '券商、交易所、数据提供方、数据库和社交平台实时流式传输。' },
+        { status: 'shipped', title: '45+ 个市场数据连接器', body: '数据库、社交平台、券商、交易所、钱包、开放数据和网络服务实时流式传输。' },
         { status: 'shipped', title: '云端机器人与提醒', body: '自动化监视你的数据并向组件推送信号，即使标签页已关闭。' },
         { status: 'shipped', title: '账户与云同步', body: '免费账户，工作区在每台设备间同步——为平台上线预留 10K 积分。' },
         { status: 'shipped', title: '社区信息流与主页', body: '关注创作者、将组件分享到信息流，并认领你的公开 @handle。' },
@@ -312,7 +312,7 @@ export const zh: SiteContent = {
         },
         {
           q: '支持哪些市场和交易场所？',
-          a: 'Nexow 拥有 28 个实时连接器（目录中共 56 个），覆盖 FX（OANDA、LMAX、FXCM）、加密货币（Binance、Coinbase、Kraken、Deribit、BitMEX）、股票和期货（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、预测市场（Kalshi、Polymarket）、数据提供方和数据库（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）以及社交信息流（X、YouTube、Discord、Telegram、Spotify）。',
+          a: 'Nexow 拥有 45 个实时连接器（目录中共 83 个），覆盖 FX（OANDA、LMAX、FXCM）、加密货币（Binance、Coinbase、Kraken、Deribit、BitMEX）、股票和期货（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、预测市场（Kalshi、Polymarket）、数据提供方和数据库（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）以及社交信息流（X、YouTube、Discord、Telegram、Spotify）。',
         },
         {
           q: '机器人和智能体是什么？',
@@ -347,7 +347,7 @@ export const zh: SiteContent = {
     meta: {
       title: '功能 — Nexow',
       description:
-        '自然语言组件生成、沙箱化运行时、带编组和链接的自由画布、28+ 个市场数据连接器、云端机器人和智能体、带 XP 奖励的创作者社区、私密本地模式，以及带版本管理的组件库。探索 Nexow 的一切。',
+        '自然语言组件生成、沙箱化运行时、带编组和链接的自由画布、45+ 个市场数据连接器、云端机器人和智能体、带 XP 奖励的创作者社区、私密本地模式，以及带版本管理的组件库。探索 Nexow 的一切。',
     },
     hero: {
       badge: '功能',
@@ -379,7 +379,7 @@ export const zh: SiteContent = {
         title: '连接',
         body: '来自你实际使用的交易场所的可插拔数据。',
         items: [
-          { icon: 'plug', title: '28+ 个市场数据连接器', body: 'FX、加密货币、股票、期货、期权和预测市场——OANDA、Binance、Coinbase、IBKR、Polygon、Kalshi、Polymarket 等。' },
+          { icon: 'plug', title: '45+ 个市场数据连接器', body: '数据库、社交信息流、市场、钱包和网络服务——Postgres、ClickHouse、Qdrant、X、YouTube、Discord、OANDA、Binance、Coinbase、MetaMask、Ledger、Polygon、Kalshi 等。' },
           { icon: 'globe', title: '尽可能浏览器直连', body: '在 CORS 允许的地方，已认证的交易场所调用直接从你的浏览器运行，完全绕过我们的代理。' },
           { icon: 'database', title: '也支持数据库与社交平台', body: '让组件指向 Postgres、ClickHouse 或 Qdrant，或在实时市场之外从 X、YouTube、Discord 和 Telegram 拉取数据。' },
         ],
@@ -452,7 +452,7 @@ export const zh: SiteContent = {
       title: '每个方案都包含',
       items: [
         '无限屏幕、工作区和组件',
-        '28+ 个实时市场数据连接器',
+        '45+ 个实时市场数据连接器',
         '沙箱化组件运行时',
         '全局 Copilot（即将推出）',
         '社区与市场访问权',
@@ -551,7 +551,7 @@ export const zh: SiteContent = {
     meta: {
       title: '连接器 — Nexow',
       description:
-        '浏览 Nexow 的每一个连接器——28 个已上线，目录中共 56 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
+        '浏览 Nexow 的每一个连接器——45 个已上线，目录中共 83 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
     },
     hero: {
       badge: '连接器',
@@ -562,7 +562,7 @@ export const zh: SiteContent = {
     searchPlaceholder: '搜索连接器……',
     filters: '筛选',
     all: '全部',
-    categories: { finance: '金融', data: '数据', socials: '社交' },
+    categories: { finance: '金融', wallets: '钱包', services: '服务', data: '数据', socials: '社交' },
     status: { all: '全部', live: '已上线', soon: '即将' },
     kinds: {
       broker: '券商',
@@ -580,6 +580,15 @@ export const zh: SiteContent = {
       video: '视频',
       community: '社区',
       music: '音乐',
+      wallet: '加密钱包',
+      browser: '浏览器自动化',
+      scraping: '网页抓取',
+      search: '网页搜索',
+      weather: '天气与空气',
+      open_data: '开放数据',
+      knowledge: '知识',
+      news: '新闻',
+      geo: '地理与交通',
     },
     assets: {
       equities: '股票',

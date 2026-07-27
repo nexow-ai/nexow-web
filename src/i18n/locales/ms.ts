@@ -51,7 +51,7 @@ export const ms: SiteContent = {
     meta: {
       title: 'Nexow — Bina papan pemuka pasaran dengan AI, dalam bahasa biasa',
       description:
-        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 28+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
+        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 45+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
     },
     hero: {
       badge: 'Pratonton kini langsung',
@@ -69,7 +69,7 @@ export const ms: SiteContent = {
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',
     stats: [
-      { n: 28, suffix: '+', label: 'penyambung data pasaran langsung' },
+      { n: 45, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
       { n: 6, label: 'kelas aset pada satu kanvas' },
       { n: 10, suffix: 'K', label: 'kredit AI percuma yang dikhaskan semasa mendaftar' },
       { n: 30, prefix: '<', suffix: 's', label: 'daripada ayat kepada widget yang berjalan' },
@@ -121,7 +121,7 @@ export const ms: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ penyambung data langsung',
+          title: '45+ penyambung data langsung',
           body: 'Pembekal data pasaran yang boleh pasang — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket dan banyak lagi — laluan data masa nyata ke widget anda.',
         },
         {
@@ -198,8 +198,8 @@ export const ms: SiteContent = {
       title: 'Pasang ke setiap pasaran',
       subtitle:
         'Penyambung yang boleh pasang mengalirkan harga langsung, buku pesanan dan data rujukan terus ke widget anda — merentasi FX, kripto, ekuiti, niaga hadapan, opsyen, pasaran ramalan, pangkalan data dan suapan sosial.',
-      note: '28 penyambung langsung hari ini dan 56 duduk dalam katalog — broker, pertukaran, pembekal data, pangkalan data dan sosial. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
-      count: 28,
+      note: '45 penyambung langsung hari ini dan 83 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
+      count: 45,
       countLabel: 'penyambung langsung',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const ms: SiteContent = {
       soon: 'Segera hadir',
       items: [
         { status: 'shipped', title: 'Penghasilan widget AI', body: 'Widget bahasa biasa berjalan sandbok pada kanvas.' },
-        { status: 'shipped', title: '28+ penyambung data pasaran', body: 'Broker, pertukaran, pembekal data, pangkalan data dan sosial mengalir secara langsung.' },
+        { status: 'shipped', title: '45+ penyambung data pasaran', body: 'Pangkalan data, sosial, broker, pertukaran, dompet, data terbuka dan perkhidmatan web mengalir secara langsung.' },
         { status: 'shipped', title: 'Bot & amaran awan', body: 'Automasi yang memantau data anda dan menembak isyarat ke widget anda, tab ditutup.' },
         { status: 'shipped', title: 'Akaun & segerak awan', body: 'Akaun percuma dengan ruang kerja disegerak ke setiap peranti — 10K kredit dikhaskan untuk pelancaran platform.' },
         { status: 'shipped', title: 'Suapan komuniti & profil', body: 'Ikuti pembuat, kongsi widget ke suapan, dan tuntut @handle awam anda.' },
@@ -312,7 +312,7 @@ export const ms: SiteContent = {
         },
         {
           q: 'Pasaran dan tempat apa yang disokong?',
-          a: 'Nexow mempunyai 28 penyambung langsung (56 dalam katalog) merentasi FX (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ekuiti dan niaga hadapan (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), pasaran ramalan (Kalshi, Polymarket), pembekal data dan pangkalan data (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) dan suapan sosial (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow mempunyai 45 penyambung langsung (83 dalam katalog) merentasi FX (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ekuiti dan niaga hadapan (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), pasaran ramalan (Kalshi, Polymarket), pembekal data dan pangkalan data (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) dan suapan sosial (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Apa itu bot dan ejen?',
@@ -347,7 +347,7 @@ export const ms: SiteContent = {
     meta: {
       title: 'Ciri-ciri — Nexow',
       description:
-        'Penghasilan widget bahasa biasa, masa jalan sandbok, kanvas bentuk bebas dengan kumpulan dan pautan, 28+ penyambung data pasaran, bot dan ejen awan, komuniti pembuat dengan ganjaran XP, mod tempatan swasta dan perpustakaan widget versi. Terokai semua yang Nexow lakukan.',
+        'Penghasilan widget bahasa biasa, masa jalan sandbok, kanvas bentuk bebas dengan kumpulan dan pautan, 45+ penyambung data pasaran, bot dan ejen awan, komuniti pembuat dengan ganjaran XP, mod tempatan swasta dan perpustakaan widget versi. Terokai semua yang Nexow lakukan.',
     },
     hero: {
       badge: 'Ciri-ciri',
@@ -379,7 +379,7 @@ export const ms: SiteContent = {
         title: 'Sambung',
         body: 'Data yang boleh pasang daripada tempat yang sebenarnya anda gunakan.',
         items: [
-          { icon: 'plug', title: '28+ penyambung data pasaran', body: 'FX, kripto, ekuiti, niaga hadapan, opsyen dan pasaran ramalan — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket dan banyak lagi.' },
+          { icon: 'plug', title: '45+ penyambung data pasaran', body: 'Pangkalan data, suapan sosial, pasaran, dompet dan perkhidmatan web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi dan banyak lagi.' },
           { icon: 'globe', title: 'Penyemak imbas langsung di mana mungkin', body: 'Di mana CORS membenarkan, panggilan tempat yang disahkan menjalankan terus dari penyemak imbas anda dan lintasan proksi kami sepenuhnya.' },
           { icon: 'database', title: 'Pangkalan data & sosial juga', body: 'Arahkan widget ke Postgres, ClickHouse atau Qdrant, atau tarik daripada X, YouTube, Discord dan Telegram bersama pasaran langsung.' },
         ],
@@ -452,7 +452,7 @@ export const ms: SiteContent = {
       title: 'Termasuk dalam setiap pelan',
       items: [
         'Skrin, ruang kerja & widget tanpa had',
-        '28+ penyambung data pasaran langsung',
+        '45+ penyambung data pasaran langsung',
         'Masa jalan widget sandbok',
         'Copilot global (akan datang segera)',
         'Akses komuniti & pasaran',
@@ -551,7 +551,7 @@ export const ms: SiteContent = {
     meta: {
       title: 'Penyambung — Nexow',
       description:
-        'Layari setiap penyambung Nexow — 28 langsung dan 56 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
+        'Layari setiap penyambung Nexow — 45 langsung dan 83 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
     },
     hero: {
       badge: 'Penyambung',
@@ -562,7 +562,7 @@ export const ms: SiteContent = {
     searchPlaceholder: 'Cari penyambung…',
     filters: 'Penapis',
     all: 'Semua',
-    categories: { finance: 'Kewangan', data: 'Data', socials: 'Sosial' },
+    categories: { finance: 'Kewangan', wallets: 'Dompet', services: 'Perkhidmatan', data: 'Data', socials: 'Sosial' },
     status: { all: 'Semua', live: 'Langsung', soon: 'Segera hadir' },
     kinds: {
       broker: 'Broker',
@@ -580,6 +580,15 @@ export const ms: SiteContent = {
       video: 'Video',
       community: 'Komuniti',
       music: 'Muzik',
+      wallet: 'Dompet kripto',
+      browser: 'Automasi penyemak imbas',
+      scraping: 'Pengikisan web',
+      search: 'Carian web',
+      weather: 'Cuaca & udara',
+      open_data: 'Data terbuka',
+      knowledge: 'Pengetahuan',
+      news: 'Berita',
+      geo: 'Geo & pengangkutan',
     },
     assets: {
       equities: 'Ekuiti',
