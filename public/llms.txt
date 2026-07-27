@@ -19,13 +19,18 @@
 - How it works: prompt → AI-generated widget source → sandboxed iframe runtime → themed canvas → optional connectors / local state → refine in natural language.
 - Structure: Workspaces contain Screens, which hold Widgets on a free-form canvas. Groups bundle widgets with mosaic or tab layouts; Links pipe events or data between widgets, one-way or two-way.
 - Privacy: private by default and no account required; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many services connect browser-direct.
-- Advanced layers: bots, agents, Copilot, community, marketplace and XP rewards exist or are on the roadmap, but the home page positions them as secondary to the widget canvas.
+- Advanced layers: bots, agents, Copilot, community, marketplace and reputation are LIVE; premium widgets/signals and reward credits are on the roadmap. The home page positions all of them as secondary to the widget canvas.
+- Agents: build an agent from a harness (model, memory, skills, tools, knowledge, triggers) and deploy it to the cloud — grant-gated tools, memory between runs, scheduled cadence and a live run history. LIVE.
+- Copilot: workspace assistant with parallel tabbed conversations, background widget builds that survive interruptions, and canvas layout tools. LIVE.
+- Marketplace: publish and install widgets, themes, screens/workspaces and bots, with lineage that credits every remake. Free to publish and install; buying/selling and strategy signals are COMING SOON. Published bots are sanitized: author credentials, wallet addresses and webhook/database sinks never travel.
+- Reputation: points, tiered achievements (bronze/silver/gold), rare and legendary medals, and levels on public profiles. LIVE; converting reputation into reward credits is COMING SOON.
+- Wallets: MetaMask, Phantom, Coinbase Wallet, Trust Wallet and Ledger connect watch-only with multi-chain tracking; bots can watch wallet activity and balance moves. LIVE.
 - Accounts: free, no credit card. Cross-device cloud sync is LIVE; 10,000 AI credits are reserved at sign-up and activate when platform mode opens.
 - Connectors (28 live, 56 in catalog): databases and data tools such as Postgres, ClickHouse and Qdrant; socials such as X, YouTube, Discord, Telegram and Spotify; market venues such as OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Kalshi and Polymarket.
 - Markets remain supported: FX, crypto, equities, futures, options and prediction markets are still first-class examples, not the whole product.
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
 - Plans: free forever to build (locally with your own key, or with 10,000 AI credits reserved on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout and platform credits are coming soon.
-- Status: public preview live (canvas, codegen, connectors, cloud bots, accounts & sync, community feed). Roadmap: agent deploy, Copilot, marketplace, templates/workflows, XP & rewards.
+- Status: public preview live (canvas, codegen, connectors, cloud bots, agents & Copilot, marketplace, accounts & sync, community & reputation). Roadmap: premium widgets & strategy signals, paid checkout & platform credits, reward credits, templates/workflows.
 - App: https://x.nexow.ai
 
 ## Pages
@@ -45,10 +50,34 @@
 - [Cloud bots](https://nexow.ai/blog/cloud-bots-alerts-that-watch-the-market): bot concepts using market alerts as an example.
 - [Free accounts, credits & cloud sync](https://nexow.ai/blog/free-accounts-credits-cloud-sync): what a free account unlocks.
 - [The connector gallery](https://nexow.ai/blog/connector-gallery-explore-every-venue): explore every service Nexow connects to.
-- [What we're building next](https://nexow.ai/blog/whats-next-agents-copilot-marketplace): agents, a workspace Copilot and the marketplace.
+- [What we're building next](https://nexow.ai/blog/whats-next-agents-copilot-marketplace): agents, a workspace Copilot and the marketplace — now delivered; see the posts below.
+- [Agents are live](https://nexow.ai/blog/agents-are-live-deploy-a-teammate): deploy an agent to the cloud with tool grants, memory and a run timeline.
+- [Copilot has landed](https://nexow.ai/blog/copilot-parallel-conversations): parallel conversations, background builds, clarifying questions.
+- [The marketplace is open](https://nexow.ai/blog/marketplace-widgets-themes-bots): publish and install widgets, themes, screens and bots.
+- [Your wallets, on the canvas](https://nexow.ai/blog/wallets-on-the-canvas): MetaMask, Phantom, Coinbase, Trust and Ledger, plus wallet-watching bots.
+- [The You tab](https://nexow.ai/blog/you-tab-profile-boards-reputation): profile, boards, answer inbox and reputation medals.
+- [Bots v2](https://nexow.ai/blog/bots-v2-triggers-webhooks-database): RSI and volume triggers, webhook and database delivery.
+- [Widget building you can trust](https://nexow.ai/blog/widget-builds-durability-provenance): durable builds, version provenance, lint in the chat.
+- [One workspace, every device](https://nexow.ai/blog/sync-libraries-privacy-stash): deeper sync, screen/workspace libraries, privacy-mode stashing.
+- [Explore, rebuilt](https://nexow.ai/blog/explore-rebuilt-subfeeds-scopes): endless sub-feeds, resizable tiles, contacts-only scope.
+- [A calmer cockpit](https://nexow.ai/blog/calmer-cockpit-dock-presets-tips): auto-hiding dock, layout presets and built-in tips.
 
 ## Languages
 
 - English: https://nexow.ai/
+- العربية: https://nexow.ai/ar/
+- Deutsch: https://nexow.ai/de/
+- Ελληνικά: https://nexow.ai/el/
 - Español: https://nexow.ai/es/
 - Français: https://nexow.ai/fr/
+- עברית: https://nexow.ai/he/
+- Italiano: https://nexow.ai/it/
+- 日本語: https://nexow.ai/ja/
+- 한국어: https://nexow.ai/ko/
+- Bahasa Melayu: https://nexow.ai/ms/
+- Nederlands: https://nexow.ai/nl/
+- Português: https://nexow.ai/pt/
+- Русский: https://nexow.ai/ru/
+- Türkçe: https://nexow.ai/tr/
+- Українська: https://nexow.ai/uk/
+- 中文: https://nexow.ai/zh/
