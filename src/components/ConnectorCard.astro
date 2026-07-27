@@ -10,7 +10,7 @@ interface Props {
 const { c, t } = Astro.props;
 
 const kindLabel = t.kinds[c.kind] ?? c.kind;
-const catLabel = t.categories[c.category as 'finance' | 'data' | 'socials'] ?? c.category;
+const catLabel = t.categories[c.category] ?? c.category;
 const assetLabels = c.assets.map((a) => t.assets[a] ?? a);
 const shown = assetLabels.slice(0, 3);
 const more = assetLabels.length - shown.length;

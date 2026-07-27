@@ -10,7 +10,9 @@ const venuesRaw = JSON.parse(
 );
 const venues = Array.isArray(venuesRaw) ? venuesRaw : venuesRaw.venues;
 
-// Site categories mirror the app's connections panel tabs.
+// Site categories mirror the app's connections panel tabs, except data
+// providers: the app files them under its Markets tab, but the site's Data
+// category covers market-data APIs and databases alike.
 const CATEGORY_BY_KIND = {
   undefined: 'finance', // market venues carry no `kind`
   db: 'data',
@@ -18,6 +20,8 @@ const CATEGORY_BY_KIND = {
   wallet: 'wallets',
   service: 'services',
 };
+const categoryOf = (v) =>
+  v.venue_type === 'data_provider' ? 'data' : CATEGORY_BY_KIND[v.kind];
 
 // venue_type → i18n key into connectorsPage.kinds
 const MARKET_KINDS = {
@@ -52,8 +56,11 @@ const SITE_ASSETS = new Set([
   'volatility', 'prediction_markets',
 ]);
 
+// Analytics warehouses get their own label instead of the generic SQL one.
+const WAREHOUSES = new Set(['bigquery', 'snowflake']);
+
 const kindOf = (v) => {
-  if (v.kind === 'db') return v.dbType ?? 'sql';
+  if (v.kind === 'db') return WAREHOUSES.has(v.id) ? 'warehouse' : (v.dbType ?? 'sql');
   if (v.kind === 'social') return SOCIAL_KINDS[v.venue_type] ?? 'social';
   if (v.kind === 'wallet') return 'wallet';
   if (v.kind === 'service') return SERVICE_KINDS[v.venue_type] ?? 'open_data';
@@ -84,7 +91,7 @@ const connectors = venues
   .map((v) => ({
     id: v.id,
     name: v.name,
-    category: CATEGORY_BY_KIND[v.kind],
+    category: categoryOf(v),
     kind: kindOf(v),
     status: v.status === 'available' ? 'live' : 'soon',
     trading: !!v.trading,
@@ -92,7 +99,12 @@ const connectors = venues
     url: urlOf(v),
     logo: logoOf(v),
   }))
-  .sort((a, b) => a.id.localeCompare(b.id));
+  // Live connectors lead the gallery; alphabetical by display name within each group.
+  .sort((a, b) =>
+    a.status !== b.status
+      ? (a.status === 'live' ? -1 : 1)
+      : a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  );
 
 const header = `// AUTO-GENERATED from the Nexow app connector catalog. Do not edit by hand.
 // Regenerate with scratchpad/gen-connectors.mjs.

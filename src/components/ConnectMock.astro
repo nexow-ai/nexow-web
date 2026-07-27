@@ -42,9 +42,9 @@ const pick = ['coinbase', 'binance', 'oanda', 'interactive_brokers', 'kraken', '
     </div>
 
     <!-- tabs -->
-    <div class="mt-3 flex gap-1.5">
+    <div class="mt-3 flex flex-wrap gap-1.5">
       {
-        [t.categories.finance, t.categories.data, t.categories.socials].map((label, i) => (
+        [t.categories.finance, t.categories.wallets, t.categories.services, t.categories.data, t.categories.socials].map((label, i) => (
           <span
             class:list={[
               'rounded-full px-2.5 py-1 font-mono text-[0.65rem]',
