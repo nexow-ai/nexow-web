@@ -51,7 +51,7 @@ export const he: SiteContent = {
     meta: {
       title: 'Nexow — בנו לוחות מחוונים לשוק עם בינה מלאכותית, בשפה טבעית',
       description:
-        'Nexow היא סביבת עבודה ילידת בינה מלאכותית לשווקים. תארו ווידג׳ט בעברית טבעית ו־Nexow בונה אותו, מחבר אותו לנתונים חיים מ־28+ מחברים, ומוסיף בוטים בענן, סוכנים בינה מלאכותית, קהילת יוצרים ופרסי XP — פרטי כברירת מחדל, חופשי להתחלה.',
+        'Nexow היא סביבת עבודה ילידת בינה מלאכותית לשווקים. תארו ווידג׳ט בעברית טבעית ו־Nexow בונה אותו, מחבר אותו לנתונים חיים מ־45+ מחברים, ומוסיף בוטים בענן, סוכנים בינה מלאכותית, קהילת יוצרים ופרסי XP — פרטי כברירת מחדל, חופשי להתחלה.',
     },
     hero: {
       badge: 'התצוגה המקדימה חיה כעת',
@@ -69,7 +69,7 @@ export const he: SiteContent = {
     ticker: { label: 'מחברים חיים' },
     trust: 'קנבס אחד לכל שוק — FX, קריפטו, מניות, עתידות, אופציות ושווקי חיזוי.',
     stats: [
-      { n: 28, suffix: '+', label: 'מחברי נתוני שוק חיים' },
+      { n: 45, suffix: '+', label: 'מחברים חיים לנתונים, ארנקים, חברתיות ושווקים' },
       { n: 6, label: 'סוגי נכסים בקנבס אחד' },
       { n: 10, suffix: 'K', label: 'אשראים בינה מלאכותית חופשיים שמורים בהרשמה' },
       { n: 30, prefix: '<', suffix: 's', label: 'מהמשפט לווידג׳ט פעיל' },
@@ -121,7 +121,7 @@ export const he: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28+ מחברי נתוני שוק חיים',
+          title: '45+ מחברי נתוני שוק חיים',
           body: 'ספקי נתוני שוק שניתן לחבר — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket ועוד — זורמים נתונים בזמן אמת לווידג׳טים שלכם.',
         },
         {
@@ -198,8 +198,8 @@ export const he: SiteContent = {
       title: 'התחברו לכל שוק',
       subtitle:
         'מחברים שניתן לחבר זורמים מחירים חיים, ספרי הזמנות ונתונים ייחוסיים ישירות לווידג׳טים שלכם — על פני FX, קריפטו, מניות, עתידות, אופציות, שווקי חיזוי, מסדי נתונים ופידים חברתיים.',
-      note: '28 מחברים חיים כיום ו-56 יושבים בקטלוג — ברוקרים, בורסות, ספקי נתונים, מסדי נתונים וחברתיים. רבים זורמים ישירות מהדפדפן שלכם; השאר מנתבים דרך פרוקסי דק.',
-      count: 28,
+      note: '45 מחברים חיים כיום ו-83 יושבים בקטלוג — ברוקרים, בורסות, ספקי נתונים, מסדי נתונים, מקורות חברתיים, ארנקי קריפטו ושירותי ווב. רבים זורמים ישירות מהדפדפן שלכם; השאר מנתבים דרך פרוקסי דק.',
+      count: 45,
       countLabel: 'מחברים חיים',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const he: SiteContent = {
       soon: 'בקרוב',
       items: [
         { status: 'shipped', title: 'codegen ווידג׳ט בינה מלאכותית', body: 'ווידג׳טים בשפה טבעית רצים מוגנים על הקנבס.' },
-        { status: 'shipped', title: '28+ מחברי נתוני שוק', body: 'ברוקרים, בורסות, ספקי נתונים, מסדי נתונים וחברתיים זורמים חיים.' },
+        { status: 'shipped', title: '45+ מחברי נתוני שוק', body: 'מסדי נתונים, חברתיים, ברוקרים, בורסות, ארנקים, נתונים פתוחים ושירותי ווב זורמים חיים.' },
         { status: 'shipped', title: 'בוטים בענן והתראות', body: 'אוטומציות שצופות בנתונים שלכם וירות אותות לווידג׳טים שלכם, כרטיסייה סגורה.' },
         { status: 'shipped', title: 'חשבונות וסנכרון בענן', body: 'חשבונות חופשיים עם סביבות עבודה מסונכרנות בכל מכשיר — 10K אשראים שמורים לשיגור פלטפורמה.' },
         { status: 'shipped', title: 'פידה קהילתית ופרופילים', body: 'עקבו אחר יוצרים, שתפו ווידג׳טים לפיד, וטנו את הטיפול הציבורי שלכם @handle.' },
@@ -312,7 +312,7 @@ export const he: SiteContent = {
         },
         {
           q: 'אילו שווקים ובורסות נתמכים?',
-          a: 'Nexow יש 28 מחברים חיים (56 בקטלוג) המשתרעים ב-FX (OANDA, LMAX, FXCM), קריפטו (Binance, Coinbase, Kraken, Deribit, BitMEX), מניות ועתידות (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), שווקי חיזוי (Kalshi, Polymarket), ספקי נתונים ומסדי נתונים (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) ופידים חברתיים (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow יש 45 מחברים חיים (83 בקטלוג) המשתרעים ב-FX (OANDA, LMAX, FXCM), קריפטו (Binance, Coinbase, Kraken, Deribit, BitMEX), מניות ועתידות (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), שווקי חיזוי (Kalshi, Polymarket), ספקי נתונים ומסדי נתונים (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) ופידים חברתיים (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'מה זה בוטים וסוכנים?',
@@ -347,7 +347,7 @@ export const he: SiteContent = {
     meta: {
       title: 'תכונות — Nexow',
       description:
-        'יצירת ווידג׳ט בשפה טבעית, זמן ריצה מוגן, קנבס חופשי עם קבוצות וקישורים, 28+ מחברי נתוני שוק, בוטים בענן וסוכנים, קהילת יוצרים עם פרסי XP, מצב מקומי פרטי וספרייה ווידג׳ט משונה. חקרו את כל מה ש-Nexow עושה.',
+        'יצירת ווידג׳ט בשפה טבעית, זמן ריצה מוגן, קנבס חופשי עם קבוצות וקישורים, 45+ מחברי נתוני שוק, בוטים בענן וסוכנים, קהילת יוצרים עם פרסי XP, מצב מקומי פרטי וספרייה ווידג׳ט משונה. חקרו את כל מה ש-Nexow עושה.',
     },
     hero: {
       badge: 'תכונות',
@@ -379,7 +379,7 @@ export const he: SiteContent = {
         title: 'התחברו',
         body: 'נתונים שניתן לחבר מהבורסות שבהן אתם בעצם משתמשים.',
         items: [
-          { icon: 'plug', title: '28+ מחברי נתוני שוק', body: 'FX, קריפטו, מניות, עתידות, אופציות ושווקי חיזוי — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket ועוד.' },
+          { icon: 'plug', title: '45+ מחברי נתוני שוק', body: 'מסדי נתונים, פידים חברתיים, שווקים, ארנקים ושירותי ווב — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi ועוד.' },
           { icon: 'globe', title: 'דפדפן-ישירות איפה שאפשר', body: 'כאשר CORS מאפשר, קריאות בורסה מאומתות רצות ישירות מהדפדפן שלכם ו-bypass פרוקסי שלנו לחלוטין.' },
           { icon: 'database', title: 'מסדי נתונים וחברתיות גם כן', body: 'הצביעו ווידג׳טים ב-Postgres, ClickHouse או Qdrant, או משכו מ-X, YouTube, Discord ו-Telegram לצד בורסות חיים.' },
         ],
@@ -452,7 +452,7 @@ export const he: SiteContent = {
       title: 'כלול בכל תוכנית',
       items: [
         'מסכים בלתי מוגבלים, סביבות עבודה וווידג׳טים',
-        '28+ מחברי נתוני שוק חיים',
+        '45+ מחברי נתוני שוק חיים',
         'זמן ריצה ווידג׳ט מוגן',
         'Copilot גלובלי (בקרוב)',
         'גישה קהילה וחנות',
@@ -551,7 +551,7 @@ export const he: SiteContent = {
     meta: {
       title: 'מחברים — Nexow',
       description:
-        'עיינו בכל מחבר Nexow — 28 חיים ו-56 בקטלוג. ברוקרים, בורסות, DEXs, שווקי חיזוי, ספקי נתונים, מסדי נתונים ופידים חברתיים. חפשו, סננו וחברו.',
+        'עיינו בכל מחבר Nexow — 45 חיים ו-83 בקטלוג. ברוקרים, בורסות, DEXs, שווקי חיזוי, ספקי נתונים, מסדי נתונים ופידים חברתיים. חפשו, סננו וחברו.',
     },
     hero: {
       badge: 'מחברים',
@@ -562,7 +562,7 @@ export const he: SiteContent = {
     searchPlaceholder: 'חפשו מחברים…',
     filters: 'מסננים',
     all: 'הכל',
-    categories: { finance: 'מימון', data: 'נתונים', socials: 'חברתיות' },
+    categories: { finance: 'מימון', wallets: 'ארנקים', services: 'שירותים', data: 'נתונים', socials: 'חברתיות' },
     status: { all: 'הכל', live: 'חי', soon: 'בקרוב' },
     kinds: {
       broker: 'ברוקר',
@@ -580,6 +580,15 @@ export const he: SiteContent = {
       video: 'וידאו',
       community: 'קהילה',
       music: 'מוזיקה',
+      wallet: 'ארנק קריפטו',
+      browser: 'אוטומציית דפדפן',
+      scraping: 'גריפת אתרים',
+      search: 'חיפוש ברשת',
+      weather: 'מזג אוויר ואיכות אוויר',
+      open_data: 'נתונים פתוחים',
+      knowledge: 'ידע',
+      news: 'חדשות',
+      geo: 'גיאו ותחבורה',
     },
     assets: {
       equities: 'מניות',

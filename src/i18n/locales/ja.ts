@@ -51,7 +51,7 @@ export const ja: SiteContent = {
     meta: {
       title: 'Nexow — AI と自然言語で市場ダッシュボードを構築',
       description:
-        'Nexow は市場向けの AI ネイティブなワークスペースです。自然な言葉でウィジェットを説明するだけで、Nexow が構築し、28 以上のコネクタからのライブデータに接続。さらにクラウドボット、AI エージェント、メイカーコミュニティ、XP 報酬を追加します。デフォルトでプライベート、無料で始められます。',
+        'Nexow は市場向けの AI ネイティブなワークスペースです。自然な言葉でウィジェットを説明するだけで、Nexow が構築し、45 以上のコネクタからのライブデータに接続。さらにクラウドボット、AI エージェント、メイカーコミュニティ、XP 報酬を追加します。デフォルトでプライベート、無料で始められます。',
     },
     hero: {
       badge: 'プレビュー公開中',
@@ -69,7 +69,7 @@ export const ja: SiteContent = {
     ticker: { label: 'ライブコネクタ' },
     trust: 'あらゆる市場を 1 つのキャンバスに — FX、暗号資産、株式、先物、オプション、予測市場。',
     stats: [
-      { n: 28, suffix: '+', label: 'ライブ市場データコネクタ' },
+      { n: 45, suffix: '+', label: 'データ、ウォレット、ソーシャル、市場のライブコネクタ' },
       { n: 6, label: '1 つのキャンバスに載せられる資産クラス' },
       { n: 10, suffix: 'K', label: 'サインアップ時に確保される無料 AI クレジット' },
       { n: 30, prefix: '<', suffix: 's', label: '文章から稼働するウィジェットまで' },
@@ -121,7 +121,7 @@ export const ja: SiteContent = {
         },
         {
           icon: 'plug',
-          title: '28 以上のライブデータコネクタ',
+          title: '45 以上のライブデータコネクタ',
           body: 'プラグ可能な市場データプロバイダー — OANDA、Binance、Coinbase、Kraken、Polygon、Interactive Brokers、Kalshi、Polymarket など — がリアルタイムデータをウィジェットに届けます。',
         },
         {
@@ -198,8 +198,8 @@ export const ja: SiteContent = {
       title: 'あらゆる市場につながる',
       subtitle:
         'プラグ可能なコネクタが、ライブ価格、板情報、参照データをウィジェットに直接配信 — FX、暗号資産、株式、先物、オプション、予測市場、データベース、ソーシャルフィードにわたって。',
-      note: '現在 28 のコネクタがライブ稼働、56 がカタログに掲載 — ブローカー、取引所、データプロバイダー、データベース、ソーシャル。多くはブラウザから直接配信し、残りは軽量プロキシ経由でルーティングします。',
-      count: 28,
+      note: '現在 45 のコネクタがライブ稼働、83 がカタログに掲載 — 取引所、市場データ API、データベース、ソーシャルソース、暗号資産ウォレット、ウェブサービス。多くはブラウザから直接配信し、残りは軽量プロキシ経由でルーティングします。',
+      count: 45,
       countLabel: 'ライブコネクタ',
       groups: {
         fx: 'FX',
@@ -282,7 +282,7 @@ export const ja: SiteContent = {
       soon: '近日公開',
       items: [
         { status: 'shipped', title: 'AI ウィジェットコード生成', body: 'キャンバス上でサンドボックス実行される自然言語ウィジェット。' },
-        { status: 'shipped', title: '28 以上の市場データコネクタ', body: 'ブローカー、取引所、データプロバイダー、データベース、ソーシャルがライブ配信。' },
+        { status: 'shipped', title: '45 以上の市場データコネクタ', body: 'データベース、ソーシャル、ブローカー、取引所、ウォレット、オープンデータ、ウェブサービスがライブ配信。' },
         { status: 'shipped', title: 'クラウドボットとアラート', body: 'データを監視し、タブを閉じていてもシグナルをウィジェットに送るオートメーション。' },
         { status: 'shipped', title: 'アカウントとクラウド同期', body: 'あらゆるデバイス間で同期されるワークスペースを備えた無料アカウント — プラットフォームローンチ向けに 10K クレジットを確保。' },
         { status: 'shipped', title: 'コミュニティフィードとプロフィール', body: 'メイカーをフォローし、ウィジェットをフィードに共有し、公開の @ハンドルを取得。' },
@@ -312,7 +312,7 @@ export const ja: SiteContent = {
         },
         {
           q: 'どの市場と取引所に対応していますか？',
-          a: 'Nexow には 28 のライブコネクタ（カタログには 56）があり、FX（OANDA、LMAX、FXCM）、暗号資産（Binance、Coinbase、Kraken、Deribit、BitMEX）、株式・先物（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、予測市場（Kalshi、Polymarket）、データプロバイダーとデータベース（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）、ソーシャルフィード（X、YouTube、Discord、Telegram、Spotify）にわたります。',
+          a: 'Nexow には 45 のライブコネクタ（カタログには 83）があり、FX（OANDA、LMAX、FXCM）、暗号資産（Binance、Coinbase、Kraken、Deribit、BitMEX）、株式・先物（Interactive Brokers、Alpaca、TradeStation、Polygon、Rithmic、IQFeed）、予測市場（Kalshi、Polymarket）、データプロバイダーとデータベース（Alpha Vantage、Intrinio、Trading Economics、Postgres、ClickHouse、Qdrant）、ソーシャルフィード（X、YouTube、Discord、Telegram、Spotify）にわたります。',
         },
         {
           q: 'ボットとエージェントとは何ですか？',
@@ -347,7 +347,7 @@ export const ja: SiteContent = {
     meta: {
       title: '機能 — Nexow',
       description:
-        '自然言語によるウィジェット生成、サンドボックスランタイム、グループとリンクを備えた自由配置キャンバス、28 以上の市場データコネクタ、クラウドボットとエージェント、XP 報酬付きのメイカーコミュニティ、プライベートなローカルモード、バージョン管理されたウィジェットライブラリ。Nexow のすべてを見る。',
+        '自然言語によるウィジェット生成、サンドボックスランタイム、グループとリンクを備えた自由配置キャンバス、45 以上の市場データコネクタ、クラウドボットとエージェント、XP 報酬付きのメイカーコミュニティ、プライベートなローカルモード、バージョン管理されたウィジェットライブラリ。Nexow のすべてを見る。',
     },
     hero: {
       badge: '機能',
@@ -379,7 +379,7 @@ export const ja: SiteContent = {
         title: '接続',
         body: '実際に使う取引所からのプラグ可能なデータ。',
         items: [
-          { icon: 'plug', title: '28 以上の市場データコネクタ', body: 'FX、暗号資産、株式、先物、オプション、予測市場 — OANDA、Binance、Coinbase、IBKR、Polygon、Kalshi、Polymarket など。' },
+          { icon: 'plug', title: '45 以上の市場データコネクタ', body: 'データベース、ソーシャルフィード、市場、ウォレット、ウェブサービス — Postgres、ClickHouse、Qdrant、X、YouTube、Discord、OANDA、Binance、Coinbase、MetaMask、Ledger、Polygon、Kalshi など。' },
           { icon: 'globe', title: '可能な限りブラウザ直結', body: 'CORS が許す限り、認証済みの取引所呼び出しはブラウザから直接実行され、当社プロキシを完全にバイパスします。' },
           { icon: 'database', title: 'データベースやソーシャルも', body: 'ウィジェットを Postgres、ClickHouse、Qdrant に向けたり、ライブ市場と並べて X、YouTube、Discord、Telegram から取得したりできます。' },
         ],
@@ -452,7 +452,7 @@ export const ja: SiteContent = {
       title: 'すべてのプランに含まれるもの',
       items: [
         '無制限のスクリーン、ワークスペース、ウィジェット',
-        '28 以上のライブ市場データコネクタ',
+        '45 以上のライブ市場データコネクタ',
         'サンドボックスウィジェットランタイム',
         'グローバル Copilot（近日公開）',
         'コミュニティとマーケットプレイスへのアクセス',
@@ -551,7 +551,7 @@ export const ja: SiteContent = {
     meta: {
       title: 'コネクタ — Nexow',
       description:
-        'Nexow のすべてのコネクタを閲覧 — 28 がライブ、56 がカタログに。ブローカー、取引所、DEX、予測市場、データプロバイダー、データベース、ソーシャルフィード。検索、フィルタ、接続。',
+        'Nexow のすべてのコネクタを閲覧 — 45 がライブ、83 がカタログに。ブローカー、取引所、DEX、予測市場、データプロバイダー、データベース、ソーシャルフィード。検索、フィルタ、接続。',
     },
     hero: {
       badge: 'コネクタ',
@@ -562,7 +562,7 @@ export const ja: SiteContent = {
     searchPlaceholder: 'コネクタを検索…',
     filters: 'フィルター',
     all: 'すべて',
-    categories: { finance: '金融', data: 'データ', socials: 'ソーシャル' },
+    categories: { finance: '金融', wallets: 'ウォレット', services: 'サービス', data: 'データ', socials: 'ソーシャル' },
     status: { all: 'すべて', live: 'ライブ', soon: '近日' },
     kinds: {
       broker: 'ブローカー',
@@ -580,6 +580,15 @@ export const ja: SiteContent = {
       video: '動画',
       community: 'コミュニティ',
       music: '音楽',
+      wallet: '暗号資産ウォレット',
+      browser: 'ブラウザ自動化',
+      scraping: 'ウェブスクレイピング',
+      search: 'ウェブ検索',
+      weather: '気象・大気',
+      open_data: 'オープンデータ',
+      knowledge: 'ナレッジ',
+      news: 'ニュース',
+      geo: '地理・交通',
     },
     assets: {
       equities: '株式',
