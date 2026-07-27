@@ -379,7 +379,7 @@ export const uk: SiteContent = {
         title: 'Підключіться',
         body: 'Підключувані дані від бірж, які ви фактично використовуєте.',
         items: [
-          { icon: 'plug', title: '28+ коннекторів ринкових даних', body: 'FX, крипто, акції, ф\'ючерси, опціони й ринки передбачень — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket й інші.' },
+          { icon: 'plug', title: '45+ коннекторів ринкових даних', body: 'Бази даних, соціальні стрічки, ринки, гаманці й вебсервіси — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi й інші.' },
           { icon: 'globe', title: 'Браузерний прямий де можливо', body: 'Де CORS дозволяє, автентифіковані виклики біржі запускаються прямо з вашого браузера й повністю обходять наш проксі.' },
           { icon: 'database', title: 'Бази даних й соціальні мережи теж', body: 'Вказуйте віджетам на Postgres, ClickHouse чи Qdrant, або отримуйте дані з X, YouTube, Discord й Telegram поруч із живими ринками.' },
         ],
