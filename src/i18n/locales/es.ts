@@ -286,9 +286,11 @@ export const es: SiteContent = {
         { status: 'shipped', title: 'Bots y alertas en la nube', body: 'Automatizaciones que vigilan tus datos y envían señales a tus widgets, con la pestaña cerrada.' },
         { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis con espacios sincronizados en todos tus dispositivos — 10K créditos reservados para el lanzamiento de la plataforma.' },
         { status: 'shipped', title: 'Comunidad: feed y perfiles', body: 'Sigue makers, comparte widgets en el feed y reclama tu @usuario público.' },
-        { status: 'soon', title: 'Agentes y Copilot', body: 'Despliega agentes en la nube con un harness completo, y un Copilot para tu espacio.' },
-        { status: 'soon', title: 'Marketplace y señales', body: 'Compra y vende widgets, y publica señales de estrategia auditadas con las que ganar.' },
-        { status: 'soon', title: 'XP, insignias y recompensas', body: 'Una cuenta gamificada — gana XP e insignias por logros y conviértelos en créditos de recompensa.' },
+        { status: 'shipped', title: 'Agentes y Copilot', body: 'Agentes en la nube con un harness completo, desplegados con permisos de herramientas e historial de ejecuciones — más un Copilot que construye y organiza tu espacio.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Publica e instala widgets, temas, pantallas y bots — con un linaje que da crédito a cada remake.' },
+        { status: 'shipped', title: 'Reputación y medallas', body: 'Puntos, logros escalonados, medallas raras y niveles por lo que construyes y compartes.' },
+        { status: 'soon', title: 'Widgets premium y señales', body: 'Publica widgets premium y señales de estrategia, deja que otros se suscriban y gana con lo que ejecutas.' },
+        { status: 'soon', title: 'Planes de pago y créditos de recompensa', body: 'Checkout de Supporter y Sponsor, créditos de plataforma y conversión de reputación en créditos de recompensa.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const es: SiteContent = {
         body: 'Automatizaciones en la nube e IA que actúan sin ti.',
         items: [
           { icon: 'bot', title: 'Bots en la nube', body: 'Describe una alerta o constrúyela visualmente — umbrales, % de cambio, cruces de medias, resúmenes u operaciones nuevas en una cuenta de broker conectada. Los bots corren en un latido en la nube y envían señales a tus widgets, con la pestaña cerrada.' },
-          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores. Diseña el tuyo hoy en el editor visual del harness — el despliegue en la nube llega pronto.' },
-          { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir qué vigilar. Próximamente.' },
+          { icon: 'cpu', title: 'Agentes de IA', body: 'Agentes con un harness completo — modelo, memoria, skills, herramientas, conocimiento y disparadores. Construye el tuyo en el editor visual del harness y despliégalo en la nube — con permisos de herramientas y un historial de ejecuciones en vivo.' },
+          { icon: 'chat', title: 'Copilot', body: 'Un asistente para tu espacio: adjunta la captura de un widget o sus datos y pídele explicar, resumir o sugerir el próximo cambio — en conversaciones paralelas que siguen construyendo en segundo plano.' },
         ],
       },
       {
