@@ -186,8 +186,8 @@ export const es: SiteContent = {
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Un asistente de IA para todo tu espacio. Adjunta la captura de un widget o sus datos en vivo y pregunta — «explica este gráfico», «resume esto», «¿qué debería vigilar ahora?».',
-          status: 'soon',
+          body: 'Un asistente de IA para todo tu espacio. Chatea en pestañas paralelas, deja que construya widgets en segundo plano y organice tu lienzo, y pregunta — «explica este tablero», «resume esto», «¿qué debería cambiar ahora?».',
+          status: 'live',
         },
       ],
       harnessChips: ['modelo', 'memoria', 'skills', 'herramientas', 'conocimiento', 'disparadores'],
@@ -227,8 +227,8 @@ export const es: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Compartir widgets ya funciona en la comunidad — lo siguiente es un marketplace para comprar y vender widgets listos, y ganar con lo que construyes.',
-          status: 'soon',
+          body: 'Publica widgets, temas, pantallas y bots desde tu biblioteca, e instala lo que otros comparten — con un linaje que da crédito a cada remake. Comprar y vender es lo siguiente.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const es: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP y recompensas',
-          body: 'Una cuenta gamificada — cada widget, bot y publicación da XP. Sube de nivel, desbloquea insignias por logros y conviértelos en créditos de recompensa.',
-          status: 'soon',
+          title: 'Reputación y medallas',
+          body: 'Cada widget, bot y publicación da reputación — puntos, logros escalonados, medallas raras y niveles en tu perfil público. Convertirlos en créditos de recompensa es lo siguiente.',
+          status: 'live',
         },
       ],
       accountBadge: 'Cuenta gratis',
