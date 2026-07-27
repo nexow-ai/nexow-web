@@ -282,7 +282,7 @@ export const zh: SiteContent = {
       soon: '即将推出',
       items: [
         { status: 'shipped', title: 'AI 组件代码生成', body: '自然语言组件在画布上沙箱化运行。' },
-        { status: 'shipped', title: '28+ 个市场数据连接器', body: '券商、交易所、数据提供方、数据库和社交平台实时流式传输。' },
+        { status: 'shipped', title: '45+ 个市场数据连接器', body: '数据库、社交平台、券商、交易所、钱包、开放数据和网络服务实时流式传输。' },
         { status: 'shipped', title: '云端机器人与提醒', body: '自动化监视你的数据并向组件推送信号，即使标签页已关闭。' },
         { status: 'shipped', title: '账户与云同步', body: '免费账户，工作区在每台设备间同步——为平台上线预留 10K 积分。' },
         { status: 'shipped', title: '社区信息流与主页', body: '关注创作者、将组件分享到信息流，并认领你的公开 @handle。' },

@@ -347,7 +347,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Funzionalità — Nexow',
       description:
-        'Generazione di widget in linguaggio naturale, un runtime sandbox, un canvas libero con gruppi e link, oltre 28 connettori di dati di mercato, bot e agenti cloud, una community di maker con ricompense XP, modalità locale privata e una libreria di widget versionata. Esplora tutto ciò che fa Nexow.',
+        'Generazione di widget in linguaggio naturale, un runtime sandbox, un canvas libero con gruppi e link, oltre 45 connettori di dati di mercato, bot e agenti cloud, una community di maker con ricompense XP, modalità locale privata e una libreria di widget versionata. Esplora tutto ciò che fa Nexow.',
     },
     hero: {
       badge: 'Funzionalità',
