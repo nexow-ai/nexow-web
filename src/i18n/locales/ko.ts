@@ -379,7 +379,7 @@ export const ko: SiteContent = {
         title: '연결',
         body: '실제로 사용하는 베뉴의 플러그형 데이터.',
         items: [
-          { icon: 'plug', title: '28개 이상의 마켓 데이터 커넥터', body: 'FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓 — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket 등.' },
+          { icon: 'plug', title: '45개 이상의 마켓 데이터 커넥터', body: '데이터베이스, 소셜 피드, 마켓, 지갑 및 웹 서비스 — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi 등.' },
           { icon: 'globe', title: '가능한 경우 브라우저 직접', body: 'CORS를 허용하는 경우 인증된 베뉴 호출이 브라우저에서 직접 실행되고 프록시를 완전히 우회합니다.' },
           { icon: 'database', title: '데이터베이스 & 소셜도', body: '위젯을 Postgres, ClickHouse 또는 Qdrant로 지정하거나 X, YouTube, Discord 및 Telegram을 라이브 마켓과 함께 가져오세요.' },
         ],
@@ -452,7 +452,7 @@ export const ko: SiteContent = {
       title: '모든 요금제에 포함',
       items: [
         '무제한 화면, 워크스페이스 & 위젯',
-        '28개 이상의 라이브 마켓 데이터 커넥터',
+        '45개 이상의 라이브 마켓 데이터 커넥터',
         '샌드박스 위젯 런타임',
         '글로벌 Copilot (곧 출시)',
         '커뮤니티 & 마켓플레이스 접근',
@@ -551,7 +551,7 @@ export const ko: SiteContent = {
     meta: {
       title: '커넥터 — Nexow',
       description:
-        '모든 Nexow 커넥터 찾아보기 — 28개 라이브 및 56개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
+        '모든 Nexow 커넥터 찾아보기 — 45개 라이브 및 83개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
     },
     hero: {
       badge: '커넥터',
@@ -562,7 +562,7 @@ export const ko: SiteContent = {
     searchPlaceholder: '커넥터 검색…',
     filters: '필터',
     all: '전부',
-    categories: { finance: '금융', data: '데이터', socials: '소셜' },
+    categories: { finance: '금융', wallets: '지갑', services: '서비스', data: '데이터', socials: '소셜' },
     status: { all: '전부', live: '라이브', soon: '곧' },
     kinds: {
       broker: '브로커',

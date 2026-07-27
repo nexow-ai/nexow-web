@@ -582,7 +582,7 @@ export const fr: SiteContent = {
     meta: {
       title: 'Connecteurs — Nexow',
       description:
-        'Parcourez tous les connecteurs Nexow — 28 en direct et 56 au catalogue. Brokers, exchanges, DEX, marchés de prédiction, fournisseurs de données, bases de données et réseaux sociaux. Cherchez, filtrez et connectez.',
+        'Parcourez tous les connecteurs Nexow — 45 en direct et 83 au catalogue. Brokers, exchanges, DEX, marchés de prédiction, fournisseurs de données, bases de données et réseaux sociaux. Cherchez, filtrez et connectez.',
     },
     hero: {
       badge: 'Connecteurs',
@@ -593,7 +593,7 @@ export const fr: SiteContent = {
     searchPlaceholder: 'Rechercher des connecteurs…',
     filters: 'Filtres',
     all: 'Tous',
-    categories: { finance: 'Finance', data: 'Données', socials: 'Réseaux' },
+    categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Données', socials: 'Réseaux' },
     status: { all: 'Tous', live: 'En direct', soon: 'Bientôt' },
     kinds: {
       broker: 'Broker',
@@ -611,6 +611,15 @@ export const fr: SiteContent = {
       video: 'Vidéo',
       community: 'Communauté',
       music: 'Musique',
+      wallet: 'Wallet crypto',
+      browser: 'Automatisation du navigateur',
+      scraping: 'Web scraping',
+      search: 'Recherche web',
+      weather: 'Météo et air',
+      open_data: 'Données ouvertes',
+      knowledge: 'Connaissances',
+      news: 'Actualités',
+      geo: 'Géo et transports',
     },
     assets: {
       equities: 'Actions',
