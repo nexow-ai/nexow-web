@@ -558,6 +558,7 @@ export const ko: SiteContent = {
         'Nexow가 연결하는 모든 베뉴의 전체 카탈로그를 검색하세요 — 브로커, 거래소, 데이터 제공자, 데이터베이스 및 소셜. 라이브 커넥터는 오늘 작동합니다. 나머지는 곧 출시됩니다.',
     },
     searchPlaceholder: '커넥터 검색…',
+    filters: '필터',
     all: '전부',
     categories: { finance: '금융', data: '데이터', socials: '소셜' },
     status: { all: '전부', live: '라이브', soon: '곧' },

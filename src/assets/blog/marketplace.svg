@@ -1,0 +1,82 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Marketplace asset cards with install arrow and lineage chain illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="182" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#marketplace</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="320" rx="320" ry="220" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- three asset cards: widget, theme, bot -->
+    <g>
+      <rect x="300" y="200" width="180" height="200" rx="20" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.7" stroke-width="2.5"/>
+      <rect x="300" y="200" width="180" height="200" rx="20" fill="#f59e0b" fill-opacity="0.05"/>
+      <polyline points="324,320 358,282 392,300 428,252" stroke="#fbbf24" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="324" y="356" width="100" height="10" rx="5" fill="#fde68a" fill-opacity="0.5"/>
+    </g>
+    <g>
+      <rect x="510" y="180" width="180" height="200" rx="20" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <rect x="510" y="180" width="180" height="200" rx="20" fill="#f59e0b" fill-opacity="0.12"/>
+      <circle cx="560" cy="240" r="18" fill="#fbbf24"/>
+      <circle cx="604" cy="240" r="18" fill="#d97706"/>
+      <circle cx="648" cy="240" r="18" fill="#fde68a"/>
+      <rect x="534" y="336" width="100" height="10" rx="5" fill="#fde68a" fill-opacity="0.8"/>
+    </g>
+    <g>
+      <rect x="720" y="200" width="180" height="200" rx="20" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.7" stroke-width="2.5"/>
+      <rect x="720" y="200" width="180" height="200" rx="20" fill="#f59e0b" fill-opacity="0.05"/>
+      <circle cx="810" cy="280" r="34" fill="none" stroke="#fde68a" stroke-width="4"/>
+      <circle cx="810" cy="280" r="8" fill="#fde68a"/>
+      <line x1="810" y1="234" x2="810" y2="218" stroke="#8a7b57" stroke-width="5" stroke-linecap="round"/>
+      <rect x="744" y="356" width="100" height="10" rx="5" fill="#fde68a" fill-opacity="0.5"/>
+    </g>
+
+    <!-- install arrow onto the canvas -->
+    <g>
+      <line x1="600" y1="410" x2="600" y2="470" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+      <path d="M580 452 L600 476 L620 452" stroke="#fbbf24" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- lineage chain: remakes credit the chain underneath -->
+    <line x1="380" y1="505" x2="820" y2="505" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+    <circle cx="400" cy="505" r="11" fill="#fbbf24"/>
+    <circle cx="600" cy="505" r="11" fill="#d97706" stroke="#f59e0b" stroke-width="3"/>
+    <circle cx="800" cy="505" r="11" fill="none" stroke="#8a7b57" stroke-width="3"/>
+  </g>
+</svg>

@@ -558,6 +558,7 @@ export const ja: SiteContent = {
         'Nexow が接続する取引所の全カタログを検索 — ブローカー、取引所、データプロバイダー、データベース、ソーシャル。ライブコネクタは今日から動作し、残りは近日登場します。',
     },
     searchPlaceholder: 'コネクタを検索…',
+    filters: 'フィルター',
     all: 'すべて',
     categories: { finance: '金融', data: 'データ', socials: 'ソーシャル' },
     status: { all: 'すべて', live: 'ライブ', soon: '近日' },

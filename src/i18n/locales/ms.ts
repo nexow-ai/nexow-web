@@ -558,6 +558,7 @@ export const ms: SiteContent = {
         'Cari katalog lengkap tempat Nexow sambung — broker, pertukaran, pembekal data, pangkalan data dan sosial. Penyambung langsung bekerja hari ini; selebihnya akan datang segera.',
     },
     searchPlaceholder: 'Cari penyambung…',
+    filters: 'Penapis',
     all: 'Semua',
     categories: { finance: 'Kewangan', data: 'Data', socials: 'Sosial' },
     status: { all: 'Semua', live: 'Langsung', soon: 'Segera hadir' },

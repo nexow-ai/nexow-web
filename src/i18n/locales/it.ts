@@ -558,6 +558,7 @@ export const it: SiteContent = {
         'Cerca nel catalogo completo dei venue a cui Nexow si connette — broker, exchange, provider di dati, database e social. I connettori attivi funzionano oggi; gli altri sono in arrivo.',
     },
     searchPlaceholder: 'Cerca connettori…',
+    filters: 'Filtri',
     all: 'Tutti',
     categories: { finance: 'Finanza', data: 'Dati', socials: 'Social' },
     status: { all: 'Tutti', live: 'Attivi', soon: 'In arrivo' },

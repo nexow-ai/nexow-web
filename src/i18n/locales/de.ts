@@ -558,6 +558,7 @@ export const de: SiteContent = {
         'Durchsuche den vollständigen Katalog der Venues, mit denen sich Nexow verbindet — Broker, Börsen, Datenanbieter, Datenbanken und Socials. Live-Konnektoren funktionieren heute; der Rest landet demnächst.',
     },
     searchPlaceholder: 'Konnektoren durchsuchen…',
+    filters: 'Filter',
     all: 'Alle',
     categories: { finance: 'Finanzen', data: 'Daten', socials: 'Socials' },
     status: { all: 'Alle', live: 'Live', soon: 'Demnächst' },

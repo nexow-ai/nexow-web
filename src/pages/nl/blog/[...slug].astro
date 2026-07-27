@@ -1,0 +1,33 @@
+---
+import { render } from 'astro:content';
+import readingTime from 'reading-time';
+import { getPosts, slugOf } from '../../../i18n/blog';
+import BlogPost from '../../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPosts('nl');
+  return posts.map((post) => ({
+    params: { slug: slugOf(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const minutes = Math.max(1, Math.round(readingTime(post.body ?? '').minutes));
+---
+
+<BlogPost
+  lang="nl"
+  slug={slugOf(post)}
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  author={post.data.author}
+  tags={post.data.tags}
+  heroImage={post.data.heroImage}
+  minutes={minutes}
+>
+  <Content />
+</BlogPost>

@@ -565,6 +565,7 @@ export const en: SiteContent = {
         'Nexow started with trading, so APIs and live data are part of the foundation. Connect brokers, exchanges, market data, databases and social feeds when your widget needs real information.',
     },
     searchPlaceholder: 'Search connectors…',
+    filters: 'Filters',
     all: 'All',
     categories: { finance: 'Finance', data: 'Data', socials: 'Socials' },
     status: { all: 'All', live: 'Live', soon: 'Soon' },
