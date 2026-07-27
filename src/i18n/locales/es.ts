@@ -180,8 +180,8 @@ export const es: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agentes',
-          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores. Dale un trabajo a un agente y deja que vigile, razone y actúe — diseña el tuyo hoy en el editor visual del harness; el despliegue en la nube llega pronto.',
-          status: 'soon',
+          body: 'Agentes de IA con un harness real — modelo, memoria, skills, herramientas, conocimiento y disparadores. Dale un trabajo a un agente y deja que vigile, razone y actúe — construye el tuyo en el editor visual del harness y despliégalo en la nube, con permisos de herramientas, memoria entre ejecuciones y un historial de ejecuciones en vivo.',
+          status: 'live',
         },
         {
           icon: 'chat',
