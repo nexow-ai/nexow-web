@@ -398,9 +398,9 @@ export const es: SiteContent = {
         body: 'Construye junto a un mundo de makers.',
         items: [
           { icon: 'users', title: 'Comunidad', body: 'Sigue makers, publica en el feed y comparte widgets que otros pueden añadir directo a su biblioteca — en vivo hoy, con perfiles públicos de maker.' },
-          { icon: 'store', title: 'Marketplace', body: 'Compra y vende widgets listos, y gana con lo que construyes. Próximamente — compartir ya funciona en la comunidad.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publica e instala widgets listos, temas, pantallas y bots — en vivo hoy, con un linaje que da crédito a cada remake. Comprar y vender es lo siguiente.' },
           { icon: 'signal', title: 'Señales de estrategia', body: 'Publica historiales auditados, suscríbete a señales de confianza y gana con las estrategias que ejecutas. Próximamente.' },
-          { icon: 'trophy', title: 'XP y recompensas', body: 'Gana XP por construir, desbloquea insignias por logros y conviértelas en créditos de recompensa. Próximamente.' },
+          { icon: 'trophy', title: 'Reputación y medallas', body: 'Gana puntos de reputación por construir y compartir, desbloquea logros escalonados y medallas raras — en vivo hoy. Los créditos de recompensa llegan después.' },
         ],
       },
       {

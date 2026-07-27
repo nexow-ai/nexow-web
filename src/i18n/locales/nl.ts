@@ -180,14 +180,14 @@ export const nl: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agenten',
-          body: 'AI-agenten met een echt harnas — model, geheugen, vaardigheden, tools, kennis en triggers. Geef een agent een taak en laat hem kijken, redeneren en handelen — ontwerp je vandaag in de visuele harnas builder; cloud deployment komt binnenkort.',
-          status: 'soon',
+          body: 'AI-agenten met een echt harnas — model, geheugen, vaardigheden, tools, kennis en triggers. Geef een agent een taak en laat hem kijken, redeneren en handelen — bouw de jouwe in de visuele harnas builder en implementeer hem naar de cloud, met tool-rechten, geheugen tussen runs en een live rungeschiedenis.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Een AI-assistent voor je hele werkruimte. Voeg een screenshot of live gegevens van een widget toe en vraag — "leg deze grafiek uit", "vat dit samen", "wat moet ik volgen?"',
-          status: 'soon',
+          body: 'Een AI-assistent voor je hele werkruimte. Chat in parallelle tabs, laat hem widgets bouwen op de achtergrond en je canvas ordenen, en vraag — "leg deze grafiek uit", "vat dit samen", "wat moet ik volgen?"',
+          status: 'live',
         },
       ],
       harnessChips: ['model', 'geheugen', 'vaardigheden', 'tools', 'kennis', 'triggers'],
@@ -227,8 +227,8 @@ export const nl: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Widgetdeling is live in de gemeenschap — volgende komt een marketplace om kant-en-klare widgets te kopen en verkopen, en verdien aan wat je bouwt.',
-          status: 'soon',
+          body: 'Publiceer widgets, thema\'s, schermen en bots uit je bibliotheek, en installeer wat anderen delen — met herkomst die elke remake crediteert. Kopen en verkopen komt daarna.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const nl: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP & beloningen',
-          body: 'Een gamified account — elke widget, bot en aandeel verdient XP. Level up, ontgrendel badges voor achievements, en zet ze om in beloningscredits.',
-          status: 'soon',
+          title: 'Reputatie & medailles',
+          body: 'Elke widget, bot en share verdient reputatie — punten, gelaagde achievements, zeldzame medailles en levels op je openbare profiel. Ze omzetten in beloningscredits komt daarna.',
+          status: 'live',
         },
       ],
       accountBadge: 'Gratis account',
@@ -250,7 +250,7 @@ export const nl: SiteContent = {
         '10.000 gratis AI-credits gereserveerd bij aanmelding',
         'Cloud-synchronisatie over apparaten voor werkruimten & widgets',
         'Gemeenschap, marketplace & widgetbibliotheek',
-        'XP, badges & beloningscredits terwijl je bouwt (binnenkort)',
+        'Reputatiepunten, medailles & levels terwijl je bouwt en deelt',
       ],
       accountCta: 'Maak je gratis account aan',
     },
@@ -277,7 +277,7 @@ export const nl: SiteContent = {
       eyebrow: 'Routekaart',
       title: 'Dit is de preview. Hier is wat er volgt.',
       subtitle:
-        'Nexow heeft een openbare preview van het canvas, codegen, cloud bots, accounts en de community feed gelanceerd. De bouwstenen hieronder komen volgende.',
+        'Nexow heeft het canvas, codegen, cloud bots, agenten, Copilot, de marketplace, accounts en de gemeenschap gelanceerd. Het bredere app-canvas blijft landen via de bouwstenen hieronder.',
       shipped: 'Gelanceerd',
       soon: 'Komt binnenkort',
       items: [
@@ -286,9 +286,11 @@ export const nl: SiteContent = {
         { status: 'shipped', title: 'Cloud bots & waarschuwingen', body: 'Automatisering die je gegevens bewaakt en signalen naar je widgets stuurt, tab gesloten.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Gratis accounts met werkruimten gesynchroniseerd op elk apparaat — 10K credits gereserveerd voor platformlancering.' },
         { status: 'shipped', title: 'Community feed & profielen', body: 'Volg makers, deel widgets naar de feed, en claim je openbare @handle.' },
-        { status: 'soon', title: 'Agenten & Copilot', body: 'Implementeer cloud-agenten met een volledig harnas, en een Copilot voor je werkruimte.' },
-        { status: 'soon', title: 'Marketplace & signalen', body: 'Koop en verkoop widgets, en publiceer geaudeerde strategische signalen waar je op kunt verdienen.' },
-        { status: 'soon', title: 'XP, badges & beloningen', body: 'Een gamified account — verdien XP en badges voor achievements, en zet ze om in beloningscredits.' },
+        { status: 'shipped', title: 'Agenten & Copilot', body: 'Cloud-agenten met een volledig harnas, geïmplementeerd met tool-rechten en rungeschiedenis — plus een Copilot die je werkruimte bouwt en ordent.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Publiceer en installeer widgets, thema\'s, schermen en bots — met herkomst die elke remake crediteert.' },
+        { status: 'shipped', title: 'Reputatie & medailles', body: 'Punten, gelaagde achievements, zeldzame medailles en levels voor wat je bouwt en deelt.' },
+        { status: 'soon', title: 'Premium widgets & signalen', body: 'Publiceer premium widgets en strategische signalen, laat anderen zich abonneren, en verdien aan wat je uitvoert.' },
+        { status: 'soon', title: 'Betaalde plannen & beloningscredits', body: 'Supporter- en Sponsor-checkout, platformcredits, en reputatie omzetten in beloningscredits.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const nl: SiteContent = {
         body: 'Cloud automatisering en AI die handelt terwijl je weg bent.',
         items: [
           { icon: 'bot', title: 'Cloud bots', body: 'Beschrijf een waarschuwing of verbind deze visueel — drempels, % verandering, MA-overgangen, samenvattingen, of nieuwe trades in een verbonden broker-account. Bots draaien op een cloud-hartslag en duwen signalen naar je widgets, tab gesloten.' },
-          { icon: 'cpu', title: 'AI-agenten', body: 'Agenten met een volledig harnas — model, geheugen, vaardigheden, tools, kennis en triggers. Ontwerp je vandaag in de visuele harnas builder — cloud deployment komt binnenkort.' },
-          { icon: 'chat', title: 'Copilot', body: 'Een assistent voor je werkruimte: voeg een screenshot of gegevens van een widget toe en vraag het uit te leggen, samen te vatten of voor te stellen wat je volgt. Komt binnenkort.' },
+          { icon: 'cpu', title: 'AI-agenten', body: 'Agenten met een volledig harnas — model, geheugen, vaardigheden, tools, kennis en triggers. Ontwerp de jouwe in de visuele harnas builder en implementeer hem naar de cloud met tool-rechten en een live rungeschiedenis.' },
+          { icon: 'chat', title: 'Copilot', body: 'Een assistent voor je werkruimte: voeg een screenshot of gegevens van een widget toe en vraag het uit te leggen, samen te vatten of voor te stellen wat je volgt — in parallelle gesprekken die op de achtergrond blijven bouwen.' },
         ],
       },
       {
@@ -396,9 +398,9 @@ export const nl: SiteContent = {
         body: 'Bouw naast een wereld van makers.',
         items: [
           { icon: 'users', title: 'Gemeenschap', body: 'Volg makers, post naar de feed, en deel widgets die anderen rechtstreeks aan hun bibliotheek kunnen toevoegen — vandaag live, met openbare maker-profielen.' },
-          { icon: 'store', title: 'Marketplace', body: 'Koop en verkoop kant-en-klare widgets, en verdien aan wat je bouwt. Komt binnenkort — delen werkt al in de gemeenschap.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publiceer en installeer kant-en-klare widgets, thema\'s, schermen en bots — vandaag live, met herkomst die elke remake crediteert. Kopen en verkopen komt daarna.' },
           { icon: 'signal', title: 'Strategische signalen', body: 'Publiceer geaudeerde track records, abonneer je op signalen die je vertrouwt, en verdien aan de strategieën die je uitvoert. Komt binnenkort.' },
-          { icon: 'trophy', title: 'XP & beloningen', body: 'Verdien XP voor bouwen, ontgrendel badges voor achievements, en zet ze om in beloningscredits. Komt binnenkort.' },
+          { icon: 'trophy', title: 'Reputatie & medailles', body: 'Verdien reputatiepunten voor bouwen en delen, ontgrendel gelaagde achievements en zeldzame medailles — vandaag live. Beloningscredits komen daarna.' },
         ],
       },
       {

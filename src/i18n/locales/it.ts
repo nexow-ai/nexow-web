@@ -180,14 +180,14 @@ export const it: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agenti',
-          body: 'Agenti AI con un vero harness — modello, memoria, skill, strumenti, conoscenza e trigger. Assegna un compito a un agente e lascialo osservare, ragionare e agire — progetta il tuo nel visual harness builder oggi; il deploy cloud è in arrivo.',
-          status: 'soon',
+          body: 'Agenti AI con un vero harness — modello, memoria, skill, strumenti, conoscenza e trigger. Assegna un compito a un agente e lascialo osservare, ragionare e agire — costruisci il tuo nel visual harness builder e distribuiscilo nel cloud, con permessi degli strumenti, memoria tra le esecuzioni e una cronologia delle esecuzioni in tempo reale.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Un assistente AI per l’intero workspace. Allega lo screenshot di un widget o i suoi dati in tempo reale e chiedi — “spiega questo grafico”, “riassumi questo”, “cosa dovrei monitorare adesso?”',
-          status: 'soon',
+          body: 'Un assistente AI per l’intero workspace. Chatta in schede parallele, lascialo costruire widget in background e organizzare il tuo canvas, e chiedi — “spiega questa board”, “riassumi questo”, “cosa dovrei cambiare adesso?”',
+          status: 'live',
         },
       ],
       harnessChips: ['modello', 'memoria', 'skill', 'strumenti', 'conoscenza', 'trigger'],
@@ -227,8 +227,8 @@ export const it: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'La condivisione dei widget è già attiva nella community — poi arriva un marketplace per comprare e vendere widget pronti all’uso, e guadagnare su ciò che crei.',
-          status: 'soon',
+          body: 'Pubblica widget, temi, schermate e bot dalla tua libreria e installa ciò che gli altri condividono — con una lineage che dà credito a ogni remake. Comprare e vendere arriva dopo.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -238,9 +238,9 @@ export const it: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP e ricompense',
-          body: 'Un account gamificato — ogni widget, bot e condivisione fa guadagnare XP. Sali di livello, sblocca badge per i traguardi e trasformali in crediti ricompensa.',
-          status: 'soon',
+          title: 'Reputazione e medaglie',
+          body: 'Ogni widget, bot e condivisione fa guadagnare reputazione — punti, traguardi progressivi, medaglie rare e livelli sul tuo profilo pubblico. La conversione in crediti ricompensa arriva dopo.',
+          status: 'live',
         },
       ],
       accountBadge: 'Account gratuito',
@@ -250,7 +250,7 @@ export const it: SiteContent = {
         '10.000 crediti AI gratuiti riservati alla registrazione',
         'Sincronizzazione cloud cross-device per workspace e widget',
         'Community, marketplace e la libreria di widget',
-        'XP, badge e crediti ricompensa man mano che costruisci (in arrivo)',
+        'Punti reputazione, medaglie e livelli man mano che costruisci e condividi',
       ],
       accountCta: 'Crea il tuo account gratuito',
     },
@@ -277,7 +277,7 @@ export const it: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'Questa è l’anteprima. Ecco cosa arriva.',
       subtitle:
-        'Nexow ha rilasciato un’anteprima pubblica del canvas, della generazione del codice, dei bot cloud, degli account e del feed della community. I building block qui sotto sono i prossimi in arrivo.',
+        'Nexow ha rilasciato il canvas, la generazione del codice, i bot cloud, gli agenti, Copilot, il marketplace, gli account e la community. Il canvas delle app più ampio continua ad arrivare attraverso i building block qui sotto.',
       shipped: 'Rilasciato',
       soon: 'In arrivo',
       items: [
@@ -286,9 +286,11 @@ export const it: SiteContent = {
         { status: 'shipped', title: 'Bot cloud e avvisi', body: 'Automazioni che monitorano i tuoi dati e inviano segnali ai tuoi widget, a scheda chiusa.' },
         { status: 'shipped', title: 'Account e sincronizzazione cloud', body: 'Account gratuiti con workspace sincronizzati su ogni dispositivo — 10K crediti riservati per il lancio della piattaforma.' },
         { status: 'shipped', title: 'Feed della community e profili', body: 'Segui i maker, condividi widget nel feed e rivendica il tuo @handle pubblico.' },
-        { status: 'soon', title: 'Agenti e Copilot', body: 'Distribuisci agenti cloud con un harness completo e un Copilot per il tuo workspace.' },
-        { status: 'soon', title: 'Marketplace e segnali', body: 'Compra e vendi widget e pubblica segnali di strategia verificati su cui puoi guadagnare.' },
-        { status: 'soon', title: 'XP, badge e ricompense', body: 'Un account gamificato — guadagna XP e badge per i traguardi e convertili in crediti ricompensa.' },
+        { status: 'shipped', title: 'Agenti e Copilot', body: 'Agenti cloud con un harness completo, distribuiti con permessi degli strumenti e cronologia delle esecuzioni — più un Copilot che costruisce e organizza il tuo workspace.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Pubblica e installa widget, temi, schermate e bot — con una lineage che dà credito a ogni remake.' },
+        { status: 'shipped', title: 'Reputazione e medaglie', body: 'Punti, traguardi progressivi, medaglie rare e livelli per ciò che costruisci e condividi.' },
+        { status: 'soon', title: 'Widget premium e segnali', body: 'Pubblica widget premium e segnali di strategia, lascia che altri si abbonino e guadagna su ciò che esegui.' },
+        { status: 'soon', title: 'Piani a pagamento e crediti ricompensa', body: 'Checkout Supporter e Sponsor, crediti di piattaforma e conversione della reputazione in crediti ricompensa.' },
       ],
     },
     faq: {
@@ -387,8 +389,8 @@ export const it: SiteContent = {
         body: 'Automazioni cloud e AI che agiscono mentre sei via.',
         items: [
           { icon: 'bot', title: 'Bot cloud', body: 'Descrivi un avviso o impostalo visivamente — soglie, variazione %, incroci di MA, riepiloghi o nuovi trade in un conto broker collegato. I bot girano su un heartbeat cloud e inviano segnali ai tuoi widget, a scheda chiusa.' },
-          { icon: 'cpu', title: 'Agenti AI', body: 'Agenti con un harness completo — modello, memoria, skill, strumenti, conoscenza e trigger. Progetta il tuo nel visual harness builder oggi — il deploy cloud è in arrivo.' },
-          { icon: 'chat', title: 'Copilot', body: 'Un assistente per il tuo workspace: allega lo screenshot o i dati di un widget e chiedigli di spiegare, riassumere o suggerire cosa monitorare dopo. In arrivo.' },
+          { icon: 'cpu', title: 'Agenti AI', body: 'Agenti con un harness completo — modello, memoria, skill, strumenti, conoscenza e trigger. Costruisci il tuo nel visual harness builder e distribuiscilo nel cloud — con permessi degli strumenti e una cronologia delle esecuzioni in tempo reale.' },
+          { icon: 'chat', title: 'Copilot', body: 'Un assistente per il tuo workspace: allega lo screenshot o i dati di un widget e chiedigli di spiegare, riassumere o suggerire la prossima modifica — in conversazioni parallele che continuano a costruire in background.' },
         ],
       },
       {
