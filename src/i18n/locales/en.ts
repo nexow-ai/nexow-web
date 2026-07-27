@@ -199,14 +199,14 @@ export const en: SiteContent = {
         {
           icon: 'cpu',
           title: 'Agents',
-          body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers. Give an agent a job and let it watch, reason and act — design yours in the visual harness builder today; cloud deploy is coming soon.',
-          status: 'soon',
+          body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers. Give an agent a job and let it watch, reason and act — build yours in the visual harness builder and deploy it to the cloud, with tool grants, memory between runs and a live run history.',
+          status: 'live',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'An AI assistant for your whole workspace. Attach a widget’s screenshot or state and ask — “explain this board”, “summarize this”, “what should I change next?”',
-          status: 'soon',
+          body: 'An AI assistant for your whole workspace. Chat in parallel tabs, let it build widgets in the background, arrange your canvas, and ask — “explain this board”, “summarize this”, “what should I change next?”',
+          status: 'live',
         },
       ],
       harnessChips: ['model', 'memory', 'skills', 'tools', 'knowledge', 'triggers'],
@@ -246,8 +246,8 @@ export const en: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Widget sharing is live in the community — next comes a marketplace to buy and sell ready-made widgets, and earn on what you build.',
-          status: 'soon',
+          body: 'Publish widgets, themes, screens and bots from your library, and install what others share — with lineage that credits every remake. Buying and selling comes next.',
+          status: 'live',
         },
         {
           icon: 'signal',
@@ -257,9 +257,9 @@ export const en: SiteContent = {
         },
         {
           icon: 'trophy',
-          title: 'XP & rewards',
-          body: 'A gamified account — every widget, bot and share earns XP. Level up, unlock badges for achievements, and turn them into reward credits.',
-          status: 'soon',
+          title: 'Reputation & medals',
+          body: 'Every widget, bot and share earns reputation — points, tiered achievements, rare medals and levels on your public profile. Converting them into reward credits comes next.',
+          status: 'live',
         },
       ],
       accountBadge: 'Free account',
@@ -269,7 +269,7 @@ export const en: SiteContent = {
         '10,000 starter AI credits on Free',
         'Cross-device cloud sync for workspaces & widgets',
         'Community, marketplace & the widget library',
-        'XP, badges & reward credits as you build (coming soon)',
+        'Reputation points, medals & levels as you build and share',
       ],
       accountCta: 'Create your free account',
     },
@@ -296,7 +296,7 @@ export const en: SiteContent = {
       eyebrow: 'Roadmap',
       title: 'This is the preview. Here’s what’s next.',
       subtitle:
-        'Nexow shipped a public preview of the canvas, codegen, cloud bots, accounts and the community feed. The broader app canvas is landing through the building blocks below.',
+        'Nexow shipped the canvas, codegen, cloud bots, agents, Copilot, the marketplace, accounts and the community. The broader app canvas keeps landing through the building blocks below.',
       shipped: 'Shipped',
       soon: 'Coming soon',
       items: [
@@ -305,9 +305,11 @@ export const en: SiteContent = {
         { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
-        { status: 'soon', title: 'Agents & Copilot', body: 'Deploy cloud agents with a full harness, and a Copilot for your workspace.' },
-        { status: 'soon', title: 'Marketplace & templates', body: 'Buy, sell and remix widgets, app screens and reusable workflows.' },
-        { status: 'soon', title: 'XP, badges & rewards', body: 'A gamified account — earn XP and badges for achievements, and convert them into reward credits.' },
+        { status: 'shipped', title: 'Agents & Copilot', body: 'Cloud agents with a full harness, deployed with tool grants and run history — plus a Copilot that builds and arranges your workspace.' },
+        { status: 'shipped', title: 'Marketplace', body: 'Publish and install widgets, themes, screens and bots — with lineage that credits every remake.' },
+        { status: 'shipped', title: 'Reputation & medals', body: 'Points, tiered achievements, rare medals and levels for what you build and share.' },
+        { status: 'soon', title: 'Premium widgets & signals', body: 'Publish premium widgets and strategy signals, let others subscribe, and earn on what you run.' },
+        { status: 'soon', title: 'Paid plans & reward credits', body: 'Supporter and Sponsor checkout, platform credits, and converting reputation into reward credits.' },
       ],
     },
     faq: {
@@ -394,8 +396,8 @@ export const en: SiteContent = {
         body: 'Optional automations for widgets that need to watch and act.',
         items: [
           { icon: 'bot', title: 'Background watchers', body: 'Describe an alert or wire it visually — streak reminders, weekly digests, social updates, thresholds or market moves. Watchers run on a cloud heartbeat and push signals back to your widgets.' },
-          { icon: 'cpu', title: 'Advanced workflows', body: 'For operational canvases, attach memory, tools, knowledge and triggers so a workflow can watch, reason and prepare the next step. Cloud deploy is coming soon.' },
-          { icon: 'chat', title: 'Workspace assistant', body: 'Ask about a widget screenshot or its data: explain what changed, summarize the state, or suggest the next edit. Coming soon.' },
+          { icon: 'cpu', title: 'Advanced workflows', body: 'For operational canvases, attach memory, tools, knowledge and triggers so a workflow can watch, reason and prepare the next step — then deploy it to the cloud with tool grants and a live run history.' },
+          { icon: 'chat', title: 'Workspace assistant', body: 'Ask about a widget screenshot or its data: explain what changed, summarize the state, or suggest the next edit — in parallel conversations that keep building in the background.' },
         ],
       },
       {
@@ -403,9 +405,9 @@ export const en: SiteContent = {
         body: 'Optional sharing when you want to reuse or publish widgets.',
         items: [
           { icon: 'users', title: 'Community', body: 'Follow makers, post to the feed, and share widgets others can add straight to their library — live today, with public maker profiles.' },
-          { icon: 'store', title: 'Marketplace', body: 'Buy and sell ready-made widgets, templates and workflows. Coming soon — sharing already works in the community.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publish and install ready-made widgets, themes, screens and bots — live today, with lineage that credits every remake. Buying and selling comes next.' },
           { icon: 'signal', title: 'Premium workflows', body: 'Publish polished app screens and workflows, let others subscribe, and earn on what you run. Coming soon.' },
-          { icon: 'trophy', title: 'XP & rewards', body: 'Earn XP for building, unlock badges for achievements, and convert them into reward credits. Coming soon.' },
+          { icon: 'trophy', title: 'Reputation & medals', body: 'Earn reputation points for building and sharing, unlock tiered achievements and rare medals — live today. Reward credits come next.' },
         ],
       },
       {
