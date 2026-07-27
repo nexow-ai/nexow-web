@@ -26,7 +26,7 @@
 - Reputation: points, tiered achievements (bronze/silver/gold), rare and legendary medals, and levels on public profiles. LIVE; converting reputation into reward credits is COMING SOON.
 - Wallets: MetaMask, Phantom, Coinbase Wallet, Trust Wallet and Ledger connect watch-only with multi-chain tracking; bots can watch wallet activity and balance moves. LIVE.
 - Accounts: free, no credit card. Cross-device cloud sync is LIVE; 10,000 AI credits are reserved at sign-up and activate when platform mode opens.
-- Connectors (28 live, 56 in catalog): databases and data tools such as Postgres, ClickHouse and Qdrant; socials such as X, YouTube, Discord, Telegram and Spotify; market venues such as OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Kalshi and Polymarket.
+- Connectors (45 live, 83 in catalog): databases and data tools such as Postgres, ClickHouse and Qdrant; socials such as X, YouTube, Discord, Telegram and Spotify; market venues such as OANDA, Binance, Coinbase, Kraken, Deribit, BitMEX, Alpaca, Interactive Brokers, TradeStation, Polygon, Kalshi and Polymarket; crypto wallets such as MetaMask, Phantom, Coinbase Wallet, Trust Wallet and Ledger (watch-only); web services such as Browserbase plus open-data sources like FRED, World Bank, NASA, Open-Meteo, Wikipedia and The Guardian.
 - Markets remain supported: FX, crypto, equities, futures, options and prediction markets are still first-class examples, not the whole product.
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
 - Plans: free forever to build (locally with your own key, or with 10,000 AI credits reserved on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout and platform credits are coming soon.
@@ -37,7 +37,7 @@
 
 - [Home](https://nexow.ai/): clear overview, examples, how it works, core features, optional connectors, privacy, plans, FAQ.
 - [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
-- [Connectors](https://nexow.ai/connectors): searchable gallery of all 56 services — 28 live today.
+- [Connectors](https://nexow.ai/connectors): searchable gallery of all 83 services — 45 live today.
 - [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
