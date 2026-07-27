@@ -379,7 +379,7 @@ export const el: SiteContent = {
         title: 'Συνδεθείτε',
         body: 'Δεδομένα που μπορούν να συνδεθούν από τα venue που όντως χρησιμοποιείτε.',
         items: [
-          { icon: 'plug', title: '28+ σύνδεσμοι δεδομένων αγοράς', body: 'FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα και αγορές πρόβλεψης — OANDA, Binance, Coinbase, IBKR, Polygon, Kalshi, Polymarket και άλλα.' },
+          { icon: 'plug', title: '45+ σύνδεσμοι δεδομένων αγοράς', body: 'Βάσεις δεδομένων, κοινωνικά feeds, αγορές, πορτοφόλια και υπηρεσίες web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi και άλλα.' },
           { icon: 'globe', title: 'Browser-direct όπου δυνατό', body: 'Όπου επιτρέπει το CORS, οι αυθεντικοποιημένες κλήσεις venue εκτελούνται κατευθείαν από το πρόγραμμα περιήγησής σας και παρακάμπτουν πλήρως το proxy μας.' },
           { icon: 'database', title: 'Βάσεις δεδομένων & κοινωνικά επίσης', body: 'Δείξτε widgets σε Postgres, ClickHouse ή Qdrant, ή τραβήξτε από X, YouTube, Discord και Telegram δίπλα σε ζωντανές αγορές.' },
         ],

@@ -282,7 +282,7 @@ export const it: SiteContent = {
       soon: 'In arrivo',
       items: [
         { status: 'shipped', title: 'Generazione AI dei widget', body: 'Widget in linguaggio naturale eseguiti in sandbox sul canvas.' },
-        { status: 'shipped', title: 'Oltre 28 connettori di dati di mercato', body: 'Broker, exchange, provider di dati, database e social in streaming dal vivo.' },
+        { status: 'shipped', title: 'Oltre 45 connettori di dati di mercato', body: 'Database, social, broker, exchange, wallet, dati aperti e servizi web in streaming dal vivo.' },
         { status: 'shipped', title: 'Bot cloud e avvisi', body: 'Automazioni che monitorano i tuoi dati e inviano segnali ai tuoi widget, a scheda chiusa.' },
         { status: 'shipped', title: 'Account e sincronizzazione cloud', body: 'Account gratuiti con workspace sincronizzati su ogni dispositivo — 10K crediti riservati per il lancio della piattaforma.' },
         { status: 'shipped', title: 'Feed della community e profili', body: 'Segui i maker, condividi widget nel feed e rivendica il tuo @handle pubblico.' },
@@ -312,7 +312,7 @@ export const it: SiteContent = {
         },
         {
           q: 'Quali mercati e venue sono supportati?',
-          a: 'Nexow ha 28 connettori attivi (56 nel catalogo) che coprono FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), azioni e futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), prediction market (Kalshi, Polymarket), provider di dati e database (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) e feed social (X, YouTube, Discord, Telegram, Spotify).',
+          a: 'Nexow ha 45 connettori attivi (83 nel catalogo) che coprono FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), azioni e futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), prediction market (Kalshi, Polymarket), provider di dati e database (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) e feed social (X, YouTube, Discord, Telegram, Spotify).',
         },
         {
           q: 'Cosa sono bot e agenti?',
