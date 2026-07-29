@@ -1,0 +1,226 @@
+---
+/**
+ * The four plan cards, on a 3D stage.
+ *
+ * Copy comes from `plansPage.tiers` (same array the home page teaser uses); the
+ * accent, icon and featured flag come from `src/data/gamification.ts`, which
+ * mirrors the app's own plan cards — so a tier wears the same colour here as it
+ * does inside Nexow. The two arrays are zipped by index: Free, Supporter,
+ * Sponsor, Partner.
+ *
+ * The billing toggle swaps the visible price span; the same `data-price` /
+ * `data-billed` contract the home page uses, so one script shape covers both.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import { PLANS } from '../../data/gamification';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).plansPage;
+const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
+
+const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
+---
+
+<section class="relative">
+  <!-- Billing toggle -->
+  <div id="plans-billing" data-mode="monthly" class="container-page -mt-4 flex justify-center pb-10">
+    <div class="inline-flex items-center rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+      <button
+        type="button"
+        data-billing="monthly"
+        aria-pressed="true"
+        class="rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+      >
+        {t.billing.monthly}
+      </button>
+      <button
+        type="button"
+        data-billing="yearly"
+        aria-pressed="false"
+        class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+      >
+        {t.billing.yearly}
+        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600">{t.billing.save}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container-page pb-14">
+    <div class="stage-3d reveal-stagger grid items-start gap-5 lg:grid-cols-4">
+      {
+        cards.map(({ tier, spec }) => {
+          const isExternal = tier.ctaHref.startsWith('http') || tier.ctaHref.startsWith('mailto');
+          return (
+            <article
+              data-tilt
+              class:list={[
+                'tilt group relative flex flex-col rounded-3xl border p-7',
+                tier.featured
+                  ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-white/10 lg:-mt-4 lg:mb-4'
+                  : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03]',
+              ]}
+              style={`--a:${spec.accent}`}
+            >
+              {/* Accent wash + pointer sheen, both decorative. The wash gets its
+                  own clipping wrapper so the card itself never needs
+                  `overflow:hidden`, which would flatten the 3D layer below. */}
+              <span class="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl" aria-hidden="true">
+                <span
+                  class="absolute inset-x-0 -top-24 h-48 opacity-70 blur-2xl"
+                  style={`background:radial-gradient(50% 60% at 50% 100%, color-mix(in oklab, var(--a) ${tier.featured ? 42 : 22}%, transparent), transparent 70%)`}
+                />
+              </span>
+              <span class="tilt-sheen" aria-hidden="true" />
+
+              <div class="tilt-layer relative flex h-full flex-col" style="--z:26px">
+                {tier.badge && (
+                  <span
+                    class:list={[
+                      'absolute -top-1 right-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold',
+                      tier.featured ? 'text-ink-950' : 'text-white',
+                    ]}
+                    style="background:linear-gradient(120deg, color-mix(in oklab, var(--a) 82%, white), var(--a))"
+                  >
+                    <Icon name="sparkles" class="size-3.5" /> {tier.badge}
+                  </span>
+                )}
+
+                <span
+                  class="inline-flex size-11 items-center justify-center rounded-2xl"
+                  style="color:var(--a);background:color-mix(in oklab, var(--a) 14%, transparent);box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--a) 32%, transparent)"
+                  aria-hidden="true"
+                >
+                  <Icon name={spec.icon} class="size-5.5" />
+                </span>
+
+                <h3 class:list={['mt-4 font-display text-xl font-semibold', tier.featured ? 'text-white' : 'text-ink-950']}>
+                  {tier.name}
+                </h3>
+                <p class:list={['mt-1 text-sm', tier.featured ? 'text-ink-300' : 'text-ink-500']}>{tier.tagline}</p>
+
+                <div class="mt-5 flex items-baseline gap-1.5">
+                  <span class:list={['font-display text-4xl font-bold', tier.featured ? 'text-white' : 'text-ink-950']}>
+                    <span data-price="monthly">{tier.priceMonthly}</span>
+                    <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
+                  </span>
+                  {tier.cadence && (
+                    <span class:list={['text-sm', tier.featured ? 'text-ink-400' : 'text-ink-500']}>{tier.cadence}</span>
+                  )}
+                </div>
+                <p
+                  data-billed
+                  class:list={['mt-1 hidden font-mono text-[0.7rem]', tier.featured ? 'text-ink-400' : 'text-ink-500']}
+                >
+                  {tier.billedYearly ?? ' '}
+                </p>
+
+                {tier.stats && (
+                  <div class="mt-4 flex flex-wrap gap-1.5">
+                    {tier.stats.map((s) => (
+                      <span
+                        class:list={[
+                          'rounded-md border px-2 py-0.5 font-mono text-[0.65rem]',
+                          tier.featured ? 'border-white/10 bg-white/[0.04] text-ink-200' : 'border-ink-900/10 bg-ink-50 text-ink-600',
+                        ]}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <a
+                  href={localize(tier.ctaHref)}
+                  target={isExternal ? '_blank' : undefined}
+                  rel={isExternal ? 'noopener noreferrer' : undefined}
+                  class:list={[
+                    'mt-6 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-all hover:-translate-y-0.5',
+                    tier.featured ? 'bg-white text-ink-950 hover:bg-white/90' : 'text-white',
+                  ]}
+                  style={tier.featured ? undefined : 'background:var(--a)'}
+                >
+                  {tier.cta}
+                </a>
+
+                {tier.note && (
+                  <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500']}>{tier.note}</p>
+                )}
+                <ul class="mt-3 space-y-3">
+                  {tier.features.map((f) => (
+                    <li class="flex items-start gap-2.5 text-sm">
+                      <Icon name="check" class="mt-0.5 size-4 shrink-0" style="color:var(--a)" />
+                      <span class={tier.featured ? 'text-ink-200' : 'text-ink-700'}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Billing toggle + pointer tilt. Both re-arm on every client-side navigation,
+  // and both are torn down through one AbortController so a second page-load
+  // never leaves duplicate listeners behind.
+  let tiersAbort: AbortController | undefined;
+
+  function initPlanTiers() {
+    tiersAbort?.abort();
+    tiersAbort = new AbortController();
+    const { signal } = tiersAbort;
+
+    const root = document.getElementById('plans-billing');
+    if (root) {
+      const scope = root.closest('main') ?? document;
+      const btns = root.querySelectorAll<HTMLButtonElement>('[data-billing]');
+      const apply = (mode: string) => {
+        btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.billing === mode)));
+        scope
+          .querySelectorAll<HTMLElement>('[data-price="monthly"]')
+          .forEach((el) => el.classList.toggle('hidden', mode !== 'monthly'));
+        scope
+          .querySelectorAll<HTMLElement>('[data-price="yearly"]')
+          .forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
+        scope.querySelectorAll<HTMLElement>('[data-billed]').forEach((el) => el.classList.toggle('hidden', mode !== 'yearly'));
+      };
+      btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.billing ?? 'monthly'), { signal }));
+    }
+
+    // Pointer lean. Skipped entirely for coarse pointers and reduced motion —
+    // the CSS already flattens those, so this just avoids pointless work.
+    if (window.matchMedia('(hover: none), (prefers-reduced-motion: reduce)').matches) return;
+
+    const MAX = 7; // degrees
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+      const move = (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        card.classList.add('is-tilting');
+        card.style.setProperty('--ry', `${(x - 0.5) * 2 * MAX}deg`);
+        card.style.setProperty('--rx', `${(0.5 - y) * 2 * MAX}deg`);
+        card.style.setProperty('--mx', `${x * 100}%`);
+        card.style.setProperty('--my', `${y * 100}%`);
+      };
+      const reset = () => {
+        card.classList.remove('is-tilting');
+        card.style.removeProperty('--rx');
+        card.style.removeProperty('--ry');
+      };
+      card.addEventListener('pointermove', move, { signal });
+      card.addEventListener('pointerleave', reset, { signal });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initPlanTiers);
+</script>

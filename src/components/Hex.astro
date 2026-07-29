@@ -1,0 +1,38 @@
+---
+/**
+ * Hexagonal medallion — the same shape the app stamps on every reputation
+ * surface (`app/components/account/ReputationHex.vue`), so a badge looks the
+ * same on the marketing site as it does in the product.
+ *
+ * Colours arrive as a gradient pair from `src/data/gamification.ts`; `locked`
+ * swaps in the muted fill used for a badge you have not earned yet.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  icon: string;
+  from?: string;
+  to?: string;
+  /** Icon colour on top of the gradient — dark for light metals, light for deep ones. */
+  ink?: string;
+  locked?: boolean;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Stagger for the shine sweep, in ms. */
+  delay?: number;
+  class?: string;
+}
+
+const { icon, from, to, ink = '#131722', locked = false, size = 'md', delay = 0, class: className } = Astro.props;
+
+const BOX = { sm: 'size-8', md: 'size-12', lg: 'size-16', xl: 'size-20' } as const;
+const GLYPH = { sm: 'size-4', md: 'size-5.5', lg: 'size-7', xl: 'size-9' } as const;
+---
+
+<span
+  class:list={['hex', BOX[size], className]}
+  data-locked={locked ? 'true' : 'false'}
+  style={`--from:${from};--to:${to};--hex-ink:${ink};--d:${delay}ms`}
+  aria-hidden="true"
+>
+  <Icon name={icon} class={`relative z-10 ${GLYPH[size]}`} />
+</span>

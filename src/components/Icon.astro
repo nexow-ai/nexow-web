@@ -10,8 +10,10 @@ import { ICON_PATHS as paths } from './icon-paths';
 interface Props {
   name: string;
   class?: string;
+  /** Inline style — lets a caller tint the glyph from a CSS custom property. */
+  style?: string;
 }
-const { name, class: className } = Astro.props;
+const { name, class: className, style } = Astro.props;
 
 /** Filled brand marks (Simple Icons paths, 24×24) — read better than stroke approximations. */
 const filled: Record<string, { d: string; rule?: 'evenodd' }> = {
@@ -30,7 +32,7 @@ const strokePath = paths[name];
 
 {
   fillIcon ? (
-    <svg viewBox="0 0 24 24" fill="currentColor" class={className} aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="currentColor" class={className} style={style} aria-hidden="true">
       <path d={fillIcon.d} fill-rule={fillIcon.rule} />
     </svg>
   ) : (
@@ -42,6 +44,7 @@ const strokePath = paths[name];
       stroke-linecap="round"
       stroke-linejoin="round"
       class={className}
+      style={style}
       aria-hidden="true"
     >
       <path d={strokePath ?? ''} />

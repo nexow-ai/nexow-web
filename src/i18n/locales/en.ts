@@ -795,7 +795,7 @@ export const en: SiteContent = {
       perAction: 'pts each',
       bonusTitle: 'Badge bonuses',
       bonusBody:
-        'On top of raw activity, every badge tier you cross adds a flat bonus — worth 3,580 points if you complete the entire catalogue.',
+        'On top of raw activity, every badge tier you cross adds a flat bonus — worth {n} points if you complete the entire catalogue.',
       simTitle: 'Try it',
       simBody: 'Tap the actions you would realistically do in a month and watch the level meter move.',
       simReset: 'Reset',

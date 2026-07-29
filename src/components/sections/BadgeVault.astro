@@ -1,0 +1,224 @@
+---
+/**
+ * The badge vault — all 34 achievements, flippable.
+ *
+ * Front: the hex medallion and the badge name. Back: the stat it tracks and the
+ * exact thresholds, which are the app's real numbers (three tiers for a tiered
+ * badge, one hard bar for a rare or legendary medal).
+ *
+ * Flip is CSS on hover/focus; the click handler toggles `data-flipped` so touch
+ * visitors get the same card back without a hover state to fight.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import {
+  TIERED_BADGES,
+  RARE_BADGES,
+  LEGENDARY_BADGES,
+  RARITY_COLORS,
+  RARITY_POINTS,
+  type BadgeSpec,
+} from '../../data/gamification';
+import Icon from '../Icon.astro';
+import Hex from '../Hex.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).rewards.badges;
+
+const badges: BadgeSpec[] = [...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES];
+
+const RARITIES = [
+  { key: 'tiered' as const, icon: 'award', count: TIERED_BADGES.length },
+  { key: 'rare' as const, icon: 'gem', count: RARE_BADGES.length },
+  { key: 'legendary' as const, icon: 'crown', count: LEGENDARY_BADGES.length },
+];
+
+const FILTERS = [
+  { key: 'all', count: badges.length },
+  ...RARITIES.map((r) => ({ key: r.key, count: r.count })),
+];
+
+/** Ink that stays legible on each rarity's gradient. */
+const INK: Record<string, string> = { tiered: '#3d2b05', rare: '#eff6ff', legendary: '#f6efff' };
+
+/** Tier labels for the card back — tiered badges list three, medals list one. */
+const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
+---
+
+<section class="relative overflow-hidden bg-ink-950 py-16 text-white">
+  <div class="bg-grid pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true"></div>
+
+  <div class="container-page relative">
+    <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-xl">
+        <h3 class="font-display text-2xl font-semibold text-white sm:text-3xl">{t.title}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-ink-300">{t.body}</p>
+      </div>
+      <p class="shrink-0 font-mono text-xs text-ink-400">{t.flipHint}</p>
+    </div>
+
+    <!-- Rarity legend -->
+    <div class="reveal-stagger mt-8 grid gap-3 sm:grid-cols-3">
+      {
+        RARITIES.map((r, i) => (
+          <div
+            class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+            style={`--from:${RARITY_COLORS[r.key].from};--to:${RARITY_COLORS[r.key].to}`}
+          >
+            <Hex icon={r.icon} from={RARITY_COLORS[r.key].from} to={RARITY_COLORS[r.key].to} ink={INK[r.key]} delay={i * 400} />
+            <div class="min-w-0">
+              <p class="flex items-center gap-2 font-display text-sm font-semibold text-white">
+                {t.rarity[r.key]}
+                <span class="rounded-full bg-white/[0.07] px-1.5 py-0.5 font-mono text-[0.6rem] font-medium text-ink-300">
+                  {t.worth.replace('{n}', String(RARITY_POINTS[r.key]))}
+                </span>
+              </p>
+              <p class="mt-1 text-xs leading-relaxed text-ink-400">{t.rarityBody[r.key]}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Filters -->
+    <div id="badge-filters" class="reveal mt-8 flex flex-wrap items-center gap-2">
+      {
+        FILTERS.map((f, i) => (
+          <button
+            type="button"
+            data-badge-filter={f.key}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class="inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3.5 py-1.5 text-sm font-medium text-ink-300 transition-colors hover:border-white/25 hover:text-white aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950"
+          >
+            {t.filters[f.key as keyof typeof t.filters]}
+            <span class="font-mono text-[0.65rem] opacity-60">{f.count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- The vault -->
+    <div id="badge-grid" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      {
+        badges.map((badge, i) => {
+          const colors = RARITY_COLORS[badge.rarity];
+          const tiered = badge.rarity === 'tiered';
+          return (
+            <button
+              type="button"
+              class="flip group h-52 w-full text-left"
+              data-badge
+              data-rarity={badge.rarity}
+              data-flipped="false"
+              aria-label={t.names[badge.id]}
+            >
+              <span class="flip-inner block h-full w-full">
+                {/* Front */}
+                <span
+                  class="flip-face flex h-full w-full flex-col items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center transition-colors group-hover:border-white/20"
+                  style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 62%)`}
+                >
+                  <span class="relative">
+                    <span
+                      class="aura pointer-events-none absolute -inset-2.5 rounded-full blur-lg"
+                      style={`background:radial-gradient(circle, ${colors.to}, transparent 70%);--d:${(i % 8) * 300}ms`}
+                      aria-hidden="true"
+                    />
+                    <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="lg" delay={(i % 8) * 300} />
+                  </span>
+                  <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
+                  <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
+                    {t.rarity[badge.rarity]}
+                  </span>
+                </span>
+
+                {/* Back */}
+                <span
+                  class="flip-face flip-back flex h-full w-full flex-col justify-between rounded-2xl border p-4"
+                  style={`border-color:color-mix(in oklab, ${colors.to} 45%, transparent);background-image:linear-gradient(160deg, color-mix(in oklab, ${colors.to} 22%, #0b0d13), #0b0d13)`}
+                >
+                  <span class="block">
+                    <span class="block font-display text-sm font-semibold text-white">{t.names[badge.id]}</span>
+                    <span class="mt-1 block text-[0.68rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
+                    <span class="block text-xs leading-snug text-ink-200">{t.stats[badge.stat]}</span>
+                  </span>
+
+                  <span class="block">
+                    <span class="block text-[0.68rem] uppercase tracking-wider text-ink-400">{t.unlocks}</span>
+                    <span class="mt-1 flex flex-col gap-0.5">
+                      {badge.thresholds.map((n, ti) => (
+                        <span class="flex items-baseline justify-between gap-2 font-mono text-[0.7rem]">
+                          <span class="text-ink-300">{tiered ? tierLabels[ti] : t.rarity[badge.rarity]}</span>
+                          <span class="font-semibold text-white">{n.toLocaleString(lang)}</span>
+                        </span>
+                      ))}
+                    </span>
+                    <span class="mt-2 flex items-center gap-1.5 text-[0.65rem] text-ink-400">
+                      <Icon name="bolt" class="size-3" />
+                      {t.worth.replace('{n}', String(RARITY_POINTS[badge.rarity]))}
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </button>
+          );
+        })
+      }
+    </div>
+
+    <p class="reveal mt-5 text-center font-mono text-xs text-ink-500">
+      {t.count.replace('{n}', String(badges.length))}
+    </p>
+  </div>
+</section>
+
+<script>
+  // Rarity filter + tap-to-flip. Hover flip is pure CSS; the click handler only
+  // exists so touch devices (which have no hover) can still read a card back.
+  let vaultAbort: AbortController | undefined;
+
+  function initBadgeVault() {
+    vaultAbort?.abort();
+    vaultAbort = new AbortController();
+    const { signal } = vaultAbort;
+
+    const grid = document.getElementById('badge-grid');
+    const filters = document.querySelectorAll<HTMLButtonElement>('[data-badge-filter]');
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll<HTMLElement>('[data-badge]');
+
+    filters.forEach((btn) => {
+      btn.addEventListener(
+        'click',
+        () => {
+          const want = btn.dataset.badgeFilter ?? 'all';
+          filters.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.badgeFilter === want)));
+          cards.forEach((card) => {
+            const match = want === 'all' || card.dataset.rarity === want;
+            card.classList.toggle('hidden', !match);
+            card.dataset.flipped = 'false';
+          });
+        },
+        { signal },
+      );
+    });
+
+    cards.forEach((card) => {
+      card.addEventListener(
+        'click',
+        () => {
+          const open = card.dataset.flipped === 'true';
+          cards.forEach((c) => (c.dataset.flipped = 'false'));
+          card.dataset.flipped = open ? 'false' : 'true';
+        },
+        { signal },
+      );
+    });
+  }
+
+  document.addEventListener('astro:page-load', initBadgeVault);
+</script>
