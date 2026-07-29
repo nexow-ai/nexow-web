@@ -227,7 +227,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Referrals -->
-  <section id="referrals" class="relative overflow-hidden border-t border-brand-100/60 bg-gradient-to-b from-white via-[#f5faf9] to-white py-28 sm:py-36">
+  <section id="referrals" class="relative overflow-hidden border-t border-brand-100/60 bg-gradient-to-b from-white via-[#f5faf9] to-white py-28 sm:py-36 dark:border-white/8 dark:bg-white/[0.015] dark:bg-none">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="aurora-a absolute -top-24 left-1/3 size-[520px] rounded-full opacity-40 blur-3xl"
@@ -244,11 +244,11 @@ const hrefClaim = claimHandleAppUrl();
     <div class="container-page relative">
       <div class="grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
         <div class="reveal" data-motion="slide-l">
-          <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50/90 dark:bg-brand-400/12 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300 backdrop-blur">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 backdrop-blur dark:border-white/8 dark:bg-brand-400/12 dark:text-brand-300">
             {t.referrals.eyebrow}
             <span class="ref-badge-pulse rounded-full bg-accent-500/20 px-2 py-0.5 text-[0.65rem] text-accent-700">{t.referrals.badge}</span>
           </span>
-          <h2 class="mt-6 max-w-xl font-display text-3xl font-semibold tracking-tight text-ink-950 dark:text-white sm:text-4xl md:text-[2.85rem] md:leading-[1.08]">
+          <h2 class="mt-6 max-w-xl font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.85rem] md:leading-[1.08] dark:text-white">
             <span class="text-gradient">{t.referrals.title}</span>
           </h2>
           <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.referrals.subtitle}</p>
@@ -271,7 +271,7 @@ const hrefClaim = claimHandleAppUrl();
               href={hrefClaim}
               target="_blank"
               rel="noopener noreferrer"
-              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 dark:border-white/8 bg-white/90 dark:bg-white/[0.06] p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10"
+              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10 dark:border-white/10 dark:bg-white/[0.04]"
               data-motion="rise"
               style={`--d:${i * 0.08}s`}
             >
@@ -279,10 +279,10 @@ const hrefClaim = claimHandleAppUrl();
                 class="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
                 style="background:radial-gradient(circle, var(--color-accent-200), transparent 70%)"
               />
-              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-600 ring-1 ring-brand-200/80 dark:ring-brand-400/25 transition-transform duration-300 group-hover:scale-110">
+              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
                 <Icon name={f.icon} class="size-5" />
               </span>
-              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 dark:text-white transition-colors group-hover:text-brand-800 dark:group-hover:text-brand-300 dark:text-brand-300">{f.title}</h3>
+              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
             </a>
           ))
@@ -292,7 +292,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Marketplace -->
-  <section id="marketplace" class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] dark:bg-white/[0.015] py-24 sm:py-36">
+  <section id="marketplace" class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] py-24 sm:py-36 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="aurora-a absolute -top-20 left-1/2 size-[640px] -translate-x-1/2 rounded-full opacity-45 blur-3xl"
@@ -338,13 +338,13 @@ const hrefClaim = claimHandleAppUrl();
               href={hrefMarketplace}
               target="_blank"
               rel="noopener noreferrer"
-              class="group flex gap-4 rounded-3xl border border-ink-900/8 dark:border-white/8 bg-white/90 dark:bg-white/[0.06] p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md"
+              class="group flex gap-4 rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md dark:border-white/10 dark:bg-white/[0.04]"
             >
-              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-600 ring-1 ring-brand-200/80 dark:ring-brand-400/25 transition-transform duration-300 group-hover:scale-110">
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
                 <Icon name={f.icon} class="size-5" />
               </span>
               <div>
-                <h3 class="font-display text-lg font-semibold text-ink-950 dark:text-white transition-colors group-hover:text-brand-800 dark:group-hover:text-brand-300 dark:text-brand-300">{f.title}</h3>
+                <h3 class="font-display text-lg font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
               </div>
             </a>

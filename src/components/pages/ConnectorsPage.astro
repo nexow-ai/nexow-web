@@ -610,7 +610,7 @@ const chipBtn =
         for (const a of item.assets) {
           const chip = document.createElement('span');
           chip.className =
-            'rounded-md border border-ink-900/10 bg-[#f7fbfb] dark:bg-white/[0.015] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600';
+            'rounded-md border border-ink-900/10 bg-[#f7fbfb] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600 dark:border-white/10 dark:bg-white/[0.015] dark:text-ink-300';
           chip.textContent = a;
           assetsEl.appendChild(chip);
         }

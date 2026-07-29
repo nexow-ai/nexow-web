@@ -104,13 +104,13 @@ const names = c.tiers.map((tier) => tier.name);
                   class="px-4 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6"
                 >
                   <span class="inline-flex items-center gap-2">
-                    <Icon name={group.icon} class="size-3.5 text-brand-600" />
+                    <Icon name={group.icon} class="size-3.5 text-brand-600 dark:text-brand-300" />
                     {t.groups[group.key]}
                   </span>
                 </th>
               </tr>
               {group.rows.map((row) => (
-                <tr class="border-t border-ink-900/[0.06]">
+                <tr class="border-t border-ink-900/[0.06] dark:border-white/8">
                   <th scope="row" class="px-4 py-3 text-sm font-normal text-ink-700 dark:text-ink-200 sm:px-6">
                     {t.rows[row.key]}
                     {row.soon && (
@@ -138,7 +138,7 @@ const names = c.tiers.map((tier) => tier.name);
                             style={`color:${PLANS[i].accentInk}`}
                           />
                         ) : (
-                          <span class="text-ink-300" aria-label="—">
+                          <span class="text-ink-300 dark:text-ink-600" aria-label="—">
                             —
                           </span>
                         )}
