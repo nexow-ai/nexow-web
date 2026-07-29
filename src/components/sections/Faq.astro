@@ -13,8 +13,10 @@ interface Props {
   subtitle?: string;
   /** 'dark' renders the terminal-style variant used on the home page. */
   tone?: 'light' | 'dark';
+  /** Shared <details name> so only one item is open at a time. */
+  group?: string;
 }
-const { lang, tone = 'light' } = Astro.props;
+const { lang, tone = 'light', group = 'faq' } = Astro.props;
 const home = useContent(lang).home.faq;
 const items = Astro.props.items ?? home.items;
 const eyebrow = Astro.props.eyebrow ?? home.eyebrow;
@@ -37,11 +39,17 @@ const dark = tone === 'dark';
     >
       {
         items.map((item) => (
-          <details class="group px-6">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 [&::-webkit-details-marker]:hidden">
+          <details name={group} class="group px-5 sm:px-6">
+            <summary
+              class:list={[
+                'flex cursor-pointer list-none items-center justify-between gap-4 py-5 outline-none transition-colors [&::-webkit-details-marker]:hidden',
+                'focus-visible:rounded-lg focus-visible:ring-2 focus-visible:ring-brand-400/50 focus-visible:ring-offset-2',
+                dark ? 'focus-visible:ring-offset-ink-950' : 'focus-visible:ring-offset-white dark:focus-visible:ring-offset-ink-950',
+              ]}
+            >
               <span
                 class:list={[
-                  'font-display text-base font-semibold',
+                  'font-display text-base font-semibold text-balance',
                   dark ? 'text-white' : 'text-ink-950 dark:text-white',
                 ]}
               >
@@ -52,13 +60,14 @@ const dark = tone === 'dark';
                   'inline-flex size-7 shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-open:rotate-180',
                   dark ? 'bg-white/8 text-ink-300' : 'bg-ink-900/5 dark:bg-white/8 text-ink-500 dark:text-ink-400',
                 ]}
+                aria-hidden="true"
               >
                 <Icon name="chevron" class="size-4" />
               </span>
             </summary>
             <p
               class:list={[
-                'pb-5 pr-11 text-sm leading-relaxed',
+                'pb-5 pr-11 text-sm leading-relaxed text-pretty',
                 dark ? 'text-ink-400 dark:text-ink-500' : 'text-ink-600 dark:text-ink-300',
               ]}
             >
