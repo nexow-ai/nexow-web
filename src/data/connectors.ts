@@ -1971,6 +1971,25 @@ export const CONNECTORS: Connector[] = [
     "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
   },
   {
+    "id": "morningstar",
+    "name": "Morningstar",
+    "category": "finance",
+    "kind": "data",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "indices",
+      "fixed_income",
+      "fx"
+    ],
+    "url": "https://www.morningstar.com/",
+    "logo": "/connectors/morningstar.svg",
+    "banner": "/connectors/banners/morningstar.png",
+    "logoFit": "cover",
+    "notes": "Investment research and fund ratings — pull equity/fund analytics, star ratings, and market commentary into research widgets."
+  },
+  {
     "id": "news24",
     "name": "News24",
     "category": "services",
