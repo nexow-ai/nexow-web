@@ -533,7 +533,7 @@ export interface SiteContent {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
     searchPlaceholder: string;
-    /** Mobile toggle label for the category/status filter panel. */
+    /** Toggle label for the category/status filter panel. */
     filters: string;
     all: string;
     categories: { finance: string; wallets: string; services: string; data: string; socials: string };

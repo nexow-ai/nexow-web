@@ -142,7 +142,7 @@ const chipBtn =
       <!-- Controls -->
       <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8 dark:border-white/8 dark:bg-ink-950/85">
         <div class="flex flex-col gap-3">
-          <!-- Search + mobile filter toggle -->
+          <!-- Search + filter toggle (collapsible on all breakpoints) -->
           <div class="flex w-full items-center gap-2 lg:max-w-sm">
             <div class="relative min-w-0 flex-1">
               <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-500" />
@@ -158,7 +158,7 @@ const chipBtn =
             <button
               type="button"
               id="connector-filters-toggle"
-              class="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-ink-900/10 bg-white px-3.5 text-sm font-medium text-ink-500 shadow-sm transition-colors hover:border-ink-900/15 hover:text-ink-950 lg:hidden dark:border-white/10 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:border-white/20 dark:hover:text-white"
+              class="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-ink-900/10 bg-white px-3.5 text-sm font-medium text-ink-500 shadow-sm transition-colors hover:border-ink-900/15 hover:text-ink-950 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:border-white/20 dark:hover:text-white"
               aria-expanded="false"
               aria-controls="connector-filters"
             >
@@ -176,11 +176,11 @@ const chipBtn =
             </button>
           </div>
 
-          <!-- Filters (collapsed on mobile, always open on lg+) -->
+          <!-- Filters (collapsed by default; openable on all breakpoints) -->
           <div
             id="connector-filters"
             data-open="false"
-            class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr] lg:grid-rows-[1fr] lg:data-[open=false]:grid-rows-[1fr]"
+            class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr]"
           >
             <div class="min-h-0 overflow-hidden">
               <div class="flex flex-col gap-2.5 pt-1 lg:pt-0">
@@ -460,6 +460,9 @@ const chipBtn =
       filtersEl?.setAttribute('data-open', String(next));
       filtersToggle?.setAttribute('aria-expanded', String(next));
     };
+
+    // Desktop previously always showed filters; keep them open by default on lg+.
+    syncFiltersOpen(window.matchMedia('(min-width: 1024px)').matches);
 
     const syncFiltersBadge = () => {
       const active =
