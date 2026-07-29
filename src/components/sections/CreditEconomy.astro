@@ -45,7 +45,7 @@ const maxTokens = Math.max(...TOKENS_PER_CREDIT.map((m) => m.tokens));
 
     <div class="reveal-stagger mt-12 grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]">
       <!-- The rate -->
-      <div class="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-ink-950 p-8 text-white">
+      <div class="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-ink-950 p-8 text-white dark:border-white/10">
         <div class="bg-grid pointer-events-none absolute inset-0 opacity-30" aria-hidden="true"></div>
         <div class="glow-brand pointer-events-none absolute -left-16 -top-20 size-64 opacity-60 animate-glow" aria-hidden="true">
         </div>
@@ -61,7 +61,7 @@ const maxTokens = Math.max(...TOKENS_PER_CREDIT.map((m) => m.tokens));
       </div>
 
       <!-- Tokens per credit -->
-      <div class="rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-8 shadow-sm shadow-ink-950/[0.03]">
+      <div class="rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-8 shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40">
         <h3 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{t.tokensTitle}</h3>
         <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{t.tokensNote}</p>
 
