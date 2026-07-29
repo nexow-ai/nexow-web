@@ -20,7 +20,7 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
+const t = useContent(lang).communityPage;
 ---
 
 <Layout lang={lang} route="/community" title={t.meta.title} description={t.meta.description}>

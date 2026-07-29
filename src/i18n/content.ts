@@ -461,10 +461,9 @@ export interface SiteContent {
     groups: { title: string; body: string; items: Feature[] }[];
   };
   /**
-   * Dedicated Community marketing page. Optional so locales without a
-   * translation fall back to English in CommunityPage.astro.
+   * Dedicated Community marketing page (/community).
    */
-  communityPage?: CommunityPageContent;
+  communityPage: CommunityPageContent;
   plansPage: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
