@@ -5,12 +5,26 @@ interface Props {
   subtitle?: string;
   align?: 'left' | 'center';
   tone?: 'light' | 'dark';
+  /** Apply brand → sky → accent gradient to the title. */
+  gradientTitle?: boolean;
   class?: string;
 }
-const { eyebrow, title, subtitle, align = 'center', tone = 'light', class: className = '' } = Astro.props;
+const {
+  eyebrow,
+  title,
+  subtitle,
+  align = 'center',
+  tone = 'light',
+  gradientTitle = false,
+  class: className = '',
+} = Astro.props;
 
 const alignCls = align === 'center' ? 'mx-auto text-center items-center' : 'items-start text-left';
-const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950 dark:text-white';
+const titleColor = gradientTitle
+  ? 'text-gradient'
+  : tone === 'dark'
+    ? 'text-white'
+    : 'text-ink-950 dark:text-white';
 const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-300';
 ---
 
@@ -18,7 +32,7 @@ const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-
   {
     eyebrow && (
       <span class="eyebrow mb-3 inline-flex items-center gap-2 text-brand-600 dark:text-brand-300">
-        <span class="h-px w-6 bg-brand-500/50 dark:bg-brand-400/60"></span>
+        <span class="h-px w-6 rule-gradient"></span>
         {eyebrow}
       </span>
     )

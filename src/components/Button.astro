@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 
 interface Props {
   href: string;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'dark' | 'outline';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'dark' | 'outline' | 'gradient';
   size?: 'sm' | 'md' | 'lg';
   icon?: string;
   iconRight?: string;
@@ -24,11 +24,15 @@ const {
 const base =
   'group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-all duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-offset-2 whitespace-nowrap';
 
+// Brand gradient (teal → sky → indigo on light; teal → indigo → plasma on
+// `.dark` via --grad-* tokens). Same stops as `.text-gradient` / hero CTAs.
+const brandGradient =
+  'bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] text-white shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_12px_28px_-14px_color-mix(in_oklab,var(--grad-b)_70%,transparent)] hover:brightness-[1.06] hover:shadow-[0_1px_0_rgba(255,255,255,0.28)_inset,0_16px_34px_-14px_color-mix(in_oklab,var(--grad-c)_55%,transparent)] hover:-translate-y-0.5';
+
 const variants: Record<string, string> = {
-  // On a dark surface the flat teal fill goes flat: swap it for the brand →
-  // secondary-accent gradient, which is where the page's colour story lives.
-  primary:
-    'bg-brand-600 text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_10px_20px_-14px_var(--color-brand-600)] hover:bg-brand-500 hover:shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_14px_26px_-16px_var(--color-brand-500)] hover:-translate-y-0.5 dark:bg-none dark:bg-[linear-gradient(100deg,var(--color-brand-500),var(--color-accent-500)_62%,var(--color-plasma-500))] dark:text-white dark:shadow-[0_10px_34px_-14px_var(--color-accent-500)] dark:hover:shadow-[0_14px_40px_-14px_var(--color-plasma-500)]',
+  primary: brandGradient,
+  // Explicit alias for feature CTAs; same paint as primary.
+  gradient: brandGradient,
   secondary:
     'bg-white text-ink-900 ring-1 ring-ink-900/10 hover:ring-ink-900/20 hover:-translate-y-0.5 shadow-sm dark:bg-white/[0.06] dark:text-white dark:ring-white/12 dark:backdrop-blur dark:hover:bg-white/[0.1] dark:hover:ring-white/25',
   dark: 'bg-white text-ink-950 hover:bg-white/90 hover:-translate-y-0.5 shadow-lg shadow-black/20',

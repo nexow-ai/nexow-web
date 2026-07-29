@@ -47,8 +47,29 @@ import Icon from './Icon.astro';
 
   <div class="relative h-72 overflow-hidden bg-ink-950/60 sm:h-80">
     <div class="bg-grid absolute inset-0 opacity-35"></div>
-    <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/35" viewBox="0 0 520 320" preserveAspectRatio="none">
-      <path d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 5" />
+    <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/45" viewBox="0 0 520 320" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="canvas-link" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.15"></stop>
+          <stop offset="50%" stop-color="var(--color-brand-300)" stop-opacity="0.85"></stop>
+          <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.7"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        class="canvas-link-path"
+        pathLength="1"
+        d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126"
+        fill="none"
+        stroke="url(#canvas-link)"
+        stroke-width="1.4"
+        stroke-linecap="round"
+      />
+      <circle class="canvas-link-packet" r="2.8" fill="var(--color-brand-300)">
+        <animateMotion dur="3.2s" repeatCount="indefinite" path="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126"></animateMotion>
+      </circle>
+      <circle class="canvas-link-packet" r="2.2" fill="var(--color-sky-400)" opacity="0.85">
+        <animateMotion dur="4.6s" begin="1.4s" repeatCount="indefinite" path="M396 126 C358 106 326 107 292 128 C258 150 226 148 188 122"></animateMotion>
+      </circle>
     </svg>
 
     <section class="absolute left-3 top-3 h-32 w-[58%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30 sm:left-4 sm:top-4 sm:h-36">
@@ -125,3 +146,18 @@ import Icon from './Icon.astro';
     </div>
   </div>
 </div>
+
+<style>
+  .canvas-link-path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: canvas-draw 1.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) 0.25s forwards;
+  }
+  @keyframes canvas-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .canvas-link-path { animation: none; stroke-dashoffset: 0; }
+    .canvas-link-packet { display: none; }
+  }
+</style>

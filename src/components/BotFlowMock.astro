@@ -40,7 +40,15 @@ const nodes = [
               </div>
             </div>
             {i < nodes.length - 1 && (
-              <div class="ml-[1.85rem] flex h-5 w-px flex-col bg-gradient-to-b from-brand-300/70 to-sky-300/70" />
+              <div class="relative ml-[1.85rem] h-5 w-px overflow-visible">
+                <span class="absolute inset-0 bg-gradient-to-b from-brand-300/70 to-sky-300/70"></span>
+                <svg class="absolute -left-1.5 top-0 h-5 w-3 overflow-visible" viewBox="0 0 12 20" aria-hidden="true">
+                  <circle class="bot-flow-pulse" cx="6" cy="2" r="2" fill="var(--color-brand-500)">
+                    <animate attributeName="cy" values="2;18;2" dur="2.4s" begin={`${i * 0.35}s`} repeatCount="indefinite"></animate>
+                    <animate attributeName="opacity" values="0.9;0.35;0.9" dur="2.4s" begin={`${i * 0.35}s`} repeatCount="indefinite"></animate>
+                  </circle>
+                </svg>
+              </div>
             )}
           </li>
         ))
@@ -54,3 +62,11 @@ const nodes = [
     </div>
   </div>
 </div>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .bot-flow-pulse {
+      display: none;
+    }
+  }
+</style>
