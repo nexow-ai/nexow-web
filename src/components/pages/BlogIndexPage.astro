@@ -21,7 +21,7 @@ const posts = await getPosts(lang);
   <section class="container-page pb-24 sm:pb-32">
     {
       posts.length === 0 ? (
-        <p class="text-center text-ink-500">—</p>
+        <p class="text-center text-ink-500 dark:text-ink-400">—</p>
       ) : (
         <div class="reveal-stagger grid gap-5 md:grid-cols-2">
           {posts.map((post, i) => (

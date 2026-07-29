@@ -6,7 +6,7 @@ import Icon from './Icon.astro';
 ---
 
 <div
-  class="community-mock relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-sky-500/10"
+  class="community-mock relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-xl shadow-ink-950/10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-sky-500/10"
   aria-hidden="true"
 >
   <div class="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full opacity-40 blur-3xl community-mock-glow" style="background:radial-gradient(circle, var(--color-sky-300), transparent 70%)"></div>
@@ -29,9 +29,9 @@ import Icon from './Icon.astro';
     <circle class="community-mock-node" cx="300" cy="58" r="2" fill="var(--color-accent-400)" style="--d:0.8s"></circle>
   </svg>
 
-  <div class="relative flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
+  <div class="relative flex items-center gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 py-3">
     <Icon name="users" class="size-4 text-sky-600" />
-    <span class="font-mono text-xs text-ink-500">community · discover</span>
+    <span class="font-mono text-xs text-ink-500 dark:text-ink-400">community · discover</span>
     <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-2 py-0.5 font-mono text-[0.65rem] text-sky-700">
       <span class="size-1.5 rounded-full bg-sky-500 community-mock-pulse"></span>
       feed
@@ -39,19 +39,19 @@ import Icon from './Icon.astro';
   </div>
 
   <div class="relative space-y-3 p-5">
-    <div class="community-mock-card rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3 transition-transform duration-300 hover:-translate-y-0.5">
+    <div class="community-mock-card rounded-xl border border-ink-900/10 dark:border-white/10 bg-[#f7fbfb] dark:bg-white/[0.015] p-3 transition-transform duration-300 hover:-translate-y-0.5">
       <div class="flex items-center gap-2.5">
         <span class="inline-flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 font-display text-xs font-bold text-white shadow-md shadow-brand-500/30">Q</span>
         <div class="min-w-0 leading-tight">
-          <p class="font-mono text-xs text-ink-900">@quanta</p>
-          <p class="font-mono text-[0.6rem] text-ink-500">shared a widget</p>
+          <p class="font-mono text-xs text-ink-900 dark:text-white">@quanta</p>
+          <p class="font-mono text-[0.6rem] text-ink-500 dark:text-ink-400">shared a widget</p>
         </div>
-        <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-2 py-0.5 font-mono text-[0.6rem] text-ink-600 ring-1 ring-ink-900/10">
+        <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-white dark:bg-white/[0.04] px-2 py-0.5 font-mono text-[0.6rem] text-ink-600 dark:text-ink-300 ring-1 ring-ink-900/10 dark:ring-white/10">
           <Icon name="store" class="size-3 text-brand-700" /> $12
         </span>
       </div>
 
-      <div class="mt-3 grid h-16 grid-cols-5 gap-1 rounded-lg border border-ink-900/10 bg-white p-2">
+      <div class="mt-3 grid h-16 grid-cols-5 gap-1 rounded-lg border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-2">
         {
           Array.from({ length: 10 }).map((_, i) => (
             <span
@@ -72,25 +72,25 @@ import Icon from './Icon.astro';
       </div>
     </div>
 
-    <div class="community-mock-card flex items-center gap-2.5 rounded-xl border border-ink-900/10 bg-white px-3 py-2.5 transition-transform duration-300 hover:-translate-y-0.5" style="--d:0.12s">
+    <div class="community-mock-card flex items-center gap-2.5 rounded-xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3 py-2.5 transition-transform duration-300 hover:-translate-y-0.5" style="--d:0.12s">
       <span class="relative inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-100 font-display text-xs font-bold text-brand-800">
         A
         <span class="absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full bg-brand-500 ring-2 ring-white community-mock-pulse"></span>
       </span>
       <div class="min-w-0 leading-tight">
-        <p class="font-mono text-xs text-ink-900">@ada</p>
-        <p class="truncate font-mono text-[0.6rem] text-ink-500">
+        <p class="font-mono text-xs text-ink-900 dark:text-white">@ada</p>
+        <p class="truncate font-mono text-[0.6rem] text-ink-500 dark:text-ink-400">
           typing a reply<span class="community-mock-dots">…</span>
         </p>
       </div>
-      <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 ring-1 ring-brand-200/80">
+      <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 dark:text-brand-300 ring-1 ring-brand-200/80 dark:ring-brand-400/25">
         <Icon name="mail" class="size-3" /> live
       </span>
     </div>
 
     <div class="community-mock-card flex items-center gap-2.5 rounded-xl border border-sky-200 bg-gradient-to-r from-sky-50 to-brand-50/40 px-3 py-2.5 transition-transform duration-300 hover:-translate-y-0.5" style="--d:0.22s">
       <Icon name="store" class="size-4 shrink-0 text-sky-700" />
-      <span class="min-w-0 truncate font-mono text-xs text-ink-700">new theme in marketplace</span>
+      <span class="min-w-0 truncate font-mono text-xs text-ink-700 dark:text-ink-200">new theme in marketplace</span>
       <span class="ml-auto shrink-0 font-mono text-[0.65rem] font-medium text-brand-700">install</span>
     </div>
   </div>

@@ -64,7 +64,7 @@ const articleSchema = {
       <div class="mx-auto max-w-3xl">
         <a
           href={localizePath('/blog', lang)}
-          class="inline-flex items-center gap-1.5 font-mono text-sm text-ink-500 transition-colors hover:text-ink-900"
+          class="inline-flex items-center gap-1.5 font-mono text-sm text-ink-500 dark:text-ink-400 transition-colors hover:text-ink-900 dark:text-white"
         >
           <Icon name="arrow" class="size-4 rotate-180" />
           {t.backToBlog}
@@ -72,18 +72,18 @@ const articleSchema = {
 
         <div class="mt-6 flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <span class="rounded-full bg-brand-50 px-2.5 py-1 font-mono text-xs text-brand-700 ring-1 ring-brand-500/10">
+            <span class="rounded-full bg-brand-50 dark:bg-brand-400/12 px-2.5 py-1 font-mono text-xs text-brand-700 dark:text-brand-300 ring-1 ring-brand-500/10">
               #{tag}
             </span>
           ))}
         </div>
 
-        <h1 class="mt-4 text-balance font-display text-4xl font-semibold leading-[1.1] tracking-tight text-ink-950 sm:text-5xl">
+        <h1 class="mt-4 text-balance font-display text-4xl font-semibold leading-[1.1] tracking-tight text-ink-950 dark:text-white sm:text-5xl">
           {title}
         </h1>
-        <p class="mt-4 text-lg leading-relaxed text-ink-600">{description}</p>
+        <p class="mt-4 text-lg leading-relaxed text-ink-600 dark:text-ink-300">{description}</p>
 
-        <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-ink-900/8 pb-8 font-mono text-sm text-ink-500">
+        <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-ink-900/8 dark:border-white/8 pb-8 font-mono text-sm text-ink-500 dark:text-ink-400">
           <span>{author}</span>
           <span aria-hidden="true">·</span>
           <time datetime={pubDate.toISOString()}>{dtFmt.format(pubDate)}</time>
@@ -119,16 +119,16 @@ const articleSchema = {
 
     <div class="container-page mt-10">
       <div
-        class="prose prose-lg mx-auto max-w-3xl prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-12 prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-ink-900 prose-blockquote:border-l-brand-500 prose-blockquote:bg-brand-50/40 prose-blockquote:py-1 prose-blockquote:not-italic prose-code:font-mono prose-code:text-brand-700 prose-code:before:content-none prose-code:after:content-none"
+        class="prose dark:prose-invert prose-lg mx-auto max-w-3xl prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-2xl prose-h2:mt-12 prose-a:text-brand-700 dark:text-brand-300 prose-a:no-underline hover:prose-a:underline prose-strong:text-ink-900 dark:text-white prose-blockquote:border-l-brand-500 prose-blockquote:bg-brand-50 dark:bg-brand-400/12/40 prose-blockquote:py-1 prose-blockquote:not-italic prose-code:font-mono prose-code:text-brand-700 dark:text-brand-300 prose-code:before:content-none prose-code:after:content-none"
       >
         <slot />
       </div>
     </div>
 
     <div class="container-page mt-16 mb-24">
-      <div class="mx-auto max-w-3xl rounded-2xl border border-ink-900/8 bg-slate-50/70 p-8 text-center">
-        <h2 class="font-display text-2xl font-semibold text-ink-950">{useContent(lang).home.cta.title}</h2>
-        <p class="mx-auto mt-2 max-w-md text-ink-600">{useContent(lang).home.cta.subtitle}</p>
+      <div class="mx-auto max-w-3xl rounded-2xl border border-ink-900/8 dark:border-white/8 bg-slate-50/70 dark:bg-white/[0.03] p-8 text-center">
+        <h2 class="font-display text-2xl font-semibold text-ink-950 dark:text-white">{useContent(lang).home.cta.title}</h2>
+        <p class="mx-auto mt-2 max-w-md text-ink-600 dark:text-ink-300">{useContent(lang).home.cta.subtitle}</p>
         <div class="mt-6 flex justify-center">
           <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
             {useContent(lang).home.cta.primary}

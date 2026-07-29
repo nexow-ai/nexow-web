@@ -29,13 +29,13 @@ const primaryHref = code ? signupAppUrl({ ref: code }) : claimHandleAppUrl();
   />
 
   <section class="container-page pb-8">
-    <p class="reveal mx-auto max-w-2xl text-center text-lg leading-relaxed text-ink-600">{t.body}</p>
+    <p class="reveal mx-auto max-w-2xl text-center text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.body}</p>
     {
       code && (
-        <div class="reveal mx-auto mt-8 max-w-md rounded-2xl border border-ink-900/10 bg-[#f7fbfb] px-5 py-4 text-center">
+        <div class="reveal mx-auto mt-8 max-w-md rounded-2xl border border-ink-900/10 bg-[#f7fbfb] dark:bg-white/[0.015] px-5 py-4 text-center dark:border-white/10 dark:bg-white/[0.02]">
           <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">{t.codeLabel}</p>
-          <p class="mt-1 font-display text-2xl font-semibold tracking-tight text-ink-950">{code}</p>
-          <p class="mt-2 text-xs text-ink-500">{t.codeHint}</p>
+          <p class="mt-1 font-display text-2xl font-semibold tracking-tight text-ink-950 dark:text-white">{code}</p>
+          <p class="mt-2 text-xs text-ink-500 dark:text-ink-400">{t.codeHint}</p>
         </div>
       )
     }

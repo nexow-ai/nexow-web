@@ -28,7 +28,7 @@ const badgeIcon = getPageBadgeIcon('/features');
 
 <Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-40">
+  <section class="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-40 dark:bg-transparent">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
@@ -73,14 +73,14 @@ const badgeIcon = getPageBadgeIcon('/features');
     </div>
 
     <div class="container-page relative text-center">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-ink-700">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-ink-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-ink-300">
         {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
       </span>
-      <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl dark:text-white">
         {t.hero.title}
       </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.hero.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
         <Button href={featureGroupAppHref(0)} size="lg" variant="gradient" external iconRight="arrow">{home.ctaPrimary}</Button>
         <Button href={localizePath('/connectors', lang)} variant="secondary" size="lg" icon="plug">{explore}</Button>
@@ -90,13 +90,13 @@ const badgeIcon = getPageBadgeIcon('/features');
   </section>
 
   <!-- Feature pillars (zig-zag, each paired with an animated visual) -->
-  <div class="bg-white">
+  <div class="bg-white dark:bg-transparent">
     {
       t.groups.map((group, i) => {
         const reverse = i % 2 === 1;
         const openHref = featureGroupAppHref(i);
         return (
-          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80']}>
+          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80 dark:border-white/8']}>
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
               <div
                 class:list={[
@@ -110,10 +110,10 @@ const badgeIcon = getPageBadgeIcon('/features');
                 <!-- Copy -->
                 <div class:list={['reveal', reverse && 'lg:order-2']}>
                   <span class="eyebrow inline-flex items-center gap-3 text-brand-600">
-                    <span class="font-mono text-2xl font-bold text-ink-950">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="font-mono text-2xl font-bold text-ink-950 dark:text-white">{String(i + 1).padStart(2, '0')}</span>
                     {group.title}
                   </span>
-                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1]">
+                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1] dark:text-white">
                     {group.body}
                   </h2>
                   <ul class="mt-8 space-y-5">
@@ -123,12 +123,12 @@ const badgeIcon = getPageBadgeIcon('/features');
                           href={featureItemAppHref(f.icon)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          class="group flex gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-brand-50/60"
+                          class="group flex gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-brand-50/60 dark:hover:bg-white/[0.04]"
                         >
                           <FeatureGlyph name={f.icon} />
                           <div class="min-w-0">
-                            <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800">{f.title}</h3>
-                            <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
+                            <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+                            <p class="mt-1 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
                           </div>
                         </a>
                       </li>
@@ -143,7 +143,7 @@ const badgeIcon = getPageBadgeIcon('/features');
 
                 <!-- Visual -->
                 <div class:list={['reveal lg:sticky lg:top-28', reverse && 'lg:order-1']}>
-                  <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white">
+                  <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white dark:ring-offset-ink-950">
                     {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
                     {i === 1 && <CanvasMock />}
                     {i === 2 && <ConnectMock lang={lang} />}

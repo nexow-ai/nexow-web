@@ -34,20 +34,20 @@ function text(cell: MatrixCell): string | null {
 const names = c.tiers.map((tier) => tier.name);
 ---
 
-<section id="compare" class="border-t border-ink-900/8 bg-ink-50 py-20 sm:py-24">
+<section id="compare" class="border-t border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.02] py-20 sm:py-24">
   <div class="container-page">
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
     <!-- Mobile / tablet: Free vs one chosen plan. -->
     <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-2 lg:hidden">
-      <span class="text-xs font-medium text-ink-500">{t.pick}</span>
+      <span class="text-xs font-medium text-ink-500 dark:text-ink-400">{t.pick}</span>
       {
         names.slice(1).map((name, i) => (
           <button
             type="button"
             data-matrix-pick={i + 1}
             aria-pressed={i === 1 ? 'true' : 'false'}
-            class="rounded-full border border-ink-900/10 bg-white px-3.5 py-1.5 text-sm font-medium text-ink-600 transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+            class="rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3.5 py-1.5 text-sm font-medium text-ink-600 dark:text-ink-300 transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
             style={`--a:${PLANS[i + 1].accent}`}
           >
             {name}
@@ -59,13 +59,13 @@ const names = c.tiers.map((tier) => tier.name);
     <div
       id="plan-matrix"
       data-pick="2"
-      class="reveal mt-8 overflow-hidden rounded-3xl border border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03]"
+      class="reveal mt-8 overflow-hidden rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03]"
     >
       <table class="w-full border-collapse text-left">
         <caption class="sr-only">{t.title}</caption>
-        <thead class="sticky top-16 z-10 bg-white/95 backdrop-blur">
-          <tr class="border-b border-ink-900/10">
-            <th scope="col" class="px-4 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 sm:px-6">
+        <thead class="sticky top-16 z-10 bg-white/95 dark:bg-white/[0.04] backdrop-blur">
+          <tr class="border-b border-ink-900/10 dark:border-white/10">
+            <th scope="col" class="px-4 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6">
               {t.feature}
             </th>
             {
@@ -74,7 +74,7 @@ const names = c.tiers.map((tier) => tier.name);
                   scope="col"
                   data-col={i}
                   class:list={[
-                    'px-3 py-4 text-center text-sm font-semibold text-ink-950 sm:px-4',
+                    'px-3 py-4 text-center text-sm font-semibold text-ink-950 dark:text-white sm:px-4',
                     i > 0 && 'plan-col',
                   ]}
                 >
@@ -97,11 +97,11 @@ const names = c.tiers.map((tier) => tier.name);
         {
           MATRIX.map((group) => (
             <tbody>
-              <tr class="bg-ink-50/70">
+              <tr class="bg-ink-50 dark:bg-white/[0.02]/70">
                 <th
                   scope="colgroup"
                   colspan={5}
-                  class="px-4 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 sm:px-6"
+                  class="px-4 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6"
                 >
                   <span class="inline-flex items-center gap-2">
                     <Icon name={group.icon} class="size-3.5 text-brand-600" />
@@ -111,7 +111,7 @@ const names = c.tiers.map((tier) => tier.name);
               </tr>
               {group.rows.map((row) => (
                 <tr class="border-t border-ink-900/[0.06]">
-                  <th scope="row" class="px-4 py-3 text-sm font-normal text-ink-700 sm:px-6">
+                  <th scope="row" class="px-4 py-3 text-sm font-normal text-ink-700 dark:text-ink-200 sm:px-6">
                     {t.rows[row.key]}
                     {row.soon && (
                       <span class="ms-2 rounded-full bg-accent-500/10 px-1.5 py-0.5 align-middle font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
@@ -130,7 +130,7 @@ const names = c.tiers.map((tier) => tier.name);
                         ]}
                       >
                         {label ? (
-                          <span class="font-medium text-ink-800">{label}</span>
+                          <span class="font-medium text-ink-800 dark:text-ink-200">{label}</span>
                         ) : cell === true ? (
                           <Icon
                             name="check"

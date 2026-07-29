@@ -30,7 +30,7 @@ const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))
   <section class="container-page pb-20">
     {
       posts.length === 0 ? (
-        <p class="reveal mx-auto max-w-xl text-center text-ink-600">{t.empty}</p>
+        <p class="reveal mx-auto max-w-xl text-center text-ink-600 dark:text-ink-300">{t.empty}</p>
       ) : (
         <ol class="reveal-stagger mx-auto max-w-3xl space-y-0">
           {posts.map((post) => {
@@ -42,17 +42,17 @@ const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))
               day: 'numeric',
             });
             return (
-              <li class="relative border-l border-ink-900/10 py-6 pl-8 first:pt-0 last:pb-0">
+              <li class="relative border-l border-ink-900/10 dark:border-white/10 py-6 pl-8 first:pt-0 last:pb-0">
                 <span class="absolute -left-1.5 top-8 size-3 rounded-full bg-brand-500 ring-4 ring-white first:top-2" />
                 <time class="font-mono text-xs text-ink-400" datetime={post.data.pubDate.toISOString()}>
                   {date}
                 </time>
-                <h2 class="mt-2 font-display text-xl font-semibold text-ink-950">
+                <h2 class="mt-2 font-display text-xl font-semibold text-ink-950 dark:text-white">
                   <a href={href} class="transition-colors hover:text-brand-700">
                     {post.data.title}
                   </a>
                 </h2>
-                <p class="mt-2 text-sm leading-relaxed text-ink-600">{post.data.description}</p>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{post.data.description}</p>
                 <a
                   href={href}
                   class="mt-3 inline-flex text-sm font-medium text-brand-700 hover:text-brand-800"

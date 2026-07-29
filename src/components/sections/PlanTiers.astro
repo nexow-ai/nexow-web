@@ -30,12 +30,12 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
 <section id="tiers" class="relative">
   <!-- Billing toggle -->
   <div id="plans-billing" data-mode="monthly" class="container-page -mt-4 flex justify-center pb-10">
-    <div class="inline-flex items-center rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+    <div class="inline-flex items-center rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-1 shadow-sm">
       <button
         type="button"
         data-billing="monthly"
         aria-pressed="true"
-        class="rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+        class="rounded-full px-5 py-2 text-sm font-medium text-ink-500 dark:text-ink-400 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
       >
         {t.billing.monthly}
       </button>
@@ -43,7 +43,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
         type="button"
         data-billing="yearly"
         aria-pressed="false"
-        class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+        class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 dark:text-ink-400 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
       >
         {t.billing.yearly}
         <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600">{t.billing.save}</span>

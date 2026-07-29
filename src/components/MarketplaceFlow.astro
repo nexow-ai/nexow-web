@@ -81,7 +81,7 @@ const { steps } = Astro.props;
     {
       steps.map((s, i) => (
         <li class="mkt-step group flex flex-col items-center text-center" style={`--d:${i * 0.1}s`}>
-          <span class="relative z-10 inline-flex size-14 items-center justify-center rounded-2xl bg-white text-brand-700 shadow-lg shadow-brand-500/15 ring-1 ring-brand-200/80 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-brand-500/25 group-hover:ring-brand-400/50 group-focus-within:-translate-y-1">
+          <span class="relative z-10 inline-flex size-14 items-center justify-center rounded-2xl bg-white dark:bg-white/[0.04] text-brand-700 dark:text-brand-300 shadow-lg shadow-brand-500/15 ring-1 ring-brand-200/80 dark:ring-brand-400/25 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-brand-500/25 group-hover:ring-brand-400/50 group-focus-within:-translate-y-1">
             <span class="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-400/0 via-accent-400/0 to-plasma-400/0 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></span>
             {i === 0 && <Icon name="store" class="relative size-5 transition-transform duration-300 group-hover:scale-110" />}
             {i === 1 && <Icon name="coins" class="relative size-5 transition-transform duration-300 group-hover:scale-110" />}
@@ -89,7 +89,7 @@ const { steps } = Astro.props;
             {i === 3 && <Icon name="check" class="relative size-5 transition-transform duration-300 group-hover:scale-110" />}
           </span>
           <span class="mt-3 font-mono text-[0.65rem] text-brand-600">{s.n}</span>
-          <span class="mt-1 max-w-[9.5rem] font-display text-sm font-semibold leading-snug text-ink-950 transition-colors group-hover:text-brand-800">{s.title}</span>
+          <span class="mt-1 max-w-[9.5rem] font-display text-sm font-semibold leading-snug text-ink-950 dark:text-white transition-colors group-hover:text-brand-800 dark:group-hover:text-brand-300 dark:text-brand-300">{s.title}</span>
         </li>
       ))
     }

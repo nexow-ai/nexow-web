@@ -40,7 +40,7 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
       >
         <div class="grid gap-5 sm:grid-cols-2">
           <div>
-            <label for="contact-name" class="block text-sm font-medium text-ink-700">{t.form.name}</label>
+            <label for="contact-name" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.name}</label>
             <input
               id="contact-name"
               name="name"
@@ -48,11 +48,11 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
               autocomplete="name"
               maxlength="120"
               required
-              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40"
+              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
             />
           </div>
           <div>
-            <label for="contact-email" class="block text-sm font-medium text-ink-700">{t.form.email}</label>
+            <label for="contact-email" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.email}</label>
             <input
               id="contact-email"
               name="email"
@@ -60,17 +60,17 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
               autocomplete="email"
               required
               maxlength="254"
-              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40"
+              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
             />
           </div>
         </div>
 
         <div>
-          <label for="contact-type" class="block text-sm font-medium text-ink-700">{t.form.type}</label>
+          <label for="contact-type" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.type}</label>
           <select
             id="contact-type"
             name="type"
-            class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40"
+            class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
           >
             {
               t.form.types.map((opt) => (
@@ -83,14 +83,14 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
         </div>
 
         <div>
-          <label for="contact-message" class="block text-sm font-medium text-ink-700">{t.form.message}</label>
+          <label for="contact-message" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.message}</label>
           <textarea
             id="contact-message"
             name="message"
             rows="6"
             required
             maxlength="4000"
-            class="mt-2 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 py-3 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40"
+            class="mt-2 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 py-3 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
           ></textarea>
         </div>
 
@@ -104,9 +104,9 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
         <p id="contact-status" class="min-h-[1.25rem] text-sm" role="status" aria-live="polite"></p>
       </form>
 
-      <aside class="reveal rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-6 sm:p-7">
-        <h2 class="font-display text-lg font-semibold text-ink-950">{t.aside.title}</h2>
-        <p class="mt-2 text-sm leading-relaxed text-ink-600">{t.aside.body}</p>
+      <aside class="reveal rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-6 sm:p-7 dark:border-white/10 dark:bg-white/[0.02]">
+        <h2 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{t.aside.title}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{t.aside.body}</p>
         <ul class="mt-6 space-y-4">
           {
             t.aside.channels.map((ch) => (
@@ -114,7 +114,7 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
                 <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">{ch.label}</p>
                 <a
                   href={ch.href}
-                  class="mt-1 inline-flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-800"
+                  class="mt-1 inline-flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200"
                 >
                   <Icon name="mail" class="size-3.5" />
                   {ch.value}
@@ -169,7 +169,7 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
 
       if (!name || !email || !EMAIL_RE.test(email) || message.length < 8) {
         status.textContent = labels.invalid;
-        status.className = 'min-h-[1.25rem] text-sm text-red-600';
+        status.className = 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400';
         return;
       }
 
@@ -185,11 +185,11 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
       try {
         window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
         status.textContent = labels.success;
-        status.className = 'min-h-[1.25rem] text-sm text-brand-700';
+        status.className = 'min-h-[1.25rem] text-sm text-brand-700 dark:text-brand-300';
         form.reset();
       } catch {
         status.textContent = labels.error;
-        status.className = 'min-h-[1.25rem] text-sm text-red-600';
+        status.className = 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400';
       } finally {
         submit.disabled = false;
         submit.textContent = labels.submit;

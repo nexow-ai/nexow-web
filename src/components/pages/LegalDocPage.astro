@@ -39,10 +39,10 @@ const governingNote =
 
   <section class="container-page pb-24">
     <div class="mx-auto max-w-2xl">
-      <p class="font-mono text-sm text-ink-500">{copy.updated}</p>
+      <p class="font-mono text-sm text-ink-500 dark:text-ink-400">{copy.updated}</p>
       {
         showGoverningNote && governingNote && (
-          <p class="mt-4 rounded-lg border border-ink-900/8 bg-ink-50/80 px-4 py-3 text-sm leading-relaxed text-ink-600">
+          <p class="mt-4 rounded-lg border border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.02]/80 px-4 py-3 text-sm leading-relaxed text-ink-600 dark:text-ink-300">
             {governingNote}
           </p>
         )
@@ -51,10 +51,10 @@ const governingNote =
         {
           copy.sections.map((s) => (
             <div class="reveal">
-              <h2 class="font-display text-xl font-semibold text-ink-950">{s.h}</h2>
+              <h2 class="font-display text-xl font-semibold text-ink-950 dark:text-white">{s.h}</h2>
               <div class="mt-3 space-y-3">
                 {s.paragraphs.map((p) => (
-                  <p class="leading-relaxed text-ink-600">{p}</p>
+                  <p class="leading-relaxed text-ink-600 dark:text-ink-300">{p}</p>
                 ))}
               </div>
             </div>
