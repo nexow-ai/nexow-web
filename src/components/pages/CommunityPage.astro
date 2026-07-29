@@ -206,7 +206,7 @@ const hrefClaim = claimHandleAppUrl();
               href={communityGrowItemHref(f.icon)}
               target="_blank"
               rel="noopener noreferrer"
-              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 dark:border-white/8 bg-white dark:bg-white/[0.04] p-6 shadow-sm shadow-ink-950/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10"
+              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 bg-white p-6 shadow-sm shadow-ink-950/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40"
               data-motion="rise"
               style={`--d:${i * 0.06}s`}
             >
@@ -214,10 +214,10 @@ const hrefClaim = claimHandleAppUrl();
                 class="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
                 style="background:radial-gradient(circle, var(--color-brand-200), transparent 70%)"
               />
-              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-600 ring-1 ring-brand-200/80 dark:ring-brand-400/25 transition-transform duration-300 group-hover:scale-110">
+              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
                 <Icon name={f.icon} class="size-5" />
               </span>
-              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 dark:text-white transition-colors group-hover:text-brand-800 dark:group-hover:text-brand-300 dark:text-brand-300">{f.title}</h3>
+              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
             </a>
           ))
