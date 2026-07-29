@@ -239,10 +239,11 @@
 /* ------------------------------------------------------------------ *
  * Semantic surface tokens.
  *
- * The marketing pages are light; the home page opts into `.dark` (set on
- * <body> from Layout when `theme="dark"`). Anything drawn in a component
- * <style> block — the inline SVG diagrams especially — reads these instead of
- * hard-coding white/ink, so it flips with no per-component dark rules.
+ * Marketing pages are light by default. Opt into `.dark` via Layout
+ * `theme="dark"` when a page needs the terminal-style chrome. Anything drawn
+ * in a component <style> block — the inline SVG diagrams especially — reads
+ * these instead of hard-coding white/ink, so it flips with no per-component
+ * dark rules.
  *
  * Tailwind-classed markup keeps using explicit `dark:` variants, which stay
  * readable at the call site.

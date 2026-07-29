@@ -19,7 +19,7 @@ interface Props {
   type?: 'website' | 'article';
   schema?: Record<string, unknown>[];
   noindex?: boolean;
-  /** Page surface: 'dark' renders the terminal-style dark chrome (home). */
+  /** Page surface: 'dark' renders the terminal-style dark chrome. Default is light (marketing pages). */
   theme?: 'light' | 'dark';
   /** In-page section rail (right side, desktop). Omit to hide. */
   sections?: { id: string; label: string }[];

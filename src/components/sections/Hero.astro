@@ -29,26 +29,23 @@ const D = {
   id="hero"
   class="relative overflow-x-clip pb-16 pt-32 text-ink-950 sm:pb-24 sm:pt-40 dark:text-white"
 >
-  <!-- Backdrop. On the dark home page the page-wide dot field shows through,
-       so this layer only adds the coloured light on top of it. -->
+  <!-- Backdrop: soft brand auroras matching Features / PageHero language. -->
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <div
       data-motion="sink-lg"
-      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-35 blur-3xl dark:opacity-30"
-      style="background:radial-gradient(circle at 42% 40%, color-mix(in oklab, var(--color-brand-400) 60%, transparent), transparent 68%)"
+      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-60 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
     >
     </div>
     <div
       data-motion="rise-lg"
-      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-28 blur-3xl dark:opacity-26"
-      style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-accent-400) 55%, transparent), transparent 68%)"
+      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-40 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
     >
     </div>
-    <!-- The secondary accent, low and centred, so the three lights meet in the
-         middle of the fold instead of stacking on one side. -->
     <div
-      class="aurora-c absolute left-[38%] top-[38%] hidden h-[520px] w-[520px] rounded-full opacity-24 blur-3xl dark:block"
-      style="background:radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--color-plasma-500) 48%, transparent), transparent 66%)"
+      class="aurora-c absolute left-[38%] top-[38%] h-[520px] w-[520px] rounded-full opacity-35 blur-3xl"
+      style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
     >
     </div>
     <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
