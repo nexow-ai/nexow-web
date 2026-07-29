@@ -520,6 +520,59 @@
 .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.24s; }
 .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.30s; }
 
+/* ------------------------------------------------------------------ *
+ * Scroll motion — progress vars come from src/components/ScrollMotion.astro.
+ *
+ * Every opted-in element shares ONE composed transform, so tokens only set
+ * inputs and never overwrite each other. Defaults are no-ops, which is also
+ * what renders before JavaScript has written anything (and forever, without
+ * JavaScript or with reduced motion).
+ *
+ *   rise / sink      drift against the scroll        (--pc)
+ *   slide-l/-r       the same, horizontally          (--pc)
+ *   breathe          expand mid-screen, contract     (--pb)
+ *   tilt / turn      lean in 3D as it travels        (--pc)
+ *   depth            push away from the camera       (--pb)
+ *   dim              fade at the edges of the trip   (--pb)
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-motion] {
+    transform:
+      perspective(var(--m-persp, 1500px))
+      translate3d(
+        calc(var(--pc, 0) * var(--m-slide, 0px)),
+        calc(var(--pc, 0) * var(--m-shift, 0px)),
+        calc((1 - var(--pb, 1)) * var(--m-depth, 0px))
+      )
+      rotateX(calc(var(--pc, 0) * var(--m-tilt, 0deg)))
+      rotateY(calc(var(--pc, 0) * var(--m-turn, 0deg)))
+      scale(calc(var(--m-base, 1) + var(--pb, 1) * var(--m-zoom, 0)));
+  }
+
+  .js [data-motion~='rise'] { --m-shift: -26px; }
+  .js [data-motion~='rise-lg'] { --m-shift: -58px; }
+  .js [data-motion~='sink'] { --m-shift: 26px; }
+  .js [data-motion~='sink-lg'] { --m-shift: 58px; }
+  .js [data-motion~='slide-l'] { --m-slide: -34px; }
+  .js [data-motion~='slide-r'] { --m-slide: 34px; }
+
+  .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
+  .js [data-motion~='breathe-lg'] { --m-base: 0.918; --m-zoom: 0.082; }
+
+  .js [data-motion~='tilt'] { --m-tilt: 6deg; }
+  .js [data-motion~='tilt-lg'] { --m-tilt: 11deg; }
+  .js [data-motion~='turn'] { --m-turn: 4deg; }
+  .js [data-motion~='depth'] { --m-depth: -150px; }
+
+  .js [data-motion~='dim'] { opacity: calc(0.5 + var(--pb, 1) * 0.5); }
+
+  /* Small screens get the drift and the breathing but not the lean — a tilted
+   * card next to the viewport edge reads as a rendering bug on a phone. */
+  @media (max-width: 640px) {
+    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; }
+  }
+}
+
 /* Marquee for the connector / ticker strip. */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -555,6 +608,203 @@
 .animate-glow { animation: glow-pulse 6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .animate-glow { animation: none; opacity: 0.35; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Plans page — 3D tiers, hex medallions and the badge vault.
+ *
+ * Everything here composes its own transform and is deliberately kept clear of
+ * `[data-motion]` (which owns the scroll-driven transform above) so the two
+ * systems never fight over the same property on one element.
+ * ------------------------------------------------------------------ */
+
+/* Shared camera for a row of 3D cards. */
+.stage-3d {
+  perspective: 1600px;
+  perspective-origin: 50% 35%;
+}
+
+/* Pointer-tracked lean. The section script writes --rx/--ry (deg) while the
+ * pointer is over the card and clears them on leave, so the card eases back. */
+.tilt {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
+  transition:
+    transform 0.55s var(--ease-out-expo),
+    box-shadow 0.55s var(--ease-out-expo);
+  will-change: transform;
+}
+.tilt.is-tilting {
+  transition:
+    transform 0.1s linear,
+    box-shadow 0.4s var(--ease-out-expo);
+}
+
+/* Children that should float off the card face. */
+.tilt-layer {
+  transform: translateZ(var(--z, 34px));
+  transform-style: preserve-3d;
+}
+
+/* Specular sheen that tracks the pointer across the face. */
+.tilt-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+  background: radial-gradient(
+    440px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(255 255 255 / 0.18),
+    transparent 62%
+  );
+}
+.tilt:hover .tilt-sheen,
+.tilt:focus-within .tilt-sheen {
+  opacity: 1;
+}
+
+/* Touch and reduced-motion visitors get the layout, never the lean. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none !important;
+  }
+  .tilt-layer {
+    transform: none;
+  }
+}
+
+/* ---- hex medallion (mirrors the app's ReputationHex) ---- */
+.hex {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: linear-gradient(140deg, var(--from, #d9dee6), var(--to, #8e99a8));
+  color: var(--hex-ink, #131722);
+}
+.hex[data-locked='true'] {
+  background: linear-gradient(140deg, #e8ecf5, #cdd4e3);
+  color: #7e88a1;
+}
+.hex::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: hex-shine 3.6s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hex-shine {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  75%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hex::after {
+    display: none;
+  }
+}
+
+/* Breathing halo behind a rare / legendary medallion. */
+@keyframes aura-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+}
+.aura {
+  animation: aura-pulse 4.2s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .aura {
+    animation: none;
+    opacity: 0.45;
+  }
+}
+
+/* ---- badge vault flip cards ---- */
+.flip {
+  perspective: 900px;
+}
+.flip-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.flip:hover .flip-inner,
+.flip:focus-visible .flip-inner,
+.flip[data-flipped='true'] .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+/* Left-anchored bar fill, used by the level ladder and the simulator. */
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 1s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow {
+    animation: none;
+  }
+}
+
+/* Slowly rotating coin for the credit-rate figure. */
+@keyframes coin-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+.coin-spin {
+  transform-style: preserve-3d;
+  animation: coin-spin 7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-spin {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ *

@@ -87,7 +87,11 @@ const shots = t.shots.map((shot, i) => ({ ...shot, ...SHOT_MEDIA[i] }));
     </div>
 
     <div class="reveal mx-auto mt-7 max-w-6xl">
-      <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10">
+      <div
+        data-motion="breathe tilt"
+        style="--m-persp:1800px"
+        class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10"
+      >
         <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
           <span class="size-3 rounded-full bg-rose-500/80"></span>
           <span class="size-3 rounded-full bg-amber-400/80"></span>

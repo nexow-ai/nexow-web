@@ -33,7 +33,7 @@ const statusLabel = (s: 'live' | 'soon') => (s === 'live' ? t.liveLabel : t.soon
           <h3 class="mt-5 font-display text-xl font-semibold text-ink-950">{bots.title}</h3>
           <p class="mt-2 text-sm leading-relaxed text-ink-600">{bots.body}</p>
         </div>
-        <div class="min-w-0 flex-1 self-stretch">
+        <div class="min-w-0 flex-1 self-stretch" data-motion="breathe tilt" style="--m-persp:1200px">
           <BotFlowMock />
         </div>
       </div>

@@ -41,7 +41,11 @@ const live = CONNECTORS.filter((c) => c.status === 'live');
     </div>
 
     <!-- Logo wall of live connectors -->
-    <div class="reveal-stagger mx-auto mt-10 flex max-w-5xl flex-wrap justify-center gap-2.5">
+    <div
+      data-motion="rise"
+      style="--m-shift:-18px"
+      class="reveal-stagger mx-auto mt-10 flex max-w-5xl flex-wrap justify-center gap-2.5"
+    >
       {
         live.map((c) => (
           <span

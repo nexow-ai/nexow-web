@@ -41,7 +41,11 @@ const t = useContent(lang).home.privacy;
 
       <!-- Visual: workspace security panel -->
       <div class="reveal">
-        <div class="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10">
+        <div
+          data-motion="breathe tilt"
+          style="--m-persp:1200px"
+          class="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10"
+        >
           <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
             <Icon name="lock" class="size-4 text-brand-700" />
             <span class="font-mono text-xs text-ink-500">settings · workspace security</span>

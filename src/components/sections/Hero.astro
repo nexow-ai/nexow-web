@@ -26,6 +26,7 @@ const t = useContent(lang).home.hero;
     >
     </div>
     <div
+      data-motion="sink-lg"
       class="absolute inset-0 opacity-45 [mask-image:radial-gradient(80%_60%_at_50%_16%,black,transparent)]"
       style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 13%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
     ></div>
@@ -75,7 +76,9 @@ const t = useContent(lang).home.hero;
 
       <!-- Product mock -->
       <div class="reveal lg:pl-4">
-        <PlaygroundMock promptExample={t.promptExample} />
+        <div data-motion="tilt-lg rise depth" style="--m-persp:1100px">
+          <PlaygroundMock promptExample={t.promptExample} />
+        </div>
       </div>
     </div>
   </div>

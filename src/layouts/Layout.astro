@@ -2,6 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ScrollMotion from '../components/ScrollMotion.astro';
 import { ClientRouter, fade } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
 import { getPageAccent } from '../i18n/accent';
@@ -51,6 +52,8 @@ const mainFade = fade({ duration: '0.32s' });
     </main>
 
     <Footer />
+
+    <ScrollMotion />
 
     <script>
       // Scroll-reveal: re-init after client-side navigations (view transitions).
