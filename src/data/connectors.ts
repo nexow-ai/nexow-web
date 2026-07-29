@@ -1454,6 +1454,34 @@ export const CONNECTORS: Connector[] = [
     "notes": "Enterprise payment platform — chart authorization rates, settlement, and revenue across markets and channels."
   },
   {
+    "id": "afp",
+    "name": "AFP",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.afp.com/",
+    "logo": "/connectors/afp.svg",
+    "banner": "/connectors/banners/afp.png",
+    "logoFit": "cover",
+    "notes": "Agence France-Presse wire — bring French and international newswire headlines into agent research workflows."
+  },
+  {
+    "id": "al_jazeera",
+    "name": "Al Jazeera",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.aljazeera.com/",
+    "logo": "/connectors/al_jazeera.svg",
+    "banner": "/connectors/banners/al_jazeera.png",
+    "logoFit": "cover",
+    "notes": "Doha-based international broadcaster — track Middle East and global coverage for multilingual news widgets."
+  },
+  {
     "id": "redshift",
     "name": "Amazon Redshift",
     "category": "data",
@@ -1496,6 +1524,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Smart wallet for Ethereum and Starknet — track Argent accounts for balances and activity without custodial keys."
   },
   {
+    "id": "ap_news",
+    "name": "Associated Press",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://apnews.com/",
+    "logo": "/connectors/ap_news.svg",
+    "banner": "/connectors/banners/ap_news.png",
+    "logoFit": "cover",
+    "notes": "US-based wire service — pull AP headlines and worldwide desk coverage for news dashboards and agent briefings."
+  },
+  {
     "id": "backpack",
     "name": "Backpack",
     "category": "wallets",
@@ -1508,6 +1550,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/backpack.png",
     "logoFit": "cover",
     "notes": "xNFT wallet for Solana and Ethereum — monitor Backpack addresses for balances and recent on-chain activity."
+  },
+  {
+    "id": "bbc",
+    "name": "BBC News",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.bbc.com/news",
+    "logo": "/connectors/bbc.svg",
+    "banner": "/connectors/banners/bbc.png",
+    "logoFit": "cover",
+    "notes": "UK public broadcaster — follow world, business, and regional BBC News sections in live research boards."
   },
   {
     "id": "bitget_wallet",
@@ -1544,6 +1600,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
   {
+    "id": "cnn",
+    "name": "CNN",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.cnn.com/",
+    "logo": "/connectors/cnn.svg",
+    "banner": "/connectors/banners/cnn.png",
+    "logoFit": "cover",
+    "notes": "Global cable and digital news network — surface top stories and topic feeds on ops and research canvases."
+  },
+  {
     "id": "databricks",
     "name": "Databricks",
     "category": "data",
@@ -1570,6 +1640,34 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/datadog.png",
     "logoFit": "cover",
     "notes": "Cloud monitoring and security platform — stream infrastructure metrics, APM spans, and monitors into live operations widgets."
+  },
+  {
+    "id": "deutsche_welle",
+    "name": "Deutsche Welle",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.dw.com/",
+    "logo": "/connectors/deutsche_welle.svg",
+    "banner": "/connectors/banners/deutsche_welle.png",
+    "logoFit": "cover",
+    "notes": "Germany's international broadcaster — follow DW world news and analysis across languages on your boards."
+  },
+  {
+    "id": "el_pais",
+    "name": "El País",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://elpais.com/",
+    "logo": "/connectors/el_pais.svg",
+    "banner": "/connectors/banners/el_pais.png",
+    "logoFit": "cover",
+    "notes": "Leading Spanish-language newspaper — track Spain, Latin America, and world coverage in news widgets."
   },
   {
     "id": "etoro",
@@ -1621,6 +1719,34 @@ export const CONNECTORS: Connector[] = [
     "notes": "Full-service broker and wealth platform — bring brokerage balances, positions, and activity into finance dashboards."
   },
   {
+    "id": "financial_times",
+    "name": "Financial Times",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.ft.com/",
+    "logo": "/connectors/financial_times.svg",
+    "banner": "/connectors/banners/financial_times.png",
+    "logoFit": "cover",
+    "notes": "Global business newspaper — stream markets, companies, and macro coverage into trading and research dashboards."
+  },
+  {
+    "id": "france24",
+    "name": "France 24",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.france24.com/",
+    "logo": "/connectors/france24.svg",
+    "banner": "/connectors/banners/france24.png",
+    "logoFit": "cover",
+    "notes": "French international 24-hour news channel — stream global and European headlines into live briefing widgets."
+  },
+  {
     "id": "grafana",
     "name": "Grafana",
     "category": "data",
@@ -1647,6 +1773,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/keplr.png",
     "logoFit": "cover",
     "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
+  },
+  {
+    "id": "le_monde",
+    "name": "Le Monde",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.lemonde.fr/",
+    "logo": "/connectors/le_monde.svg",
+    "banner": "/connectors/banners/le_monde.png",
+    "logoFit": "cover",
+    "notes": "French newspaper of record — bring politics, economy, and international reporting into multilingual briefings."
   },
   {
     "id": "linear",
@@ -1689,6 +1829,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/metabase.png",
     "logoFit": "cover",
     "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
+  },
+  {
+    "id": "nhk",
+    "name": "NHK World",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www3.nhk.or.jp/nhkworld/",
+    "logo": "/connectors/nhk.svg",
+    "banner": "/connectors/banners/nhk.png",
+    "logoFit": "cover",
+    "notes": "Japan's public broadcaster international service — surface Asia-Pacific headlines and Japan desk coverage."
   },
   {
     "id": "notion",
@@ -1803,6 +1957,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
   },
   {
+    "id": "reuters",
+    "name": "Reuters",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.reuters.com/",
+    "logo": "/connectors/reuters.svg",
+    "banner": "/connectors/banners/reuters.png",
+    "logoFit": "cover",
+    "notes": "Global news wire — stream international headlines, markets coverage, and breaking stories into research and briefing widgets."
+  },
+  {
     "id": "revolut",
     "name": "Revolut",
     "category": "finance",
@@ -1877,6 +2045,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Solana wallet for SOL and SPL tokens — connect or paste addresses to track holdings watch-only alongside Phantom."
   },
   {
+    "id": "scmp",
+    "name": "South China Morning Post",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.scmp.com/",
+    "logo": "/connectors/scmp.svg",
+    "banner": "/connectors/banners/scmp.png",
+    "logoFit": "cover",
+    "notes": "Hong Kong English-language daily — follow Greater China and Asia news for regional research boards."
+  },
+  {
     "id": "stripe",
     "name": "Stripe",
     "category": "services",
@@ -1889,6 +2071,34 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/stripe.png",
     "logoFit": "cover",
     "notes": "Payments infrastructure — chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
+  },
+  {
+    "id": "nytimes",
+    "name": "The New York Times",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.nytimes.com/",
+    "logo": "/connectors/nytimes.svg",
+    "banner": "/connectors/banners/nytimes.png",
+    "logoFit": "cover",
+    "notes": "US newspaper of record — pull top stories, business, and world coverage into research and morning-brief widgets."
+  },
+  {
+    "id": "times_of_india",
+    "name": "The Times of India",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://timesofindia.indiatimes.com/",
+    "logo": "/connectors/times_of_india.svg",
+    "banner": "/connectors/banners/times_of_india.png",
+    "logoFit": "cover",
+    "notes": "India's largest English daily — surface South Asia headlines and business coverage for regional news boards."
   },
   {
     "id": "tradier",
@@ -1975,4 +2185,4 @@ export const CONNECTORS: Connector[] = [
 ];
 
 export const CONNECTOR_COUNT = CONNECTORS.length;
-export const CONNECTOR_LIVE_COUNT = CONNECTORS.filter((c) => c.status === 'live').length;
+export const CONNECTOR_LIVE_COUNT = CONNECTORS.filter((c) => c.status === "live").length;

@@ -11,7 +11,7 @@
     "logo": "/connectors/grafana.svg",
     "banner": "/connectors/banners/grafana.png",
     "logoFit": "cover",
-    "notes": "Open observability platform for metrics, logs, and traces \u2014 pull Grafana dashboards and alert state into Nexow ops boards."
+    "notes": "Open observability platform for metrics, logs, and traces — pull Grafana dashboards and alert state into Nexow ops boards."
   },
   {
     "id": "datadog",
@@ -25,7 +25,7 @@
     "logo": "/connectors/datadog.svg",
     "banner": "/connectors/banners/datadog.png",
     "logoFit": "cover",
-    "notes": "Cloud monitoring and security platform \u2014 stream infrastructure metrics, APM spans, and monitors into live operations widgets."
+    "notes": "Cloud monitoring and security platform — stream infrastructure metrics, APM spans, and monitors into live operations widgets."
   },
   {
     "id": "sentry",
@@ -39,7 +39,7 @@
     "logo": "/connectors/sentry.svg",
     "banner": "/connectors/banners/sentry.png",
     "logoFit": "cover",
-    "notes": "Application error monitoring \u2014 surface crash rates, issue trends, and release health on your ops dashboards."
+    "notes": "Application error monitoring — surface crash rates, issue trends, and release health on your ops dashboards."
   },
   {
     "id": "pagerduty",
@@ -53,7 +53,7 @@
     "logo": "/connectors/pagerduty.svg",
     "banner": "/connectors/banners/pagerduty.png",
     "logoFit": "cover",
-    "notes": "Incident response and on-call orchestration \u2014 show open incidents, services, and escalation status on a live ops board."
+    "notes": "Incident response and on-call orchestration — show open incidents, services, and escalation status on a live ops board."
   },
   {
     "id": "prometheus",
@@ -67,7 +67,7 @@
     "logo": "/connectors/prometheus.svg",
     "banner": "/connectors/banners/prometheus.png",
     "logoFit": "cover",
-    "notes": "Open-source metrics and alerting toolkit \u2014 query PromQL time series for infrastructure and app health widgets."
+    "notes": "Open-source metrics and alerting toolkit — query PromQL time series for infrastructure and app health widgets."
   },
   {
     "id": "databricks",
@@ -81,7 +81,7 @@
     "logo": "/connectors/databricks.svg",
     "banner": "/connectors/banners/databricks.png",
     "logoFit": "cover",
-    "notes": "Lakehouse platform for analytics and AI \u2014 read curated tables and feature datasets into research and dashboard widgets."
+    "notes": "Lakehouse platform for analytics and AI — read curated tables and feature datasets into research and dashboard widgets."
   },
   {
     "id": "redshift",
@@ -95,7 +95,7 @@
     "logo": "/connectors/redshift.svg",
     "banner": "/connectors/banners/redshift.png",
     "logoFit": "cover",
-    "notes": "AWS cloud data warehouse \u2014 query analytics marts and operational aggregates for dashboard and reporting widgets."
+    "notes": "AWS cloud data warehouse — query analytics marts and operational aggregates for dashboard and reporting widgets."
   },
   {
     "id": "looker",
@@ -109,7 +109,7 @@
     "logo": "/connectors/looker.svg",
     "banner": "/connectors/banners/looker.png",
     "logoFit": "cover",
-    "notes": "Google Cloud BI platform \u2014 connect Looker explores and Looks so agents and widgets reuse governed business metrics."
+    "notes": "Google Cloud BI platform — connect Looker explores and Looks so agents and widgets reuse governed business metrics."
   },
   {
     "id": "metabase",
@@ -123,7 +123,7 @@
     "logo": "/connectors/metabase.svg",
     "banner": "/connectors/banners/metabase.png",
     "logoFit": "cover",
-    "notes": "Open-source business intelligence \u2014 pull saved questions and dashboards into Nexow for ops and product reporting."
+    "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
   },
   {
     "id": "posthog",
@@ -137,7 +137,7 @@
     "logo": "/connectors/posthog.svg",
     "banner": "/connectors/banners/posthog.png",
     "logoFit": "cover",
-    "notes": "Product analytics and feature flags \u2014 chart funnels, retention, and event trends alongside your market and ops boards."
+    "notes": "Product analytics and feature flags — chart funnels, retention, and event trends alongside your market and ops boards."
   },
   {
     "id": "amplitude",
@@ -151,7 +151,7 @@
     "logo": "/connectors/amplitude.svg",
     "banner": "/connectors/banners/amplitude.png",
     "logoFit": "cover",
-    "notes": "Product analytics for growth teams \u2014 bring cohorts, conversion, and behavioral metrics into live dashboard widgets."
+    "notes": "Product analytics for growth teams — bring cohorts, conversion, and behavioral metrics into live dashboard widgets."
   },
   {
     "id": "notion",
@@ -165,7 +165,7 @@
     "logo": "/connectors/notion.svg",
     "banner": "/connectors/banners/notion.png",
     "logoFit": "cover",
-    "notes": "All-in-one workspace \u2014 sync pages, databases, and runbooks into knowledge-backed agents and ops dashboards."
+    "notes": "All-in-one workspace — sync pages, databases, and runbooks into knowledge-backed agents and ops dashboards."
   },
   {
     "id": "linear",
@@ -179,7 +179,7 @@
     "logo": "/connectors/linear.svg",
     "banner": "/connectors/banners/linear.png",
     "logoFit": "cover",
-    "notes": "Issue tracking built for product teams \u2014 surface cycles, priorities, and shipping velocity on operations boards."
+    "notes": "Issue tracking built for product teams — surface cycles, priorities, and shipping velocity on operations boards."
   },
   {
     "id": "slack",
@@ -193,7 +193,7 @@
     "logo": "/connectors/slack.svg",
     "banner": "/connectors/banners/slack.png",
     "logoFit": "cover",
-    "notes": "Team messaging for ops workflows \u2014 read channels and threads so bots and agents can monitor and brief from Slack."
+    "notes": "Team messaging for ops workflows — read channels and threads so bots and agents can monitor and brief from Slack."
   },
   {
     "id": "stripe",
@@ -207,7 +207,7 @@
     "logo": "/connectors/stripe.svg",
     "banner": "/connectors/banners/stripe.png",
     "logoFit": "cover",
-    "notes": "Payments infrastructure \u2014 chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
+    "notes": "Payments infrastructure — chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
   },
   {
     "id": "trezor",
@@ -221,7 +221,7 @@
     "logo": "/connectors/trezor.svg",
     "banner": "/connectors/banners/trezor.png",
     "logoFit": "cover",
-    "notes": "Hardware wallet for self-custody \u2014 watch Trezor public addresses for balances and activity without exposing keys to Nexow."
+    "notes": "Hardware wallet for self-custody — watch Trezor public addresses for balances and activity without exposing keys to Nexow."
   },
   {
     "id": "rainbow",
@@ -235,7 +235,7 @@
     "logo": "/connectors/rainbow.svg",
     "banner": "/connectors/banners/rainbow.png",
     "logoFit": "cover",
-    "notes": "Ethereum wallet built for everyday DeFi \u2014 connect or paste addresses to track holdings and recent activity watch-only."
+    "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
   },
   {
     "id": "exodus",
@@ -249,7 +249,7 @@
     "logo": "/connectors/exodus.svg",
     "banner": "/connectors/banners/exodus.png",
     "logoFit": "cover",
-    "notes": "Multi-asset desktop and mobile wallet \u2014 surface portfolio balances and transfers on ops and research boards."
+    "notes": "Multi-asset desktop and mobile wallet — surface portfolio balances and transfers on ops and research boards."
   },
   {
     "id": "rabby",
@@ -263,7 +263,7 @@
     "logo": "/connectors/rabby.svg",
     "banner": "/connectors/banners/rabby.png",
     "logoFit": "cover",
-    "notes": "Multi-chain browser wallet focused on clear transaction previews \u2014 watch EVM addresses and token balances in Nexow."
+    "notes": "Multi-chain browser wallet focused on clear transaction previews — watch EVM addresses and token balances in Nexow."
   },
   {
     "id": "safe",
@@ -277,7 +277,7 @@
     "logo": "/connectors/safe.svg",
     "banner": "/connectors/banners/safe.png",
     "logoFit": "cover",
-    "notes": "Smart-account multisig wallet (formerly Gnosis Safe) \u2014 monitor Safe treasuries, owners, and on-chain activity."
+    "notes": "Smart-account multisig wallet (formerly Gnosis Safe) — monitor Safe treasuries, owners, and on-chain activity."
   },
   {
     "id": "argent",
@@ -291,7 +291,7 @@
     "logo": "/connectors/argent.svg",
     "banner": "/connectors/banners/argent.png",
     "logoFit": "cover",
-    "notes": "Smart wallet for Ethereum and Starknet \u2014 track Argent accounts for balances and activity without custodial keys."
+    "notes": "Smart wallet for Ethereum and Starknet — track Argent accounts for balances and activity without custodial keys."
   },
   {
     "id": "keplr",
@@ -305,7 +305,7 @@
     "logo": "/connectors/keplr.svg",
     "banner": "/connectors/banners/keplr.png",
     "logoFit": "cover",
-    "notes": "Cosmos ecosystem wallet \u2014 watch Keplr addresses across Cosmos chains for balances and staking-related activity."
+    "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
   },
   {
     "id": "solflare",
@@ -319,7 +319,7 @@
     "logo": "/connectors/solflare.svg",
     "banner": "/connectors/banners/solflare.png",
     "logoFit": "cover",
-    "notes": "Solana wallet for SOL and SPL tokens \u2014 connect or paste addresses to track holdings watch-only alongside Phantom."
+    "notes": "Solana wallet for SOL and SPL tokens — connect or paste addresses to track holdings watch-only alongside Phantom."
   },
   {
     "id": "backpack",
@@ -333,7 +333,7 @@
     "logo": "/connectors/backpack.svg",
     "banner": "/connectors/banners/backpack.png",
     "logoFit": "cover",
-    "notes": "xNFT wallet for Solana and Ethereum \u2014 monitor Backpack addresses for balances and recent on-chain activity."
+    "notes": "xNFT wallet for Solana and Ethereum — monitor Backpack addresses for balances and recent on-chain activity."
   },
   {
     "id": "bitget_wallet",
@@ -347,7 +347,7 @@
     "logo": "/connectors/bitget_wallet.svg",
     "banner": "/connectors/banners/bitget_wallet.png",
     "logoFit": "cover",
-    "notes": "Multi-chain Web3 wallet from Bitget \u2014 watch public addresses for native and token balances across supported networks."
+    "notes": "Multi-chain Web3 wallet from Bitget — watch public addresses for native and token balances across supported networks."
   },
   {
     "id": "fidelity",
@@ -365,7 +365,7 @@
     "logo": "/connectors/fidelity.svg",
     "banner": "/connectors/banners/fidelity.png",
     "logoFit": "cover",
-    "notes": "Full-service broker and wealth platform \u2014 bring brokerage balances, positions, and activity into finance dashboards."
+    "notes": "Full-service broker and wealth platform — bring brokerage balances, positions, and activity into finance dashboards."
   },
   {
     "id": "wise",
@@ -381,7 +381,7 @@
     "logo": "/connectors/wise.svg",
     "banner": "/connectors/banners/wise.png",
     "logoFit": "cover",
-    "notes": "Cross-border payments and multi-currency accounts \u2014 chart transfers, balances, and FX rates on finance widgets."
+    "notes": "Cross-border payments and multi-currency accounts — chart transfers, balances, and FX rates on finance widgets."
   },
   {
     "id": "paypal",
@@ -395,7 +395,7 @@
     "logo": "/connectors/paypal.svg",
     "banner": "/connectors/banners/paypal.png",
     "logoFit": "cover",
-    "notes": "Global payments network \u2014 surface payouts, balances, and transaction volume on ops and finance boards."
+    "notes": "Global payments network — surface payouts, balances, and transaction volume on ops and finance boards."
   },
   {
     "id": "revolut",
@@ -413,7 +413,7 @@
     "logo": "/connectors/revolut.svg",
     "banner": "/connectors/banners/revolut.png",
     "logoFit": "cover",
-    "notes": "Digital banking and multi-currency cards \u2014 track account balances, cards, and FX activity in live widgets."
+    "notes": "Digital banking and multi-currency cards — track account balances, cards, and FX activity in live widgets."
   },
   {
     "id": "plaid",
@@ -427,7 +427,7 @@
     "logo": "/connectors/plaid.svg",
     "banner": "/connectors/banners/plaid.png",
     "logoFit": "cover",
-    "notes": "Open banking connectivity \u2014 link bank and brokerage accounts so agents and widgets read balances and transactions."
+    "notes": "Open banking connectivity — link bank and brokerage accounts so agents and widgets read balances and transactions."
   },
   {
     "id": "bloomberg",
@@ -447,7 +447,7 @@
     "logo": "/connectors/bloomberg.svg",
     "banner": "/connectors/banners/bloomberg.png",
     "logoFit": "cover",
-    "notes": "Terminal-grade market data and news \u2014 stream prices, curves, and headlines into research and trading dashboards."
+    "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
   {
     "id": "tradingview",
@@ -466,7 +466,7 @@
     "logo": "/connectors/tradingview.svg",
     "banner": "/connectors/banners/tradingview.png",
     "logoFit": "cover",
-    "notes": "Charts and market community data \u2014 pull symbols, watchlists, and alert context into Nexow research widgets."
+    "notes": "Charts and market community data — pull symbols, watchlists, and alert context into Nexow research widgets."
   },
   {
     "id": "etoro",
@@ -483,7 +483,7 @@
     "logo": "/connectors/etoro.svg",
     "banner": "/connectors/banners/etoro.png",
     "logoFit": "cover",
-    "notes": "Social trading broker for stocks and crypto \u2014 connect account data for positions, P&L, and copy-trade context."
+    "notes": "Social trading broker for stocks and crypto — connect account data for positions, P&L, and copy-trade context."
   },
   {
     "id": "tradier",
@@ -500,7 +500,7 @@
     "logo": "/connectors/tradier.svg",
     "banner": "/connectors/banners/tradier.png",
     "logoFit": "cover",
-    "notes": "Brokerage API for equities and options \u2014 stream quotes, positions, and order state into trading dashboards."
+    "notes": "Brokerage API for equities and options — stream quotes, positions, and order state into trading dashboards."
   },
   {
     "id": "adyen",
@@ -514,6 +514,216 @@
     "logo": "/connectors/adyen.svg",
     "banner": "/connectors/banners/adyen.png",
     "logoFit": "cover",
-    "notes": "Enterprise payment platform \u2014 chart authorization rates, settlement, and revenue across markets and channels."
+    "notes": "Enterprise payment platform — chart authorization rates, settlement, and revenue across markets and channels."
+  },
+  {
+    "id": "reuters",
+    "name": "Reuters",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.reuters.com/",
+    "logo": "/connectors/reuters.svg",
+    "banner": "/connectors/banners/reuters.png",
+    "logoFit": "cover",
+    "notes": "Global news wire — stream international headlines, markets coverage, and breaking stories into research and briefing widgets."
+  },
+  {
+    "id": "ap_news",
+    "name": "Associated Press",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://apnews.com/",
+    "logo": "/connectors/ap_news.svg",
+    "banner": "/connectors/banners/ap_news.png",
+    "logoFit": "cover",
+    "notes": "US-based wire service — pull AP headlines and worldwide desk coverage for news dashboards and agent briefings."
+  },
+  {
+    "id": "bbc",
+    "name": "BBC News",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.bbc.com/news",
+    "logo": "/connectors/bbc.svg",
+    "banner": "/connectors/banners/bbc.png",
+    "logoFit": "cover",
+    "notes": "UK public broadcaster — follow world, business, and regional BBC News sections in live research boards."
+  },
+  {
+    "id": "cnn",
+    "name": "CNN",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.cnn.com/",
+    "logo": "/connectors/cnn.svg",
+    "banner": "/connectors/banners/cnn.png",
+    "logoFit": "cover",
+    "notes": "Global cable and digital news network — surface top stories and topic feeds on ops and research canvases."
+  },
+  {
+    "id": "al_jazeera",
+    "name": "Al Jazeera",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.aljazeera.com/",
+    "logo": "/connectors/al_jazeera.svg",
+    "banner": "/connectors/banners/al_jazeera.png",
+    "logoFit": "cover",
+    "notes": "Doha-based international broadcaster — track Middle East and global coverage for multilingual news widgets."
+  },
+  {
+    "id": "afp",
+    "name": "AFP",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.afp.com/",
+    "logo": "/connectors/afp.svg",
+    "banner": "/connectors/banners/afp.png",
+    "logoFit": "cover",
+    "notes": "Agence France-Presse wire — bring French and international newswire headlines into agent research workflows."
+  },
+  {
+    "id": "deutsche_welle",
+    "name": "Deutsche Welle",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.dw.com/",
+    "logo": "/connectors/deutsche_welle.svg",
+    "banner": "/connectors/banners/deutsche_welle.png",
+    "logoFit": "cover",
+    "notes": "Germany's international broadcaster — follow DW world news and analysis across languages on your boards."
+  },
+  {
+    "id": "france24",
+    "name": "France 24",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.france24.com/",
+    "logo": "/connectors/france24.svg",
+    "banner": "/connectors/banners/france24.png",
+    "logoFit": "cover",
+    "notes": "French international 24-hour news channel — stream global and European headlines into live briefing widgets."
+  },
+  {
+    "id": "nhk",
+    "name": "NHK World",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www3.nhk.or.jp/nhkworld/",
+    "logo": "/connectors/nhk.svg",
+    "banner": "/connectors/banners/nhk.png",
+    "logoFit": "cover",
+    "notes": "Japan's public broadcaster international service — surface Asia-Pacific headlines and Japan desk coverage."
+  },
+  {
+    "id": "nytimes",
+    "name": "The New York Times",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.nytimes.com/",
+    "logo": "/connectors/nytimes.svg",
+    "banner": "/connectors/banners/nytimes.png",
+    "logoFit": "cover",
+    "notes": "US newspaper of record — pull top stories, business, and world coverage into research and morning-brief widgets."
+  },
+  {
+    "id": "financial_times",
+    "name": "Financial Times",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.ft.com/",
+    "logo": "/connectors/financial_times.svg",
+    "banner": "/connectors/banners/financial_times.png",
+    "logoFit": "cover",
+    "notes": "Global business newspaper — stream markets, companies, and macro coverage into trading and research dashboards."
+  },
+  {
+    "id": "scmp",
+    "name": "South China Morning Post",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.scmp.com/",
+    "logo": "/connectors/scmp.svg",
+    "banner": "/connectors/banners/scmp.png",
+    "logoFit": "cover",
+    "notes": "Hong Kong English-language daily — follow Greater China and Asia news for regional research boards."
+  },
+  {
+    "id": "el_pais",
+    "name": "El País",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://elpais.com/",
+    "logo": "/connectors/el_pais.svg",
+    "banner": "/connectors/banners/el_pais.png",
+    "logoFit": "cover",
+    "notes": "Leading Spanish-language newspaper — track Spain, Latin America, and world coverage in news widgets."
+  },
+  {
+    "id": "le_monde",
+    "name": "Le Monde",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.lemonde.fr/",
+    "logo": "/connectors/le_monde.svg",
+    "banner": "/connectors/banners/le_monde.png",
+    "logoFit": "cover",
+    "notes": "French newspaper of record — bring politics, economy, and international reporting into multilingual briefings."
+  },
+  {
+    "id": "times_of_india",
+    "name": "The Times of India",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://timesofindia.indiatimes.com/",
+    "logo": "/connectors/times_of_india.svg",
+    "banner": "/connectors/banners/times_of_india.png",
+    "logoFit": "cover",
+    "notes": "India's largest English daily — surface South Asia headlines and business coverage for regional news boards."
   }
 ]
