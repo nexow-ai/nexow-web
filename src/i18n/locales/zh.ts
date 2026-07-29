@@ -25,7 +25,6 @@ export const zh: SiteContent = {
           { label: '方案', href: '/plans' },
           { label: '连接器', href: '/connectors' },
           { label: '自动化', href: '/#automate' },
-          { label: '路线图', href: '/#roadmap' },
         ],
       },
       {

@@ -25,7 +25,6 @@ export const nl: SiteContent = {
           { label: 'Plannen', href: '/plans' },
           { label: 'Connectoren', href: '/connectors' },
           { label: 'Automatisering', href: '/#automate' },
-          { label: 'Routekaart', href: '/#roadmap' },
         ],
       },
       {
@@ -1307,7 +1306,7 @@ export const nl: SiteContent = {
   },
   blog: {
     meta: {
-      title: 'Blog — Nexow',
+      title: 'De blog — Nexow',
       description:
         'Gidsen en diepgravingen over het bouwen van marktdashboards met AI, het verbinden van live gegevens en handelsinstrumenten — van het team bij Nexow.',
     },

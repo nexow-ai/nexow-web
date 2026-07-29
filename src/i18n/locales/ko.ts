@@ -25,7 +25,6 @@ export const ko: SiteContent = {
           { label: '요금제', href: '/plans' },
           { label: '커넥터', href: '/connectors' },
           { label: '자동화', href: '/#automate' },
-          { label: '로드맵', href: '/#roadmap' },
         ],
       },
       {

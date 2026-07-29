@@ -25,7 +25,6 @@ export const de: SiteContent = {
           { label: 'Tarife', href: '/plans' },
           { label: 'Konnektoren', href: '/connectors' },
           { label: 'Automatisierungen', href: '/#automate' },
-          { label: 'Roadmap', href: '/#roadmap' },
         ],
       },
       {
@@ -1307,7 +1306,7 @@ export const de: SiteContent = {
   },
   blog: {
     meta: {
-      title: 'Blog — Nexow',
+      title: 'Der Blog — Nexow',
       description:
         'Guides und Deep-Dives zum Bauen von Markt-Dashboards mit KI, zum Verbinden von Live-Daten und zu Trading-Tooling — vom Team bei Nexow.',
     },

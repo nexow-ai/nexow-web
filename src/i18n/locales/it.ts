@@ -25,7 +25,6 @@ export const it: SiteContent = {
           { label: 'Piani', href: '/plans' },
           { label: 'Connettori', href: '/connectors' },
           { label: 'Automazioni', href: '/#automate' },
-          { label: 'Roadmap', href: '/#roadmap' },
         ],
       },
       {
@@ -1307,7 +1306,7 @@ export const it: SiteContent = {
   },
   blog: {
     meta: {
-      title: 'Blog — Nexow',
+      title: 'Il blog — Nexow',
       description:
         'Guide e approfondimenti sulla costruzione di dashboard di mercato con l’AI, sulla connessione ai dati in tempo reale e sugli strumenti di trading — dal team di Nexow.',
     },

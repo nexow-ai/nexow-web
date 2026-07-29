@@ -25,7 +25,6 @@ export const tr: SiteContent = {
           { label: 'Planlar', href: '/plans' },
           { label: 'Bağlantılar', href: '/connectors' },
           { label: 'Otomasyonlar', href: '/#automate' },
-          { label: 'Yol Haritası', href: '/#roadmap' },
         ],
       },
       {
@@ -432,45 +431,41 @@ export const tr: SiteContent = {
       ],
     },
     faq: {
-      eyebrow: 'SSS',
-      title: 'Sorular, Cevaplanmış',
-      subtitle: 'Uygulamayı başlatmadan önce bilmeniz gereken her şey.',
+      eyebrow: "SSS",
+      title: "Başlamadan önce sorular",
+      subtitle: "Nexow’un ne olduğu, nasıl çalıştığı ve maliyeti hakkında net yanıtlar.",
       items: [
         {
-          q: 'Nexow Nedir?',
-          a: 'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade dilde bir widget — grafik, tablo, ısı haritası veya sinyal — açıklarsınız ve Nexow kaynağını oluşturur, korumalı bir iframe içinde çalıştırır ve canlı pazar verilerini serbest biçimli bir tuvale akış yapılır. Bunun etrafında bulut botları, yapay zeka ajanları, Copilot ve bir yapıcı topluluğu ekler.',
+          q: "Nexow nedir?",
+          a: "Nexow bir widget tuvalidir. İhtiyacınızı sade dille anlatın; çalışan bir widget üretir — moodboard’lar, planlayıcılar, oyunlar, sosyal araçlar, veritabanları, piyasa panelleri veya özel iş akışları — düzenleyebilir, konuşmayla düzenleyebilir ve çalışma alanları arasında yeniden kullanabilirsiniz.",
         },
         {
-          q: 'Kod yazmayı Bilmek Gerekli mi?',
-          a: 'Hayır. Sade dilde istediğinizi açıklarsınız ve Nexow bunu sizin için yazar ve çalıştırır. Kod okursanız, her widget\'in kaynağı ve sürüm geçmişi incelemek ve iyileştirmek için mevcuttur.',
+          q: "Kod bilmem gerekir mi?",
+          a: "Hayır. Widget üretmek ve rafine etmek için doğal dil yeter. Kod okuyorsanız her widget’ın kaynağı, sürümleri ve günlükleri inceleme, geri alma veya ayarlama için hazırdır.",
         },
         {
-          q: 'Verilerim Özel mi? Hesap Gerekli mi?',
-          a: 'Hesap gerekmiyor. Nexow varsayılan olarak tamamen yerel olarak çalışır: kendi Anthropic API anahtarınızı eklersiniz ve widget oluşturma tarayıcınızda gerçekleşir; widget\'ler, sürümler ve günlükler IndexedDB\'de saklanır. Ücretsiz bir hesap her zaman isteğe bağlıdır — yapay zeka kredileri, bulut sinkronizasyonu ve topluluğu ekler, ancak %100 yerel olarak yapım yapmaya devam edebilirsiniz.',
+          q: "Hesap gerekir mi?",
+          a: "Olmadan da deneyebilirsiniz. Ücretsiz hesap başlangıç AI kredileri, cihazlar arası bulut senkronu, topluluk, itibar ve pazaryerini açar — kredi kartı gerekmez. Tamamen yerel mi istersiniz? Kendi Anthropic anahtarınızla üretimi tarayıcıda tutun.",
         },
         {
-          q: 'Hangi Piyasalar ve Mekanlar Destekleniyor?',
-          a: 'Nexow 45 canlı bağlantıya (katalogda 83) sahiptir; döviz (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), hisse senedi ve vadeli işlem (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), tahmin piyasaları (Kalshi, Polymarket), veri sağlayıcıları ve veritabanları (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) ve sosyal ortam kaynakları (X, YouTube, Discord, Telegram, Spotify) yayılır.',
+          q: "Nexow gizliliği nasıl ele alır?",
+          a: "Üretilen widget’lar kum sandbox çalışma zamanında çalışır, bağlayıcı kimlik bilgileri bağladığınız hizmetlerle sınırlıdır, sürümler ve günlükler çalışma alanınızda kalır. Bulut senkronu, widget’larınızın taşınabilir ve sizin kontrolünüzde kalması için tasarlanmıştır.",
         },
         {
-          q: 'Botlar ve Ajanlar Nedir?',
-          a: 'Botlar, verilerinizi izleyen ve sekmeleriniz kapalı olduğunda bile widget\'lerinize sinyaller ve uyarılar gönderen bulut otomasyonlarıdır — sade sözcüklerle bir uyarı açıklayın veya eşikler, % değişim, hareketli ortalama kesişmeleri ve bağlı bir broker hesabında yeni işlemler ile görsel bağlama yapın. Ajanlar, tam araç gereç (model, hafıza, beceriler, araçlar, bilgi, tetikleyiciler) ile yapay zekadır — bugün görsel araç yöneticisinde sizinki tasarlayın; bulut dağıtımı ve Copilot asistanı yakında gelecek.',
+          q: "Nexow yalnızca trading için mi?",
+          a: "Hayır. Trading panelleri canlı widget’lar için erken bir stres testiydi ama platform genel amaçlıdır: alışkanlık takipçileri, proje panoları, araştırma akışları, iç araçlar ve özel iş akışları aynı tuvalde çalışır.",
         },
         {
-          q: 'Topluluk ve Pazaryeri var mı?',
-          a: 'Topluluk canlı — ücretsiz hesap oluşturun, herkese açık @handle\'inizi talep edin, yapıcıları takip edin, beslemede yayınlayın ve widget\'leri başkalarının doğrudan kütüphanelerine ekleyebilmeleri için paylaşın. Widget\'ler satın almak ve satmak ile para kazanabileceğiniz denetlenmiş strateji sinyalleri için bir pazaryeri yakında gelecek.',
+          q: "Bağlayıcılar nedir?",
+          a: "Bağlayıcılar widget’ları canlı verilere bağlar — bugün veritabanları, cüzdanlar, sosyal uygulamalar, brokerlar, borsalar ve açık veri arasında 45+. CORS izin verdiğinde çağrılar doğrudan tarayıcıdan gider. Birçok widget bağlayıcıya ihtiyaç duymaz ve senkronlayana kadar durumu yerelde tutar.",
         },
         {
-          q: 'XP ve Ödüller Nedir?',
-          a: 'Nexow hesaplara oyunlaştırılmış bir katman ekliyor: widget\'ler yapıp, botlar çalıştırıp ve toplulukla paylaşmak XP kazanacak ve başarılar için rozetleri açacak — ve başarılar yapay zeka kullanımında harcayabileceğiniz ödül kredilerine dönüşecek. Yakında alıyor; erken hesaplar ilk sırada.',
+          q: "Botlar ve ajanlar nedir?",
+          a: "Botlar bulut gözcüleridir: bir kaynağı programa göre kontrol eder ve koşul doğru olduğunda sinyal veya uyarı yollar — sekme kapalı olsa bile. Ajanlar tam harness’li (model, bellek, beceriler, araçlar, bilgi, tetikleyiciler) AI işçileridir; araç döngüsünde akıl yürütür ve harekete geçer. Copilot çalışma alanının kendisini kurmanıza ve düzenlemenize yardım eder.",
         },
         {
-          q: 'Maliyeti Ne Kadar?',
-          a: 'Yapım yapmak için sonsuza dek ücretsiz — kendi anahtarınız ile yerel olarak veya ücretsiz bir hesapta 10.000 yapay zeka kredisi ayrılmış olarak. Ücretli planlar (Supporter ve Sponsor) aylık krediler ve daha yüksek bot ve ajan limitleri ekler ve Partner, özel altyapı gerektiren takımlar içindir. Ücretli kasa yakında gelecek; planlar sayfasına bakın.',
-        },
-        {
-          q: 'Hangi Yapay Zeka Modeli Nexow\'u Güçlendirir?',
-          a: 'Nexow, Anthropic SDK aracılığıyla Anthropic\'in Claude modellerine oluşturur — varsayılan olarak Claude Opus 4.8, daha hızlı ve daha ucuz oluşturma için Sonnet 4.6 ve Haiku 4.5. Özel modda kendi anahtarınız sağlarsınız, bu nedenle kullanım ve maliyetin tam kontrolünü sakla.',
+          q: "Ne kadar tutar?",
+          a: "Free tam widget tuvalini, kütüphaneyi, bulut senkronunu, 10 botu, 3 ajanı, topluluk erişimini ve kayıtta 10.000 AI kredisini içerir. Supporter ve Sponsor aylık kredi, daha yüksek otomasyon kotası ve premium görünüm ekler — ödeme yakında. Tam karşılaştırma için Planlar’a bakın.",
         },
       ],
     },
@@ -925,12 +920,36 @@ export const tr: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Plan Soruları',
+    faqTitle: "Planlar ve faturalama",
     faq: [
-      { q: 'Nexow Gerçekten Ücretsiz mi?', a: 'Evet. Sonsuza dek ücretsiz yapabilirsiniz — kendi Anthropic anahtarınız ile tamamen yerel çalıştırın (sadece kendi API kullanımınız için ödeme yaparsınız) veya platform modu açıldığında 10.000 yapay zeka kredisi ayıran ücretsiz hesap oluşturun, bu nedenle kendinize ait anahtar gerekmiyor.' },
-      { q: 'Krediler Nedir?', a: 'Krediler yapay zeka kullanımını ölçer — widget\'ler, bağlantılar, botlar ve Copilot yanıtları oluşturmak. Ücretsiz hesap başlangıç için 10.000 ayırır ve ücretli planlar aylık ödenek verir (Supporter\'de 50K, Sponsor\'de 800K). Kredi ölçüm platform modesi ile canlı gider ve istediğiniz zaman daha fazla satın alabilirsiniz.' },
-      { q: 'Ücretli Planlar Ne Zaman Başlayacak?', a: 'Supporter ve Sponsor tanımlanmış ve uygulamada gösterilir ama ücretli kasa yakında geliyor. Bugün herkes Ücretsiz\'te — faturalama açıldığında ilk olması için hesap oluşturun.' },
-      { q: 'Yıllık Ödeme Yapabilir miyim?', a: 'Evet. Yıllık Faturalama Aylık Ödemeye Karşı İki Ay Kazanır. İstediğiniz Zaman Aylık ve Yıllık Arasında Geçiş Yapabilirsiniz.' },
+      {
+        q: "Nexow gerçekten ücretsiz mi?",
+        a: "Evet. Free tam bir çalışma alanıdır — sınırsız ekran, widget ve bağlayıcı, yeniden kullanılabilir kütüphane, bulut senkronu, 10 bot, 3 ajan, topluluk ve itibar artı kayıtta ayrılan 10.000 AI kredisi. Ücretli planlar aylık kredi yenilemesi, daha yüksek kotalar ve premium görünüm ekler — çekirdek kilitli değildir.",
+      },
+      {
+        q: "Krediler nedir?",
+        a: "Krediler AI kullanımını ölçer: widget üretmek, konuşmayla düzenlemek, bağlantı oluşturmak ve Copilot kullanmak. Bir kredi, sağlayıcı maliyetinde bir Sonnet çıktı token’ına eşittir; bu yüzden fiyat seçtiğiniz modele bağlı değildir — Haiku bir krediyi yaklaşık 3 tokene uzatır; Opus yaklaşık 0,6’da tüketir. Free kayıtta 10.000 ayırır; Supporter ayda 115.000 verir; Sponsor 800.000 — paketleri istediğiniz zaman alabilirsiniz.",
+      },
+      {
+        q: "Ücretli planlar ne zaman başlar?",
+        a: "Supporter ve Sponsor tanımlı ve uygulamada gösteriliyor ama ücretli ödeme yakında. Bugün herkes Free’de — faturalama açıldığında önde olmak için hesap oluşturun.",
+      },
+      {
+        q: "Yıllık ödeyebilir miyim?",
+        a: "Evet. Yıllık faturalama aylığa göre iki ay ücretsiz verir — Supporter için yılda $99,90, Sponsor için $699,90. Aylık ile yıllık arasında istediğiniz zaman geçebilirsiniz.",
+      },
+      {
+        q: "İtibar nasıl hesaplanır?",
+        a: "İstemci tarafında, kendi etkinliğinizden — Nexow sizi sunucuda başkalarına karşı sıralamaz. Gönderi ve widget’lar 5’er puan, panolar 10, botlar 15, yayımlanan varlıklar 25, kurulumlar 10, takipler 3 — artı rozet bonusları (kademe başına 20, nadir 100, efsanevi 250). Seviyeler: Bronze, Silver 250, Gold 1.000, Platinum 5.000, Legend 20.000.",
+      },
+      {
+        q: "Rozetler plana bağlı mı?",
+        a: "Hayır. 34 rozetin tümü, beş seviye ve tüm topluluk katmanı Free’de. Planlar kapasite ve görünüm alır, asla statü — Free hesap Legend’a ulaşabilir.",
+      },
+      {
+        q: "Kredi ve token ödülleri ne zaman gelir?",
+        a: "Rozetler ve puanlar bugün canlı. Bunları kredilere ve NEXO yönetişim token’larına dönüştürmek Nexow DAO ile gelir; ilk oylama nihai takvimi onaylar. Bu sayfadaki sayılar sunduğumuz öneridir.",
+      },
     ],
   },
   connectorsPage: {
@@ -1042,7 +1061,7 @@ export const tr: SiteContent = {
     meta: {
       title: 'Blog — Nexow',
       description:
-        'Yapay Zeka ile Pazar Gösterge Panelleri Yapma, Canlı Veriye Bağlama ve Ticaret Araçları Hakkında Kılavuzlar ve Derinlemesine Dergiler — Nexow Ekibinden.',
+        'Yapay zeka ile piyasa panoları oluşturma, canlı veri bağlama ve ticaret araçları hakkında kılavuzlar ve derinlemesine yazılar — Nexow ekibinden.',
     },
     title: 'Nexow Blogu',
     subtitle: 'Yapay Zeka Tabanlı Pazar Araçları Yapma — Kılavuzlar, Derinlemesine Dergiler ve Ürün Notları.',

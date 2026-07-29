@@ -25,7 +25,6 @@ export const ms: SiteContent = {
           { label: 'Pelan', href: '/plans' },
           { label: 'Penyambung', href: '/connectors' },
           { label: 'Automasi', href: '/#automate' },
-          { label: 'Peta Jalan', href: '/#roadmap' },
         ],
       },
       {
@@ -432,45 +431,41 @@ export const ms: SiteContent = {
       ],
     },
     faq: {
-      eyebrow: 'Soalan Lazim',
-      title: 'Soalan, dijawab',
-      subtitle: 'Semua yang anda perlukan tahu sebelum anda melancarkan aplikasi.',
+      eyebrow: "Soalan Lazim",
+      title: "Soalan sebelum bermula",
+      subtitle: "Jawapan terus tentang apa itu Nexow, cara ia berfungsi, dan berapa kosnya.",
       items: [
         {
-          q: 'Apa itu Nexow?',
-          a: 'Nexow adalah ruang kerja asli AI untuk pasaran. Anda menerangkan widget — carta, jadual, peta haba atau isyarat — dalam bahasa biasa, dan Nexow menjana kod sumbernya, menjalankannya dalam iframe sandbok, dan mengalirkan data pasaran langsung ke kanvas bentuk bebas. Sekitarnya ia menambah bot awan, ejen AI, Copilot dan komuniti pembuat.',
+          q: "Apakah Nexow?",
+          a: "Nexow ialah kanvas widget. Huraikan keperluan anda dalam bahasa biasa dan ia menjana widget yang berfungsi — moodboard, perancang, permainan, alat sosial, pangkalan data, papan pasaran atau aliran kerja tersuai — yang boleh anda susun, edit melalui perbualan, dan guna semula merentas ruang kerja.",
         },
         {
-          q: 'Adakah saya perlu tahu cara mengod?',
-          a: 'Tidak. Anda menerangkan apa yang anda inginkan dalam bahasa biasa dan Nexow menulis dan menjalankan widget untuk anda. Jika anda membaca kod, sumber setiap widget dan sejarah versi tersedia untuk diperiksa dan disempurnakan.',
+          q: "Perlukah saya tahu mengekod?",
+          a: "Tidak. Bahasa semula jadi cukup untuk menjana dan memperhalusi widget. Jika anda membaca kod, sumber, versi dan log setiap widget tersedia untuk diperiksa, digulung balik atau dilaras.",
         },
         {
-          q: 'Adakah data saya swasta? Adakah saya memerlukan akaun?',
-          a: 'Tiada akaun diperlukan. Nexow berjalan sepenuhnya tempatan secara lalai: tambah kunci API Anthropic anda sendiri dan penghasilan widget berlaku di penyemak imbas anda, dengan widget, versi dan log disimpan dalam IndexedDB. Akaun percuma sentiasa pilihan — ia menambah kredit AI, segerak awan dan komuniti, tetapi anda boleh terus membina 100% tempatan.',
+          q: "Perlukah akaun?",
+          a: "Anda boleh mencuba Nexow tanpa akaun. Akaun percuma membuka kredit AI permulaan, sync awan merentas peranti, komuniti, reputasi dan marketplace — tanpa kad kredit. Lebih suka sepenuhnya tempatan? Bawa kunci Anthropic anda sendiri dan kekalkan penjanaan dalam pelayar.",
         },
         {
-          q: 'Pasaran dan tempat apa yang disokong?',
-          a: 'Nexow mempunyai 45 penyambung langsung (83 dalam katalog) merentasi FX (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ekuiti dan niaga hadapan (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), pasaran ramalan (Kalshi, Polymarket), pembekal data dan pangkalan data (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) dan suapan sosial (X, YouTube, Discord, Telegram, Spotify).',
+          q: "Bagaimana Nexow mengendalikan privasi?",
+          a: "Widget yang dijana berjalan dalam runtime kotak pasir, kelayakan penyambung terhad kepada perkhidmatan yang anda sambungkan, dan versi serta log kekal dengan ruang kerja anda. Sync awan direka supaya widget anda kekal mudah alih dan di bawah kawalan anda.",
         },
         {
-          q: 'Apa itu bot dan ejen?',
-          a: 'Bot adalah automasi awan yang memantau data anda dan menembak isyarat dan amaran ke widget anda walaupun tab anda ditutup — terangkan amaran dalam perkataan biasa atau sambungkannya secara visual dengan ambang, perubahan %, persilangan purata bergerak dan perdagangan baru dalam akaun broker yang disambungkan. Ejen adalah AI dengan tali kendali lengkap (model, memori, kemahiran, alatan, pengetahuan, pencetus) — reka bentuk anda hari ini dalam pembina tali kendali visual; penyebaran awan dan pembantu Copilot akan datang segera.',
+          q: "Adakah Nexow hanya untuk trading?",
+          a: "Tidak. Papan pemuka trading ialah ujian tekanan awal untuk widget langsung, tetapi platform ini tujuan umum: penjejak tabiat, papan projek, suapan penyelidikan, alat dalaman dan aliran kerja tersuai semuanya berjalan pada kanvas yang sama.",
         },
         {
-          q: 'Adakah ada komuniti dan pasaran?',
-          a: 'Komuniti langsung — buat akaun percuma, tuntut @handle awam anda, ikuti pembuat, pos ke suapan, dan kongsi widget yang boleh ditambah oleh orang lain terus ke perpustakaan mereka. Pasaran untuk membeli dan menjual widget dan isyarat strategi yang diaudit yang boleh anda menang akan datang seterusnya.',
+          q: "Apakah penyambung?",
+          a: "Penyambung menyambungkan widget kepada data langsung — 45+ hari ini merentas pangkalan data, dompet, apl sosial, broker, bursa dan data terbuka. Di mana CORS membenarkan, panggilan boleh berjalan terus dari pelayar. Banyak widget tidak memerlukan penyambung dan menyimpan keadaan secara tempatan sehingga anda sync.",
         },
         {
-          q: 'Apa itu XP dan ganjaran?',
-          a: 'Nexow menambah lapisan gamifikasi ke akaun: membina widget, menjalankan bot dan berkongsi dengan komuniti akan menang XP dan buka lencana untuk pencapaian — dan pencapaian akan ubah menjadi kredit ganjaran yang boleh anda belanjakan semasa penggunaan AI. Ia bergulir segera; akaun awal adalah baris depan.',
+          q: "Apakah bot dan ejen?",
+          a: "Bot ialah pemerhati awan: mereka menyemak sumber mengikut jadual dan menghantar isyarat atau amaran apabila syarat benar — walaupun tab ditutup. Ejen ialah pekerja AI dengan harness penuh (model, memori, kemahiran, alatan, pengetahuan, pencetus) yang menaakul dalam gelung alatan dan bertindak. Copilot membantu anda bina dan susun ruang kerja itu sendiri.",
         },
         {
-          q: 'Berapa harganya?',
-          a: 'Percuma selamanya untuk membina — secara tempatan dengan kunci anda sendiri, atau dengan 10,000 kredit AI yang dikhaskan pada akaun percuma. Pelan berbayar (Penyokong dan Penaja) menambah kredit bulanan dan had bot dan ejen yang lebih tinggi, dan Rakan adalah untuk pasukan yang memerlukan infrastruktur swasta. Pembayaran berbayar akan datang segera; lihat halaman pelan.',
-        },
-        {
-          q: 'Model AI mana yang kuasa Nexow?',
-          a: 'Nexow menjana dengan model Claude Anthropic melalui SDK Anthropic — Claude Opus 4.8 secara lalai, dengan Sonnet 4.6 dan Haiku 4.5 untuk penghasilan yang lebih cepat dan lebih murah. Dalam mod swasta anda membekalkan kunci anda sendiri, jadi anda kekal dalam kawalan penuh penggunaan dan kos.',
+          q: "Berapa kosnya?",
+          a: "Free merangkumi kanvas widget penuh, perpustakaan, sync awan, 10 bot, 3 ejen, akses komuniti dan 10,000 kredit AI semasa daftar. Supporter dan Sponsor menambah kredit bulanan, kuota automasi lebih tinggi dan rupa premium — pembayaran akan datang tidak lama lagi. Lihat Pelan untuk perbandingan penuh.",
         },
       ],
     },
@@ -925,12 +920,36 @@ export const ms: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Soalan pelan',
+    faqTitle: "Pelan & bil",
     faq: [
-      { q: 'Adakah Nexow benar-benar percuma?', a: 'Ya. Anda boleh membina percuma selamanya — jalankan sepenuhnya tempatan dengan kunci Anthropic anda sendiri (anda hanya bayar penggunaan API anda sendiri), atau buat akaun percuma yang menempah 10,000 kredit AI untuk apabila mod platform terbuka, jadi tiada kunci anda sendiri diperlukan.' },
-      { q: 'Apa itu kredit?', a: 'Kredit meter penggunaan AI — menjana widget, pautan, bot dan balas Copilot. Akaun percuma menempah 10,000 untuk mula, dan pelan berbayar memberikan elaun bulanan (50K pada Penyokong, 800K pada Penaja). Metering kredit hidup dengan mod platform, dan anda boleh beli lebih banyak bila saja.' },
-      { q: 'Bilakah pelan berbayar dilancarkan?', a: 'Penyokong dan Penaja ditakrifkan dan ditunjukkan dalam aplikasi, tetapi pembayaran berbayar akan datang segera. Semua orang berada pada Percuma hari ini — buat akaun untuk menjadi yang pertama apabila pembilangan terbuka.' },
-      { q: 'Bolehkah saya bayar tahunan?', a: 'Ya. Pembilangan tahunan memberikan anda dua bulan percuma berbanding membayar bulanan. Anda boleh tukar antara bulanan dan tahunan pada bila-bila masa.' },
+      {
+        q: "Adakah Nexow benar-benar percuma?",
+        a: "Ya. Free ialah ruang kerja penuh — skrin, widget dan penyambung tanpa had, perpustakaan boleh guna semula, sync awan, 10 bot, 3 ejen, komuniti dan reputasi, ditambah 10,000 kredit AI yang ditempah semasa daftar. Pelan berbayar menambah muat semula kredit bulanan, kuota lebih tinggi dan rupa premium — teras tidak digate.",
+      },
+      {
+        q: "Apakah kredit?",
+        a: "Kredit mengukur penggunaan AI: menjana widget, mengedit melalui perbualan, mencipta pautan dan menggunakan Copilot. Satu kredit bersamaan satu token output Sonnet kos pembekal, jadi harga tidak bergantung pada model yang dipilih — Haiku meregangkan kredit kepada kira-kira 3 token; Opus menggunakannya dalam kira-kira 0.6. Free menempah 10,000 semasa daftar; Supporter memberi 115,000 sebulan; Sponsor 800,000 — dan anda boleh beli pek bila-bila masa.",
+      },
+      {
+        q: "Bila pelan berbayar dilancarkan?",
+        a: "Supporter dan Sponsor ditakrifkan dan dipaparkan dalam apl, tetapi pembayaran berbayar akan datang tidak lama lagi. Semua orang pada Free hari ini — buat akaun untuk berada di hadapan apabila bil dibuka.",
+      },
+      {
+        q: "Bolehkah saya bayar tahunan?",
+        a: "Ya. Bil tahunan memberi anda dua bulan percuma berbanding bulanan — $99.90 setahun untuk Supporter, $699.90 untuk Sponsor. Anda boleh tukar antara bulanan dan tahunan bila-bila masa.",
+      },
+      {
+        q: "Bagaimana reputasi dikira?",
+        a: "Di pihak klien, daripada aktiviti anda sendiri — Nexow tidak ranking anda berbanding orang lain pada pelayan. Siaran dan widget 5 mata setiap satu, papan 10, bot 15, aset diterbitkan 25, pemasangan 10, pengikut 3 — ditambah bonus lencana (20 setiap peringkat, 100 jarang, 250 legenda). Tahap: Bronze, Silver pada 250, Gold pada 1,000, Platinum pada 5,000, Legend pada 20,000.",
+      },
+      {
+        q: "Adakah lencana terikat pada pelan?",
+        a: "Tidak. Semua 34 lencana, lima tahap dan lapisan komuniti penuh tersedia pada Free. Pelan membeli kapasiti dan rupa, bukan status — akaun Free boleh mencapai Legend.",
+      },
+      {
+        q: "Bila ganjaran kredit dan token tiba?",
+        a: "Lencana dan mata sudah hidup hari ini. Menukarkannya kepada kredit dan token tadbir urus NEXO datang bersama Nexow DAO; undian pertama meratifikasi jadual akhir. Nombor pada halaman ini ialah cadangan yang kami komitmenkan.",
+      },
     ],
   },
   connectorsPage: {
@@ -1040,7 +1059,7 @@ export const ms: SiteContent = {
   },
   blog: {
     meta: {
-      title: 'Blog — Nexow',
+      title: 'Blog Nexow',
       description:
         'Panduan dan penggalian mendalam tentang membina papan pemuka pasaran dengan AI, menyambung data langsung, dan alatan perdagangan — daripada pasukan di Nexow.',
     },

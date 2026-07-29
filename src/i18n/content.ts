@@ -624,6 +624,38 @@ import { tr } from './locales/tr';
 
 export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, nl, pt, zh, ja, ar, he, ko, ru, uk, ms, el, tr };
 
+/**
+ * Deep-merge locale content onto English so incomplete translations still
+ * resolve (e.g. a missing `rewards` or `plansPage.matrix` block) instead of
+ * crashing pages at build/runtime. Arrays from the locale replace English.
+ */
+function mergeContent<T>(base: T, override: T): T {
+  if (override === null || override === undefined) return base;
+  if (Array.isArray(override)) return override;
+  if (typeof override !== 'object' || typeof base !== 'object' || base === null) {
+    return override;
+  }
+  const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const [key, value] of Object.entries(override as Record<string, unknown>)) {
+    if (value === undefined) continue;
+    const current = out[key];
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      current &&
+      typeof current === 'object' &&
+      !Array.isArray(current)
+    ) {
+      out[key] = mergeContent(current, value);
+    } else {
+      out[key] = value;
+    }
+  }
+  return out as T;
+}
+
 export function useContent(lang: Lang): SiteContent {
-  return content[lang];
+  if (lang === 'en') return content.en;
+  return mergeContent(content.en, content[lang]);
 }

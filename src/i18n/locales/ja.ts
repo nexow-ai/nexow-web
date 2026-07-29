@@ -25,7 +25,6 @@ export const ja: SiteContent = {
           { label: 'プラン', href: '/plans' },
           { label: 'コネクタ', href: '/connectors' },
           { label: 'オートメーション', href: '/#automate' },
-          { label: 'ロードマップ', href: '/#roadmap' },
         ],
       },
       {

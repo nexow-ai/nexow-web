@@ -25,7 +25,6 @@ export const ru: SiteContent = {
           { label: 'Планы', href: '/plans' },
           { label: 'Коннекторы', href: '/connectors' },
           { label: 'Автоматизация', href: '/#automate' },
-          { label: 'Дорожная карта', href: '/#roadmap' },
         ],
       },
       {

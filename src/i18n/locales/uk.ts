@@ -25,7 +25,6 @@ export const uk: SiteContent = {
           { label: 'Плани', href: '/plans' },
           { label: 'Коннектори', href: '/connectors' },
           { label: 'Автоматизація', href: '/#automate' },
-          { label: 'Дорожна карта', href: '/#roadmap' },
         ],
       },
       {
