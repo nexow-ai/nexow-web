@@ -23,7 +23,7 @@ const subtitle = Astro.props.subtitle ?? home.subtitle;
 const dark = tone === 'dark';
 ---
 
-<section id="faq" class:list={['py-20 sm:py-24', dark && 'bg-ink-950 text-white']}>
+<section id="faq" class:list={['py-20 sm:py-24', dark && 'text-white']}>
   <div class="container-page">
     <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} tone={tone} />
 
@@ -32,7 +32,7 @@ const dark = tone === 'dark';
         'reveal mx-auto mt-10 max-w-3xl divide-y rounded-2xl border',
         dark
           ? 'divide-white/8 border-white/10 bg-white/[0.02]'
-          : 'divide-ink-900/8 border-ink-900/8 bg-white',
+          : 'divide-ink-900/8 dark:divide-white/8 border-ink-900/8 dark:border-white/8 bg-white dark:bg-white/[0.04]',
       ]}
     >
       {
@@ -42,7 +42,7 @@ const dark = tone === 'dark';
               <span
                 class:list={[
                   'font-display text-base font-semibold',
-                  dark ? 'text-white' : 'text-ink-950',
+                  dark ? 'text-white' : 'text-ink-950 dark:text-white',
                 ]}
               >
                 {item.q}
@@ -50,7 +50,7 @@ const dark = tone === 'dark';
               <span
                 class:list={[
                   'inline-flex size-7 shrink-0 items-center justify-center rounded-full transition-transform duration-300 group-open:rotate-180',
-                  dark ? 'bg-white/8 text-ink-300' : 'bg-ink-900/5 text-ink-500',
+                  dark ? 'bg-white/8 text-ink-300' : 'bg-ink-900/5 dark:bg-white/8 text-ink-500 dark:text-ink-400',
                 ]}
               >
                 <Icon name="chevron" class="size-4" />
@@ -59,7 +59,7 @@ const dark = tone === 'dark';
             <p
               class:list={[
                 'pb-5 pr-11 text-sm leading-relaxed',
-                dark ? 'text-ink-400' : 'text-ink-600',
+                dark ? 'text-ink-400 dark:text-ink-500' : 'text-ink-600 dark:text-ink-300',
               ]}
             >
               {item.a}

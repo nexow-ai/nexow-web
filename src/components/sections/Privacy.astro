@@ -10,29 +10,29 @@ const { lang } = Astro.props;
 const t = useContent(lang).home.privacy;
 ---
 
-<section class="relative overflow-hidden border-y border-ink-900/5 bg-[#f7fbfb] py-20 text-ink-950 sm:py-24">
+<section class="relative overflow-x-clip border-y border-ink-900/5 bg-[#f7fbfb] py-20 text-ink-950 sm:py-24 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
   <div class="pointer-events-none absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100),transparent_60%)] opacity-60 blur-2xl"></div>
   <div class="container-page relative">
     <div class="grid items-center gap-14 lg:grid-cols-2">
       <!-- Copy -->
       <div class="reveal max-w-xl">
-        <span class="eyebrow inline-flex items-center gap-2 text-brand-700">
+        <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
           <span class="h-px w-6 bg-brand-500/50"></span>
           {t.eyebrow}
         </span>
         <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]">
           {t.title}
         </h2>
-        <p class="mt-5 text-lg leading-relaxed text-ink-600">{t.body}</p>
+        <p class="mt-5 text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.body}</p>
 
         <ul class="mt-8 space-y-3.5">
           {
             t.points.map((p) => (
               <li class="flex items-start gap-3">
-                <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
+                <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 dark:bg-brand-400/12 text-brand-700 dark:text-brand-300 ring-1 ring-brand-200/80 dark:ring-brand-400/25">
                   <Icon name="check" class="size-3.5" />
                 </span>
-                <span class="text-sm leading-relaxed text-ink-700">{p}</span>
+                <span class="text-sm leading-relaxed text-ink-700 dark:text-ink-200">{p}</span>
               </li>
             ))
           }
@@ -44,35 +44,35 @@ const t = useContent(lang).home.privacy;
         <div
           data-motion="breathe tilt"
           style="--m-persp:1200px"
-          class="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10"
+          class="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-xl shadow-ink-950/10 dark:shadow-black/50"
         >
-          <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
-            <Icon name="lock" class="size-4 text-brand-700" />
-            <span class="font-mono text-xs text-ink-500">settings · workspace security</span>
-            <span class="ml-auto rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700">scoped</span>
+          <div class="flex items-center gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 py-3">
+            <Icon name="lock" class="size-4 text-brand-700 dark:text-brand-300" />
+            <span class="font-mono text-xs text-ink-500 dark:text-ink-400">settings · workspace security</span>
+            <span class="ml-auto rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:text-brand-300">scoped</span>
           </div>
           <div class="space-y-3 p-5 font-mono text-xs">
             <div class="flex items-center justify-between">
-              <span class="text-ink-500">credential vault</span>
-              <span class="text-ink-700">encrypted</span>
+              <span class="text-ink-500 dark:text-ink-400">credential vault</span>
+              <span class="text-ink-700 dark:text-ink-200">encrypted</span>
             </div>
-            <div class="h-px bg-ink-900/8"></div>
+            <div class="h-px bg-ink-900/8 dark:bg-white/8"></div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500">widget runtime</span>
-              <span class="inline-flex items-center gap-1.5 text-brand-700"><span class="size-1.5 rounded-full bg-brand-500"></span>sandboxed</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="text-ink-500">widgets · versions · logs</span>
-              <span class="text-ink-700">workspace history</span>
+              <span class="text-ink-500 dark:text-ink-400">widget runtime</span>
+              <span class="inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-300"><span class="size-1.5 rounded-full bg-brand-500"></span>sandboxed</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500">connections</span>
-              <span class="text-ink-700">least privilege</span>
+              <span class="text-ink-500 dark:text-ink-400">widgets · versions · logs</span>
+              <span class="text-ink-700 dark:text-ink-200">workspace history</span>
             </div>
-            <div class="h-px bg-ink-900/8"></div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500">sync status</span>
-              <span class="text-lg font-bold text-brand-700">ready</span>
+              <span class="text-ink-500 dark:text-ink-400">connections</span>
+              <span class="text-ink-700 dark:text-ink-200">least privilege</span>
+            </div>
+            <div class="h-px bg-ink-900/8 dark:bg-white/8"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-ink-500 dark:text-ink-400">sync status</span>
+              <span class="text-lg font-bold text-brand-700 dark:text-brand-300">ready</span>
             </div>
           </div>
         </div>

@@ -28,7 +28,24 @@ import Icon from './Icon.astro';
     </span>
   </div>
 
-  <div class="relative h-80 overflow-hidden bg-ink-950/60">
+  <!-- Configurable toolbar tray -->
+  <div class="flex h-8 items-center gap-1.5 border-b border-white/6 bg-ink-900/80 px-3">
+    {[
+      { icon: 'sparkles', label: 'add' },
+      { icon: 'grid', label: 'layout' },
+      { icon: 'history', label: 'undo' },
+      { icon: 'lock', label: 'lock' },
+      { icon: 'sync', label: 'sync' },
+    ].map((a) => (
+      <span class="inline-flex items-center gap-1 rounded-md border border-white/8 bg-white/[0.03] px-1.5 py-0.5 font-mono text-[0.52rem] text-ink-300">
+        <Icon name={a.icon} class="size-2.5 text-brand-300" />
+        {a.label}
+      </span>
+    ))}
+    <span class="ml-auto font-mono text-[0.5rem] uppercase tracking-wider text-ink-500">toolbar</span>
+  </div>
+
+  <div class="relative h-72 overflow-hidden bg-ink-950/60">
     <div class="bg-grid absolute inset-0 opacity-35"></div>
     <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/35" viewBox="0 0 520 320" preserveAspectRatio="none">
       <path d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 5" />
@@ -92,5 +109,19 @@ import Icon from './Icon.astro';
         </div>
       </div>
     </section>
+
+    <!-- Dock pill -->
+    <div class="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/12 bg-white/10 px-2 py-1 shadow-lg shadow-black/40 backdrop-blur">
+      {[
+        { icon: 'chat', tip: 'copilot' },
+        { icon: 'users', tip: 'community' },
+        { icon: 'bell', tip: 'notices' },
+        { icon: 'mail', tip: 'messages' },
+      ].map((d) => (
+        <span class="inline-flex size-6 items-center justify-center rounded-full bg-ink-950/50 text-ink-200" title={d.tip}>
+          <Icon name={d.icon} class="size-3" />
+        </span>
+      ))}
+    </div>
   </div>
 </div>

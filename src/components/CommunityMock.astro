@@ -48,11 +48,26 @@ import Icon from './Icon.astro';
       </div>
     </div>
 
-    <!-- Premium workflow row -->
+    <!-- Realtime DM row -->
+    <div class="flex items-center gap-2.5 rounded-xl border border-ink-900/10 bg-white px-3 py-2.5">
+      <span class="relative inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-100 font-display text-xs font-bold text-brand-800">
+        A
+        <span class="absolute -right-0.5 -bottom-0.5 size-2.5 rounded-full bg-brand-500 ring-2 ring-white"></span>
+      </span>
+      <div class="min-w-0 leading-tight">
+        <p class="font-mono text-xs text-ink-900">@ada</p>
+        <p class="truncate font-mono text-[0.6rem] text-ink-500">typing a reply…</p>
+      </div>
+      <span class="ml-auto inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 ring-1 ring-brand-200/80">
+        <Icon name="mail" class="size-3" /> live
+      </span>
+    </div>
+
+    <!-- Marketplace row -->
     <div class="flex items-center gap-2.5 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2.5">
-      <Icon name="signal" class="size-4 shrink-0 text-sky-700" />
-      <span class="font-mono text-xs text-ink-700">@ada published a planner flow</span>
-      <span class="ml-auto font-mono text-[0.65rem] text-brand-700">premium</span>
+      <Icon name="store" class="size-4 shrink-0 text-sky-700" />
+      <span class="font-mono text-xs text-ink-700">new theme in marketplace</span>
+      <span class="ml-auto font-mono text-[0.65rem] text-brand-700">install</span>
     </div>
   </div>
 </div>

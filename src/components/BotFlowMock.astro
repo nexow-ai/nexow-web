@@ -14,13 +14,13 @@ const nodes = [
 ---
 
 <div
-  class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10"
+  class="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-xl shadow-ink-950/10 dark:shadow-black/50"
   aria-hidden="true"
 >
-  <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
-    <Icon name="bot" class="size-4 text-brand-600" />
-    <span class="font-mono text-xs text-ink-500">bots · flow</span>
-    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700">
+  <div class="flex items-center gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 py-3">
+    <Icon name="bot" class="size-4 text-brand-600 dark:text-brand-300" />
+    <span class="font-mono text-xs text-ink-500 dark:text-ink-400">bots · flow</span>
+    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:text-brand-300">
       <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>running
     </span>
   </div>
@@ -30,13 +30,13 @@ const nodes = [
       {
         nodes.map((n, i) => (
           <li>
-            <div class="flex items-center gap-3 rounded-xl border border-ink-900/10 bg-[#f7fbfb] px-3 py-2.5">
-              <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
+            <div class="flex items-center gap-3 rounded-xl border border-ink-900/10 dark:border-white/10 bg-[#f7fbfb] dark:bg-white/[0.02] px-3 py-2.5">
+              <span class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-400/12 text-brand-700 dark:text-brand-300 ring-1 ring-brand-200/80 dark:ring-brand-400/25">
                 <Icon name={n.icon} class="size-4" />
               </span>
               <div class="min-w-0">
-                <p class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">{n.tag}</p>
-                <p class="truncate font-mono text-xs text-ink-700">{n.label}</p>
+                <p class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400 dark:text-ink-500">{n.tag}</p>
+                <p class="truncate font-mono text-xs text-ink-700 dark:text-ink-200">{n.label}</p>
               </div>
             </div>
             {i < nodes.length - 1 && (
@@ -47,10 +47,10 @@ const nodes = [
       }
     </ol>
 
-    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-brand-200 bg-brand-50 px-3 py-2.5">
-      <Icon name="bell" class="size-4 shrink-0 text-brand-600" />
-      <span class="font-mono text-xs text-ink-700">2 habits still open before <span class="text-brand-700">9pm</span></span>
-      <span class="ml-auto font-mono text-[0.6rem] text-ink-500">now</span>
+    <div class="mt-4 flex items-center gap-2.5 rounded-xl border border-brand-200 dark:border-brand-400/30 bg-brand-50 dark:bg-brand-400/12 px-3 py-2.5">
+      <Icon name="bell" class="size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+      <span class="font-mono text-xs text-ink-700 dark:text-ink-200">2 habits still open before <span class="text-brand-700 dark:text-brand-300">9pm</span></span>
+      <span class="ml-auto font-mono text-[0.6rem] text-ink-500 dark:text-ink-400">now</span>
     </div>
   </div>
 </div>

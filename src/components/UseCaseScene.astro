@@ -269,7 +269,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     fill: none;
   }
   .core-disc {
-    fill: color-mix(in oklab, var(--color-brand-50) 92%, white);
+    fill: color-mix(in oklab, var(--color-brand-50) 92%, transparent);
     stroke: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
     stroke-width: 1.3;
   }
@@ -420,7 +420,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
     62%,
     88% {
-      fill: color-mix(in oklab, var(--color-brand-50) 90%, white);
+      fill: color-mix(in oklab, var(--color-brand-50) 90%, transparent);
       stroke: var(--color-brand-500);
     }
   }
@@ -439,7 +439,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
   }
   .tile {
-    fill: color-mix(in oklab, var(--color-brand-500) 12%, white);
+    fill: color-mix(in oklab, var(--color-brand-500) 12%, transparent);
     stroke: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
     stroke-width: 1;
     animation: tile-lit 3.4s ease-in-out infinite;
@@ -448,10 +448,10 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
   @keyframes tile-lit {
     0%,
     100% {
-      fill: color-mix(in oklab, var(--color-brand-500) 9%, white);
+      fill: color-mix(in oklab, var(--color-brand-500) 9%, transparent);
     }
     45% {
-      fill: color-mix(in oklab, var(--color-brand-500) 34%, white);
+      fill: color-mix(in oklab, var(--color-brand-500) 34%, transparent);
     }
   }
 
@@ -492,7 +492,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
     55% {
       stroke: var(--color-brand-500);
-      fill: color-mix(in oklab, var(--color-brand-50) 85%, white);
+      fill: color-mix(in oklab, var(--color-brand-50) 85%, transparent);
     }
   }
 
@@ -537,7 +537,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
   }
   .block {
-    fill: color-mix(in oklab, var(--color-brand-500) 16%, white);
+    fill: color-mix(in oklab, var(--color-brand-500) 16%, transparent);
     stroke: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
     stroke-width: 1;
     transform-box: fill-box;
@@ -606,7 +606,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     stroke-linecap: round;
   }
   .body {
-    fill: color-mix(in oklab, var(--color-ink-900) 12%, white);
+    fill: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
     stroke: color-mix(in oklab, var(--color-ink-900) 22%, transparent);
     stroke-width: 1;
   }
@@ -629,7 +629,7 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
   }
   .body.up {
-    fill: color-mix(in oklab, var(--color-brand-500) 30%, white);
+    fill: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
     stroke: var(--color-brand-500);
   }
   .breakout {

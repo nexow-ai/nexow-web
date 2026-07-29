@@ -10,15 +10,15 @@ interface Props {
 const { eyebrow, title, subtitle, align = 'center', tone = 'light', class: className = '' } = Astro.props;
 
 const alignCls = align === 'center' ? 'mx-auto text-center items-center' : 'items-start text-left';
-const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950';
-const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600';
+const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950 dark:text-white';
+const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-300';
 ---
 
 <div class:list={['flex max-w-2xl flex-col reveal', alignCls, className]}>
   {
     eyebrow && (
-      <span class="eyebrow mb-3 inline-flex items-center gap-2 text-brand-600">
-        <span class="h-px w-6 bg-brand-500/50"></span>
+      <span class="eyebrow mb-3 inline-flex items-center gap-2 text-brand-600 dark:text-brand-300">
+        <span class="h-px w-6 bg-brand-500/50 dark:bg-brand-400/60"></span>
         {eyebrow}
       </span>
     )

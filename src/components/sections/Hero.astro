@@ -10,27 +10,47 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
+
+/** Entrance order. The headline leads, everything else follows it up. */
+const D = {
+  badge: '0.05s',
+  line1: '0.14s',
+  line2: '0.22s',
+  line3: '0.30s',
+  kicker: '0.40s',
+  sub: '0.48s',
+  cta: '0.56s',
+  note: '0.64s',
+  mock: '0.30s',
+};
 ---
 
-<section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-18">
-  <!-- Backdrop: soft workspace wash + quiet grid -->
+<section
+  class="relative overflow-x-clip pb-16 pt-32 text-ink-950 sm:pb-24 sm:pt-40 dark:text-white"
+>
+  <!-- Backdrop. On the dark home page the page-wide dot field shows through,
+       so this layer only adds the coloured light on top of it. -->
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <div
-      class="aurora-a absolute -top-48 left-[4%] h-[620px] w-[620px] rounded-full opacity-35 blur-3xl"
-      style="background:radial-gradient(circle at 42% 40%, color-mix(in oklab, var(--color-brand-200) 72%, white), transparent 68%)"
-    >
-    </div>
-    <div
-      class="aurora-b absolute -top-36 right-[0%] h-[680px] w-[680px] rounded-full opacity-28 blur-3xl"
-      style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-sky-200) 70%, white), transparent 68%)"
-    >
-    </div>
-    <div
       data-motion="sink-lg"
-      class="absolute inset-0 opacity-45 [mask-image:radial-gradient(80%_60%_at_50%_16%,black,transparent)]"
-      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 13%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
-    ></div>
-    <div class="hairline-gold absolute inset-x-0 bottom-0 opacity-60"></div>
+      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-35 blur-3xl dark:opacity-30"
+      style="background:radial-gradient(circle at 42% 40%, color-mix(in oklab, var(--color-brand-400) 60%, transparent), transparent 68%)"
+    >
+    </div>
+    <div
+      data-motion="rise-lg"
+      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-28 blur-3xl dark:opacity-26"
+      style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-accent-400) 55%, transparent), transparent 68%)"
+    >
+    </div>
+    <!-- The secondary accent, low and centred, so the three lights meet in the
+         middle of the fold instead of stacking on one side. -->
+    <div
+      class="aurora-c absolute left-[38%] top-[38%] hidden h-[520px] w-[520px] rounded-full opacity-24 blur-3xl dark:block"
+      style="background:radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--color-plasma-500) 48%, transparent), transparent 66%)"
+    >
+    </div>
+    <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
   </div>
 
   <div class="container-page relative">
@@ -41,41 +61,66 @@ const t = useContent(lang).home.hero;
           href={SITE.appUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="group inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3.5 text-sm font-medium text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300"
+          class="enter group inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3.5 text-sm font-medium text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300 dark:border-white/12 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:border-brand-400/40"
+          style={`--enter-delay:${D.badge}`}
         >
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700">
-            <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>
+          <span
+            class="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700 dark:bg-brand-400/15 dark:text-brand-300"
+          >
+            <span class="size-1.5 animate-pulse rounded-full bg-brand-500 dark:bg-brand-400"></span>
             {t.badge}
           </span>
           <Icon name="arrow" class="size-3.5 text-ink-400 transition-transform group-hover:translate-x-0.5" />
         </a>
 
-        <h1 class="mt-7 font-display text-5xl font-semibold leading-[1.04] tracking-tight text-ink-950 sm:text-6xl lg:text-[4.1rem]">
-          {t.titleLead}<br />
-          <span class="text-gradient">{t.titleGradient}</span><br />
-          {t.titleTail}
+        <h1
+          class="mt-7 font-display text-[2.7rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
+        >
+          <span class="enter block" style={`--enter-delay:${D.line1}`}>{t.titleLead}</span>
+          <span class="enter block" style={`--enter-delay:${D.line2}`}>
+            <span class="text-gradient-live">{t.titleGradient}</span>
+          </span>
+          <span class="enter block" style={`--enter-delay:${D.line3}`}>{t.titleTail}</span>
         </h1>
 
-        <p class="mt-6 max-w-lg text-lg leading-relaxed text-ink-600">
+        {
+          t.titleKicker && (
+            <p
+              class="enter mt-5 flex items-center gap-3 font-display text-lg font-medium text-ink-500 sm:text-xl dark:text-ink-300"
+              style={`--enter-delay:${D.kicker}`}
+            >
+              <span class="rule-gradient hidden h-px w-10 shrink-0 sm:block" />
+              {t.titleKicker}
+            </p>
+          )
+        }
+
+        <p
+          class="enter mt-6 max-w-lg text-lg leading-relaxed text-ink-600 dark:text-ink-300"
+          style={`--enter-delay:${D.sub}`}
+        >
           {t.subtitle}
         </p>
 
-        <div class="mt-9 flex flex-wrap items-center gap-3">
+        <div class="enter mt-9 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
           <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
             {t.ctaPrimary}
           </Button>
-          <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
+          <Button href="#forge" variant="secondary" size="lg" icon="sparkles">
             {t.ctaSecondary}
           </Button>
         </div>
 
-        <p class="mt-7 font-mono text-xs leading-relaxed text-ink-500">
+        <p
+          class="enter mt-7 font-mono text-xs leading-relaxed text-ink-500 dark:text-ink-400"
+          style={`--enter-delay:${D.note}`}
+        >
           {t.note}
         </p>
       </div>
 
       <!-- Product mock -->
-      <div class="reveal lg:pl-4">
+      <div class="enter lg:pl-4" style={`--enter-delay:${D.mock}`}>
         <div data-motion="tilt-lg rise depth" style="--m-persp:1100px">
           <PlaygroundMock promptExample={t.promptExample} />
         </div>
