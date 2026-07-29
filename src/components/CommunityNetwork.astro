@@ -1,30 +1,60 @@
 ---
 /**
- * Large decorative community network for the hero — nodes linked by drawing
- * paths, soft pulses, and a light pointer-reactive parallax. Pauses when
- * `.is-offscreen` (ScrollMotion) or prefers-reduced-motion.
+ * Community hero atmosphere — soft light planes and a few refined arcs.
+ * Spacious, brand-first; no constellation / wire-graph clutter.
+ * Pauses when `.is-offscreen` (ScrollMotion) or prefers-reduced-motion.
  */
 ---
 
 <div
-  class="community-net pointer-events-none absolute inset-0 overflow-hidden"
+  class="community-aura pointer-events-none absolute inset-0 overflow-hidden"
   aria-hidden="true"
   data-motion="dim"
-  data-community-net
+  data-community-aura
 >
-  <svg class="absolute left-1/2 top-8 h-[min(72vw,560px)] w-[min(140%,920px)] -translate-x-1/2" viewBox="0 0 920 520" fill="none">
+  <!-- Soft glow planes -->
+  <div
+    class="caura-plane caura-plane--a absolute left-1/2 top-[-8%] size-[min(92vw,720px)] -translate-x-1/2 rounded-full opacity-70 blur-3xl"
+    style="background:radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--color-brand-200) 75%, transparent), transparent 68%)"
+  >
+  </div>
+  <div
+    class="caura-plane caura-plane--b absolute left-[8%] top-[18%] size-[min(55vw,380px)] rounded-full opacity-45 blur-3xl"
+    style="background:radial-gradient(circle at 40% 40%, color-mix(in oklab, var(--color-sky-200) 70%, transparent), transparent 70%)"
+  >
+  </div>
+  <div
+    class="caura-plane caura-plane--c absolute right-[4%] top-[12%] size-[min(58vw,400px)] rounded-full opacity-40 blur-3xl"
+    style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-accent-200) 65%, transparent), transparent 70%)"
+  >
+  </div>
+
+  <!-- Refined horizon arcs — premium, quiet -->
+  <svg
+    class="caura-svg absolute left-1/2 top-[6%] h-[min(58vw,420px)] w-[min(118%,880px)] -translate-x-1/2"
+    viewBox="0 0 880 420"
+    fill="none"
+  >
     <defs>
-      <linearGradient id="cnet-wire" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.55"></stop>
-        <stop offset="50%" stop-color="var(--color-accent-400)" stop-opacity="0.45"></stop>
-        <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.35"></stop>
+      <linearGradient id="caura-arc" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
+        <stop offset="28%" stop-color="var(--color-brand-400)" stop-opacity="0.45"></stop>
+        <stop offset="50%" stop-color="var(--color-sky-400)" stop-opacity="0.55"></stop>
+        <stop offset="72%" stop-color="var(--color-accent-400)" stop-opacity="0.4"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0"></stop>
       </linearGradient>
-      <radialGradient id="cnet-node" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0.95"></stop>
-        <stop offset="100%" stop-color="var(--color-brand-500)" stop-opacity="0.2"></stop>
+      <linearGradient id="caura-arc-soft" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0"></stop>
+        <stop offset="50%" stop-color="var(--color-brand-400)" stop-opacity="0.28"></stop>
+        <stop offset="100%" stop-color="var(--color-sky-300)" stop-opacity="0"></stop>
+      </linearGradient>
+      <radialGradient id="caura-core" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0.55"></stop>
+        <stop offset="55%" stop-color="var(--color-brand-400)" stop-opacity="0.18"></stop>
+        <stop offset="100%" stop-color="var(--color-brand-500)" stop-opacity="0"></stop>
       </radialGradient>
-      <filter id="cnet-blur" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="8" result="b"></feGaussianBlur>
+      <filter id="caura-soft" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="6" result="b"></feGaussianBlur>
         <feMerge>
           <feMergeNode in="b"></feMergeNode>
           <feMergeNode in="SourceGraphic"></feMergeNode>
@@ -32,172 +62,180 @@
       </filter>
     </defs>
 
-    <g class="cnet-parallax" style="transform: translate3d(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 8px), 0)">
-      <!-- Soft constellation backdrop -->
-      <circle cx="460" cy="210" r="180" fill="var(--color-brand-200)" opacity="0.12" class="cnet-bloom"></circle>
-      <circle cx="620" cy="160" r="110" fill="var(--color-accent-200)" opacity="0.1" class="cnet-bloom cnet-bloom--late"></circle>
+    <!-- Soft core light behind the headline -->
+    <ellipse class="caura-core" cx="440" cy="168" rx="160" ry="90" fill="url(#caura-core)"></ellipse>
 
-      <!-- Wires (draw in) -->
-      <path class="cnet-wire" pathLength="1" d="M140 120 C 240 80 320 100 400 160"></path>
-      <path class="cnet-wire cnet-wire--2" pathLength="1" d="M780 100 C 680 70 560 90 500 150"></path>
-      <path class="cnet-wire cnet-wire--3" pathLength="1" d="M160 360 C 280 300 360 280 450 240"></path>
-      <path class="cnet-wire cnet-wire--4" pathLength="1" d="M760 340 C 660 300 560 260 500 230"></path>
-      <path class="cnet-wire cnet-wire--5" pathLength="1" d="M300 80 C 380 140 420 180 460 210"></path>
-      <path class="cnet-wire cnet-wire--6" pathLength="1" d="M620 380 C 540 320 500 280 460 230"></path>
+    <!-- Wide horizon bowls -->
+    <path
+      class="caura-arc"
+      pathLength="1"
+      d="M80 210 C 220 110 360 90 440 90 C 520 90 660 110 800 210"
+      stroke="url(#caura-arc)"
+      stroke-width="1.6"
+      stroke-linecap="round"
+    >
+    </path>
+    <path
+      class="caura-arc caura-arc--2"
+      pathLength="1"
+      d="M140 248 C 260 168 360 148 440 148 C 520 148 620 168 740 248"
+      stroke="url(#caura-arc-soft)"
+      stroke-width="1.2"
+      stroke-linecap="round"
+    >
+    </path>
+    <path
+      class="caura-arc caura-arc--3"
+      pathLength="1"
+      d="M210 286 C 300 230 380 210 440 210 C 500 210 580 230 670 286"
+      stroke="url(#caura-arc-soft)"
+      stroke-width="1"
+      stroke-linecap="round"
+      opacity="0.7"
+    >
+    </path>
 
-      <!-- Traveling packets -->
-      <circle r="3.5" fill="var(--color-brand-400)" filter="url(#cnet-blur)" class="cnet-packet">
-        <animateMotion dur="5.5s" repeatCount="indefinite" path="M140 120 C 240 80 320 100 400 160"></animateMotion>
-      </circle>
-      <circle r="3" fill="var(--color-accent-400)" opacity="0.9" class="cnet-packet">
-        <animateMotion dur="6.2s" begin="1.1s" repeatCount="indefinite" path="M780 100 C 680 70 560 90 500 150"></animateMotion>
-      </circle>
-      <circle r="2.6" fill="var(--color-sky-400)" class="cnet-packet">
-        <animateMotion dur="7s" begin="2s" repeatCount="indefinite" path="M160 360 C 280 300 360 280 450 240"></animateMotion>
-      </circle>
-
-      <!-- Nodes -->
-      {
-        [
-          [140, 120, 9],
-          [300, 80, 7],
-          [780, 100, 8],
-          [160, 360, 7],
-          [760, 340, 8],
-          [620, 380, 6.5],
-          [460, 210, 14],
-          [400, 160, 6],
-          [500, 150, 6],
-          [450, 240, 5.5],
-        ].map(([x, y, r], i) => (
-          <g class="cnet-node" style={`--d:${(i * 0.18).toFixed(2)}s`} transform={`translate(${x} ${y})`}>
-            <circle r={r * 2.4} fill="url(#cnet-node)" opacity="0.25" class="cnet-halo"></circle>
-            <circle r={r} fill="url(#cnet-node)"></circle>
-            {i === 6 && (
-              <circle r="22" stroke="var(--color-brand-400)" stroke-width="1" stroke-dasharray="3 7" opacity="0.35" class="cnet-ring"></circle>
-            )}
-          </g>
-        ))
-      }
-    </g>
+    <!-- Quiet accent marks (not a graph) -->
+    <circle class="caura-dot" cx="440" cy="90" r="3.2" fill="var(--color-brand-400)" filter="url(#caura-soft)"></circle>
+    <circle class="caura-dot caura-dot--late" cx="300" cy="132" r="2.2" fill="var(--color-sky-400)" opacity="0.7"></circle>
+    <circle class="caura-dot caura-dot--late" cx="580" cy="132" r="2.2" fill="var(--color-accent-400)" opacity="0.65"></circle>
   </svg>
+
+  <!-- Soft fade so copy stays crisp -->
+  <div
+    class="absolute inset-0"
+    style="background:radial-gradient(65% 50% at 50% 28%, transparent 20%, color-mix(in oklab, white 55%, transparent) 78%, white 100%)"
+  >
+  </div>
 </div>
 
-<script>
-  let abort: AbortController | undefined;
+<style>
+  .caura-plane {
+    will-change: transform, opacity;
+  }
+  .caura-plane--a {
+    animation: caura-drift-a 22s ease-in-out infinite;
+  }
+  .caura-plane--b {
+    animation: caura-drift-b 26s ease-in-out infinite;
+  }
+  .caura-plane--c {
+    animation: caura-drift-c 30s ease-in-out infinite;
+  }
 
-  function initCommunityNet() {
-    abort?.abort();
-    abort = new AbortController();
-    const { signal } = abort;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  .caura-core {
+    animation: caura-breathe 10s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
 
-    const roots = document.querySelectorAll<HTMLElement>('[data-community-net]');
-    for (const root of roots) {
-      const section = root.closest('section') ?? root.parentElement;
-      if (!section) continue;
-      section.addEventListener(
-        'pointermove',
-        (e) => {
-          const r = section.getBoundingClientRect();
-          const mx = ((e.clientX - r.left) / r.width) * 2 - 1;
-          const my = ((e.clientY - r.top) / r.height) * 2 - 1;
-          root.style.setProperty('--mx', mx.toFixed(3));
-          root.style.setProperty('--my', my.toFixed(3));
-        },
-        { signal, passive: true },
-      );
-      section.addEventListener(
-        'pointerleave',
-        () => {
-          root.style.setProperty('--mx', '0');
-          root.style.setProperty('--my', '0');
-        },
-        { signal },
-      );
+  .caura-arc {
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: caura-draw 2.2s var(--ease-out-expo) 0.15s forwards;
+  }
+  .caura-arc--2 {
+    animation-delay: 0.35s;
+  }
+  .caura-arc--3 {
+    animation-delay: 0.55s;
+  }
+
+  .caura-dot {
+    animation: caura-dot-in 1s var(--ease-out-expo) 0.9s both;
+  }
+  .caura-dot--late {
+    animation-delay: 1.15s;
+  }
+
+  @keyframes caura-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes caura-dot-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes caura-breathe {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+  }
+  @keyframes caura-drift-a {
+    0%,
+    100% {
+      transform: translate3d(-50%, 0, 0) scale(1);
+      opacity: 0.65;
+    }
+    50% {
+      transform: translate3d(-50%, 2%, 0) scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  @keyframes caura-drift-b {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate3d(3%, -2%, 0);
+      opacity: 0.55;
+    }
+  }
+  @keyframes caura-drift-c {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 0.35;
+    }
+    50% {
+      transform: translate3d(-2%, 3%, 0);
+      opacity: 0.5;
     }
   }
 
-  document.addEventListener('astro:page-load', initCommunityNet);
-</script>
-
-<style>
-  .cnet-parallax {
-    transition: transform 0.45s var(--ease-out-expo);
-    will-change: transform;
-  }
-  .cnet-wire {
-    stroke: url(#cnet-wire);
-    stroke-width: 1.4;
-    fill: none;
-    stroke-linecap: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: cnet-draw 1.8s var(--ease-out-expo) forwards;
-  }
-  .cnet-wire--2 { animation-delay: 0.12s; }
-  .cnet-wire--3 { animation-delay: 0.22s; }
-  .cnet-wire--4 { animation-delay: 0.32s; }
-  .cnet-wire--5 { animation-delay: 0.18s; }
-  .cnet-wire--6 { animation-delay: 0.28s; }
-
-  .cnet-node {
-    animation: cnet-pop 0.9s var(--ease-out-expo) both;
-    animation-delay: var(--d, 0s);
-  }
-  .cnet-halo {
-    animation: cnet-pulse 3.6s ease-in-out infinite;
-    animation-delay: var(--d, 0s);
-    transform-origin: center;
-    transform-box: fill-box;
-  }
-  .cnet-ring {
-    transform-origin: center;
-    transform-box: fill-box;
-    animation: cnet-spin 28s linear infinite;
-  }
-  .cnet-bloom {
-    animation: cnet-bloom 10s ease-in-out infinite;
-  }
-  .cnet-bloom--late {
-    animation-delay: -4s;
-  }
-
-  @keyframes cnet-draw {
-    to { stroke-dashoffset: 0; }
-  }
-  @keyframes cnet-pop {
-    from { opacity: 0; transform: scale(0.4); }
-    to { opacity: 1; transform: none; }
-  }
-  @keyframes cnet-pulse {
-    0%, 100% { opacity: 0.18; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.25); }
-  }
-  @keyframes cnet-spin {
-    to { transform: rotate(360deg); }
-  }
-  @keyframes cnet-bloom {
-    0%, 100% { opacity: 0.1; transform: scale(1); }
-    50% { opacity: 0.18; transform: scale(1.06); }
-  }
-
-  .is-offscreen .cnet-wire,
-  .is-offscreen .cnet-node,
-  .is-offscreen .cnet-halo,
-  .is-offscreen .cnet-ring,
-  .is-offscreen .cnet-bloom,
-  .is-offscreen .cnet-packet {
+  .is-offscreen .caura-plane,
+  .is-offscreen .caura-core,
+  .is-offscreen .caura-arc,
+  .is-offscreen .caura-dot {
     animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cnet-wire { animation: none; stroke-dashoffset: 0; }
-    .cnet-node,
-    .cnet-halo,
-    .cnet-ring,
-    .cnet-bloom { animation: none; }
-    .cnet-packet { display: none; }
-    .cnet-parallax { transition: none; }
+    .caura-plane,
+    .caura-core,
+    .caura-dot {
+      animation: none;
+    }
+    .caura-arc {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .caura-svg {
+      opacity: 0.75;
+      top: 2%;
+    }
+    .caura-plane--b,
+    .caura-plane--c {
+      opacity: 0.28;
+    }
   }
 </style>
