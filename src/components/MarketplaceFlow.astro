@@ -1,0 +1,95 @@
+---
+/**
+ * Decorative USDC-on-Solana purchase rail: order → Phantom → verify → install.
+ * Illustrative only (aria-hidden).
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  steps: { n: string; title: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<div class="relative mx-auto w-full max-w-xl" aria-hidden="true" data-motion="rise">
+  <svg class="pointer-events-none absolute inset-x-8 top-[1.65rem] hidden h-8 sm:block" viewBox="0 0 400 32" fill="none" preserveAspectRatio="none">
+    <path
+      class="mkt-path"
+      d="M8 16 C 80 16 100 16 140 16 S 220 16 260 16 S 340 16 392 16"
+      stroke="url(#mkt-line)"
+      stroke-width="2"
+      stroke-dasharray="6 8"
+      stroke-linecap="round"
+    ></path>
+    <defs>
+      <linearGradient id="mkt-line" x1="0" y1="0" x2="400" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-400)"></stop>
+        <stop offset="55%" stop-color="var(--color-accent-400)"></stop>
+        <stop offset="100%" stop-color="var(--color-plasma-400)"></stop>
+      </linearGradient>
+    </defs>
+    <circle r="4" fill="var(--color-brand-400)">
+      <animateMotion dur="3.6s" repeatCount="indefinite" path="M8 16 C 80 16 100 16 140 16 S 220 16 260 16 S 340 16 392 16"></animateMotion>
+    </circle>
+  </svg>
+
+  <ol class="relative grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-3">
+    {
+      steps.map((s, i) => (
+        <li
+          class="mkt-step flex flex-col items-center text-center"
+          style={`--d:${i * 0.12}s`}
+        >
+          <span class="relative z-10 inline-flex size-12 items-center justify-center rounded-2xl bg-white text-brand-700 shadow-lg shadow-brand-500/10 ring-1 ring-brand-200/80">
+            {i === 0 && <Icon name="store" class="size-5" />}
+            {i === 1 && <Icon name="coins" class="size-5" />}
+            {i === 2 && <Icon name="shield" class="size-5" />}
+            {i === 3 && <Icon name="check" class="size-5" />}
+          </span>
+          <span class="mt-3 font-mono text-[0.65rem] text-brand-600">{s.n}</span>
+          <span class="mt-1 max-w-[9rem] font-display text-sm font-semibold leading-snug text-ink-950">{s.title}</span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="mt-8 flex items-center justify-center gap-2 rounded-full border border-brand-200/70 bg-brand-50/80 px-4 py-2 font-mono text-xs text-brand-800">
+    <Icon name="bolt" class="size-3.5 text-brand-600" />
+    USDC · Solana · direct wallet transfer
+  </div>
+</div>
+
+<style>
+  .mkt-path {
+    animation: mkt-dash 8s linear infinite;
+  }
+  .mkt-step {
+    animation: mkt-in 0.85s var(--ease-out-expo) both;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes mkt-dash {
+    to {
+      stroke-dashoffset: -80;
+    }
+  }
+  @keyframes mkt-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .is-offscreen .mkt-path,
+  .is-offscreen .mkt-step {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mkt-path,
+    .mkt-step {
+      animation: none;
+    }
+  }
+</style>

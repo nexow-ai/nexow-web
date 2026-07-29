@@ -4,6 +4,7 @@ export const en: SiteContent = {
   nav: {
     links: [
       { label: 'Features', href: '/features' },
+      { label: 'Community', href: '/community' },
       { label: 'Connectors', href: '/connectors' },
       { label: 'Plans', href: '/plans' },
       { label: 'Blog', href: '/blog' },
@@ -20,8 +21,9 @@ export const en: SiteContent = {
         title: 'Product',
         links: [
           { label: 'Features', href: '/features' },
-          { label: 'Plans', href: '/plans' },
+          { label: 'Community', href: '/community' },
           { label: 'Connectors', href: '/connectors' },
+          { label: 'Plans', href: '/plans' },
           { label: 'Privacy', href: '/privacy' },
         ],
       },
@@ -134,30 +136,167 @@ export const en: SiteContent = {
       ],
     },
     features: {
-      eyebrow: 'What you get',
-      title: 'A simple loop: ask, edit, arrange',
+      eyebrow: 'The app',
+      title: 'Every surface of Nexow',
       subtitle:
-        'The AI is the starting point, not the product. You get working widgets you can inspect, change, reuse and keep on your own workspace.',
+        'Widgets on a free-form canvas, live connectors, cloud bots and agents, a maker community with realtime chat, marketplaces, themes, and a toolbar and dock that stay out of your way.',
       items: [
         {
           icon: 'sparkles',
-          title: 'Plain-language creation',
-          body: 'Describe a widget in normal words. Nexow writes the interface and logic, then runs it live so you can use it immediately.',
+          title: 'Widgets',
+          body: 'Describe a widget in normal words. Nexow generates the interface and logic, runs it sandboxed, and lets you refine it by conversation.',
         },
         {
           icon: 'layers',
-          title: 'A canvas, not a chat result',
-          body: 'Drag, resize and arrange widgets into workspaces. Keep a moodboard beside a planner, a game beside a feed, or a chart beside your notes.',
-        },
-        {
-          icon: 'shield',
-          title: 'Generated code stays contained',
-          body: 'Every widget runs in an isolated sandbox. It can render, store state and fetch data, but it cannot reach into the rest of your workspace.',
+          title: 'Canvas & workspaces',
+          body: 'Drag, resize and arrange widgets across workspaces and screens. Group them, link their data, and switch setups instantly.',
         },
         {
           icon: 'plug',
-          title: 'Useful when you connect it',
-          body: 'Use local state for personal widgets, or plug into databases, social feeds and market data when the widget needs live information.',
+          title: 'Connectors',
+          body: 'Plug widgets into markets, databases, wallets and social apps — or keep state local until you need live data.',
+        },
+        {
+          icon: 'bot',
+          title: 'Bots',
+          body: 'Cloud automations that watch your data and fire signals back to widgets — even when your tab is closed.',
+        },
+        {
+          icon: 'cpu',
+          title: 'Agents',
+          body: 'AI teammates with model, memory, skills, tools, knowledge and triggers — build, deploy and review runs in the cloud.',
+        },
+        {
+          icon: 'chat',
+          title: 'Copilot',
+          body: 'An AI assistant for the whole workspace: build widgets, arrange the canvas and ask what to change next.',
+        },
+        {
+          icon: 'users',
+          title: 'Community',
+          body: 'Follow makers, post to the feed, share widgets to the library and claim a public @handle.',
+        },
+        {
+          icon: 'store',
+          title: 'Marketplace',
+          body: 'Publish and install widgets, themes, screens, bots and agents — with lineage that credits every remake.',
+        },
+        {
+          icon: 'mail',
+          title: 'Realtime chats',
+          body: 'Message friends and contacts live — 1:1 and group DMs with presence, reactions and an inbox on the dock.',
+        },
+        {
+          icon: 'vault',
+          title: 'Account',
+          body: 'Free accounts with credits, reputation, usage, plans, notices, App Lock and multi-account switching.',
+        },
+        {
+          icon: 'moon',
+          title: 'Themes & settings',
+          body: 'Theme the whole chrome — colors, fonts, density, patterns — plus shortcuts, security and install preferences.',
+        },
+        {
+          icon: 'grid',
+          title: 'Toolbar & dock',
+          body: 'A configurable header toolbar for canvas actions, and a glassy dock for Copilot, panels, notifications and messages.',
+        },
+      ],
+      groups: [
+        {
+          title: 'Build',
+          items: [
+            {
+              icon: 'sparkles',
+              title: 'Widgets',
+              body: 'Describe a widget in normal words. Nexow generates the interface and logic, runs it sandboxed, and lets you refine it by conversation.',
+            },
+            {
+              icon: 'layers',
+              title: 'Canvas & workspaces',
+              body: 'Drag, resize and arrange widgets across workspaces and screens. Group them, link their data, and switch setups instantly.',
+            },
+            {
+              icon: 'library',
+              title: 'Widget library',
+              body: 'Save any widget to your library and drop it into another dashboard in one click — versions and logs stay with it.',
+            },
+          ],
+        },
+        {
+          title: 'Automate',
+          items: [
+            {
+              icon: 'bot',
+              title: 'Bots',
+              body: 'Cloud automations that watch your data and fire signals back to widgets — even when your tab is closed.',
+            },
+            {
+              icon: 'cpu',
+              title: 'Agents',
+              body: 'AI teammates with model, memory, skills, tools, knowledge and triggers — build, deploy and review runs in the cloud.',
+            },
+            {
+              icon: 'chat',
+              title: 'Copilot',
+              body: 'An AI assistant for the whole workspace: build widgets, arrange the canvas and ask what to change next.',
+            },
+          ],
+        },
+        {
+          title: 'Connect & share',
+          items: [
+            {
+              icon: 'plug',
+              title: 'Connectors',
+              body: '45+ live connectors across markets, databases, wallets and social apps — browser-direct where CORS allows.',
+            },
+            {
+              icon: 'globe',
+              title: 'Social media apps',
+              body: 'Pull live feeds and signals from X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon and more into your widgets.',
+            },
+            {
+              icon: 'users',
+              title: 'Community',
+              body: 'Follow makers, post to the feed, share widgets to the library and claim a public @handle.',
+            },
+            {
+              icon: 'store',
+              title: 'Marketplace',
+              body: 'Publish and install widgets, themes, screens, bots and agents — with lineage that credits every remake.',
+            },
+            {
+              icon: 'mail',
+              title: 'Realtime chats',
+              body: 'Message friends and contacts live — 1:1 and group DMs with presence, reactions and an inbox on the dock.',
+            },
+          ],
+        },
+        {
+          title: 'Chrome & account',
+          items: [
+            {
+              icon: 'vault',
+              title: 'Account',
+              body: 'Free accounts with credits, reputation, usage, plans, notices, App Lock and multi-account switching.',
+            },
+            {
+              icon: 'moon',
+              title: 'Themes & settings',
+              body: 'Theme the whole chrome — colors, fonts, density, patterns — plus shortcuts, security and install preferences.',
+            },
+            {
+              icon: 'sliders',
+              title: 'Toolbar',
+              body: 'Add widgets, auto-layout, screenshot, undo/redo, lock, color mode, credits and sync — show or hide each action.',
+            },
+            {
+              icon: 'grid',
+              title: 'Dock',
+              body: 'A draggable glass pill for Copilot, panel shortcuts, notifications and messages — auto-hides into a puck when idle.',
+            },
+          ],
         },
       ],
     },
@@ -495,73 +634,296 @@ export const en: SiteContent = {
       secondary: 'Explore features',
     },
   },
+  communityPage: {
+    meta: {
+      title: 'Community — Nexow',
+      description:
+        'Nexow is a social workspace for makers: interactive posts, research boards, live dashboards, a USDC marketplace on Solana, and a coming DAO that lets the community steer the roadmap.',
+    },
+    hero: {
+      badge: 'Community',
+      titleLead: 'A social app for',
+      titleGradient: 'makers who ship',
+      titleTail: 'real work.',
+      subtitle:
+        'Share interactive widgets, research and dashboards. Follow makers, chat in realtime, publish to a marketplace settled in USDC on Solana — and grow a community that compounds.',
+      ctaPrimary: 'Join the community',
+      ctaSecondary: 'Explore marketplace',
+      chips: ['Live feed', 'Boards & dashboards', 'USDC on Solana', 'DAO coming soon'],
+    },
+    social: {
+      eyebrow: 'Social feed',
+      title: 'Posts that actually run — not just screenshots.',
+      subtitle:
+        'The community feed is built for builders. Share a widget, an image, a video or a research note; others can like, comment, remake and install what you ship.',
+      items: [
+        {
+          icon: 'sparkles',
+          title: 'Interactive widget posts',
+          body: 'Attach a live widget to a post. Viewers preview it in the feed, then add it straight to their library — with lineage that credits your work.',
+        },
+        {
+          icon: 'chat',
+          title: 'Likes, comments & mentions',
+          body: 'Threaded replies, reactions and an inbox for mentions so conversations stay on the post — not scattered across DMs.',
+        },
+        {
+          icon: 'mail',
+          title: 'Realtime chats',
+          body: '1:1 and group DMs with presence and reactions, reachable from Account or the dock — friends and contacts stay a click away.',
+        },
+        {
+          icon: 'users',
+          title: 'Public maker profiles',
+          body: 'Claim your @handle, pin posts, show your boards and let people follow the work you publish.',
+        },
+      ],
+    },
+    research: {
+      eyebrow: 'Research & dashboards',
+      title: 'Collect sources. Build the desk. Keep it live.',
+      subtitle:
+        'Boards hold the research trail — links, media and widgets. Dashboards and screens turn that into a working desk you can share or remake.',
+      items: [
+        {
+          icon: 'library',
+          title: 'Profile boards',
+          body: 'Moodboards for makers: drop widgets, upload media, pin posts from the feed, and save links from TikTok, YouTube, articles and anywhere else.',
+        },
+        {
+          icon: 'link',
+          title: 'Share-to-Nexow',
+          body: 'Install the PWA or use the share target — a URL lands on a board with a preview snapshot, ready to open on your canvas.',
+        },
+        {
+          icon: 'layers',
+          title: 'Dashboards, screens & workspaces',
+          body: 'Arrange live widgets on a free-form canvas, group them into screens and workspaces, and switch setups without rebuilding from scratch.',
+        },
+        {
+          icon: 'bolt',
+          title: 'Open a board on the canvas',
+          body: 'Turn saved links into live embeds on your dashboard in one action — research stays connected to the tools that use it.',
+        },
+      ],
+    },
+    grow: {
+      eyebrow: 'Grow the network',
+      title: 'Reputation that follows the work you share.',
+      subtitle:
+        'Building, shipping and helping others earns points, medals and levels on your public profile — the same reputation surface across Free and paid plans.',
+      items: [
+        {
+          icon: 'trophy',
+          title: 'Points, medals & levels',
+          body: 'Earn reputation for widgets, bots, shares and social activity. Unlock tiered achievements and rare medals that show on your profile.',
+        },
+        {
+          icon: 'signal',
+          title: 'Discover & follow',
+          body: 'Browse the Discover feed, filter by widgets, images or video, search people and posts, and follow makers whose work you want in your stream.',
+        },
+        {
+          icon: 'award',
+          title: 'Contacts that compound',
+          body: 'Mutual follows become contacts. Group chats, mentions and a shared network make collaboration feel like a product — not a side channel.',
+        },
+        {
+          icon: 'globe',
+          title: 'One free account unlocks it',
+          body: 'Cloud sync, starter credits, the feed, marketplace and reputation layer come with a free account. No card required to start.',
+        },
+      ],
+    },
+    marketplace: {
+      eyebrow: 'Marketplace',
+      title: 'Publish once. Sell in USDC. Keep the lineage.',
+      subtitle:
+        'One share dialog covers widgets, screens, workspaces, bots, agents and themes — free to install, or priced in USDC and settled on Solana.',
+      intro:
+        'Nexow never custodians the money. A sale is a direct SPL-token transfer from the buyer’s wallet to yours. The platform verifies the chain, unlocks the asset, and stores only the bookkeeping both sides need to trust the result.',
+      pillars: [
+        {
+          icon: 'store',
+          title: 'One dialog, six kinds',
+          body: 'Share from Library, Bots, Agents or Themes. Pick free or a USDC price, add description and tags, and optionally announce to the community feed.',
+        },
+        {
+          icon: 'history',
+          title: 'Lineage on every remake',
+          body: 'If you publish a remake, the dialog names whose work it descends from before anything ships. Credit is never something you discover later.',
+        },
+        {
+          icon: 'shield',
+          title: 'No escrow, no platform cut',
+          body: 'Phantom signs the USDC transfer. Nexow does not hold funds and does not take a cut — only verifies the on-chain receipt before unlocking install.',
+        },
+        {
+          icon: 'check',
+          title: 'Updates stay with the buyer',
+          body: 'Buying any version entitles you to later versions from the same author. Someone else’s remake is a separate product with its own price.',
+        },
+      ],
+      railTitle: 'How a USDC purchase works',
+      railBody:
+        'Prices are quoted in USDC on Solana. The server creates the order; your wallet pays; the chain has to agree before the asset unlocks.',
+      railSteps: [
+        {
+          n: '01',
+          title: 'Create the order',
+          body: 'Checkout asks the server for the price and seller wallet — the client never invents the amount.',
+        },
+        {
+          n: '02',
+          title: 'Pay with Phantom',
+          body: 'Your wallet signs a USDC transfer with the order id in the memo and broadcasts it on Solana.',
+        },
+        {
+          n: '03',
+          title: 'Verify on-chain',
+          body: 'Nexow reads the transaction back: confirmed, matching memo, seller USDC balance up by the quoted amount, correct mint.',
+        },
+        {
+          n: '04',
+          title: 'Install what you bought',
+          body: 'Entitlement unlocks. Install the widget, theme, bot or agent — paid previews stay locked until settlement.',
+        },
+      ],
+      railNotes: [
+        'Receipts are saved locally the instant the wallet returns a signature — if the tab closes mid-confirm, Finish purchase resumes without paying twice.',
+        'Installed bots arrive paused; agents arrive undeployed; themes never auto-apply. The first run is always your choice.',
+        'Private parts never travel: prompts, chat history, connection ids, wallet addresses and agent memory stay with the author.',
+      ],
+      kindsTitle: 'What you can publish',
+      kinds: [
+        { label: 'Widgets', body: 'The active version’s code — sandboxed and remakeable.' },
+        { label: 'Screens & workspaces', body: 'Geometry, widget code and links as a portable desk.' },
+        { label: 'Bots', body: 'Processor, params and schedule — arrives paused for the buyer.' },
+        { label: 'Agents', body: 'Model, skills, tool grants and cadence — undeployed until they connect theirs.' },
+        { label: 'Themes', body: 'Colours, fonts, radius and density — added to the library, never forced on.' },
+      ],
+    },
+    dao: {
+      eyebrow: 'Governance',
+      badge: 'Coming soon',
+      title: 'Own the roadmap with the Nexow DAO.',
+      subtitle:
+        'NEXO is the governance token. Earn it by building and shipping; spend it by proposing, voting and steering a shared treasury.',
+      body:
+        'The DAO tab is already in the community panel as a teaser — real ballots, treasury and creator rewards land next. Until then, reputation and medals are live so early makers start ahead.',
+      pillars: [
+        {
+          icon: 'lightbulb',
+          title: 'Propose',
+          body: 'Pitch features, connectors and rules. Anyone holding NEXO can put an idea on the ballot.',
+        },
+        {
+          icon: 'vote',
+          title: 'Vote',
+          body: 'Public, transparent votes decide what gets built next and in what order.',
+        },
+        {
+          icon: 'vault',
+          title: 'Treasury',
+          body: 'A shared treasury funds the bounties and grants the community votes in.',
+        },
+        {
+          icon: 'gift',
+          title: 'Creator rewards',
+          body: 'Builders earn a share when the DAO ships and promotes their work.',
+        },
+      ],
+      previewTitle: 'First ballots',
+      previewBadge: 'Preview',
+      forLabel: '{pct}% for',
+      votesLabel: '{n} votes',
+      proposals: [
+        { title: 'Fund a community widget bounty program', tag: 'Treasury', pct: 72, votes: 341 },
+        { title: 'Revenue share for marketplace creators', tag: 'Rewards', pct: 87, votes: 512 },
+        { title: 'Open-source the widget runtime', tag: 'Roadmap', pct: 64, votes: 289 },
+      ],
+      footer: 'Shaped in the open with the community — details land in the DAO tab first.',
+    },
+    cta: {
+      title: 'Claim your @handle and ship something.',
+      subtitle: 'Free account. Live feed. Marketplace with USDC. The DAO is next.',
+      primary: 'Launch Nexow',
+      secondary: 'See all features',
+    },
+  },
   features: {
     meta: {
       title: 'Features — Nexow',
       description:
-        'Explore Nexow features: plain-language widget generation, a sandboxed runtime, a free-form canvas, trading-grade data connectors, local privacy and reusable widget workspaces.',
+        'Explore every Nexow surface: widgets, canvas, toolbar and dock, connectors and social apps, bots and agents, community and realtime chat, marketplace, account, themes and settings.',
     },
     hero: {
       badge: 'Features',
-      title: 'The parts behind the widget canvas',
+      title: 'The whole app, surface by surface',
       subtitle:
-        'Start with one useful widget, then arrange, refine, connect and reuse it. Advanced automation exists, but the core stays simple: describe what you need and keep it on your canvas.',
+        'Nexow is a widget canvas with a full product around it — side panels for account, community, marketplace, library, bots, agents, connectors, themes and settings, plus a toolbar and dock that keep the chrome configurable.',
     },
     groups: [
       {
-        title: 'Generate',
-        body: 'Describe what you want. Nexow turns it into a working widget.',
+        title: 'Widgets',
+        body: 'Describe what you want. Nexow turns it into a working, inspectable widget.',
         items: [
           { icon: 'sparkles', title: 'Plain-language codegen', body: 'Describe a widget and Nexow generates its full source with Claude — moodboards, planners, games, feeds, charts, tables and custom tools.' },
           { icon: 'wand', title: 'Refine by conversation', body: 'Change anything by asking. “Make it warmer”, “add a streak calendar”, “turn this into a game” — Nexow edits the widget in place.' },
           { icon: 'history', title: 'Versioned & inspectable', body: 'Every generation is versioned with logs. Roll back, compare, and read the exact source running in each widget.' },
+          { icon: 'shield', title: 'Sandboxed runtime', body: 'Widgets execute in isolated iframes with a strict boundary — generated code can render and fetch, but can’t touch your workspace or other widgets.' },
+          { icon: 'library', title: 'Reusable library', body: 'Save any widget to your library and drop it into any dashboard in one click — versions and logs stay with it.' },
         ],
       },
       {
-        title: 'Run',
-        body: 'Generated code runs contained, inspectable and ready to use.',
+        title: 'Workspace',
+        body: 'A free-form canvas with chrome that stays configurable.',
         items: [
-          { icon: 'shield', title: 'Sandboxed iframes', body: 'Widgets execute in isolated iframes with a strict boundary — generated code can render and fetch, but can’t touch your workspace or other widgets.' },
-          { icon: 'bolt', title: 'Interactive by default', body: 'Widgets can keep state, react to events, subscribe to data and update live without turning your workspace into a static mockup.' },
-          { icon: 'layers', title: 'Themed canvas & workspaces', body: 'Arrange widgets on a themed free-form canvas, group them into workspaces and screens, and switch between setups instantly.' },
+          { icon: 'layers', title: 'Canvas, workspaces & screens', body: 'Arrange widgets on a themed free-form canvas, group them into workspaces and screens, and switch between setups instantly.' },
           { icon: 'link', title: 'Groups & Links', body: 'Bundle widgets into groups with mosaic or tab layouts, and wire widgets together with Links — one-way or two-way pipes that stream one widget’s data into another.' },
+          { icon: 'sliders', title: 'Toolbar', body: 'A configurable tray under the header: add widget, auto-layout, screenshot, undo/redo, lock, color mode, credits and cloud sync — show or hide each action.' },
+          { icon: 'grid', title: 'Dock', body: 'A draggable glass pill for Copilot, panel shortcuts, notifications and messages. Customize which items appear, resize it, and let it auto-hide into a puck when idle.' },
+          { icon: 'bolt', title: 'Interactive by default', body: 'Widgets keep state, react to events, subscribe to data and update live — your workspace stays a working tool, not a static mockup.' },
         ],
       },
       {
-        title: 'Connect',
-        body: 'Trading-grade APIs, generalized for every live-data widget.',
+        title: 'Connectors',
+        body: 'Live data from markets, databases, wallets and social apps.',
         items: [
-          { icon: 'plug', title: '45+ live connectors', body: 'Databases, social feeds, markets, wallets and web services — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi and more.' },
-          { icon: 'globe', title: 'Browser-direct where possible', body: 'Where CORS allows, authenticated calls run straight from your browser and bypass our proxy entirely.' },
+          { icon: 'plug', title: '45+ live connectors', body: 'Databases, markets, wallets and web services — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi and more.' },
+          { icon: 'globe', title: 'Social media integrations', body: 'Connect X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to and Hacker News so widgets can read and react to the feeds you already use.' },
+          { icon: 'signal', title: 'Browser-direct where possible', body: 'Where CORS allows, authenticated calls run straight from your browser and bypass our proxy entirely.' },
           { icon: 'database', title: 'Local state too', body: 'Many widgets need no external data at all: games, planners, moodboards and private trackers can live in the browser until you choose to sync.' },
         ],
       },
       {
         title: 'Automate',
-        body: 'Optional automations for widgets that need to watch and act.',
+        body: 'Bots, agents and Copilot that keep working when your tab is closed.',
         items: [
-          { icon: 'bot', title: 'Background watchers', body: 'Describe an alert or wire it visually — streak reminders, weekly digests, social updates, thresholds or market moves. Watchers run on a cloud heartbeat and push signals back to your widgets.' },
-          { icon: 'cpu', title: 'Advanced workflows', body: 'For operational canvases, attach memory, tools, knowledge and triggers so a workflow can watch, reason and prepare the next step — then deploy it to the cloud with tool grants and a live run history.' },
-          { icon: 'chat', title: 'Workspace assistant', body: 'Ask about a widget screenshot or its data: explain what changed, summarize the state, or suggest the next edit — in parallel conversations that keep building in the background.' },
+          { icon: 'bot', title: 'Bots', body: 'Cloud automations that watch your data and fire signals to your widgets. Describe an alert in plain words or wire it visually — streak reminders, digests, social updates, thresholds or market moves.' },
+          { icon: 'cpu', title: 'Agents', body: 'AI agents with a real harness — model, memory, skills, tools, knowledge and triggers. Build yours visually, deploy to the cloud with tool grants, and review a live run history.' },
+          { icon: 'chat', title: 'Copilot', body: 'An AI assistant for your whole workspace. Chat in parallel tabs, let it build widgets in the background, arrange your canvas, and ask what to change next.' },
         ],
       },
       {
         title: 'Network',
-        body: 'Optional sharing when you want to reuse or publish widgets.',
+        body: 'Community, marketplace and realtime chat with friends and contacts.',
         items: [
-          { icon: 'users', title: 'Community', body: 'Follow makers, post to the feed, and share widgets others can add straight to their library — live today, with public maker profiles.' },
-          { icon: 'store', title: 'Marketplace', body: 'Publish and install ready-made widgets, themes, screens and bots — live today, with lineage that credits every remake. Buying and selling comes next.' },
-          { icon: 'signal', title: 'Premium workflows', body: 'Publish polished app screens and workflows, let others subscribe, and earn on what you run. Coming soon.' },
+          { icon: 'users', title: 'Community', body: 'Follow makers, like and comment in a social feed for builders, explore boards, and share widgets others can add straight to their library — with public maker profiles.' },
+          { icon: 'mail', title: 'Realtime chats', body: 'Message friends and contacts live from Account or the dock — 1:1 and group DMs with presence, reactions, followers/following and a contacts inbox.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publish and install widgets, themes, screens, bots and agents — with lineage that credits every remake. Buying and selling comes next.' },
           { icon: 'trophy', title: 'Reputation & medals', body: 'Earn reputation points for building and sharing, unlock tiered achievements and rare medals — live today. Reward credits come next.' },
         ],
       },
       {
-        title: 'Own',
-        body: 'Secure by design, yours to keep.',
+        title: 'Account & appearance',
+        body: 'Your identity, themes, settings and sync across devices.',
         items: [
+          { icon: 'vault', title: 'Account', body: 'Sign in for credits, reputation, usage charts, plans, notices, token packs, App Lock, security controls and multi-account switching — or stay fully local with your own key.' },
+          { icon: 'moon', title: 'Themes', body: 'Build appearance themes for colors, fonts, radius, density, glass and patterns. Publish them to the marketplace or install themes from other makers.' },
+          { icon: 'sliders', title: 'Settings', body: 'General preferences, customizable keyboard shortcuts, security options, backup/restore and install/PWA controls — all in the Settings panel.' },
+          { icon: 'sync', title: 'Cloud sync', body: 'Sync workspaces, widgets, dock and toolbar prefs, themes and settings across every device — with an encrypted credential vault.' },
           { icon: 'lock', title: 'Workspace boundaries', body: 'Generated widgets run sandboxed, with connector access limited to the services and data each widget needs.' },
-          { icon: 'sync', title: 'Cloud sync', body: 'Sync workspaces, widgets and settings across every device — with an encrypted credential vault.' },
-          { icon: 'library', title: 'Reusable library', body: 'Save any widget to your library and drop it into any dashboard in one click.' },
         ],
       },
     ],

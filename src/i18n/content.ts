@@ -25,6 +25,72 @@ export interface Faq {
   a: string;
 }
 
+/** Dedicated /community marketing page copy. */
+export interface CommunityPageContent {
+  meta: { title: string; description: string };
+  hero: {
+    badge: string;
+    titleLead: string;
+    titleGradient: string;
+    titleTail: string;
+    subtitle: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    chips: string[];
+  };
+  social: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: Feature[];
+  };
+  research: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: Feature[];
+  };
+  grow: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: Feature[];
+  };
+  marketplace: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    intro: string;
+    pillars: Feature[];
+    railTitle: string;
+    railBody: string;
+    railSteps: { n: string; title: string; body: string }[];
+    railNotes: string[];
+    kindsTitle: string;
+    kinds: { label: string; body: string }[];
+  };
+  dao: {
+    eyebrow: string;
+    badge: string;
+    title: string;
+    subtitle: string;
+    body: string;
+    pillars: Feature[];
+    previewTitle: string;
+    previewBadge: string;
+    forLabel: string;
+    votesLabel: string;
+    proposals: { title: string; tag: string; pct: number; votes: number }[];
+    footer: string;
+  };
+  cta: {
+    title: string;
+    subtitle: string;
+    primary: string;
+    secondary: string;
+  };
+}
+
 export interface PlanTier {
   name: string;
   tagline: string;
@@ -246,7 +312,13 @@ export interface SiteContent {
       eyebrow: string;
       title: string;
       subtitle: string;
+      /** Flat list used for schema / locales that have not migrated to groups yet. */
       items: Feature[];
+      /**
+       * Optional product-area groups for the home features map. When present,
+       * Features.astro renders these instead of the flat `items` list.
+       */
+      groups?: { title: string; items: Feature[] }[];
     };
     how: {
       eyebrow: string;
@@ -376,6 +448,11 @@ export interface SiteContent {
     hero: { badge: string; title: string; subtitle: string };
     groups: { title: string; body: string; items: Feature[] }[];
   };
+  /**
+   * Dedicated Community marketing page. Optional so locales without a
+   * translation fall back to English in CommunityPage.astro.
+   */
+  communityPage?: CommunityPageContent;
   plansPage: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };

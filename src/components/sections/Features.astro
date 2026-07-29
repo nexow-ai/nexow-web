@@ -1,19 +1,29 @@
 ---
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
 import SectionHeading from '../SectionHeading.astro';
 import Icon from '../Icon.astro';
+import Button from '../Button.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).home.features;
+const local = useContent(lang).home.features;
+const en = useContent('en').home.features;
+/** Prefer locale groups when translated; otherwise show the full English product map. */
+const t = local.groups?.length ? local : en;
+const explore = useContent(lang).nav.links.find((l) => l.href === '/features')?.label ?? 'Features';
 
-const items = t.items;
+const groups =
+  t.groups ??
+  (t.items.length
+    ? [{ title: '', items: t.items }]
+    : []);
 ---
 
-<section id="features" class="relative overflow-hidden bg-[#f7fbfb] py-20 text-ink-950 sm:py-24">
+<section id="features" class="relative overflow-x-clip bg-[#f7fbfb] py-20 text-ink-950 sm:py-24 dark:bg-white/[0.015] dark:text-white">
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <div
       class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_20%,black,transparent)]"
@@ -24,48 +34,45 @@ const items = t.items;
   <div class="container-page relative">
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
-    <div class="reveal-stagger mt-10 grid gap-4 md:grid-cols-2">
+    <div class="mt-12 space-y-12">
       {
-        items.map((item, i) => (
-          <article class:list={[
-            'rounded-2xl border border-ink-900/10 bg-white p-6 shadow-sm shadow-ink-950/[0.03]',
-            i === 0 && 'md:col-span-2 lg:col-span-1',
-          ]}>
-            <div class="flex items-start gap-4">
-              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
-                <Icon name={item.icon} class="size-5.5" />
-              </span>
-              <div>
-                <h3 class="font-display text-xl font-semibold text-ink-950">{item.title}</h3>
-                <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
-              </div>
+        groups.map((group) => (
+          <div class="reveal">
+            {group.title && (
+              <h3 class="font-mono text-xs font-medium uppercase tracking-[0.18em] text-brand-700 dark:text-brand-300">
+                {group.title}
+              </h3>
+            )}
+            <div
+              class:list={[
+                'grid gap-4',
+                group.title ? 'mt-4' : '',
+                group.items.length >= 4 ? 'sm:grid-cols-2 lg:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-3',
+              ]}
+            >
+              {group.items.map((item) => (
+                <article class="rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-5 shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40 transition-colors hover:border-brand-300/50">
+                  <div class="flex items-start gap-3.5">
+                    <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-700 dark:text-brand-300 ring-1 ring-brand-200/80 dark:ring-brand-400/25">
+                      <Icon name={item.icon} class="size-5" />
+                    </span>
+                    <div class="min-w-0">
+                      <h4 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{item.title}</h4>
+                      <p class="mt-1.5 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{item.body}</p>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
-
-            {i === 0 && (
-              <div class="mt-6 rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-4 font-mono text-[0.72rem] leading-relaxed text-ink-700">
-                <p><span class="text-brand-700">prompt</span> make a soft habit planner with streaks</p>
-                <div class="my-3 h-px bg-ink-900/8"></div>
-                <p><span class="text-sky-700">widget</span> generated · sandboxed · saved to library</p>
-              </div>
-            )}
-
-            {i === 3 && (
-              <div class="mt-6 grid grid-cols-3 gap-2 rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
-                <div class="col-span-2 flex h-14 items-end gap-1 rounded-lg bg-white p-2">
-                  {[35, 55, 40, 70, 52, 80].map((v) => (
-                    <span class="w-full rounded-sm bg-brand-300" style={`height:${v}%`}></span>
-                  ))}
-                </div>
-                <div class="rounded-lg bg-sky-100"></div>
-                <div class="rounded-lg border border-dashed border-ink-900/15 p-2 text-center font-mono text-[0.6rem] text-ink-500">
-                  + widget
-                </div>
-                <div class="col-span-2 rounded-lg bg-brand-100"></div>
-              </div>
-            )}
-          </article>
+          </div>
         ))
       }
+    </div>
+
+    <div class="reveal mt-12 flex justify-center">
+      <Button href={localizePath('/features', lang)} variant="secondary" iconRight="arrow">
+        {explore}
+      </Button>
     </div>
   </div>
 </section>

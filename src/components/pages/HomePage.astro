@@ -39,7 +39,8 @@ const softwareSchema = {
     offerCount: c.plansPage.tiers.length,
   },
   featureList: [
-    ...t.features.items.map((f) => f.title),
+    ...(t.features.groups?.flatMap((g) => g.items.map((f) => f.title)) ??
+      t.features.items.map((f) => f.title)),
     `${t.connectors.count}+ ${t.connectors.countLabel}`,
   ],
 };

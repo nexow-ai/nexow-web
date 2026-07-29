@@ -17,7 +17,13 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).features;
+const local = useContent(lang).features;
+const en = useContent('en').features;
+/** Use the full English feature map until a locale ships the updated groups. */
+const hasUpdatedGroups = local.groups.some((g) =>
+  g.items.some((item) => /dock|toolbar|realtime|themes?/i.test(`${item.title} ${item.body}`)),
+);
+const t = hasUpdatedGroups ? local : { ...local, ...en, meta: local.meta, hero: { ...en.hero, badge: local.hero.badge } };
 const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
 ---
