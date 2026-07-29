@@ -4,6 +4,7 @@ export const el: SiteContent = {
   nav: {
     links: [
       { label: 'Χαρακτηριστικά', href: '/features' },
+      { label: 'Κοινότητα', href: '/community' },
       { label: 'Συνδέσμοι', href: '/connectors' },
       { label: 'Σχέδια', href: '/plans' },
       { label: 'Blog', href: '/blog' },
@@ -20,10 +21,10 @@ export const el: SiteContent = {
         title: 'Προϊόν',
         links: [
           { label: 'Χαρακτηριστικά', href: '/features' },
+          { label: 'Κοινότητα', href: '/community' },
           { label: 'Σχέδια', href: '/plans' },
           { label: 'Συνδέσμοι', href: '/connectors' },
           { label: 'Αυτοματισμός', href: '/#automate' },
-          { label: 'Κοινότητα', href: '/#network' },
           { label: 'Χάρτης δρόμου', href: '/#roadmap' },
         ],
       },

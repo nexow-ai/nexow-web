@@ -4,6 +4,7 @@ export const ms: SiteContent = {
   nav: {
     links: [
       { label: 'Ciri-ciri', href: '/features' },
+      { label: 'Komuniti', href: '/community' },
       { label: 'Penyambung', href: '/connectors' },
       { label: 'Pelan', href: '/plans' },
       { label: 'Blog', href: '/blog' },
@@ -20,10 +21,10 @@ export const ms: SiteContent = {
         title: 'Produk',
         links: [
           { label: 'Ciri-ciri', href: '/features' },
+          { label: 'Komuniti', href: '/community' },
           { label: 'Pelan', href: '/plans' },
           { label: 'Penyambung', href: '/connectors' },
           { label: 'Automasi', href: '/#automate' },
-          { label: 'Komuniti', href: '/#network' },
           { label: 'Peta Jalan', href: '/#roadmap' },
         ],
       },

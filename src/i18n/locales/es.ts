@@ -4,6 +4,7 @@ export const es: SiteContent = {
   nav: {
     links: [
       { label: 'Funciones', href: '/features' },
+      { label: 'Comunidad', href: '/community' },
       { label: 'Conectores', href: '/connectors' },
       { label: 'Planes', href: '/plans' },
       { label: 'Blog', href: '/blog' },
@@ -20,10 +21,10 @@ export const es: SiteContent = {
         title: 'Producto',
         links: [
           { label: 'Funciones', href: '/features' },
+          { label: 'Comunidad', href: '/community' },
           { label: 'Planes', href: '/plans' },
           { label: 'Conectores', href: '/connectors' },
           { label: 'Automatizaciones', href: '/#automate' },
-          { label: 'Comunidad', href: '/#network' },
           { label: 'Roadmap', href: '/#roadmap' },
         ],
       },

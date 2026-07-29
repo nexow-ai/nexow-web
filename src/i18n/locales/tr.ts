@@ -4,6 +4,7 @@ export const tr: SiteContent = {
   nav: {
     links: [
       { label: 'Özellikler', href: '/features' },
+      { label: 'Topluluk', href: '/community' },
       { label: 'Bağlantılar', href: '/connectors' },
       { label: 'Planlar', href: '/plans' },
       { label: 'Blog', href: '/blog' },
@@ -20,10 +21,10 @@ export const tr: SiteContent = {
         title: 'Ürün',
         links: [
           { label: 'Özellikler', href: '/features' },
+          { label: 'Topluluk', href: '/community' },
           { label: 'Planlar', href: '/plans' },
           { label: 'Bağlantılar', href: '/connectors' },
           { label: 'Otomasyonlar', href: '/#automate' },
-          { label: 'Topluluk', href: '/#network' },
           { label: 'Yol Haritası', href: '/#roadmap' },
         ],
       },
