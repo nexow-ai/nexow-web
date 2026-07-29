@@ -1,0 +1,214 @@
+---
+/**
+ * Animated SVG glyph for feature cards. Compact accent drawn with brand
+ * strokes — intentional idle motion (draw / pulse / orbit), paused when
+ * offscreen or prefers-reduced-motion.
+ */
+interface Props {
+  name: string;
+  class?: string;
+}
+const { name, class: className = '' } = Astro.props;
+
+const uid = `fg-${name}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span class:list={['feature-glyph inline-flex size-10 shrink-0 items-center justify-center', className]} aria-hidden="true">
+  <svg class="feature-glyph-svg size-full" viewBox="0 0 40 40" fill="none">
+    <defs>
+      <linearGradient id={`${uid}-g`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-500)"></stop>
+        <stop offset="55%" stop-color="var(--color-sky-500)"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-500)"></stop>
+      </linearGradient>
+    </defs>
+
+    {/* Soft tile */}
+    <rect
+      x="1.5"
+      y="1.5"
+      width="37"
+      height="37"
+      rx="11"
+      class="feature-glyph-tile"
+      stroke={`url(#${uid}-g)`}
+      stroke-width="1.2"
+      fill="color-mix(in oklab, var(--color-brand-50) 88%, white)"
+    ></rect>
+
+    {
+      name === 'sparkles' || name === 'wand' ? (
+        <>
+          <path
+            class="feature-glyph-draw"
+            d="M20 10l1.6 5.2L27 17l-5.4 1.8L20 24l-1.6-5.2L13 17l5.4-1.8z"
+            fill={`url(#${uid}-g)`}
+            opacity="0.95"
+          />
+          <circle class="feature-glyph-pulse" cx="29" cy="11" r="1.6" fill="var(--color-sky-500)"></circle>
+          <circle class="feature-glyph-pulse feature-glyph-pulse--late" cx="11" cy="28" r="1.2" fill="var(--color-accent-500)"></circle>
+        </>
+      ) : name === 'layers' || name === 'link' ? (
+        <>
+          <rect class="feature-glyph-float" x="10" y="12" width="16" height="10" rx="2" stroke={`url(#${uid}-g)`} stroke-width="1.5"></rect>
+          <rect class="feature-glyph-float feature-glyph-float--2" x="13" y="17" width="16" height="10" rx="2" stroke="var(--color-sky-500)" stroke-width="1.4" opacity="0.7"></rect>
+        </>
+      ) : name === 'plug' || name === 'globe' || name === 'signal' || name === 'database' ? (
+        <>
+          <circle cx="20" cy="20" r="8" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="feature-glyph-ring"></circle>
+          <path class="feature-glyph-draw" d="M20 12v16M12 20h16" stroke={`url(#${uid}-g)`} stroke-width="1.4" stroke-linecap="round" pathLength="1"></path>
+          <circle class="feature-glyph-orbit" r="2" fill="var(--color-brand-500)">
+            <animateMotion dur="4.5s" repeatCount="indefinite" path="M20 12 A8 8 0 1 1 19.99 12"></animateMotion>
+          </circle>
+        </>
+      ) : name === 'bot' || name === 'cpu' ? (
+        <>
+          <rect x="12" y="13" width="16" height="14" rx="3" stroke={`url(#${uid}-g)`} stroke-width="1.5"></rect>
+          <circle class="feature-glyph-pulse" cx="16.5" cy="19" r="1.4" fill="var(--color-brand-500)"></circle>
+          <circle class="feature-glyph-pulse feature-glyph-pulse--late" cx="23.5" cy="19" r="1.4" fill="var(--color-accent-500)"></circle>
+          <path d="M16 24h8" stroke="var(--color-sky-500)" stroke-width="1.4" stroke-linecap="round"></path>
+          <path class="feature-glyph-antenna" d="M20 13V9M17 9h6" stroke={`url(#${uid}-g)`} stroke-width="1.4" stroke-linecap="round"></path>
+        </>
+      ) : name === 'chat' || name === 'mail' ? (
+        <>
+          <path
+            class="feature-glyph-draw"
+            d="M11 14.5c0-1.4 1.2-2.5 2.6-2.5h12.8c1.4 0 2.6 1.1 2.6 2.5v7c0 1.4-1.2 2.5-2.6 2.5H18l-4.2 3.2V24H13.6c-1.4 0-2.6-1.1-2.6-2.5z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            pathLength="1"
+          />
+          <circle class="feature-glyph-pulse" cx="16" cy="18" r="1.1" fill="var(--color-brand-500)"></circle>
+          <circle class="feature-glyph-pulse feature-glyph-pulse--late" cx="20" cy="18" r="1.1" fill="var(--color-sky-500)"></circle>
+          <circle class="feature-glyph-pulse" cx="24" cy="18" r="1.1" fill="var(--color-accent-500)" style="animation-delay:0.4s"></circle>
+        </>
+      ) : name === 'users' || name === 'trophy' || name === 'award' ? (
+        <>
+          <circle cx="20" cy="15" r="4" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="feature-glyph-pulse"></circle>
+          <path d="M12 28c1.5-4 4.2-6 8-6s6.5 2 8 6" stroke={`url(#${uid}-g)`} stroke-width="1.5" stroke-linecap="round" class="feature-glyph-draw" pathLength="1"></path>
+          <circle class="feature-glyph-orbit" r="1.5" fill="var(--color-sky-500)">
+            <animateMotion dur="5s" repeatCount="indefinite" path="M14 12 C16 8 24 8 26 12"></animateMotion>
+          </circle>
+        </>
+      ) : name === 'store' ? (
+        <>
+          <path d="M12 16h16l-1.2 12H13.2z" stroke={`url(#${uid}-g)`} stroke-width="1.5" stroke-linejoin="round"></path>
+          <path class="feature-glyph-draw" d="M11 16l2.5-5h13L29 16" stroke={`url(#${uid}-g)`} stroke-width="1.5" stroke-linecap="round" pathLength="1"></path>
+          <circle class="feature-glyph-pulse" cx="20" cy="22" r="2" fill="var(--color-brand-500)" opacity="0.85"></circle>
+        </>
+      ) : name === 'vault' || name === 'lock' || name === 'shield' ? (
+        <>
+          <path
+            d="M20 9l9 3.5v6.2c0 5.2-3.8 8.8-9 10.3-5.2-1.5-9-5.1-9-10.3v-6.2z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            class="feature-glyph-draw"
+            pathLength="1"
+          />
+          <circle class="feature-glyph-pulse" cx="20" cy="19" r="2.2" fill="var(--color-brand-500)"></circle>
+        </>
+      ) : name === 'moon' || name === 'sliders' || name === 'sync' ? (
+        <>
+          <circle cx="20" cy="20" r="8" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="feature-glyph-ring"></circle>
+          <path
+            class="feature-glyph-draw"
+            d="M22 12.2a7.2 7.2 0 1 0 5.8 10.6A6 6 0 0 1 22 12.2z"
+            fill={`url(#${uid}-g)`}
+            opacity="0.85"
+          />
+        </>
+      ) : name === 'grid' || name === 'bolt' ? (
+        <>
+          <rect x="11" y="18" width="18" height="7" rx="3.5" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="feature-glyph-float"></rect>
+          <circle class="feature-glyph-pulse" cx="15" cy="21.5" r="1.3" fill="var(--color-brand-500)"></circle>
+          <circle class="feature-glyph-pulse feature-glyph-pulse--late" cx="20" cy="21.5" r="1.3" fill="var(--color-sky-500)"></circle>
+          <circle class="feature-glyph-pulse" cx="25" cy="21.5" r="1.3" fill="var(--color-accent-500)" style="animation-delay:0.35s"></circle>
+        </>
+      ) : (
+        <>
+          <circle cx="20" cy="20" r="7" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="feature-glyph-ring"></circle>
+          <circle class="feature-glyph-pulse" cx="20" cy="20" r="2.5" fill="var(--color-brand-500)"></circle>
+        </>
+      )
+    }
+  </svg>
+</span>
+
+<style>
+  .feature-glyph-tile {
+    opacity: 0.95;
+  }
+  .feature-glyph-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: fg-draw 2.8s var(--ease-out-expo, ease) both;
+  }
+  .feature-glyph-pulse {
+    animation: fg-pulse 2.4s ease-in-out infinite;
+  }
+  .feature-glyph-pulse--late {
+    animation-delay: 0.55s;
+  }
+  .feature-glyph-float {
+    animation: fg-float 3.6s ease-in-out infinite;
+  }
+  .feature-glyph-float--2 {
+    animation-delay: 0.45s;
+  }
+  .feature-glyph-ring {
+    stroke-dasharray: 4 6;
+    animation: fg-spin 12s linear infinite;
+    transform-origin: 20px 20px;
+  }
+  .feature-glyph-antenna {
+    animation: fg-nudge 2.2s ease-in-out infinite;
+    transform-origin: 20px 13px;
+  }
+  .feature-glyph-orbit {
+    opacity: 0.9;
+  }
+
+  @keyframes fg-draw {
+    from { stroke-dashoffset: 1; opacity: 0.35; }
+    to { stroke-dashoffset: 0; opacity: 1; }
+  }
+  @keyframes fg-pulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
+  }
+  @keyframes fg-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1.5px); }
+  }
+  @keyframes fg-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes fg-nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1px); }
+  }
+
+  :global(.is-offscreen) .feature-glyph-draw,
+  :global(.is-offscreen) .feature-glyph-pulse,
+  :global(.is-offscreen) .feature-glyph-float,
+  :global(.is-offscreen) .feature-glyph-ring,
+  :global(.is-offscreen) .feature-glyph-antenna,
+  :global(.is-offscreen) .feature-glyph-orbit {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-glyph-draw,
+    .feature-glyph-pulse,
+    .feature-glyph-float,
+    .feature-glyph-ring,
+    .feature-glyph-antenna {
+      animation: none;
+    }
+    .feature-glyph-orbit {
+      display: none;
+    }
+  }
+</style>

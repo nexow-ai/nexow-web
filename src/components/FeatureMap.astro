@@ -1,0 +1,577 @@
+---
+/**
+ * Interactive isometric map of every major Nexow surface.
+ * SVG scene + HTML hotspots; vanilla JS popovers (tap / focus / click).
+ */
+import { localizePath } from '../i18n/utils';
+import type { Lang } from '../i18n/config';
+import { ICON_PATHS } from './icon-paths';
+import { featureMapAppHref, type FeatureMapSurfaceDef } from '../lib/featureMap';
+
+export interface FeatureMapNode extends FeatureMapSurfaceDef {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  lang: Lang;
+  nodes: FeatureMapNode[];
+  hint: string;
+  moreLabel: string;
+  openLabel: string;
+  closeLabel: string;
+}
+
+const { lang, nodes, hint, moreLabel, openLabel, closeLabel } = Astro.props;
+
+const payload = nodes.map((n) => ({
+  id: n.id,
+  title: n.title,
+  body: n.body,
+  moreHref: localizePath(n.morePath, lang),
+  openHref: featureMapAppHref(n.app),
+  moreLabel,
+  openLabel,
+  closeLabel,
+}));
+---
+
+<div
+  class="feature-map reveal relative mx-auto w-full max-w-5xl"
+  data-feature-map
+  style={`--fm-hint:${JSON.stringify(hint)}`}
+>
+  <p class="mb-5 text-center font-mono text-xs tracking-wide text-ink-500 dark:text-ink-400" data-fm-hint>
+    {hint}
+  </p>
+
+  <div class="feature-map-perspective relative">
+    <div class="feature-map-stage relative aspect-[16/11] w-full origin-center" data-fm-stage>
+      <!-- Isometric app chrome (decorative) -->
+      <svg
+        class="feature-map-svg absolute inset-0 h-full w-full"
+        viewBox="0 0 900 620"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="fm-desk" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-100)" stop-opacity="0.95"></stop>
+            <stop offset="55%" stop-color="var(--color-sky-50)" stop-opacity="0.9"></stop>
+            <stop offset="100%" stop-color="var(--color-brand-50)" stop-opacity="0.85"></stop>
+          </linearGradient>
+          <linearGradient id="fm-panel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="white" stop-opacity="0.95"></stop>
+            <stop offset="100%" stop-color="var(--color-brand-50)" stop-opacity="0.75"></stop>
+          </linearGradient>
+          <linearGradient id="fm-wire" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.55"></stop>
+            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.35"></stop>
+          </linearGradient>
+          <filter id="fm-soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="10" result="b"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="b"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Floor shadow -->
+        <ellipse class="fm-float" cx="450" cy="540" rx="280" ry="28" fill="var(--color-ink-950)" opacity="0.06"></ellipse>
+
+        <!-- Back wall / header rail -->
+        <g class="fm-layer fm-layer--0">
+          <path
+            d="M120 110 L450 40 L780 110 L780 155 L450 95 L120 155 Z"
+            fill="url(#fm-panel)"
+            stroke="color-mix(in oklab, var(--color-brand-400) 35%, transparent)"
+            stroke-width="1.2"
+          ></path>
+          <path d="M140 130 L450 70 L760 130" stroke="url(#fm-wire)" stroke-width="1.4" stroke-linecap="round" opacity="0.7"></path>
+        </g>
+
+        <!-- Left panel stack -->
+        <g class="fm-layer fm-layer--1">
+          <path
+            d="M90 170 L210 130 L210 390 L90 430 Z"
+            fill="url(#fm-panel)"
+            stroke="color-mix(in oklab, var(--color-brand-500) 28%, transparent)"
+            stroke-width="1.2"
+          ></path>
+          <path d="M105 210 H185 M105 245 H170 M105 280 H180" stroke="var(--color-brand-300)" stroke-width="2" stroke-linecap="round" opacity="0.55"></path>
+        </g>
+
+        <!-- Center canvas desk -->
+        <g class="fm-layer fm-layer--1">
+          <path
+            d="M250 250 L450 180 L650 250 L650 400 L450 470 L250 400 Z"
+            fill="url(#fm-desk)"
+            stroke="color-mix(in oklab, var(--color-brand-500) 40%, transparent)"
+            stroke-width="1.5"
+            filter="url(#fm-soft)"
+          ></path>
+          <!-- Widget tiles on canvas -->
+          <path d="M310 300 L390 272 L390 330 L310 358 Z" fill="white" opacity="0.85" stroke="var(--color-brand-300)" stroke-width="1"></path>
+          <path d="M410 265 L500 235 L500 300 L410 330 Z" fill="color-mix(in oklab, var(--color-sky-100) 80%, white)" stroke="var(--color-sky-300)" stroke-width="1"></path>
+          <path d="M520 290 L600 262 L600 330 L520 358 Z" fill="color-mix(in oklab, var(--color-brand-100) 70%, white)" stroke="var(--color-brand-300)" stroke-width="1"></path>
+          <path
+            class="fm-wire"
+            pathLength="1"
+            d="M350 320 C390 340 460 300 540 320"
+            stroke="url(#fm-wire)"
+            stroke-width="1.4"
+            stroke-linecap="round"
+          ></path>
+          <circle r="2.4" fill="var(--color-brand-500)">
+            <animateMotion dur="5.5s" repeatCount="indefinite" path="M350 320 C390 340 460 300 540 320"></animateMotion>
+          </circle>
+        </g>
+
+        <!-- Right connectors rail -->
+        <g class="fm-layer fm-layer--1">
+          <path
+            d="M690 170 L810 210 L810 400 L690 360 Z"
+            fill="url(#fm-panel)"
+            stroke="color-mix(in oklab, var(--color-sky-500) 30%, transparent)"
+            stroke-width="1.2"
+          ></path>
+          <circle cx="740" cy="240" r="8" stroke="var(--color-brand-400)" stroke-width="1.4" fill="white"></circle>
+          <circle cx="760" cy="280" r="8" stroke="var(--color-sky-400)" stroke-width="1.4" fill="white"></circle>
+          <circle cx="745" cy="320" r="8" stroke="var(--color-accent-400)" stroke-width="1.4" fill="white"></circle>
+        </g>
+
+        <!-- Toolbar bar -->
+        <g class="fm-layer fm-layer--2">
+          <path
+            d="M280 480 L450 430 L620 480 L620 505 L450 555 L280 505 Z"
+            fill="white"
+            stroke="color-mix(in oklab, var(--color-ink-900) 12%, transparent)"
+            stroke-width="1.2"
+            opacity="0.95"
+          ></path>
+          <path d="M320 490 H400 M430 475 H500 M530 490 H580" stroke="var(--color-brand-400)" stroke-width="2.2" stroke-linecap="round" opacity="0.5"></path>
+        </g>
+
+        <!-- Dock pill -->
+        <g class="fm-layer fm-layer--3">
+          <ellipse cx="620" cy="545" rx="70" ry="18" fill="color-mix(in oklab, var(--color-ink-950) 78%, var(--color-brand-700))" opacity="0.88"></ellipse>
+          <circle cx="585" cy="545" r="5" fill="var(--color-brand-300)"></circle>
+          <circle cx="605" cy="545" r="5" fill="var(--color-sky-300)"></circle>
+          <circle cx="625" cy="545" r="5" fill="var(--color-accent-300)"></circle>
+          <circle cx="645" cy="545" r="5" fill="white" opacity="0.55"></circle>
+        </g>
+
+        <!-- Soft constellation packets -->
+        <path class="fm-wire fm-wire--late" pathLength="1" d="M200 200 C280 160 360 200 430 190" stroke="url(#fm-wire)" stroke-width="1.1"></path>
+        <circle r="2" fill="var(--color-sky-500)" opacity="0.85">
+          <animateMotion dur="7s" begin="0.8s" repeatCount="indefinite" path="M200 200 C280 160 360 200 430 190"></animateMotion>
+        </circle>
+      </svg>
+
+      <!-- Focusable hotspots -->
+      <ul class="absolute inset-0 m-0 list-none p-0" role="list">
+        {
+          nodes.map((node) => {
+            const path = ICON_PATHS[node.icon] ?? ICON_PATHS.sparkles;
+            return (
+              <li
+                class:list={['feature-map-hotspot', `fm-depth-${node.depth}`]}
+                style={`left:${node.x}%;top:${node.y}%`}
+              >
+                <button
+                  type="button"
+                  class="feature-map-node"
+                  data-fm-node={node.id}
+                  aria-expanded="false"
+                  aria-controls={`fm-pop-${node.id}`}
+                  aria-label={node.title}
+                >
+                  <span class="feature-map-node-ring" aria-hidden="true"></span>
+                  <span class="feature-map-node-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="size-[1.05rem]" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d={path}></path>
+                    </svg>
+                  </span>
+                  <span class="feature-map-node-label">{node.title}</span>
+                </button>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <!-- Shared popover -->
+      <div
+        class="feature-map-popover"
+        data-fm-popover
+        id="fm-popover"
+        role="dialog"
+        aria-modal="false"
+        hidden
+      >
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="font-display text-base font-semibold text-ink-950" data-fm-title></h3>
+          <button
+            type="button"
+            class="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-ink-500 transition hover:bg-ink-900/5 hover:text-ink-900"
+            data-fm-close
+            aria-label={closeLabel}
+          >
+            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+        <p class="mt-2 text-sm leading-relaxed text-ink-600" data-fm-body></p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          <a
+            class="inline-flex h-9 items-center justify-center rounded-full bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-4 text-sm font-medium text-white shadow-sm transition hover:brightness-105"
+            data-fm-open
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {openLabel}
+          </a>
+          <a
+            class="inline-flex h-9 items-center justify-center rounded-full bg-white px-4 text-sm font-medium text-ink-900 ring-1 ring-ink-900/10 transition hover:ring-ink-900/20"
+            data-fm-more
+          >
+            {moreLabel}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline type="application/json" id="feature-map-data" set:html={JSON.stringify(payload)} />
+</div>
+
+<style>
+  .feature-map-perspective {
+    perspective: 1400px;
+  }
+  .feature-map-stage {
+    transform: rotateX(11deg) rotateY(-7deg) rotateZ(0.5deg);
+    transform-style: preserve-3d;
+  }
+  .fm-layer--0 { transform: translateZ(-18px); }
+  .fm-layer--1 { transform: translateZ(0); }
+  .fm-layer--2 { transform: translateZ(14px); }
+  .fm-layer--3 { transform: translateZ(28px); }
+
+  .fm-wire {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fm-draw 1.8s var(--ease-out-expo, ease) forwards;
+  }
+  .fm-wire--late { animation-delay: 0.35s; }
+  .fm-float {
+    animation: fm-breathe 4.5s ease-in-out infinite;
+  }
+
+  @keyframes fm-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes fm-breathe {
+    0%, 100% { opacity: 0.05; transform: scaleX(1); }
+    50% { opacity: 0.09; transform: scaleX(1.04); }
+  }
+
+  .feature-map-hotspot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .fm-depth-0 { z-index: 2; }
+  .fm-depth-1 { z-index: 3; }
+  .fm-depth-2 { z-index: 4; }
+  .fm-depth-3 { z-index: 5; }
+
+  .feature-map-node {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 2.75rem;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-ink-800);
+  }
+  .feature-map-node-ring {
+    position: absolute;
+    top: 0.15rem;
+    left: 50%;
+    width: 2.6rem;
+    height: 2.6rem;
+    translate: -50% 0;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-brand-200) 45%, white);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-brand-400) 35%, transparent),
+      0 10px 24px -16px color-mix(in oklab, var(--color-brand-700) 45%, transparent);
+    animation: fm-pulse 2.8s ease-in-out infinite;
+  }
+  .feature-map-node-icon {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    size: 2.55rem;
+    width: 2.55rem;
+    height: 2.55rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: white;
+    color: var(--color-brand-700);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  }
+  .feature-map-node-label {
+    position: relative;
+    z-index: 1;
+    max-width: 6.5rem;
+    text-align: center;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.62rem;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-600);
+    text-wrap: balance;
+  }
+  .feature-map-node:hover .feature-map-node-ring,
+  .feature-map-node:focus-visible .feature-map-node-ring,
+  .feature-map-node[aria-expanded='true'] .feature-map-node-ring {
+    background: color-mix(in oklab, var(--color-brand-300) 55%, white);
+    box-shadow:
+      0 0 0 2px color-mix(in oklab, var(--color-brand-500) 55%, transparent),
+      0 14px 28px -14px color-mix(in oklab, var(--color-brand-700) 50%, transparent);
+    animation: none;
+  }
+  .feature-map-node:focus-visible {
+    outline: none;
+  }
+  .feature-map-node:focus-visible .feature-map-node-icon {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+
+  @keyframes fm-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  .feature-map-popover {
+    position: absolute;
+    z-index: 20;
+    width: min(20rem, calc(100% - 1.5rem));
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+    background: color-mix(in oklab, white 92%, var(--color-brand-50));
+    padding: 1rem 1rem 0.95rem;
+    box-shadow: 0 18px 40px -24px rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+  }
+  .feature-map-popover[hidden] {
+    display: none;
+  }
+
+  :global(.dark) .feature-map-node-icon {
+    background: color-mix(in oklab, white 8%, transparent);
+    color: var(--color-brand-200);
+  }
+  :global(.dark) .feature-map-node-label {
+    color: var(--color-ink-300);
+  }
+  :global(.dark) .feature-map-popover {
+    background: color-mix(in oklab, var(--color-ink-950) 88%, var(--color-brand-900));
+    border-color: color-mix(in oklab, white 12%, transparent);
+  }
+  :global(.dark) .feature-map-popover h3 {
+    color: white;
+  }
+  :global(.dark) .feature-map-popover p {
+    color: var(--color-ink-300);
+  }
+
+  @media (max-width: 640px) {
+    .feature-map-stage {
+      transform: rotateX(6deg) rotateY(-3deg);
+    }
+    .feature-map-node-label {
+      display: none;
+    }
+    .feature-map-popover {
+      left: 50% !important;
+      top: auto !important;
+      bottom: 0.5rem;
+      transform: translateX(-50%);
+      width: calc(100% - 1rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feature-map-stage {
+      transform: none;
+    }
+    .fm-wire,
+    .fm-float,
+    .feature-map-node-ring {
+      animation: none !important;
+    }
+    .fm-wire {
+      stroke-dashoffset: 0;
+    }
+    .feature-map-svg circle[r='2.4'],
+    .feature-map-svg circle[r='2'] {
+      display: none;
+    }
+  }
+
+  :global(.is-offscreen) .fm-wire,
+  :global(.is-offscreen) .fm-float,
+  :global(.is-offscreen) .feature-map-node-ring,
+  :global(.is-offscreen) .feature-map-svg circle {
+    animation-play-state: paused;
+  }
+</style>
+
+<script>
+  type NodePayload = {
+    id: string;
+    title: string;
+    body: string;
+    moreHref: string;
+    openHref: string;
+    moreLabel: string;
+    openLabel: string;
+    closeLabel: string;
+  };
+
+  let abort: AbortController | null = null;
+
+  function initFeatureMaps() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+
+    document.querySelectorAll<HTMLElement>('[data-feature-map]').forEach((root) => {
+      const dataEl = root.querySelector<HTMLScriptElement>('#feature-map-data');
+      if (!dataEl?.textContent) return;
+      let nodes: NodePayload[] = [];
+      try {
+        nodes = JSON.parse(dataEl.textContent) as NodePayload[];
+      } catch {
+        return;
+      }
+      const byId = new Map(nodes.map((n) => [n.id, n]));
+      const stage = root.querySelector<HTMLElement>('[data-fm-stage]');
+      const pop = root.querySelector<HTMLElement>('[data-fm-popover]');
+      if (!stage || !pop) return;
+
+      const titleEl = pop.querySelector<HTMLElement>('[data-fm-title]');
+      const bodyEl = pop.querySelector<HTMLElement>('[data-fm-body]');
+      const openEl = pop.querySelector<HTMLAnchorElement>('[data-fm-open]');
+      const moreEl = pop.querySelector<HTMLAnchorElement>('[data-fm-more]');
+      const closeBtn = pop.querySelector<HTMLButtonElement>('[data-fm-close]');
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-fm-node]'));
+
+      let activeId: string | null = null;
+
+      const setExpanded = (id: string | null) => {
+        buttons.forEach((b) => {
+          const on = b.dataset.fmNode === id;
+          b.setAttribute('aria-expanded', on ? 'true' : 'false');
+        });
+      };
+
+      const close = () => {
+        activeId = null;
+        pop.hidden = true;
+        setExpanded(null);
+      };
+
+      const openAt = (btn: HTMLButtonElement) => {
+        const id = btn.dataset.fmNode;
+        if (!id) return;
+        const node = byId.get(id);
+        if (!node) return;
+
+        if (activeId === id && !pop.hidden) {
+          close();
+          return;
+        }
+
+        activeId = id;
+        if (titleEl) titleEl.textContent = node.title;
+        if (bodyEl) bodyEl.textContent = node.body;
+        if (openEl) {
+          openEl.href = node.openHref;
+          openEl.textContent = node.openLabel;
+        }
+        if (moreEl) {
+          moreEl.href = node.moreHref;
+          moreEl.textContent = node.moreLabel;
+        }
+        if (closeBtn) closeBtn.setAttribute('aria-label', node.closeLabel);
+
+        pop.hidden = false;
+        setExpanded(id);
+
+        const stageRect = stage.getBoundingClientRect();
+        const btnRect = btn.getBoundingClientRect();
+        const popW = Math.min(320, stage.clientWidth - 24);
+        let left = btnRect.left - stageRect.left + btnRect.width / 2 - popW / 2;
+        left = Math.max(12, Math.min(left, stage.clientWidth - popW - 12));
+        let top = btnRect.bottom - stageRect.top + 12;
+        if (top + 180 > stage.clientHeight) {
+          top = Math.max(12, btnRect.top - stageRect.top - 190);
+        }
+        // Mobile CSS pins the popover; still set vars for desktop.
+        if (window.matchMedia('(min-width: 641px)').matches) {
+          pop.style.left = `${left}px`;
+          pop.style.top = `${top}px`;
+          pop.style.transform = 'none';
+          pop.style.bottom = 'auto';
+          pop.style.width = `${popW}px`;
+        }
+
+        closeBtn?.focus({ preventScroll: true });
+      };
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openAt(btn);
+        }, { signal });
+      });
+
+      closeBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const prev = activeId;
+        close();
+        if (prev) root.querySelector<HTMLButtonElement>(`[data-fm-node="${prev}"]`)?.focus();
+      }, { signal });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !pop.hidden) {
+          e.preventDefault();
+          const prev = activeId;
+          close();
+          if (prev) root.querySelector<HTMLButtonElement>(`[data-fm-node="${prev}"]`)?.focus();
+        }
+      }, { signal });
+
+      document.addEventListener('pointerdown', (e) => {
+        if (pop.hidden) return;
+        const t = e.target as Node | null;
+        if (t && (pop.contains(t) || buttons.some((b) => b.contains(t)))) return;
+        close();
+      }, { signal });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initFeatureMaps);
+  initFeatureMaps();
+</script>

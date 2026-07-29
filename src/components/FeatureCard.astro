@@ -1,13 +1,14 @@
 ---
-import Icon from './Icon.astro';
+import FeatureGlyph from './FeatureGlyph.astro';
 
 interface Props {
   icon: string;
   title: string;
   body: string;
+  href?: string;
   tone?: 'light' | 'dark';
 }
-const { icon, title, body, tone = 'light' } = Astro.props;
+const { icon, title, body, href, tone = 'light' } = Astro.props;
 
 const shell =
   tone === 'dark'
@@ -15,21 +16,25 @@ const shell =
     : 'border-ink-900/8 bg-white hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-900/5';
 const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950';
 const bodyColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600';
-const iconTile =
-  tone === 'dark'
-    ? 'bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20'
-    : 'bg-brand-50 text-brand-600 ring-1 ring-brand-500/10';
+
+const classes = [
+  'group relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1',
+  shell,
+];
 ---
 
-<div
-  class:list={[
-    'group relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1',
-    shell,
-  ]}
->
-  <div class:list={['inline-flex size-11 items-center justify-center rounded-xl', iconTile]}>
-    <Icon name={icon} class="size-5.5" />
-  </div>
-  <h3 class:list={['mt-5 font-display text-lg font-semibold', titleColor]}>{title}</h3>
-  <p class:list={['mt-2 text-sm leading-relaxed', bodyColor]}>{body}</p>
-</div>
+{
+  href ? (
+    <a href={href} target="_blank" rel="noopener noreferrer" class:list={classes}>
+      <FeatureGlyph name={icon} class="size-11" />
+      <h3 class:list={['mt-5 font-display text-lg font-semibold', titleColor]}>{title}</h3>
+      <p class:list={['mt-2 text-sm leading-relaxed', bodyColor]}>{body}</p>
+    </a>
+  ) : (
+    <div class:list={classes}>
+      <FeatureGlyph name={icon} class="size-11" />
+      <h3 class:list={['mt-5 font-display text-lg font-semibold', titleColor]}>{title}</h3>
+      <p class:list={['mt-2 text-sm leading-relaxed', bodyColor]}>{body}</p>
+    </div>
+  )
+}
