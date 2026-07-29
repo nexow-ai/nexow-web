@@ -1,8 +1,8 @@
 ---
 /**
  * Decorative community/marketplace mock: a maker's shared widget post with a
- * mini template thumbnail, engagement counts and a marketplace price, plus a
- * premium workflow row. Purely illustrative (aria-hidden), deterministic markup.
+ * mini template thumbnail, a live DM row, and a marketplace install cue.
+ * Purely illustrative (aria-hidden), deterministic markup.
  */
 import Icon from './Icon.astro';
 ---
@@ -17,16 +17,16 @@ import Icon from './Icon.astro';
     <span class="ml-auto rounded-full bg-sky-50 px-2 py-0.5 font-mono text-[0.65rem] text-sky-700">feed</span>
   </div>
 
-  <div class="space-y-4 p-5">
+  <div class="space-y-3 p-5">
     <!-- Shared widget post -->
     <div class="rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
       <div class="flex items-center gap-2.5">
         <span class="inline-flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-accent-500 font-display text-xs font-bold text-white">Q</span>
-        <div class="leading-tight">
+        <div class="min-w-0 leading-tight">
           <p class="font-mono text-xs text-ink-900">@quanta</p>
           <p class="font-mono text-[0.6rem] text-ink-500">shared a widget</p>
         </div>
-        <span class="ml-auto inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 font-mono text-[0.6rem] text-ink-600 ring-1 ring-ink-900/10">
+        <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-2 py-0.5 font-mono text-[0.6rem] text-ink-600 ring-1 ring-ink-900/10">
           <Icon name="store" class="size-3 text-brand-700" /> $12
         </span>
       </div>
@@ -36,7 +36,7 @@ import Icon from './Icon.astro';
         {Array.from({ length: 10 }).map((_, i) => (
           <span class:list={[
             'rounded-sm',
-            [0, 5].includes(i) ? 'bg-brand-400/65' : [3, 8].includes(i) ? 'bg-accent-400/65' : 'bg-white/[0.06]',
+            [0, 5].includes(i) ? 'bg-brand-400/65' : [3, 8].includes(i) ? 'bg-accent-400/65' : 'bg-ink-900/[0.06]',
           ]}></span>
         ))}
       </div>
@@ -58,7 +58,7 @@ import Icon from './Icon.astro';
         <p class="font-mono text-xs text-ink-900">@ada</p>
         <p class="truncate font-mono text-[0.6rem] text-ink-500">typing a reply…</p>
       </div>
-      <span class="ml-auto inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 ring-1 ring-brand-200/80">
+      <span class="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 ring-1 ring-brand-200/80">
         <Icon name="mail" class="size-3" /> live
       </span>
     </div>
@@ -66,8 +66,8 @@ import Icon from './Icon.astro';
     <!-- Marketplace row -->
     <div class="flex items-center gap-2.5 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2.5">
       <Icon name="store" class="size-4 shrink-0 text-sky-700" />
-      <span class="font-mono text-xs text-ink-700">new theme in marketplace</span>
-      <span class="ml-auto font-mono text-[0.65rem] text-brand-700">install</span>
+      <span class="min-w-0 truncate font-mono text-xs text-ink-700">new theme in marketplace</span>
+      <span class="ml-auto shrink-0 font-mono text-[0.65rem] text-brand-700">install</span>
     </div>
   </div>
 </div>
