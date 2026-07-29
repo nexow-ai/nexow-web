@@ -41,7 +41,10 @@ const capabilityFilters = [
 ];
 const labelSub = (sc: ConnectorSubcategory) => ({
   ...sc,
-  label: t.kinds[sc.key] ?? sc.key,
+  label:
+    sc.labelFrom === 'assets'
+      ? (t.assets[sc.key] ?? sc.key)
+      : (t.kinds[sc.key] ?? sc.key),
 });
 /** Payload for client: which subcategory chips belong to which category. */
 const subcategoryCatalog = {
@@ -471,7 +474,8 @@ const chipBtn =
 
     const syncSubcategoryChips = () => {
       const allowed = new Set((subCatalog[category] ?? subCatalog.all ?? []).map((s) => s.key));
-      for (const btn of subBtns()) {
+      const all = subBtns();
+      for (const btn of all) {
         const key = btn.dataset.filterSubcategory ?? '';
         if (key === 'all') {
           btn.hidden = false;
@@ -482,11 +486,12 @@ const chipBtn =
       if (subcategory !== 'all' && !allowed.has(subcategory)) {
         subcategory = 'all';
       }
-      const visible = subBtns().filter((b) => !b.hidden);
+      const visible = all.filter((b) => !b.hidden);
       const active =
         visible.find((b) => b.dataset.filterSubcategory === subcategory) ??
         visible.find((b) => b.dataset.filterSubcategory === 'all');
-      if (active) setPressed(visible, active);
+      // Clear pressed on every chip (including hidden) so re-shown chips don't stay stuck.
+      all.forEach((x) => x.setAttribute('aria-pressed', String(x === active)));
       subWrap?.classList.toggle('hidden', visible.length <= 1);
     };
 
@@ -497,7 +502,13 @@ const chipBtn =
         capability === 'all' ||
         (capability === 'trading' && card.dataset.trading === 'yes') ||
         (capability === 'readonly' && card.dataset.trading === 'no');
-      const okSub = subcategory === 'all' || card.dataset.kind === subcategory;
+      const okSub =
+        subcategory === 'all' ||
+        card.dataset.kind === subcategory ||
+        (card.dataset.assets ?? '')
+          .split(/\s+/)
+          .filter(Boolean)
+          .includes(subcategory);
       const letter = (card.dataset.letter ?? '').toUpperCase();
       const okAlpha =
         alpha === 'all' ||
