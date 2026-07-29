@@ -115,8 +115,10 @@ const maxCredits = Math.max(...rows.map((r) => r.credits));
                   <td class="px-3 py-3.5 text-right font-mono text-xs text-ink-300">+{nf(row.points)}</td>
                   <td class="px-3 py-3.5 text-right font-mono text-sm font-semibold text-brand-300">
                     {nf(row.credits)}
-                    {/* Meter: this prize against the biggest one on the ladder. */}
-                    <span class="mt-1.5 block h-1 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
+                    {/* Meter: this prize against the biggest one on the ladder.
+                        Narrow and right-aligned, so it reads as a bar under the
+                        figure rather than a rule struck through the cell. */}
+                    <span class="ms-auto mt-1.5 block h-1 w-20 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
                       <span
                         class="bar-grow block h-full rounded-full"
                         style={`width:${Math.max(4, Math.round((row.credits / maxCredits) * 100))}%;background:linear-gradient(90deg, ${row.from}, ${row.to});--d:${i * 70}ms`}
@@ -161,7 +163,7 @@ const maxCredits = Math.max(...rows.map((r) => r.credits));
               </p>
               <p class="mt-0.5 font-mono text-xs uppercase tracking-wider text-accent-300">{t.tokensLabel}</p>
               <p class="mt-2 text-xs leading-relaxed text-ink-400">
-                {t.tokenNote.replace('10%', `${DAO_COMMUNITY_ALLOCATION_PCT}%`)}
+                {t.tokenNote.replace('{pct}', `${DAO_COMMUNITY_ALLOCATION_PCT}%`)}
               </p>
             </div>
           </div>

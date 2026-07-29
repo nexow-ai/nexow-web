@@ -807,6 +807,7 @@ export const en: SiteContent = {
       title: 'Five levels, one bar',
       body: 'Points bucket into levels. The medallion in your account header changes with each one.',
       at: 'from {n} pts',
+      unit: 'levels',
       names: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold', platinum: 'Platinum', legend: 'Legend' },
     },
     badges: {
@@ -815,6 +816,7 @@ export const en: SiteContent = {
         '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Flip any card to see what it tracks.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
+      unit: 'badges',
       tracks: 'Tracks',
       unlocks: 'Unlocks at',
       worth: '+{n} pts',
@@ -889,7 +891,7 @@ export const en: SiteContent = {
         'Each unlock pays twice: spendable AI credits, and NEXO — the governance token of the Nexow DAO. Same schedule for everyone, on every plan.',
       tokenName: 'NEXO',
       tokenNote:
-        'NEXO is the Nexow DAO governance token. 10% of supply is reserved for the community ladder below; holders propose, vote and steer the treasury.',
+        'NEXO is the Nexow DAO governance token. {pct} of supply is reserved for the community ladder; holders propose, vote and steer the treasury.',
       colUnlock: 'Unlock',
       colCount: 'Available',
       colPoints: 'Points',
@@ -922,6 +924,7 @@ export const en: SiteContent = {
       ],
     },
     credits: {
+      eyebrow: 'Credits',
       title: 'What a credit actually is',
       body:
         'One credit is one Sonnet output token of real provider cost. Cheaper models stretch further, expensive models burn faster, and the dollar price of a credit never moves — so a generation costs what it costs, with no surprise markup by model.',

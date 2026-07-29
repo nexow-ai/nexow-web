@@ -68,6 +68,12 @@ export interface PlanSpec {
   icon: string;
   /** Card accent, matching the app's plan cards exactly. */
   accent: string;
+  /**
+   * The same hue, darkened for use ON WHITE. The app's accents are tuned for a
+   * dark canvas — cyan and gold at those values fail contrast as a check mark or
+   * as a button fill on the marketing site, so light surfaces use this instead.
+   */
+  accentInk: string;
   /** Monthly USD, or null for Free / Partner. */
   monthly: number | null;
   /** Credits granted every billing period (0 = not applicable). */
@@ -101,6 +107,7 @@ export const PLANS: PlanSpec[] = [
     key: 'free',
     icon: 'bolt',
     accent: '#22d3ee',
+    accentInk: '#0e7490',
     monthly: null,
     monthlyCredits: 0,
     bots: '10',
@@ -112,6 +119,7 @@ export const PLANS: PlanSpec[] = [
     key: 'supporter',
     icon: 'heart',
     accent: '#b072ff',
+    accentInk: '#7c3aed',
     monthly: 9.99,
     monthlyCredits: planCredits(9.99), // 115,000
     bots: '30',
@@ -124,6 +132,7 @@ export const PLANS: PlanSpec[] = [
     key: 'sponsor',
     icon: 'gem',
     accent: '#22c55e',
+    accentInk: '#15803d',
     monthly: 69.99,
     monthlyCredits: planCredits(69.99), // 800,000
     bots: '300',
@@ -137,6 +146,7 @@ export const PLANS: PlanSpec[] = [
     key: 'partner',
     icon: 'handshake',
     accent: '#f6c25a',
+    accentInk: '#a16207',
     monthly: null,
     monthlyCredits: 0,
     bots: '∞',

@@ -81,7 +81,7 @@ const names = c.tiers.map((tier) => tier.name);
                   <span class="flex flex-col items-center gap-1.5">
                     <span
                       class="inline-flex size-7 items-center justify-center rounded-lg"
-                      style={`color:${PLANS[i].accent};background:color-mix(in oklab, ${PLANS[i].accent} 14%, transparent)`}
+                      style={`color:${PLANS[i].accentInk};background:color-mix(in oklab, ${PLANS[i].accent} 16%, transparent)`}
                       aria-hidden="true"
                     >
                       <Icon name={PLANS[i].icon} class="size-4" />
@@ -135,7 +135,7 @@ const names = c.tiers.map((tier) => tier.name);
                           <Icon
                             name="check"
                             class="mx-auto size-4"
-                            style={`color:${PLANS[i].accent}`}
+                            style={`color:${PLANS[i].accentInk}`}
                           />
                         ) : (
                           <span class="text-ink-300" aria-label="—">

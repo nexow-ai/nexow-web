@@ -95,6 +95,8 @@ export interface RewardsContent {
     body: string;
     /** "from {n} pts" */
     at: string;
+    /** Bare noun for the teaser strip, e.g. 'levels'. */
+    unit: string;
     names: Record<'bronze' | 'silver' | 'gold' | 'platinum' | 'legend', string>;
   };
   badges: {
@@ -103,6 +105,8 @@ export interface RewardsContent {
     filters: Record<'all' | 'tiered' | 'rare' | 'legendary', string>;
     /** "{n} badges" */
     count: string;
+    /** Bare noun for the teaser strip, e.g. 'badges'. */
+    unit: string;
     /** Card back labels. */
     tracks: string;
     unlocks: string;
@@ -145,6 +149,7 @@ export interface RewardsContent {
     cards: { icon: string; title: string; body: string }[];
   };
   credits: {
+    eyebrow: string;
     title: string;
     body: string;
     /** "{usd} per 1,000,000 credits". */
@@ -200,6 +205,12 @@ export interface SiteContent {
       titleLead: string;
       titleGradient: string;
       titleTail: string;
+      /**
+       * Optional fourth beat under the three-line headline ("In seconds — not
+       * weeks or months."). Set apart typographically because four equal lines
+       * stop reading as a slogan. Locales without it just show three.
+       */
+      titleKicker?: string;
       subtitle: string;
       ctaPrimary: string;
       ctaSecondary: string;

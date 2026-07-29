@@ -130,9 +130,19 @@ const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
                     <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="lg" delay={(i % 8) * 300} />
                   </span>
                   <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
-                  <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
-                    {t.rarity[badge.rarity]}
-                  </span>
+                  {/* Three pips say "this one has bronze, silver and gold tiers"
+                      at a glance — the medals below carry a single bar instead. */}
+                  {tiered ? (
+                    <span class="flex items-center gap-1" aria-hidden="true">
+                      {(['bronze', 'silver', 'gold'] as const).map((tier) => (
+                        <span class="size-1.5 rounded-full" style={`background:${RARITY_COLORS[tier].from}`} />
+                      ))}
+                    </span>
+                  ) : (
+                    <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
+                      {t.rarity[badge.rarity]}
+                    </span>
+                  )}
                 </span>
 
                 {/* Back */}
