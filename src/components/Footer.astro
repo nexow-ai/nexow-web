@@ -5,6 +5,13 @@ import { getLangFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 
+interface Props {
+  /** On an already-dark page the footer drops its own background so the page
+   *  backdrop (the dot field) runs straight through it. */
+  tone?: 'light' | 'dark';
+}
+const { tone = 'light' } = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 const t = useContent(lang);
 const year = 2026;
@@ -13,9 +20,18 @@ const localize = (href: string) =>
   href.startsWith('/') ? localizePath(href, lang) : href;
 ---
 
-<footer transition:animate="none" class="relative overflow-hidden bg-ink-950 text-ink-300">
-  <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(80%_60%_at_50%_0%,black,transparent)]">
-  </div>
+<footer
+  transition:animate="none"
+  class:list={[
+    'relative overflow-hidden text-ink-300',
+    tone === 'dark' ? 'border-t border-white/8' : 'bg-ink-950',
+  ]}
+>
+  {
+    tone !== 'dark' && (
+      <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(80%_60%_at_50%_0%,black,transparent)]" />
+    )
+  }
   <div class="container-page relative py-16">
     <div class="grid gap-12 lg:grid-cols-[1.5fr_2fr]">
       <div class="max-w-sm">
