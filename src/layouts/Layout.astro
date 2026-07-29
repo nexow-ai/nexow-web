@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ScrollMotion from '../components/ScrollMotion.astro';
+import DotField from '../components/DotField.astro';
 import { ClientRouter, fade } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
 import { getPageAccent } from '../i18n/accent';
@@ -37,7 +38,14 @@ const mainFade = fade({ duration: '0.32s' });
     <BaseHead lang={lang} route={route} {...head} />
     <ClientRouter />
   </head>
-  <body class:list={['min-h-dvh antialiased', theme === 'dark' ? 'bg-ink-950' : 'bg-white']}>
+  <body
+    class:list={[
+      'min-h-dvh antialiased',
+      // `dark` switches every `dark:` variant on the page — see the semantic
+      // surface tokens in global.css.
+      theme === 'dark' ? 'dark bg-ink-950 text-ink-200' : 'bg-white',
+    ]}
+  >
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
@@ -45,13 +53,20 @@ const mainFade = fade({ duration: '0.32s' });
       Skip to content
     </a>
 
+    {
+      /* The dot field is a page-wide backdrop, not a per-section one: sections
+         render on translucent surfaces so one continuous light travels the
+         whole page. */
+      theme === 'dark' && <DotField class="fixed inset-0 z-0" />
+    }
+
     <Header tone={theme} />
 
-    <main id="main" transition:animate={mainFade}>
+    <main id="main" class="relative z-10" transition:animate={mainFade}>
       <slot />
     </main>
 
-    <Footer />
+    <Footer tone={theme} />
 
     <ScrollMotion />
 

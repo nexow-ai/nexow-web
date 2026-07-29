@@ -46,6 +46,22 @@
   --color-accent-900: #312e81;
   --color-accent-950: #1e1b4b;
 
+  /* Plasma — SECONDARY accent. Never used alone: it is the third stop that
+   * turns the teal→indigo brand gradient into something that actually glows on
+   * a dark surface. Keep it for gradients, glows and hairlines, not for text
+   * or UI state (that is what brand/accent are for). */
+  --color-plasma-50: #fdf4ff;
+  --color-plasma-100: #fae8ff;
+  --color-plasma-200: #f5d0fe;
+  --color-plasma-300: #f0abfc;
+  --color-plasma-400: #e879f9;
+  --color-plasma-500: #d946ef;
+  --color-plasma-600: #c026d3;
+  --color-plasma-700: #a21caf;
+  --color-plasma-800: #86198f;
+  --color-plasma-900: #701a75;
+  --color-plasma-950: #4a044e;
+
   /* Gold — premium accent for light marketing surfaces */
   --color-gold-50: #fdfaf3;
   --color-gold-100: #f6edd6;
@@ -221,6 +237,49 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Semantic surface tokens.
+ *
+ * The marketing pages are light; the home page opts into `.dark` (set on
+ * <body> from Layout when `theme="dark"`). Anything drawn in a component
+ * <style> block — the inline SVG diagrams especially — reads these instead of
+ * hard-coding white/ink, so it flips with no per-component dark rules.
+ *
+ * Tailwind-classed markup keeps using explicit `dark:` variants, which stay
+ * readable at the call site.
+ * ------------------------------------------------------------------ */
+:root {
+  --surface: #ffffff;
+  --surface-sunk: #f7fbfb;
+  --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  --surface-line-soft: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+  --text-strong: var(--color-ink-950);
+  --text-body: var(--color-ink-600);
+  --text-muted: var(--color-ink-400);
+  --glyph: var(--color-brand-700);
+
+  /* Gradient stops — three of them once we are on a dark surface, where the
+   * secondary accent finally has room to glow. */
+  --grad-a: var(--color-brand-600);
+  --grad-b: var(--color-sky-500);
+  --grad-c: var(--color-accent-600);
+}
+
+.dark {
+  --surface: color-mix(in oklab, white 4%, transparent);
+  --surface-sunk: color-mix(in oklab, white 2%, transparent);
+  --surface-line: color-mix(in oklab, white 11%, transparent);
+  --surface-line-soft: color-mix(in oklab, white 7%, transparent);
+  --text-strong: #ffffff;
+  --text-body: var(--color-ink-300);
+  --text-muted: var(--color-ink-400);
+  --glyph: var(--color-brand-300);
+
+  --grad-a: var(--color-brand-300);
+  --grad-b: var(--color-accent-300);
+  --grad-c: var(--color-plasma-400);
+}
+
+/* ------------------------------------------------------------------ *
  * Base
  * ------------------------------------------------------------------ */
 @layer base {
@@ -296,16 +355,54 @@
     }
   }
 
-  /* Brand gradient text (teal → indigo). */
+  /* Brand gradient text. Teal → sky → indigo on light; on `.dark` the stops
+   * swap to teal → indigo → plasma, which is where the secondary accent earns
+   * its keep. */
   .text-gradient {
     background-image: linear-gradient(
       100deg,
-      var(--color-brand-600),
-      var(--color-sky-500) 85%
+      var(--grad-a),
+      var(--grad-b) 52%,
+      var(--grad-c)
     );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+  }
+
+  /* The same three stops, but wide enough to drift — used on the hero headline
+   * so the colour slowly travels across the words. */
+  .text-gradient-live {
+    background-image: linear-gradient(
+      100deg,
+      var(--grad-a),
+      var(--grad-b) 30%,
+      var(--grad-c) 55%,
+      var(--grad-b) 78%,
+      var(--grad-a)
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-drift 14s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .text-gradient-live {
+      animation: none;
+    }
+  }
+
+  /* Gradient rule/underline in the same three stops. */
+  .rule-gradient {
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--grad-a) 18%,
+      var(--grad-b) 50%,
+      var(--grad-c) 82%,
+      transparent
+    );
   }
 
   /* Eyebrow / kicker label above headings. */
@@ -339,6 +436,15 @@
     background: radial-gradient(
       60% 60% at 50% 40%,
       color-mix(in oklab, var(--color-accent-500) 28%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Secondary-accent glow — the magenta counterweight to `.glow-brand`. */
+  .glow-plasma {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-plasma-500) 26%, transparent),
       transparent 70%
     );
   }
@@ -464,6 +570,42 @@
 .aurora-b { animation: aurora-b 22s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .aurora-a, .aurora-b { animation: none; }
+}
+
+/* Slow travel of a wide gradient across text (see `.text-gradient-live`). */
+@keyframes gradient-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Third aurora blob — the secondary accent, on a longer cycle than the other
+ * two so the three never line up into a single visible pulse. */
+@keyframes aurora-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  35% { transform: translate(-6%, -7%) scale(1.14); }
+  70% { transform: translate(7%, 4%) scale(0.9); }
+}
+.aurora-c { animation: aurora-c 26s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .aurora-c { animation: none; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero entrance — a short staggered rise, run once on load. Separate from
+ * `.reveal` (which is scroll-driven and would otherwise hold the hero hidden
+ * until an IntersectionObserver callback lands, i.e. after first paint).
+ * ------------------------------------------------------------------ */
+@keyframes enter-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.js .enter {
+  opacity: 0;
+  animation: enter-up 0.85s var(--ease-out-expo) both;
+  animation-delay: var(--enter-delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .enter { opacity: 1; animation: none; }
 }
 
 /* Blinking caret for the typed hero prompt. */
@@ -788,18 +930,21 @@
   }
 }
 
-/* Slowly rotating coin for the credit-rate figure. */
+/* Coin for the credit-rate figure. It rocks rather than spinning a full turn:
+ * a 360° rotation spends part of every cycle edge-on, which reads as a glitch
+ * on a still (and in a screenshot) rather than as motion. */
 @keyframes coin-spin {
-  from {
-    transform: rotateY(0deg);
+  0%,
+  100% {
+    transform: rotateY(-26deg);
   }
-  to {
-    transform: rotateY(360deg);
+  50% {
+    transform: rotateY(26deg);
   }
 }
 .coin-spin {
   transform-style: preserve-3d;
-  animation: coin-spin 7s linear infinite;
+  animation: coin-spin 6s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .coin-spin {
