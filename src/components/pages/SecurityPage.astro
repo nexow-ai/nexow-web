@@ -30,7 +30,7 @@ const t = useContent(lang).securityPage!;
     </div>
   </section>
 
-  <section class="border-y border-ink-900/5 bg-[#f7fbfb] dark:bg-white/[0.015] py-16 dark:border-white/8 dark:bg-white/[0.015]">
+  <section class="border-y border-ink-900/5 bg-[#f7fbfb] py-16 dark:border-white/8 dark:bg-white/[0.015]">
     <div class="container-page">
       <h2 class="reveal text-center font-display text-2xl font-semibold text-ink-950 sm:text-3xl dark:text-white">
         {t.principlesTitle}
@@ -38,7 +38,7 @@ const t = useContent(lang).securityPage!;
       <ul class="reveal-stagger mx-auto mt-10 max-w-2xl space-y-4">
         {
           t.principles.map((p) => (
-            <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-700 dark:text-ink-200 sm:text-base dark:text-ink-300">
+            <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-700 sm:text-base dark:text-ink-300">
               <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200/80 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
                 <Icon name="check" class="size-3.5" />
               </span>
