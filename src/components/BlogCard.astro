@@ -27,7 +27,7 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
 
 <article
   class:list={[
-    'group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/8 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-900/5',
+    'group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/8 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-900/5 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-brand-400/30 dark:hover:shadow-black/40',
     featured && 'md:col-span-2 md:flex-row',
   ]}
 >
@@ -35,7 +35,7 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
     heroImage && (
       <div
         class:list={[
-          'relative shrink-0 overflow-hidden bg-brand-50',
+          'relative shrink-0 overflow-hidden bg-brand-50 dark:bg-brand-400/10',
           featured && 'md:w-[46%]',
         ]}
       >
@@ -73,7 +73,7 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
     </div>
     <h2
       class:list={[
-        'mt-3 text-balance font-display font-semibold text-ink-950',
+        'mt-3 text-balance font-display font-semibold text-ink-950 dark:text-white',
         featured ? 'text-2xl md:text-3xl' : 'text-xl',
       ]}
     >
@@ -84,13 +84,13 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
     </h2>
     <p
       class:list={[
-        'mt-3 line-clamp-3 leading-relaxed text-ink-600',
+        'mt-3 line-clamp-3 leading-relaxed text-ink-600 dark:text-ink-300',
         featured ? 'text-sm md:text-base' : 'text-sm',
       ]}
     >
       {description}
     </p>
-    <span class="mt-5 inline-flex items-center gap-1.5 font-mono text-sm font-medium text-brand-700">
+    <span class="mt-5 inline-flex items-center gap-1.5 font-mono text-sm font-medium text-brand-700 dark:text-brand-300">
       {t.readMore}
       <Icon name="arrow" class="size-4 transition-transform group-hover:translate-x-0.5" />
     </span>

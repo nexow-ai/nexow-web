@@ -6,13 +6,7 @@ import { getLangFromUrl, getRouteFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
-
-interface Props {
-  /** Chrome tone: 'dark' for dark-themed pages, 'light' elsewhere. */
-  tone?: 'light' | 'dark';
-}
-const { tone = 'light' } = Astro.props;
-const dark = tone === 'dark';
+import ThemeToggle from './ThemeToggle.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
@@ -26,6 +20,8 @@ const links = t.nav.links.map((l) => ({
 }));
 
 const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
+const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
+const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 ---
 
 <header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
@@ -33,10 +29,9 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
     <nav
       class="mt-3 flex h-16 items-center justify-between rounded-full border border-transparent px-3 pl-4 transition-all duration-300"
       id="site-nav"
-      data-tone={tone}
       aria-label="Primary"
     >
-      <Logo lang={lang} tone={dark ? 'light' : 'dark'} class="h-7" />
+      <Logo lang={lang} class="h-7" />
 
       <!-- Desktop nav -->
       <ul class="hidden items-center gap-1 md:flex">
@@ -47,13 +42,9 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
                 href={l.url}
                 class:list={[
                   'inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
-                  dark
-                    ? l.active
-                      ? 'text-brand-300'
-                      : 'text-ink-300 hover:text-white'
-                    : l.active
-                      ? 'text-brand-600'
-                      : 'text-ink-600 hover:text-ink-950',
+                  l.active
+                    ? 'text-brand-600 dark:text-brand-300'
+                    : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
                 ]}
                 aria-current={l.active ? 'page' : undefined}
               >
@@ -65,33 +56,26 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
         }
       </ul>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <ThemeToggle toDarkLabel={themeToDark} toLightLabel={themeToLight} />
+
         <details class="group relative hidden sm:block">
           <summary
-            class:list={[
-              'flex cursor-pointer list-none items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider transition-colors [&::-webkit-details-marker]:hidden',
-              dark ? 'text-ink-300 hover:text-white' : 'text-ink-600 hover:text-ink-950',
-            ]}
+            class="flex cursor-pointer list-none items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider text-ink-600 transition-colors hover:text-ink-950 dark:text-ink-300 dark:hover:text-white [&::-webkit-details-marker]:hidden"
             aria-label="Switch language"
           >
             <Icon name="globe" class="size-4" />
             {lang}
           </summary>
           <ul
-            class:list={[
-              'absolute right-0 top-full z-50 mt-2 min-w-[8rem] overflow-hidden rounded-xl border py-1 shadow-lg',
-              dark ? 'border-white/10 bg-ink-900' : 'border-ink-900/10 bg-white',
-            ]}
+            class="absolute right-0 top-full z-50 mt-2 min-w-[8rem] overflow-hidden rounded-xl border border-ink-900/10 bg-white py-1 shadow-lg dark:border-white/10 dark:bg-ink-900"
           >
             {
               otherLangs.map((l) => (
                 <li>
                   <a
                     href={localizePath(route, l)}
-                    class:list={[
-                      'block px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors',
-                      dark ? 'text-ink-300 hover:bg-white/10 hover:text-white' : 'text-ink-600 hover:bg-ink-900/5 hover:text-ink-950',
-                    ]}
+                    class="block px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-600 transition-colors hover:bg-ink-900/5 hover:text-ink-950 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white"
                   >
                     {languages[l]}
                   </a>
@@ -108,10 +92,7 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
         <button
           type="button"
           id="menu-toggle"
-          class:list={[
-            'inline-flex size-10 items-center justify-center rounded-full md:hidden',
-            dark ? 'text-ink-200 hover:bg-white/10' : 'text-ink-800 hover:bg-ink-900/5',
-          ]}
+          class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 md:hidden dark:text-ink-200 dark:hover:bg-white/10"
           aria-expanded="false"
           aria-controls="mobile-menu"
           aria-label={t.nav.menu}
@@ -125,21 +106,15 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class:list={[
-      'fixed inset-0 z-40 hidden backdrop-blur-md md:hidden',
-      dark ? 'bg-ink-950/98' : 'bg-white/98',
-    ]}
+    class="fixed inset-0 z-40 hidden bg-white/98 backdrop-blur-md md:hidden dark:bg-ink-950/98"
     hidden
   >
     <div class="container-page flex h-16 items-center justify-between pt-3">
-      <Logo lang={lang} tone={dark ? 'light' : 'dark'} class="h-7" />
+      <Logo lang={lang} class="h-7" />
       <button
         type="button"
         id="menu-close"
-        class:list={[
-          'inline-flex size-10 items-center justify-center rounded-full',
-          dark ? 'text-ink-200 hover:bg-white/10' : 'text-ink-800 hover:bg-ink-900/5',
-        ]}
+        class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
         aria-label={t.nav.close}
       >
         <Icon name="x" class="size-6" />
@@ -151,9 +126,8 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
           <a
             href={l.url}
             class:list={[
-              'flex items-center gap-3 py-4 font-display text-2xl font-semibold',
-              dark ? 'border-b border-white/10 text-white' : 'border-b border-ink-900/5 text-ink-900',
-              l.active && (dark ? 'text-brand-300' : 'text-brand-600'),
+              'flex items-center gap-3 border-b border-ink-900/5 py-4 font-display text-2xl font-semibold text-ink-900 dark:border-white/10 dark:text-white',
+              l.active && 'text-brand-600 dark:text-brand-300',
             ]}
             aria-current={l.active ? 'page' : undefined}
           >
@@ -173,10 +147,7 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
             otherLangs.map((l) => (
               <a
                 href={localizePath(route, l)}
-                class:list={[
-                  'inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider',
-                  dark ? 'text-ink-300' : 'text-ink-600',
-                ]}
+                class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider text-ink-600 dark:text-ink-300"
               >
                 <Icon name="globe" class="size-4" />
                 {languages[l]}
@@ -193,6 +164,16 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
   // Header: solidify on scroll + mobile menu toggle. Re-inits on view transitions.
   let headerAbort: AbortController | undefined;
 
+  const lightSolid = ['bg-white/95', 'backdrop-blur-md', '!border-ink-900/10', 'shadow-sm'] as const;
+  const darkSolid = [
+    'bg-ink-900/92',
+    'backdrop-blur-md',
+    '!border-white/10',
+    'shadow-lg',
+    'shadow-black/20',
+  ] as const;
+  const allSolid = [...lightSolid, ...darkSolid];
+
   function initHeader() {
     headerAbort?.abort();
     headerAbort = new AbortController();
@@ -202,17 +183,18 @@ const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
     const nav = document.getElementById('site-nav');
     if (!header || !nav) return;
 
-    const darkNav = nav.dataset.tone === 'dark';
-    const solidClasses = darkNav
-      ? ['bg-ink-900/92', 'backdrop-blur-md', '!border-white/10', 'shadow-lg', 'shadow-black/20']
-      : ['bg-white/95', 'backdrop-blur-md', '!border-ink-900/10', 'shadow-sm'];
     const onScroll = () => {
       const solid = window.scrollY > 8;
-      solidClasses.forEach((c) => nav.classList.toggle(c, solid));
+      allSolid.forEach((c) => nav.classList.remove(c));
+      if (solid) {
+        const classes = document.documentElement.classList.contains('dark') ? darkSolid : lightSolid;
+        classes.forEach((c) => nav.classList.add(c));
+      }
       header.classList.toggle('is-scrolled', solid);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true, signal });
+    document.addEventListener('nexow:themechange', onScroll, { signal });
 
     const menu = document.getElementById('mobile-menu');
     const toggle = document.getElementById('menu-toggle');

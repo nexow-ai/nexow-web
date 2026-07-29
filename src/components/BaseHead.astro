@@ -78,16 +78,29 @@ const allSchema = [orgSchema, ...schema];
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script is:inline>
   (function () {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function isDark() {
+      if (document.documentElement.dataset.themeLocked !== undefined) {
+        return document.documentElement.classList.contains('dark');
+      }
+      try {
+        var stored = localStorage.getItem('nexow-theme');
+        if (stored === 'dark' || stored === 'light') return stored === 'dark';
+      } catch (e) {}
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
     function apply() {
-      const link = document.getElementById('site-favicon');
+      var link = document.getElementById('site-favicon');
       if (!link) return;
-      link.href = mq.matches ? '/favicon.png' : '/favicon-black.png';
+      link.href = isDark() ? '/favicon.png' : '/favicon-black.png';
+      var meta = document.querySelector('meta[name="theme-color"]:not([media])');
+      if (meta) meta.setAttribute('content', isDark() ? '#08090d' : '#06a086');
     }
     apply();
-    mq.addEventListener('change', apply);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
+    document.addEventListener('nexow:themechange', apply);
   })();
 </script>
+<meta name="theme-color" content="#06a086" />
 <meta name="theme-color" content="#06a086" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#08090d" media="(prefers-color-scheme: dark)" />
 

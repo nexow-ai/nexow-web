@@ -1,0 +1,151 @@
+---
+/**
+ * Light/dark toggle with Telegram-style circular wipe (View Transitions API).
+ * Preference lives in localStorage (`nexow-theme`); FOUC script is in Layout.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  toDarkLabel: string;
+  toLightLabel: string;
+  class?: string;
+}
+
+const { toDarkLabel, toLightLabel, class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class:list={[
+    'theme-toggle inline-flex size-10 items-center justify-center rounded-full transition-colors',
+    'text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10',
+    className,
+  ]}
+  data-to-dark={toDarkLabel}
+  data-to-light={toLightLabel}
+  aria-label={toDarkLabel}
+>
+  <Icon name="moon" class="size-4.5 dark:hidden" />
+  <Icon name="sun" class="size-4.5 hidden dark:block" />
+</button>
+
+<style>
+  :global([data-theme-locked]) .theme-toggle {
+    display: none;
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'nexow-theme';
+
+  type Theme = 'light' | 'dark';
+
+  function currentTheme(): Theme {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme: Theme) {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      /* private mode / blocked storage */
+    }
+
+    const meta = document.querySelector('meta[name="theme-color"]:not([media])');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#08090d' : '#06a086');
+
+    const favicon = document.getElementById('site-favicon') as HTMLLinkElement | null;
+    if (favicon) favicon.href = theme === 'dark' ? '/favicon.png' : '/favicon-black.png';
+
+    document.dispatchEvent(new CustomEvent('nexow:themechange', { detail: { theme } }));
+  }
+
+  function syncToggle(btn: HTMLButtonElement) {
+    const dark = currentTheme() === 'dark';
+    btn.setAttribute('aria-label', dark ? btn.dataset.toLight! : btn.dataset.toDark!);
+    btn.setAttribute('aria-pressed', String(dark));
+  }
+
+  async function toggleTheme(btn: HTMLButtonElement) {
+    const next: Theme = currentTheme() === 'dark' ? 'light' : 'dark';
+    const reduce =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      typeof document.startViewTransition !== 'function';
+
+    if (reduce) {
+      applyTheme(next);
+      syncToggle(btn);
+      return;
+    }
+
+    const { top, left, width, height } = btn.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    document.documentElement.classList.add('is-theme-transition');
+
+    try {
+      const transition = document.startViewTransition(() => {
+        applyTheme(next);
+        syncToggle(btn);
+      });
+
+      await transition.ready;
+
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${maxRadius}px at ${x}px ${y}px)`,
+          ],
+        },
+        {
+          duration: 520,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          pseudoElement: '::view-transition-new(root)',
+        },
+      );
+
+      await transition.finished;
+    } catch {
+      applyTheme(next);
+      syncToggle(btn);
+    } finally {
+      document.documentElement.classList.remove('is-theme-transition');
+    }
+  }
+
+  let abort: AbortController | undefined;
+
+  function initThemeToggle() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+
+    const btn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
+    if (!btn) return;
+
+    syncToggle(btn);
+    btn.addEventListener('click', () => void toggleTheme(btn), { signal });
+  }
+
+  document.addEventListener('astro:page-load', initThemeToggle);
+
+  // Keep user theme across ClientRouter swaps (new documents are SSR'd light).
+  document.addEventListener('astro:before-swap', (event) => {
+    if (document.documentElement.hasAttribute('data-theme-locked')) return;
+    const dark = document.documentElement.classList.contains('dark');
+    const theme = document.documentElement.dataset.theme;
+    const next = event.newDocument.documentElement;
+    next.classList.toggle('dark', dark);
+    if (theme) next.dataset.theme = theme;
+    next.classList.add('js');
+  });
+</script>

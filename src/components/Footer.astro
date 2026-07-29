@@ -4,13 +4,7 @@ import { useContent } from '../i18n/content';
 import { getLangFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-
-interface Props {
-  /** On an already-dark page the footer drops its own background so the page
-   *  backdrop (the dot field) runs straight through it. */
-  tone?: 'light' | 'dark';
-}
-const { tone = 'light' } = Astro.props;
+import DotField from './DotField.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useContent(lang);
@@ -23,17 +17,14 @@ const localize = (href: string) =>
 
 <footer
   transition:animate="none"
-  class:list={[
-    'relative overflow-hidden text-ink-300',
-    tone === 'dark' ? 'border-t border-white/8' : 'bg-ink-950',
-  ]}
+  class="relative overflow-hidden border-t border-transparent bg-ink-950 text-ink-300 dark:border-white/8 dark:bg-transparent"
 >
-  {
-    tone !== 'dark' && (
-      <div class="bg-grid absolute inset-0 opacity-40 [mask-image:radial-gradient(80%_60%_at_50%_0%,black,transparent)]" />
-    )
-  }
-  <div class="container-page relative py-16">
+  {/* Light mode: scoped dark DotField. Dark mode uses Layout's page-wide field. */}
+  <DotField
+    tone="dark"
+    class="absolute inset-0 z-0 opacity-90 [mask-image:radial-gradient(85%_70%_at_50%_0%,black,transparent)] dark:hidden"
+  />
+  <div class="container-page relative z-10 py-16">
     <div class="grid gap-12 lg:grid-cols-[1.5fr_2fr]">
       <div class="max-w-sm">
         <Logo lang={lang} tone="light" class="h-8" />
@@ -134,12 +125,21 @@ const localize = (href: string) =>
     }
 
     <div class="mt-14 border-t border-white/10 pt-8">
-      <p class="text-xs leading-relaxed text-ink-500">{t.footer.disclaimer}</p>
+      <p class="text-xs leading-relaxed text-ink-500">
+        <span class="font-medium text-ink-400">{SITE.legalName}</span>
+        <span class="mx-2 text-ink-700" aria-hidden="true">·</span>
+        <span>{SITE.address}</span>
+      </p>
       <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-xs text-ink-500">
           © {year} {SITE.legalName}. {t.footer.rights}
         </p>
-        <p class="font-mono text-xs text-ink-600">{t.footer.builtWith}</p>
+        <time
+          id="footer-clock"
+          class="font-mono text-xs tabular-nums text-ink-500"
+          data-locale={lang}
+          datetime=""
+        ></time>
       </div>
     </div>
   </div>
@@ -226,5 +226,44 @@ const localize = (href: string) =>
     });
   }
 
-  document.addEventListener('astro:page-load', initNewsletterForm);
+  let clockTimer: number | null = null;
+
+  function formatClock(locale: string, now: Date) {
+    try {
+      return new Intl.DateTimeFormat(locale, {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }).format(now);
+    } catch {
+      return now.toISOString().replace('T', ' ').slice(0, 19);
+    }
+  }
+
+  function tickClock(el: HTMLTimeElement) {
+    const now = new Date();
+    el.dateTime = now.toISOString();
+    el.textContent = formatClock(el.dataset.locale || 'en', now);
+  }
+
+  function initFooterClock() {
+    if (clockTimer != null) {
+      window.clearInterval(clockTimer);
+      clockTimer = null;
+    }
+    const el = document.getElementById('footer-clock') as HTMLTimeElement | null;
+    if (!el) return;
+    tickClock(el);
+    clockTimer = window.setInterval(() => tickClock(el), 1000);
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initNewsletterForm();
+    initFooterClock();
+  });
 </script>

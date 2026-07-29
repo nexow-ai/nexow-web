@@ -239,11 +239,11 @@
 /* ------------------------------------------------------------------ *
  * Semantic surface tokens.
  *
- * Marketing pages are light by default. Opt into `.dark` via Layout
- * `theme="dark"` when a page needs the terminal-style chrome. Anything drawn
- * in a component <style> block — the inline SVG diagrams especially — reads
- * these instead of hard-coding white/ink, so it flips with no per-component
- * dark rules.
+ * Marketing pages are light by default; users can flip to dark via the header
+ * toggle (Telegram-style wipe). Layout `theme="dark"|"light"` locks the surface
+ * and hides the toggle. Anything drawn in a component <style> block — the
+ * inline SVG diagrams especially — reads these instead of hard-coding
+ * white/ink, so it flips with no per-component dark rules.
  *
  * Tailwind-classed markup keeps using explicit `dark:` variants, which stay
  * readable at the call site.
@@ -310,7 +310,29 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    transition: background-color 0.35s var(--ease-out-expo);
+  }
+
+  .dark body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-200);
+  }
+
+  /*
+   * Telegram-style theme wipe — only while `.is-theme-transition` is set so
+   * Astro ClientRouter page fades keep their default root crossfade.
+   */
+  html.is-theme-transition::view-transition-old(root),
+  html.is-theme-transition::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  html.is-theme-transition::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  html.is-theme-transition::view-transition-new(root) {
+    z-index: 2;
   }
 
   h1,

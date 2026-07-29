@@ -1,13 +1,16 @@
 ---
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
 import Icon from '../Icon.astro';
+import Button from '../Button.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.privacy;
+const securityHref = localizePath('/security', lang);
 ---
 
 <section id="privacy" class="relative overflow-x-clip border-y border-ink-900/5 bg-[#f7fbfb] py-20 text-ink-950 sm:py-24 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
@@ -37,6 +40,12 @@ const t = useContent(lang).home.privacy;
             ))
           }
         </ul>
+
+        <div class="mt-8">
+          <Button href={securityHref} variant="secondary" size="md" iconRight="arrow">
+            {t.cta}
+          </Button>
+        </div>
       </div>
 
       <!-- Visual: workspace security panel -->

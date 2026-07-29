@@ -13,40 +13,25 @@ export interface SectionNavItem {
 
 interface Props {
   sections: SectionNavItem[];
-  /** Chrome tone — matches Header / Layout theme. */
-  tone?: 'light' | 'dark';
   /** Accessible name for the nav landmark. */
   label?: string;
 }
 
-const { sections, tone = 'light', label = 'On this page' } = Astro.props;
-const dark = tone === 'dark';
+const { sections, label = 'On this page' } = Astro.props;
 ---
 
 {
   sections.length > 0 && (
     <nav
       id="section-nav"
-      class:list={[
-        'section-nav pointer-events-none fixed inset-y-0 z-40 hidden items-center lg:flex',
-        'end-3 xl:end-5',
-      ]}
+      class="section-nav pointer-events-none fixed inset-y-0 z-40 hidden items-center end-3 lg:flex xl:end-5"
       aria-label={label}
-      data-tone={tone}
       data-section-nav
     >
-      <ol
-        class:list={[
-          'section-nav__list pointer-events-auto relative flex flex-col gap-1 py-2',
-          dark ? 'text-ink-300' : 'text-ink-500',
-        ]}
-      >
+      <ol class="section-nav__list pointer-events-auto relative flex flex-col gap-1 py-2 text-ink-500 dark:text-ink-300">
         {/* Vertical track behind the dots */}
         <span
-          class:list={[
-            'section-nav__track pointer-events-none absolute top-3 bottom-3 end-[0.4375rem] w-px',
-            dark ? 'bg-white/10' : 'bg-ink-900/10',
-          ]}
+          class="section-nav__track pointer-events-none absolute top-3 bottom-3 end-[0.4375rem] w-px bg-ink-900/10 dark:bg-white/10"
           aria-hidden="true"
         />
 
@@ -54,13 +39,7 @@ const dark = tone === 'dark';
           <li>
             <a
               href={`#${s.id}`}
-              class:list={[
-                'section-nav__link group relative flex items-center gap-3 py-1.5',
-                'outline-none transition-colors duration-200',
-                dark
-                  ? 'text-ink-400 hover:text-white focus-visible:text-white'
-                  : 'text-ink-500 hover:text-ink-950 focus-visible:text-ink-950',
-              ]}
+              class="section-nav__link group relative flex items-center gap-3 py-1.5 text-ink-500 outline-none transition-colors duration-200 hover:text-ink-950 focus-visible:text-ink-950 dark:text-ink-400 dark:hover:text-white dark:focus-visible:text-white"
               data-section-link={s.id}
             >
               <span
@@ -98,13 +77,13 @@ const dark = tone === 'dark';
     opacity: 1;
   }
 
-  .section-nav[data-tone='dark'] .section-nav__dot {
-    border-color: color-mix(in oklab, white 25%, transparent);
-    background: var(--color-ink-900);
-  }
-  .section-nav[data-tone='light'] .section-nav__dot {
+  .section-nav__dot {
     border-color: color-mix(in oklab, var(--color-ink-900) 20%, transparent);
     background: white;
+  }
+  :global(.dark) .section-nav__dot {
+    border-color: color-mix(in oklab, white 25%, transparent);
+    background: var(--color-ink-900);
   }
 
   .section-nav__link:hover .section-nav__dot,
@@ -120,11 +99,11 @@ const dark = tone === 'dark';
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-brand-500) 22%, transparent);
   }
 
-  .section-nav[data-tone='dark'] .section-nav__link[aria-current='true'] .section-nav__label {
-    color: var(--color-brand-300);
-  }
-  .section-nav[data-tone='light'] .section-nav__link[aria-current='true'] .section-nav__label {
+  .section-nav__link[aria-current='true'] .section-nav__label {
     color: var(--color-brand-700);
+  }
+  :global(.dark) .section-nav__link[aria-current='true'] .section-nav__label {
+    color: var(--color-brand-300);
   }
 </style>
 

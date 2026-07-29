@@ -4,22 +4,52 @@ import { localizePath } from '../i18n/utils';
 
 interface Props {
   lang: Lang;
-  tone?: 'dark' | 'light'; // dark = black wordmark (for light bg), light = white wordmark
+  /**
+   * Logo colour. `auto` (default) follows light/dark mode.
+   * `dark` = black wordmark (light bg). `light` = white wordmark (dark bg).
+   */
+  tone?: 'dark' | 'light' | 'auto';
   class?: string;
 }
-const { lang, tone = 'dark', class: className = 'h-8' } = Astro.props;
-const src = tone === 'light' ? '/logo-white.png' : '/logo-black.png';
+const { lang, tone = 'auto', class: className = 'h-8' } = Astro.props;
 const home = localizePath('/', lang);
+const imgClass = ['w-auto select-none', className];
 ---
 
 <a href={home} class="inline-flex items-center" aria-label={`${SITE.name} — home`}>
-  <img
-    src={src}
-    alt={`${SITE.name}`}
-    width="640"
-    height="393"
-    class:list={['w-auto select-none', className]}
-    loading="eager"
-    decoding="async"
-  />
+  {
+    tone === 'auto' ? (
+      <>
+        <img
+          src="/logo-black.png"
+          alt={`${SITE.name}`}
+          width="640"
+          height="393"
+          class:list={[...imgClass, 'dark:hidden']}
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          src="/logo-white.png"
+          alt=""
+          width="640"
+          height="393"
+          class:list={[...imgClass, 'hidden dark:block']}
+          loading="eager"
+          decoding="async"
+          aria-hidden="true"
+        />
+      </>
+    ) : (
+      <img
+        src={tone === 'light' ? '/logo-white.png' : '/logo-black.png'}
+        alt={`${SITE.name}`}
+        width="640"
+        height="393"
+        class:list={imgClass}
+        loading="eager"
+        decoding="async"
+      />
+    )
+  }
 </a>

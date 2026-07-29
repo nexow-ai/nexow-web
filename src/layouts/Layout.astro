@@ -19,7 +19,10 @@ interface Props {
   type?: 'website' | 'article';
   schema?: Record<string, unknown>[];
   noindex?: boolean;
-  /** Page surface: 'dark' renders the terminal-style dark chrome. Default is light (marketing pages). */
+  /**
+   * Forced page surface. When set, locks the chrome to that tone and skips the
+   * user theme preference. Omit to honour light/dark mode from the toggle.
+   */
   theme?: 'light' | 'dark';
   /** In-page section rail (right side, desktop). Omit to hide. */
   sections?: { id: string; label: string }[];
@@ -27,30 +30,48 @@ interface Props {
   sectionNavLabel?: string;
 }
 
-const { lang, theme = 'light', route, sections, sectionNavLabel, ...head } = Astro.props;
+const { lang, theme, route, sections, sectionNavLabel, ...head } = Astro.props;
 const accent = getPageAccent(route);
 const mainFade = fade({ duration: '0.32s' });
+const themeLocked = theme === 'light' || theme === 'dark';
 
 ---
 
 <!doctype html>
-<html lang={lang} dir={dir(lang)} class="scroll-smooth" data-accent={accent}>
+<html
+  lang={lang}
+  dir={dir(lang)}
+  class:list={['scroll-smooth', theme === 'dark' && 'dark']}
+  data-accent={accent}
+  data-theme={theme ?? undefined}
+  data-theme-locked={themeLocked ? '' : undefined}
+>
   <head>
     <script is:inline>
       // Mark JS-capable before paint so scroll-reveal hiding only applies with JS.
       document.documentElement.classList.add('js');
     </script>
+    {
+      !themeLocked && (
+        <script is:inline>
+          (function () {
+            try {
+              var stored = localStorage.getItem('nexow-theme');
+              var dark =
+                stored === 'dark' ||
+                (stored !== 'light' &&
+                  window.matchMedia('(prefers-color-scheme: dark)').matches);
+              document.documentElement.classList.toggle('dark', dark);
+              document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+            } catch (e) {}
+          })();
+        </script>
+      )
+    }
     <BaseHead lang={lang} route={route} {...head} />
     <ClientRouter />
   </head>
-  <body
-    class:list={[
-      'min-h-dvh antialiased',
-      // `dark` switches every `dark:` variant on the page — see the semantic
-      // surface tokens in global.css.
-      theme === 'dark' ? 'dark bg-ink-950 text-ink-200' : 'bg-white',
-    ]}
-  >
+  <body class="min-h-dvh antialiased bg-white text-ink-900 dark:bg-ink-950 dark:text-ink-200">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
@@ -58,18 +79,14 @@ const mainFade = fade({ duration: '0.32s' });
       Skip to content
     </a>
 
-    {
-      /* The dot field is a page-wide backdrop, not a per-section one: sections
-         render on translucent surfaces so one continuous light travels the
-         whole page. */
-      theme === 'dark' && <DotField class="fixed inset-0 z-0" />
-    }
+    {/* Dot field backdrop — visible in dark mode only. */}
+    <DotField class="fixed inset-0 z-0 hidden dark:block" />
 
-    <Header tone={theme} />
+    <Header />
 
     {
       sections && sections.length > 0 && (
-        <SectionNav sections={sections} tone={theme} label={sectionNavLabel} />
+        <SectionNav sections={sections} label={sectionNavLabel} />
       )
     }
 
@@ -77,7 +94,7 @@ const mainFade = fade({ duration: '0.32s' });
       <slot />
     </main>
 
-    <Footer tone={theme} />
+    <Footer />
 
     <ScrollMotion />
 

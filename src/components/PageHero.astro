@@ -11,18 +11,18 @@ interface Props {
 const { badge, icon, title, subtitle } = Astro.props;
 ---
 
-<section class="relative overflow-hidden pt-32 pb-14 sm:pt-40 sm:pb-20">
-  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(55%_60%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70"></div>
+<section class="relative overflow-hidden pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-20 dark:text-white">
+  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(55%_60%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70 dark:opacity-35"></div>
   <div class="container-page">
     <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:border-brand-400/25 dark:bg-brand-400/12 dark:text-brand-300">
         {icon && <Icon name={icon} class="size-3.5 shrink-0" />}
         {badge}
       </span>
-      <h1 class="mt-6 text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1 class="mt-6 text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl dark:text-white">
         {title}
       </h1>
-      {subtitle && <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">{subtitle}</p>}
+      {subtitle && <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{subtitle}</p>}
     </div>
   </div>
 </section>

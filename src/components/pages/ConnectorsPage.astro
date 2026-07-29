@@ -108,9 +108,8 @@ const chipBtn =
   title={t.meta.title}
   description={t.meta.description}
   schema={[itemListSchema]}
-  theme="light"
 >
-  <section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-12 text-ink-950 sm:pt-40">
+  <section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-12 text-ink-950 sm:pt-40 dark:bg-white/[0.015] dark:text-white">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute -top-28 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-65 blur-3xl"
@@ -128,7 +127,7 @@ const chipBtn =
         {t.hero.badge}
         <span class="h-px w-6 bg-brand-500/50"></span>
       </span>
-      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl md:text-6xl dark:text-white">
         {t.hero.title}
       </h1>
       <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>

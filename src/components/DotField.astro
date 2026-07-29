@@ -17,11 +17,21 @@
 interface Props {
   /** Extra positioning classes; defaults to a fixed, full-viewport backdrop. */
   class?: string;
+  /**
+   * Dot ink on light vs dark surfaces. Defaults to inheriting from an ancestor
+   * `.dark` (page chrome); pass `dark` when the field sits on a dark island
+   * like the light-page footer.
+   */
+  tone?: 'light' | 'dark';
 }
-const { class: className = 'fixed inset-0' } = Astro.props;
+const { class: className = 'fixed inset-0', tone } = Astro.props;
 ---
 
-<div class:list={['dot-field pointer-events-none', className]} aria-hidden="true">
+<div
+  class:list={['dot-field pointer-events-none', className]}
+  data-tone={tone}
+  aria-hidden="true"
+>
   <canvas class="dot-field__canvas" data-dot-field></canvas>
 </div>
 
@@ -34,6 +44,7 @@ const { class: className = 'fixed inset-0' } = Astro.props;
     --dot-ink: color-mix(in oklab, var(--color-ink-900) 9%, transparent);
     --dot-light: 16, 197, 163;
   }
+  .dot-field[data-tone='dark'],
   :global(.dark) .dot-field {
     --dot-ink: color-mix(in oklab, white 7%, transparent);
   }

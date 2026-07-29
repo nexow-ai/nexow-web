@@ -13,9 +13,9 @@ const { icon, title, body, href, tone = 'light' } = Astro.props;
 const shell =
   tone === 'dark'
     ? 'border-white/10 bg-white/[0.03] hover:bg-white/[0.06]'
-    : 'border-ink-900/8 bg-white hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-900/5';
-const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950';
-const bodyColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600';
+    : 'border-ink-900/8 bg-white hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-900/5 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-brand-400/30 dark:hover:bg-white/[0.06] dark:hover:shadow-black/40';
+const titleColor = tone === 'dark' ? 'text-white' : 'text-ink-950 dark:text-white';
+const bodyColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-300';
 
 const classes = [
   'group relative flex flex-col rounded-2xl border p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1',
