@@ -13,6 +13,8 @@ export const it: SiteContent = {
     launch: 'Avvia l’app',
     menu: 'Apri il menu',
     close: 'Chiudi il menu',
+    themeToDark: 'Passa alla modalità scura',
+    themeToLight: 'Passa alla modalità chiara',
   },
   footer: {
     tagline: 'Descrivi un widget. Nexow lo costruisce, lo collega ai dati di mercato in tempo reale e lo posiziona sul tuo canvas.',
@@ -49,7 +51,6 @@ export const it: SiteContent = {
     rights: 'Tutti i diritti riservati.',
     disclaimer:
       'Nexow è una piattaforma di strumenti e visualizzazione. Nulla di quanto qui riportato costituisce consulenza finanziaria. I mercati comportano rischi; opera in modo responsabile.',
-    builtWith: 'Costruito con Astro. Privato di default.',
     newsletter: {
       eyebrow: 'Newsletter',
       title: 'Resta aggiornato',
@@ -346,8 +347,8 @@ export const it: SiteContent = {
       title: 'Collegati a ogni mercato',
       subtitle:
         'Connettori modulari trasmettono prezzi, order book e dati di riferimento in tempo reale direttamente nei tuoi widget — su FX, crypto, azioni, futures, opzioni, prediction market, database e feed social.',
-      note: '45 connettori sono attivi oggi e 83 sono nel catalogo — venue di trading, API di dati di mercato, database, fonti social, wallet crypto e servizi web. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
-      count: 45,
+      note: '90 connettori sono attivi oggi e 141 sono nel catalogo — venue di trading, API di dati di mercato, database, fonti social, wallet crypto e servizi web. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
+      count: 90,
       countLabel: 'connettori attivi',
       groups: {
         fx: 'FX',
@@ -1036,7 +1037,7 @@ export const it: SiteContent = {
         patternsDots: 'Solo punti',
         patternsAll: 'Tutti e 6',
         loadersAll: 'Tutti e 5',
-        connectorsAll: 'Tutti e 83',
+        connectorsAll: 'Tutti e 141',
         brandNexow: 'Marchio Nexow',
         brandAvatar: 'Il tuo avatar',
         brandCustom: 'Il tuo logo',
@@ -1257,7 +1258,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Connettori — Nexow',
       description:
-        'Sfoglia ogni connettore Nexow — 45 attivi e 83 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
+        'Sfoglia ogni connettore Nexow — 90 attivi e 141 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
     },
     hero: {
       badge: 'Connettori',

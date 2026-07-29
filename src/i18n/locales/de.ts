@@ -13,6 +13,8 @@ export const de: SiteContent = {
     launch: 'App starten',
     menu: 'Menü öffnen',
     close: 'Menü schließen',
+    themeToDark: 'Zum Dunkelmodus wechseln',
+    themeToLight: 'Zum Hellmodus wechseln',
   },
   footer: {
     tagline: 'Beschreibe ein Widget. Nexow baut es, verbindet es mit Live-Marktdaten und legt es auf dein Canvas.',
@@ -49,7 +51,6 @@ export const de: SiteContent = {
     rights: 'Alle Rechte vorbehalten.',
     disclaimer:
       'Nexow ist eine Tooling- und Visualisierungsplattform. Nichts hier ist eine Finanzberatung. Märkte bergen Risiken; handle verantwortungsvoll.',
-    builtWith: 'Gebaut mit Astro. Standardmäßig privat.',
     newsletter: {
       eyebrow: 'Newsletter',
       title: 'Bleib auf dem Laufenden',
@@ -346,8 +347,8 @@ export const de: SiteContent = {
       title: 'Verbinde dich mit jedem Markt',
       subtitle:
         'Modulare Konnektoren streamen Live-Kurse, Orderbücher und Referenzdaten direkt in deine Widgets — über FX, Krypto, Aktien, Futures, Optionen, Prognosemärkte, Datenbanken und Social-Feeds hinweg.',
-      note: '45 Konnektoren sind heute live und 83 stehen im Katalog — Broker, Börsen, Datenanbieter, Datenbanken, Socials, Krypto-Wallets und Web-Dienste. Viele streamen direkt aus deinem Browser; der Rest läuft über einen schlanken Proxy.',
-      count: 45,
+      note: '90 Konnektoren sind heute live und 141 stehen im Katalog — Broker, Börsen, Datenanbieter, Datenbanken, Socials, Krypto-Wallets und Web-Dienste. Viele streamen direkt aus deinem Browser; der Rest läuft über einen schlanken Proxy.',
+      count: 90,
       countLabel: 'Live-Konnektoren',
       groups: {
         fx: 'FX',
@@ -1036,7 +1037,7 @@ export const de: SiteContent = {
         patternsDots: 'Nur Punkte',
         patternsAll: 'Alle 6',
         loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 83',
+        connectorsAll: 'Alle 141',
         brandNexow: 'Nexow-Marke',
         brandAvatar: 'Dein Avatar',
         brandCustom: 'Dein Logo',
@@ -1257,7 +1258,7 @@ export const de: SiteContent = {
     meta: {
       title: 'Konnektoren — Nexow',
       description:
-        'Durchstöbere jeden Nexow-Konnektor — 45 live und 83 im Katalog. Broker, Börsen, DEXs, Prognosemärkte, Datenanbieter, Datenbanken und Social-Feeds. Suchen, filtern und verbinden.',
+        'Durchstöbere jeden Nexow-Konnektor — 90 live und 141 im Katalog. Broker, Börsen, DEXs, Prognosemärkte, Datenanbieter, Datenbanken und Social-Feeds. Suchen, filtern und verbinden.',
     },
     hero: {
       badge: 'Konnektoren',

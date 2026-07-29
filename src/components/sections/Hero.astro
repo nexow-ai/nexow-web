@@ -1,6 +1,7 @@
 ---
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { promptAppUrl } from '../../lib/appDeepLinks';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
 import PlaygroundMock from '../PlaygroundMock.astro';
@@ -10,6 +11,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
+const defaultPromptUrl = promptAppUrl(t.promptExample);
 
 /** Entrance order. The headline leads, everything else follows it up. */
 const D = {
@@ -19,8 +21,9 @@ const D = {
   line3: '0.30s',
   kicker: '0.40s',
   sub: '0.48s',
-  cta: '0.56s',
-  note: '0.64s',
+  forge: '0.54s',
+  cta: '0.62s',
+  note: '0.70s',
   mock: '0.30s',
 };
 ---
@@ -100,11 +103,46 @@ const D = {
           {t.subtitle}
         </p>
 
-        <div class="enter mt-9 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
-          <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+        <!-- Live prompt → app: deep-links with ?prompt= (see appDeepLinks.promptAppUrl). -->
+        <form
+          id="forge"
+          class="enter mt-8"
+          style={`--enter-delay:${D.forge}`}
+          data-app-base={SITE.appUrl}
+          action={defaultPromptUrl}
+          method="get"
+          target="_blank"
+        >
+          <label class="sr-only" for="hero-prompt">{t.promptPlaceholder}</label>
+          <div
+            class="flex flex-col gap-2 rounded-2xl border border-ink-900/10 bg-white/80 p-2 shadow-sm backdrop-blur dark:border-white/12 dark:bg-white/[0.06] sm:flex-row sm:items-stretch"
+          >
+            <div class="flex min-w-0 flex-1 items-start gap-2.5 px-2.5 py-2">
+              <Icon name="sparkles" class="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+              <textarea
+                id="hero-prompt"
+                name="prompt"
+                rows="2"
+                maxlength="500"
+                placeholder={t.promptPlaceholder}
+                class="min-h-[2.75rem] w-full resize-none bg-transparent text-sm leading-relaxed text-ink-800 placeholder:text-ink-400 focus:outline-none dark:text-ink-100 dark:placeholder:text-ink-500"
+              >{t.promptExample}</textarea>
+            </div>
+            <button
+              type="submit"
+              class="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-5 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 sm:self-end"
+            >
+              {t.ctaPrimary}
+              <Icon name="arrow" class="size-3.5" />
+            </button>
+          </div>
+        </form>
+
+        <div class="enter mt-5 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
+          <Button href={defaultPromptUrl} size="lg" external iconRight="arrow">
             {t.ctaPrimary}
           </Button>
-          <Button href="#forge" variant="secondary" size="lg" icon="sparkles">
+          <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
             {t.ctaSecondary}
           </Button>
         </div>
@@ -126,3 +164,32 @@ const D = {
     </div>
   </div>
 </section>
+
+<script>
+  function initHeroForge() {
+    const form = document.getElementById('forge') as HTMLFormElement | null;
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const base = (form.dataset.appBase || 'https://x.nexow.ai').replace(/\/$/, '');
+    const input = form.querySelector<HTMLTextAreaElement>('#hero-prompt');
+    if (!input) return;
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const prompt = input.value.trim();
+      const params = new URLSearchParams();
+      params.set('signup', '');
+      if (prompt) params.set('prompt', prompt);
+      // Bare `signup` flag (no `=`) to match appDeepLinks.appUrl convention.
+      const qs = params
+        .toString()
+        .split('&')
+        .map((part) => (part.endsWith('=') ? part.slice(0, -1) : part))
+        .join('&');
+      window.open(`${base}/?${qs}`, '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHeroForge);
+</script>

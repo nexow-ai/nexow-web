@@ -1,0 +1,74 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent, type UseCaseLandingContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath } from '../../i18n/utils';
+import { promptAppUrl } from '../../lib/appDeepLinks';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import CtaBand from '../sections/CtaBand.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+  slug: 'traders' | 'founders' | 'builders';
+}
+const { lang, slug } = Astro.props;
+const pages = useContent(lang).useCasePages!;
+const t: UseCaseLandingContent = pages[slug];
+const route = `/for/${slug}`;
+const appHref = promptAppUrl(t.prompt);
+const secondaryHref =
+  slug === 'traders'
+    ? localizePath('/connectors', lang)
+    : slug === 'founders'
+      ? `${localizePath('/', lang)}#app-showcase`
+      : localizePath('/community', lang);
+---
+
+<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon(route)}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section class="container-page pb-12">
+    <div class="reveal mx-auto max-w-2xl">
+      <div class="rounded-2xl border border-ink-900/10 bg-white p-5 shadow-sm sm:p-6">
+        <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">Try this prompt</p>
+        <p class="mt-3 font-mono text-sm leading-relaxed text-ink-700 sm:text-base">{t.prompt}</p>
+        <div class="mt-5">
+          <Button href={appHref} size="md" external iconRight="arrow">
+            {t.ctaPrimary}
+          </Button>
+        </div>
+      </div>
+
+      <ul class="mt-10 space-y-4">
+        {
+          t.points.map((p) => (
+            <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-700 sm:text-base">
+              <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200/80">
+                <Icon name="check" class="size-3.5" />
+              </span>
+              {p}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    lang={lang}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+    primary={t.ctaPrimary}
+    primaryHref={appHref}
+    secondary={t.ctaSecondary}
+    secondaryHref={secondaryHref}
+  />
+</Layout>

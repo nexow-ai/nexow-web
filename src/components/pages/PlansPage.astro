@@ -23,6 +23,7 @@ import RewardLedger from '../sections/RewardLedger.astro';
 import CreditEconomy from '../sections/CreditEconomy.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
+import WaitlistBand from '../sections/WaitlistBand.astro';
 import Icon from '../Icon.astro';
 
 interface Props {
@@ -70,6 +71,7 @@ const teasers = [
 
 const sections = [
   { id: 'tiers', label: t.hero.badge },
+  { id: 'waitlist', label: c.waitlist?.eyebrow ?? 'Waitlist' },
   { id: 'compare', label: t.matrix.eyebrow },
   { id: 'rewards', label: c.rewards.eyebrow },
   { id: 'credits', label: c.rewards.credits.eyebrow },
@@ -143,13 +145,15 @@ const sections = [
     </div>
   </section>
 
-  <!-- Coming soon notice -->
-  <div class="container-page pb-8">
+  <!-- Coming soon + billing waitlist -->
+  <div class="container-page pb-4">
     <p class="reveal mx-auto flex max-w-2xl items-start gap-3 rounded-2xl border border-brand-500/20 bg-brand-50 px-5 py-4 text-sm leading-relaxed text-ink-600">
       <Icon name="sparkles" class="mt-0.5 size-4 shrink-0 text-brand-600" />
       <span>{t.comingSoon}</span>
     </p>
   </div>
+
+  <WaitlistBand lang={lang} />
 
   <PlanMatrix lang={lang} />
 

@@ -13,6 +13,8 @@ export const pt: SiteContent = {
     launch: 'Abrir app',
     menu: 'Abrir menu',
     close: 'Fechar menu',
+    themeToDark: 'Mudar para modo escuro',
+    themeToLight: 'Mudar para modo claro',
   },
   footer: {
     tagline: 'Descreva um widget. O Nexow constrói-o, liga-o a dados de mercado em tempo real e coloca-o no seu canvas.',
@@ -49,7 +51,6 @@ export const pt: SiteContent = {
     rights: 'Todos os direitos reservados.',
     disclaimer:
       'O Nexow é uma plataforma de ferramentas e visualização. Nada aqui constitui aconselhamento financeiro. Os mercados envolvem risco; negoceie de forma responsável.',
-    builtWith: 'Construído com Astro. Privado por predefinição.',
     newsletter: {
       eyebrow: 'Newsletter',
       title: 'Fique por dentro',
@@ -346,8 +347,8 @@ export const pt: SiteContent = {
       title: 'Ligue-se a todos os mercados',
       subtitle:
         'Conectores plugáveis transmitem preços em tempo real, order books e dados de referência diretamente para os seus widgets — em FX, cripto, ações, futuros, opções, mercados de previsão, bases de dados e feeds sociais.',
-      note: '45 conectores estão disponíveis hoje e 83 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
-      count: 45,
+      note: '90 conectores estão disponíveis hoje e 141 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
+      count: 90,
       countLabel: 'conectores ativos',
       groups: {
         fx: 'FX',
@@ -1036,7 +1037,7 @@ export const pt: SiteContent = {
         patternsDots: 'Só pontos',
         patternsAll: 'Os 6',
         loadersAll: 'Os 5',
-        connectorsAll: 'Os 83',
+        connectorsAll: 'Os 141',
         brandNexow: 'Marca Nexow',
         brandAvatar: 'O teu avatar',
         brandCustom: 'O teu logo',
@@ -1257,7 +1258,7 @@ export const pt: SiteContent = {
     meta: {
       title: 'Conectores — Nexow',
       description:
-        'Explore todos os conectores do Nexow — 45 ativos e 83 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
+        'Explore todos os conectores do Nexow — 90 ativos e 141 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
     },
     hero: {
       badge: 'Conectores',

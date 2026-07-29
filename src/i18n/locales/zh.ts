@@ -49,7 +49,6 @@ export const zh: SiteContent = {
     rights: '保留所有权利。',
     disclaimer:
       'Nexow 是一个工具与可视化平台。此处内容均不构成投资建议。市场有风险，交易需谨慎。',
-    builtWith: '基于 Astro 构建。默认私密。',
   },
   home: {
     meta: {
@@ -335,8 +334,8 @@ export const zh: SiteContent = {
       title: '接入每一个市场',
       subtitle:
         '可插拔的连接器将实时价格、订单簿和参考数据直接流式送入你的组件——覆盖 FX、加密货币、股票、期货、期权、预测市场、数据库和社交信息流。',
-      note: '如今已有 45 个连接器上线，另有 83 个在目录中——交易场所、市场数据 API、数据库、社交来源、加密钱包和网络服务。许多直接从你的浏览器流式传输；其余则通过一层轻量代理路由。',
-      count: 45,
+      note: '如今已有 90 个连接器上线，另有 141 个在目录中——交易场所、市场数据 API、数据库、社交来源、加密钱包和网络服务。许多直接从你的浏览器流式传输；其余则通过一层轻量代理路由。',
+      count: 90,
       countLabel: '个实时连接器',
       groups: {
         fx: 'FX',
@@ -1025,7 +1024,7 @@ export const zh: SiteContent = {
         patternsDots: '仅圆点',
         patternsAll: '全部 6 种',
         loadersAll: '全部 5 种',
-        connectorsAll: '全部 83 个',
+        connectorsAll: '全部 141 个',
         brandNexow: 'Nexow 标识',
         brandAvatar: '你的头像',
         brandCustom: '你的 Logo',
@@ -1246,7 +1245,7 @@ export const zh: SiteContent = {
     meta: {
       title: '连接器 — Nexow',
       description:
-        '浏览 Nexow 的每一个连接器——45 个已上线，目录中共 83 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
+        '浏览 Nexow 的每一个连接器——90 个已上线，目录中共 141 个。券商、交易所、DEX、预测市场、数据提供方、数据库和社交信息流。搜索、筛选并连接。',
     },
     hero: {
       badge: '连接器',

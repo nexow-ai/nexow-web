@@ -277,13 +277,16 @@ export interface SiteContent {
     launch: string;
     menu: string;
     close: string;
+    /** Aria label when the page is light (action switches to dark). */
+    themeToDark?: string;
+    /** Aria label when the page is dark (action switches to light). */
+    themeToLight?: string;
   };
   footer: {
     tagline: string;
     columns: { title: string; links: NavLink[] }[];
     rights: string;
     disclaimer: string;
-    builtWith: string;
     /**
      * Newsletter signup in the site footer. Optional so locales can omit it and
      * fall back to English via `useContent` merge.
@@ -604,6 +607,94 @@ export interface SiteContent {
     body: string;
     cta: string;
   };
+  /**
+   * Optional marketing pages. English defines them; other locales inherit via
+   * `useContent` deep-merge.
+   */
+  contactPage?: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    form: {
+      name: string;
+      email: string;
+      type: string;
+      types: { value: string; label: string }[];
+      message: string;
+      submit: string;
+      submitting: string;
+      success: string;
+      error: string;
+      invalid: string;
+    };
+    aside: {
+      title: string;
+      body: string;
+      channels: { label: string; value: string; href: string }[];
+    };
+  };
+  helpPage?: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    guides: { icon: string; title: string; body: string; href: string; cta: string }[];
+    ctaTitle: string;
+    ctaBody: string;
+    cta: string;
+  };
+  securityPage?: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    pillars: Feature[];
+    principlesTitle: string;
+    principles: string[];
+    ctaTitle: string;
+    ctaBody: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+  };
+  changelogPage?: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    empty: string;
+    readMore: string;
+    viewBlog: string;
+  };
+  invitePage?: {
+    meta: { title: string; description: string };
+    hero: { badge: string; title: string; subtitle: string };
+    body: string;
+    pillars: Feature[];
+    ctaPrimary: string;
+    ctaSecondary: string;
+    codeLabel: string;
+    codeHint: string;
+  };
+  useCasePages?: {
+    traders: UseCaseLandingContent;
+    founders: UseCaseLandingContent;
+    builders: UseCaseLandingContent;
+  };
+  /** Plans billing waitlist (optional — EN defines; others inherit). */
+  waitlist?: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    placeholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    error: string;
+    invalid: string;
+  };
+}
+
+/** Shared shape for /for/* landing pages. */
+export interface UseCaseLandingContent {
+  meta: { title: string; description: string };
+  hero: { badge: string; title: string; subtitle: string };
+  prompt: string;
+  points: string[];
+  ctaPrimary: string;
+  ctaSecondary: string;
 }
 
 /* ------------------------------------------------------------------ *

@@ -1,0 +1,253 @@
+---
+/**
+ * Animated SVG accent for DAO ballot / proposal cards. Dark-surface glyphs
+ * with idle draw / pulse / orbit motion; pauses when offscreen or reduced-motion.
+ */
+interface Props {
+  /** Stable ballot kind — treasury | rewards | roadmap | governance | fees | moderation */
+  kind: string;
+  class?: string;
+}
+const { kind, class: className = '' } = Astro.props;
+const uid = `bg-${kind}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span
+  class:list={['ballot-glyph inline-flex size-11 shrink-0 items-center justify-center', className]}
+  aria-hidden="true"
+>
+  <svg class="ballot-glyph-svg size-full" viewBox="0 0 44 44" fill="none">
+    <defs>
+      <linearGradient id={`${uid}-g`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)"></stop>
+        <stop offset="55%" stop-color="var(--color-accent-400)"></stop>
+        <stop offset="100%" stop-color="var(--color-plasma-400)"></stop>
+      </linearGradient>
+      <filter id={`${uid}-glow`} x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="1.4" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <rect
+      x="1.5"
+      y="1.5"
+      width="41"
+      height="41"
+      rx="12"
+      class="ballot-glyph-tile"
+      stroke={`url(#${uid}-g)`}
+      stroke-width="1.15"
+      fill="color-mix(in oklab, var(--color-brand-500) 14%, transparent)"
+    >
+    </rect>
+
+    {
+      kind === 'treasury' ? (
+        <>
+          <rect
+            x="13"
+            y="14"
+            width="18"
+            height="16"
+            rx="2.5"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            class="ballot-glyph-draw"
+            pathLength="1"
+          />
+          <circle
+            class="ballot-glyph-pulse"
+            cx="22"
+            cy="22"
+            r="4"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            filter={`url(#${uid}-glow)`}
+          />
+          <circle class="ballot-glyph-pulse ballot-glyph-pulse--late" cx="22" cy="22" r="1.6" fill="var(--color-brand-300)"></circle>
+        </>
+      ) : kind === 'rewards' ? (
+        <>
+          <path
+            class="ballot-glyph-draw"
+            d="M14 20h16v10.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 0114 30.5V20z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            pathLength="1"
+          />
+          <path
+            class="ballot-glyph-draw"
+            d="M13 20h18v-3.5a1.5 1.5 0 00-1.5-1.5h-15A1.5 1.5 0 0013 16.5V20z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            pathLength="1"
+            style="animation-delay:0.12s"
+          />
+          <path d="M22 15v17" stroke="var(--color-accent-300)" stroke-width="1.3" stroke-linecap="round"></path>
+          <circle class="ballot-glyph-orbit" r="1.8" fill="var(--color-brand-300)" filter={`url(#${uid}-glow)`}>
+            <animateMotion dur="3.8s" repeatCount="indefinite" path="M16 13 C18 9 26 9 28 13"></animateMotion>
+          </circle>
+        </>
+      ) : kind === 'roadmap' ? (
+        <>
+          <path
+            class="ballot-glyph-draw"
+            d="M12 28c4-10 8-14 10-14s6 4 10 14"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linecap="round"
+            pathLength="1"
+          />
+          <circle class="ballot-glyph-pulse" cx="22" cy="14" r="2.2" fill="var(--color-brand-300)" filter={`url(#${uid}-glow)`}></circle>
+          <circle class="ballot-glyph-pulse ballot-glyph-pulse--late" cx="14.5" cy="24" r="1.6" fill="var(--color-accent-400)"></circle>
+          <circle class="ballot-glyph-pulse" cx="29.5" cy="24" r="1.6" fill="var(--color-plasma-400)" style="animation-delay:0.35s"></circle>
+          <circle class="ballot-glyph-orbit" r="1.5" fill="var(--color-sky-300)">
+            <animateMotion dur="4.2s" repeatCount="indefinite" path="M12 28c4-10 8-14 10-14s6 4 10 14"></animateMotion>
+          </circle>
+        </>
+      ) : kind === 'governance' ? (
+        <>
+          <path
+            class="ballot-glyph-draw"
+            d="M15 12h14v14H15z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            pathLength="1"
+          />
+          <path
+            class="ballot-glyph-check"
+            d="M18.5 19.5l2.4 2.4 4.6-4.6"
+            stroke="var(--color-brand-300)"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            pathLength="1"
+            filter={`url(#${uid}-glow)`}
+          />
+          <path d="M14 28l-1.5 4h19L30 28" stroke={`url(#${uid}-g)`} stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+        </>
+      ) : kind === 'fees' ? (
+        <>
+          <circle cx="22" cy="22" r="9" stroke={`url(#${uid}-g)`} stroke-width="1.5" class="ballot-glyph-ring"></circle>
+          <path
+            class="ballot-glyph-draw"
+            d="M26.5 16.5 17.5 27.5M18 17.5h.01M26 26.5h.01"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.6"
+            stroke-linecap="round"
+            pathLength="1"
+          />
+          <circle class="ballot-glyph-pulse" cx="18.2" cy="17.5" r="1.5" fill="var(--color-brand-300)"></circle>
+          <circle class="ballot-glyph-pulse ballot-glyph-pulse--late" cx="26" cy="26.5" r="1.5" fill="var(--color-accent-400)"></circle>
+        </>
+      ) : (
+        /* moderation + fallback */
+        <>
+          <path
+            class="ballot-glyph-draw"
+            d="M22 11l9 3.5v6c0 5-3.6 8.5-9 10-5.4-1.5-9-5-9-10v-6z"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            pathLength="1"
+          />
+          <path
+            class="ballot-glyph-check"
+            d="M18.5 21.5l2.3 2.3 4.7-4.7"
+            stroke="var(--color-brand-300)"
+            stroke-width="1.55"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            pathLength="1"
+            filter={`url(#${uid}-glow)`}
+          />
+        </>
+      )
+    }
+  </svg>
+</span>
+
+<style>
+  .ballot-glyph-tile {
+    opacity: 0.95;
+  }
+  .ballot-glyph-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: bg-draw 2.6s var(--ease-out-expo, ease) both;
+  }
+  .ballot-glyph-check {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: bg-draw 1.8s var(--ease-out-expo, ease) 0.35s both;
+  }
+  .ballot-glyph-pulse {
+    animation: bg-pulse 2.4s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .ballot-glyph-pulse--late {
+    animation-delay: 0.55s;
+  }
+  .ballot-glyph-ring {
+    stroke-dasharray: 3.5 5.5;
+    animation: bg-spin 11s linear infinite;
+    transform-origin: 22px 22px;
+  }
+  .ballot-glyph-orbit {
+    opacity: 0.95;
+  }
+
+  @keyframes bg-draw {
+    from {
+      stroke-dashoffset: 1;
+      opacity: 0.35;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+  @keyframes bg-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.12);
+    }
+  }
+  @keyframes bg-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  :global(.is-offscreen) .ballot-glyph-draw,
+  :global(.is-offscreen) .ballot-glyph-check,
+  :global(.is-offscreen) .ballot-glyph-pulse,
+  :global(.is-offscreen) .ballot-glyph-ring,
+  :global(.is-offscreen) .ballot-glyph-orbit {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ballot-glyph-draw,
+    .ballot-glyph-check,
+    .ballot-glyph-pulse,
+    .ballot-glyph-ring {
+      animation: none;
+    }
+    .ballot-glyph-orbit {
+      display: none;
+    }
+  }
+</style>

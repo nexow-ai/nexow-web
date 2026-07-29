@@ -14,6 +14,14 @@ export const PAGE_BADGE_ICONS: Record<string, string> = {
   '/cookies': 'cookie',
   '/legal': 'landmark',
   '/acceptable-use': 'check',
+  '/contact': 'mail',
+  '/help': 'bookOpen',
+  '/security': 'shield',
+  '/changelog': 'history',
+  '/invite': 'gift',
+  '/for/traders': 'signal',
+  '/for/founders': 'bolt',
+  '/for/builders': 'cpu',
 };
 
 export function getPageBadgeIcon(route: string): string | undefined {

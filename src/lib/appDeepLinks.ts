@@ -4,6 +4,9 @@
  * Convention (from nexow PANEL_ACTIONS + CommunityPanel URL sync + auth plugin):
  *   /?signup                              → open auth / onboarding (AuthWall when signed out)
  *   /?panel=<id>[&tab=<tab>][&view=<…>][&post=<id>]
+ *   /?prompt=<text>[&signup]              → open workspace with the prompt prefilled
+ *                                           (marketing → app handoff; app should read `prompt`)
+ *   /?signup&ref=<code>                   → signup with optional referral code
  *
  * Panel ids match the in-app chrome: account, community, marketplace, copilot,
  * library, bots, agents, connectors, themes, settings.
@@ -58,6 +61,18 @@ export function appUrl(query?: Record<string, string | undefined | boolean>): st
 /** Signup / onboarding: `/?signup` (AuthWall when signed out). */
 export function signupAppUrl(extra?: Record<string, string | undefined>): string {
   return appUrl({ signup: true, ...extra });
+}
+
+/**
+ * Prefill the in-app codegen prompt: `/?prompt=<text>&signup`.
+ * Used by the marketing hero “live prompt → app” handoff.
+ */
+export function promptAppUrl(prompt: string, opts?: { signup?: boolean }): string {
+  const trimmed = prompt.trim();
+  return appUrl({
+    prompt: trimmed || undefined,
+    signup: opts?.signup === false ? undefined : true,
+  });
 }
 
 /** Open a side panel: `/?panel=<id>`. */

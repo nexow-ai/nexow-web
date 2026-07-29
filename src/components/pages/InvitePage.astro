@@ -1,0 +1,59 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath } from '../../i18n/utils';
+import { claimHandleAppUrl, signupAppUrl } from '../../lib/appDeepLinks';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import FeatureCard from '../FeatureCard.astro';
+import CtaBand from '../sections/CtaBand.astro';
+
+interface Props {
+  lang: Lang;
+  /** Optional invite / referral code from `/r/[code]` or `?code=`. */
+  code?: string;
+}
+const { lang, code } = Astro.props;
+const t = useContent(lang).invitePage!;
+/** `ref` is reserved for referral attribution when the app ledger goes live. */
+const primaryHref = code ? signupAppUrl({ ref: code }) : claimHandleAppUrl();
+---
+
+<Layout lang={lang} route={code ? `/r/${code}` : '/invite'} title={t.meta.title} description={t.meta.description}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon('/invite')}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section class="container-page pb-8">
+    <p class="reveal mx-auto max-w-2xl text-center text-lg leading-relaxed text-ink-600">{t.body}</p>
+    {
+      code && (
+        <div class="reveal mx-auto mt-8 max-w-md rounded-2xl border border-ink-900/10 bg-[#f7fbfb] px-5 py-4 text-center">
+          <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">{t.codeLabel}</p>
+          <p class="mt-1 font-display text-2xl font-semibold tracking-tight text-ink-950">{code}</p>
+          <p class="mt-2 text-xs text-ink-500">{t.codeHint}</p>
+        </div>
+      )
+    }
+  </section>
+
+  <section class="container-page py-10 sm:py-14">
+    <div class="reveal-stagger mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
+      {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
+    </div>
+  </section>
+
+  <CtaBand
+    lang={lang}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+    primary={t.ctaPrimary}
+    primaryHref={primaryHref}
+    secondary={t.ctaSecondary}
+    secondaryHref={localizePath('/community', lang)}
+  />
+</Layout>

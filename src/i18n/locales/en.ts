@@ -14,12 +14,15 @@ export const en: SiteContent = {
       { label: 'Community', href: '/community' },
       { label: 'Connectors', href: '/connectors' },
       { label: 'Plans', href: '/plans' },
+      { label: 'Help', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
     ],
     launch: 'Launch app',
     menu: 'Open menu',
     close: 'Close menu',
+    themeToDark: 'Switch to dark mode',
+    themeToLight: 'Switch to light mode',
   },
   footer: {
     tagline: 'Describe what you need. Nexow turns it into widgets on a canvas.',
@@ -31,6 +34,10 @@ export const en: SiteContent = {
           { label: 'Community', href: '/community' },
           { label: 'Connectors', href: '/connectors' },
           { label: 'Plans', href: '/plans' },
+          { label: 'Help', href: '/help' },
+          { label: 'For traders', href: '/for/traders' },
+          { label: 'For founders', href: '/for/founders' },
+          { label: 'For builders', href: '/for/builders' },
         ],
       },
       {
@@ -38,6 +45,10 @@ export const en: SiteContent = {
         links: [
           { label: 'About', href: '/about' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Changelog', href: '/changelog' },
+          { label: 'Security', href: '/security' },
+          { label: 'Contact', href: '/contact' },
+          { label: 'Invite', href: '/invite' },
           { label: 'Legal', href: '/legal' },
         ],
       },
@@ -55,7 +66,6 @@ export const en: SiteContent = {
     rights: 'All rights reserved.',
     disclaimer:
       'Nexow is a tooling and visualization platform operated by Nexow, Inc. Some examples use market data, but the canvas is built for general-purpose widgets and workflows. Nothing here is financial, investment, legal, or tax advice.',
-    builtWith: 'Built with Astro.',
     newsletter: {
       eyebrow: 'Newsletter',
       title: 'Stay in the loop',
@@ -553,8 +563,8 @@ export const en: SiteContent = {
       title: 'Trading-grade data, optional everywhere',
       subtitle:
         'Nexow started with trading, so live APIs and data connectors are built into the base. Use them for markets, databases, social feeds or any widget that needs live information.',
-      note: '45 connectors are live today and 83 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
-      count: 45,
+      note: '90 connectors are live today and 141 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
+      count: 90,
       countLabel: 'live connectors',
       groups: {
         fx: 'FX',
@@ -1133,7 +1143,7 @@ export const en: SiteContent = {
         stats: ['Private infra', 'Unlimited bots & agents', 'Dedicated support'],
         note: 'Everything in Sponsor, plus:',
         cta: 'Contact us',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Private infrastructure',
           'White-glove setup',
@@ -1206,7 +1216,7 @@ export const en: SiteContent = {
         patternsDots: 'Dots only',
         patternsAll: 'All 6',
         loadersAll: 'All 5',
-        connectorsAll: 'All 83',
+        connectorsAll: 'All 141',
         brandNexow: 'Nexow mark',
         brandAvatar: 'Your avatar',
         brandCustom: 'Your logo',
@@ -1537,6 +1547,280 @@ export const en: SiteContent = {
     title: 'This page drifted off the canvas',
     body: 'The page you’re looking for doesn’t exist — but your next widget might.',
     cta: 'Back to home',
+  },
+  waitlist: {
+    eyebrow: 'Billing waitlist',
+    title: 'Checkout is almost here',
+    subtitle:
+      'Supporter and Sponsor billing is landing soon. Leave your email and we’ll notify you the day checkout opens — no spam.',
+    placeholder: 'you@email.com',
+    submit: 'Join the waitlist',
+    submitting: 'Joining…',
+    success: 'You’re on the list. We’ll email you when billing opens.',
+    error: 'Something went wrong. Please try again.',
+    invalid: 'Enter a valid email address.',
+  },
+  contactPage: {
+    meta: {
+      title: 'Contact — Nexow',
+      description:
+        'Reach Nexow for support, sales, or partnership inquiries. We read every message.',
+    },
+    hero: {
+      badge: 'Contact',
+      title: 'Talk to the Nexow team',
+      subtitle:
+        'Support questions, sales for teams, or partnership ideas — pick a type and we’ll route it to the right inbox.',
+    },
+    form: {
+      name: 'Name',
+      email: 'Email',
+      type: 'Inquiry type',
+      types: [
+        { value: 'support', label: 'Support' },
+        { value: 'sales', label: 'Sales' },
+        { value: 'partnership', label: 'Partnership' },
+        { value: 'other', label: 'Other' },
+      ],
+      message: 'How can we help?',
+      submit: 'Send message',
+      submitting: 'Opening mail…',
+      success: 'Your mail client should open with the message ready. Thanks for reaching out.',
+      error: 'Something went wrong. Email us directly instead.',
+      invalid: 'Please fill in a valid email and a short message.',
+    },
+    aside: {
+      title: 'Prefer email directly?',
+      body: 'We reply from the addresses below. Partnership and Partner-plan requests go to partners@.',
+      channels: [
+        { label: 'General', value: 'hello@nexow.ai', href: 'mailto:hello@nexow.ai' },
+        { label: 'Support', value: 'support@nexow.ai', href: 'mailto:support@nexow.ai' },
+        { label: 'Partners', value: 'partners@nexow.ai', href: 'mailto:partners@nexow.ai' },
+      ],
+    },
+  },
+  helpPage: {
+    meta: {
+      title: 'Help — Nexow',
+      description:
+        'Getting started with Nexow: launch the app, read guides, explore features, and find community help.',
+    },
+    hero: {
+      badge: 'Help',
+      title: 'Get started with Nexow',
+      subtitle:
+        'A short path into the product — launch the canvas, follow a guide, or dig into features and community.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Open the app',
+        body: 'Describe a widget in plain language and place it on your canvas. Free accounts include starter credits.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Launch Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'From prompt to live widget',
+        body: 'A walkthrough of how codegen, the sandbox, and the canvas fit together.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Read the guide',
+      },
+      {
+        icon: 'layers',
+        title: 'Explore every surface',
+        body: 'Widgets, connectors, bots, agents, community, marketplace — the full product map.',
+        href: '/features',
+        cta: 'See features',
+      },
+      {
+        icon: 'plug',
+        title: 'Wire live data',
+        body: 'Browse 45+ connectors across markets, wallets, socials and databases.',
+        href: '/connectors',
+        cta: 'Browse connectors',
+      },
+      {
+        icon: 'users',
+        title: 'Join the community',
+        body: 'Share widgets, follow makers, and claim your @handle.',
+        href: '/community',
+        cta: 'Open community',
+      },
+      {
+        icon: 'shield',
+        title: 'Security & trust',
+        body: 'How sandboxing, credentials and workspace boundaries work.',
+        href: '/security',
+        cta: 'Read security',
+      },
+    ],
+    ctaTitle: 'Still stuck?',
+    ctaBody: 'Email support or send a contact form — we read every message.',
+    cta: 'Contact us',
+  },
+  securityPage: {
+    meta: {
+      title: 'Security & Trust — Nexow',
+      description:
+        'How Nexow scopes widgets, credentials, versions and sync — sandboxed runtime, least-privilege connectors, workspace ownership.',
+    },
+    hero: {
+      badge: 'Security',
+      title: 'Trust built into the canvas',
+      subtitle:
+        'Nexow is designed so power never means open access. Generated code runs sandboxed, credentials stay scoped, and your workspace history stays yours.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Sandboxed widgets',
+        body: 'Every generated widget runs in an isolated iframe with a strict boundary — it can render and fetch, not reach your account or other widgets.',
+      },
+      {
+        icon: 'lock',
+        title: 'Scoped credentials',
+        body: 'Connector credentials are limited to the services you connect and the widgets that need them. Least privilege by default.',
+      },
+      {
+        icon: 'history',
+        title: 'Workspace provenance',
+        body: 'Versions, logs and generated source stay attached to your workspace history so you can inspect, roll back and audit what runs.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sync you control',
+        body: 'Cloud sync keeps workspaces available across devices without turning your canvas into someone else’s product.',
+      },
+    ],
+    principlesTitle: 'What we commit to',
+    principles: [
+      'Generated code never runs with unrestricted access to your account.',
+      'Private prompts, chat history and connection ids stay with the author.',
+      'Marketplace installs arrive paused or undeployed — the first run is always your choice.',
+      'Legal privacy details live in our Privacy Policy; this page is the product view.',
+    ],
+    ctaTitle: 'Read the fine print',
+    ctaBody: 'Product architecture here; the Privacy Policy covers legal processing details.',
+    ctaPrimary: 'Privacy Policy',
+    ctaSecondary: 'Contact us',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Changelog — Nexow',
+      description: 'Recent Nexow product updates, shipped features and release notes from the blog.',
+    },
+    hero: {
+      badge: 'Changelog',
+      title: 'What we shipped lately',
+      subtitle: 'Product updates from the Nexow blog — newest first.',
+    },
+    empty: 'No product updates yet — check the blog for guides and notes.',
+    readMore: 'Read update',
+    viewBlog: 'View all posts',
+  },
+  invitePage: {
+    meta: {
+      title: 'Invite — Nexow',
+      description:
+        'Invite makers to Nexow. Claim your handle, share your link, and grow with the community.',
+    },
+    hero: {
+      badge: 'Referrals',
+      title: 'Invite makers who ship',
+      subtitle:
+        'Nexow grows when builders bring builders. Claim your handle, share an invite, and be ready when referral rewards go live.',
+    },
+    body: 'Referral rewards and follower bonuses are on the community track. Your invite link deep-links into the app so friends land ready to claim a handle.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Share your invite',
+        body: 'Send a link. When someone joins from it, they land in the community with signup open.',
+      },
+      {
+        icon: 'users',
+        title: 'Grow your orbit',
+        body: 'Follow makers, share widgets, and build a network that compounds on the same reputation surface.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Rewards coming',
+        body: 'Early rewards land as credits; NEXO-tied bonuses unlock with the DAO. Same game layer, new ways to earn.',
+      },
+    ],
+    ctaPrimary: 'Claim your handle',
+    ctaSecondary: 'Explore community',
+    codeLabel: 'Invite code',
+    codeHint: 'This link includes your invite code for when referral tracking goes live.',
+  },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow for traders',
+        description:
+          'Build a live trading desk from one prompt — charts, watchlists, order books and market heatmaps on a canvas you control.',
+      },
+      hero: {
+        badge: 'For traders',
+        title: 'A desk that rebuilds when the market changes',
+        subtitle:
+          'Describe the widgets you need. Nexow generates them, wires live connectors, and lays them out on one canvas — from candlesticks to prediction markets.',
+      },
+      prompt:
+        'Build me a crypto desk: candlestick chart, watchlist, order book depth, heatmap and derivatives.',
+      points: [
+        'Live market data from public APIs — Binance, BitMEX, Kalshi and more.',
+        'Bots that watch conditions and fire alerts with your tab closed.',
+        'Sandbox every widget so a bad script never owns your desk.',
+      ],
+      ctaPrimary: 'Build a trading desk',
+      ctaSecondary: 'See connectors',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow for founders',
+        description:
+          'Spin up a founder HQ from one prompt — pipeline, launch checklist, content calendar and MRR on a single canvas.',
+      },
+      hero: {
+        badge: 'For founders',
+        title: 'Your command center from one sentence',
+        subtitle:
+          'Solo founders don’t need five tools. Describe the dashboard you want and Nexow builds the widgets — pipeline, revenue, launch plan and notes together.',
+      },
+      prompt:
+        'Build a solo founder dashboard: lead pipeline, launch checklist, content calendar, MRR chart and quick notes.',
+      points: [
+        'Five widgets from a single prompt — arranged the way you actually work.',
+        'Cloud sync across devices so the HQ travels with you.',
+        'Share live widgets with co-founders without exporting screenshots.',
+      ],
+      ctaPrimary: 'Build founder HQ',
+      ctaSecondary: 'See examples',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow for builders',
+        description:
+          'Ship interactive widgets, bots and agents on a sandboxed canvas — then publish to a community marketplace.',
+      },
+      hero: {
+        badge: 'For builders',
+        title: 'Ship software at the speed of a prompt',
+        subtitle:
+          'Nexow is a widget runtime with bots, agents, connectors and a maker community. Generate, refine by conversation, and publish what works.',
+      },
+      prompt:
+        'Create a project command center: kanban board, Gantt timeline, KPIs, risks and team workload.',
+      points: [
+        'Inspectable, versioned source for every generated widget.',
+        'Cloud bots and agents with a full harness — model, tools, triggers.',
+        'Marketplace lineage so remakes credit the original builder.',
+      ],
+      ctaPrimary: 'Start building',
+      ctaSecondary: 'Join community',
+    },
   },
   privacyPage,
   termsPage,

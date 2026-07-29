@@ -4,6 +4,7 @@ export const NAV_ICONS: Record<string, string> = {
   '/community': 'users',
   '/connectors': 'plug',
   '/plans': 'coins',
+  '/help': 'bookOpen',
   '/blog': 'library',
   '/about': 'globe',
 };

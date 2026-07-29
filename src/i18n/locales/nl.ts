@@ -13,6 +13,8 @@ export const nl: SiteContent = {
     launch: 'App starten',
     menu: 'Menu openen',
     close: 'Menu sluiten',
+    themeToDark: 'Overschakelen naar donkere modus',
+    themeToLight: 'Overschakelen naar lichte modus',
   },
   footer: {
     tagline: 'Beschrijf een widget. Nexow bouwt het, verbindt het met live marktgegevens, en zet het op je canvas.',
@@ -49,7 +51,6 @@ export const nl: SiteContent = {
     rights: 'Alle rechten voorbehouden.',
     disclaimer:
       'Nexow is een tooling- en visualisatieplatform. Niets hiervan is financieel advies. Markten dragen risico mee; handel verantwoord.',
-    builtWith: 'Gebouwd met Astro. Standaard privé.',
   },
   home: {
     meta: {
@@ -335,8 +336,8 @@ export const nl: SiteContent = {
       title: 'Plug in elke markt',
       subtitle:
         'Pluggable connectoren streamen live prijzen, orderboeken en referentiegegevens rechtstreeks in je widgets — over FX, crypto, aandelen, futures, opties, voorspellingsmarkten, databases en social feeds.',
-      note: '45 connectoren zijn vandaag live en 83 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
-      count: 45,
+      note: '90 connectoren zijn vandaag live en 141 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
+      count: 90,
       countLabel: 'live connectoren',
       groups: {
         fx: 'FX',
@@ -1025,7 +1026,7 @@ export const nl: SiteContent = {
         patternsDots: 'Alleen stippen',
         patternsAll: 'Alle 6',
         loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 83',
+        connectorsAll: 'Alle 141',
         brandNexow: 'Nexow-merk',
         brandAvatar: 'Je avatar',
         brandCustom: 'Je logo',
@@ -1246,7 +1247,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Connectoren — Nexow',
       description:
-        'Blader door elke Nexow-connector — 45 live en 83 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
+        'Blader door elke Nexow-connector — 90 live en 141 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
     },
     hero: {
       badge: 'Connectoren',

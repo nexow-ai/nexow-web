@@ -153,7 +153,7 @@ export const PLANS: PlanSpec[] = [
     agents: '∞',
     inherits: 'sponsor',
     features: ['infra', 'setup', 'dev', 'personalization', 'support'],
-    ctaHref: 'mailto:partners@nexow.ai',
+    ctaHref: '/contact?type=partnership',
   },
 ];
 
