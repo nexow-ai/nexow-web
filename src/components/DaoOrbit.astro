@@ -1,26 +1,35 @@
 ---
 /**
- * Large decorative DAO orbit — community members circling a governance core
- * with vote pulses drifting inward. Mirrors the app's DaoTab teaser, scaled
- * for the marketing page. Pure CSS / SMIL motion; paused via `.is-offscreen`.
+ * Large decorative DAO orbit — denser constellation, path-drawn rings,
+ * vote pulses, and a light pointer tilt. Pauses via `.is-offscreen`.
  */
 ---
 
-<div class="dao-orbit relative mx-auto w-full max-w-lg" aria-hidden="true" data-motion="breathe">
+<div
+  class="dao-orbit relative mx-auto w-full max-w-xl"
+  aria-hidden="true"
+  data-motion="breathe"
+  data-dao-orbit
+>
   <div
-    class="pointer-events-none absolute inset-0 rounded-full opacity-50 blur-3xl"
-    style="background:radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-brand-400) 35%, transparent), transparent 65%)"
+    class="pointer-events-none absolute inset-0 rounded-full opacity-55 blur-3xl"
+    style="background:radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-brand-400) 40%, transparent), color-mix(in oklab, var(--color-accent-500) 18%, transparent) 55%, transparent 70%)"
   >
   </div>
-  <svg class="relative mx-auto block h-auto w-full" viewBox="0 0 420 280" fill="none">
+  <svg class="dao-svg relative mx-auto block h-auto w-full" viewBox="0 0 440 300" fill="none">
     <defs>
       <radialGradient id="dao-core-fill" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.95"></stop>
-        <stop offset="55%" stop-color="var(--color-accent-500)" stop-opacity="0.9"></stop>
-        <stop offset="100%" stop-color="var(--color-plasma-500)" stop-opacity="0.75"></stop>
+        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="1"></stop>
+        <stop offset="45%" stop-color="var(--color-brand-500)" stop-opacity="0.95"></stop>
+        <stop offset="78%" stop-color="var(--color-accent-500)" stop-opacity="0.88"></stop>
+        <stop offset="100%" stop-color="var(--color-plasma-500)" stop-opacity="0.7"></stop>
       </radialGradient>
-      <filter id="dao-glow" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="6" result="b"></feGaussianBlur>
+      <linearGradient id="dao-ring-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.7"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.35"></stop>
+      </linearGradient>
+      <filter id="dao-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="7" result="b"></feGaussianBlur>
         <feMerge>
           <feMergeNode in="b"></feMergeNode>
           <feMergeNode in="SourceGraphic"></feMergeNode>
@@ -28,61 +37,122 @@
       </filter>
     </defs>
 
-    <!-- Orbit guides -->
-    <circle class="dao-ring" cx="210" cy="140" r="112" stroke="currentColor" stroke-width="1" stroke-dasharray="4 10" opacity="0.22"></circle>
-    <circle class="dao-ring dao-ring--slow" cx="210" cy="140" r="74" stroke="currentColor" stroke-width="1" stroke-dasharray="3 8" opacity="0.16"></circle>
-    <circle cx="210" cy="140" r="42" stroke="currentColor" stroke-width="1" opacity="0.1"></circle>
+    <g class="dao-tilt">
+      <!-- Drawn orbit guides -->
+      <circle class="dao-ring-draw" cx="220" cy="150" r="118" stroke="url(#dao-ring-grad)" stroke-width="1.2" pathLength="1" fill="none"></circle>
+      <circle class="dao-ring-draw dao-ring-draw--2" cx="220" cy="150" r="78" stroke="url(#dao-ring-grad)" stroke-width="1" pathLength="1" fill="none"></circle>
+      <circle class="dao-ring dao-ring--spin" cx="220" cy="150" r="118" stroke="currentColor" stroke-width="1" stroke-dasharray="4 10" opacity="0.18" fill="none"></circle>
+      <circle class="dao-ring dao-ring--spin-rev" cx="220" cy="150" r="78" stroke="currentColor" stroke-width="1" stroke-dasharray="3 8" opacity="0.14" fill="none"></circle>
+      <circle cx="220" cy="150" r="44" stroke="currentColor" stroke-width="1" opacity="0.1" fill="none"></circle>
 
-    <!-- Outer members -->
-    <g class="dao-spin">
-      <circle cx="210" cy="28" r="7" class="dao-member" style="--d:0s"></circle>
-      <circle cx="308" cy="196" r="5.5" class="dao-member" style="--d:0.5s"></circle>
-      <circle cx="112" cy="196" r="6.2" class="dao-member" style="--d:1s"></circle>
-      <circle cx="318" cy="88" r="4.8" class="dao-member" style="--d:1.5s"></circle>
+      <!-- Outer members -->
+      <g class="dao-spin">
+        <circle cx="220" cy="32" r="7.5" class="dao-member" style="--d:0s"></circle>
+        <circle cx="324" cy="210" r="5.8" class="dao-member" style="--d:0.45s"></circle>
+        <circle cx="116" cy="210" r="6.4" class="dao-member" style="--d:0.9s"></circle>
+        <circle cx="334" cy="92" r="5" class="dao-member" style="--d:1.35s"></circle>
+        <circle cx="106" cy="92" r="4.6" class="dao-member" style="--d:1.8s"></circle>
+      </g>
+
+      <g class="dao-spin dao-spin--rev">
+        <circle cx="298" cy="150" r="5.2" class="dao-member dao-member--soft" style="--d:0.3s"></circle>
+        <circle cx="174" cy="84" r="5.8" class="dao-member dao-member--soft" style="--d:0.85s"></circle>
+        <circle cx="174" cy="216" r="4.8" class="dao-member dao-member--soft" style="--d:1.4s"></circle>
+        <circle cx="266" cy="84" r="4.4" class="dao-member dao-member--soft" style="--d:1.9s"></circle>
+      </g>
+
+      <!-- Vote pulses + trails -->
+      <circle class="dao-vote" r="4.8" fill="var(--color-brand-400)" filter="url(#dao-glow)">
+        <animateMotion dur="3s" repeatCount="indefinite" path="M220 32 C 300 55 305 110 238 138"></animateMotion>
+      </circle>
+      <circle class="dao-vote" r="3.8" fill="var(--color-accent-400)" opacity="0.9">
+        <animateMotion dur="3.6s" begin="0.7s" repeatCount="indefinite" path="M116 210 C 150 198 180 176 204 158"></animateMotion>
+      </circle>
+      <circle class="dao-vote" r="3.4" fill="var(--color-plasma-400)" opacity="0.85">
+        <animateMotion dur="4s" begin="1.3s" repeatCount="indefinite" path="M334 92 C 300 108 260 128 238 144"></animateMotion>
+      </circle>
+      <circle class="dao-vote" r="2.8" fill="var(--color-sky-300)" opacity="0.8">
+        <animateMotion dur="4.6s" begin="0.4s" repeatCount="indefinite" path="M106 92 C 140 110 170 130 200 146"></animateMotion>
+      </circle>
+
+      <!-- Core -->
+      <g filter="url(#dao-glow)" class="dao-core">
+        <circle cx="220" cy="150" r="54" fill="url(#dao-core-fill)" opacity="0.22" class="dao-halo"></circle>
+        <circle cx="220" cy="150" r="36" fill="url(#dao-core-fill)"></circle>
+        <path
+          d="M203 141.5 220 130l17 11.5M205 146h30M208 152v13M217 152v13M226 152v13M235 152v13M205 168h30"
+          stroke="white"
+          stroke-width="2.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          opacity="0.95"
+        ></path>
+      </g>
+
+      <!-- Sparks -->
+      <path d="M68 70l3.4 8.4 8.4 3.4-8.4 3.4-3.4 8.4-3.4-8.4-8.4-3.4 8.4-3.4z" fill="var(--color-brand-400)" class="dao-spark" style="--d:0s"></path>
+      <path d="M368 78l2.8 6.8 6.8 2.8-6.8 2.8-2.8 6.8-2.8-6.8-6.8-2.8 6.8-2.8z" fill="var(--color-accent-400)" class="dao-spark" style="--d:0.7s"></path>
+      <path d="M352 236l2.4 5.8 5.8 2.4-5.8 2.4-2.4 5.8-2.4-5.8-5.8-2.4 5.8-2.4z" fill="var(--color-plasma-400)" class="dao-spark" style="--d:1.3s"></path>
+      <path d="M78 230l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="var(--color-sky-300)" class="dao-spark" style="--d:1.9s"></path>
     </g>
-
-    <!-- Inner members (counter-rotate) -->
-    <g class="dao-spin dao-spin--rev">
-      <circle cx="284" cy="140" r="5" class="dao-member dao-member--soft" style="--d:0.3s"></circle>
-      <circle cx="168" cy="78" r="5.6" class="dao-member dao-member--soft" style="--d:0.9s"></circle>
-      <circle cx="168" cy="202" r="4.6" class="dao-member dao-member--soft" style="--d:1.4s"></circle>
-    </g>
-
-    <!-- Vote pulses -->
-    <circle class="dao-vote" r="4.5" fill="var(--color-brand-400)" filter="url(#dao-glow)">
-      <animateMotion dur="3.2s" repeatCount="indefinite" path="M210 28 C 280 48 290 100 228 128"></animateMotion>
-    </circle>
-    <circle class="dao-vote" r="3.6" fill="var(--color-accent-400)" opacity="0.85">
-      <animateMotion dur="3.8s" begin="0.8s" repeatCount="indefinite" path="M112 196 C 140 186 170 168 194 150"></animateMotion>
-    </circle>
-    <circle class="dao-vote" r="3.2" fill="var(--color-plasma-400)" opacity="0.8">
-      <animateMotion dur="4.2s" begin="1.4s" repeatCount="indefinite" path="M318 88 C 290 100 250 120 230 136"></animateMotion>
-    </circle>
-
-    <!-- Governance core -->
-    <g filter="url(#dao-glow)">
-      <circle cx="210" cy="140" r="48" fill="url(#dao-core-fill)" opacity="0.28" class="dao-halo"></circle>
-      <circle cx="210" cy="140" r="34" fill="url(#dao-core-fill)"></circle>
-      <path
-        d="M194 132.5 210 122l16 10.5M196 136h28M198 141v12M207 141v12M215 141v12M223 141v12M196 156h28"
-        stroke="white"
-        stroke-width="2.2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        opacity="0.92"
-      ></path>
-    </g>
-
-    <!-- Sparks -->
-    <path d="M72 64l3.2 8 8 3.2-8 3.2-3.2 8-3.2-8-8-3.2 8-3.2z" fill="var(--color-brand-400)" class="dao-spark" style="--d:0s"></path>
-    <path d="M348 72l2.6 6.4 6.4 2.6-6.4 2.6-2.6 6.4-2.6-6.4-6.4-2.6 6.4-2.6z" fill="var(--color-accent-400)" class="dao-spark" style="--d:0.7s"></path>
-    <path d="M336 220l2.2 5.4 5.4 2.2-5.4 2.2-2.2 5.4-2.2-5.4-5.4-2.2 5.4-2.2z" fill="var(--color-plasma-400)" class="dao-spark" style="--d:1.3s"></path>
   </svg>
 </div>
+
+<script>
+  let abort: AbortController | undefined;
+
+  function initDaoOrbit() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    for (const root of document.querySelectorAll<HTMLElement>('[data-dao-orbit]')) {
+      const host = root.closest('section') ?? root;
+      host.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = root.getBoundingClientRect();
+          const mx = ((e.clientX - r.left) / r.width) * 2 - 1;
+          const my = ((e.clientY - r.top) / r.height) * 2 - 1;
+          root.style.setProperty('--tx', `${(mx * 6).toFixed(2)}deg`);
+          root.style.setProperty('--ty', `${(-my * 5).toFixed(2)}deg`);
+        },
+        { signal, passive: true },
+      );
+      host.addEventListener(
+        'pointerleave',
+        () => {
+          root.style.setProperty('--tx', '0deg');
+          root.style.setProperty('--ty', '0deg');
+        },
+        { signal },
+      );
+    }
+  }
+
+  document.addEventListener('astro:page-load', initDaoOrbit);
+</script>
 
 <style>
   .dao-orbit {
     color: var(--color-brand-300);
+    --tx: 0deg;
+    --ty: 0deg;
+  }
+  .dao-tilt {
+    transform-origin: 220px 150px;
+    transform: perspective(700px) rotateY(var(--tx)) rotateX(var(--ty));
+    transition: transform 0.5s var(--ease-out-expo);
+    will-change: transform;
+  }
+  .dao-ring-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: dao-draw 2.2s var(--ease-out-expo) 0.15s forwards;
+  }
+  .dao-ring-draw--2 {
+    animation-delay: 0.35s;
   }
   .dao-member {
     fill: var(--color-brand-400);
@@ -91,88 +161,81 @@
   }
   .dao-member--soft {
     fill: var(--color-accent-400);
-    opacity: 0.85;
+    opacity: 0.88;
   }
   .dao-halo {
-    animation: dao-breathe 4.5s ease-in-out infinite;
+    animation: dao-breathe 4.2s ease-in-out infinite;
+    transform-origin: 220px 150px;
+  }
+  .dao-core:hover .dao-halo,
+  .dao-orbit:hover .dao-halo {
+    animation-duration: 2.4s;
   }
   .dao-spark {
     animation: dao-twinkle 2.4s ease-in-out infinite;
     animation-delay: var(--d, 0s);
   }
   .dao-spin {
-    transform-origin: 210px 140px;
-    animation: dao-rotate 28s linear infinite;
+    transform-origin: 220px 150px;
+    animation: dao-rotate 26s linear infinite;
   }
   .dao-spin--rev {
     animation-direction: reverse;
-    animation-duration: 18s;
+    animation-duration: 16s;
   }
-  .dao-ring {
-    transform-origin: 210px 140px;
-    animation: dao-rotate 48s linear infinite;
+  .dao-ring--spin {
+    transform-origin: 220px 150px;
+    animation: dao-rotate 44s linear infinite;
   }
-  .dao-ring--slow {
-    animation-duration: 72s;
-    animation-direction: reverse;
+  .dao-ring--spin-rev {
+    transform-origin: 220px 150px;
+    animation: dao-rotate 64s linear infinite reverse;
   }
 
+  @keyframes dao-draw {
+    to { stroke-dashoffset: 0; }
+  }
   @keyframes dao-rotate {
-    to {
-      transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
   }
   @keyframes dao-pulse {
-    0%,
-    100% {
-      opacity: 0.55;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.18);
-    }
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
   }
   @keyframes dao-breathe {
-    0%,
-    100% {
-      opacity: 0.22;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.4;
-      transform: scale(1.08);
-    }
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.42; transform: scale(1.1); }
   }
   @keyframes dao-twinkle {
-    0%,
-    100% {
-      opacity: 0.35;
-    }
-    50% {
-      opacity: 1;
-    }
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
   }
 
   .is-offscreen .dao-spin,
-  .is-offscreen .dao-ring,
+  .is-offscreen .dao-ring--spin,
+  .is-offscreen .dao-ring--spin-rev,
   .is-offscreen .dao-member,
   .is-offscreen .dao-halo,
   .is-offscreen .dao-spark,
-  .is-offscreen .dao-vote {
+  .is-offscreen .dao-vote,
+  .is-offscreen .dao-ring-draw {
     animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .dao-spin,
-    .dao-ring,
+    .dao-ring--spin,
+    .dao-ring--spin-rev,
     .dao-member,
     .dao-halo,
     .dao-spark {
       animation: none !important;
     }
-    .dao-vote {
-      display: none;
+    .dao-ring-draw {
+      animation: none;
+      stroke-dashoffset: 0;
     }
+    .dao-vote { display: none; }
+    .dao-tilt { transition: none; transform: none; }
   }
 </style>

@@ -1,57 +1,78 @@
 ---
 /**
- * Decorative research board → dashboard mock: a board of links/media/widgets
- * flowing onto a live canvas desk. Illustrative only (aria-hidden).
+ * Research board → live dashboard mock with SVG flow arrows, shimmer tiles,
+ * and hover lift. Illustrative (aria-hidden).
  */
 import Icon from './Icon.astro';
 ---
 
 <div
-  class="relative mx-auto w-full max-w-lg overflow-hidden rounded-3xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10"
+  class="research-mock group/mock relative mx-auto w-full max-w-lg overflow-hidden rounded-3xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10 transition-shadow duration-500 hover:shadow-2xl hover:shadow-brand-500/10"
   aria-hidden="true"
   data-motion="tilt rise"
 >
   <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
     <Icon name="library" class="size-4 text-brand-600" />
     <span class="font-mono text-xs text-ink-500">board · research desk</span>
-    <span class="ml-auto rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700">live</span>
+    <span class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700">
+      <span class="size-1.5 rounded-full bg-brand-500 research-live-dot"></span>
+      live
+    </span>
   </div>
 
+  <!-- SVG flow ribbon between columns -->
+  <svg class="pointer-events-none absolute inset-x-0 top-[52%] z-10 hidden h-10 -translate-y-1/2 sm:block" viewBox="0 0 400 40" fill="none" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="research-flow" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
+        <stop offset="40%" stop-color="var(--color-brand-400)" stop-opacity="0.7"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.8"></stop>
+      </linearGradient>
+    </defs>
+    <path class="research-arc" pathLength="1" d="M155 20 C 200 8 240 8 260 20" stroke="url(#research-flow)" stroke-width="1.8" stroke-linecap="round"></path>
+    <circle r="3" fill="var(--color-brand-400)">
+      <animateMotion dur="2.8s" repeatCount="indefinite" path="M155 20 C 200 8 240 8 260 20"></animateMotion>
+    </circle>
+  </svg>
+
   <div class="grid gap-3 p-4 sm:grid-cols-[0.9fr_1.1fr]">
-    <!-- Board tiles -->
     <div class="space-y-2.5 rounded-2xl border border-ink-900/8 bg-[#f7fbfb] p-3">
       <p class="font-mono text-[0.65rem] uppercase tracking-wider text-ink-400">Board</p>
       <div class="grid grid-cols-2 gap-2">
-        <div class="research-tile rounded-xl border border-ink-900/10 bg-white p-2" style="--d:0s">
-          <div class="h-10 rounded-lg bg-gradient-to-br from-brand-200 to-sky-100"></div>
+        <div class="research-tile group/tile rounded-xl border border-ink-900/10 bg-white p-2 transition-transform duration-300 hover:-translate-y-0.5 hover:border-brand-300/50 hover:shadow-md" style="--d:0s">
+          <div class="research-shimmer relative h-10 overflow-hidden rounded-lg bg-gradient-to-br from-brand-200 to-sky-100"></div>
           <p class="mt-1.5 truncate font-mono text-[0.6rem] text-ink-600">widget · heatmap</p>
         </div>
-        <div class="research-tile rounded-xl border border-ink-900/10 bg-white p-2" style="--d:0.15s">
+        <div class="research-tile group/tile rounded-xl border border-ink-900/10 bg-white p-2 transition-transform duration-300 hover:-translate-y-0.5 hover:border-brand-300/50 hover:shadow-md" style="--d:0.12s">
           <div class="flex h-10 items-center justify-center rounded-lg bg-ink-950/5">
-            <Icon name="link" class="size-4 text-accent-500" />
+            <Icon name="link" class="size-4 text-accent-500 transition-transform duration-300 group-hover/tile:scale-110" />
           </div>
           <p class="mt-1.5 truncate font-mono text-[0.6rem] text-ink-600">yt · brief</p>
         </div>
-        <div class="research-tile rounded-xl border border-ink-900/10 bg-white p-2" style="--d:0.3s">
-          <div class="h-10 rounded-lg bg-gradient-to-br from-accent-200/80 to-plasma-100"></div>
+        <div class="research-tile group/tile rounded-xl border border-ink-900/10 bg-white p-2 transition-transform duration-300 hover:-translate-y-0.5 hover:border-brand-300/50 hover:shadow-md" style="--d:0.24s">
+          <div class="research-shimmer relative h-10 overflow-hidden rounded-lg bg-gradient-to-br from-accent-200/80 to-plasma-100"></div>
           <p class="mt-1.5 truncate font-mono text-[0.6rem] text-ink-600">media · clip</p>
         </div>
-        <div class="research-tile rounded-xl border border-ink-900/10 bg-white p-2" style="--d:0.45s">
+        <div class="research-tile group/tile rounded-xl border border-ink-900/10 bg-white p-2 transition-transform duration-300 hover:-translate-y-0.5 hover:border-brand-300/50 hover:shadow-md" style="--d:0.36s">
           <div class="flex h-10 items-center gap-1 rounded-lg bg-white p-1.5 ring-1 ring-ink-900/8">
-            <span class="h-full flex-1 rounded-sm bg-brand-400/50"></span>
-            <span class="h-full flex-1 rounded-sm bg-brand-300/40"></span>
-            <span class="h-full flex-1 rounded-sm bg-sky-300/50"></span>
+            <span class="research-bar h-full flex-1 rounded-sm bg-brand-400/55" style="--bh:70%"></span>
+            <span class="research-bar h-full flex-1 rounded-sm bg-brand-300/45" style="--bh:45%"></span>
+            <span class="research-bar h-full flex-1 rounded-sm bg-sky-300/55" style="--bh:85%"></span>
           </div>
           <p class="mt-1.5 truncate font-mono text-[0.6rem] text-ink-600">post · pinned</p>
         </div>
       </div>
     </div>
 
-    <!-- Dashboard -->
     <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-ink-950 p-3 text-white">
       <div
-        class="pointer-events-none absolute -right-8 -top-8 size-28 rounded-full opacity-40 blur-2xl"
+        class="pointer-events-none absolute -right-8 -top-8 size-32 rounded-full opacity-45 blur-2xl research-glow"
         style="background:radial-gradient(circle, var(--color-brand-400), transparent 70%)"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute -bottom-10 left-0 size-28 rounded-full opacity-30 blur-2xl research-glow research-glow--late"
+        style="background:radial-gradient(circle, var(--color-accent-500), transparent 70%)"
       >
       </div>
       <div class="relative flex items-center gap-2">
@@ -64,20 +85,20 @@ import Icon from './Icon.astro';
           Array.from({ length: 6 }).map((_, i) => (
             <span
               class:list={[
-                'research-cell h-9 rounded-md',
+                'research-cell h-9 rounded-md transition-transform duration-300 hover:scale-[1.03]',
                 [0, 3].includes(i)
-                  ? 'col-span-2 bg-gradient-to-br from-brand-500/50 to-accent-500/30'
+                  ? 'col-span-2 bg-gradient-to-br from-brand-500/55 to-accent-500/35'
                   : i === 1
-                    ? 'bg-white/10'
-                    : 'bg-white/[0.06]',
+                    ? 'bg-white/12'
+                    : 'bg-white/[0.07]',
               ]}
-              style={`--d:${0.1 + i * 0.08}s`}
+              style={`--d:${0.1 + i * 0.07}s`}
             />
           ))
         }
       </div>
       <div class="relative mt-3 flex items-center gap-2 font-mono text-[0.6rem] text-ink-400">
-        <span class="inline-flex size-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+        <span class="inline-flex size-1.5 rounded-full bg-brand-400 research-live-dot"></span>
         streaming · 4 widgets live
       </div>
     </div>
@@ -90,24 +111,78 @@ import Icon from './Icon.astro';
     animation: research-in 0.9s var(--ease-out-expo) both;
     animation-delay: var(--d, 0s);
   }
-  @keyframes research-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.97);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+  .research-arc {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: research-draw 1.4s var(--ease-out-expo) 0.35s forwards;
   }
+  .research-live-dot {
+    animation: research-blink 1.6s ease-in-out infinite;
+  }
+  .research-glow {
+    animation: research-bloom 5s ease-in-out infinite;
+  }
+  .research-glow--late {
+    animation-delay: -2.5s;
+  }
+  .research-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.45) 50%, transparent 60%);
+    transform: translateX(-120%);
+    animation: research-shine 3.8s ease-in-out infinite;
+  }
+  .research-bar {
+    transform-origin: bottom;
+    animation: research-bar 2.4s ease-in-out infinite alternate;
+    height: var(--bh, 60%) !important;
+    align-self: end;
+  }
+
+  @keyframes research-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes research-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes research-blink {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+  @keyframes research-bloom {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(1.08); }
+  }
+  @keyframes research-shine {
+    0%, 40% { transform: translateX(-120%); }
+    70%, 100% { transform: translateX(120%); }
+  }
+  @keyframes research-bar {
+    from { transform: scaleY(0.65); }
+    to { transform: scaleY(1); }
+  }
+
   .is-offscreen .research-tile,
-  .is-offscreen .research-cell {
+  .is-offscreen .research-cell,
+  .is-offscreen .research-arc,
+  .is-offscreen .research-live-dot,
+  .is-offscreen .research-glow,
+  .is-offscreen .research-shimmer::after,
+  .is-offscreen .research-bar {
     animation-play-state: paused;
   }
+
   @media (prefers-reduced-motion: reduce) {
     .research-tile,
-    .research-cell {
+    .research-cell,
+    .research-live-dot,
+    .research-glow,
+    .research-bar {
       animation: none;
     }
+    .research-arc { animation: none; stroke-dashoffset: 0; }
+    .research-shimmer::after { display: none; }
   }
 </style>
