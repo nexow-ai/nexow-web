@@ -56,6 +56,17 @@ export const en: SiteContent = {
     disclaimer:
       'Nexow is a tooling and visualization platform operated by Nexow, Inc. Some examples use market data, but the canvas is built for general-purpose widgets and workflows. Nothing here is financial, investment, legal, or tax advice.',
     builtWith: 'Built with Astro.',
+    newsletter: {
+      eyebrow: 'Newsletter',
+      title: 'Stay in the loop',
+      subtitle: 'Product updates, canvas tips, and release notes — occasional, no spam.',
+      placeholder: 'you@email.com',
+      submit: 'Subscribe',
+      submitting: 'Subscribing…',
+      success: 'You\'re in. Thanks for subscribing.',
+      error: 'Something went wrong. Please try again.',
+      invalid: 'Enter a valid email address.',
+    },
   },
   home: {
     meta: {

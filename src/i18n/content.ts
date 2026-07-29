@@ -284,6 +284,21 @@ export interface SiteContent {
     rights: string;
     disclaimer: string;
     builtWith: string;
+    /**
+     * Newsletter signup in the site footer. Optional so locales can omit it and
+     * fall back to English via `useContent` merge.
+     */
+    newsletter?: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      placeholder: string;
+      submit: string;
+      submitting: string;
+      success: string;
+      error: string;
+      invalid: string;
+    };
   };
   home: {
     meta: { title: string; description: string };

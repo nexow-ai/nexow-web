@@ -34,6 +34,8 @@ export const SITE = {
   url: 'https://nexow.ai',
   appUrl: 'https://x.nexow.ai',
   docsUrl: 'https://x.nexow.ai',
+  /** Marketing newsletter signup (Nuxt API on the app host). */
+  newsletterUrl: 'https://x.nexow.ai/api/newsletter',
   email: 'hello@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
   x: '@nexow_ai',

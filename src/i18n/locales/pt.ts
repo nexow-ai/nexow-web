@@ -50,6 +50,17 @@ export const pt: SiteContent = {
     disclaimer:
       'O Nexow é uma plataforma de ferramentas e visualização. Nada aqui constitui aconselhamento financeiro. Os mercados envolvem risco; negoceie de forma responsável.',
     builtWith: 'Construído com Astro. Privado por predefinição.',
+    newsletter: {
+      eyebrow: 'Newsletter',
+      title: 'Fique por dentro',
+      subtitle: 'Atualizações do produto, dicas do canvas e notas de versão — ocasional, sem spam.',
+      placeholder: 'voce@email.com',
+      submit: 'Assinar',
+      submitting: 'A assinar…',
+      success: 'Está inscrito. Obrigado.',
+      error: 'Algo correu mal. Tente novamente.',
+      invalid: 'Introduza um email válido.',
+    },
   },
   home: {
     meta: {
