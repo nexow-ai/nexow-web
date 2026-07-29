@@ -17,13 +17,7 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const local = useContent(lang).features;
-const en = useContent('en').features;
-/** Use the full English feature map until a locale ships the updated groups. */
-const hasUpdatedGroups = local.groups.some((g) =>
-  g.items.some((item) => /dock|toolbar|realtime|themes?/i.test(`${item.title} ${item.body}`)),
-);
-const t = hasUpdatedGroups ? local : { ...local, ...en, meta: local.meta, hero: { ...en.hero, badge: local.hero.badge } };
+const t = useContent(lang).features;
 const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
 ---
@@ -86,7 +80,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
               />
             </div>
             <div class="container-page relative">
-              <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+              <div class="grid items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
                 <!-- Copy -->
                 <div class:list={['reveal', reverse && 'lg:order-2']}>
                   <span class="eyebrow inline-flex items-center gap-3 text-brand-600">
@@ -102,7 +96,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
                         <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80">
                           <Icon name={f.icon} class="size-5" />
                         </span>
-                        <div>
+                        <div class="min-w-0">
                           <h3 class="font-display text-base font-semibold text-ink-950">{f.title}</h3>
                           <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
                         </div>
@@ -112,7 +106,7 @@ const explore = useContent(lang).connectorsPage.exploreCta;
                 </div>
 
                 <!-- Visual -->
-                <div class:list={['reveal', reverse && 'lg:order-1']}>
+                <div class:list={['reveal lg:sticky lg:top-28', reverse && 'lg:order-1']}>
                   <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white">
                     {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
                     {i === 1 && <CanvasMock />}
