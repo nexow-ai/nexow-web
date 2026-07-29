@@ -8,6 +8,11 @@ import ConnectorModal from '../ConnectorModal.astro';
 import Icon from '../Icon.astro';
 import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
+import {
+  ALL_SUBCATEGORIES,
+  SUBCATEGORIES_BY_CATEGORY,
+  type ConnectorSubcategory,
+} from '../../data/connector-subcategories';
 
 interface Props {
   lang: Lang;
@@ -34,20 +39,19 @@ const capabilityFilters = [
   { key: 'trading', label: t.capability.trading },
   { key: 'readonly', label: t.capability.readonly },
 ];
-const assetKeys = [
-  'equities',
-  'indices',
-  'fixed_income',
-  'fx',
-  'commodities',
-  'crypto',
-  'volatility',
-  'prediction_markets',
-] as const;
-const assetFilters = [
-  { key: 'all', label: t.all },
-  ...assetKeys.map((key) => ({ key, label: t.assets[key] ?? key })),
-];
+const labelSub = (sc: ConnectorSubcategory) => ({
+  ...sc,
+  label: t.kinds[sc.key] ?? sc.key,
+});
+/** Payload for client: which subcategory chips belong to which category. */
+const subcategoryCatalog = {
+  all: ALL_SUBCATEGORIES.map(labelSub),
+  finance: SUBCATEGORIES_BY_CATEGORY.finance.map(labelSub),
+  wallets: SUBCATEGORIES_BY_CATEGORY.wallets.map(labelSub),
+  services: SUBCATEGORIES_BY_CATEGORY.services.map(labelSub),
+  data: SUBCATEGORIES_BY_CATEGORY.data.map(labelSub),
+  socials: SUBCATEGORIES_BY_CATEGORY.socials.map(labelSub),
+};
 const alphaFilters = [
   { key: 'all', label: t.all, min: '', max: '' },
   { key: 'a-d', label: 'A–D', min: 'A', max: 'D' },
@@ -57,6 +61,8 @@ const alphaFilters = [
   { key: 'q-t', label: 'Q–T', min: 'Q', max: 'T' },
   { key: 'u-z', label: 'U–Z', min: 'U', max: 'Z' },
 ];
+const chipBtnIcon =
+  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white';
 
 /** Catalog payload for the client modal (localized labels baked in). */
 const catalog = CONNECTORS.map((c) => ({
@@ -223,18 +229,29 @@ const chipBtn =
 
                 <div class="flex flex-wrap items-center gap-2 lg:gap-3">
                   <div
+                    id="connector-subcategories"
                     class="inline-flex max-w-full flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm"
                     role="group"
-                    aria-label={t.filterAssets}
+                    aria-label={t.filterSubcategories}
                   >
+                    <button
+                      type="button"
+                      data-filter-subcategory="all"
+                      aria-pressed="true"
+                      class={chipBtnIcon}
+                    >
+                      {t.all}
+                    </button>
                     {
-                      assetFilters.map((f) => (
+                      subcategoryCatalog.all.map((f) => (
                         <button
                           type="button"
-                          data-filter-asset={f.key}
-                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                          class={chipBtn}
+                          data-filter-subcategory={f.key}
+                          data-subcategory-icon={f.icon}
+                          aria-pressed="false"
+                          class={chipBtnIcon}
                         >
+                          <Icon name={f.icon} class="size-3 shrink-0 opacity-80" />
                           {f.label}
                         </button>
                       ))
@@ -283,6 +300,11 @@ const chipBtn =
       type="application/json"
       id="connectors-catalog"
       set:html={JSON.stringify(catalog).replace(/</g, '\\u003c')}
+    />
+    <script
+      type="application/json"
+      id="connectors-subcategories"
+      set:html={JSON.stringify(subcategoryCatalog).replace(/</g, '\\u003c')}
     />
   </section>
 
@@ -349,6 +371,9 @@ const chipBtn =
   let connectorsAbort: AbortController | undefined;
   let lastFocus: HTMLElement | null = null;
 
+  type SubcategoryChip = { key: string; icon: string; label: string };
+  type SubcategoryCatalog = Record<string, SubcategoryChip[]>;
+
   function readCatalog(): CatalogItem[] {
     const el = document.getElementById('connectors-catalog');
     if (!el?.textContent) return [];
@@ -356,6 +381,16 @@ const chipBtn =
       return JSON.parse(el.textContent) as CatalogItem[];
     } catch {
       return [];
+    }
+  }
+
+  function readSubcategoryCatalog(): SubcategoryCatalog {
+    const el = document.getElementById('connectors-subcategories');
+    if (!el?.textContent) return { all: [] };
+    try {
+      return JSON.parse(el.textContent) as SubcategoryCatalog;
+    } catch {
+      return { all: [] };
     }
   }
 
@@ -377,9 +412,12 @@ const chipBtn =
     const catBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-category]'));
     const statusBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-status]'));
     const capabilityBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-capability]'));
-    const assetBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-asset]'));
+    const subWrap = root.querySelector<HTMLElement>('#connector-subcategories');
+    const subBtns = () =>
+      Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]'));
     const alphaBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-alpha]'));
     const tmpl = countEl?.dataset.template ?? '{n}';
+    const subCatalog = readSubcategoryCatalog();
 
     const modal = document.getElementById('connector-modal');
     const panel = document.getElementById('connector-modal-panel');
@@ -403,7 +441,7 @@ const chipBtn =
     let category = 'all';
     let status = 'all';
     let capability = 'all';
-    let asset = 'all';
+    let subcategory = 'all';
     let alpha = 'all';
     let alphaMin = '';
     let alphaMax = '';
@@ -426,9 +464,30 @@ const chipBtn =
         category !== 'all' ||
         status !== 'all' ||
         capability !== 'all' ||
-        asset !== 'all' ||
+        subcategory !== 'all' ||
         alpha !== 'all';
       filtersBadge?.classList.toggle('hidden', !active);
+    };
+
+    const syncSubcategoryChips = () => {
+      const allowed = new Set((subCatalog[category] ?? subCatalog.all ?? []).map((s) => s.key));
+      for (const btn of subBtns()) {
+        const key = btn.dataset.filterSubcategory ?? '';
+        if (key === 'all') {
+          btn.hidden = false;
+          continue;
+        }
+        btn.hidden = !allowed.has(key);
+      }
+      if (subcategory !== 'all' && !allowed.has(subcategory)) {
+        subcategory = 'all';
+      }
+      const visible = subBtns().filter((b) => !b.hidden);
+      const active =
+        visible.find((b) => b.dataset.filterSubcategory === subcategory) ??
+        visible.find((b) => b.dataset.filterSubcategory === 'all');
+      if (active) setPressed(visible, active);
+      subWrap?.classList.toggle('hidden', visible.length <= 1);
     };
 
     const matches = (card: HTMLElement) => {
@@ -438,18 +497,13 @@ const chipBtn =
         capability === 'all' ||
         (capability === 'trading' && card.dataset.trading === 'yes') ||
         (capability === 'readonly' && card.dataset.trading === 'no');
-      const okAsset =
-        asset === 'all' ||
-        (card.dataset.assets ?? '')
-          .split(/\s+/)
-          .filter(Boolean)
-          .includes(asset);
+      const okSub = subcategory === 'all' || card.dataset.kind === subcategory;
       const letter = (card.dataset.letter ?? '').toUpperCase();
       const okAlpha =
         alpha === 'all' ||
         (letter >= alphaMin && letter <= alphaMax);
       const okQuery = query === '' || (card.dataset.search ?? '').includes(query);
-      return okCat && okStatus && okCap && okAsset && okAlpha && okQuery;
+      return okCat && okStatus && okCap && okSub && okAlpha && okQuery;
     };
 
     const apply = () => {
@@ -649,6 +703,7 @@ const chipBtn =
         () => {
           category = b.dataset.filterCategory ?? 'all';
           setPressed(catBtns, b);
+          syncSubcategoryChips();
           apply();
         },
         { signal },
@@ -676,12 +731,16 @@ const chipBtn =
         { signal },
       ),
     );
-    assetBtns.forEach((b) =>
+    subBtns().forEach((b) =>
       b.addEventListener(
         'click',
         () => {
-          asset = b.dataset.filterAsset ?? 'all';
-          setPressed(assetBtns, b);
+          if (b.hidden) return;
+          subcategory = b.dataset.filterSubcategory ?? 'all';
+          setPressed(
+            subBtns().filter((x) => !x.hidden),
+            b,
+          );
           apply();
         },
         { signal },
@@ -700,6 +759,8 @@ const chipBtn =
         { signal },
       ),
     );
+
+    syncSubcategoryChips();
 
     cards.forEach((card) =>
       card.addEventListener(

@@ -1440,6 +1440,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Read a channel's uploads or search videos via the YouTube Data API v3. Add an API key, then read from a widget with ctx.data.feed({ provider: 'youtube', query }) or ({ channel: 'UC...' })."
   },
   {
+    "id": "adyen",
+    "name": "Adyen",
+    "category": "finance",
+    "kind": "payments",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.adyen.com/",
+    "logo": "/connectors/adyen.svg",
+    "banner": "/connectors/banners/adyen.png",
+    "logoFit": "cover",
+    "notes": "Enterprise payment platform — chart authorization rates, settlement, and revenue across markets and channels."
+  },
+  {
     "id": "redshift",
     "name": "Amazon Redshift",
     "category": "data",
@@ -1466,6 +1480,68 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/amplitude.png",
     "logoFit": "cover",
     "notes": "Product analytics for growth teams — bring cohorts, conversion, and behavioral metrics into live dashboard widgets."
+  },
+  {
+    "id": "argent",
+    "name": "Argent",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.argent.xyz/",
+    "logo": "/connectors/argent.svg",
+    "banner": "/connectors/banners/argent.png",
+    "logoFit": "cover",
+    "notes": "Smart wallet for Ethereum and Starknet — track Argent accounts for balances and activity without custodial keys."
+  },
+  {
+    "id": "backpack",
+    "name": "Backpack",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://backpack.app/",
+    "logo": "/connectors/backpack.svg",
+    "banner": "/connectors/banners/backpack.png",
+    "logoFit": "cover",
+    "notes": "xNFT wallet for Solana and Ethereum — monitor Backpack addresses for balances and recent on-chain activity."
+  },
+  {
+    "id": "bitget_wallet",
+    "name": "Bitget Wallet",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://web3.bitget.com/",
+    "logo": "/connectors/bitget_wallet.svg",
+    "banner": "/connectors/banners/bitget_wallet.png",
+    "logoFit": "cover",
+    "notes": "Multi-chain Web3 wallet from Bitget — watch public addresses for native and token balances across supported networks."
+  },
+  {
+    "id": "bloomberg",
+    "name": "Bloomberg",
+    "category": "finance",
+    "kind": "data",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "indices",
+      "fixed_income",
+      "fx",
+      "commodities"
+    ],
+    "url": "https://www.bloomberg.com/professional/",
+    "logo": "/connectors/bloomberg.svg",
+    "banner": "/connectors/banners/bloomberg.png",
+    "logoFit": "cover",
+    "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
   {
     "id": "databricks",
@@ -1496,6 +1572,55 @@ export const CONNECTORS: Connector[] = [
     "notes": "Cloud monitoring and security platform — stream infrastructure metrics, APM spans, and monitors into live operations widgets."
   },
   {
+    "id": "etoro",
+    "name": "eToro",
+    "category": "finance",
+    "kind": "broker",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "crypto"
+    ],
+    "url": "https://www.etoro.com/",
+    "logo": "/connectors/etoro.svg",
+    "banner": "/connectors/banners/etoro.png",
+    "logoFit": "cover",
+    "notes": "Social trading broker for stocks and crypto — connect account data for positions, P&L, and copy-trade context."
+  },
+  {
+    "id": "exodus",
+    "name": "Exodus",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.exodus.com/",
+    "logo": "/connectors/exodus.svg",
+    "banner": "/connectors/banners/exodus.png",
+    "logoFit": "cover",
+    "notes": "Multi-asset desktop and mobile wallet — surface portfolio balances and transfers on ops and research boards."
+  },
+  {
+    "id": "fidelity",
+    "name": "Fidelity",
+    "category": "finance",
+    "kind": "broker",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "indices",
+      "fixed_income"
+    ],
+    "url": "https://www.fidelity.com/",
+    "logo": "/connectors/fidelity.svg",
+    "banner": "/connectors/banners/fidelity.png",
+    "logoFit": "cover",
+    "notes": "Full-service broker and wealth platform — bring brokerage balances, positions, and activity into finance dashboards."
+  },
+  {
     "id": "grafana",
     "name": "Grafana",
     "category": "data",
@@ -1508,6 +1633,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/grafana.png",
     "logoFit": "cover",
     "notes": "Open observability platform for metrics, logs, and traces — pull Grafana dashboards and alert state into Nexow ops boards."
+  },
+  {
+    "id": "keplr",
+    "name": "Keplr",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.keplr.app/",
+    "logo": "/connectors/keplr.svg",
+    "banner": "/connectors/banners/keplr.png",
+    "logoFit": "cover",
+    "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
   },
   {
     "id": "linear",
@@ -1580,6 +1719,34 @@ export const CONNECTORS: Connector[] = [
     "notes": "Incident response and on-call orchestration — show open incidents, services, and escalation status on a live ops board."
   },
   {
+    "id": "paypal",
+    "name": "PayPal",
+    "category": "finance",
+    "kind": "payments",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.paypal.com/",
+    "logo": "/connectors/paypal.svg",
+    "banner": "/connectors/banners/paypal.png",
+    "logoFit": "cover",
+    "notes": "Global payments network — surface payouts, balances, and transaction volume on ops and finance boards."
+  },
+  {
+    "id": "plaid",
+    "name": "Plaid",
+    "category": "finance",
+    "kind": "payments",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://plaid.com/",
+    "logo": "/connectors/plaid.svg",
+    "banner": "/connectors/banners/plaid.png",
+    "logoFit": "cover",
+    "notes": "Open banking connectivity — link bank and brokerage accounts so agents and widgets read balances and transactions."
+  },
+  {
     "id": "posthog",
     "name": "PostHog",
     "category": "data",
@@ -1606,6 +1773,66 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/prometheus.png",
     "logoFit": "cover",
     "notes": "Open-source metrics and alerting toolkit — query PromQL time series for infrastructure and app health widgets."
+  },
+  {
+    "id": "rabby",
+    "name": "Rabby",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://rabby.io/",
+    "logo": "/connectors/rabby.svg",
+    "banner": "/connectors/banners/rabby.png",
+    "logoFit": "cover",
+    "notes": "Multi-chain browser wallet focused on clear transaction previews — watch EVM addresses and token balances in Nexow."
+  },
+  {
+    "id": "rainbow",
+    "name": "Rainbow",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://rainbow.me/",
+    "logo": "/connectors/rainbow.svg",
+    "banner": "/connectors/banners/rainbow.png",
+    "logoFit": "cover",
+    "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
+  },
+  {
+    "id": "revolut",
+    "name": "Revolut",
+    "category": "finance",
+    "kind": "payments",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "fx",
+      "equities",
+      "crypto"
+    ],
+    "url": "https://www.revolut.com/",
+    "logo": "/connectors/revolut.svg",
+    "banner": "/connectors/banners/revolut.png",
+    "logoFit": "cover",
+    "notes": "Digital banking and multi-currency cards — track account balances, cards, and FX activity in live widgets."
+  },
+  {
+    "id": "safe",
+    "name": "Safe",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://safe.global/",
+    "logo": "/connectors/safe.svg",
+    "banner": "/connectors/banners/safe.png",
+    "logoFit": "cover",
+    "notes": "Smart-account multisig wallet (formerly Gnosis Safe) — monitor Safe treasuries, owners, and on-chain activity."
   },
   {
     "id": "sentry",
@@ -1636,6 +1863,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Team messaging for ops workflows — read channels and threads so bots and agents can monitor and brief from Slack."
   },
   {
+    "id": "solflare",
+    "name": "Solflare",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://solflare.com/",
+    "logo": "/connectors/solflare.svg",
+    "banner": "/connectors/banners/solflare.png",
+    "logoFit": "cover",
+    "notes": "Solana wallet for SOL and SPL tokens — connect or paste addresses to track holdings watch-only alongside Phantom."
+  },
+  {
     "id": "stripe",
     "name": "Stripe",
     "category": "services",
@@ -1648,6 +1889,56 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/stripe.png",
     "logoFit": "cover",
     "notes": "Payments infrastructure — chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
+  },
+  {
+    "id": "tradier",
+    "name": "Tradier",
+    "category": "finance",
+    "kind": "broker",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "indices"
+    ],
+    "url": "https://www.tradier.com/",
+    "logo": "/connectors/tradier.svg",
+    "banner": "/connectors/banners/tradier.png",
+    "logoFit": "cover",
+    "notes": "Brokerage API for equities and options — stream quotes, positions, and order state into trading dashboards."
+  },
+  {
+    "id": "tradingview",
+    "name": "TradingView",
+    "category": "finance",
+    "kind": "data",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "equities",
+      "indices",
+      "fx",
+      "crypto"
+    ],
+    "url": "https://www.tradingview.com/",
+    "logo": "/connectors/tradingview.svg",
+    "banner": "/connectors/banners/tradingview.png",
+    "logoFit": "cover",
+    "notes": "Charts and market community data — pull symbols, watchlists, and alert context into Nexow research widgets."
+  },
+  {
+    "id": "trezor",
+    "name": "Trezor",
+    "category": "wallets",
+    "kind": "wallet",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://trezor.io/",
+    "logo": "/connectors/trezor.svg",
+    "banner": "/connectors/banners/trezor.png",
+    "logoFit": "cover",
+    "notes": "Hardware wallet for self-custody — watch Trezor public addresses for balances and activity without exposing keys to Nexow."
   },
   {
     "id": "uniswap",
@@ -1664,6 +1955,22 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/uniswap.png",
     "logoFit": "cover",
     "notes": "Decentralized exchange protocol for token swaps and AMM liquidity across Ethereum and supported EVM networks."
+  },
+  {
+    "id": "wise",
+    "name": "Wise",
+    "category": "finance",
+    "kind": "payments",
+    "status": "soon",
+    "trading": false,
+    "assets": [
+      "fx"
+    ],
+    "url": "https://wise.com/",
+    "logo": "/connectors/wise.svg",
+    "banner": "/connectors/banners/wise.png",
+    "logoFit": "cover",
+    "notes": "Cross-border payments and multi-currency accounts — chart transfers, balances, and FX rates on finance widgets."
   }
 ];
 

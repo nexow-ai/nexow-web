@@ -25,6 +25,7 @@ const search = [c.id, c.name, c.notes, kindLabel, catLabel, ...assetLabels, ...c
     c.status === 'soon' && 'opacity-75 hover:opacity-100',
   ]}
   data-category={c.category}
+  data-kind={c.kind}
   data-status={c.status}
   data-trading={c.trading ? 'yes' : 'no'}
   data-assets={c.assets.join(' ')}

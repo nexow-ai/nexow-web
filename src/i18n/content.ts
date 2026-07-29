@@ -514,6 +514,8 @@ export interface SiteContent {
     /** Trading-capable vs data/read-only connectors. */
     capability: { all: string; trading: string; readonly: string };
     /** Screen-reader / group labels for extra filter rows. */
+    filterSubcategories: string;
+    /** @deprecated Prefer filterSubcategories; kept for asset chip a11y if reintroduced. */
     filterAssets: string;
     filterAlpha: string;
     kinds: Record<string, string>;

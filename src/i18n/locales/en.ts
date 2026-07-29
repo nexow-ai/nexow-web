@@ -1392,6 +1392,8 @@ export const en: SiteContent = {
     categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Data', socials: 'Socials' },
     status: { all: 'All', live: 'Live', soon: 'Soon' },
     capability: { all: 'All', trading: 'Trading', readonly: 'Data only' },
+    filterSubcategories: 'Type',
+
     filterAssets: 'Assets',
     filterAlpha: 'Name',
     kinds: {
