@@ -650,17 +650,25 @@ const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y
     }
   }
 
-  /* Idle until the card has actually been revealed. */
-  .scene * {
+  /* Park the loops once the card is well away from the viewport — eight scenes
+   * repainting forever is not free. ScrollMotion owns `.is-offscreen`; playing
+   * is the default so a scene is never stuck on a blank first frame. */
+  :global(.is-offscreen) .scene * {
     animation-play-state: paused;
   }
-  :global(.is-visible) .scene * {
-    animation-play-state: running;
-  }
 
+  /* Reduced motion holds the finished frame, not the empty one the loops
+   * happen to open on. */
   @media (prefers-reduced-motion: reduce) {
     .scene * {
       animation: none !important;
+    }
+    .draw,
+    .tick {
+      stroke-dashoffset: 0;
+    }
+    .row-line {
+      opacity: 0.75;
     }
   }
 </style>

@@ -18,6 +18,12 @@
  * Elements with `data-stages="N"` also get `data-stage="0…N-1"` from `--ps`,
  * which is how the scroll-scrubbed run diagram advances.
  *
+ * Tracked elements carry `.is-offscreen` once they are well away from the
+ * viewport, which looping decorative SVGs park their `animation-play-state` on
+ * so a gallery of them costs nothing after it has been scrolled past. The class
+ * marks the *inactive* state deliberately: with no JavaScript, or before the
+ * first observer callback, the default is "playing and legible".
+ *
  * Reliability rules this file keeps: reads are batched ahead of writes (no
  * layout thrash), work only happens for elements near the viewport, frames are
  * coalesced through rAF, and reduced-motion visitors never start the loop.
@@ -88,6 +94,7 @@
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
     for (const el of active) el.style.willChange = '';
+    for (const el of document.querySelectorAll('.is-offscreen')) el.classList.remove('is-offscreen');
     active = [];
     if (listening) {
       window.removeEventListener('scroll', schedule);
@@ -109,14 +116,18 @@
           const el = e.target as HTMLElement;
           const i = active.indexOf(el);
           if (e.isIntersecting) {
+            el.classList.remove('is-offscreen');
             if (i === -1) {
               active.push(el);
               // Only hint the compositor while the element can actually move.
               if (el.hasAttribute('data-motion')) el.style.willChange = 'transform';
             }
-          } else if (i !== -1) {
-            active.splice(i, 1);
-            el.style.willChange = '';
+          } else {
+            el.classList.add('is-offscreen');
+            if (i !== -1) {
+              active.splice(i, 1);
+              el.style.willChange = '';
+            }
           }
         }
         schedule();
