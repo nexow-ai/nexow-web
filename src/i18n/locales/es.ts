@@ -577,6 +577,31 @@ export const es: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referidos',
+      badge: 'Próximamente',
+      title: 'Haz crecer la red. Gana cuando se multiplica.',
+      subtitle: 'Invita a makers que shippean — y gana cuando nuevos seguidores entran en tu órbita.',
+      body: 'Las recompensas por referidos y los bonos por seguidores son lo siguiente en la pista community. Reclama tu handle ya para estar listo cuando el ledger se active.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Gana por referidos',
+          body: 'Comparte tu invitación. Cuando alguien que traes construye, shippea o sube de plan, te llevas una parte del upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Gana con nuevos seguidores',
+          body: 'Atrae audiencia y recibe recompensas mientras crece tu red — reputación que paga en ambos sentidos.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Créditos y NEXO después',
+          body: 'Las primeras recompensas llegan como créditos; los bonos ligados a NEXO se abren con la DAO. Misma reputación, nuevas formas de ganar.',
+        },
+      ],
+      cta: 'Reclama tu handle',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Publica una vez. Vende en USDC. Conserva el linaje.',
@@ -707,6 +732,24 @@ export const es: SiteContent = {
           tag: 'Roadmap',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'Bajar el umbral de propuestas NEXO a 1.000',
+          tag: 'Gobernanza',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Bajar las fees del marketplace Solana al 2,5%',
+          tag: 'Fees',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Elegir moderadores de research boards',
+          tag: 'Moderación',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Se construye en abierto con la comunidad — los detalles aterrizan primero en la pestaña DAO.',

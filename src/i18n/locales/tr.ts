@@ -577,6 +577,31 @@ export const tr: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referanslar',
+      badge: 'Yakında',
+      title: 'Ağı büyütün. Bileşik kazanın.',
+      subtitle: 'Üreten maker’ları davet edin — ve yeni takipçiler yörüngenize girince kazanın.',
+      body: 'Referans ödülleri ve takipçi bonusları community yolunun sıradaki adımı. Ledger canlı olduğunda hazır olmak için şimdi @handle’ınızı alın.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Referanslardan kazanın',
+          body: 'Davetinizi paylaşın. Getirdiğiniz biri inşa eder, yayınlar veya yükseltirse upside’ın bir payını alırsınız.',
+        },
+        {
+          icon: 'users',
+          title: 'Yeni takipçilerden kazanın',
+          body: 'Kitle çekin ve ağınız büyüdükçe ödüllendirilin — iki yöne de ödeyen itibar.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Önce kredi, sonra NEXO',
+          body: 'Erken ödüller kredi olarak gelir; NEXO’ya bağlı bonuslar DAO ile açılır. Aynı itibar yüzeyi, yeni kazanma yolları.',
+        },
+      ],
+      cta: '@handle’ınızı alın',
+    },
     marketplace: {
       eyebrow: 'Pazaryeri',
       title: 'Bir kez yayınlayın. USDC ile satın. Soyağacını koruyun.',
@@ -707,6 +732,24 @@ export const tr: SiteContent = {
           tag: 'Yol haritası',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'NEXO teklif eşiğini 1.000’e düşür',
+          tag: 'Yönetişim',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Solana pazaryeri ücretlerini %2,5’e indir',
+          tag: 'Ücretler',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Araştırma panosu moderatörlerini seç',
+          tag: 'Moderasyon',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Toplulukla açıkça şekillenir — ayrıntılar önce DAO sekmesine iner.',

@@ -1,0 +1,260 @@
+---
+/**
+ * Decorative referral constellation — you at the core, invite arcs,
+ * follower nodes, and reward pulses. Pauses via `.is-offscreen`.
+ */
+---
+
+<div
+  class="ref-orbit relative mx-auto w-full max-w-xl"
+  aria-hidden="true"
+  data-motion="breathe"
+  data-ref-orbit
+>
+  <div
+    class="pointer-events-none absolute inset-0 rounded-full opacity-50 blur-3xl"
+    style="background:radial-gradient(circle at 48% 42%, color-mix(in oklab, var(--color-brand-300) 42%, transparent), color-mix(in oklab, var(--color-accent-400) 20%, transparent) 52%, transparent 72%)"
+  >
+  </div>
+  <svg class="ref-svg relative mx-auto block h-auto w-full" viewBox="0 0 440 300" fill="none">
+    <defs>
+      <radialGradient id="ref-core-fill" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--color-brand-200)" stop-opacity="1"></stop>
+        <stop offset="50%" stop-color="var(--color-brand-500)" stop-opacity="0.95"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-500)" stop-opacity="0.8"></stop>
+      </radialGradient>
+      <linearGradient id="ref-arc-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.75"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.35"></stop>
+      </linearGradient>
+      <filter id="ref-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="6" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <g class="ref-tilt">
+      <!-- Soft guide rings -->
+      <circle class="ref-ring-draw" cx="220" cy="150" r="112" stroke="url(#ref-arc-grad)" stroke-width="1.2" pathLength="1" fill="none"></circle>
+      <circle class="ref-ring-draw ref-ring-draw--2" cx="220" cy="150" r="72" stroke="url(#ref-arc-grad)" stroke-width="1" pathLength="1" fill="none"></circle>
+      <circle class="ref-ring ref-ring--spin" cx="220" cy="150" r="112" stroke="currentColor" stroke-width="1" stroke-dasharray="3 9" opacity="0.14" fill="none"></circle>
+
+      <!-- Invite arcs (you → referrals) -->
+      <path class="ref-arc" pathLength="1" d="M220 150 C 250 90 300 70 340 78" stroke="url(#ref-arc-grad)" stroke-width="1.4" fill="none" stroke-linecap="round"></path>
+      <path class="ref-arc" pathLength="1" d="M220 150 C 280 160 320 200 348 228" stroke="url(#ref-arc-grad)" stroke-width="1.4" fill="none" stroke-linecap="round" style="--d:0.2s"></path>
+      <path class="ref-arc" pathLength="1" d="M220 150 C 170 100 120 88 92 100" stroke="url(#ref-arc-grad)" stroke-width="1.4" fill="none" stroke-linecap="round" style="--d:0.35s"></path>
+      <path class="ref-arc" pathLength="1" d="M220 150 C 160 180 120 220 98 240" stroke="url(#ref-arc-grad)" stroke-width="1.3" fill="none" stroke-linecap="round" style="--d:0.5s"></path>
+
+      <!-- Referral nodes -->
+      <g class="ref-nodes">
+        <circle cx="340" cy="78" r="8" class="ref-node" style="--d:0s"></circle>
+        <circle cx="348" cy="228" r="6.5" class="ref-node" style="--d:0.4s"></circle>
+        <circle cx="92" cy="100" r="7" class="ref-node" style="--d:0.8s"></circle>
+        <circle cx="98" cy="240" r="5.5" class="ref-node ref-node--soft" style="--d:1.2s"></circle>
+        <circle cx="300" cy="150" r="4.5" class="ref-node ref-node--soft" style="--d:0.6s"></circle>
+        <circle cx="150" cy="70" r="4" class="ref-node ref-node--soft" style="--d:1s"></circle>
+      </g>
+
+      <!-- Reward pulses traveling invite arcs -->
+      <circle class="ref-pulse" r="4.2" fill="var(--color-brand-400)" filter="url(#ref-glow)">
+        <animateMotion dur="2.8s" repeatCount="indefinite" path="M220 150 C 250 90 300 70 340 78"></animateMotion>
+      </circle>
+      <circle class="ref-pulse" r="3.4" fill="var(--color-accent-400)" opacity="0.9">
+        <animateMotion dur="3.4s" begin="0.6s" repeatCount="indefinite" path="M220 150 C 280 160 320 200 348 228"></animateMotion>
+      </circle>
+      <circle class="ref-pulse" r="3.2" fill="var(--color-plasma-400)" opacity="0.85">
+        <animateMotion dur="3.8s" begin="1.1s" repeatCount="indefinite" path="M220 150 C 170 100 120 88 92 100"></animateMotion>
+      </circle>
+      <circle class="ref-pulse" r="2.6" fill="var(--color-sky-300)" opacity="0.8">
+        <animateMotion dur="4.2s" begin="0.3s" repeatCount="indefinite" path="M220 150 C 160 180 120 220 98 240"></animateMotion>
+      </circle>
+
+      <!-- You / core -->
+      <g filter="url(#ref-glow)" class="ref-core">
+        <circle cx="220" cy="150" r="48" fill="url(#ref-core-fill)" opacity="0.2" class="ref-halo"></circle>
+        <circle cx="220" cy="150" r="32" fill="url(#ref-core-fill)"></circle>
+        <circle cx="220" cy="150" r="32" fill="none" stroke="white" stroke-opacity="0.25" stroke-width="1"></circle>
+      </g>
+
+      <!-- Spark accents -->
+      <path d="M70 60l2.8 6.8 6.8 2.8-6.8 2.8-2.8 6.8-2.8-6.8-6.8-2.8 6.8-2.8z" fill="var(--color-brand-400)" class="ref-spark" style="--d:0s"></path>
+      <path d="M372 56l2.4 5.8 5.8 2.4-5.8 2.4-2.4 5.8-2.4-5.8-5.8-2.4 5.8-2.4z" fill="var(--color-accent-400)" class="ref-spark" style="--d:0.8s"></path>
+      <path d="M360 250l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="var(--color-plasma-400)" class="ref-spark" style="--d:1.5s"></path>
+    </g>
+  </svg>
+</div>
+
+<script>
+  let abort: AbortController | undefined;
+
+  function initRefOrbit() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+
+    for (const root of document.querySelectorAll<HTMLElement>('[data-ref-orbit]')) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            e.target.classList.toggle('is-offscreen', !e.isIntersecting);
+          }
+        },
+        { rootMargin: '10% 0px', threshold: 0.05 },
+      );
+      io.observe(root);
+      signal.addEventListener('abort', () => io.disconnect());
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) continue;
+
+      const host = root.closest('section') ?? root;
+      host.addEventListener(
+        'pointermove',
+        (e) => {
+          if (root.classList.contains('is-offscreen')) return;
+          const r = root.getBoundingClientRect();
+          const mx = ((e.clientX - r.left) / r.width) * 2 - 1;
+          const my = ((e.clientY - r.top) / r.height) * 2 - 1;
+          const tilt = root.querySelector<HTMLElement>('.ref-tilt');
+          if (tilt) tilt.style.transform = `rotateX(${(-my * 5).toFixed(2)}deg) rotateY(${(mx * 6).toFixed(2)}deg)`;
+        },
+        { signal, passive: true },
+      );
+      host.addEventListener(
+        'pointerleave',
+        () => {
+          const tilt = root.querySelector<HTMLElement>('.ref-tilt');
+          if (tilt) tilt.style.transform = '';
+        },
+        { signal },
+      );
+    }
+  }
+
+  document.addEventListener('astro:page-load', initRefOrbit);
+</script>
+
+<style>
+  .ref-orbit {
+    perspective: 900px;
+  }
+  .ref-tilt {
+    transform-origin: 50% 50%;
+    transition: transform 0.45s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    transform-style: preserve-3d;
+  }
+  .ref-ring-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: ref-draw 2.1s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) 0.12s forwards;
+  }
+  .ref-ring-draw--2 {
+    animation-delay: 0.35s;
+  }
+  .ref-arc {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: ref-draw 1.8s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) var(--d, 0s) forwards;
+  }
+  .ref-node {
+    fill: var(--color-brand-400);
+    animation: ref-pulse 2.6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .ref-node--soft {
+    fill: var(--color-accent-400);
+    opacity: 0.85;
+  }
+  .ref-halo {
+    animation: ref-breathe 4s ease-in-out infinite;
+  }
+  .ref-core:hover .ref-halo,
+  .ref-orbit:hover .ref-halo {
+    animation-duration: 2.2s;
+  }
+  .ref-spark {
+    animation: ref-twinkle 2.5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .ref-ring--spin {
+    transform-origin: 220px 150px;
+    animation: ref-rotate 48s linear infinite;
+  }
+
+  @keyframes ref-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes ref-rotate {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes ref-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.18);
+    }
+  }
+  @keyframes ref-breathe {
+    0%,
+    100% {
+      opacity: 0.18;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.32;
+      transform: scale(1.08);
+    }
+  }
+  @keyframes ref-twinkle {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(0.85);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
+
+  .is-offscreen .ref-ring--spin,
+  .is-offscreen .ref-node,
+  .is-offscreen .ref-halo,
+  .is-offscreen .ref-spark,
+  .is-offscreen .ref-pulse,
+  .is-offscreen .ref-ring-draw,
+  .is-offscreen .ref-arc {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ref-ring--spin,
+    .ref-node,
+    .ref-halo,
+    .ref-spark {
+      animation: none;
+    }
+    .ref-ring-draw,
+    .ref-arc {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+    .ref-pulse {
+      display: none;
+    }
+    .ref-tilt {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>

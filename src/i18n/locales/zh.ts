@@ -577,6 +577,31 @@ export const zh: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: '推荐',
+      badge: '即将推出',
+      title: '让网络增长。在复利中赚钱。',
+      subtitle: '邀请会交付的创造者——并在新关注者进入你的轨道时获得收益。',
+      body: '推荐奖励与关注者奖金是社区路线图的下一步。现在领取你的 @handle，等账本上线时你已准备就绪。',
+      pillars: [
+        {
+          icon: 'gift',
+          title: '从推荐中赚钱',
+          body: '分享你的邀请。当你带来的人构建、发布或升级时，你获得一部分收益。',
+        },
+        {
+          icon: 'users',
+          title: '从新关注者赚钱',
+          body: '吸引受众，并在网络成长时获得奖励——双向回报的声誉。',
+        },
+        {
+          icon: 'sparkles',
+          title: '先积分，后 NEXO',
+          body: '早期奖励以积分落地；与 NEXO 绑定的奖金随 DAO 解锁。同一声誉层，新的赚钱方式。',
+        },
+      ],
+      cta: '领取你的 handle',
+    },
     marketplace: {
       eyebrow: '市场',
       title: '发布一次。用 USDC 出售。保留谱系。',
@@ -707,6 +732,24 @@ export const zh: SiteContent = {
           tag: '路线图',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: '将 NEXO 提案门槛降至 1,000',
+          tag: '治理',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: '将 Solana 市场手续费降至 2.5%',
+          tag: '费用',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: '选举社区研究看板版主',
+          tag: '审核',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: '与社区公开共创 — 细节会先出现在 DAO 标签。',

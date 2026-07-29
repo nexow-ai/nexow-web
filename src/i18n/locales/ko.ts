@@ -577,6 +577,31 @@ export const ko: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: '추천',
+      badge: '곧 출시',
+      title: '네트워크를 키우고, 복리로 벌어들이세요.',
+      subtitle: '실제로 결과물을 내는 메이커를 초대하고 — 새 팔로워가 궤도에 합류할 때도 보상받으세요.',
+      body: '추천 보상과 팔로워 보너스가 커뮤니티 트랙의 다음 단계입니다. 원장이 라이브되기 전에 @handle을 확보해 두세요.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: '추천으로 수익',
+          body: '초대를 공유하세요. 당신이 데려온 사람이 만들고, 출시하거나 업그레이드하면 업사이드의 일부를 얻습니다.',
+        },
+        {
+          icon: 'users',
+          title: '새 팔로워로 수익',
+          body: '오디언스를 모으고 네트워크가 성장할수록 보상받으세요 — 양방향으로 보상하는 평판.',
+        },
+        {
+          icon: 'sparkles',
+          title: '크레딧, 이후 NEXO',
+          body: '초기 보상은 크레딧으로, NEXO 연동 보너스는 DAO와 함께 열립니다. 같은 평판, 새로운 수익 방식.',
+        },
+      ],
+      cta: '@handle 확보하기',
+    },
     marketplace: {
       eyebrow: '마켓플레이스',
       title: '한 번 게시. USDC로 판매. 계보 유지.',
@@ -707,6 +732,24 @@ export const ko: SiteContent = {
           tag: '로드맵',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'NEXO 제안 문턱을 1,000으로 낮추기',
+          tag: '거버넌스',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Solana 마켓 수수료를 2.5%로 인하',
+          tag: '수수료',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: '커뮤니티 리서치 보드 모더레이터 선출',
+          tag: '모더레이션',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: '커뮤니티와 공개적으로 다듬습니다 — 세부사항은 먼저 DAO 탭에 착륙합니다.',

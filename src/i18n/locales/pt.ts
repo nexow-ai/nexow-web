@@ -577,6 +577,31 @@ export const pt: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referências',
+      badge: 'Em breve',
+      title: 'Faça a rede crescer. Ganhe quando ela compõe.',
+      subtitle: 'Convide makers que publicam — e ganhe quando novos seguidores entram na sua órbita.',
+      body: 'Recompensas por referência e bónus de seguidores são o próximo na pista community. Reivindique o seu handle agora para estar pronto quando o ledger for live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Ganhe com referências',
+          body: 'Partilhe o seu convite. Quando alguém que traz constrói, publica ou faz upgrade, recebe uma parte do upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Ganhe com novos seguidores',
+          body: 'Atraia audiência e seja recompensado à medida que a rede cresce — reputação que paga nos dois sentidos.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Créditos e depois NEXO',
+          body: 'As primeiras recompensas chegam como créditos; bónus ligados a NEXO abrem com a DAO. A mesma reputação, novas formas de ganhar.',
+        },
+      ],
+      cta: 'Reivindique o seu handle',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Publique uma vez. Venda em USDC. Mantenha a linhagem.',
@@ -707,6 +732,24 @@ export const pt: SiteContent = {
           tag: 'Roadmap',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'Baixar o limiar de propostas NEXO para 1.000',
+          tag: 'Governação',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Cortar fees do marketplace Solana para 2,5%',
+          tag: 'Fees',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Eleger moderadores de research boards',
+          tag: 'Moderação',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Moldada em aberto com a comunidade — os detalhes aterraram primeiro no separador DAO.',

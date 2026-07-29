@@ -577,6 +577,31 @@ export const ms: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Rujukan',
+      badge: 'Tidak lama lagi',
+      title: 'Kembangkan rangkaian. Dapatkan ganjaran bila ia berkompaun.',
+      subtitle: 'Jemput pembuat yang menghantar hasil — dan dapat ganjaran bila pengikut baharu masuk orbit anda.',
+      body: 'Ganjaran rujukan dan bonus pengikut ialah langkah seterusnya pada landasan komuniti. Tuntut @handle sekarang supaya anda bersedia bila lejar live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Dapat ganjaran dari rujukan',
+          body: 'Kongsi jemputan anda. Bila seseorang yang anda bawa bina, hantar atau naik taraf, anda dapat bahagian upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Dapat ganjaran dari pengikut baharu',
+          body: 'Tarik audiens dan diganjarkan apabila rangkaian anda berkembang — reputasi yang membayar dua arah.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Kredit & kemudian NEXO',
+          body: 'Ganjaran awal datang sebagai kredit; bonus terikat NEXO dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana.',
+        },
+      ],
+      cta: 'Tuntut @handle anda',
+    },
     marketplace: {
       eyebrow: 'Pasaran',
       title: 'Terbitkan sekali. Jual dalam USDC. Kekalkan keturunan.',
@@ -707,6 +732,24 @@ export const ms: SiteContent = {
           tag: 'Peta jalan',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'Turunkan ambang cadangan NEXO kepada 1,000',
+          tag: 'Tadbir urus',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Potong yuran pasaran Solana kepada 2.5%',
+          tag: 'Yuran',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Pilih moderator papan penyelidikan',
+          tag: 'Moderasi',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Dibentuk secara terbuka dengan komuniti — butiran mendarat dahulu dalam tab DAO.',

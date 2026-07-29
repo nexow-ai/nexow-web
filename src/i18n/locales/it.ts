@@ -577,6 +577,31 @@ export const it: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referral',
+      badge: 'In arrivo',
+      title: 'Fai crescere la rete. Guadagna quando compone.',
+      subtitle: 'Invita maker che shippano — e guadagna quando nuovi follower entrano nella tua orbita.',
+      body: 'Le reward da referral e i bonus follower sono il prossimo passo sulla pista community. Rivendica il tuo handle ora per essere pronto quando il ledger sarà live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Guadagna sui referral',
+          body: 'Condividi il tuo invite. Quando qualcuno che porti costruisce, shippa o fa upgrade, guadagni una quota dell’upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Guadagna dai nuovi follower',
+          body: 'Attira audience e vieni premiato mentre la rete cresce — reputazione che paga in entrambe le direzioni.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Crediti e poi NEXO',
+          body: 'Le prime reward arrivano come crediti; i bonus legati a NEXO si sbloccano con la DAO. Stessa reputazione, nuovi modi di guadagnare.',
+        },
+      ],
+      cta: 'Rivendica il tuo handle',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Pubblica una volta. Vendi in USDC. Conserva il lineage.',
@@ -707,6 +732,24 @@ export const it: SiteContent = {
           tag: 'Roadmap',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'Abbassare la soglia proposte NEXO a 1.000',
+          tag: 'Governance',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Tagliare le fee marketplace Solana al 2,5%',
+          tag: 'Fee',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Eleggere i moderator dei research board',
+          tag: 'Moderazione',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Plasmata in aperto con la community — i dettagli atterrano prima nel tab DAO.',

@@ -784,6 +784,31 @@ export const en: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referrals',
+      badge: 'Coming soon',
+      title: 'Grow the network. Earn when it compounds.',
+      subtitle: 'Invite makers who ship — and earn when new followers join your orbit.',
+      body: 'Referral rewards and follower bonuses are next on the community track. Claim your handle now so you’re ready when the ledger goes live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Earn on referrals',
+          body: 'Share your invite. When someone you bring in builds, ships or upgrades, you earn a cut of the upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Earn from new followers',
+          body: 'Attract an audience and get rewarded as your network grows — reputation that pays both ways.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Credits & NEXO later',
+          body: 'Early rewards land as credits; NEXO-tied bonuses unlock with the DAO. Same reputation surface, new ways to earn.',
+        },
+      ],
+      cta: 'Claim your handle',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Publish once. Sell in USDC. Keep the lineage.',
@@ -890,6 +915,9 @@ export const en: SiteContent = {
         { title: 'Fund a community widget bounty program', tag: 'Treasury', pct: 72, votes: 341 },
         { title: 'Revenue share for marketplace creators', tag: 'Rewards', pct: 87, votes: 512 },
         { title: 'Open-source the widget runtime', tag: 'Roadmap', pct: 64, votes: 289 },
+        { title: 'Lower the NEXO proposal threshold to 1,000', tag: 'Governance', pct: 58, votes: 203 },
+        { title: 'Cut Solana marketplace fees to 2.5%', tag: 'Fees', pct: 81, votes: 456 },
+        { title: 'Elect community research board moderators', tag: 'Moderation', pct: 69, votes: 318 },
       ],
       footer: 'Shaped in the open with the community — details land in the DAO tab first.',
     },

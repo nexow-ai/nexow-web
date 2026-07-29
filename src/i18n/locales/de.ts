@@ -577,6 +577,31 @@ export const de: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Referrals',
+      badge: 'Demnächst',
+      title: 'Netzwerk wachsen lassen. Verdienen, wenn es compoundet.',
+      subtitle: 'Lade Maker ein, die shippen — und verdiene, wenn neue Follower in deine Orbit kommen.',
+      body: 'Referral-Rewards und Follower-Boni sind als Nächstes auf der Community-Spur. Sichere dir jetzt dein Handle, damit du bereit bist, wenn das Ledger live geht.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Verdienen mit Referrals',
+          body: 'Teile deine Invite. Wenn jemand, den du bringst, baut, shippt oder upgradet, verdienst du einen Anteil am Upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Verdienen mit neuen Followern',
+          body: 'Ziehe Audience an und werde belohnt, während dein Netzwerk wächst — Reputation, die in beide Richtungen zahlt.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Credits & später NEXO',
+          body: 'Frühe Rewards kommen als Credits; NEXO-gebundene Boni öffnen sich mit der DAO. Gleiche Reputation, neue Earn-Wege.',
+        },
+      ],
+      cta: 'Handle sichern',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Einmal publizieren. In USDC verkaufen. Lineage behalten.',
@@ -707,6 +732,24 @@ export const de: SiteContent = {
           tag: 'Roadmap',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'NEXO-Proposal-Schwelle auf 1.000 senken',
+          tag: 'Governance',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Solana-Marketplace-Fees auf 2,5 % senken',
+          tag: 'Fees',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Moderatoren für Research Boards wählen',
+          tag: 'Moderation',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Offen mit der Community geformt — Details landen zuerst im DAO-Tab.',

@@ -608,6 +608,31 @@ export const fr: SiteContent = {
         },
       ],
     },
+    referrals: {
+      eyebrow: 'Parrainage',
+      badge: 'Bientôt',
+      title: 'Faites grandir le réseau. Gagnez quand il compose.',
+      subtitle: 'Invitez des makers qui shippent — et gagnez quand de nouveaux followers rejoignent votre orbite.',
+      body: 'Les récompenses de parrainage et les bonus followers sont la suite sur la piste communauté. Réclamez votre handle maintenant pour être prêt quand le ledger sera live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Gagnez sur les parrainages',
+          body: 'Partagez votre invite. Quand quelqu’un que vous amenez construit, shippe ou upgrade, vous touchez une part de l’upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Gagnez grâce aux nouveaux followers',
+          body: 'Attirez une audience et soyez récompensé à mesure que votre réseau grandit — une réputation qui paie dans les deux sens.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Crédits & NEXO ensuite',
+          body: 'Les premières récompenses arrivent en crédits ; les bonus liés au NEXO s’ouvrent avec la DAO. Même surface de réputation, de nouvelles façons de gagner.',
+        },
+      ],
+      cta: 'Réclamez votre handle',
+    },
     marketplace: {
       eyebrow: 'Marketplace',
       title: 'Publiez une fois. Vendez en USDC. Gardez la lignée.',
@@ -738,6 +763,24 @@ export const fr: SiteContent = {
           tag: 'Roadmap',
           pct: 64,
           votes: 289,
+        },
+        {
+          title: 'Baisser le seuil de proposition NEXO à 1 000',
+          tag: 'Gouvernance',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Réduire les fees marketplace Solana à 2,5 %',
+          tag: 'Fees',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Élire les modérateurs des research boards',
+          tag: 'Modération',
+          pct: 69,
+          votes: 318,
         },
       ],
       footer: 'Façonné en ouvert avec la communauté — les détails atterrissent d’abord dans l’onglet DAO.',
