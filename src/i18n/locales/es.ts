@@ -432,45 +432,41 @@ export const es: SiteContent = {
       ],
     },
     faq: {
-      eyebrow: 'FAQ',
-      title: 'Preguntas, respondidas',
-      subtitle: 'Todo lo que necesitas saber antes de abrir la app.',
+      eyebrow: "FAQ",
+      title: "Preguntas antes de empezar",
+      subtitle: "Respuestas claras sobre qué es Nexow, cómo funciona y cuánto cuesta.",
       items: [
         {
-          q: '¿Qué es Nexow?',
-          a: 'Nexow es un espacio de trabajo nativo de IA para mercados. Describes un widget — un gráfico, tabla, mapa de calor o señal — en lenguaje natural, y Nexow genera su código, lo ejecuta en un iframe aislado y le transmite datos de mercado en vivo sobre un lienzo libre. Alrededor suma bots en la nube, agentes de IA, un Copilot y una comunidad de makers.',
+          q: "¿Qué es Nexow?",
+          a: "Nexow es un lienzo de widgets. Describes lo que necesitas en lenguaje natural y genera un widget que funciona — moodboards, planificadores, juegos, herramientas sociales, bases de datos, paneles de mercado o flujos a medida — que puedes organizar, editar por conversación y reutilizar en varios workspaces.",
         },
         {
-          q: '¿Necesito saber programar?',
-          a: 'No. Describes lo que quieres en lenguaje natural y Nexow escribe y ejecuta el widget por ti. Si lees código, el código fuente y el historial de versiones de cada widget están disponibles para inspeccionar y refinar.',
+          q: "¿Necesito saber programar?",
+          a: "No. El lenguaje natural basta para generar y refinar widgets. Si lees código, el código fuente, las versiones y los logs de cada widget están disponibles para inspeccionar, revertir o ajustar.",
         },
         {
-          q: '¿Mis datos son privados? ¿Necesito cuenta?',
-          a: 'No hace falta cuenta. Nexow corre totalmente local por defecto: añades tu propia clave de Anthropic y la generación ocurre en tu navegador, con widgets, versiones y logs en IndexedDB. Una cuenta gratis siempre es opcional — suma créditos de IA, sync en la nube y comunidad, pero puedes seguir construyendo 100% en local.',
+          q: "¿Necesito una cuenta?",
+          a: "Puedes probar Nexow sin una. Una cuenta gratis desbloquea créditos de IA de inicio, sync en la nube entre dispositivos, comunidad, reputación y marketplace — sin tarjeta. ¿Prefieres todo en local? Usa tu propia clave de Anthropic y mantén la generación en el navegador.",
         },
         {
-          q: '¿Qué mercados y venues soporta?',
-          a: 'Nexow tiene 45 conectores en vivo (83 en el catálogo) que abarcan FX (OANDA, LMAX, FXCM), cripto (Binance, Coinbase, Kraken, Deribit, BitMEX), acciones y futuros (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), mercados de predicción (Kalshi, Polymarket), proveedores de datos y bases de datos (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) y feeds sociales (X, YouTube, Discord, Telegram, Spotify).',
+          q: "¿Cómo gestiona Nexow la privacidad?",
+          a: "Los widgets generados corren en un runtime aislado, las credenciales de conectores se limitan a los servicios que conectas, y las versiones y logs se quedan con tu workspace. El sync en la nube está pensado para que tus widgets sigan siendo portátiles y bajo tu control.",
         },
         {
-          q: '¿Qué son los bots y los agentes?',
-          a: 'Los bots son automatizaciones en la nube que vigilan tus datos y envían señales y alertas a tus widgets aunque tengas la pestaña cerrada — describe una alerta con palabras o constrúyela visualmente con umbrales, % de cambio, cruces de medias y operaciones nuevas en una cuenta de broker conectada. Los agentes son IA con un harness completo (modelo, memoria, skills, herramientas, conocimiento, disparadores) — diseña el tuyo hoy en el editor visual; el despliegue en la nube y el asistente Copilot llegan pronto.',
+          q: "¿Nexow es solo para trading?",
+          a: "No. Los paneles de trading fueron una prueba temprana para widgets en vivo, pero la plataforma es de propósito general: trackers de hábitos, tableros de proyecto, feeds de investigación, herramientas internas y flujos a medida corren en el mismo lienzo.",
         },
         {
-          q: '¿Hay comunidad y marketplace?',
-          a: 'La comunidad ya está en vivo — crea una cuenta gratis, reclama tu @usuario público, sigue makers, publica en el feed y comparte widgets que otros pueden añadir directo a su biblioteca. El marketplace para comprar y vender widgets y las señales de estrategia auditadas llegan pronto.',
+          q: "¿Qué son los conectores?",
+          a: "Los conectores enlazan widgets con datos en vivo — más de 45 hoy entre bases de datos, wallets, apps sociales, brokers, exchanges y datos abiertos. Donde CORS lo permite, las llamadas pueden ir directo desde el navegador. Muchos widgets no necesitan conector y guardan el estado en local hasta que eliges sincronizar.",
         },
         {
-          q: '¿Qué son los XP y las recompensas?',
-          a: 'Nexow está añadiendo una capa gamificada a las cuentas: crear widgets, ejecutar bots y compartir con la comunidad dará XP y desbloqueará insignias por logros — y los logros se convertirán en créditos de recompensa que podrás gastar en uso de IA. Llega pronto; las cuentas tempranas serán las primeras.',
+          q: "¿Qué son los bots y los agentes?",
+          a: "Los bots son vigilantes en la nube: comprueban una fuente con una cadencia y disparan señales o alertas cuando se cumple una condición — aunque tengas la pestaña cerrada. Los agentes son trabajadores de IA con un harness completo (modelo, memoria, skills, herramientas, conocimiento, disparadores) que razonan en un bucle de herramientas y actúan. Copilot te ayuda a construir y organizar el propio workspace.",
         },
         {
-          q: '¿Cuánto cuesta?',
-          a: 'Gratis para siempre para construir — en local con tu propia clave, o con 10.000 créditos de IA reservados en una cuenta gratis. Los planes de pago (Supporter y Sponsor) suman créditos mensuales y límites más altos de bots y agentes, y Partner es para equipos que necesitan infraestructura privada. El pago llega pronto; consulta la página de precios.',
-        },
-        {
-          q: '¿Qué modelo de IA usa Nexow?',
-          a: 'Nexow genera con los modelos Claude de Anthropic mediante el SDK de Anthropic — Claude Opus 4.8 por defecto, con Sonnet 4.6 y Haiku 4.5 para una generación más rápida y económica. En modo privado aportas tu propia clave, así mantienes el control total del uso y el coste.',
+          q: "¿Cuánto cuesta?",
+          a: "Free incluye el lienzo completo de widgets, biblioteca, sync en la nube, 10 bots, 3 agentes, acceso a la comunidad y 10.000 créditos de IA al registrarte. Supporter y Sponsor suman créditos mensuales, más automatización y apariencia premium — el pago llega pronto. Consulta Planes para la comparación completa.",
         },
       ],
     },
@@ -997,14 +993,36 @@ export const es: SiteContent = {
         supportDedicated: 'Dedicado',
       },
     },
-    faqTitle: 'Preguntas sobre los planes',
+    faqTitle: "Planes y facturación",
     faq: [
-      { q: '¿Nexow es de verdad gratis?', a: 'Sí. Puedes construir gratis para siempre — totalmente local con tu propia clave de Anthropic (solo pagas tu uso de la API), o crea una cuenta gratis que reserva 10.000 créditos de IA para cuando se abra el modo plataforma, sin necesidad de clave propia.' },
-      { q: '¿Qué son los créditos?', a: 'Los créditos miden el uso de IA — generar widgets, links, bots y respuestas de Copilot. La cuenta gratis reserva 10.000 para empezar, y los planes de pago dan una asignación mensual (115K en Supporter, 800K en Sponsor). La medición de créditos se activa con el modo plataforma, y puedes comprar más cuando quieras.' },
-      { q: '¿Cuándo salen los planes de pago?', a: 'Supporter y Sponsor ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.' },
-      { q: '¿Puedo pagar anual?', a: 'Sí. La facturación anual te da dos meses gratis frente al pago mensual. Puedes cambiar entre mensual y anual cuando quieras.' },
-      { q: '¿Cómo se calcula mi reputación?', a: 'En tu dispositivo, a partir de tu propia actividad. Cada post son 5 puntos, un widget 5, un tablero 10, un bot 15, un recurso publicado 25, una instalación 10 y un seguidor 3 — más 20 puntos por cada nivel de insignia, 100 por una medalla rara y 250 por una legendaria. Encima hay cinco rangos: Bronce, Plata a los 250 puntos, Oro a los 1.000, Platino a los 5.000 y Leyenda a los 20.000.' },
-      { q: '¿Las insignias dependen del plan?', a: 'No. Las 34 insignias, los cinco rangos y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta gratis puede llegar a Leyenda. Convertir esos logros en créditos y tokens NEXO llega con la Nexow DAO.' },
+      {
+        q: "¿Nexow es de verdad gratis?",
+        a: "Sí. Free es un workspace completo — pantallas, widgets y conectores ilimitados, biblioteca reutilizable, sync en la nube, 10 bots, 3 agentes, comunidad y reputación, más 10.000 créditos de IA reservados al registrarte. Los planes de pago suman créditos mensuales, cuotas más altas y apariencia premium — el núcleo no está bloqueado.",
+      },
+      {
+        q: "¿Qué son los créditos?",
+        a: "Los créditos miden el uso de IA: generar widgets, editarlos por conversación, crear links y usar Copilot. Un crédito equivale a un token de salida de Sonnet en coste de proveedor, así que el precio no depende del modelo que elijas — Haiku estira un crédito a unos 3 tokens; Opus lo usa en unos 0,6. Free reserva 10.000 al registrarte; Supporter da 115.000 al mes; Sponsor 800.000 — y puedes comprar packs en cualquier momento.",
+      },
+      {
+        q: "¿Cuándo salen los planes de pago?",
+        a: "Supporter y Sponsor ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra la facturación.",
+      },
+      {
+        q: "¿Puedo pagar anual?",
+        a: "Sí. La facturación anual te da dos meses gratis frente al pago mensual — 99,90 $ al año en Supporter, 699,90 $ en Sponsor. Puedes cambiar entre mensual y anual cuando quieras.",
+      },
+      {
+        q: "¿Cómo se calcula la reputación?",
+        a: "En el cliente, a partir de tu propia actividad — Nexow no te rankea frente a otros en un servidor. Posts y widgets valen 5 puntos cada uno, tableros 10, bots 15, recursos publicados 25, instalaciones 10, seguidores 3 — más bonos de insignia (20 por nivel, 100 rara, 250 legendaria). Niveles: Bronce, Plata a 250, Oro a 1.000, Platino a 5.000, Leyenda a 20.000.",
+      },
+      {
+        q: "¿Las insignias dependen del plan?",
+        a: "No. Las 34 insignias, cinco niveles y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta Free puede llegar a Leyenda.",
+      },
+      {
+        q: "¿Cuándo llegan las recompensas en créditos y tokens?",
+        a: "Las insignias y los puntos ya están activos. Convertirlos en créditos y tokens de gobernanza NEXO llega con la Nexow DAO; la primera votación ratifica el calendario final. Los números de esta página son la propuesta a la que nos comprometemos.",
+      },
     ],
   },
   rewards: {

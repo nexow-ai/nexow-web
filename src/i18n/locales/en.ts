@@ -639,32 +639,40 @@ export const en: SiteContent = {
     },
     faq: {
       eyebrow: 'FAQ',
-      title: 'Quick answers',
-      subtitle: 'The short version before you open the app.',
+      title: 'Questions before you start',
+      subtitle: 'Straight answers about what Nexow is, how it works, and what it costs.',
       items: [
         {
           q: 'What is Nexow?',
-          a: 'Nexow is a canvas for live widgets. You describe what you want in plain language, and Nexow generates a working widget you can arrange, edit and reuse.',
+          a: 'Nexow is a widget canvas. Describe what you need in plain language and it generates a working widget — moodboards, planners, games, social tools, databases, market dashboards or custom workflows — that you can arrange, edit by conversation, and reuse across workspaces.',
         },
         {
           q: 'Do I need to know how to code?',
-          a: 'No. You describe what you want in natural language and Nexow writes and runs the widget for you. If you do read code, every widget’s source and version history is available to inspect and refine.',
+          a: 'No. Natural language is enough to generate and refine widgets. If you do read code, every widget’s source, versions and logs are available to inspect, roll back or tweak.',
+        },
+        {
+          q: 'Do I need an account?',
+          a: 'You can try Nexow without one. A free account unlocks starter AI credits, cloud sync across devices, community, reputation and marketplace — no credit card required. Prefer fully local? Bring your own Anthropic key and keep generation in the browser.',
         },
         {
           q: 'How does Nexow handle privacy?',
-          a: 'Generated widgets run in a sandbox, connector access is scoped, and workspace history is kept with the workspace it belongs to. Cloud sync, credits and community features are designed so your widgets remain portable and under your control.',
+          a: 'Generated widgets run in a sandboxed runtime, connector credentials are scoped to the services you connect, and versions and logs stay with your workspace. Cloud sync is designed so your widgets remain portable and under your control.',
         },
         {
           q: 'Is Nexow only for trading?',
-          a: 'No. Nexow started with trading because live dashboards are a hard test for generated widgets, but the platform is general: moodboards, habit planners, mini games, social widgets, internal tools, databases, market dashboards and custom workflows all run on the same canvas.',
+          a: 'No. Trading dashboards were an early stress test for live widgets, but the platform is general-purpose: habit trackers, project boards, research feeds, internal tools and custom workflows all run on the same canvas.',
+        },
+        {
+          q: 'What are connectors?',
+          a: 'Connectors wire widgets to live data — 45+ today across databases, wallets, social apps, brokers, exchanges and open data. Where CORS allows, calls can run straight from your browser. Many widgets need no connector at all and keep state local until you choose to sync.',
         },
         {
           q: 'What are bots and agents?',
-          a: 'They are advanced automation features. They are useful later, but you do not need them to understand or use Nexow: the core product is the widget canvas.',
+          a: 'Bots are cloud watchers: they check a source on a schedule and fire signals or alerts when a condition is true — even with your tab closed. Agents are AI workers with a full harness (model, memory, skills, tools, knowledge, triggers) that reason through a tool loop and act on what they find. Copilot helps you build and arrange the workspace itself.',
         },
         {
           q: 'How much does it cost?',
-          a: 'You can start for free with starter credits, sync and the core widget canvas. Paid plans are for more capacity later.',
+          a: 'Free includes the full widget canvas, library, cloud sync, 10 bots, 3 agents, community access and 10,000 AI credits at sign-up. Supporter and Sponsor add monthly credits, higher automation quotas and premium appearance — checkout is coming soon. See Plans for the full comparison.',
         },
       ],
     },
@@ -1169,15 +1177,36 @@ export const en: SiteContent = {
         supportDedicated: 'Dedicated',
       },
     },
-    faqTitle: 'Plan questions',
+    faqTitle: 'Plans & billing',
     faq: [
-      { q: 'Is Nexow really free?', a: 'Yes. Free gives you the core widget canvas, reusable library, cloud sync, 10 bots, 3 agents, full community and reputation access, and 10,000 AI credits reserved at sign-up. Paid plans add monthly credits, higher quotas and premium appearance.' },
-      { q: 'What are credits?', a: 'Credits meter AI usage — generating widgets, editing them by conversation, creating links and using Copilot. One credit is one Sonnet output token of provider cost, so the price never depends on which model you pick: Haiku stretches a credit to 3 tokens, Opus burns it in 0.6. Free reserves 10,000 at sign-up, Supporter grants 115,000 a month, Sponsor 800,000 — and you can buy packs anytime.' },
-      { q: 'How is my reputation calculated?', a: 'Client-side, from your own activity. Every post is 5 points, a widget 5, a board 10, a bot 15, a published asset 25, an install 10, a follower 3 — plus 20 points for each badge tier, 100 for a rare medal and 250 for a legendary one. Five levels sit on top: Bronze, Silver at 250 points, Gold at 1,000, Platinum at 5,000 and Legend at 20,000.' },
-      { q: 'Are badges tied to my plan?', a: 'No. All 34 badges, all five levels and the whole community layer are on Free. Plans buy capacity and appearance, never status — a Free account can hit Legend.' },
-      { q: 'When do credit and token rewards land?', a: 'Badges and points are live in the app today. Turning them into credits and NEXO governance tokens ships with the Nexow DAO, and the first ballot ratifies the final schedule. The numbers on this page are the proposal we are committing to.' },
-      { q: 'When do paid plans launch?', a: 'Supporter and Sponsor are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.' },
-      { q: 'Can I pay yearly?', a: 'Yes. Yearly billing gives you two months free versus paying monthly — $99.90 a year for Supporter, $699.90 for Sponsor. You can switch between monthly and yearly at any time.' },
+      {
+        q: 'Is Nexow really free?',
+        a: 'Yes. Free is a full workspace — unlimited screens, widgets and connectors, reusable library, cloud sync, 10 bots, 3 agents, community and reputation, plus 10,000 AI credits reserved at sign-up. Paid plans add monthly credit refreshes, higher quotas and premium appearance — not a gated core.',
+      },
+      {
+        q: 'What are credits?',
+        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 10,000 at sign-up; Supporter grants 115,000 a month; Sponsor 800,000 — and you can buy packs anytime.',
+      },
+      {
+        q: 'When do paid plans launch?',
+        a: 'Supporter and Sponsor are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.',
+      },
+      {
+        q: 'Can I pay yearly?',
+        a: 'Yes. Yearly billing gives you two months free versus monthly — $99.90 a year for Supporter, $699.90 for Sponsor. You can switch between monthly and yearly anytime.',
+      },
+      {
+        q: 'How is reputation calculated?',
+        a: 'Client-side, from your own activity — Nexow does not rank you against other people on a server. Posts and widgets are 5 points each, boards 10, bots 15, published assets 25, installs 10, followers 3 — plus badge bonuses (20 per tier, 100 rare, 250 legendary). Levels: Bronze, Silver at 250, Gold at 1,000, Platinum at 5,000, Legend at 20,000.',
+      },
+      {
+        q: 'Are badges tied to my plan?',
+        a: 'No. All 34 badges, five levels and the full community layer are available on Free. Plans buy capacity and appearance, never status — a Free account can reach Legend.',
+      },
+      {
+        q: 'When do credit and token rewards land?',
+        a: 'Badges and points are live today. Turning them into credits and NEXO governance tokens ships with the Nexow DAO; the first ballot ratifies the final schedule. The numbers on this page are the proposal we are committing to.',
+      },
     ],
   },
   rewards: {
