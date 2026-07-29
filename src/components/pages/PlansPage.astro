@@ -67,6 +67,15 @@ const teasers = [
   { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: c.rewards.ledger.creditsLabel, soon: true },
   { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: c.rewards.ledger.tokensLabel, soon: true },
 ];
+
+const sections = [
+  { id: 'tiers', label: t.hero.badge },
+  { id: 'compare', label: t.matrix.eyebrow },
+  { id: 'rewards', label: c.rewards.eyebrow },
+  { id: 'credits', label: c.rewards.credits.eyebrow },
+  { id: 'faq', label: t.faqTitle },
+  { id: 'cta', label: c.home.cta.primary },
+];
 ---
 
 <Layout
@@ -75,6 +84,7 @@ const teasers = [
   title={t.meta.title}
   description={t.meta.description}
   schema={[offerSchema, faqSchema]}
+  sections={sections}
 >
   <PageHero badge={t.hero.badge} icon={getPageBadgeIcon('/plans')} title={t.hero.title} subtitle={t.hero.subtitle} />
 

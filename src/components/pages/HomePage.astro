@@ -61,6 +61,21 @@ const websiteSchema = {
   url: SITE.url,
   inLanguage: lang,
 };
+
+/** Right-rail labels reuse existing section eyebrows (already localized). */
+const sections = [
+  { id: 'hero', label: t.hero.titleLead.replace(/\.$/, '') },
+  { id: 'app-showcase', label: t.appShowcase?.eyebrow ?? 'App' },
+  { id: 'how', label: t.how.eyebrow },
+  { id: 'features', label: t.features.eyebrow },
+  { id: 'automate', label: t.automate.eyebrow },
+  { id: 'bots-agents', label: t.botsAgents?.eyebrow ?? 'Bots & Agents' },
+  { id: 'connectors', label: t.connectors.eyebrow },
+  { id: 'privacy', label: t.privacy.eyebrow },
+  { id: 'plans', label: t.plans.eyebrow },
+  { id: 'faq', label: t.faq.eyebrow },
+  { id: 'cta', label: t.cta.primary },
+];
 ---
 
 <Layout
@@ -70,6 +85,7 @@ const websiteSchema = {
   description={t.meta.description}
   schema={[websiteSchema, softwareSchema, faqSchema]}
   theme="dark"
+  sections={sections}
 >
   <Hero lang={lang} />
   <AppShowcase lang={lang} />
