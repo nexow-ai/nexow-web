@@ -432,45 +432,41 @@ export const nl: SiteContent = {
       ],
     },
     faq: {
-      eyebrow: 'Veelgestelde vragen',
-      title: 'Vragen, beantwoord',
-      subtitle: 'Alles wat je moet weten voordat je de app start.',
+      eyebrow: "Veelgestelde vragen",
+      title: "Vragen vóór je begint",
+      subtitle: "Duidelijke antwoorden over wat Nexow is, hoe het werkt en wat het kost.",
       items: [
         {
-          q: 'Wat is Nexow?',
-          a: 'Nexow is een AI-native werkruimte voor markten. Je beschrijft een widget — een grafiek, tabel, heatmap of signaal — in normaal Nederlands, en Nexow genereert de broncode, voert deze uit in een sandbox iframe, en streamt live marktgegevens naar een canvas met vrije vorm. Daarin voegt het cloud bots, AI-agenten, een Copilot en een maker-gemeenschap toe.',
+          q: "Wat is Nexow?",
+          a: "Nexow is een widget-canvas. Beschrijf in gewone taal wat je nodig hebt en het genereert een werkende widget — moodboards, planners, games, social tools, databases, marktdashboards of eigen workflows — die je kunt rangschikken, via gesprek bewerken en hergebruiken over workspaces.",
         },
         {
-          q: 'Moet ik weten hoe ik moet coderen?',
-          a: 'Nee. Je beschrijft wat je wilt in normaal Nederlands en Nexow schrijft en voert de widget voor je uit. Als je code leest, zijn de bron en versiegeschiedenis van elke widget beschikbaar om te inspecteren en te verfijnen.',
+          q: "Moet ik kunnen programmeren?",
+          a: "Nee. Natuurlijke taal is genoeg om widgets te genereren en te verfijnen. Als je code leest, zijn bron, versies en logs van elke widget beschikbaar om te inspecteren, terug te zetten of bij te stellen.",
         },
         {
-          q: 'Zijn mijn gegevens privé? Heb ik een account nodig?',
-          a: 'Geen account nodig. Nexow draait standaard volledig lokaal: voeg je eigen Anthropic API-sleutel toe en widget-generatie gebeurt in je browser, met widgets, versies en logs opgeslagen in IndexedDB. Een gratis account is altijd optioneel — het voegt AI-credits, cloud-synchronisatie en de gemeenschap toe, maar je kunt 100% lokaal blijven bouwen.',
+          q: "Heb ik een account nodig?",
+          a: "Je kunt Nexow zonder account proberen. Een gratis account ontgrendelt start-AI-credits, cloud sync tussen apparaten, community, reputatie en marketplace — zonder creditcard. Liever volledig lokaal? Gebruik je eigen Anthropic-sleutel en houd generatie in de browser.",
         },
         {
-          q: 'Welke markten en venues worden ondersteund?',
-          a: 'Nexow heeft 45 live connectoren (83 in de catalogus) over FX (OANDA, LMAX, FXCM), crypto (Binance, Coinbase, Kraken, Deribit, BitMEX), aandelen en futures (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), voorspellingsmarkten (Kalshi, Polymarket), gegevensleveranciers en databases (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) en social feeds (X, YouTube, Discord, Telegram, Spotify).',
+          q: "Hoe gaat Nexow om met privacy?",
+          a: "Gegenereerde widgets draaien in een gesandboxte runtime, connector-credentials zijn beperkt tot de diensten die je koppelt, en versies en logs blijven bij je workspace. Cloud sync is zo ontworpen dat je widgets draagbaar en onder jouw controle blijven.",
         },
         {
-          q: 'Wat zijn bots en agenten?',
-          a: 'Bots zijn cloud-automatisering die je gegevens bewaken en signalen en waarschuwingen naar je widgets sturen, zelfs wanneer je tab is gesloten — beschrijf een waarschuwing in normaal Nederlands of verbind het visueel met drempels, % verandering, voortschrijdend-gemiddelde overgangen en nieuwe trades in een verbonden broker-account. Agenten zijn AI met een volledig harnas (model, geheugen, vaardigheden, tools, kennis, triggers) — ontwerp je vandaag in de visuele harnas builder; cloud deployment en de Copilot-assistent komen binnenkort.',
+          q: "Is Nexow alleen voor trading?",
+          a: "Nee. Trading-dashboards waren een vroege stresstest voor live widgets, maar het platform is algemeen: habit trackers, projectboards, researchfeeds, interne tools en custom workflows draaien op hetzelfde canvas.",
         },
         {
-          q: 'Is er een gemeenschap en marketplace?',
-          a: 'De gemeenschap is live — maak een gratis account aan, claim je openbare @handle, volg makers, post naar de feed, en deel widgets die anderen rechtstreeks aan hun bibliotheek kunnen toevoegen. Een marketplace voor het kopen en verkopen van widgets en geaudeerde strategische signalen waar je op kunt verdienen, komen volgende.',
+          q: "Wat zijn connectors?",
+          a: "Connectors koppelen widgets aan live data — vandaag 45+ over databases, wallets, social apps, brokers, exchanges en open data. Waar CORS het toelaat, gaan calls rechtstreeks vanuit de browser. Veel widgets hebben geen connector nodig en houden state lokaal tot je synchroniseert.",
         },
         {
-          q: 'Wat zijn XP en beloningen?',
-          a: 'Nexow voegt een gamified laag toe aan accounts: widgets bouwen, bots uitvoeren en delen met de gemeenschap verdient XP en ontgrendelt badges voor achievements — en achievements zetten zich om in beloningscredits die je kunt gebruiken voor AI-gebruik. Het wordt binnenkort uitgerold; vroege accounts zijn eerst.',
+          q: "Wat zijn bots en agents?",
+          a: "Bots zijn cloud-watchers: ze checken een bron op schema en sturen signalen of alerts als een conditie waar is — ook met gesloten tab. Agents zijn AI-workers met een volledig harness (model, geheugen, skills, tools, kennis, triggers) die redeneren in een tool-loop en handelen. Copilot helpt je de workspace zelf te bouwen en te ordenen.",
         },
         {
-          q: 'Hoeveel kost het?',
-          a: 'Gratis voor altijd om te bouwen — lokaal met je eigen sleutel, of met 10.000 AI-credits gereserveerd op een gratis account. Betaalde plannen (Supporter en Sponsor) voegen maandelijkse credits en hogere bot- en agent-limieten toe, en Partner is voor teams die private infrastructuur nodig hebben. Betaalde checkout komt binnenkort; zie de planpagina.',
-        },
-        {
-          q: 'Welk AI-model drijft Nexow aan?',
-          a: 'Nexow genereert met Anthropic Claude-modellen via de Anthropic SDK — Claude Opus 4.8 standaard, met Sonnet 4.6 en Haiku 4.5 voor snellere, goedkopere generatie. In privé-modus voer je je eigen sleutel in, dus je behoudt volledige controle over gebruik en kosten.',
+          q: "Wat kost het?",
+          a: "Free omvat het volledige widget-canvas, bibliotheek, cloud sync, 10 bots, 3 agents, communitytoegang en 10.000 AI-credits bij aanmelding. Supporter en Sponsor voegen maandelijkse credits, hogere automatiseringsquota en premium uiterlijk toe — checkout komt binnenkort. Zie Plans voor de volledige vergelijking.",
         },
       ],
     },
@@ -997,14 +993,36 @@ export const nl: SiteContent = {
         supportDedicated: 'Toegewijd',
       },
     },
-    faqTitle: 'Planvragen',
+    faqTitle: "Plannen & facturatie",
     faq: [
-      { q: 'Is Nexow echt gratis?', a: 'Ja. Je kunt voor altijd gratis bouwen — voer volledig lokaal uit met je eigen Anthropic-sleutel (je betaalt alleen je eigen API-gebruik), of maak een gratis account aan dat 10.000 AI-credits reserveert voor wanneer platformmodus opent, dus geen eigen sleutel nodig.' },
-      { q: 'Wat zijn credits?', a: 'Credits meten AI-gebruik — het genereren van widgets, links, bots en Copilot-antwoorden. Het gratis account reserveert 10.000 om mee te beginnen, en betaalde plannen geven een maandelijks budget (115K op Supporter, 800K op Sponsor). Credit-meting gaat live met platformmodus, en je kunt altijd meer kopen.' },
-      { q: 'Wanneer worden betaalde plannen gelanceerd?', a: 'Supporter en Sponsor zijn gedefinieerd en weergegeven in de app, maar betaalde checkout komt binnenkort. Iedereen is vandaag Gratis — maak een account aan om eerst te zijn wanneer facturering opent.' },
-      { q: 'Kan ik jaarlijks betalen?', a: 'Ja. Jaarlijkse facturering geeft je twee maanden gratis tegenover maandelijks betalen. Je kunt op elk moment tussen maandelijks en jaarlijks schakelen.' },
-      { q: 'Hoe wordt mijn reputatie berekend?', a: 'Op je eigen apparaat, uit je eigen activiteit. Elke post is 5 punten, een widget 5, een bord 10, een bot 15, een gepubliceerde asset 25, een installatie 10 en een volger 3 — plus 20 punten per badgetrede, 100 voor een zeldzame medaille en 250 voor een legendarische. Daarboven liggen vijf levels: Brons, Zilver bij 250 punten, Goud bij 1.000, Platina bij 5.000 en Legend bij 20.000.' },
-      { q: 'Hangen badges van mijn plan af?', a: 'Nee. Alle 34 badges, alle vijf levels en de complete communitylaag zitten in Free. Plannen kopen capaciteit en uiterlijk, nooit status — een gratis account kan Legend halen. Ze omzetten in credits en NEXO-tokens komt met de Nexow DAO.' },
+      {
+        q: "Is Nexow echt gratis?",
+        a: "Ja. Free is een volledige workspace — onbeperkte screens, widgets en connectors, herbruikbare bibliotheek, cloud sync, 10 bots, 3 agents, community en reputatie, plus 10.000 AI-credits gereserveerd bij aanmelding. Betaalde plannen voegen maandelijkse credits, hogere quota en premium uiterlijk toe — de kern is niet geblokkeerd.",
+      },
+      {
+        q: "Wat zijn credits?",
+        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 3 tokens; Opus gebruikt hem in ongeveer 0,6. Free reserveert 10.000 bij aanmelding; Supporter geeft 115.000 per maand; Sponsor 800.000 — en je kunt altijd packs kopen.",
+      },
+      {
+        q: "Wanneer starten betaalde plannen?",
+        a: "Supporter en Sponsor zijn gedefinieerd en zichtbaar in de app, maar betaalde checkout komt binnenkort. Iedereen zit vandaag op Free — maak een account om vooraan te staan wanneer facturatie opent.",
+      },
+      {
+        q: "Kan ik jaarlijks betalen?",
+        a: "Ja. Jaarlijkse facturatie geeft je twee maanden gratis ten opzichte van maandelijks — $99,90 per jaar voor Supporter, $699,90 voor Sponsor. Je kunt altijd wisselen tussen maandelijks en jaarlijks.",
+      },
+      {
+        q: "Hoe wordt reputatie berekend?",
+        a: "Client-side, uit je eigen activiteit — Nexow rangschikt je niet tegen anderen op een server. Posts en widgets 5 punten elk, boards 10, bots 15, gepubliceerde assets 25, installs 10, followers 3 — plus badgebonussen (20 per tier, 100 zeldzaam, 250 legendarisch). Levels: Bronze, Silver vanaf 250, Gold vanaf 1.000, Platinum vanaf 5.000, Legend vanaf 20.000.",
+      },
+      {
+        q: "Hangen badges aan mijn plan?",
+        a: "Nee. Alle 34 badges, vijf levels en de volledige community-laag zijn beschikbaar op Free. Plannen kopen capaciteit en uiterlijk, nooit status — een Free-account kan Legend bereiken.",
+      },
+      {
+        q: "Wanneer landen credit- en tokenbeloningen?",
+        a: "Badges en punten zijn vandaag live. Ze omzetten in credits en NEXO-governance-tokens komt met de Nexow DAO; de eerste stemming bekrachtigt het definitieve schema. De cijfers op deze pagina zijn het voorstel waaraan we ons verbinden.",
+      },
     ],
   },
   rewards: {
@@ -1200,6 +1218,8 @@ export const nl: SiteContent = {
     categories: { finance: 'Financiën', wallets: 'Wallets', services: 'Diensten', data: 'Gegevens', socials: 'Sociaal' },
     status: { all: 'Alles', live: 'Live', soon: 'Binnenkort' },
     capability: { all: 'Alle', trading: 'Trading', readonly: 'Alleen data' },
+    filterSubcategories: 'Type',
+
     filterAssets: 'Assets',
     filterAlpha: 'Naam',
     kinds: {

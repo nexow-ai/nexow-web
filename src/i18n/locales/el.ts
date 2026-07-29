@@ -951,6 +951,8 @@ export const el: SiteContent = {
     categories: { finance: 'Χρηματοοικονομικά', wallets: 'Πορτοφόλια', services: 'Υπηρεσίες', data: 'Δεδομένα', socials: 'Κοινωνικά' },
     status: { all: 'Όλα', live: 'Ζωντανό', soon: 'Σύντομα' },
     capability: { all: 'Όλα', trading: 'Συναλλαγές', readonly: 'Μόνο δεδομένα' },
+    filterSubcategories: 'Τύπος',
+
     filterAssets: 'Περιουσιακά',
     filterAlpha: 'Όνομα',
     kinds: {

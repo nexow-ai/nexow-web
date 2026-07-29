@@ -1218,6 +1218,8 @@ export const it: SiteContent = {
     categories: { finance: 'Finanza', wallets: 'Wallet', services: 'Servizi', data: 'Dati', socials: 'Social' },
     status: { all: 'Tutti', live: 'Attivi', soon: 'In arrivo' },
     capability: { all: 'Tutti', trading: 'Trading', readonly: 'Solo dati' },
+    filterSubcategories: 'Tipo',
+
     filterAssets: 'Asset',
     filterAlpha: 'Nome',
     kinds: {

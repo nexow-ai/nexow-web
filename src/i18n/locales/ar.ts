@@ -1200,6 +1200,8 @@ export const ar: SiteContent = {
     categories: { finance: 'التمويل', wallets: 'المحافظ', services: 'الخدمات', data: 'البيانات', socials: 'الاجتماعيات' },
     status: { all: 'كل', live: 'حي', soon: 'قريبا' },
     capability: { all: 'الكل', trading: 'تداول', readonly: 'بيانات فقط' },
+    filterSubcategories: 'النوع',
+
     filterAssets: 'الأصول',
     filterAlpha: 'الاسم',
     kinds: {

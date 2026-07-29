@@ -1200,6 +1200,8 @@ export const he: SiteContent = {
     categories: { finance: 'מימון', wallets: 'ארנקים', services: 'שירותים', data: 'נתונים', socials: 'חברתיות' },
     status: { all: 'הכל', live: 'חי', soon: 'בקרוב' },
     capability: { all: 'הכל', trading: 'מסחר', readonly: 'נתונים בלבד' },
+    filterSubcategories: 'סוג',
+
     filterAssets: 'נכסים',
     filterAlpha: 'שם',
     kinds: {

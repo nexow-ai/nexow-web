@@ -951,6 +951,8 @@ export const tr: SiteContent = {
     categories: { finance: 'Finans', wallets: 'Cüzdanlar', services: 'Hizmetler', data: 'Veri', socials: 'Sosyal Ortamlar' },
     status: { all: 'Tümü', live: 'Canlı', soon: 'Yakında' },
     capability: { all: 'Tümü', trading: 'Alım satım', readonly: 'Yalnızca veri' },
+    filterSubcategories: 'Tür',
+
     filterAssets: 'Varlıklar',
     filterAlpha: 'Ad',
     kinds: {

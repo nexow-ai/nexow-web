@@ -951,6 +951,8 @@ export const ms: SiteContent = {
     categories: { finance: 'Kewangan', wallets: 'Dompet', services: 'Perkhidmatan', data: 'Data', socials: 'Sosial' },
     status: { all: 'Semua', live: 'Langsung', soon: 'Segera hadir' },
     capability: { all: 'Semua', trading: 'Dagangan', readonly: 'Data sahaja' },
+    filterSubcategories: 'Jenis',
+
     filterAssets: 'Aset',
     filterAlpha: 'Nama',
     kinds: {
