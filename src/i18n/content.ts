@@ -56,6 +56,129 @@ export interface PillarItem {
   status: 'live' | 'soon';
 }
 
+/**
+ * Reputation & rewards copy for the Plans page. The NUMBERS all live in
+ * `src/data/gamification.ts` (mirrored from the app); this is purely the words
+ * wrapped around them, so a locale never has to restate a threshold or a price.
+ */
+export interface RewardsContent {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  /** Status chips: what ships today vs what ships with the DAO. */
+  live: string;
+  planned: string;
+  plannedNote: string;
+  points: {
+    title: string;
+    body: string;
+    /** "Reputation" — the score's name in the app. */
+    label: string;
+    /** "pts" */
+    unit: string;
+    tableTitle: string;
+    /** Column header over the weights, e.g. 'pts each'. */
+    perAction: string;
+    bonusTitle: string;
+    bonusBody: string;
+    /** Interactive simulator. */
+    simTitle: string;
+    simBody: string;
+    simReset: string;
+    simNext: string;
+    /** Shown instead of simNext once the top band is reached. */
+    simMaxed: string;
+    simHint: string;
+  };
+  levels: {
+    title: string;
+    body: string;
+    /** "from {n} pts" */
+    at: string;
+    names: Record<'bronze' | 'silver' | 'gold' | 'platinum' | 'legend', string>;
+  };
+  badges: {
+    title: string;
+    body: string;
+    filters: Record<'all' | 'tiered' | 'rare' | 'legendary', string>;
+    /** "{n} badges" */
+    count: string;
+    /** Card back labels. */
+    tracks: string;
+    unlocks: string;
+    /** "+{n} pts per tier" / "+{n} pts". */
+    worth: string;
+    tiers: Record<'bronze' | 'silver' | 'gold', string>;
+    rarity: Record<'tiered' | 'rare' | 'legendary', string>;
+    rarityBody: Record<'tiered' | 'rare' | 'legendary', string>;
+    flipHint: string;
+    /** One label per tracked stat — the badge's "Tracks" line. */
+    stats: Record<string, string>;
+    /** One name per badge id (18 tiered + 10 rare + 6 legendary). */
+    names: Record<string, string>;
+  };
+  ledger: {
+    title: string;
+    body: string;
+    tokenName: string;
+    tokenNote: string;
+    colUnlock: string;
+    colCount: string;
+    colPoints: string;
+    colCredits: string;
+    colTokens: string;
+    rows: Record<'bronze' | 'silver' | 'gold' | 'rare' | 'legendary', string>;
+    /** "Reach {level}" for the level-up rows. */
+    levelRow: string;
+    totalTitle: string;
+    totalBody: string;
+    creditsLabel: string;
+    tokensLabel: string;
+    /** "≈ {usd} of AI generation at list price". */
+    worth: string;
+    /** "= {n} months of Sponsor-grade generation". */
+    months: string;
+  };
+  dao: {
+    title: string;
+    body: string;
+    cards: { icon: string; title: string; body: string }[];
+  };
+  credits: {
+    title: string;
+    body: string;
+    /** "{usd} per 1,000,000 credits". */
+    rate: string;
+    rateNote: string;
+    tokensTitle: string;
+    tokensNote: string;
+    /** "tokens per credit" */
+    tokensUnit: string;
+    packsTitle: string;
+    packsNote: string;
+    /** "Save {n}%" */
+    packSave: string;
+    /** "credits" under the pack number. */
+    packUnit: string;
+    packTtl: string;
+    packCta: string;
+  };
+}
+
+/**
+ * One animated use case in the Bots & Agents deep-dive. `scene` selects the SVG
+ * scene drawn by UseCaseScene.astro — keep the key, translations only touch the
+ * prose. `kind` decides whether the card is badged as a bot or an agent.
+ */
+export interface UseCaseItem {
+  scene: 'news' | 'social' | 'monitor' | 'alerts' | 'reason' | 'execute' | 'pipeline' | 'markets';
+  kind: 'bot' | 'agent';
+  title: string;
+  body: string;
+  /** Mono one-liner under the scene, e.g. `every 1h → web_search → notify`. */
+  recipe: string;
+}
+
 export interface SiteContent {
   nav: {
     links: NavLink[];
@@ -132,6 +255,55 @@ export interface SiteContent {
       /** Decorative example prompts shown on the Copilot card. */
       copilotPrompts: string[];
     };
+    /**
+     * Bots & Agents deep-dive: the two kinds of teammate, a scroll-scrubbed
+     * anatomy of one run, and the use-case gallery. Optional — locales without
+     * a translation fall back to the English strings (see BotsAgents.astro).
+     */
+    botsAgents?: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      /** [bots, agents] — order matters, the component pairs them with visuals. */
+      kinds: {
+        badge: string;
+        title: string;
+        body: string;
+        points: string[];
+      }[];
+      run: {
+        eyebrow: string;
+        title: string;
+        subtitle: string;
+        /** Nudge under the diagram telling people the stages follow the scroll. */
+        hint: string;
+        /** Four inputs, in diagram order: web, socials, markets, stores. */
+        sources: string[];
+        /** Six harness pieces: model, memory, skills, tools, knowledge, triggers. */
+        harness: string[];
+        /** Four outputs, in diagram order: widgets, inbox, webhook, database. */
+        deliveries: string[];
+        sourcesLabel: string;
+        harnessLabel: string;
+        deliveriesLabel: string;
+        /** Exactly four — the diagram scrubs through them as you scroll. */
+        stages: { n: string; title: string; body: string }[];
+      };
+      cases: {
+        eyebrow: string;
+        title: string;
+        subtitle: string;
+        botLabel: string;
+        agentLabel: string;
+        items: UseCaseItem[];
+      };
+      more: {
+        title: string;
+        items: string[];
+      };
+      cta: string;
+      ctaNote: string;
+    };
     connectors: {
       eyebrow: string;
       title: string;
@@ -204,9 +376,26 @@ export interface SiteContent {
     included: { title: string; items: string[] };
     billing: { monthly: string; yearly: string; save: string };
     tiers: PlanTier[];
+    /** Full feature comparison. Rows/cells come from `src/data/gamification.ts`. */
+    matrix: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      /** Header over the row-label column. */
+      feature: string;
+      /** Chip on rows that are defined but not live yet. */
+      soon: string;
+      /** Helper above the mobile plan picker. */
+      pick: string;
+      groups: Record<string, string>;
+      rows: Record<string, string>;
+      values: Record<string, string>;
+    };
     faqTitle: string;
     faq: Faq[];
   };
+  /** Reputation, badges and the credit / DAO-token reward ladder (Plans page). */
+  rewards: RewardsContent;
   connectorsPage: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
