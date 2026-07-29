@@ -65,7 +65,7 @@ const alphaFilters = [
   { key: 'u-z', label: 'U–Z', min: 'U', max: 'Z' },
 ];
 const chipBtnIcon =
-  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white';
+  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 
 /** Catalog payload for the client modal (localized labels baked in). */
 const catalog = CONNECTORS.map((c) => ({
@@ -109,7 +109,7 @@ const chipBtn =
   description={t.meta.description}
   schema={[itemListSchema]}
 >
-  <section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-12 text-ink-950 sm:pt-40 dark:bg-white/[0.015] dark:text-white">
+  <section class="relative overflow-hidden bg-[#f7fbfb] dark:bg-white/[0.015] pt-32 pb-12 text-ink-950 sm:pt-40 dark:bg-white/[0.015] dark:text-white">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute -top-28 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-65 blur-3xl"
@@ -121,7 +121,7 @@ const chipBtn =
       ></div>
     </div>
     <div class="container-page relative text-center">
-      <span class="eyebrow inline-flex items-center gap-2 text-brand-700">
+      <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
         <span class="h-px w-6 bg-brand-500/50"></span>
         {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
@@ -137,7 +137,7 @@ const chipBtn =
     </div>
   </section>
 
-  <section id="connectors-app" class="bg-[#f7fbfb] pb-24 text-ink-950 sm:pb-32 dark:bg-transparent dark:text-white">
+  <section id="connectors-app" class="bg-[#f7fbfb] dark:bg-white/[0.015] pb-24 text-ink-950 sm:pb-32 dark:bg-transparent dark:text-white">
     <div class="container-page">
       <!-- Controls -->
       <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8 dark:border-white/8 dark:bg-ink-950/85">
@@ -610,7 +610,7 @@ const chipBtn =
         for (const a of item.assets) {
           const chip = document.createElement('span');
           chip.className =
-            'rounded-md border border-ink-900/10 bg-[#f7fbfb] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600';
+            'rounded-md border border-ink-900/10 bg-[#f7fbfb] dark:bg-white/[0.015] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600';
           chip.textContent = a;
           assetsEl.appendChild(chip);
         }

@@ -47,7 +47,7 @@ const hrefClaim = claimHandleAppUrl();
 
 <Layout lang={lang} route="/community" title={t.meta.title} description={t.meta.description}>
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-white dark:bg-white/[0.04] pt-32 pb-28 sm:pt-40 sm:pb-36">
+  <section class="relative overflow-hidden bg-white dark:bg-transparent pt-32 pb-28 sm:pt-40 sm:pb-36">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute inset-0 opacity-20 [mask-image:radial-gradient(62%_48%_at_50%_8%,black,transparent)]"
@@ -59,7 +59,7 @@ const hrefClaim = claimHandleAppUrl();
     <CommunityNetwork />
 
     <div class="container-page relative text-center">
-      <span class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-300/40 bg-brand-50 dark:bg-brand-400/12/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300 backdrop-blur" style="--enter-delay:0.05s">
+      <span class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-300/40 bg-brand-50/90 dark:bg-brand-400/12 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300 backdrop-blur" style="--enter-delay:0.05s">
         {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
       </span>
@@ -96,7 +96,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Social -->
-  <section class="relative overflow-hidden bg-white dark:bg-white/[0.04] py-24 sm:py-32">
+  <section class="relative overflow-hidden bg-white dark:bg-transparent py-24 sm:py-32">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div class="animate-glow absolute top-1/2 -right-40 size-[460px] -translate-y-1/2 blur-2xl glow-brand"></div>
     </div>
@@ -119,7 +119,7 @@ const hrefClaim = claimHandleAppUrl();
                     href={communitySocialItemHref(f.icon)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-brand-50 dark:bg-brand-400/12/60"
+                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-brand-50/60 dark:hover:bg-brand-400/12"
                   >
                     <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-600 ring-1 ring-brand-200/80 dark:ring-brand-400/25 transition-all duration-300 group-hover:scale-105 group-hover:bg-brand-100 group-hover:ring-brand-300/70">
                       <Icon name={f.icon} class="size-5" />
@@ -144,7 +144,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Research -->
-  <section class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] py-24 sm:py-32">
+  <section class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] dark:bg-white/[0.015] py-24 sm:py-32">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div class="animate-glow absolute top-1/2 -left-40 size-[460px] -translate-y-1/2 blur-2xl glow-brand"></div>
     </div>
@@ -190,7 +190,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Grow -->
-  <section class="relative overflow-hidden bg-white dark:bg-white/[0.04] py-24 sm:py-32">
+  <section class="relative overflow-hidden bg-white dark:bg-transparent py-24 sm:py-32">
     <div class="container-page relative">
       <SectionHeading
         eyebrow={t.grow.eyebrow}
@@ -244,7 +244,7 @@ const hrefClaim = claimHandleAppUrl();
     <div class="container-page relative">
       <div class="grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
         <div class="reveal" data-motion="slide-l">
-          <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50 dark:bg-brand-400/12/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300 backdrop-blur">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50/90 dark:bg-brand-400/12 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300 backdrop-blur">
             {t.referrals.eyebrow}
             <span class="ref-badge-pulse rounded-full bg-accent-500/20 px-2 py-0.5 text-[0.65rem] text-accent-700">{t.referrals.badge}</span>
           </span>
@@ -292,7 +292,7 @@ const hrefClaim = claimHandleAppUrl();
   </section>
 
   <!-- Marketplace -->
-  <section id="marketplace" class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] py-24 sm:py-36">
+  <section id="marketplace" class="relative overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb] dark:bg-white/[0.015] py-24 sm:py-36">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="aurora-a absolute -top-20 left-1/2 size-[640px] -translate-x-1/2 rounded-full opacity-45 blur-3xl"

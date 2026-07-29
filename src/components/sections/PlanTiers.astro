@@ -46,7 +46,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
         class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 dark:text-ink-400 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
       >
         {t.billing.yearly}
-        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600">{t.billing.save}</span>
+        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600 dark:text-brand-300">{t.billing.save}</span>
       </button>
     </div>
   </div>
@@ -63,7 +63,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                 'tilt group relative flex flex-col rounded-3xl border p-7',
                 tier.featured
                   ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-white/10 lg:-mt-4 lg:mb-4'
-                  : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03]',
+                  : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40',
               ]}
               style={`--a:${spec.accent};--ai:${tier.featured ? spec.accent : spec.accentInk}`}
             >
@@ -99,23 +99,23 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                   <Icon name={spec.icon} class="size-5.5" />
                 </span>
 
-                <h3 class:list={['mt-4 font-display text-xl font-semibold', tier.featured ? 'text-white' : 'text-ink-950']}>
+                <h3 class:list={['mt-4 font-display text-xl font-semibold', tier.featured ? 'text-white' : 'text-ink-950 dark:text-white']}>
                   {tier.name}
                 </h3>
-                <p class:list={['mt-1 text-sm', tier.featured ? 'text-ink-300' : 'text-ink-500']}>{tier.tagline}</p>
+                <p class:list={['mt-1 text-sm', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.tagline}</p>
 
                 <div class="mt-5 flex items-baseline gap-1.5">
-                  <span class:list={['font-display text-4xl font-bold', tier.featured ? 'text-white' : 'text-ink-950']}>
+                  <span class:list={['font-display text-4xl font-bold', tier.featured ? 'text-white' : 'text-ink-950 dark:text-white']}>
                     <span data-price="monthly">{tier.priceMonthly}</span>
                     <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
                   </span>
                   {tier.cadence && (
-                    <span class:list={['text-sm', tier.featured ? 'text-ink-400' : 'text-ink-500']}>{tier.cadence}</span>
+                    <span class:list={['text-sm', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}>{tier.cadence}</span>
                   )}
                 </div>
                 <p
                   data-billed
-                  class:list={['mt-1 hidden font-mono text-[0.7rem]', tier.featured ? 'text-ink-400' : 'text-ink-500']}
+                  class:list={['mt-1 hidden font-mono text-[0.7rem]', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}
                 >
                   {tier.billedYearly ?? ' '}
                 </p>
@@ -126,7 +126,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                       <span
                         class:list={[
                           'rounded-md border px-2 py-0.5 font-mono text-[0.65rem]',
-                          tier.featured ? 'border-white/10 bg-white/[0.04] text-ink-200' : 'border-ink-900/10 bg-ink-50 text-ink-600',
+                          tier.featured ? 'border-white/10 bg-white/[0.04] text-ink-200' : 'border-ink-900/10 bg-ink-50 text-ink-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-ink-300',
                         ]}
                       >
                         {s}
@@ -149,13 +149,13 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                 </a>
 
                 {tier.note && (
-                  <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500']}>{tier.note}</p>
+                  <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.note}</p>
                 )}
                 <ul class="mt-3 space-y-3">
                   {tier.features.map((f) => (
                     <li class="flex items-start gap-2.5 text-sm">
                       <Icon name="check" class="mt-0.5 size-4 shrink-0" style="color:var(--ai)" />
-                      <span class={tier.featured ? 'text-ink-200' : 'text-ink-700'}>{f}</span>
+                      <span class={tier.featured ? 'text-ink-200' : 'text-ink-700 dark:text-ink-300'}>{f}</span>
                     </li>
                   ))}
                 </ul>
