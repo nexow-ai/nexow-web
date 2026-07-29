@@ -57,6 +57,8 @@ export const ICON_PATHS: Record<string, string> = {
   moon: 'M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z',
   mail: 'M3 6h18v12H3V6zM3 7l9 6 9-6',
   scroll: 'M5 4h12v13a3 3 0 003 3H8a3 3 0 01-3-3V4zM17 4a2 2 0 012 2v11M9 8h5M9 12h5',
+  cookie:
+    'M12 3a9 9 0 100 18 9 9 0 000-18zM8.5 9.5h.01M12 8h.01M15.5 10h.01M9 14h.01M12.5 15.5h.01M15 13.5h.01',
   factory: 'M3 20h18V10l-5 3v-3l-5 3V7H5L3 20zM8 16h.01M13 16h.01M18 16h.01',
   landmark: 'M2 10h20L12 3 2 10zM3 21h18M5 10v8M9.5 10v8M14.5 10v8M19 10v8',
   gem: 'M6 3h12l3 6-9 12L3 9l3-6zM3 9h18M9 3l3 6 3-6M12 9v12',

@@ -1,6 +1,7 @@
 ---
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
 import FeatureCard from '../FeatureCard.astro';
@@ -14,7 +15,7 @@ const t = useContent(lang).about;
 ---
 
 <Layout lang={lang} route="/about" title={t.meta.title} description={t.meta.description}>
-  <PageHero badge={t.hero.badge} title={t.hero.title} subtitle={t.hero.subtitle} />
+  <PageHero badge={t.hero.badge} icon={getPageBadgeIcon('/about')} title={t.hero.title} subtitle={t.hero.subtitle} />
 
   <section class="container-page py-12 sm:py-16">
     <div class="reveal mx-auto max-w-3xl">

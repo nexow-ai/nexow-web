@@ -5,6 +5,7 @@
  */
 import { type Lang } from '../../i18n/config';
 import { useContent, type LegalPageContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
 
@@ -34,7 +35,7 @@ const governingNote =
 ---
 
 <Layout lang={lang} route={route} title={copy.meta.title} description={copy.meta.description}>
-  <PageHero badge={copy.badge} title={copy.title} subtitle={copy.subtitle} />
+  <PageHero badge={copy.badge} icon={getPageBadgeIcon(route)} title={copy.title} subtitle={copy.subtitle} />
 
   <section class="container-page pb-24">
     <div class="mx-auto max-w-2xl">

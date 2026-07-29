@@ -3,9 +3,19 @@
  * /community — social feed, research boards & dashboards, reputation,
  * USDC marketplace on Solana, and the coming Nexow DAO.
  */
-import { SITE, type Lang } from '../../i18n/config';
+import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import {
+  claimHandleAppUrl,
+  communityAppUrl,
+  communityGrowItemHref,
+  communityHeroChipHref,
+  communityResearchItemHref,
+  communitySocialItemHref,
+  panelAppUrl,
+} from '../../lib/appDeepLinks';
 import Layout from '../../layouts/Layout.astro';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
@@ -22,6 +32,12 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
+const badgeIcon = getPageBadgeIcon('/community');
+
+const hrefJoin = communityAppUrl({ tab: 'discover', signup: true });
+const hrefMarketplace = panelAppUrl('marketplace');
+const hrefDao = communityAppUrl({ tab: 'dao' });
+const hrefClaim = claimHandleAppUrl();
 ---
 
 <Layout lang={lang} route="/community" title={t.meta.title} description={t.meta.description}>
@@ -58,7 +74,8 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
     <CommunityNetwork />
 
     <div class="container-page relative text-center">
-      <span class="enter inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 backdrop-blur" style="--enter-delay:0.05s">
+      <span class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-300/40 bg-brand-50/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 backdrop-blur" style="--enter-delay:0.05s">
+        {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
       </span>
       <h1 class="mx-auto mt-7 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl lg:text-[4.35rem]">
@@ -70,14 +87,21 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
         {t.hero.subtitle}
       </p>
       <div class="enter mt-10 flex flex-wrap items-center justify-center gap-3" style="--enter-delay:0.52s">
-        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">{t.hero.ctaPrimary}</Button>
-        <Button href="#marketplace" variant="secondary" size="lg" icon="store">{t.hero.ctaSecondary}</Button>
+        <Button href={hrefJoin} size="lg" variant="gradient" external iconRight="arrow">{t.hero.ctaPrimary}</Button>
+        <Button href={hrefMarketplace} variant="secondary" size="lg" external icon="store">{t.hero.ctaSecondary}</Button>
       </div>
       <ul class="reveal-stagger mx-auto mt-14 flex max-w-3xl flex-wrap items-center justify-center gap-2.5">
         {
-          t.hero.chips.map((chip) => (
-            <li class="rounded-full border border-ink-900/8 bg-white/85 px-3.5 py-1.5 font-mono text-xs text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300/50 hover:text-brand-800">
-              {chip}
+          t.hero.chips.map((chip, i) => (
+            <li>
+              <a
+                href={communityHeroChipHref(i)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex rounded-full border border-ink-900/8 bg-white/85 px-3.5 py-1.5 font-mono text-xs text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300/50 hover:text-brand-800"
+              >
+                {chip}
+              </a>
             </li>
           ))
         }
@@ -99,19 +123,27 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
             title={t.social.title}
             subtitle={t.social.subtitle}
             align="left"
+            gradientTitle
             class="max-w-xl"
           />
           <ul class="mt-11 space-y-4">
             {
               t.social.items.map((f) => (
-                <li class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-brand-50/60">
-                  <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:bg-brand-100 group-hover:ring-brand-300/70">
-                    <Icon name={f.icon} class="size-5" />
-                  </span>
-                  <div>
-                    <h3 class="font-display text-base font-semibold text-ink-950">{f.title}</h3>
-                    <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
-                  </div>
+                <li>
+                  <a
+                    href={communitySocialItemHref(f.icon)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-brand-50/60"
+                  >
+                    <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:bg-brand-100 group-hover:ring-brand-300/70">
+                      <Icon name={f.icon} class="size-5" />
+                    </span>
+                    <div>
+                      <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800">{f.title}</h3>
+                      <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
+                    </div>
+                  </a>
                 </li>
               ))
             }
@@ -142,19 +174,27 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
             title={t.research.title}
             subtitle={t.research.subtitle}
             align="left"
+            gradientTitle
             class="max-w-xl"
           />
           <ul class="mt-11 space-y-4">
             {
               t.research.items.map((f) => (
-                <li class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-white/80">
-                  <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-sm ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:ring-brand-300/70">
-                    <Icon name={f.icon} class="size-5" />
-                  </span>
-                  <div>
-                    <h3 class="font-display text-base font-semibold text-ink-950">{f.title}</h3>
-                    <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
-                  </div>
+                <li>
+                  <a
+                    href={communityResearchItemHref(f.icon)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-white/80"
+                  >
+                    <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-sm ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:ring-brand-300/70">
+                      <Icon name={f.icon} class="size-5" />
+                    </span>
+                    <div>
+                      <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800">{f.title}</h3>
+                      <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
+                    </div>
+                  </a>
                 </li>
               ))
             }
@@ -171,12 +211,16 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
         eyebrow={t.grow.eyebrow}
         title={t.grow.title}
         subtitle={t.grow.subtitle}
+        gradientTitle
         class="mx-auto"
       />
       <div class="reveal-stagger mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {
           t.grow.items.map((f, i) => (
-            <article
+            <a
+              href={communityGrowItemHref(f.icon)}
+              target="_blank"
+              rel="noopener noreferrer"
               class="group relative overflow-hidden rounded-3xl border border-ink-900/8 bg-white p-6 shadow-sm shadow-ink-950/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10"
               data-motion="rise"
               style={`--d:${i * 0.06}s`}
@@ -188,9 +232,9 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
               <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110">
                 <Icon name={f.icon} class="size-5" />
               </span>
-              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950">{f.title}</h3>
+              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 transition-colors group-hover:text-brand-800">{f.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-ink-600">{f.body}</p>
-            </article>
+            </a>
           ))
         }
       </div>
@@ -240,15 +284,20 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
       <div class="reveal-stagger mt-16 grid gap-5 sm:grid-cols-2">
         {
           t.marketplace.pillars.map((f) => (
-            <article class="group flex gap-4 rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md">
+            <a
+              href={hrefMarketplace}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex gap-4 rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md"
+            >
               <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110">
                 <Icon name={f.icon} class="size-5" />
               </span>
               <div>
-                <h3 class="font-display text-lg font-semibold text-ink-950">{f.title}</h3>
+                <h3 class="font-display text-lg font-semibold text-ink-950 transition-colors group-hover:text-brand-800">{f.title}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-ink-600">{f.body}</p>
               </div>
-            </article>
+            </a>
           ))
         }
       </div>
@@ -284,6 +333,11 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
             ))
           }
         </ul>
+        <div class="mt-10 flex justify-center">
+          <Button href={hrefMarketplace} size="lg" external iconRight="arrow" icon="store">
+            {t.hero.ctaSecondary}
+          </Button>
+        </div>
       </div>
 
       <div class="mt-20">
@@ -293,10 +347,15 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
         <div class="reveal-stagger mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {
             t.marketplace.kinds.map((k) => (
-              <div class="group rounded-2xl border border-brand-200/60 bg-gradient-to-br from-white to-brand-50/60 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/50 hover:shadow-md">
+              <a
+                href={hrefMarketplace}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group rounded-2xl border border-brand-200/60 bg-gradient-to-br from-white to-brand-50/60 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/50 hover:shadow-md"
+              >
                 <p class="font-display text-sm font-semibold text-ink-950 transition-colors group-hover:text-brand-800">{k.label}</p>
                 <p class="mt-2 text-xs leading-relaxed text-ink-600">{k.body}</p>
-              </div>
+              </a>
             ))
           }
         </div>
@@ -340,19 +399,29 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
           </h2>
           <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-300">{t.dao.subtitle}</p>
           <p class="mt-4 max-w-xl text-sm leading-relaxed text-ink-400">{t.dao.body}</p>
+          <div class="mt-8">
+            <Button href={hrefDao} size="lg" variant="outline" external iconRight="arrow">
+              {t.dao.eyebrow}
+            </Button>
+          </div>
         </div>
       </div>
 
       <div class="reveal-stagger mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {
           t.dao.pillars.map((f) => (
-            <article class="group rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-400/30 hover:bg-white/[0.07]">
+            <a
+              href={hrefDao}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-400/30 hover:bg-white/[0.07]"
+            >
               <span class="inline-flex size-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20 transition-transform duration-300 group-hover:scale-110">
                 <Icon name={f.icon} class="size-5" />
               </span>
               <h3 class="mt-4 font-display text-base font-semibold text-white">{f.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-ink-400">{f.body}</p>
-            </article>
+            </a>
           ))
         }
       </div>
@@ -366,22 +435,24 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
           {
             t.dao.proposals.map((p, i) => (
               <li class="dao-proposal group rounded-2xl border border-white/8 bg-ink-950/40 p-4 transition-colors hover:border-brand-400/25 hover:bg-ink-950/60" style={`--d:${0.15 + i * 0.1}s`}>
-                <div class="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <span class="rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.6rem] text-brand-300">{p.tag}</span>
-                    <p class="mt-2 font-display text-sm font-semibold text-white sm:text-base">{p.title}</p>
+                <a href={hrefDao} target="_blank" rel="noopener noreferrer" class="block">
+                  <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <span class="rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.6rem] text-brand-300">{p.tag}</span>
+                      <p class="mt-2 font-display text-sm font-semibold text-white sm:text-base">{p.title}</p>
+                    </div>
+                    <div class="text-right font-mono text-xs text-ink-400">
+                      <p class="text-brand-300">{t.dao.forLabel.replace('{pct}', String(p.pct))}</p>
+                      <p>{t.dao.votesLabel.replace('{n}', String(p.votes))}</p>
+                    </div>
                   </div>
-                  <div class="text-right font-mono text-xs text-ink-400">
-                    <p class="text-brand-300">{t.dao.forLabel.replace('{pct}', String(p.pct))}</p>
-                    <p>{t.dao.votesLabel.replace('{n}', String(p.votes))}</p>
+                  <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">
+                    <div
+                      class="dao-bar h-full rounded-full bg-gradient-to-r from-brand-400 via-accent-400 to-plasma-400"
+                      style={`--w:${p.pct}%`}
+                    />
                   </div>
-                </div>
-                <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">
-                  <div
-                    class="dao-bar h-full rounded-full bg-gradient-to-r from-brand-400 via-accent-400 to-plasma-400"
-                    style={`--w:${p.pct}%`}
-                  />
-                </div>
+                </a>
               </li>
             ))
           }
@@ -398,6 +469,8 @@ const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
     primary={t.cta.primary}
     secondary={t.cta.secondary}
     secondaryHref={localizePath('/features', lang)}
+    primaryHref={hrefClaim}
+    fireworks
   />
 </Layout>
 

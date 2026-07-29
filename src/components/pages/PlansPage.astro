@@ -11,6 +11,7 @@
  */
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import { LEVELS, TOTAL_REWARD_CREDITS, TOTAL_REWARD_TOKENS, ALL_BADGES } from '../../data/gamification';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
@@ -75,7 +76,7 @@ const teasers = [
   description={t.meta.description}
   schema={[offerSchema, faqSchema]}
 >
-  <PageHero badge={t.hero.badge} title={t.hero.title} subtitle={t.hero.subtitle} />
+  <PageHero badge={t.hero.badge} icon={getPageBadgeIcon('/plans')} title={t.hero.title} subtitle={t.hero.subtitle} />
 
   <!-- Game-layer teaser: the reward numbers, above the fold-ish. -->
   <div class="container-page -mt-6 pb-8">

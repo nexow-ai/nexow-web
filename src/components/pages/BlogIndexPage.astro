@@ -2,6 +2,7 @@
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { getPosts, slugOf } from '../../i18n/blog';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
 import BlogCard from '../BlogCard.astro';
@@ -15,7 +16,7 @@ const posts = await getPosts(lang);
 ---
 
 <Layout lang={lang} route="/blog" title={t.meta.title} description={t.meta.description}>
-  <PageHero badge={t.title} title={t.title} subtitle={t.subtitle} />
+  <PageHero badge={t.title} icon={getPageBadgeIcon('/blog')} title={t.title} subtitle={t.subtitle} />
 
   <section class="container-page pb-24 sm:pb-32">
     {
