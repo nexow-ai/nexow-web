@@ -1468,6 +1468,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Agence France-Presse wire — bring French and international newswire headlines into agent research workflows."
   },
   {
+    "id": "africanews",
+    "name": "Africanews",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.africanews.com/",
+    "logo": "/connectors/africanews.svg",
+    "banner": "/connectors/banners/africanews.png",
+    "logoFit": "cover",
+    "notes": "Pan-African 24-hour news channel — stream continent-wide headlines and regional desks for research boards."
+  },
+  {
     "id": "al_jazeera",
     "name": "Al Jazeera",
     "category": "services",
@@ -1480,6 +1494,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/al_jazeera.png",
     "logoFit": "cover",
     "notes": "Doha-based international broadcaster — track Middle East and global coverage for multilingual news widgets."
+  },
+  {
+    "id": "al_ahram",
+    "name": "Al-Ahram",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://english.ahram.org.eg/",
+    "logo": "/connectors/al_ahram.svg",
+    "banner": "/connectors/banners/al_ahram.png",
+    "logoFit": "cover",
+    "notes": "Egypt's historic newspaper — bring Cairo politics, Middle East, and North Africa coverage into multilingual widgets."
   },
   {
     "id": "redshift",
@@ -1600,6 +1628,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
   {
+    "id": "clarin",
+    "name": "Clarín",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.clarin.com/",
+    "logo": "/connectors/clarin.svg",
+    "banner": "/connectors/banners/clarin.png",
+    "logoFit": "cover",
+    "notes": "Argentina's largest daily — follow Buenos Aires politics, economy, and regional coverage on news dashboards."
+  },
+  {
     "id": "cnn",
     "name": "CNN",
     "category": "services",
@@ -1612,6 +1654,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/cnn.png",
     "logoFit": "cover",
     "notes": "Global cable and digital news network — surface top stories and topic feeds on ops and research canvases."
+  },
+  {
+    "id": "daily_nation",
+    "name": "Daily Nation",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://nation.africa/",
+    "logo": "/connectors/daily_nation.svg",
+    "banner": "/connectors/banners/daily_nation.png",
+    "logoFit": "cover",
+    "notes": "Kenya's flagship Nation Media daily — track East Africa politics, business, and regional breaking news."
   },
   {
     "id": "databricks",
@@ -1668,6 +1724,34 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/el_pais.png",
     "logoFit": "cover",
     "notes": "Leading Spanish-language newspaper — track Spain, Latin America, and world coverage in news widgets."
+  },
+  {
+    "id": "el_tiempo",
+    "name": "El Tiempo",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.eltiempo.com/",
+    "logo": "/connectors/el_tiempo.svg",
+    "banner": "/connectors/banners/el_tiempo.png",
+    "logoFit": "cover",
+    "notes": "Colombia's leading daily — bring Bogotá politics, economy, and Andean regional coverage into news boards."
+  },
+  {
+    "id": "emol",
+    "name": "Emol",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.emol.com/",
+    "logo": "/connectors/emol.svg",
+    "banner": "/connectors/banners/emol.png",
+    "logoFit": "cover",
+    "notes": "El Mercurio's Chilean digital portal — follow Santiago politics, markets, and Southern Cone headlines."
   },
   {
     "id": "etoro",
@@ -1733,6 +1817,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Global business newspaper — stream markets, companies, and macro coverage into trading and research dashboards."
   },
   {
+    "id": "folha",
+    "name": "Folha de S.Paulo",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.folha.uol.com.br/",
+    "logo": "/connectors/folha.svg",
+    "banner": "/connectors/banners/folha.png",
+    "logoFit": "cover",
+    "notes": "Brazil newspaper of record — stream São Paulo and national politics, business, and culture coverage into research boards."
+  },
+  {
     "id": "france24",
     "name": "France 24",
     "category": "services",
@@ -1745,6 +1843,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/france24.png",
     "logoFit": "cover",
     "notes": "French international 24-hour news channel — stream global and European headlines into live briefing widgets."
+  },
+  {
+    "id": "g1",
+    "name": "G1",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://g1.globo.com/",
+    "logo": "/connectors/g1.svg",
+    "banner": "/connectors/banners/g1.png",
+    "logoFit": "cover",
+    "notes": "Globo's Brazilian news portal — pull national headlines, politics, and breaking stories for LatAm briefing widgets."
   },
   {
     "id": "grafana",
@@ -1773,6 +1885,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/keplr.png",
     "logoFit": "cover",
     "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
+  },
+  {
+    "id": "la_nacion",
+    "name": "La Nación",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.lanacion.com.ar/",
+    "logo": "/connectors/la_nacion.svg",
+    "banner": "/connectors/banners/la_nacion.png",
+    "logoFit": "cover",
+    "notes": "Leading Argentine broadsheet — surface politics, markets, and international desks for Spanish-language research boards."
   },
   {
     "id": "le_monde",
@@ -1817,6 +1943,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Google Cloud BI platform — connect Looker explores and Looks so agents and widgets reuse governed business metrics."
   },
   {
+    "id": "mail_guardian",
+    "name": "Mail & Guardian",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://mg.co.za/",
+    "logo": "/connectors/mail_guardian.svg",
+    "banner": "/connectors/banners/mail_guardian.png",
+    "logoFit": "cover",
+    "notes": "South African investigative weekly — surface in-depth politics, society, and continental analysis."
+  },
+  {
     "id": "metabase",
     "name": "Metabase",
     "category": "data",
@@ -1829,6 +1969,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/metabase.png",
     "logoFit": "cover",
     "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
+  },
+  {
+    "id": "news24",
+    "name": "News24",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.news24.com/",
+    "logo": "/connectors/news24.svg",
+    "banner": "/connectors/banners/news24.png",
+    "logoFit": "cover",
+    "notes": "South Africa's largest digital news site — stream national politics, business, and African desk coverage."
   },
   {
     "id": "nhk",
@@ -1915,6 +2069,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Product analytics and feature flags — chart funnels, retention, and event trends alongside your market and ops boards."
   },
   {
+    "id": "premium_times",
+    "name": "Premium Times",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.premiumtimesng.com/",
+    "logo": "/connectors/premium_times.svg",
+    "banner": "/connectors/banners/premium_times.png",
+    "logoFit": "cover",
+    "notes": "Nigerian investigative news outlet — follow accountability reporting and national politics for African boards."
+  },
+  {
     "id": "prometheus",
     "name": "Prometheus",
     "category": "data",
@@ -1927,6 +2095,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/prometheus.png",
     "logoFit": "cover",
     "notes": "Open-source metrics and alerting toolkit — query PromQL time series for infrastructure and app health widgets."
+  },
+  {
+    "id": "punch",
+    "name": "Punch",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://punchng.com/",
+    "logo": "/connectors/punch.svg",
+    "banner": "/connectors/banners/punch.png",
+    "logoFit": "cover",
+    "notes": "Nigeria's widely read daily — pull Lagos politics, business, and West Africa headlines into research widgets."
   },
   {
     "id": "rabby",
@@ -1955,6 +2137,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/rainbow.png",
     "logoFit": "cover",
     "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
+  },
+  {
+    "id": "reforma",
+    "name": "Reforma",
+    "category": "services",
+    "kind": "news",
+    "status": "soon",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.reforma.com/",
+    "logo": "/connectors/reforma.svg",
+    "banner": "/connectors/banners/reforma.png",
+    "logoFit": "cover",
+    "notes": "Major Mexican newspaper — track Mexico City politics, business, and national news for LatAm widgets."
   },
   {
     "id": "reuters",
@@ -2185,4 +2381,4 @@ export const CONNECTORS: Connector[] = [
 ];
 
 export const CONNECTOR_COUNT = CONNECTORS.length;
-export const CONNECTOR_LIVE_COUNT = CONNECTORS.filter((c) => c.status === "live").length;
+export const CONNECTOR_LIVE_COUNT = CONNECTORS.filter((c) => c.status === 'live').length;
