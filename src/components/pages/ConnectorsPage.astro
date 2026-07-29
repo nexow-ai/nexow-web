@@ -4,6 +4,7 @@ import { useContent } from '../../i18n/content';
 import Layout from '../../layouts/Layout.astro';
 import CtaBand from '../sections/CtaBand.astro';
 import ConnectorCard from '../ConnectorCard.astro';
+import ConnectorModal from '../ConnectorModal.astro';
 import Icon from '../Icon.astro';
 import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 
@@ -26,6 +27,21 @@ const statusFilters = [
   { key: 'live', label: t.status.live },
   { key: 'soon', label: t.status.soon },
 ];
+
+/** Catalog payload for the client modal (localized labels baked in). */
+const catalog = CONNECTORS.map((c) => ({
+  id: c.id,
+  name: c.name,
+  status: c.status,
+  kind: t.kinds[c.kind] ?? c.kind,
+  assets: c.assets.map((a) => t.assets[a] ?? a),
+  url: c.url,
+  logo: c.logo,
+  banner: c.banner,
+  logoFit: c.logoFit,
+  notes: c.notes,
+  connectUrl: `https://x.nexow.ai/c/?connector=${encodeURIComponent(c.id)}`,
+}));
 
 // ItemList structured data (SEO / GEO) — the full venue catalog.
 const itemListSchema = {
@@ -169,13 +185,45 @@ const itemListSchema = {
       <!-- Empty state -->
       <p id="connector-empty" class="hidden py-16 text-center text-sm text-ink-500">{t.empty}</p>
     </div>
+
+    <script
+      type="application/json"
+      id="connectors-catalog"
+      set:html={JSON.stringify(catalog).replace(/</g, '\\u003c')}
+    />
   </section>
 
+  <ConnectorModal t={t} />
   <CtaBand lang={lang} />
 </Layout>
 
 <script>
+  type CatalogItem = {
+    id: string;
+    name: string;
+    status: 'live' | 'soon';
+    kind: string;
+    assets: string[];
+    url: string;
+    logo: string;
+    banner: string;
+    logoFit: 'cover' | 'contain';
+    notes: string;
+    connectUrl: string;
+  };
+
   let connectorsAbort: AbortController | undefined;
+  let lastFocus: HTMLElement | null = null;
+
+  function readCatalog(): CatalogItem[] {
+    const el = document.getElementById('connectors-catalog');
+    if (!el?.textContent) return [];
+    try {
+      return JSON.parse(el.textContent) as CatalogItem[];
+    } catch {
+      return [];
+    }
+  }
 
   function initConnectorsApp() {
     connectorsAbort?.abort();
@@ -196,13 +244,33 @@ const itemListSchema = {
     const statusBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-status]'));
     const tmpl = countEl?.dataset.template ?? '{n}';
 
+    const modal = document.getElementById('connector-modal');
+    const panel = document.getElementById('connector-modal-panel');
+    const bannerWrap = document.getElementById('connector-modal-banner-wrap');
+    const bannerImg = document.getElementById('connector-modal-banner') as HTMLImageElement | null;
+    const closePlain = document.getElementById('connector-modal-close-plain');
+    const logoWrap = document.getElementById('connector-modal-logo-wrap');
+    const logoImg = document.getElementById('connector-modal-logo') as HTMLImageElement | null;
+    const titleEl = document.getElementById('connector-modal-title');
+    const kindEl = document.getElementById('connector-modal-kind');
+    const soonEl = document.getElementById('connector-modal-soon');
+    const notesEl = document.getElementById('connector-modal-notes');
+    const assetsEl = document.getElementById('connector-modal-assets');
+    const connectEl = document.getElementById('connector-modal-connect') as HTMLAnchorElement | null;
+    const websiteEl = document.getElementById('connector-modal-website') as HTMLAnchorElement | null;
+    const websiteIcon = document.getElementById('connector-modal-website-icon') as HTMLAnchorElement | null;
+    const soonHint = document.getElementById('connector-modal-soon-hint');
+
+    const byId = new Map(readCatalog().map((c) => [c.id, c]));
+
     let category = 'all';
     let status = 'all';
     let query = '';
+    let open = false;
 
-    const syncFiltersOpen = (open: boolean) => {
-      filtersEl?.setAttribute('data-open', String(open));
-      filtersToggle?.setAttribute('aria-expanded', String(open));
+    const syncFiltersOpen = (next: boolean) => {
+      filtersEl?.setAttribute('data-open', String(next));
+      filtersToggle?.setAttribute('aria-expanded', String(next));
     };
 
     const syncFiltersBadge = () => {
@@ -225,28 +293,188 @@ const itemListSchema = {
       syncFiltersBadge();
     };
 
-    filtersToggle?.addEventListener('click', () => {
-      const open = filtersToggle.getAttribute('aria-expanded') !== 'true';
-      syncFiltersOpen(open);
-    }, { signal });
+    const populate = (item: CatalogItem) => {
+      const hasBanner = !!item.banner;
+      bannerWrap?.classList.toggle('hidden', !hasBanner);
+      closePlain?.classList.toggle('hidden', hasBanner);
+      if (bannerImg) {
+        bannerImg.src = item.banner || '';
+        bannerImg.alt = item.name;
+      }
 
-    searchEl?.addEventListener('input', () => {
-      query = (searchEl.value ?? '').trim().toLowerCase();
-      apply();
-    }, { signal });
-    catBtns.forEach((b) =>
-      b.addEventListener('click', () => {
-        category = b.dataset.filterCategory ?? 'all';
-        catBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      if (logoImg) {
+        logoImg.src = item.logo;
+        logoImg.alt = `${item.name} logo`;
+        logoImg.classList.toggle('object-cover', item.logoFit === 'cover');
+        logoImg.classList.toggle('object-contain', item.logoFit === 'contain');
+        logoImg.classList.toggle('p-1', item.logoFit === 'contain');
+      }
+      logoWrap?.classList.toggle('bg-white', item.logoFit === 'contain');
+      logoWrap?.classList.toggle('p-1', item.logoFit === 'contain');
+
+      if (titleEl) titleEl.textContent = item.name;
+      if (kindEl) kindEl.textContent = item.kind;
+      if (notesEl) {
+        notesEl.textContent = item.notes;
+        notesEl.classList.toggle('hidden', !item.notes);
+      }
+
+      const isSoon = item.status === 'soon';
+      soonEl?.classList.toggle('hidden', !isSoon);
+      soonHint?.classList.toggle('hidden', !isSoon);
+
+      if (assetsEl) {
+        assetsEl.replaceChildren();
+        for (const a of item.assets) {
+          const chip = document.createElement('span');
+          chip.className =
+            'rounded-md border border-ink-900/10 bg-[#f7fbfb] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600';
+          chip.textContent = a;
+          assetsEl.appendChild(chip);
+        }
+        assetsEl.classList.toggle('hidden', item.assets.length === 0);
+      }
+
+      if (websiteEl) {
+        websiteEl.href = item.url || '#';
+        websiteEl.classList.toggle('pointer-events-none', !item.url);
+        websiteEl.classList.toggle('opacity-50', !item.url);
+      }
+      if (websiteIcon) {
+        websiteIcon.href = item.url || '#';
+        websiteIcon.classList.toggle('hidden', !item.url);
+        const visitLabel = modal?.dataset.visitLabel || 'Website';
+        websiteIcon.setAttribute('aria-label', `${visitLabel}: ${item.name}`);
+      }
+
+      if (connectEl) {
+        connectEl.href = item.connectUrl;
+        connectEl.classList.toggle('hidden', isSoon);
+        connectEl.setAttribute('aria-disabled', String(isSoon));
+      }
+    };
+
+    const prefersReducedMotion = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const setOpen = (next: boolean, origin?: DOMRect | null) => {
+      if (!modal || !panel) return;
+      open = next;
+      if (next) {
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('overflow-hidden');
+        modal.setAttribute('data-open', 'true');
+
+        // Expand from the clicked card into the centered panel (FLIP-style).
+        if (origin && !prefersReducedMotion()) {
+          const dest = panel.getBoundingClientRect();
+          const sx = Math.max(0.18, Math.min(1, origin.width / Math.max(dest.width, 1)));
+          const sy = Math.max(0.18, Math.min(1, origin.height / Math.max(dest.height, 1)));
+          const dx = origin.left + origin.width / 2 - (dest.left + dest.width / 2);
+          const dy = origin.top + origin.height / 2 - (dest.top + dest.height / 2);
+          panel.style.transition = 'none';
+          panel.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+          panel.style.opacity = '0.4';
+          void panel.offsetWidth;
+          requestAnimationFrame(() => {
+            panel.style.transition = '';
+            panel.style.transform = '';
+            panel.style.opacity = '';
+          });
+        }
+
+        panel.focus?.();
+      } else {
+        modal.setAttribute('data-open', 'false');
+        modal.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('overflow-hidden');
+        window.setTimeout(() => {
+          if (!open) modal.hidden = true;
+        }, 280);
+        lastFocus?.focus?.();
+        lastFocus = null;
+      }
+    };
+
+    const openConnector = (id: string, card: HTMLElement) => {
+      const item = byId.get(id);
+      if (!item) return;
+      lastFocus = card;
+      populate(item);
+      setOpen(true, card.getBoundingClientRect());
+    };
+
+    filtersToggle?.addEventListener(
+      'click',
+      () => {
+        const next = filtersToggle.getAttribute('aria-expanded') !== 'true';
+        syncFiltersOpen(next);
+      },
+      { signal },
+    );
+
+    searchEl?.addEventListener(
+      'input',
+      () => {
+        query = (searchEl.value ?? '').trim().toLowerCase();
         apply();
-      }, { signal }),
+      },
+      { signal },
+    );
+    catBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          category = b.dataset.filterCategory ?? 'all';
+          catBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          apply();
+        },
+        { signal },
+      ),
     );
     statusBtns.forEach((b) =>
-      b.addEventListener('click', () => {
-        status = b.dataset.filterStatus ?? 'all';
-        statusBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        apply();
-      }, { signal }),
+      b.addEventListener(
+        'click',
+        () => {
+          status = b.dataset.filterStatus ?? 'all';
+          statusBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          apply();
+        },
+        { signal },
+      ),
+    );
+
+    cards.forEach((card) =>
+      card.addEventListener(
+        'click',
+        () => {
+          const id = card.dataset.connectorId;
+          if (id) openConnector(id, card);
+        },
+        { signal },
+      ),
+    );
+
+    modal?.querySelectorAll('[data-connector-modal-close], #connector-modal-backdrop').forEach((el) => {
+      el.addEventListener(
+        'click',
+        () => {
+          if (open) setOpen(false);
+        },
+        { signal },
+      );
+    });
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape' && open) {
+          e.preventDefault();
+          setOpen(false);
+        }
+      },
+      { signal },
     );
   }
 

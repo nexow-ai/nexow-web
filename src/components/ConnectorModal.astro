@@ -16,6 +16,7 @@ const { t } = Astro.props;
   id="connector-modal"
   class="connector-modal pointer-events-none fixed inset-0 z-50 flex items-end justify-center p-0 opacity-0 sm:items-center sm:p-6"
   data-open="false"
+  data-visit-label={t.visitWebsite}
   hidden
   aria-hidden="true"
 >
@@ -32,7 +33,8 @@ const { t } = Astro.props;
     role="dialog"
     aria-modal="true"
     aria-labelledby="connector-modal-title"
-    class="connector-modal__panel relative z-10 flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/20 sm:rounded-3xl"
+    tabindex="-1"
+    class="connector-modal__panel relative z-10 flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/20 outline-none sm:rounded-3xl"
   >
     <!-- Banner -->
     <div id="connector-modal-banner-wrap" class="relative hidden shrink-0">
