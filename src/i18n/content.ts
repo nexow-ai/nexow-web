@@ -68,6 +68,15 @@ export interface CommunityPageContent {
     subtitle: string;
     items: Feature[];
   };
+  referrals: {
+    eyebrow: string;
+    badge: string;
+    title: string;
+    subtitle: string;
+    body: string;
+    pillars: Feature[];
+    cta: string;
+  };
   marketplace: {
     eyebrow: string;
     title: string;
@@ -327,11 +336,11 @@ export interface SiteContent {
       /** Flat list used for schema / locales that have not migrated to groups yet. */
       items: Feature[];
       /**
-       * Optional product-area groups. Home FeatureMap resolves node copy from
-       * groups (preferred) or items by stable icon id.
+       * Optional product-area groups. Home FeatureMap uses groups for layout
+       * and resolves node copy by stable icon id (items as fallback).
        */
       groups?: { title: string; items: Feature[] }[];
-      /** Chrome strings for the interactive home FeatureMap popovers. */
+      /** Chrome strings for the interactive home FeatureMap explorer. */
       map?: {
         hint: string;
         moreLabel: string;

@@ -1,6 +1,6 @@
 /**
  * Home FeatureMap layout + deep-link wiring.
- * Copy (title/body) comes from locale `home.features`; positions are locale-neutral.
+ * Copy (title/body) comes from locale `home.features`; groups drive the UI.
  */
 import type { Feature } from '../i18n/content';
 import { SITE } from '../i18n/config';
@@ -28,44 +28,40 @@ export interface FeatureMapSurfaceDef {
   id: FeatureMapSurfaceId;
   /** Locale-agnostic icon key used to resolve title/body from feature lists. */
   icon: string;
-  /** Percent positions inside the map stage (0–100). */
-  x: number;
-  y: number;
-  /** Visual depth tier for parallax / layering (0 = back, 3 = front). */
-  depth: 0 | 1 | 2 | 3;
   /** Features page path (localized by caller). */
   morePath: '/features' | '/connectors' | '/community';
   /** Prod app target. */
   app: 'root' | 'community' | 'messages' | AppPanelId;
 }
 
+export type FeatureMapNode = FeatureMapSurfaceDef & { title: string; body: string };
+
+export type FeatureMapGroup = {
+  title: string;
+  nodes: FeatureMapNode[];
+};
+
 /**
- * Isometric “whole app” hotspot layout — one node per major chrome surface.
- * Coordinates are % of the stage so the SVG scene and HTML hotspots stay aligned.
+ * One node per major chrome surface — deep links + stable ids.
+ * Display order comes from locale `home.features.groups`.
  */
 export const FEATURE_MAP_SURFACES: FeatureMapSurfaceDef[] = [
-  // Header / account chrome (back)
-  { id: 'account', icon: 'vault', x: 82, y: 14, depth: 0, morePath: '/features', app: 'account' },
-  { id: 'themes', icon: 'moon', x: 70, y: 12, depth: 0, morePath: '/features', app: 'themes' },
-  { id: 'settings', icon: 'sync', x: 88, y: 22, depth: 0, morePath: '/features', app: 'settings' },
-  // Social / network (left-back)
-  { id: 'community', icon: 'users', x: 14, y: 18, depth: 0, morePath: '/community', app: 'community' },
-  { id: 'marketplace', icon: 'store', x: 26, y: 14, depth: 0, morePath: '/community', app: 'marketplace' },
-  { id: 'chats', icon: 'mail', x: 18, y: 32, depth: 1, morePath: '/community', app: 'messages' },
-  // Build core (center)
-  { id: 'canvas', icon: 'layers', x: 50, y: 42, depth: 1, morePath: '/features', app: 'root' },
-  { id: 'widgets', icon: 'sparkles', x: 40, y: 34, depth: 2, morePath: '/features', app: 'library' },
-  { id: 'library', icon: 'library', x: 58, y: 30, depth: 2, morePath: '/features', app: 'library' },
-  // Automate (mid-left)
-  { id: 'bots', icon: 'bot', x: 32, y: 52, depth: 2, morePath: '/features', app: 'bots' },
-  { id: 'agents', icon: 'cpu', x: 28, y: 64, depth: 2, morePath: '/features', app: 'agents' },
-  { id: 'copilot', icon: 'chat', x: 44, y: 68, depth: 3, morePath: '/features', app: 'copilot' },
-  // Data (right)
-  { id: 'connectors', icon: 'plug', x: 72, y: 48, depth: 2, morePath: '/connectors', app: 'connectors' },
-  { id: 'social', icon: 'globe', x: 78, y: 60, depth: 2, morePath: '/connectors', app: 'connectors' },
-  // Chrome front
-  { id: 'toolbar', icon: 'sliders', x: 50, y: 78, depth: 3, morePath: '/features', app: 'root' },
-  { id: 'dock', icon: 'grid', x: 66, y: 82, depth: 3, morePath: '/features', app: 'root' },
+  { id: 'account', icon: 'vault', morePath: '/features', app: 'account' },
+  { id: 'themes', icon: 'moon', morePath: '/features', app: 'themes' },
+  { id: 'settings', icon: 'sync', morePath: '/features', app: 'settings' },
+  { id: 'community', icon: 'users', morePath: '/community', app: 'community' },
+  { id: 'marketplace', icon: 'store', morePath: '/community', app: 'marketplace' },
+  { id: 'chats', icon: 'mail', morePath: '/community', app: 'messages' },
+  { id: 'canvas', icon: 'layers', morePath: '/features', app: 'root' },
+  { id: 'widgets', icon: 'sparkles', morePath: '/features', app: 'library' },
+  { id: 'library', icon: 'library', morePath: '/features', app: 'library' },
+  { id: 'bots', icon: 'bot', morePath: '/features', app: 'bots' },
+  { id: 'agents', icon: 'cpu', morePath: '/features', app: 'agents' },
+  { id: 'copilot', icon: 'chat', morePath: '/features', app: 'copilot' },
+  { id: 'connectors', icon: 'plug', morePath: '/connectors', app: 'connectors' },
+  { id: 'social', icon: 'globe', morePath: '/connectors', app: 'connectors' },
+  { id: 'toolbar', icon: 'sliders', morePath: '/features', app: 'root' },
+  { id: 'dock', icon: 'grid', morePath: '/features', app: 'root' },
 ];
 
 export function featureMapAppHref(app: FeatureMapSurfaceDef['app']): string {
@@ -98,6 +94,26 @@ export function featureCopyByIcon(
   return map;
 }
 
+function resolveCopy(
+  icon: string,
+  surfaceId: FeatureMapSurfaceId,
+  local: Map<string, Feature>,
+  en: Map<string, Feature>,
+): Feature {
+  const moon = local.get('moon') ?? en.get('moon');
+  const grid = local.get('grid') ?? en.get('grid');
+
+  let copy = local.get(icon) ?? en.get(icon);
+  if (!copy && surfaceId === 'settings' && moon) copy = moon;
+  if (!copy && surfaceId === 'themes' && moon) copy = moon;
+  if (!copy && surfaceId === 'toolbar' && grid) copy = grid;
+  if (!copy && surfaceId === 'dock' && grid) copy = grid;
+  if (!copy) {
+    copy = { icon, title: surfaceId, body: '' };
+  }
+  return copy;
+}
+
 /**
  * Resolve map node copy. Prefer the active locale; fall back to English for
  * icons that locales still combine (e.g. themes+settings) or omit (library).
@@ -105,24 +121,38 @@ export function featureCopyByIcon(
 export function resolveFeatureMapNodes(
   locale: { items: Feature[]; groups?: { title: string; items: Feature[] }[] },
   english: { items: Feature[]; groups?: { title: string; items: Feature[] }[] },
-): Array<FeatureMapSurfaceDef & { title: string; body: string }> {
+): FeatureMapNode[] {
   const local = featureCopyByIcon(locale);
   const en = featureCopyByIcon(english);
 
-  // Locales that still ship combined “Themes & settings” / “Toolbar & dock”
-  // under moon/grid — reuse that copy for the split nodes when needed.
-  const moon = local.get('moon') ?? en.get('moon');
-  const grid = local.get('grid') ?? en.get('grid');
-
   return FEATURE_MAP_SURFACES.map((surface) => {
-    let copy = local.get(surface.icon) ?? en.get(surface.icon);
-    if (!copy && surface.id === 'settings' && moon) copy = moon;
-    if (!copy && surface.id === 'themes' && moon) copy = moon;
-    if (!copy && surface.id === 'toolbar' && grid) copy = grid;
-    if (!copy && surface.id === 'dock' && grid) copy = grid;
-    if (!copy) {
-      copy = { icon: surface.icon, title: surface.id, body: '' };
-    }
+    const copy = resolveCopy(surface.icon, surface.id, local, en);
     return { ...surface, title: copy.title, body: copy.body };
   });
+}
+
+/**
+ * Grouped explorer layout: use locale groups when present, otherwise a flat list.
+ * Nodes are matched by icon to FEATURE_MAP_SURFACES for deep links.
+ */
+export function resolveFeatureMapGroups(
+  locale: { items: Feature[]; groups?: { title: string; items: Feature[] }[] },
+  english: { items: Feature[]; groups?: { title: string; items: Feature[] }[] },
+): FeatureMapGroup[] {
+  const nodes = resolveFeatureMapNodes(locale, english);
+  const byIcon = new Map(nodes.map((n) => [n.icon, n]));
+  const sourceGroups = locale.groups?.length ? locale.groups : english.groups;
+
+  if (sourceGroups?.length) {
+    return sourceGroups
+      .map((g) => ({
+        title: g.title,
+        nodes: g.items
+          .map((item) => byIcon.get(item.icon))
+          .filter((n): n is FeatureMapNode => Boolean(n)),
+      }))
+      .filter((g) => g.nodes.length > 0);
+  }
+
+  return [{ title: '', nodes }];
 }

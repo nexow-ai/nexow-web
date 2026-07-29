@@ -2,7 +2,7 @@
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
-import { resolveFeatureMapNodes } from '../../lib/featureMap';
+import { resolveFeatureMapGroups } from '../../lib/featureMap';
 import SectionHeading from '../SectionHeading.astro';
 import FeatureMap from '../FeatureMap.astro';
 import Button from '../Button.astro';
@@ -15,17 +15,10 @@ const t = useContent(lang).home.features;
 const en = useContent('en').home.features;
 const explore = useContent(lang).nav.links.find((l) => l.href === '/features')?.label ?? 'Features';
 const mapUi = t.map ?? en.map!;
-const nodes = resolveFeatureMapNodes(t, en);
+const groups = resolveFeatureMapGroups(t, en);
 ---
 
 <section id="features" class="relative overflow-x-clip bg-[#f7fbfb] py-20 text-ink-950 sm:py-24 dark:bg-white/[0.015] dark:text-white">
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <div
-      class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_20%,black,transparent)]"
-      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 10%, transparent) 1px, transparent 1px); background-size:56px 56px"
-    ></div>
-  </div>
-
   <div class="container-page relative">
     <!-- Plain ink title + solid eyebrow (no gradient text / chip fill) -->
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
@@ -33,7 +26,7 @@ const nodes = resolveFeatureMapNodes(t, en);
     <div class="mt-10 sm:mt-12">
       <FeatureMap
         lang={lang}
-        nodes={nodes}
+        groups={groups}
         hint={mapUi.hint}
         moreLabel={mapUi.moreLabel}
         openLabel={mapUi.openLabel}
