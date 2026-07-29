@@ -53,11 +53,12 @@ export const en: SiteContent = {
     },
     hero: {
       badge: 'Preview now live',
-      titleLead: 'Describe anything.',
-      titleGradient: 'Get a widget.',
-      titleTail: 'Arrange it.',
+      titleLead: 'Build anything.',
+      titleGradient: 'Visualize everything.',
+      titleTail: 'Share and grow.',
+      titleKicker: 'In seconds — not weeks or months.',
       subtitle:
-        'Type what you need — a trading desk, a project board, a founder dashboard, a habit tracker. Nexow generates real working widgets, plugs in live data and lays them out on a canvas you control.',
+        'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'See it live',
       note: 'Preview live · 45+ connectors · 10K starter credits',
