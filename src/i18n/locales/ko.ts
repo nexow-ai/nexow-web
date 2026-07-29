@@ -334,7 +334,7 @@ export const ko: SiteContent = {
       title: '모든 마켓에 연결',
       subtitle:
         '플러그형 커넥터는 실시간 가격, 오더북 및 참조 데이터를 위젯으로 직접 스트리밍합니다 — FX, 암호화폐, 주식, 선물, 옵션, 예측 마켓, 데이터베이스 및 소셜 피드 전체.',
-      note: '90개의 커넥터가 오늘 라이브이고 141개는 카탈로그에 있습니다 — 거래소, 마켓 데이터 API, 데이터베이스, 소셜 소스, 암호화폐 지갑 및 웹 서비스입니다. 많은 커넥터가 브라우저에서 직접 스트리밍되고, 나머지는 얇은 프록시를 통해 라우팅됩니다.',
+      note: '90개의 커넥터가 오늘 라이브이고 155개는 카탈로그에 있습니다 — 거래소, 마켓 데이터 API, 데이터베이스, 소셜 소스, 암호화폐 지갑 및 웹 서비스입니다. 많은 커넥터가 브라우저에서 직접 스트리밍되고, 나머지는 얇은 프록시를 통해 라우팅됩니다.',
       count: 90,
       countLabel: '라이브 커넥터',
       groups: {
@@ -1024,7 +1024,7 @@ export const ko: SiteContent = {
         patternsDots: '점무늬만',
         patternsAll: '6종 전부',
         loadersAll: '5종 전부',
-        connectorsAll: '141개 전부',
+        connectorsAll: '155개 전부',
         brandNexow: 'Nexow 마크',
         brandAvatar: '내 아바타',
         brandCustom: '내 로고',
@@ -1245,7 +1245,7 @@ export const ko: SiteContent = {
     meta: {
       title: '커넥터 — Nexow',
       description:
-        '모든 Nexow 커넥터 찾아보기 — 90개 라이브 및 141개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
+        '모든 Nexow 커넥터 찾아보기 — 90개 라이브 및 155개 카탈로그. 브로커, 거래소, DEX, 예측 마켓, 데이터 제공자, 데이터베이스 및 소셜 피드. 검색, 필터 및 연결.',
     },
     hero: {
       badge: '커넥터',

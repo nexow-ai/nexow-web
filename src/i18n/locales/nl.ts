@@ -336,7 +336,7 @@ export const nl: SiteContent = {
       title: 'Plug in elke markt',
       subtitle:
         'Pluggable connectoren streamen live prijzen, orderboeken en referentiegegevens rechtstreeks in je widgets — over FX, crypto, aandelen, futures, opties, voorspellingsmarkten, databases en social feeds.',
-      note: '90 connectoren zijn vandaag live en 141 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
+      note: '90 connectoren zijn vandaag live en 155 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
       count: 90,
       countLabel: 'live connectoren',
       groups: {
@@ -1026,7 +1026,7 @@ export const nl: SiteContent = {
         patternsDots: 'Alleen stippen',
         patternsAll: 'Alle 6',
         loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 141',
+        connectorsAll: 'Alle 155',
         brandNexow: 'Nexow-merk',
         brandAvatar: 'Je avatar',
         brandCustom: 'Je logo',
@@ -1247,7 +1247,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Connectoren — Nexow',
       description:
-        'Blader door elke Nexow-connector — 90 live en 141 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
+        'Blader door elke Nexow-connector — 90 live en 155 in de catalogus. Makelaars, beurzen, DEX\'s, voorspellingsmarkten, gegevensleveranciers, databases en social feeds. Zoeken, filteren en verbinden.',
     },
     hero: {
       badge: 'Connectoren',

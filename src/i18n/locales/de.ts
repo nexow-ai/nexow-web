@@ -347,7 +347,7 @@ export const de: SiteContent = {
       title: 'Verbinde dich mit jedem Markt',
       subtitle:
         'Modulare Konnektoren streamen Live-Kurse, Orderbücher und Referenzdaten direkt in deine Widgets — über FX, Krypto, Aktien, Futures, Optionen, Prognosemärkte, Datenbanken und Social-Feeds hinweg.',
-      note: '90 Konnektoren sind heute live und 141 stehen im Katalog — Broker, Börsen, Datenanbieter, Datenbanken, Socials, Krypto-Wallets und Web-Dienste. Viele streamen direkt aus deinem Browser; der Rest läuft über einen schlanken Proxy.',
+      note: '90 Konnektoren sind heute live und 155 stehen im Katalog — Broker, Börsen, Datenanbieter, Datenbanken, Socials, Krypto-Wallets und Web-Dienste. Viele streamen direkt aus deinem Browser; der Rest läuft über einen schlanken Proxy.',
       count: 90,
       countLabel: 'Live-Konnektoren',
       groups: {
@@ -1037,7 +1037,7 @@ export const de: SiteContent = {
         patternsDots: 'Nur Punkte',
         patternsAll: 'Alle 6',
         loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 141',
+        connectorsAll: 'Alle 155',
         brandNexow: 'Nexow-Marke',
         brandAvatar: 'Dein Avatar',
         brandCustom: 'Dein Logo',
@@ -1258,7 +1258,7 @@ export const de: SiteContent = {
     meta: {
       title: 'Konnektoren — Nexow',
       description:
-        'Durchstöbere jeden Nexow-Konnektor — 90 live und 141 im Katalog. Broker, Börsen, DEXs, Prognosemärkte, Datenanbieter, Datenbanken und Social-Feeds. Suchen, filtern und verbinden.',
+        'Durchstöbere jeden Nexow-Konnektor — 90 live und 155 im Katalog. Broker, Börsen, DEXs, Prognosemärkte, Datenanbieter, Datenbanken und Social-Feeds. Suchen, filtern und verbinden.',
     },
     hero: {
       badge: 'Konnektoren',

@@ -563,7 +563,7 @@ export const en: SiteContent = {
       title: 'Trading-grade data, optional everywhere',
       subtitle:
         'Nexow started with trading, so live APIs and data connectors are built into the base. Use them for markets, databases, social feeds or any widget that needs live information.',
-      note: '90 connectors are live today and 141 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
+      note: '90 connectors are live today and 155 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
       count: 90,
       countLabel: 'live connectors',
       groups: {
@@ -1216,7 +1216,7 @@ export const en: SiteContent = {
         patternsDots: 'Dots only',
         patternsAll: 'All 6',
         loadersAll: 'All 5',
-        connectorsAll: 'All 141',
+        connectorsAll: 'All 155',
         brandNexow: 'Nexow mark',
         brandAvatar: 'Your avatar',
         brandCustom: 'Your logo',

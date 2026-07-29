@@ -347,7 +347,7 @@ export const pt: SiteContent = {
       title: 'Ligue-se a todos os mercados',
       subtitle:
         'Conectores plugáveis transmitem preços em tempo real, order books e dados de referência diretamente para os seus widgets — em FX, cripto, ações, futuros, opções, mercados de previsão, bases de dados e feeds sociais.',
-      note: '90 conectores estão disponíveis hoje e 141 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
+      note: '90 conectores estão disponíveis hoje e 155 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
       count: 90,
       countLabel: 'conectores ativos',
       groups: {
@@ -1037,7 +1037,7 @@ export const pt: SiteContent = {
         patternsDots: 'Só pontos',
         patternsAll: 'Os 6',
         loadersAll: 'Os 5',
-        connectorsAll: 'Os 141',
+        connectorsAll: 'Os 155',
         brandNexow: 'Marca Nexow',
         brandAvatar: 'O teu avatar',
         brandCustom: 'O teu logo',
@@ -1258,7 +1258,7 @@ export const pt: SiteContent = {
     meta: {
       title: 'Conectores — Nexow',
       description:
-        'Explore todos os conectores do Nexow — 90 ativos e 141 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
+        'Explore todos os conectores do Nexow — 90 ativos e 155 no catálogo. Corretoras, exchanges, DEXs, mercados de previsão, fornecedores de dados, bases de dados e feeds sociais. Pesquise, filtre e ligue.',
     },
     hero: {
       badge: 'Conectores',

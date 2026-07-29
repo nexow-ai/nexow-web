@@ -347,7 +347,7 @@ export const it: SiteContent = {
       title: 'Collegati a ogni mercato',
       subtitle:
         'Connettori modulari trasmettono prezzi, order book e dati di riferimento in tempo reale direttamente nei tuoi widget — su FX, crypto, azioni, futures, opzioni, prediction market, database e feed social.',
-      note: '90 connettori sono attivi oggi e 141 sono nel catalogo — venue di trading, API di dati di mercato, database, fonti social, wallet crypto e servizi web. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
+      note: '90 connettori sono attivi oggi e 155 sono nel catalogo — venue di trading, API di dati di mercato, database, fonti social, wallet crypto e servizi web. Molti trasmettono direttamente dal tuo browser; gli altri passano attraverso un proxy leggero.',
       count: 90,
       countLabel: 'connettori attivi',
       groups: {
@@ -1037,7 +1037,7 @@ export const it: SiteContent = {
         patternsDots: 'Solo punti',
         patternsAll: 'Tutti e 6',
         loadersAll: 'Tutti e 5',
-        connectorsAll: 'Tutti e 141',
+        connectorsAll: 'Tutti e 155',
         brandNexow: 'Marchio Nexow',
         brandAvatar: 'Il tuo avatar',
         brandCustom: 'Il tuo logo',
@@ -1258,7 +1258,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Connettori — Nexow',
       description:
-        'Sfoglia ogni connettore Nexow — 90 attivi e 141 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
+        'Sfoglia ogni connettore Nexow — 90 attivi e 155 nel catalogo. Broker, exchange, DEX, prediction market, provider di dati, database e feed social. Cerca, filtra e connetti.',
     },
     hero: {
       badge: 'Connettori',

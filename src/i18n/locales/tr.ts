@@ -334,7 +334,7 @@ export const tr = {
       title: 'Her piyasaya bağlanın',
       subtitle:
         'Bağlanabilir bağlantılar, canlı fiyatları, emir defterlerini ve referans verilerini widget\'lerinize doğrudan akış yapılır — döviz, kripto, hisse senedi, vadeli işlem, opsiyon, tahmin piyasaları, veritabanları ve sosyal ortam kaynakları arasında.',
-      note: '90 bağlantı bugün canlı ve 141 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları, sosyal ortamlar, kripto cüzdanları ve web hizmetleri. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
+      note: '90 bağlantı bugün canlı ve 155 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları, sosyal ortamlar, kripto cüzdanları ve web hizmetleri. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
       count: 90,
       countLabel: 'canlı bağlantı',
       groups: {
@@ -998,7 +998,7 @@ export const tr = {
     meta: {
       title: 'Bağlantılar — Nexow',
       description:
-        'Her Nexow Bağlantısını Gözden Geçir — 90 Canlı ve 141 Katalogda. Aracılar, Borsalar, DEX\'ler, Tahmin Piyasaları, Veri Sağlayıcıları, Veritabanları ve Sosyal Ortam Kaynakları. Ara, Filtrele ve Bağlan.',
+        'Her Nexow Bağlantısını Gözden Geçir — 90 Canlı ve 155 Katalogda. Aracılar, Borsalar, DEX\'ler, Tahmin Piyasaları, Veri Sağlayıcıları, Veritabanları ve Sosyal Ortam Kaynakları. Ara, Filtrele ve Bağlan.',
     },
     hero: {
       badge: 'Bağlantılar',

@@ -334,7 +334,7 @@ export const ms = {
       title: 'Pasang ke setiap pasaran',
       subtitle:
         'Penyambung yang boleh pasang mengalirkan harga langsung, buku pesanan dan data rujukan terus ke widget anda — merentasi FX, kripto, ekuiti, niaga hadapan, opsyen, pasaran ramalan, pangkalan data dan suapan sosial.',
-      note: '90 penyambung langsung hari ini dan 141 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
+      note: '90 penyambung langsung hari ini dan 155 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
       count: 90,
       countLabel: 'penyambung langsung',
       groups: {
@@ -998,7 +998,7 @@ export const ms = {
     meta: {
       title: 'Penyambung — Nexow',
       description:
-        'Layari setiap penyambung Nexow — 90 langsung dan 141 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
+        'Layari setiap penyambung Nexow — 90 langsung dan 155 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
     },
     hero: {
       badge: 'Penyambung',

@@ -6,22 +6,51 @@
 interface Props {
   class?: string;
   title?: string;
-  /** light = white mark (dark backgrounds), dark = black mark (light backgrounds) */
-  tone?: 'dark' | 'light';
+  /** light = white mark (dark bg), dark = black mark (light bg), auto = follows theme */
+  tone?: 'dark' | 'light' | 'auto';
 }
 const { class: className, title, tone = 'light' } = Astro.props;
-const src = tone === 'light' ? '/favicon.png' : '/favicon-black.png';
+const imgClass = ['w-auto select-none object-contain', className];
 ---
 
-<img
-  src={src}
-  alt={title ?? ''}
-  width="593"
-  height="750"
-  class:list={['w-auto select-none object-contain', className]}
-  loading="lazy"
-  decoding="async"
-  role={title ? 'img' : 'presentation'}
-  aria-hidden={title ? undefined : 'true'}
-  aria-label={title}
-/>
+{
+  tone === 'auto' ? (
+    <>
+      <img
+        src="/favicon-black.png"
+        alt={title ?? ''}
+        width="593"
+        height="750"
+        class:list={[...imgClass, 'dark:hidden']}
+        loading="lazy"
+        decoding="async"
+        role={title ? 'img' : 'presentation'}
+        aria-hidden={title ? undefined : 'true'}
+        aria-label={title}
+      />
+      <img
+        src="/favicon.png"
+        alt=""
+        width="593"
+        height="750"
+        class:list={[...imgClass, 'hidden dark:block']}
+        loading="lazy"
+        decoding="async"
+        aria-hidden="true"
+      />
+    </>
+  ) : (
+    <img
+      src={tone === 'light' ? '/favicon.png' : '/favicon-black.png'}
+      alt={title ?? ''}
+      width="593"
+      height="750"
+      class:list={imgClass}
+      loading="lazy"
+      decoding="async"
+      role={title ? 'img' : 'presentation'}
+      aria-hidden={title ? undefined : 'true'}
+      aria-label={title}
+    />
+  )
+}
