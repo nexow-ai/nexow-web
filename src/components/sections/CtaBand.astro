@@ -4,6 +4,7 @@ import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
 import Button from '../Button.astro';
 import BrandMark from '../BrandMark.astro';
+import ClaimFireworks from '../ClaimFireworks.astro';
 
 interface Props {
   lang: Lang;
@@ -13,6 +14,10 @@ interface Props {
   primary?: string;
   secondary?: string;
   secondaryHref?: string;
+  /** Override the primary CTA target (defaults to the production app). */
+  primaryHref?: string;
+  /** Soft fireworks backdrop (used on the claim-@handle band). */
+  fireworks?: boolean;
 }
 const { lang } = Astro.props;
 const home = useContent(lang).home.cta;
@@ -21,6 +26,8 @@ const subtitle = Astro.props.subtitle ?? home.subtitle;
 const primary = Astro.props.primary ?? home.primary;
 const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
+const primaryHref = Astro.props.primaryHref ?? SITE.appUrl;
+const fireworks = Astro.props.fireworks ?? false;
 ---
 
 <section class="relative overflow-x-clip bg-white py-20 text-ink-950 sm:py-28 dark:bg-transparent dark:text-white">
@@ -41,6 +48,7 @@ const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lan
       style="background:radial-gradient(circle, var(--color-sky-100), transparent 60%)"
     >
     </div>
+    {fireworks && <ClaimFireworks />}
   </div>
 
   <div class="container-page relative">
@@ -53,7 +61,7 @@ const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lan
       </h2>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{subtitle}</p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+        <Button href={primaryHref} size="lg" external iconRight="arrow">
           {primary}
         </Button>
         <Button href={secondaryHref} variant="secondary" size="lg">
