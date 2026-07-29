@@ -175,6 +175,12 @@ export const ms: SiteContent = {
           body: 'Toolbar header boleh konfigur untuk tindakan kanvas, dan Dock kaca untuk Copilot, panel, pemberitahuan dan mesej.',
         },
       ],
+      map: {
+        hint: 'Pilih nod untuk meneroka permukaan — kemudian buka app atau baca lanjut.',
+        moreLabel: 'Lagi info',
+        openLabel: 'Buka dalam app',
+        closeLabel: 'Tutup',
+      },
       groups: [
         {
           title: 'Bina',
@@ -944,6 +950,9 @@ export const ms: SiteContent = {
     all: 'Semua',
     categories: { finance: 'Kewangan', wallets: 'Dompet', services: 'Perkhidmatan', data: 'Data', socials: 'Sosial' },
     status: { all: 'Semua', live: 'Langsung', soon: 'Segera hadir' },
+    capability: { all: 'Semua', trading: 'Dagangan', readonly: 'Data sahaja' },
+    filterAssets: 'Aset',
+    filterAlpha: 'Nama',
     kinds: {
       broker: 'Broker',
       exchange: 'Pertukaran',
@@ -970,6 +979,9 @@ export const ms: SiteContent = {
       knowledge: 'Pengetahuan',
       news: 'Berita',
       geo: 'Geo & pengangkutan',
+      analytics: 'Analitik',
+      observability: 'Kebolehcerapan',
+      payments: 'Pembayaran',
     },
     assets: {
       equities: 'Ekuiti',
@@ -985,6 +997,7 @@ export const ms: SiteContent = {
     openDetails: 'Lihat butiran',
     comingSoon: 'Akan datang',
     comingSoonHint: 'Penyambung ini belum tersedia dalam apl.',
+    tradingBadge: 'Dagangan',
     connect: 'Sambung dalam Nexow',
     visitWebsite: 'Lawati laman web',
     close: 'Tutup',

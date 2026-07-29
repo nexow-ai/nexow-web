@@ -327,10 +327,17 @@ export interface SiteContent {
       /** Flat list used for schema / locales that have not migrated to groups yet. */
       items: Feature[];
       /**
-       * Optional product-area groups for the home features map. When present,
-       * Features.astro renders these instead of the flat `items` list.
+       * Optional product-area groups. Home FeatureMap resolves node copy from
+       * groups (preferred) or items by stable icon id.
        */
       groups?: { title: string; items: Feature[] }[];
+      /** Chrome strings for the interactive home FeatureMap popovers. */
+      map?: {
+        hint: string;
+        moreLabel: string;
+        openLabel: string;
+        closeLabel: string;
+      };
     };
     how: {
       eyebrow: string;
@@ -504,6 +511,11 @@ export interface SiteContent {
     all: string;
     categories: { finance: string; wallets: string; services: string; data: string; socials: string };
     status: { all: string; live: string; soon: string };
+    /** Trading-capable vs data/read-only connectors. */
+    capability: { all: string; trading: string; readonly: string };
+    /** Screen-reader / group labels for extra filter rows. */
+    filterAssets: string;
+    filterAlpha: string;
     kinds: Record<string, string>;
     assets: Record<string, string>;
     visit: string;
@@ -513,6 +525,8 @@ export interface SiteContent {
     comingSoon: string;
     /** Modal hint when the connect CTA is unavailable. */
     comingSoonHint: string;
+    /** Card chip for connectors that support order routing. */
+    tradingBadge: string;
     /** Primary modal CTA — opens the app with this connector selected. */
     connect: string;
     /** Secondary modal CTA — venue website in a new tab. */

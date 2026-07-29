@@ -175,6 +175,12 @@ export const uk: SiteContent = {
           body: 'Налаштовуваний toolbar у шапці для дій на полотні та скляний Dock для Copilot, панелей, сповіщень і повідомлень.',
         },
       ],
+      map: {
+        hint: 'Оберіть вузол, щоб дослідити поверхню — потім відкрийте застосунок або дізнайтесь більше.',
+        moreLabel: 'Більше',
+        openLabel: 'Відкрити в застосунку',
+        closeLabel: 'Закрити',
+      },
       groups: [
         {
           title: 'Створюйте',
@@ -1193,6 +1199,9 @@ export const uk: SiteContent = {
     all: 'Усі',
     categories: { finance: 'Фінанси', wallets: 'Гаманці', services: 'Сервіси', data: 'Дані', socials: 'Соціальні мережи' },
     status: { all: 'Усі', live: 'Доступно', soon: 'Незабаром' },
+    capability: { all: 'Усі', trading: 'Торгівля', readonly: 'Лише дані' },
+    filterAssets: 'Активи',
+    filterAlpha: 'Назва',
     kinds: {
       broker: 'Брокер',
       exchange: 'Біржа',
@@ -1219,6 +1228,9 @@ export const uk: SiteContent = {
       knowledge: 'Знання',
       news: 'Новини',
       geo: 'Гео і транспорт',
+      analytics: 'Аналітика',
+      observability: 'Спостережуваність',
+      payments: 'Платежі',
     },
     assets: {
       equities: 'Акції',
@@ -1234,6 +1246,7 @@ export const uk: SiteContent = {
     openDetails: 'Детальніше',
     comingSoon: 'Незабаром',
     comingSoonHint: 'Цей конектор ще недоступний у застосунку.',
+    tradingBadge: 'Торгівля',
     connect: 'Підключити в Nexow',
     visitWebsite: 'Відвідати сайт',
     close: 'Закрити',

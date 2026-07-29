@@ -175,6 +175,12 @@ export const ko: SiteContent = {
           body: '캔버스 작업용 설정 가능한 헤더 툴바와 Copilot, 패널, 알림, 메시지용 글래스 Dock.',
         },
       ],
+      map: {
+        hint: '노드를 선택해 화면을 살펴본 뒤 앱에서 열거나 자세히 보세요.',
+        moreLabel: '자세히',
+        openLabel: '앱에서 열기',
+        closeLabel: '닫기',
+      },
       groups: [
         {
           title: '구축',
@@ -1193,6 +1199,9 @@ export const ko: SiteContent = {
     all: '전부',
     categories: { finance: '금융', wallets: '지갑', services: '서비스', data: '데이터', socials: '소셜' },
     status: { all: '전부', live: '라이브', soon: '곧' },
+    capability: { all: '전체', trading: '거래', readonly: '데이터만' },
+    filterAssets: '자산',
+    filterAlpha: '이름',
     kinds: {
       broker: '브로커',
       exchange: '거래소',
@@ -1219,6 +1228,9 @@ export const ko: SiteContent = {
       knowledge: '지식',
       news: '뉴스',
       geo: '지리 & 교통',
+      analytics: '분석',
+      observability: '옵저버빌리티',
+      payments: '결제',
     },
     assets: {
       equities: '주식',
@@ -1234,6 +1246,7 @@ export const ko: SiteContent = {
     openDetails: '자세히 보기',
     comingSoon: '곧 출시',
     comingSoonHint: '이 커넥터는 아직 앱에서 사용할 수 없습니다.',
+    tradingBadge: '거래',
     connect: 'Nexow에서 연결',
     visitWebsite: '웹사이트 방문',
     close: '닫기',

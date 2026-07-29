@@ -175,6 +175,12 @@ export const ja: SiteContent = {
           body: 'キャンバス操作のための設定可能なヘッダーツールバーと、Copilot、パネル、通知、メッセージ用のガラス調 Dock。',
         },
       ],
+      map: {
+        hint: 'ノードを選んで各画面を確認 — アプリで開くか詳細を読む。',
+        moreLabel: '詳細',
+        openLabel: 'アプリで開く',
+        closeLabel: '閉じる',
+      },
       groups: [
         {
           title: '構築',
@@ -1193,6 +1199,9 @@ export const ja: SiteContent = {
     all: 'すべて',
     categories: { finance: '金融', wallets: 'ウォレット', services: 'サービス', data: 'データ', socials: 'ソーシャル' },
     status: { all: 'すべて', live: 'ライブ', soon: '近日' },
+    capability: { all: 'すべて', trading: '取引', readonly: 'データのみ' },
+    filterAssets: '資産',
+    filterAlpha: '名前',
     kinds: {
       broker: 'ブローカー',
       exchange: '取引所',
@@ -1219,6 +1228,9 @@ export const ja: SiteContent = {
       knowledge: 'ナレッジ',
       news: 'ニュース',
       geo: '地理・交通',
+      analytics: 'アナリティクス',
+      observability: 'オブザーバビリティ',
+      payments: '決済',
     },
     assets: {
       equities: '株式',
@@ -1234,6 +1246,7 @@ export const ja: SiteContent = {
     openDetails: '詳細を見る',
     comingSoon: '近日公開',
     comingSoonHint: 'このコネクタはアプリでまだ利用できません。',
+    tradingBadge: '取引',
     connect: 'Nexowで接続',
     visitWebsite: 'ウェブサイトを見る',
     close: '閉じる',

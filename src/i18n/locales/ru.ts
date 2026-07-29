@@ -175,6 +175,12 @@ export const ru: SiteContent = {
           body: 'Настраиваемый toolbar в шапке для действий на холсте и стеклянный Dock для Copilot, панелей, уведомлений и сообщений.',
         },
       ],
+      map: {
+        hint: 'Выберите узел, чтобы изучить поверхность — затем откройте приложение или узнайте больше.',
+        moreLabel: 'Подробнее',
+        openLabel: 'Открыть в приложении',
+        closeLabel: 'Закрыть',
+      },
       groups: [
         {
           title: 'Создавайте',
@@ -1193,6 +1199,9 @@ export const ru: SiteContent = {
     all: 'Все',
     categories: { finance: 'Финансы', wallets: 'Кошельки', services: 'Сервисы', data: 'Данные', socials: 'Соцсети' },
     status: { all: 'Все', live: 'Живое', soon: 'Скоро' },
+    capability: { all: 'Все', trading: 'Торговля', readonly: 'Только данные' },
+    filterAssets: 'Активы',
+    filterAlpha: 'Имя',
     kinds: {
       broker: 'Брокер',
       exchange: 'Биржа',
@@ -1219,6 +1228,9 @@ export const ru: SiteContent = {
       knowledge: 'Знания',
       news: 'Новости',
       geo: 'Гео и транспорт',
+      analytics: 'Аналитика',
+      observability: 'Наблюдаемость',
+      payments: 'Платежи',
     },
     assets: {
       equities: 'Акции',
@@ -1234,6 +1246,7 @@ export const ru: SiteContent = {
     openDetails: 'Подробнее',
     comingSoon: 'Скоро',
     comingSoonHint: 'Этот коннектор пока недоступен в приложении.',
+    tradingBadge: 'Торговля',
     connect: 'Подключить в Nexow',
     visitWebsite: 'Открыть сайт',
     close: 'Закрыть',

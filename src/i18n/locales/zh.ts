@@ -175,6 +175,12 @@ export const zh: SiteContent = {
           body: '可配置的页眉工具栏用于画布操作，以及用于 Copilot、面板、通知与消息的玻璃感 Dock。',
         },
       ],
+      map: {
+        hint: '选择一个节点探索功能界面——然后打开应用或了解更多。',
+        moreLabel: '了解更多',
+        openLabel: '在应用中打开',
+        closeLabel: '关闭',
+      },
       groups: [
         {
           title: '构建',
@@ -1193,6 +1199,9 @@ export const zh: SiteContent = {
     all: '全部',
     categories: { finance: '金融', wallets: '钱包', services: '服务', data: '数据', socials: '社交' },
     status: { all: '全部', live: '已上线', soon: '即将' },
+    capability: { all: '全部', trading: '交易', readonly: '仅数据' },
+    filterAssets: '资产',
+    filterAlpha: '名称',
     kinds: {
       broker: '券商',
       exchange: '交易所',
@@ -1219,6 +1228,9 @@ export const zh: SiteContent = {
       knowledge: '知识',
       news: '新闻',
       geo: '地理与交通',
+      analytics: '分析',
+      observability: '可观测性',
+      payments: '支付',
     },
     assets: {
       equities: '股票',
@@ -1234,6 +1246,7 @@ export const zh: SiteContent = {
     openDetails: '查看详情',
     comingSoon: '即将推出',
     comingSoonHint: '此连接器尚未在应用中开放。',
+    tradingBadge: '交易',
     connect: '在 Nexow 中连接',
     visitWebsite: '访问网站',
     close: '关闭',

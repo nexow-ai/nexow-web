@@ -175,6 +175,12 @@ export const es: SiteContent = {
           body: 'Una barra de herramientas configurable en la cabecera para acciones del lienzo, y un Dock translúcido para Copilot, paneles, notificaciones y mensajes.',
         },
       ],
+      map: {
+        hint: 'Selecciona un nodo para explorar una superficie — luego abre la app o lee más.',
+        moreLabel: 'Más info',
+        openLabel: 'Abrir en la app',
+        closeLabel: 'Cerrar',
+      },
       groups: [
         {
           title: 'Construir',
@@ -1193,6 +1199,9 @@ export const es: SiteContent = {
     all: 'Todos',
     categories: { finance: 'Finanzas', wallets: 'Wallets', services: 'Servicios', data: 'Datos', socials: 'Redes' },
     status: { all: 'Todos', live: 'En vivo', soon: 'Pronto' },
+    capability: { all: 'Todos', trading: 'Trading', readonly: 'Solo datos' },
+    filterAssets: 'Activos',
+    filterAlpha: 'Nombre',
     kinds: {
       broker: 'Broker',
       exchange: 'Exchange',
@@ -1219,6 +1228,9 @@ export const es: SiteContent = {
       knowledge: 'Conocimiento',
       news: 'Noticias',
       geo: 'Geo y transporte',
+      analytics: 'Analítica',
+      observability: 'Observabilidad',
+      payments: 'Pagos',
     },
     assets: {
       equities: 'Acciones',
@@ -1234,6 +1246,7 @@ export const es: SiteContent = {
     openDetails: 'Ver detalles',
     comingSoon: 'Próximamente',
     comingSoonHint: 'Este conector aún no está disponible en la app.',
+    tradingBadge: 'Trading',
     connect: 'Conectar en Nexow',
     visitWebsite: 'Visitar sitio web',
     close: 'Cerrar',

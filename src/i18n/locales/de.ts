@@ -175,6 +175,12 @@ export const de: SiteContent = {
           body: 'Eine konfigurierbare Header-Toolbar für Canvas-Aktionen und ein gläsernes Dock für Copilot, Panels, Benachrichtigungen und Nachrichten.',
         },
       ],
+      map: {
+        hint: 'Wähle einen Knoten, um eine Oberfläche zu erkunden — dann App öffnen oder mehr lesen.',
+        moreLabel: 'Mehr erfahren',
+        openLabel: 'In der App öffnen',
+        closeLabel: 'Schließen',
+      },
       groups: [
         {
           title: 'Bauen',
@@ -1193,6 +1199,9 @@ export const de: SiteContent = {
     all: 'Alle',
     categories: { finance: 'Finanzen', wallets: 'Wallets', services: 'Dienste', data: 'Daten', socials: 'Socials' },
     status: { all: 'Alle', live: 'Live', soon: 'Demnächst' },
+    capability: { all: 'Alle', trading: 'Trading', readonly: 'Nur Daten' },
+    filterAssets: 'Assets',
+    filterAlpha: 'Name',
     kinds: {
       broker: 'Broker',
       exchange: 'Börse',
@@ -1219,6 +1228,9 @@ export const de: SiteContent = {
       knowledge: 'Wissen',
       news: 'Nachrichten',
       geo: 'Geo & Verkehr',
+      analytics: 'Analytik',
+      observability: 'Observability',
+      payments: 'Zahlungen',
     },
     assets: {
       equities: 'Aktien',
@@ -1234,6 +1246,7 @@ export const de: SiteContent = {
     openDetails: 'Details ansehen',
     comingSoon: 'Demnächst',
     comingSoonHint: 'Dieser Connector ist in der App noch nicht verfügbar.',
+    tradingBadge: 'Trading',
     connect: 'In Nexow verbinden',
     visitWebsite: 'Website besuchen',
     close: 'Schließen',

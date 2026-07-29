@@ -202,16 +202,42 @@ export const en: SiteContent = {
           body: 'Free accounts with credits, reputation, usage, plans, notices, App Lock and multi-account switching.',
         },
         {
+          icon: 'library',
+          title: 'Widget library',
+          body: 'Save any widget to your library and drop it into another dashboard in one click — versions and logs stay with it.',
+        },
+        {
+          icon: 'globe',
+          title: 'Social media apps',
+          body: 'Pull live feeds and signals from X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon and more into your widgets.',
+        },
+        {
           icon: 'moon',
-          title: 'Themes & settings',
-          body: 'Theme the whole chrome — colors, fonts, density, patterns — plus shortcuts, security and install preferences.',
+          title: 'Themes',
+          body: 'Build appearance themes for colors, fonts, radius, density, glass and patterns — publish or install from the marketplace.',
+        },
+        {
+          icon: 'sync',
+          title: 'Settings',
+          body: 'General preferences, keyboard shortcuts, security, backup/restore and PWA install controls in the Settings panel.',
+        },
+        {
+          icon: 'sliders',
+          title: 'Toolbar',
+          body: 'Add widgets, auto-layout, screenshot, undo/redo, lock, color mode, credits and sync — show or hide each action.',
         },
         {
           icon: 'grid',
-          title: 'Toolbar & dock',
-          body: 'A configurable header toolbar for canvas actions, and a glassy dock for Copilot, panels, notifications and messages.',
+          title: 'Dock',
+          body: 'A draggable glass pill for Copilot, panel shortcuts, notifications and messages — auto-hides into a puck when idle.',
         },
       ],
+      map: {
+        hint: 'Select a node to explore a surface — then open the app or read more.',
+        moreLabel: 'More info',
+        openLabel: 'Open in app',
+        closeLabel: 'Close',
+      },
       groups: [
         {
           title: 'Build',
@@ -293,8 +319,13 @@ export const en: SiteContent = {
             },
             {
               icon: 'moon',
-              title: 'Themes & settings',
-              body: 'Theme the whole chrome — colors, fonts, density, patterns — plus shortcuts, security and install preferences.',
+              title: 'Themes',
+              body: 'Build appearance themes for colors, fonts, radius, density, glass and patterns — publish or install from the marketplace.',
+            },
+            {
+              icon: 'sync',
+              title: 'Settings',
+              body: 'General preferences, keyboard shortcuts, security, backup/restore and PWA install controls in the Settings panel.',
             },
             {
               icon: 'sliders',
@@ -1331,6 +1362,9 @@ export const en: SiteContent = {
     all: 'All',
     categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Data', socials: 'Socials' },
     status: { all: 'All', live: 'Live', soon: 'Soon' },
+    capability: { all: 'All', trading: 'Trading', readonly: 'Data only' },
+    filterAssets: 'Assets',
+    filterAlpha: 'Name',
     kinds: {
       broker: 'Broker',
       exchange: 'Exchange',
@@ -1357,6 +1391,9 @@ export const en: SiteContent = {
       knowledge: 'Knowledge',
       news: 'News',
       geo: 'Geo & transit',
+      analytics: 'Analytics',
+      observability: 'Observability',
+      payments: 'Payments',
     },
     assets: {
       equities: 'Equities',
@@ -1372,6 +1409,7 @@ export const en: SiteContent = {
     openDetails: 'View details',
     comingSoon: 'Coming soon',
     comingSoonHint: 'This connector isn’t available in the app yet.',
+    tradingBadge: 'Trading',
     connect: 'Connect in Nexow',
     visitWebsite: 'Visit website',
     close: 'Close',

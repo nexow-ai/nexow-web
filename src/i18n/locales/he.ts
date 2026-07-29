@@ -175,6 +175,12 @@ export const he: SiteContent = {
           body: 'toolbar ניתן להגדרה לפעולות קנבס, ו-Dock זכוכיתי ל-Copilot, פאנלים, התראות והודעות.',
         },
       ],
+      map: {
+        hint: 'בחרו צומת כדי לחקור משטח — ואז פתחו באפליקציה או קראו עוד.',
+        moreLabel: 'מידע נוסף',
+        openLabel: 'פתח באפליקציה',
+        closeLabel: 'סגור',
+      },
       groups: [
         {
           title: 'בנו',
@@ -1193,6 +1199,9 @@ export const he: SiteContent = {
     all: 'הכל',
     categories: { finance: 'מימון', wallets: 'ארנקים', services: 'שירותים', data: 'נתונים', socials: 'חברתיות' },
     status: { all: 'הכל', live: 'חי', soon: 'בקרוב' },
+    capability: { all: 'הכל', trading: 'מסחר', readonly: 'נתונים בלבד' },
+    filterAssets: 'נכסים',
+    filterAlpha: 'שם',
     kinds: {
       broker: 'ברוקר',
       exchange: 'בורסה',
@@ -1219,6 +1228,9 @@ export const he: SiteContent = {
       knowledge: 'ידע',
       news: 'חדשות',
       geo: 'גיאו ותחבורה',
+      analytics: 'אנליטיקה',
+      observability: 'Observability',
+      payments: 'תשלומים',
     },
     assets: {
       equities: 'מניות',
@@ -1234,6 +1246,7 @@ export const he: SiteContent = {
     openDetails: 'צפייה בפרטים',
     comingSoon: 'בקרוב',
     comingSoonHint: 'המחבר עדיין לא זמין באפליקציה.',
+    tradingBadge: 'מסחר',
     connect: 'התחברות ב-Nexow',
     visitWebsite: 'ביקור באתר',
     close: 'סגירה',

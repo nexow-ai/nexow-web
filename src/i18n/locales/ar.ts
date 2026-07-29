@@ -175,6 +175,12 @@ export const ar: SiteContent = {
           body: 'شريط toolbar قابل للضبط لإجراءات اللوحة، و Dock زجاجي لـ Copilot واللوحات والإشعارات والرسائل.',
         },
       ],
+      map: {
+        hint: 'اختر عقدة لاستكشاف سطح — ثم افتح التطبيق أو اقرأ المزيد.',
+        moreLabel: 'المزيد',
+        openLabel: 'افتح في التطبيق',
+        closeLabel: 'إغلاق',
+      },
       groups: [
         {
           title: 'ابنِ',
@@ -1193,6 +1199,9 @@ export const ar: SiteContent = {
     all: 'كل',
     categories: { finance: 'التمويل', wallets: 'المحافظ', services: 'الخدمات', data: 'البيانات', socials: 'الاجتماعيات' },
     status: { all: 'كل', live: 'حي', soon: 'قريبا' },
+    capability: { all: 'الكل', trading: 'تداول', readonly: 'بيانات فقط' },
+    filterAssets: 'الأصول',
+    filterAlpha: 'الاسم',
     kinds: {
       broker: 'وسيط',
       exchange: 'التبادل',
@@ -1219,6 +1228,9 @@ export const ar: SiteContent = {
       knowledge: 'المعرفة',
       news: 'الأخبار',
       geo: 'الجغرافيا والنقل',
+      analytics: 'التحليلات',
+      observability: 'المراقبة',
+      payments: 'المدفوعات',
     },
     assets: {
       equities: 'الأسهم',
@@ -1234,6 +1246,7 @@ export const ar: SiteContent = {
     openDetails: 'عرض التفاصيل',
     comingSoon: 'قريبًا',
     comingSoonHint: 'هذا الموصل غير متاح بعد في التطبيق.',
+    tradingBadge: 'تداول',
     connect: 'الاتصال في Nexow',
     visitWebsite: 'زيارة الموقع',
     close: 'إغلاق',

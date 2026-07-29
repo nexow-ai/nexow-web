@@ -175,6 +175,12 @@ export const el: SiteContent = {
           body: 'Ρυθμιζόμενο toolbar κεφαλίδας για ενέργειες καμβά και γυάλινο Dock για Copilot, πάνελ, ειδοποιήσεις και μηνύματα.',
         },
       ],
+      map: {
+        hint: 'Επίλεξε έναν κόμβο για να εξερευνήσεις μια επιφάνεια — μετά άνοιξε την εφαρμογή ή διάβασε περισσότερα.',
+        moreLabel: 'Περισσότερα',
+        openLabel: 'Άνοιγμα στην εφαρμογή',
+        closeLabel: 'Κλείσιμο',
+      },
       groups: [
         {
           title: 'Δημιουργία',
@@ -944,6 +950,9 @@ export const el: SiteContent = {
     all: 'Όλα',
     categories: { finance: 'Χρηματοοικονομικά', wallets: 'Πορτοφόλια', services: 'Υπηρεσίες', data: 'Δεδομένα', socials: 'Κοινωνικά' },
     status: { all: 'Όλα', live: 'Ζωντανό', soon: 'Σύντομα' },
+    capability: { all: 'Όλα', trading: 'Συναλλαγές', readonly: 'Μόνο δεδομένα' },
+    filterAssets: 'Περιουσιακά',
+    filterAlpha: 'Όνομα',
     kinds: {
       broker: 'Μεσίτης',
       exchange: 'Ανταλλαγή',
@@ -970,6 +979,9 @@ export const el: SiteContent = {
       knowledge: 'Γνώση',
       news: 'Ειδήσεις',
       geo: 'Γεω & μεταφορές',
+      analytics: 'Αναλυτικά',
+      observability: 'Παρατηρησιμότητα',
+      payments: 'Πληρωμές',
     },
     assets: {
       equities: 'Μετοχές',
@@ -985,6 +997,7 @@ export const el: SiteContent = {
     openDetails: 'Προβολή λεπτομερειών',
     comingSoon: 'Σύντομα',
     comingSoonHint: 'Αυτός ο σύνδεσμος δεν είναι ακόμη διαθέσιμος στην εφαρμογή.',
+    tradingBadge: 'Συναλλαγές',
     connect: 'Σύνδεση στο Nexow',
     visitWebsite: 'Επίσκεψη ιστοτόπου',
     close: 'Κλείσιμο',

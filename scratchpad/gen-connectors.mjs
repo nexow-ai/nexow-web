@@ -131,29 +131,41 @@ const bannerOf = (v) => {
   return `/connectors/banners/${file}`;
 };
 
-const connectors = venues
-  .map((v) => ({
-    id: v.id,
-    name: v.name,
-    category: categoryOf(v),
-    kind: kindOf(v),
-    status: v.status === 'available' ? 'live' : 'soon',
-    trading: !!v.trading,
-    assets: (v.asset_classes ?? []).filter((a) => SITE_ASSETS.has(a)),
-    url: urlOf(v),
-    logo: logoOf(v),
-    banner: bannerOf(v),
-    logoFit: v.logoFit === 'contain' ? 'contain' : 'cover',
-    notes: typeof v.notes === 'string' ? v.notes : '',
-  }))
-  // Live connectors lead the gallery; alphabetical by display name within each group.
-  .sort((a, b) =>
-    a.status !== b.status
-      ? a.status === 'live'
-        ? -1
-        : 1
-      : a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
-  );
+const connectors = venues.map((v) => ({
+  id: v.id,
+  name: v.name,
+  category: categoryOf(v),
+  kind: kindOf(v),
+  status: v.status === 'available' ? 'live' : 'soon',
+  trading: !!v.trading,
+  assets: (v.asset_classes ?? []).filter((a) => SITE_ASSETS.has(a)),
+  url: urlOf(v),
+  logo: logoOf(v),
+  banner: bannerOf(v),
+  logoFit: v.logoFit === 'contain' ? 'contain' : 'cover',
+  notes: typeof v.notes === 'string' ? v.notes : '',
+}));
+
+// Site-only Coming Soon venues (dashboards & ops) that are not yet in the app catalog.
+const EXTRA_SOON_PATH = 'src/data/coming-soon-connectors.json';
+if (existsSync(EXTRA_SOON_PATH)) {
+  const extras = JSON.parse(readFileSync(EXTRA_SOON_PATH, 'utf8'));
+  const seen = new Set(connectors.map((c) => c.id));
+  for (const extra of extras) {
+    if (seen.has(extra.id)) continue;
+    connectors.push(extra);
+    seen.add(extra.id);
+  }
+}
+
+// Live connectors lead the gallery; alphabetical by display name within each group.
+connectors.sort((a, b) =>
+  a.status !== b.status
+    ? a.status === 'live'
+      ? -1
+      : 1
+    : a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+);
 
 const header = `// AUTO-GENERATED from the Nexow app connector catalog. Do not edit by hand.
 // Regenerate with scratchpad/gen-connectors.mjs.

@@ -6,6 +6,7 @@ import CtaBand from '../sections/CtaBand.astro';
 import ConnectorCard from '../ConnectorCard.astro';
 import ConnectorModal from '../ConnectorModal.astro';
 import Icon from '../Icon.astro';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).connectorsPage;
+const badgeIcon = getPageBadgeIcon('/connectors');
 
 const categoryFilters = [
   { key: 'all', label: t.all },
@@ -26,6 +28,34 @@ const statusFilters = [
   { key: 'all', label: t.status.all },
   { key: 'live', label: t.status.live },
   { key: 'soon', label: t.status.soon },
+];
+const capabilityFilters = [
+  { key: 'all', label: t.capability.all },
+  { key: 'trading', label: t.capability.trading },
+  { key: 'readonly', label: t.capability.readonly },
+];
+const assetKeys = [
+  'equities',
+  'indices',
+  'fixed_income',
+  'fx',
+  'commodities',
+  'crypto',
+  'volatility',
+  'prediction_markets',
+] as const;
+const assetFilters = [
+  { key: 'all', label: t.all },
+  ...assetKeys.map((key) => ({ key, label: t.assets[key] ?? key })),
+];
+const alphaFilters = [
+  { key: 'all', label: t.all, min: '', max: '' },
+  { key: 'a-d', label: 'A–D', min: 'A', max: 'D' },
+  { key: 'e-h', label: 'E–H', min: 'E', max: 'H' },
+  { key: 'i-l', label: 'I–L', min: 'I', max: 'L' },
+  { key: 'm-p', label: 'M–P', min: 'M', max: 'P' },
+  { key: 'q-t', label: 'Q–T', min: 'Q', max: 'T' },
+  { key: 'u-z', label: 'U–Z', min: 'U', max: 'Z' },
 ];
 
 /** Catalog payload for the client modal (localized labels baked in). */
@@ -56,6 +86,11 @@ const itemListSchema = {
     url: c.url,
   })),
 };
+
+const pillBtn =
+  'rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white';
+const chipBtn =
+  'rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white';
 ---
 
 <Layout
@@ -80,6 +115,7 @@ const itemListSchema = {
     <div class="container-page relative text-center">
       <span class="eyebrow inline-flex items-center gap-2 text-brand-700">
         <span class="h-px w-6 bg-brand-500/50"></span>
+        {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
         <span class="h-px w-6 bg-brand-500/50"></span>
       </span>
@@ -97,9 +133,9 @@ const itemListSchema = {
     <div class="container-page">
       <!-- Controls -->
       <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        <div class="flex flex-col gap-3">
           <!-- Search + mobile filter toggle -->
-          <div class="flex w-full items-center gap-2 lg:max-w-xs">
+          <div class="flex w-full items-center gap-2 lg:max-w-sm">
             <div class="relative min-w-0 flex-1">
               <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-500" />
               <input
@@ -139,34 +175,91 @@ const itemListSchema = {
             class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr] lg:grid-rows-[1fr] lg:data-[open=false]:grid-rows-[1fr]"
           >
             <div class="min-h-0 overflow-hidden">
-              <div class="flex flex-wrap items-center gap-3 pt-3 lg:gap-4 lg:pt-0">
-                <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
-                  {
-                    categoryFilters.map((f) => (
-                      <button
-                        type="button"
-                        data-filter-category={f.key}
-                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                        class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
-                      >
-                        {f.label}
-                      </button>
-                    ))
-                  }
+              <div class="flex flex-col gap-2.5 pt-1 lg:pt-0">
+                <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+                  <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+                    {
+                      categoryFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-category={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+                    {
+                      statusFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-status={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
+                    {
+                      capabilityFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-capability={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
                 </div>
-                <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
-                  {
-                    statusFilters.map((f) => (
-                      <button
-                        type="button"
-                        data-filter-status={f.key}
-                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                        class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
-                      >
-                        {f.label}
-                      </button>
-                    ))
-                  }
+
+                <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+                  <div
+                    class="inline-flex max-w-full flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm"
+                    role="group"
+                    aria-label={t.filterAssets}
+                  >
+                    {
+                      assetFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-asset={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={chipBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div
+                    class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm"
+                    role="group"
+                    aria-label={t.filterAlpha}
+                  >
+                    {
+                      alphaFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-alpha={f.key}
+                          data-alpha-min={f.min}
+                          data-alpha-max={f.max}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={chipBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -196,6 +289,47 @@ const itemListSchema = {
   <ConnectorModal t={t} />
   <CtaBand lang={lang} />
 </Layout>
+
+<style is:global>
+  @keyframes connector-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes connector-card-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  .connector-card.is-entering {
+    animation: connector-card-in 0.34s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) both;
+    animation-delay: var(--conn-stagger, 0ms);
+  }
+
+  .connector-card.is-exiting {
+    animation: connector-card-out 0.18s ease-in both;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .connector-card.is-entering,
+    .connector-card.is-exiting {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
   type CatalogItem = {
@@ -242,6 +376,9 @@ const itemListSchema = {
     const filtersBadge = root.querySelector<HTMLElement>('#connector-filters-badge');
     const catBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-category]'));
     const statusBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-status]'));
+    const capabilityBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-capability]'));
+    const assetBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-asset]'));
+    const alphaBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-alpha]'));
     const tmpl = countEl?.dataset.template ?? '{n}';
 
     const modal = document.getElementById('connector-modal');
@@ -265,8 +402,19 @@ const itemListSchema = {
 
     let category = 'all';
     let status = 'all';
+    let capability = 'all';
+    let asset = 'all';
+    let alpha = 'all';
+    let alphaMin = '';
+    let alphaMax = '';
     let query = '';
     let open = false;
+    let searchTimer: number | undefined;
+    let exitTimers = new WeakMap<HTMLElement, number>();
+    let applyGen = 0;
+
+    const prefersReducedMotion = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const syncFiltersOpen = (next: boolean) => {
       filtersEl?.setAttribute('data-open', String(next));
@@ -274,23 +422,93 @@ const itemListSchema = {
     };
 
     const syncFiltersBadge = () => {
-      const active = category !== 'all' || status !== 'all';
+      const active =
+        category !== 'all' ||
+        status !== 'all' ||
+        capability !== 'all' ||
+        asset !== 'all' ||
+        alpha !== 'all';
       filtersBadge?.classList.toggle('hidden', !active);
     };
 
+    const matches = (card: HTMLElement) => {
+      const okCat = category === 'all' || card.dataset.category === category;
+      const okStatus = status === 'all' || card.dataset.status === status;
+      const okCap =
+        capability === 'all' ||
+        (capability === 'trading' && card.dataset.trading === 'yes') ||
+        (capability === 'readonly' && card.dataset.trading === 'no');
+      const okAsset =
+        asset === 'all' ||
+        (card.dataset.assets ?? '')
+          .split(/\s+/)
+          .filter(Boolean)
+          .includes(asset);
+      const letter = (card.dataset.letter ?? '').toUpperCase();
+      const okAlpha =
+        alpha === 'all' ||
+        (letter >= alphaMin && letter <= alphaMax);
+      const okQuery = query === '' || (card.dataset.search ?? '').includes(query);
+      return okCat && okStatus && okCap && okAsset && okAlpha && okQuery;
+    };
+
     const apply = () => {
+      const gen = ++applyGen;
+      const reduce = prefersReducedMotion();
       let n = 0;
+      let enterIdx = 0;
+
       for (const card of cards) {
-        const okCat = category === 'all' || card.dataset.category === category;
-        const okStatus = status === 'all' || card.dataset.status === status;
-        const okQuery = query === '' || (card.dataset.search ?? '').includes(query);
-        const show = okCat && okStatus && okQuery;
-        card.classList.toggle('hidden', !show);
-        if (show) n++;
+        const show = matches(card);
+        const wasHidden = card.classList.contains('hidden');
+        const pendingExit = exitTimers.get(card);
+
+        if (show) {
+          if (pendingExit !== undefined) {
+            window.clearTimeout(pendingExit);
+            exitTimers.delete(card);
+          }
+          card.classList.remove('is-exiting', 'hidden');
+          if (!wasHidden || reduce) {
+            card.classList.remove('is-entering');
+            card.style.removeProperty('--conn-stagger');
+          } else {
+            card.classList.remove('is-entering');
+            card.style.setProperty('--conn-stagger', `${Math.min(enterIdx, 24) * 22}ms`);
+            void card.offsetWidth;
+            card.classList.add('is-entering');
+          }
+          enterIdx++;
+          n++;
+        } else if (!wasHidden) {
+          if (reduce) {
+            card.classList.add('hidden');
+            card.classList.remove('is-entering', 'is-exiting');
+            card.style.removeProperty('--conn-stagger');
+          } else if (!card.classList.contains('is-exiting')) {
+            card.classList.remove('is-entering');
+            card.classList.add('is-exiting');
+            const timer = window.setTimeout(() => {
+              if (gen !== applyGen) return;
+              if (!matches(card)) {
+                card.classList.add('hidden');
+                card.classList.remove('is-exiting');
+                card.style.removeProperty('--conn-stagger');
+              }
+              exitTimers.delete(card);
+            }, 180);
+            exitTimers.set(card, timer);
+          }
+        }
       }
+
       if (countEl) countEl.textContent = tmpl.replace('{n}', String(n));
       emptyEl?.classList.toggle('hidden', n !== 0);
       syncFiltersBadge();
+    };
+
+    const setPressed = (btns: HTMLButtonElement[], active: HTMLButtonElement) => {
+      btns.forEach((x) => x.setAttribute('aria-pressed', String(x === active)));
     };
 
     const populate = (item: CatalogItem) => {
@@ -354,9 +572,6 @@ const itemListSchema = {
       }
     };
 
-    const prefersReducedMotion = () =>
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     const setOpen = (next: boolean, origin?: DOMRect | null) => {
       if (!modal || !panel) return;
       open = next;
@@ -417,17 +632,23 @@ const itemListSchema = {
     searchEl?.addEventListener(
       'input',
       () => {
-        query = (searchEl.value ?? '').trim().toLowerCase();
-        apply();
+        const next = (searchEl.value ?? '').trim().toLowerCase();
+        window.clearTimeout(searchTimer);
+        // Light debounce keeps typing snappy without reflowing on every key.
+        searchTimer = window.setTimeout(() => {
+          query = next;
+          apply();
+        }, 60);
       },
       { signal },
     );
+
     catBtns.forEach((b) =>
       b.addEventListener(
         'click',
         () => {
           category = b.dataset.filterCategory ?? 'all';
-          catBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          setPressed(catBtns, b);
           apply();
         },
         { signal },
@@ -438,7 +659,42 @@ const itemListSchema = {
         'click',
         () => {
           status = b.dataset.filterStatus ?? 'all';
-          statusBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          setPressed(statusBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+    capabilityBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          capability = b.dataset.filterCapability ?? 'all';
+          setPressed(capabilityBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+    assetBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          asset = b.dataset.filterAsset ?? 'all';
+          setPressed(assetBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+    alphaBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          alpha = b.dataset.filterAlpha ?? 'all';
+          alphaMin = (b.dataset.alphaMin ?? '').toUpperCase();
+          alphaMax = (b.dataset.alphaMax ?? '').toUpperCase();
+          setPressed(alphaBtns, b);
           apply();
         },
         { signal },

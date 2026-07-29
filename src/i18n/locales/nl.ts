@@ -175,6 +175,12 @@ export const nl: SiteContent = {
           body: 'Een configureerbare werkbalk in de header voor canvas-acties, en een glazen Dock voor Copilot, panelen, meldingen en berichten.',
         },
       ],
+      map: {
+        hint: 'Selecteer een knooppunt om een oppervlak te verkennen — open daarna de app of lees meer.',
+        moreLabel: 'Meer info',
+        openLabel: 'Open in de app',
+        closeLabel: 'Sluiten',
+      },
       groups: [
         {
           title: 'Bouwen',
@@ -1193,6 +1199,9 @@ export const nl: SiteContent = {
     all: 'Alles',
     categories: { finance: 'Financiën', wallets: 'Wallets', services: 'Diensten', data: 'Gegevens', socials: 'Sociaal' },
     status: { all: 'Alles', live: 'Live', soon: 'Binnenkort' },
+    capability: { all: 'Alle', trading: 'Trading', readonly: 'Alleen data' },
+    filterAssets: 'Assets',
+    filterAlpha: 'Naam',
     kinds: {
       broker: 'Makelaar',
       exchange: 'Beurs',
@@ -1219,6 +1228,9 @@ export const nl: SiteContent = {
       knowledge: 'Kennis',
       news: 'Nieuws',
       geo: 'Geo & vervoer',
+      analytics: 'Analytics',
+      observability: 'Observability',
+      payments: 'Betalingen',
     },
     assets: {
       equities: 'Aandelen',
@@ -1234,6 +1246,7 @@ export const nl: SiteContent = {
     openDetails: 'Details bekijken',
     comingSoon: 'Binnenkort',
     comingSoonHint: 'Deze connector is nog niet beschikbaar in de app.',
+    tradingBadge: 'Trading',
     connect: 'Verbinden in Nexow',
     visitWebsite: 'Bezoek website',
     close: 'Sluiten',

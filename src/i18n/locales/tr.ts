@@ -175,6 +175,12 @@ export const tr: SiteContent = {
           body: 'Tuval eylemleri için yapılandırılabilir üst toolbar ve Copilot, paneller, bildirimler ve mesajlar için cam Dock.',
         },
       ],
+      map: {
+        hint: 'Bir yüzeyi keşfetmek için düğüm seç — sonra uygulamada aç veya daha fazla oku.',
+        moreLabel: 'Daha fazla',
+        openLabel: 'Uygulamada aç',
+        closeLabel: 'Kapat',
+      },
       groups: [
         {
           title: 'Oluştur',
@@ -944,6 +950,9 @@ export const tr: SiteContent = {
     all: 'Tümü',
     categories: { finance: 'Finans', wallets: 'Cüzdanlar', services: 'Hizmetler', data: 'Veri', socials: 'Sosyal Ortamlar' },
     status: { all: 'Tümü', live: 'Canlı', soon: 'Yakında' },
+    capability: { all: 'Tümü', trading: 'Alım satım', readonly: 'Yalnızca veri' },
+    filterAssets: 'Varlıklar',
+    filterAlpha: 'Ad',
     kinds: {
       broker: 'Aracı',
       exchange: 'Borsa',
@@ -970,6 +979,9 @@ export const tr: SiteContent = {
       knowledge: 'Bilgi',
       news: 'Haberler',
       geo: 'Coğrafya ve Ulaşım',
+      analytics: 'Analitik',
+      observability: 'Gözlemlenebilirlik',
+      payments: 'Ödemeler',
     },
     assets: {
       equities: 'Hisse Senedi',
@@ -985,6 +997,7 @@ export const tr: SiteContent = {
     openDetails: 'Ayrıntıları gör',
     comingSoon: 'Yakında',
     comingSoonHint: 'Bu bağlayıcı henüz uygulamada kullanılamıyor.',
+    tradingBadge: 'Alım satım',
     connect: 'Nexow\'da bağlan',
     visitWebsite: 'Siteyi ziyaret et',
     close: 'Kapat',
