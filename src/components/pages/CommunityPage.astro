@@ -352,9 +352,9 @@ const hrefClaim = claimHandleAppUrl();
         }
       </div>
 
-      <div class="mt-24 rounded-[2rem] border border-brand-200/50 bg-white/70 dark:bg-white/[0.06] p-8 shadow-sm backdrop-blur sm:p-12">
+      <div class="mt-24 rounded-[2rem] border border-brand-200/50 bg-white/70 p-8 shadow-sm backdrop-blur sm:p-12 dark:border-white/8 dark:bg-white/[0.04]">
         <div class="mx-auto max-w-2xl text-center">
-          <h3 class="font-display text-2xl font-semibold tracking-tight text-ink-950 dark:text-white sm:text-3xl md:text-[2.15rem]" data-motion="rise">
+          <h3 class="font-display text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl md:text-[2.15rem] dark:text-white" data-motion="rise">
             <span class="text-gradient">{t.marketplace.railTitle}</span>
           </h3>
           <p class="mt-4 text-base leading-relaxed text-ink-600 dark:text-ink-300">{t.marketplace.railBody}</p>
@@ -365,8 +365,8 @@ const hrefClaim = claimHandleAppUrl();
         <ol class="mt-14 grid gap-4 lg:grid-cols-4">
           {
             t.marketplace.railSteps.map((s) => (
-              <li class="group rounded-2xl border border-ink-900/8 dark:border-white/8 bg-white/90 dark:bg-white/[0.06] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md">
-                <span class="font-mono text-xs text-brand-600">{s.n}</span>
+              <li class="group rounded-2xl border border-ink-900/8 bg-white/90 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md dark:border-white/10 dark:bg-white/[0.04]">
+                <span class="font-mono text-xs text-brand-600 dark:text-brand-300">{s.n}</span>
                 <h4 class="mt-2 font-display text-base font-semibold text-ink-950 dark:text-white">{s.title}</h4>
                 <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{s.body}</p>
               </li>
@@ -401,9 +401,9 @@ const hrefClaim = claimHandleAppUrl();
                 href={hrefMarketplace}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group rounded-2xl border border-brand-200/60 bg-gradient-to-br from-white to-brand-50/60 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/50 hover:shadow-md"
+                class="group rounded-2xl border border-brand-200/60 bg-gradient-to-br from-white to-brand-50/60 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/50 hover:shadow-md dark:border-white/8 dark:bg-white/[0.04] dark:bg-none"
               >
-                <p class="font-display text-sm font-semibold text-ink-950 dark:text-white transition-colors group-hover:text-brand-800 dark:group-hover:text-brand-300 dark:text-brand-300">{k.label}</p>
+                <p class="font-display text-sm font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{k.label}</p>
                 <p class="mt-2 text-xs leading-relaxed text-ink-600 dark:text-ink-300">{k.body}</p>
               </a>
             ))
@@ -479,7 +479,7 @@ const hrefClaim = claimHandleAppUrl();
       <div class="mt-20 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur sm:p-9">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <h3 class="font-mono text-xs uppercase tracking-widest text-ink-400">{t.dao.previewTitle}</h3>
-          <span class="rounded-full bg-white/8 dark:bg-white/[0.04] px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{t.dao.previewBadge}</span>
+          <span class="rounded-full bg-white/8 px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{t.dao.previewBadge}</span>
         </div>
         <ul class="mt-7 grid gap-4 sm:grid-cols-2">
           {
