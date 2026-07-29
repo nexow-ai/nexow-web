@@ -1,0 +1,666 @@
+---
+/**
+ * One animated SVG scene per use case — the picture that explains what the bot
+ * or agent in that card actually does. All eight share a 160×96 viewBox, a
+ * stroke-first style and a calm ~6s loop, so a grid of them reads as one set.
+ *
+ * Animations idle until an ancestor picks up `.is-visible` from the scroll
+ * reveal, which keeps eight looping scenes off the compositor until they are
+ * on screen. Reduced motion freezes them on a legible first frame.
+ */
+import { ICON_PATHS } from './icon-paths';
+
+interface Props {
+  scene: string;
+  class?: string;
+}
+const { scene, class: className = '' } = Astro.props;
+
+/** Satellite positions for the socials scene. */
+const SOCIAL_NODES = [
+  { x: 26, y: 20 },
+  { x: 134, y: 20 },
+  { x: 26, y: 62 },
+  { x: 134, y: 62 },
+];
+/** The widget blocks that assemble on the execution scene. */
+const EXEC_BLOCKS = [
+  { x: 98, y: 18, w: 22, h: 20 },
+  { x: 124, y: 18, w: 22, h: 20 },
+  { x: 98, y: 42, w: 48, h: 18 },
+  { x: 98, y: 64, w: 22, h: 16 },
+  { x: 124, y: 64, w: 22, h: 16 },
+];
+/** Pipeline stages ahead of the store. */
+const PIPE_STAGES = [
+  { x: 10, icon: 'globe' },
+  { x: 50, icon: 'sliders' },
+];
+/** Candles leading up to the breakout. */
+const CANDLES = [
+  { x: 18, y: 52, h: 22 },
+  { x: 38, y: 46, h: 26 },
+  { x: 58, y: 56, h: 18 },
+  { x: 78, y: 44, h: 24 },
+  { x: 98, y: 50, h: 20 },
+  { x: 118, y: 38, h: 26 },
+];
+/** Curve from a socials satellite into the worker at the centre. */
+const socialWire = (x: number, y: number) => `M ${x} ${y} Q ${(x + 80) / 2} ${(y + 42) / 2 + 6} 80 42`;
+---
+
+<svg
+  viewBox="0 0 160 96"
+  fill="none"
+  class:list={['scene h-auto w-full', className]}
+  aria-hidden="true"
+>
+  {
+    scene === 'news' && (
+      <g>
+        <circle class="ln" cx="32" cy="48" r="21" />
+        <path class="ln" d="M11 48h42" />
+        <ellipse class="ln spin-meridian" cx="32" cy="48" rx="9" ry="21" />
+        <circle class="br-fill ping" cx="32" cy="48" r="4" />
+        {[14, 38, 62].map((y, i) => (
+          <g class="card" style={`--delay:${(i * 0.5).toFixed(2)}s`}>
+            <rect class="panel" x="64" y={y} width="86" height="20" rx="6" />
+            <rect class="br-fill" x="70" y={y + 6} width="9" height="8" rx="2" />
+            <rect class="bar" x="84" y={y + 7} width="46" height="2.5" rx="1.25" />
+            <rect class="bar dim" x="84" y={y + 12} width="30" height="2.5" rx="1.25" />
+          </g>
+        ))}
+      </g>
+    )
+  }
+
+  {
+    scene === 'social' && (
+      <g>
+        {SOCIAL_NODES.map((n, i) => (
+          <g>
+            <path class="ln" d={socialWire(n.x, n.y)} pathLength="100" />
+            <path
+              class="flow"
+              d={socialWire(n.x, n.y)}
+              pathLength="100"
+              style={`--delay:${(i * 0.45).toFixed(2)}s`}
+            />
+            <circle class="node" cx={n.x} cy={n.y} r="9" style={`--delay:${(i * 0.45).toFixed(2)}s`} />
+          </g>
+        ))}
+        <circle class="core-disc" cx="80" cy="42" r="14" />
+        <path class="glyph" d={ICON_PATHS.chat} transform="translate(80 42) scale(0.85) translate(-12 -12)" />
+        <rect class="bar" x="36" y="84" width="88" height="5" rx="2.5" />
+        <rect class="br-fill meter" x="36" y="84" width="88" height="5" rx="2.5" />
+      </g>
+    )
+  }
+
+  {
+    scene === 'monitor' && (
+      <g>
+        <rect class="panel" x="8" y="8" width="94" height="54" rx="7" />
+        <path
+          class="spark draw"
+          d="M16 50 L28 44 L38 47 L50 32 L62 38 L74 22 L86 27 L94 18"
+          pathLength="100"
+        />
+        <circle class="br-fill ping" cx="94" cy="18" r="3.5" />
+        <rect class="panel" x="108" y="8" width="44" height="25" rx="7" />
+        <rect class="bar" x="116" y="16" width="20" height="3" rx="1.5" />
+        <rect class="br-fill" x="116" y="23" width="28" height="4" rx="2" />
+        <rect class="panel alert" x="108" y="37" width="44" height="25" rx="7" />
+        <path class="glyph alert-glyph" d={ICON_PATHS.bell} transform="translate(130 49.5) scale(0.62) translate(-12 -12)" />
+        {[8, 38, 68, 98, 128].map((x, i) => (
+          <rect class="tile" x={x} y="70" width="24" height="18" rx="5" style={`--delay:${(i * 0.28).toFixed(2)}s`} />
+        ))}
+      </g>
+    )
+  }
+
+  {
+    scene === 'alerts' && (
+      <g>
+        <circle class="core-disc" cx="26" cy="48" r="17" />
+        <path class="glyph shake" d={ICON_PATHS.bell} transform="translate(26 48) scale(0.95) translate(-12 -12)" />
+        {[16, 48, 80].map((y, i) => (
+          <g>
+            <path class="ln" d={`M 45 48 C 66 48, 74 ${y} 100 ${y}`} pathLength="100" />
+            <path
+              class="flow"
+              d={`M 45 48 C 66 48, 74 ${y} 100 ${y}`}
+              pathLength="100"
+              style={`--delay:${(i * 0.4).toFixed(2)}s`}
+            />
+            <rect class="chip" x="102" y={y - 9} width="50" height="18" rx="6" style={`--delay:${(i * 0.4).toFixed(2)}s`} />
+            <rect class="bar" x="110" y={y - 1.5} width="26" height="3" rx="1.5" />
+          </g>
+        ))}
+      </g>
+    )
+  }
+
+  {
+    scene === 'reason' && (
+      <g>
+        <circle class="core-disc" cx="18" cy="48" r="10" />
+        {[18, 48, 78].map((y, i) => (
+          <g>
+            <path class="ln" d={`M 28 48 C 44 48, 50 ${y} 66 ${y}`} pathLength="100" />
+            <path class="flow" d={`M 28 48 C 44 48, 50 ${y} 66 ${y}`} pathLength="100" style={`--delay:${(i * 0.35).toFixed(2)}s`} />
+            <circle class="node" cx="78" cy={y} r="11" style={`--delay:${(i * 0.35).toFixed(2)}s`} />
+            <path class="ln" d={`M 90 ${y} C 106 ${y}, 112 48 128 48`} pathLength="100" />
+            <path class="flow" d={`M 90 ${y} C 106 ${y}, 112 48 128 48`} pathLength="100" style={`--delay:${(1.1 + i * 0.35).toFixed(2)}s`} />
+          </g>
+        ))}
+        <circle class="core-disc" cx="140" cy="48" r="12" />
+        <path class="glyph pop" d={ICON_PATHS.check} transform="translate(140 48) scale(0.7) translate(-12 -12)" />
+      </g>
+    )
+  }
+
+  {
+    scene === 'execute' && (
+      <g>
+        {[14, 42, 70].map((y, i) => (
+          <g class="row" style={`--delay:${(i * 0.55).toFixed(2)}s`}>
+            <rect class="panel" x="6" y={y} width="66" height="18" rx="6" />
+            <path class="glyph tick" d={ICON_PATHS.check} transform={`translate(17 ${y + 9}) scale(0.46) translate(-12 -12)`} />
+            <rect class="bar" x="27" y={y + 7.5} width="36" height="3" rx="1.5" />
+          </g>
+        ))}
+        <path class="ln" d="M 76 48 H 88" />
+        <path class="flow" d="M 74 48 H 90" pathLength="100" />
+        <rect class="panel" x="92" y="10" width="60" height="76" rx="8" />
+        {EXEC_BLOCKS.map((b, i) => (
+          <rect
+            class="block"
+            x={b.x}
+            y={b.y}
+            width={b.w}
+            height={b.h}
+            rx="4"
+            style={`--delay:${(0.6 + i * 0.28).toFixed(2)}s`}
+          />
+        ))}
+      </g>
+    )
+  }
+
+  {
+    scene === 'pipeline' && (
+      <g>
+        {PIPE_STAGES.map((s) => (
+          <g>
+            <rect class="panel" x={s.x} y="32" width="30" height="30" rx="8" />
+            <path
+              class="glyph"
+              d={ICON_PATHS[s.icon]}
+              transform={`translate(${s.x + 15} 47) scale(0.62) translate(-12 -12)`}
+            />
+          </g>
+        ))}
+        <path class="ln" d="M 42 47 H 48" />
+        <path class="ln" d="M 82 47 H 100" />
+        <path class="flow" d="M 40 47 H 50" pathLength="100" />
+        <path class="flow" d="M 80 47 H 102" pathLength="100" style="--delay:0.4s" />
+        <g>
+          <ellipse class="cyl" cx="126" cy="24" rx="24" ry="8" />
+          <path class="cyl" d="M102 24 v46 a24 8 0 0 0 48 0 V24" />
+          {[38, 50, 62].map((y, i) => (
+            <ellipse class="row-line" cx="126" cy={y} rx="24" ry="8" style={`--delay:${(0.7 + i * 0.45).toFixed(2)}s`} />
+          ))}
+        </g>
+      </g>
+    )
+  }
+
+  {
+    scene === 'markets' && (
+      <g>
+        <path class="thresh" d="M8 40 H152" />
+        {CANDLES.map((c, i) => (
+          <g class="candle" style={`--delay:${(i * 0.16).toFixed(2)}s`}>
+            <path class="wick" d={`M ${c.x} ${c.y - 7} V ${c.y + c.h + 6}`} />
+            <rect class="body" x={c.x - 5} y={c.y} width="10" height={c.h} rx="2" />
+          </g>
+        ))}
+        <g class="breakout">
+          <path class="wick" d="M138 12 V 70" />
+          <rect class="body up" x="133" y="18" width="10" height="46" rx="2" />
+        </g>
+        <circle class="br-fill ping" cx="138" cy="18" r="4" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .scene {
+    overflow: visible;
+  }
+
+  /* Structure */
+  .ln {
+    stroke: color-mix(in oklab, var(--color-ink-900) 16%, transparent);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+  .panel {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-ink-900) 11%, transparent);
+    stroke-width: 1.2;
+  }
+  .bar {
+    fill: color-mix(in oklab, var(--color-ink-900) 15%, transparent);
+  }
+  .bar.dim {
+    fill: color-mix(in oklab, var(--color-ink-900) 9%, transparent);
+  }
+  .br-fill {
+    fill: var(--color-brand-500);
+  }
+  .glyph {
+    stroke: var(--color-brand-700);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  .core-disc {
+    fill: color-mix(in oklab, var(--color-brand-50) 92%, white);
+    stroke: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
+    stroke-width: 1.3;
+  }
+  .node {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+    stroke-width: 1.3;
+    animation: node-pulse 3.6s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes node-pulse {
+    0%,
+    55%,
+    100% {
+      stroke: color-mix(in oklab, var(--color-brand-500) 32%, transparent);
+      transform: scale(1);
+    }
+    20% {
+      stroke: var(--color-brand-500);
+      transform: scale(1.14);
+    }
+  }
+
+  /* A dash travelling down a wire — the shared "data moving" motif. */
+  .flow {
+    stroke: var(--color-brand-500);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: 100;
+    animation: flow-run 2.6s linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes flow-run {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .ping {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ping 2.4s ease-out infinite;
+  }
+  @keyframes ping {
+    0% {
+      opacity: 1;
+      transform: scale(0.7);
+    }
+    60% {
+      opacity: 0.25;
+      transform: scale(1.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(0.7);
+    }
+  }
+
+  /* news */
+  .spin-meridian {
+    animation: meridian 5.5s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes meridian {
+    0%,
+    100% {
+      transform: scaleX(1);
+    }
+    50% {
+      transform: scaleX(0.12);
+    }
+  }
+  .card {
+    animation: card-in 5.4s var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes card-in {
+    0% {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+    14%,
+    72% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    88%,
+    100% {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+  }
+
+  /* social */
+  .meter {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: meter 4.2s var(--ease-out-expo) infinite;
+  }
+  @keyframes meter {
+    0%,
+    100% {
+      transform: scaleX(0.18);
+    }
+    45%,
+    70% {
+      transform: scaleX(0.82);
+    }
+  }
+
+  /* monitor */
+  .spark {
+    stroke: var(--color-brand-500);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .draw {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: draw 4.6s var(--ease-out-expo) infinite;
+  }
+  @keyframes draw {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    55%,
+    88% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: 100;
+    }
+  }
+  .alert {
+    animation: alert-flip 4.6s ease-in-out infinite;
+  }
+  @keyframes alert-flip {
+    0%,
+    52%,
+    100% {
+      fill: white;
+      stroke: color-mix(in oklab, var(--color-ink-900) 11%, transparent);
+    }
+    62%,
+    88% {
+      fill: color-mix(in oklab, var(--color-brand-50) 90%, white);
+      stroke: var(--color-brand-500);
+    }
+  }
+  .alert-glyph {
+    animation: alert-glyph 4.6s ease-in-out infinite;
+  }
+  @keyframes alert-glyph {
+    0%,
+    52%,
+    100% {
+      opacity: 0.3;
+    }
+    62%,
+    88% {
+      opacity: 1;
+    }
+  }
+  .tile {
+    fill: color-mix(in oklab, var(--color-brand-500) 12%, white);
+    stroke: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    stroke-width: 1;
+    animation: tile-lit 3.4s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tile-lit {
+    0%,
+    100% {
+      fill: color-mix(in oklab, var(--color-brand-500) 9%, white);
+    }
+    45% {
+      fill: color-mix(in oklab, var(--color-brand-500) 34%, white);
+    }
+  }
+
+  /* alerts */
+  .shake {
+    transform-box: fill-box;
+    transform-origin: center top;
+    animation: shake 3.2s ease-in-out infinite;
+  }
+  @keyframes shake {
+    0%,
+    72%,
+    100% {
+      transform: rotate(0deg);
+    }
+    78% {
+      transform: rotate(11deg);
+    }
+    84% {
+      transform: rotate(-9deg);
+    }
+    90% {
+      transform: rotate(5deg);
+    }
+  }
+  .chip {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-brand-500) 22%, transparent);
+    stroke-width: 1.2;
+    animation: chip-lit 2.6s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes chip-lit {
+    0%,
+    100% {
+      stroke: color-mix(in oklab, var(--color-brand-500) 20%, transparent);
+      fill: white;
+    }
+    55% {
+      stroke: var(--color-brand-500);
+      fill: color-mix(in oklab, var(--color-brand-50) 85%, white);
+    }
+  }
+
+  /* reason */
+  .pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pop 3.9s var(--ease-out-expo) infinite;
+  }
+  @keyframes pop {
+    0%,
+    58%,
+    100% {
+      opacity: 0.25;
+      transform: scale(0.8);
+    }
+    70%,
+    92% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* execute */
+  .tick {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: tick 4.4s var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tick {
+    0%,
+    8% {
+      stroke-dashoffset: 24;
+    }
+    24%,
+    88% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: 24;
+    }
+  }
+  .block {
+    fill: color-mix(in oklab, var(--color-brand-500) 16%, white);
+    stroke: color-mix(in oklab, var(--color-brand-500) 30%, transparent);
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: block-in 4.4s var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes block-in {
+    0%,
+    6% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    22%,
+    86% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+
+  /* pipeline */
+  .cyl {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-brand-500) 34%, transparent);
+    stroke-width: 1.3;
+  }
+  .row-line {
+    fill: none;
+    stroke: var(--color-brand-500);
+    stroke-width: 1.4;
+    opacity: 0;
+    animation: row-in 4.2s var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes row-in {
+    0%,
+    10% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    26%,
+    88% {
+      opacity: 0.75;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  /* markets */
+  .thresh {
+    stroke: var(--color-accent-500);
+    stroke-width: 1.3;
+    stroke-dasharray: 4 4;
+    opacity: 0.6;
+  }
+  .wick {
+    stroke: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .body {
+    fill: color-mix(in oklab, var(--color-ink-900) 12%, white);
+    stroke: color-mix(in oklab, var(--color-ink-900) 22%, transparent);
+    stroke-width: 1;
+  }
+  .candle {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: candle-in 4.8s var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes candle-in {
+    0%,
+    4% {
+      opacity: 0.15;
+      transform: scaleY(0.55);
+    }
+    18%,
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+  .body.up {
+    fill: color-mix(in oklab, var(--color-brand-500) 30%, white);
+    stroke: var(--color-brand-500);
+  }
+  .breakout {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: breakout 4.8s var(--ease-out-expo) infinite;
+  }
+  @keyframes breakout {
+    0%,
+    40% {
+      opacity: 0;
+      transform: scaleY(0.25);
+    }
+    58%,
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  /* Idle until the card has actually been revealed. */
+  .scene * {
+    animation-play-state: paused;
+  }
+  :global(.is-visible) .scene * {
+    animation-play-state: running;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scene * {
+      animation: none !important;
+    }
+  }
+</style>

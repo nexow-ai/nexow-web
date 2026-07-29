@@ -1,0 +1,667 @@
+---
+/**
+ * "Anatomy of a run" — a scroll-scrubbed diagram of one bot/agent cycle.
+ *
+ * The outer wrapper is deliberately taller than the viewport so ScrollMotion
+ * can hand it a `--ps` scrub and a `data-stage` index; the diagram itself is
+ * pinned with `position: sticky` and lights up trigger → gather → reason → act
+ * as the reader scrolls past. Without JavaScript, or with reduced motion, the
+ * wrapper collapses to its natural height and every stage renders lit — the
+ * whole explanation is still there, it just doesn't animate.
+ *
+ * Geometry is computed here rather than hand-written so the chip stack, the
+ * core and the flow curves can never drift apart. Two renderings share it: a
+ * landscape SVG from `md` up, and a stacked layout below that (SVG text does
+ * not survive being scaled down to a phone).
+ */
+import Icon from './Icon.astro';
+import { ICON_PATHS } from './icon-paths';
+
+interface Props {
+  /** Four inputs, in diagram order: web, socials, markets, stores. */
+  sources: string[];
+  /** Six harness pieces: model, memory, skills, tools, knowledge, triggers. */
+  harness: string[];
+  /** Four outputs, in diagram order: widgets, inbox, webhook, database. */
+  deliveries: string[];
+  stages: { n: string; title: string; body: string }[];
+  sourcesLabel: string;
+  harnessLabel: string;
+  deliveriesLabel: string;
+  hint: string;
+}
+const { sources, harness, deliveries, stages, sourcesLabel, harnessLabel, deliveriesLabel, hint } =
+  Astro.props;
+
+const SOURCE_ICONS = ['globe', 'chat', 'chart', 'database'];
+const DELIVERY_ICONS = ['layers', 'bell', 'link', 'server'];
+const HARNESS_ICONS = ['cpu', 'database', 'wand', 'sliders', 'library', 'bolt'];
+
+/* ── wide-diagram geometry (viewBox 1000 × 440) ─────────────────────────── */
+const CHIP = { w: 246, h: 54, r: 16 };
+const TOPS = [44, 132, 220, 308];
+const CORE = { x: 500, y: 203, r: 58, ring: 100 };
+const IN_X = 22;
+const OUT_X = 1000 - IN_X - CHIP.w;
+/** Where the four wires meet the core, fanned so they stay readable. */
+const ENTRY_Y = [182, 196, 210, 224];
+
+const inChips = sources.map((label, i) => ({
+  label,
+  icon: SOURCE_ICONS[i],
+  top: TOPS[i],
+  cy: TOPS[i] + CHIP.h / 2,
+}));
+const outChips = deliveries.map((label, i) => ({
+  label,
+  icon: DELIVERY_ICONS[i],
+  top: TOPS[i],
+  cy: TOPS[i] + CHIP.h / 2,
+}));
+
+const inWires = inChips.map(
+  (c, i) =>
+    `M ${IN_X + CHIP.w + 6} ${c.cy} C ${IN_X + CHIP.w + 90} ${c.cy}, ${CORE.x - 140} ${ENTRY_Y[i]}, ${CORE.x - CORE.r - 4} ${ENTRY_Y[i]}`,
+);
+const outWires = outChips.map(
+  (c, i) =>
+    `M ${CORE.x + CORE.r + 4} ${ENTRY_Y[i]} C ${CORE.x + 140} ${ENTRY_Y[i]}, ${OUT_X - 90} ${c.cy}, ${OUT_X - 6} ${c.cy}`,
+);
+
+/** Harness dots ride a top arc and a bottom arc, leaving the horizontal axis
+ *  free for the wires to reach the core. */
+const RING_ANGLES = [-140, -90, -40, 40, 90, 140];
+const ringDots = harness.map((label, i) => {
+  const a = (RING_ANGLES[i] * Math.PI) / 180;
+  return {
+    label,
+    icon: HARNESS_ICONS[i],
+    x: CORE.x + Math.cos(a) * CORE.ring,
+    y: CORE.y + Math.sin(a) * CORE.ring,
+  };
+});
+
+/** `translate/scale` that centres a 24×24 icon path on a point. */
+const glyph = (x: number, y: number, scale: number) =>
+  `translate(${x} ${y}) scale(${scale}) translate(-12 -12)`;
+
+const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] }));
+---
+
+<div class="run-scroll relative" data-stages="4">
+  <div class="run-sticky">
+    <div
+      class="relative overflow-hidden rounded-3xl border border-ink-900/10 bg-white p-4 shadow-xl shadow-ink-950/[0.06] sm:p-6"
+    >
+      <div
+        class="pointer-events-none absolute inset-0 opacity-60"
+        aria-hidden="true"
+        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 9%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 8%, transparent) 1px, transparent 1px); background-size:44px 44px; mask-image:radial-gradient(70%_60%_at_50%_45%,black,transparent)"
+      >
+      </div>
+
+      <!-- ── landscape diagram (md and up) ────────────────────────────── -->
+      <svg
+        class="diagram relative hidden h-auto w-full md:block"
+        viewBox="0 0 1000 440"
+        fill="none"
+        aria-hidden="true"
+      >
+        <text class="col-label" x={IN_X + 4} y="26">{sourcesLabel}</text>
+        <text class="col-label" x={OUT_X + 4} y="26">{deliveriesLabel}</text>
+
+        <!-- wires -->
+        <g class="wires">
+          {
+            inWires.map((d, i) => (
+              <>
+                <path class="wire lit s-gather" d={d} pathLength="100" />
+                <path
+                  class="pulse s-gather"
+                  d={d}
+                  pathLength="100"
+                  style={`--delay:${(i * 0.28).toFixed(2)}s`}
+                />
+              </>
+            ))
+          }
+          {
+            outWires.map((d, i) => (
+              <>
+                <path class="wire lit s-act" d={d} pathLength="100" />
+                <path
+                  class="pulse s-act"
+                  d={d}
+                  pathLength="100"
+                  style={`--delay:${(i * 0.28).toFixed(2)}s`}
+                />
+              </>
+            ))
+          }
+        </g>
+
+        <!-- input chips -->
+        {
+          inChips.map((c) => (
+            <g class="chip lit s-gather">
+              <rect x={IN_X} y={c.top} width={CHIP.w} height={CHIP.h} rx={CHIP.r} />
+              <circle class="chip-disc" cx={IN_X + 40} cy={c.cy} r="17" />
+              <path
+                class="chip-glyph"
+                d={ICON_PATHS[c.icon]}
+                transform={glyph(IN_X + 40, c.cy, 0.92)}
+              />
+              <text class="chip-text" x={IN_X + 70} y={c.cy + 5}>
+                {c.label}
+              </text>
+            </g>
+          ))
+        }
+
+        <!-- output chips -->
+        {
+          outChips.map((c) => (
+            <g class="chip lit s-act">
+              <rect x={OUT_X} y={c.top} width={CHIP.w} height={CHIP.h} rx={CHIP.r} />
+              <circle class="chip-disc" cx={OUT_X + 40} cy={c.cy} r="17" />
+              <path
+                class="chip-glyph"
+                d={ICON_PATHS[c.icon]}
+                transform={glyph(OUT_X + 40, c.cy, 0.92)}
+              />
+              <text class="chip-text" x={OUT_X + 70} y={c.cy + 5}>
+                {c.label}
+              </text>
+            </g>
+          ))
+        }
+
+        <!-- the worker -->
+        <g class="core">
+          <circle class="core-halo" cx={CORE.x} cy={CORE.y} r={CORE.r + 26} />
+          <circle class="core-tick s-trigger" cx={CORE.x} cy={CORE.y} r={CORE.r} />
+          <circle class="core-ring" cx={CORE.x} cy={CORE.y} r={CORE.ring} pathLength="100" />
+          <circle class="core-disc" cx={CORE.x} cy={CORE.y} r={CORE.r} />
+          <path
+            class="core-glyph s-reason"
+            d={ICON_PATHS.bot}
+            transform={glyph(CORE.x, CORE.y, 2.5)}
+          />
+          {
+            ringDots.map((d, i) => (
+              <g class="dot lit s-reason" style={`--delay:${(i * 0.16).toFixed(2)}s`}>
+                <circle class="dot-disc" cx={d.x} cy={d.y} r="16" />
+                <path class="dot-glyph" d={ICON_PATHS[d.icon]} transform={glyph(d.x, d.y, 0.64)} />
+              </g>
+            ))
+          }
+        </g>
+      </svg>
+
+      <!-- ── stacked diagram (below md) ───────────────────────────────── -->
+      <div class="relative md:hidden">
+        <p class="stack-label">{sourcesLabel}</p>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          {
+            inChips.map((c) => (
+              <span class="stack-chip lit s-gather">
+                <Icon name={c.icon} class="size-4 shrink-0" />
+                <span class="truncate">{c.label}</span>
+              </span>
+            ))
+          }
+        </div>
+
+        <div class="rail lit s-gather"><span class="rail-dot"></span></div>
+
+        <div class="stack-core lit s-reason">
+          <span class="stack-core-disc">
+            <Icon name="bot" class="size-6" />
+          </span>
+          <span class="stack-core-ring" aria-hidden="true"></span>
+        </div>
+
+        <div class="rail lit s-act"><span class="rail-dot"></span></div>
+
+        <p class="stack-label">{deliveriesLabel}</p>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+          {
+            outChips.map((c) => (
+              <span class="stack-chip lit s-act">
+                <Icon name={c.icon} class="size-4 shrink-0" />
+                <span class="truncate">{c.label}</span>
+              </span>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- harness row, shared by both renderings -->
+      <div class="relative mt-5 flex flex-wrap items-center justify-center gap-2 border-t border-ink-900/8 pt-5">
+        <span class="mr-1 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-ink-400">
+          {harnessLabel}
+        </span>
+        {
+          harnessChips.map((h, i) => (
+            <span class="harness-chip lit s-reason" style={`--delay:${(i * 0.08).toFixed(2)}s`}>
+              <Icon name={h.icon} class="size-3.5" />
+              {h.label}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- stage captions -->
+    <div class="mt-5 grid gap-3 md:grid-cols-4">
+      {
+        stages.map((s, i) => (
+          <div class={`stage stage-${i}`}>
+            <div class="flex items-center gap-2">
+              <span class="stage-n">{s.n}</span>
+              <span class="stage-title">{s.title}</span>
+            </div>
+            <p class="stage-body">{s.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="run-hint mt-4 text-center font-mono text-[0.68rem] text-ink-400">{hint}</p>
+  </div>
+</div>
+
+<style>
+  /* The pinned stage only exists when motion is welcome: without JS or with
+   * reduced motion the wrapper is just a normal block and every part is lit. */
+  .run-scroll {
+    height: auto;
+  }
+  .run-sticky {
+    position: static;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .run-scroll {
+      height: 250vh;
+    }
+    :global(html.js) .run-sticky {
+      position: sticky;
+      top: 4.5rem;
+    }
+    @media (min-width: 768px) {
+      :global(html.js) .run-scroll {
+        height: 280vh;
+      }
+      :global(html.js) .run-sticky {
+        top: 5.5rem;
+      }
+    }
+  }
+
+  /* ── stage gating ─────────────────────────────────────────────────────
+   * `--on` is 1 everywhere until ScrollMotion writes a stage index, at which
+   * point everything dims and only the current stage's parts light back up. */
+  .lit {
+    --on: 1;
+    transition:
+      opacity 0.45s var(--ease-out-expo),
+      fill-opacity 0.45s var(--ease-out-expo),
+      stroke-opacity 0.45s var(--ease-out-expo),
+      color 0.45s var(--ease-out-expo),
+      border-color 0.45s var(--ease-out-expo);
+  }
+  [data-stage] .lit {
+    --on: 0;
+  }
+  [data-stage='0'] .s-trigger,
+  [data-stage='1'] .s-gather,
+  [data-stage='2'] .s-gather,
+  [data-stage='2'] .s-reason,
+  [data-stage='3'] .s-act {
+    --on: 1;
+  }
+
+  /* ── landscape SVG ────────────────────────────────────────────────── */
+  .diagram {
+    font-family: var(--font-mono);
+  }
+  .col-label {
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: var(--color-ink-400);
+  }
+
+  .wire {
+    stroke: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    stroke-width: 1.5;
+    stroke-opacity: calc(0.45 + var(--on) * 0.55);
+  }
+  .pulse {
+    stroke: var(--color-brand-500);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 7 93;
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  .s-act.pulse {
+    stroke: var(--color-sky-500);
+  }
+  [data-stage='1'] .s-gather.pulse,
+  [data-stage='2'] .s-gather.pulse,
+  [data-stage='3'] .s-act.pulse {
+    opacity: 1;
+    animation: wire-run 1.9s linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes wire-run {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .chip rect {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+    stroke-width: 1;
+  }
+  .chip.lit rect {
+    stroke: color-mix(in oklab, var(--color-brand-500) calc(12% + var(--on) * 48%), transparent);
+  }
+  .chip-disc {
+    fill: color-mix(in oklab, var(--color-brand-500) calc(6% + var(--on) * 12%), white);
+  }
+  .chip-glyph {
+    stroke: var(--color-brand-700);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-opacity: calc(0.45 + var(--on) * 0.55);
+  }
+  .chip-text {
+    font-size: 15px;
+    fill: var(--color-ink-700);
+    fill-opacity: calc(0.55 + var(--on) * 0.45);
+  }
+
+  .core-halo {
+    fill: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
+  }
+  .core-disc {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
+    stroke-width: 1.5;
+  }
+  .core-ring {
+    stroke: color-mix(in oklab, var(--color-brand-500) 32%, transparent);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 4;
+    animation: ring-spin 34s linear infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes ring-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .core-glyph {
+    stroke: var(--color-brand-700);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  [data-stage='2'] .core-glyph {
+    animation: think 1.6s ease-in-out infinite;
+  }
+  @keyframes think {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+  /* The trigger tick: one ring expanding out of the core on stage 01. */
+  .core-tick {
+    fill: none;
+    stroke: var(--color-brand-500);
+    stroke-width: 2;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  [data-stage='0'] .core-tick {
+    animation: tick 2.2s ease-out infinite;
+  }
+  @keyframes tick {
+    0% {
+      opacity: 0.65;
+      transform: scale(1);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.85);
+    }
+  }
+
+  .dot-disc {
+    fill: white;
+    stroke: color-mix(in oklab, var(--color-brand-500) calc(20% + var(--on) * 45%), transparent);
+    stroke-width: 1.2;
+  }
+  .dot-glyph {
+    stroke: var(--color-brand-700);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-opacity: calc(0.4 + var(--on) * 0.6);
+  }
+  [data-stage='2'] .dot {
+    animation: dot-pop 1.8s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  @keyframes dot-pop {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    35% {
+      transform: scale(1.16);
+    }
+  }
+
+  /* ── stacked (phone) rendering ────────────────────────────────────── */
+  .stack-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-400);
+  }
+  .stack-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in oklab, var(--color-brand-500) calc(12% + var(--on) * 42%), transparent);
+    background: white;
+    padding: 0.55rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-ink-700);
+    opacity: calc(0.55 + var(--on) * 0.45);
+  }
+  .stack-chip :global(svg) {
+    color: var(--color-brand-600);
+  }
+  .rail {
+    position: relative;
+    margin: 0.75rem auto;
+    height: 2.25rem;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-brand-400) 45%, transparent),
+      color-mix(in oklab, var(--color-sky-400) 40%, transparent)
+    );
+    opacity: calc(0.35 + var(--on) * 0.65);
+  }
+  .rail-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 6px;
+    width: 6px;
+    margin-left: -2px;
+    border-radius: 9999px;
+    background: var(--color-brand-500);
+    opacity: 0;
+  }
+  [data-stage='1'] .s-gather .rail-dot,
+  [data-stage='2'] .s-gather .rail-dot,
+  [data-stage='3'] .s-act .rail-dot {
+    opacity: 1;
+    animation: rail-run 1.6s linear infinite;
+  }
+  @keyframes rail-run {
+    from {
+      top: -6px;
+    }
+    to {
+      top: 100%;
+    }
+  }
+  .stack-core {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+  .stack-core-disc {
+    display: inline-flex;
+    height: 3.5rem;
+    width: 3.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--color-brand-500) 45%, transparent);
+    background: white;
+    color: var(--color-brand-700);
+  }
+  .stack-core-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 5.25rem;
+    width: 5.25rem;
+    margin: -2.625rem 0 0 -2.625rem;
+    border-radius: 9999px;
+    border: 1px dashed color-mix(in oklab, var(--color-brand-500) calc(18% + var(--on) * 42%), transparent);
+    animation: ring-spin 34s linear infinite;
+  }
+
+  /* ── harness chips + stage captions ───────────────────────────────── */
+  .harness-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--color-brand-500) calc(10% + var(--on) * 45%), transparent);
+    background: color-mix(in oklab, var(--color-brand-50) calc(var(--on) * 100%), white);
+    padding: 0.25rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-ink-600);
+    opacity: calc(0.5 + var(--on) * 0.5);
+  }
+  .harness-chip :global(svg) {
+    color: var(--color-brand-600);
+  }
+  [data-stage='2'] .harness-chip {
+    animation: chip-lift 1.8s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes chip-lift {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-3px);
+    }
+  }
+
+  .stage {
+    --on: 1;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-ink-900) calc(8% + var(--on) * 4%), transparent);
+    background: color-mix(in oklab, var(--color-brand-50) calc(var(--on) * 85%), white);
+    padding: 0.85rem 1rem;
+    transition:
+      opacity 0.45s var(--ease-out-expo),
+      background-color 0.45s var(--ease-out-expo),
+      border-color 0.45s var(--ease-out-expo);
+    opacity: calc(0.45 + var(--on) * 0.55);
+  }
+  [data-stage] .stage {
+    --on: 0;
+  }
+  [data-stage='0'] .stage-0,
+  [data-stage='1'] .stage-1,
+  [data-stage='2'] .stage-2,
+  [data-stage='3'] .stage-3 {
+    --on: 1;
+  }
+  .stage-n {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--color-brand-600);
+  }
+  .stage-title {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-ink-950);
+  }
+  .stage-body {
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--color-ink-600);
+  }
+
+  /* On a phone only the current stage is worth the room. */
+  @media (max-width: 767px) {
+    [data-stage] .stage {
+      display: none;
+    }
+    [data-stage='0'] .stage-0,
+    [data-stage='1'] .stage-1,
+    [data-stage='2'] .stage-2,
+    [data-stage='3'] .stage-3 {
+      display: block;
+    }
+  }
+
+  /* The nudge only makes sense while the diagram is actually scrubbing. */
+  .run-hint {
+    display: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .run-hint {
+      display: block;
+    }
+  }
+</style>
