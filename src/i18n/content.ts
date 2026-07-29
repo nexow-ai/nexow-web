@@ -25,6 +25,18 @@ export interface Faq {
   a: string;
 }
 
+/** Standalone legal document page (privacy, terms, cookies, imprint, AUP). */
+export interface LegalPageContent {
+  badge: string;
+  title: string;
+  subtitle: string;
+  meta: { title: string; description: string };
+  updated: string;
+  /** Shown when a localized UI falls back to English legal text. */
+  governingNote?: string;
+  sections: { h: string; paragraphs: string[] }[];
+}
+
 /** Dedicated /community marketing page copy. */
 export interface CommunityPageContent {
   meta: { title: string; description: string };
@@ -496,6 +508,18 @@ export interface SiteContent {
     kinds: Record<string, string>;
     assets: Record<string, string>;
     visit: string;
+    /** Card hover cue — open the detail modal. */
+    openDetails: string;
+    /** Modal / card chip for not-yet-ready venues. */
+    comingSoon: string;
+    /** Modal hint when the connect CTA is unavailable. */
+    comingSoonHint: string;
+    /** Primary modal CTA — opens the app with this connector selected. */
+    connect: string;
+    /** Secondary modal CTA — venue website in a new tab. */
+    visitWebsite: string;
+    /** Modal dismiss control (aria + button). */
+    close: string;
     /** Result count; contains a `{n}` placeholder. */
     results: string;
     empty: string;
@@ -505,15 +529,15 @@ export interface SiteContent {
     countLive: string;
     countCatalog: string;
   };
-  /** Privacy Policy page (standalone legal copy). */
-  privacyPage: {
-    badge: string;
-    title: string;
-    subtitle: string;
-    meta: { title: string; description: string };
-    updated: string;
-    sections: { h: string; p: string }[];
-  };
+  /**
+   * Standalone legal documents. English is the source of truth; other locales
+   * may omit these and LegalDocPage falls back to English (governing language).
+   */
+  privacyPage?: LegalPageContent;
+  termsPage?: LegalPageContent;
+  cookiesPage?: LegalPageContent;
+  legalPage?: LegalPageContent;
+  acceptableUsePage?: LegalPageContent;
   about: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };

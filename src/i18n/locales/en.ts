@@ -1,4 +1,11 @@
 import type { SiteContent } from '../content';
+import {
+  acceptableUsePage,
+  cookiesPage,
+  legalPage,
+  privacyPage,
+  termsPage,
+} from '../legal-en';
 
 export const en: SiteContent = {
   nav: {
@@ -24,7 +31,6 @@ export const en: SiteContent = {
           { label: 'Community', href: '/community' },
           { label: 'Connectors', href: '/connectors' },
           { label: 'Plans', href: '/plans' },
-          { label: 'Privacy', href: '/privacy' },
         ],
       },
       {
@@ -32,19 +38,23 @@ export const en: SiteContent = {
         links: [
           { label: 'About', href: '/about' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Legal', href: '/legal' },
         ],
       },
       {
-        title: 'Resources',
+        title: 'Legal',
         links: [
-          { label: 'Launch app', href: 'https://x.nexow.ai' },
           { label: 'Privacy', href: '/privacy' },
+          { label: 'Terms of Use', href: '/terms' },
+          { label: 'Cookies', href: '/cookies' },
+          { label: 'Acceptable Use', href: '/acceptable-use' },
+          { label: 'Launch app', href: 'https://x.nexow.ai' },
         ],
       },
     ],
     rights: 'All rights reserved.',
     disclaimer:
-      'Nexow is a tooling and visualization platform. Some examples use market data, but the canvas is built for general-purpose widgets and workflows.',
+      'Nexow is a tooling and visualization platform operated by Nexow, Inc. Some examples use market data, but the canvas is built for general-purpose widgets and workflows. Nothing here is financial, investment, legal, or tax advice.',
     builtWith: 'Built with Astro.',
   },
   home: {
@@ -1337,6 +1347,7 @@ export const en: SiteContent = {
       video: 'Video',
       community: 'Community',
       music: 'Music',
+      fitness: 'Fitness',
       wallet: 'Crypto wallet',
       browser: 'Browser automation',
       scraping: 'Web scraping',
@@ -1358,6 +1369,12 @@ export const en: SiteContent = {
       prediction_markets: 'Prediction',
     },
     visit: 'Visit site',
+    openDetails: 'View details',
+    comingSoon: 'Coming soon',
+    comingSoonHint: 'This connector isn’t available in the app yet.',
+    connect: 'Connect in Nexow',
+    visitWebsite: 'Visit website',
+    close: 'Close',
     results: '{n} connectors',
     empty: 'No connectors match your search.',
     exploreCta: 'Explore all connectors',
@@ -1413,21 +1430,9 @@ export const en: SiteContent = {
     body: 'The page you’re looking for doesn’t exist — but your next widget might.',
     cta: 'Back to home',
   },
-  privacyPage: {
-    badge: 'Privacy',
-    title: 'Privacy Policy',
-    subtitle: 'How Nexow handles your data — short version: as little as possible.',
-    meta: {
-      title: 'Privacy Policy — Nexow',
-      description: 'Learn how Nexow handles data, keys and connections.',
-    },
-    updated: 'Last updated: 1 July 2026',
-    sections: [
-      { h: 'Workspace data', p: 'Nexow stores the workspace data needed to provide the app: widgets, versions, logs, library items, account settings, sync state and related metadata.' },
-      { h: 'Generated widgets', p: 'Generated code runs inside a sandboxed runtime. Widget prompts, generated code and version history stay attached to the workspace they belong to.' },
-      { h: 'Connections', p: 'Where a service permits it, Nexow connects to it directly from your browser, and your credentials are used only to talk to that service. Some services require routing through a thin proxy; in those cases only the data needed to fulfil the request passes through.' },
-      { h: 'This website', p: 'This marketing site is a static site. We keep analytics minimal and privacy-respecting, and we do not sell personal data. Outbound links (such as the app) are clearly labelled.' },
-      { h: 'Contact', p: 'Questions about privacy? Email hello@nexow.ai.' },
-    ],
-  },
+  privacyPage,
+  termsPage,
+  cookiesPage,
+  legalPage,
+  acceptableUsePage,
 };

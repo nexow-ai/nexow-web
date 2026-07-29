@@ -26,6 +26,10 @@ export const defaultLang: Lang = 'en';
 /** External + brand constants used across the site. */
 export const SITE = {
   name: 'Nexow',
+  /** Legal entity name for contracts, imprint, and copyright. */
+  legalName: 'Nexow, Inc.',
+  /** Registered / mailing address (Delaware, United States). */
+  address: '2810 N Church St STE 89080 Wilmington, DE 19802, United States',
   domain: 'nexow.ai',
   url: 'https://nexow.ai',
   appUrl: 'https://x.nexow.ai',
