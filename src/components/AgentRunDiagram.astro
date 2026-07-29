@@ -285,9 +285,10 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     :global(html.js) .run-scroll {
       height: 250vh;
     }
+    /* Clears the fixed header (12px offset + 4rem bar). */
     :global(html.js) .run-sticky {
       position: sticky;
-      top: 4.5rem;
+      top: 5rem;
     }
     @media (min-width: 768px) {
       :global(html.js) .run-scroll {

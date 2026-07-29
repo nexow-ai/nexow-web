@@ -87,7 +87,7 @@ const KIND_ICONS = ['bolt', 'cpu'];
     <!-- ── anatomy of a run ──────────────────────────────────────────── -->
     <div class="mt-20 sm:mt-24">
       <SectionHeading eyebrow={t.run.eyebrow} title={t.run.title} subtitle={t.run.subtitle} />
-      <div class="mx-auto mt-10 max-w-5xl">
+      <div class="mx-auto mt-10 max-w-4xl xl:max-w-5xl">
         <AgentRunDiagram
           sources={t.run.sources}
           harness={t.run.harness}
@@ -118,28 +118,29 @@ const KIND_ICONS = ['bolt', 'cpu'];
                 style={`--m-shift:${-10 - (i % 4) * 9}px`}
                 class="group flex flex-1 flex-col overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03] transition-shadow duration-300 hover:shadow-lg hover:shadow-ink-950/[0.07]"
               >
-              <div class="relative border-b border-ink-900/8 bg-[#f9fdfd] px-5 pb-4 pt-5">
-                <span
-                  class:list={[
-                    'absolute right-4 top-4 rounded-full px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.12em]',
-                    item.kind === 'bot'
-                      ? 'bg-brand-50 text-brand-700 ring-1 ring-brand-200/80'
-                      : 'bg-accent-50 text-accent-700 ring-1 ring-accent-200/80',
-                  ]}
-                >
-                  {item.kind === 'bot' ? t.cases.botLabel : t.cases.agentLabel}
-                </span>
-                <UseCaseScene scene={item.scene} class="mt-2" />
-              </div>
+                <div class="relative border-b border-ink-900/8 bg-[#f9fdfd] px-5 pb-4 pt-5">
+                  <span
+                    class:list={[
+                      'absolute right-4 top-4 rounded-full px-2 py-0.5 font-mono text-[0.55rem] uppercase tracking-[0.12em]',
+                      item.kind === 'bot'
+                        ? 'bg-brand-50 text-brand-700 ring-1 ring-brand-200/80'
+                        : 'bg-accent-50 text-accent-700 ring-1 ring-accent-200/80',
+                    ]}
+                  >
+                    {item.kind === 'bot' ? t.cases.botLabel : t.cases.agentLabel}
+                  </span>
+                  <UseCaseScene scene={item.scene} class="mt-2" />
+                </div>
 
-              <div class="flex flex-1 flex-col p-5">
-                <h3 class="font-display text-lg font-semibold text-ink-950">{item.title}</h3>
-                <p class="mt-2 flex-1 text-sm leading-relaxed text-ink-600">{item.body}</p>
-                <p class="mt-4 rounded-lg border border-ink-900/8 bg-[#f7fbfb] px-3 py-2 font-mono text-[0.65rem] leading-relaxed text-ink-600">
-                  {item.recipe}
-                </p>
-              </div>
-            </article>
+                <div class="flex flex-1 flex-col p-5">
+                  <h3 class="font-display text-lg font-semibold text-ink-950">{item.title}</h3>
+                  <p class="mt-2 flex-1 text-sm leading-relaxed text-ink-600">{item.body}</p>
+                  <p class="mt-4 rounded-lg border border-ink-900/8 bg-[#f7fbfb] px-3 py-2 font-mono text-[0.65rem] leading-relaxed text-ink-600">
+                    {item.recipe}
+                  </p>
+                </div>
+              </article>
+            </div>
           ))
         }
       </div>
