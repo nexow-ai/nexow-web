@@ -34,23 +34,23 @@ const { t } = Astro.props;
     aria-modal="true"
     aria-labelledby="connector-modal-title"
     tabindex="-1"
-    class="connector-modal__panel relative z-10 flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/20 outline-none sm:rounded-3xl"
+    class="connector-modal__panel relative z-10 flex max-h-[min(92vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/20 outline-none sm:rounded-3xl dark:border-white/10 dark:bg-ink-900 dark:shadow-black/50"
   >
     <!-- Banner -->
     <div id="connector-modal-banner-wrap" class="relative hidden shrink-0">
-      <div class="relative h-28 overflow-hidden bg-ink-100 sm:h-32">
+      <div class="relative h-28 overflow-hidden bg-ink-100 sm:h-32 dark:bg-ink-800">
         <img
           id="connector-modal-banner"
           src=""
           alt=""
           class="size-full object-cover object-center"
         />
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/40 to-transparent"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/40 to-transparent dark:from-ink-900/60"></div>
       </div>
       <button
         type="button"
         data-connector-modal-close
-        class="absolute left-3 top-3 inline-flex size-8 items-center justify-center rounded-full bg-white/85 text-ink-700 shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-ink-950"
+        class="absolute left-3 top-3 inline-flex size-8 items-center justify-center rounded-full bg-white/85 text-ink-700 shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-ink-950 dark:bg-ink-800/90 dark:text-ink-200 dark:hover:bg-ink-700 dark:hover:text-white"
         aria-label={t.close}
       >
         <Icon name="x" class="size-4" />
@@ -64,7 +64,7 @@ const { t } = Astro.props;
           type="button"
           id="connector-modal-close-plain"
           data-connector-modal-close
-          class="mb-3 inline-flex size-8 items-center justify-center rounded-full text-ink-500 transition hover:bg-ink-900/5 hover:text-ink-950"
+          class="mb-3 inline-flex size-8 items-center justify-center rounded-full text-ink-500 transition hover:bg-ink-900/5 hover:text-ink-950 dark:text-ink-400 dark:hover:bg-white/10 dark:hover:text-white"
           aria-label={t.close}
         >
           <Icon name="x" class="size-4" />
@@ -74,7 +74,7 @@ const { t } = Astro.props;
         <div class="flex items-start gap-3">
           <span
             id="connector-modal-logo-wrap"
-            class="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f7fbfb] ring-1 ring-ink-900/10"
+            class="inline-flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f7fbfb] ring-1 ring-ink-900/10 dark:bg-white/[0.06] dark:ring-white/10"
           >
             <img
               id="connector-modal-logo"
@@ -87,22 +87,22 @@ const { t } = Astro.props;
           </span>
           <div class="min-w-0 flex-1">
             <div class="flex min-w-0 items-center gap-1.5">
-              <h2 id="connector-modal-title" class="truncate font-display text-lg font-semibold text-ink-950"></h2>
+              <h2 id="connector-modal-title" class="truncate font-display text-lg font-semibold text-ink-950 dark:text-white"></h2>
               <a
                 id="connector-modal-website-icon"
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex shrink-0 rounded-md p-1 text-ink-400 transition hover:bg-ink-900/5 hover:text-ink-950"
+                class="inline-flex shrink-0 rounded-md p-1 text-ink-400 transition hover:bg-ink-900/5 hover:text-ink-950 dark:hover:bg-white/10 dark:hover:text-white"
                 aria-label={t.visitWebsite}
               >
                 <Icon name="external" class="size-3.5" />
               </a>
             </div>
-            <p id="connector-modal-kind" class="mt-0.5 text-xs text-ink-500"></p>
+            <p id="connector-modal-kind" class="mt-0.5 text-xs text-ink-500 dark:text-ink-400"></p>
             <p
               id="connector-modal-soon"
-              class="mt-2 hidden inline-flex items-center gap-1.5 rounded-full bg-ink-900/[0.06] px-2 py-0.5 font-mono text-[0.6rem] font-medium uppercase tracking-[0.09em] text-ink-500"
+              class="mt-2 hidden inline-flex items-center gap-1.5 rounded-full bg-ink-900/[0.06] px-2 py-0.5 font-mono text-[0.6rem] font-medium uppercase tracking-[0.09em] text-ink-500 dark:bg-white/8 dark:text-ink-400"
             >
               <span class="size-1.5 rounded-full bg-accent-500/80"></span>
               {t.comingSoon}
@@ -110,7 +110,7 @@ const { t } = Astro.props;
           </div>
         </div>
 
-        <p id="connector-modal-notes" class="mt-3 text-sm leading-relaxed text-ink-600"></p>
+        <p id="connector-modal-notes" class="mt-3 text-sm leading-relaxed text-ink-600 dark:text-ink-300"></p>
 
         <div id="connector-modal-assets" class="mt-3 flex flex-wrap gap-1.5"></div>
 
@@ -131,14 +131,14 @@ const { t } = Astro.props;
             href="#"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-ink-900 ring-1 ring-ink-900/10 shadow-sm transition hover:-translate-y-0.5 hover:ring-ink-900/20"
+            class="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-ink-900 ring-1 ring-ink-900/10 shadow-sm transition hover:-translate-y-0.5 hover:ring-ink-900/20 dark:bg-white/[0.06] dark:text-white dark:ring-white/12 dark:hover:bg-white/[0.1] dark:hover:ring-white/25"
           >
             {t.visitWebsite}
             <Icon name="external" class="size-[1.05em]" />
           </a>
         </div>
 
-        <p id="connector-modal-soon-hint" class="mt-3 hidden text-center text-xs text-ink-500">
+        <p id="connector-modal-soon-hint" class="mt-3 hidden text-center text-xs text-ink-500 dark:text-ink-400">
           {t.comingSoonHint}
         </p>
       </div>
