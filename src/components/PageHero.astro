@@ -16,36 +16,19 @@ const { badge, icon, title, subtitle, id = 'hero' } = Astro.props;
 <section id={id} class="relative scroll-mt-20 overflow-hidden pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-20 dark:text-white">
   <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
     <div class="aurora-mesh absolute inset-[-10%]"></div>
-    <!-- Light: soft *-200 blobs -->
     <div
-      class="aurora-a absolute -top-28 left-[6%] size-[min(70vw,520px)] rounded-full opacity-55 blur-3xl dark:hidden"
+      class="aurora-a absolute -top-28 left-[6%] size-[min(70vw,520px)] rounded-full opacity-55 blur-3xl dark:opacity-45"
       style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
     >
     </div>
     <div
-      class="aurora-b absolute -top-20 right-[4%] size-[min(65vw,480px)] rounded-full opacity-45 blur-3xl dark:hidden"
+      class="aurora-b absolute -top-20 right-[4%] size-[min(65vw,480px)] rounded-full opacity-45 blur-3xl dark:opacity-35"
       style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
     >
     </div>
     <div
-      class="aurora-c absolute left-[38%] top-[28%] size-[min(50vw,400px)] rounded-full opacity-40 blur-3xl dark:hidden"
+      class="aurora-c absolute left-[38%] top-[28%] size-[min(50vw,400px)] rounded-full opacity-40 blur-3xl dark:opacity-30"
       style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
-    >
-    </div>
-    <!-- Dark: mid-tone glows that read on ink -->
-    <div
-      class="aurora-a absolute -top-28 left-[6%] hidden size-[min(70vw,520px)] rounded-full opacity-45 blur-3xl dark:block"
-      style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
-    >
-    </div>
-    <div
-      class="aurora-b absolute -top-20 right-[4%] hidden size-[min(65vw,480px)] rounded-full opacity-35 blur-3xl dark:block"
-      style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
-    >
-    </div>
-    <div
-      class="aurora-c absolute left-[38%] top-[28%] hidden size-[min(50vw,400px)] rounded-full opacity-30 blur-3xl dark:block"
-      style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
     >
     </div>
   </div>
