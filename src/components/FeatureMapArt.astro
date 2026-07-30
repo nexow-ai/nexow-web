@@ -59,7 +59,7 @@ const swatches = [
 ---
 
 <div
-  class="fma relative w-full overflow-hidden rounded-xl border border-ink-900/8 dark:border-white/8 bg-white dark:bg-white/[0.03]"
+  class="fma relative w-full aspect-[8/5] overflow-hidden rounded-xl border border-ink-900/8 dark:border-white/8 bg-white dark:bg-white/[0.03] lg:grow"
   aria-hidden="true"
   data-fm-art-stage
 >
@@ -851,10 +851,14 @@ const swatches = [
     --fma-soft: color-mix(in oklab, var(--color-brand-400) 20%, transparent);
   }
 
+  /* Scenes share one stacked cell so the stage can grow to fill the detail
+     panel; each SVG scales up (and stays centred) inside whatever box it gets. */
   .fma-scene {
     display: none;
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
   }
   .fma-scene.is-active {
     display: block;
