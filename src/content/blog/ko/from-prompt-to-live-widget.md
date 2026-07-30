@@ -3,7 +3,7 @@ title: '프롬프트에서 라이브 위젯까지: Nexow가 한 문장을 트레
 description: 'Nexow가 일상 언어 프롬프트에서 실행 중이고 데이터에 연결된 시장 위젯을 생성하는 과정을 살펴봅니다 — codegen, sandboxing, 라이브 커넥터 설명.'
 pubDate: 2026-06-24
 heroImage: ../../../assets/blog/codegen.svg
-tags: ['제품', 'AI', '작동-방식']
+tags: ['제품', 'ai', '작동-방식']
 ---
 
 트레이딩 대시보드를 만드는 것은 항상 같은 반복이었습니다: API 찾기, 문서 읽기,
