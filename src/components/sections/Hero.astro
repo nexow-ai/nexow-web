@@ -64,11 +64,8 @@ const D = {
     <div class="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
       <!-- Copy -->
       <div class="max-w-xl">
-        <a
-          href={SITE.appUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="enter group inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3.5 text-sm font-medium text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300 dark:border-white/12 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:border-brand-400/40"
+        <p
+          class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3 text-sm font-medium text-ink-600 shadow-sm backdrop-blur dark:border-white/12 dark:bg-white/[0.06] dark:text-ink-300"
           style={`--enter-delay:${D.badge}`}
         >
           <span
@@ -77,8 +74,7 @@ const D = {
             <span class="size-1.5 animate-pulse rounded-full bg-brand-500 dark:bg-brand-400"></span>
             {t.badge}
           </span>
-          <Icon name="arrow" class="size-3.5 text-ink-400 transition-transform group-hover:translate-x-0.5" />
-        </a>
+        </p>
 
         {/* Phone size is fluid, not a fixed 2.7rem: locales with long compounds
             (el "Περιγράψτε", ru "Опишите.") overrun a 320px screen and the hero's
@@ -190,9 +186,6 @@ const D = {
         }
 
         <div class="enter mt-6 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
-          <Button href={defaultPromptUrl} size="lg" external iconRight="arrow" class="js-launch-prompt">
-            {t.ctaPrimary}
-          </Button>
           <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
             {t.ctaSecondary}
           </Button>
@@ -252,12 +245,8 @@ const D = {
       return `${base}/?${qs}`;
     };
 
-    // Keep the visible CTA pointing at whatever the composer currently holds.
-    const launchCta = document.querySelector<HTMLAnchorElement>('.js-launch-prompt');
     const syncLinks = () => {
-      const url = promptUrl(input.value.trim());
-      form.action = url;
-      if (launchCta) launchCta.href = url;
+      form.action = promptUrl(input.value.trim());
     };
 
     const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-prompt-example]'));

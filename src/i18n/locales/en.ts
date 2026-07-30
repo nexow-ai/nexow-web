@@ -85,7 +85,7 @@ export const en: SiteContent = {
         'Nexow turns plain-language ideas into live widgets on a canvas. Build moodboards, habit planners, mini games, social widgets, market dashboards or custom tools without starting from scratch.',
     },
     hero: {
-      badge: 'Preview now live',
+      badge: 'Early access',
       titleLead: 'Build anything.',
       titleGradient: 'Visualize everything.',
       titleTail: 'Share and grow.',
@@ -93,8 +93,8 @@ export const en: SiteContent = {
       subtitle:
         'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
       ctaPrimary: 'Launch the app',
-      ctaSecondary: 'See it live',
-      note: 'Preview live · 90 connectors · 10K starter credits',
+      ctaSecondary: 'How it works',
+      note: 'No signup to try · Private in your browser · Or a free account with 10K reserved credits',
       promptExample: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
       promptPlaceholder: 'Describe a widget…',
       promptExamplesLabel: 'Or start from an example',
