@@ -72,7 +72,7 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
               <p class="mt-1 text-sm text-ink-600 dark:text-ink-300">{tier.tagline}</p>
 
               <div class="mt-4 flex min-w-0 flex-wrap items-baseline gap-1.5">
-                <span class="min-w-0 break-words font-display text-3xl font-bold text-ink-950 dark:text-white">
+                <span class="min-w-0 [overflow-wrap:anywhere] font-display text-3xl font-bold text-ink-950 dark:text-white">
                   <span data-price="monthly">{tier.priceMonthly}</span>
                   <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
                 </span>

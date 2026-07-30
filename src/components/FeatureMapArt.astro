@@ -194,7 +194,7 @@ const swatches = [
           </g>
         ))}
       </g>
-      <g class="fma-marquee-rev" transform="translate(-78 0)">
+      <g class="fma-marquee-rev">
         {[...shelf, ...shelf].map((n, i) => (
           <g transform={`translate(${i * 78} 0)`}>
             <rect class="fma-panel" x="14" y="140" width="64" height="46" rx="9"></rect>
@@ -543,13 +543,14 @@ const swatches = [
       </g>
       <rect class="fma-bar" x="126" y="104" width="60" height="6" rx="3"></rect>
       {[0, 1, 2, 3, 4].map((n) => (
-        <path
-          class="fma-pop"
-          style={`--d:${0.5 + n * 0.09}s`}
-          d="M0 0l1.5 3.1 3.4.5-2.5 2.4.6 3.4L0 7.8l-3 1.6.6-3.4L-4.9 3.6l3.4-.5L0 0z"
-          fill="var(--fma-brand)"
-          transform={`translate(${131 + n * 12} 118)`}
-        />
+        <g transform={`translate(${131 + n * 12} 118)`}>
+          <path
+            class="fma-pop"
+            style={`--d:${0.5 + n * 0.09}s`}
+            d="M0 0l1.5 3.1 3.4.5-2.5 2.4.6 3.4L0 7.8l-3 1.6.6-3.4L-4.9 3.6l3.4-.5L0 0z"
+            fill="var(--fma-brand)"
+          />
+        </g>
       ))}
       <rect x="126" y="134" width="68" height="16" rx="8" fill="var(--fma-soft)"></rect>
       <rect class="fma-progress" style="--d:.7s" x="126" y="134" width="68" height="16" rx="8" fill="var(--fma-brand)"></rect>
