@@ -4,6 +4,7 @@ import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
 import Icon from '../Icon.astro';
 import Button from '../Button.astro';
+import SecurityDiagram from '../SecurityDiagram.astro';
 
 interface Props {
   lang: Lang;
@@ -14,9 +15,9 @@ const securityHref = localizePath('/security', lang);
 ---
 
 <section id="privacy" class="relative overflow-x-clip border-y border-ink-900/5 bg-[#f7fbfb] py-20 text-ink-950 sm:py-24 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
-  <div class="pointer-events-none absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100),transparent_60%)] opacity-60 blur-2xl"></div>
+  <div class="pointer-events-none absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100),transparent_60%)] opacity-60 blur-2xl dark:hidden"></div>
   <div class="container-page relative">
-    <div class="grid items-center gap-14 lg:grid-cols-2">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
       <!-- Copy -->
       <div class="reveal max-w-xl">
         <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
@@ -48,17 +49,19 @@ const securityHref = localizePath('/security', lang);
         </div>
       </div>
 
-      <!-- Visual: workspace security panel -->
-      <div class="reveal">
+      <!-- Visual: animated trust-boundary diagram + workspace panel -->
+      <div class="reveal relative">
+        <SecurityDiagram />
+
         <div
           data-motion="breathe tilt"
           style="--m-persp:1200px"
-          class="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-xl shadow-ink-950/10 dark:shadow-black/50"
+          class="relative z-10 mx-auto mt-2 max-w-sm overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-xl shadow-ink-950/10 dark:border-white/10 dark:bg-ink-950/85 dark:shadow-black/50 dark:backdrop-blur-md sm:mt-0 sm:-translate-y-4"
         >
-          <div class="flex items-center gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 py-3">
+          <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3 dark:border-white/8">
             <Icon name="lock" class="size-4 text-brand-700 dark:text-brand-300" />
             <span class="font-mono text-xs text-ink-500 dark:text-ink-400">settings · workspace security</span>
-            <span class="ml-auto rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:text-brand-300">scoped</span>
+            <span class="ml-auto rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:bg-brand-400/12 dark:text-brand-300">scoped</span>
           </div>
           <div class="space-y-3 p-5 font-mono text-xs">
             <div class="flex items-center justify-between">
