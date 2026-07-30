@@ -85,9 +85,15 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
             }
           </ul>
         </details>
-        <Button href={SITE.appUrl} size="sm" external iconRight="arrow" class="hidden sm:inline-flex">
-          {t.nav.launch}
-        </Button>
+        {/* The wrapper — not a `hidden` class on the Button — owns the hiding:
+            Button's base sets `inline-flex`, and between two display utilities
+            the stylesheet order wins, so `hidden` on the Button never applied
+            and the CTA stayed on screen at phone widths. */}
+        <span class="hidden sm:inline-flex">
+          <Button href={SITE.appUrl} size="sm" external iconRight="arrow">
+            {t.nav.launch}
+          </Button>
+        </span>
 
         <!-- Mobile toggle -->
         <button

@@ -769,8 +769,11 @@
   .js [data-motion~='rise-lg'] { --m-shift: -58px; }
   .js [data-motion~='sink'] { --m-shift: 26px; }
   .js [data-motion~='sink-lg'] { --m-shift: 58px; }
-  .js [data-motion~='slide-l'] { --m-slide: -34px; }
-  .js [data-motion~='slide-r'] { --m-slide: 34px; }
+  /* Kept under the 2rem page gutter: a wider drift pushes the outer columns
+   * past the viewport edge on any screen where the container is not centred
+   * with slack to spare, and the section's overflow clip shaves the text. */
+  .js [data-motion~='slide-l'] { --m-slide: -24px; }
+  .js [data-motion~='slide-r'] { --m-slide: 24px; }
 
   .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
   .js [data-motion~='breathe-lg'] { --m-base: 0.918; --m-zoom: 0.082; }
@@ -783,11 +786,17 @@
   .js [data-motion~='dim'] { opacity: calc(0.5 + var(--pb, 1) * 0.5); }
 
   /* Small screens get the drift and the breathing but not the lean — a tilted
-   * card next to the viewport edge reads as a rendering bug on a phone.
-   * The sideways drift goes too: a full-width block has no slack to move into,
-   * so the 34px shift only pushes its text under the section's overflow clip. */
+   * card next to the viewport edge reads as a rendering bug on a phone. */
   @media (max-width: 640px) {
-    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; --m-slide: 0px; }
+    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; }
+  }
+
+  /* The sideways drift needs horizontal slack to move into. `slide-l/-r` sit on
+   * the columns of two-up grids that only split at `lg`; below that the column
+   * is full width, so the 34px shift has nowhere to go and just pushes text
+   * under the section's overflow clip. */
+  @media (max-width: 63.999rem) {
+    .js [data-motion] { --m-slide: 0px; }
   }
 }
 

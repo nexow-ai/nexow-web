@@ -80,8 +80,11 @@ const D = {
           <Icon name="arrow" class="size-3.5 text-ink-400 transition-transform group-hover:translate-x-0.5" />
         </a>
 
+        {/* Phone size is fluid, not a fixed 2.7rem: locales with long compounds
+            (el "Περιγράψτε", ru "Опишите.") overrun a 320px screen and the hero's
+            overflow clip silently eats the end of the word. */}
         <h1
-          class="mt-7 font-display text-[2.7rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
+          class="mt-7 font-display text-[clamp(1.9rem,8.5vw,2.7rem)] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
         >
           {/* Particle assemble — inverse of the app composer vanish-on-send. */}
           <span class="block" data-text-appear data-text-appear-delay={D.line1.replace('s', '')}>{t.titleLead}</span>
