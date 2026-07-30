@@ -594,8 +594,8 @@ export const ja: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'クレジット、のち NEXO',
-          body: '初期報酬はクレジット。NEXO 連動ボーナスは DAO と共に解禁。同じレピュテーション、新しい稼ぎ方。',
+          title: 'クレジット、のち NXW',
+          body: '初期報酬はクレジット。NXW 連動ボーナスは DAO と共に解禁。同じレピュテーション、新しい稼ぎ方。',
         },
       ],
       cta: '@handle を取る',
@@ -684,13 +684,13 @@ export const ja: SiteContent = {
       eyebrow: 'ガバナンス',
       badge: '近日公開',
       title: 'Nexow DAO でロードマップを所有する。',
-      subtitle: 'NEXO はガバナンストークン。作って届けることで稼ぎ、提案・投票・共有トレジャリーの舵取りで使います。',
+      subtitle: 'NXW はガバナンストークン。作って届けることで稼ぎ、提案・投票・共有トレジャリーの舵取りで使います。',
       body: 'DAO タブはすでにコミュニティパネルにティーザーとしてあります — 本投票、トレジャリー、クリエイター報酬は次。それまではレピュテーションとメダルがライブなので、早期メイカーが先行できます。',
       pillars: [
         {
           icon: 'lightbulb',
           title: '提案',
-          body: '機能、コネクタ、ルールを提案。NEXO 保有者なら誰でもアイデアを投票に載せられます。',
+          body: '機能、コネクタ、ルールを提案。NXW 保有者なら誰でもアイデアを投票に載せられます。',
         },
         {
           icon: 'vote',
@@ -732,7 +732,7 @@ export const ja: SiteContent = {
           votes: 289,
         },
         {
-          title: 'NEXO 提案しきい値を 1,000 に引き下げ',
+          title: 'NXW 提案しきい値を 1,000 に引き下げ',
           tag: 'ガバナンス',
           pct: 58,
           votes: 203,
@@ -1061,7 +1061,7 @@ export const ja: SiteContent = {
       },
       {
         q: "クレジットとトークン報酬はいつですか？",
-        a: "バッジとポイントは今日すでにライブです。クレジットと NEXO ガバナンストークンへの変換は Nexow DAO と共に出荷され、最初の投票で最終スケジュールが批准されます。このページの数字は私たちが提出する提案です。",
+        a: "バッジとポイントは今日すでにライブです。クレジットと NXW ガバナンストークンへの変換は Nexow DAO と共に出荷され、最初の投票で最終スケジュールが批准されます。このページの数字は私たちが提出する提案です。",
       },
     ],
   },
@@ -1071,7 +1071,7 @@ export const ja: SiteContent = {
     subtitle: '投稿もウィジェットもボットも公開も、すべてが 1 つのスコアに流れ込みます。スコアがバッジを、バッジがレベルを解放し——DAO が開けば、その両方がクレジットとガバナンストークンで支払われます。',
     live: 'アプリで稼働中',
     planned: '計画中',
-    plannedNote: 'ポイント・バッジ・レベルは今日すでにアプリで動いています。クレジットと NEXO の支払いは Nexow DAO と同時に始まり、下の表は最初の投票にかける提案です。',
+    plannedNote: 'ポイント・バッジ・レベルは今日すでにアプリで動いています。クレジットと NXW の支払いは Nexow DAO と同時に始まり、下の表は最初の投票にかける提案です。',
     teaser: {
       badges: '作って公開した成果へのメダル',
       levels: '評判ポイントで解禁されるランク',
@@ -1196,14 +1196,14 @@ export const ja: SiteContent = {
     },
     ledger: {
       title: 'リワードのはしご',
-      body: '解放のたびに 2 通りで支払われます。使える AI クレジットと、Nexow DAO のガバナンストークン NEXO です。誰でも、どのプランでも同じ基準です。',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO は Nexow DAO のガバナンストークンです。総供給の {pct} をコミュニティのはしごに確保しています。保有者は提案し、投票し、トレジャリーを動かします。',
+      body: '解放のたびに 2 通りで支払われます。使える AI クレジットと、Nexow DAO のガバナンストークン NXW です。誰でも、どのプランでも同じ基準です。',
+      tokenName: 'NXW',
+      tokenNote: 'NXW は Nexow DAO のガバナンストークンです。総供給の {pct} をコミュニティのはしごに確保しています。保有者は提案し、投票し、トレジャリーを動かします。',
       colUnlock: '解放',
       colCount: '獲得可能数',
       colPoints: 'ポイント',
       colCredits: 'クレジット',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'ブロンズ段位',
         silver: 'シルバー段位',
@@ -1215,15 +1215,15 @@ export const ja: SiteContent = {
       totalTitle: 'コンプリートすると',
       totalBody: 'すべての段位、すべてのメダル、すべてのレベル——図鑑を丸ごと、1 回ずつ受け取った場合。',
       creditsLabel: 'クレジット',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ 定価換算で {usd} 分の AI 生成',
       months: '= Sponsor 相当の生成 {n} か月分を、稼いで手に入れる計算',
     },
     dao: {
       title: 'DAO はそれで何をするのか',
-      body: 'NEXO はおまけではありません——ロードマップはこれで決まります。つくって稼ぎ、投票して使います。',
+      body: 'NXW はおまけではありません——ロードマップはこれで決まります。つくって稼ぎ、投票して使います。',
       cards: [
-        { icon: 'lightbulb', title: '提案', body: '機能・コネクタ・ルールを提案できます。NEXO を持っていれば誰でも投票にかけられます。' },
+        { icon: 'lightbulb', title: '提案', body: '機能・コネクタ・ルールを提案できます。NXW を持っていれば誰でも投票にかけられます。' },
         { icon: 'vote', title: '投票', body: '公開・透明な投票で、次に何をどの順で作るかが決まります。' },
         { icon: 'vault', title: 'トレジャリー', body: '共有トレジャリーが、コミュニティの投票で決まった報奨金と助成を支えます。' },
         { icon: 'gift', title: 'クリエイター報酬', body: 'DAO が作品を配信・推薦したとき、つくった人に分配されます。' },

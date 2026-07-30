@@ -594,8 +594,8 @@ export const zh: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: '先积分，后 NEXO',
-          body: '早期奖励以积分落地；与 NEXO 绑定的奖金随 DAO 解锁。同一声誉层，新的赚钱方式。',
+          title: '先积分，后 NXW',
+          body: '早期奖励以积分落地；与 NXW 绑定的奖金随 DAO 解锁。同一声誉层，新的赚钱方式。',
         },
       ],
       cta: '领取你的 handle',
@@ -684,13 +684,13 @@ export const zh: SiteContent = {
       eyebrow: '治理',
       badge: '即将推出',
       title: '用 Nexow DAO 拥有路线图。',
-      subtitle: 'NEXO 是治理代币。通过构建与发布获得；通过提案、投票与共同金库调度来花费。',
+      subtitle: 'NXW 是治理代币。通过构建与发布获得；通过提案、投票与共同金库调度来花费。',
       body: '社区面板里已有 DAO 标签作为预告 — 真正的投票、金库与创作者奖励随后上线。在此之前，声誉与勋章已上线，让早期创作者抢先一步。',
       pillars: [
         {
           icon: 'lightbulb',
           title: '提案',
-          body: '提出功能、连接器与规则。持有 NEXO 即可把想法放上选票。',
+          body: '提出功能、连接器与规则。持有 NXW 即可把想法放上选票。',
         },
         {
           icon: 'vote',
@@ -732,7 +732,7 @@ export const zh: SiteContent = {
           votes: 289,
         },
         {
-          title: '将 NEXO 提案门槛降至 1,000',
+          title: '将 NXW 提案门槛降至 1,000',
           tag: '治理',
           pct: 58,
           votes: 203,
@@ -1061,7 +1061,7 @@ export const zh: SiteContent = {
       },
       {
         q: "积分与代币奖励何时落地？",
-        a: "徽章与积分今天已上线。把它们换成积分与 NEXO 治理代币会随 Nexow DAO 推出；首次投票将批准最终时间表。本页数字是我们提交的提案。",
+        a: "徽章与积分今天已上线。把它们换成积分与 NXW 治理代币会随 Nexow DAO 推出；首次投票将批准最终时间表。本页数字是我们提交的提案。",
       },
     ],
   },
@@ -1071,7 +1071,7 @@ export const zh: SiteContent = {
     subtitle: '每一条帖子、每个小组件、每个机器人和每次发布，都会汇入同一个分数。分数解锁徽章，徽章解锁等级——DAO 开放后，两者都会以积分和治理代币结算。',
     live: '已在应用中上线',
     planned: '规划中',
-    plannedNote: '积分、徽章和等级今天已经在应用里运行。积分与 NEXO 的发放将随 Nexow DAO 一起上线——下方的表格是提交首次投票的提案。',
+    plannedNote: '积分、徽章和等级今天已经在应用里运行。积分与 NXW 的发放将随 Nexow DAO 一起上线——下方的表格是提交首次投票的提案。',
     teaser: {
       badges: '为你构建与发布的成果颁发勋章',
       levels: '凭声誉积分解锁的等级',
@@ -1196,14 +1196,14 @@ export const zh: SiteContent = {
     },
     ledger: {
       title: '奖励阶梯',
-      body: '每次解锁都双份结算：可直接消费的 AI 积分，以及 NEXO——Nexow DAO 的治理代币。所有人、所有方案，同一套标准。',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO 是 Nexow DAO 的治理代币。总量的 {pct} 预留给社区阶梯；持有者提案、投票并主导金库。',
+      body: '每次解锁都双份结算：可直接消费的 AI 积分，以及 NXW——Nexow DAO 的治理代币。所有人、所有方案，同一套标准。',
+      tokenName: 'NXW',
+      tokenNote: 'NXW 是 Nexow DAO 的治理代币。总量的 {pct} 预留给社区阶梯；持有者提案、投票并主导金库。',
       colUnlock: '解锁项',
       colCount: '可获得',
       colPoints: '积分',
       colCredits: '积分额度',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: '青铜档',
         silver: '白银档',
@@ -1215,15 +1215,15 @@ export const zh: SiteContent = {
       totalTitle: '集齐整套',
       totalBody: '每一档、每一枚勋章、每一个等级——整个图鉴，各领取一次。',
       creditsLabel: '积分',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ 按标价折合 {usd} 的 AI 生成额度',
       months: '= 相当于赚到 {n} 个月 Sponsor 级别的生成量',
     },
     dao: {
       title: 'DAO 拿它做什么',
-      body: 'NEXO 不是支线任务——路线图就是这样决定的。靠创作赚取，靠投票花掉。',
+      body: 'NXW 不是支线任务——路线图就是这样决定的。靠创作赚取，靠投票花掉。',
       cards: [
-        { icon: 'lightbulb', title: '提案', body: '提出功能、连接器和规则。任何持有 NEXO 的人都能把想法送上投票。' },
+        { icon: 'lightbulb', title: '提案', body: '提出功能、连接器和规则。任何持有 NXW 的人都能把想法送上投票。' },
         { icon: 'vote', title: '投票', body: '公开、透明的投票决定接下来做什么、按什么顺序做。' },
         { icon: 'vault', title: '金库', body: '共享金库为社区投票通过的赏金和资助买单。' },
         { icon: 'gift', title: '创作者分成', body: 'DAO 发布并推广你的作品时，创作者可获得分成。' },

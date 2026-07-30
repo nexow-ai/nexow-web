@@ -607,8 +607,8 @@ export const es: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'Créditos y NEXO después',
-          body: 'Las primeras recompensas llegan como créditos; los bonos ligados a NEXO se abren con la DAO. Misma reputación, nuevas formas de ganar.',
+          title: 'Créditos y NXW después',
+          body: 'Las primeras recompensas llegan como créditos; los bonos ligados a NXW se abren con la DAO. Misma reputación, nuevas formas de ganar.',
         },
       ],
       cta: 'Reclama tu handle',
@@ -697,13 +697,13 @@ export const es: SiteContent = {
       eyebrow: 'Gobernanza',
       badge: 'Próximamente',
       title: 'Sé dueño del roadmap con la Nexow DAO.',
-      subtitle: 'NEXO es el token de gobernanza. Gánalo construyendo y publicando; gástalo proponiendo, votando y dirigiendo un tesoro compartido.',
+      subtitle: 'NXW es el token de gobernanza. Gánalo construyendo y publicando; gástalo proponiendo, votando y dirigiendo un tesoro compartido.',
       body: 'La pestaña DAO ya está en el panel de comunidad como avance — las votaciones reales, el tesoro y las recompensas a creators llegan después. Mientras, la reputación y las medallas están en vivo para que los makers tempranos empiecen por delante.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Proponer',
-          body: 'Propón funciones, conectores y reglas. Quien tenga NEXO puede poner una idea en la urna.',
+          body: 'Propón funciones, conectores y reglas. Quien tenga NXW puede poner una idea en la urna.',
         },
         {
           icon: 'vote',
@@ -745,7 +745,7 @@ export const es: SiteContent = {
           votes: 289,
         },
         {
-          title: 'Bajar el umbral de propuestas NEXO a 1.000',
+          title: 'Bajar el umbral de propuestas NXW a 1.000',
           tag: 'Gobernanza',
           pct: 58,
           votes: 203,
@@ -1074,7 +1074,7 @@ export const es: SiteContent = {
       },
       {
         q: "¿Cuándo llegan las recompensas en créditos y tokens?",
-        a: "Las insignias y los puntos ya están activos. Convertirlos en créditos y tokens de gobernanza NEXO llega con la Nexow DAO; la primera votación ratifica el calendario final. Los números de esta página son la propuesta a la que nos comprometemos.",
+        a: "Las insignias y los puntos ya están activos. Convertirlos en créditos y tokens de gobernanza NXW llega con la Nexow DAO; la primera votación ratifica el calendario final. Los números de esta página son la propuesta a la que nos comprometemos.",
       },
     ],
   },
@@ -1084,7 +1084,7 @@ export const es: SiteContent = {
     subtitle: 'Cada post, widget, bot y publicación alimenta una misma puntuación. La puntuación desbloquea insignias, las insignias desbloquean niveles — y cuando abra la DAO, ambas pagan en créditos y tokens de gobernanza.',
     live: 'Activo en la app',
     planned: 'Planeado',
-    plannedNote: 'Los puntos, las insignias y los niveles ya funcionan en la app. Los pagos en créditos y NEXO llegan con la Nexow DAO — la tabla de abajo es la propuesta que irá a la primera votación.',
+    plannedNote: 'Los puntos, las insignias y los niveles ya funcionan en la app. Los pagos en créditos y NXW llegan con la Nexow DAO — la tabla de abajo es la propuesta que irá a la primera votación.',
     teaser: {
       badges: 'Medallas por lo que construyes y publicas',
       levels: 'Rangos que desbloqueas con reputación',
@@ -1209,14 +1209,14 @@ export const es: SiteContent = {
     },
     ledger: {
       title: 'La escalera de recompensas',
-      body: 'Cada desbloqueo paga dos veces: créditos de IA para gastar, y NEXO — el token de gobernanza de la Nexow DAO. El mismo baremo para todos, en todos los planes.',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO es el token de gobernanza de la Nexow DAO. El {pct} del suministro está reservado para la escalera de la comunidad; quien lo tiene propone, vota y dirige la tesorería.',
+      body: 'Cada desbloqueo paga dos veces: créditos de IA para gastar, y NXW — el token de gobernanza de la Nexow DAO. El mismo baremo para todos, en todos los planes.',
+      tokenName: 'NXW',
+      tokenNote: 'NXW es el token de gobernanza de la Nexow DAO. El {pct} del suministro está reservado para la escalera de la comunidad; quien lo tiene propone, vota y dirige la tesorería.',
       colUnlock: 'Desbloqueo',
       colCount: 'Disponibles',
       colPoints: 'Puntos',
       colCredits: 'Créditos',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'Nivel bronce',
         silver: 'Nivel plata',
@@ -1228,15 +1228,15 @@ export const es: SiteContent = {
       totalTitle: 'Completa la colección',
       totalBody: 'Todos los niveles, todas las medallas, todos los rangos — el catálogo entero, reclamado una vez.',
       creditsLabel: 'créditos',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ {usd} de generación de IA a precio de lista',
       months: '= {n} meses de generación al nivel Sponsor, ganados',
     },
     dao: {
       title: 'Qué hace la DAO con ellos',
-      body: 'NEXO no es una misión secundaria — es cómo se decide la hoja de ruta. Se gana construyendo y se gasta votando.',
+      body: 'NXW no es una misión secundaria — es cómo se decide la hoja de ruta. Se gana construyendo y se gasta votando.',
       cards: [
-        { icon: 'lightbulb', title: 'Proponer', body: 'Propón funciones, conectores y reglas. Cualquiera con NEXO puede llevar una idea a la votación.' },
+        { icon: 'lightbulb', title: 'Proponer', body: 'Propón funciones, conectores y reglas. Cualquiera con NXW puede llevar una idea a la votación.' },
         { icon: 'vote', title: 'Votar', body: 'Votaciones públicas y transparentes deciden qué se construye y en qué orden.' },
         { icon: 'vault', title: 'Tesorería', body: 'Una tesorería común financia las recompensas y becas que vota la comunidad.' },
         { icon: 'gift', title: 'Recompensas', body: 'Quien construye se lleva una parte cuando la DAO publica y promociona su trabajo.' },

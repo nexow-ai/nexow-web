@@ -594,8 +594,8 @@ export const ms = {
         },
         {
           icon: 'sparkles',
-          title: 'Kredit & kemudian NEXO',
-          body: 'Ganjaran awal datang sebagai kredit; bonus terikat NEXO dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana.',
+          title: 'Kredit & kemudian NXW',
+          body: 'Ganjaran awal datang sebagai kredit; bonus terikat NXW dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana.',
         },
       ],
       cta: 'Tuntut @handle anda',
@@ -684,13 +684,13 @@ export const ms = {
       eyebrow: 'Tadbir urus',
       badge: 'Tidak lama lagi',
       title: 'Miliki peta jalan dengan Nexow DAO.',
-      subtitle: 'NEXO ialah token tadbir urus. Perolehnya dengan membina dan menghantar; belanjakannya dengan mencadang, mengundi dan mengemudi perbendaharaan bersama.',
+      subtitle: 'NXW ialah token tadbir urus. Perolehnya dengan membina dan menghantar; belanjakannya dengan mencadang, mengundi dan mengemudi perbendaharaan bersama.',
       body: 'Tab DAO sudah ada dalam panel komuniti sebagai teaser — undian sebenar, perbendaharaan dan ganjaran pencipta datang seterusnya. Sementara itu reputasi dan pingat sudah langsung supaya pembuat awal bermula di hadapan.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Cadang',
-          body: 'Cadangkan ciri, penyambung dan peraturan. Sesiapa yang memegang NEXO boleh meletakkan idea pada undian.',
+          body: 'Cadangkan ciri, penyambung dan peraturan. Sesiapa yang memegang NXW boleh meletakkan idea pada undian.',
         },
         {
           icon: 'vote',
@@ -732,7 +732,7 @@ export const ms = {
           votes: 289,
         },
         {
-          title: 'Turunkan ambang cadangan NEXO kepada 1,000',
+          title: 'Turunkan ambang cadangan NXW kepada 1,000',
           tag: 'Tadbir urus',
           pct: 58,
           votes: 203,
@@ -989,7 +989,7 @@ export const ms = {
       },
       {
         q: "Bila ganjaran kredit dan token tiba?",
-        a: "Lencana dan mata sudah hidup hari ini. Menukarkannya kepada kredit dan token tadbir urus NEXO datang bersama Nexow DAO; undian pertama meratifikasi jadual akhir. Nombor pada halaman ini ialah cadangan yang kami komitmenkan.",
+        a: "Lencana dan mata sudah hidup hari ini. Menukarkannya kepada kredit dan token tadbir urus NXW datang bersama Nexow DAO; undian pertama meratifikasi jadual akhir. Nombor pada halaman ini ialah cadangan yang kami komitmenkan.",
       },
     ],
   },

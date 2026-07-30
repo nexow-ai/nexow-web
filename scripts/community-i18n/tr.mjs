@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Referanslardan kazanın", body: "Davetinizi paylaşın. Getirdiğiniz biri inşa eder, yayınlar veya yükseltirse upside’ın bir payını alırsınız." },
       { icon: "users", title: "Yeni takipçilerden kazanın", body: "Kitle çekin ve ağınız büyüdükçe ödüllendirilin — iki yöne de ödeyen itibar." },
-      { icon: "sparkles", title: "Önce kredi, sonra NEXO", body: "Erken ödüller kredi olarak gelir; NEXO’ya bağlı bonuslar DAO ile açılır. Aynı itibar yüzeyi, yeni kazanma yolları." },
+      { icon: "sparkles", title: "Önce kredi, sonra NXW", body: "Erken ödüller kredi olarak gelir; NXW’ya bağlı bonuslar DAO ile açılır. Aynı itibar yüzeyi, yeni kazanma yolları." },
     ],
     cta: "@handle’ınızı alın",
   },
@@ -105,11 +105,11 @@ export default {
     badge: 'Yakında',
     title: 'Nexow DAO ile yol haritasına sahip olun.',
     subtitle:
-      'NEXO yönetişim token’ıdır. İnşa edip yayınlayarak kazanın; önererek, oy vererek ve ortak hazinede yön vererek harcayın.',
+      'NXW yönetişim token’ıdır. İnşa edip yayınlayarak kazanın; önererek, oy vererek ve ortak hazinede yön vererek harcayın.',
     body:
       'DAO sekmesi zaten topluluk panelinde bir teaser olarak var — gerçek oylamalar, hazine ve üretici ödülleri sonra gelir. O zamana kadar itibar ve madalyalar canlıdır; erken üreticiler önde başlar.',
     pillars: [
-      { icon: 'lightbulb', title: 'Öner', body: 'Özellikler, bağlayıcılar ve kurallar önerin. NEXO tutan herkes bir fikri oylamaya koyabilir.' },
+      { icon: 'lightbulb', title: 'Öner', body: 'Özellikler, bağlayıcılar ve kurallar önerin. NXW tutan herkes bir fikri oylamaya koyabilir.' },
       { icon: 'vote', title: 'Oy ver', body: 'Kamuya açık, şeffaf oylar sırada neyin hangi sırayla yapılacağına karar verir.' },
       { icon: 'vault', title: 'Hazine', body: 'Ortak bir hazine, topluluğun oyladığı ödülleri ve hibeleri finanse eder.' },
       { icon: 'gift', title: 'Üretici ödülleri', body: 'DAO işlerini yayınlayıp tanıttığında üreticiler pay alır.' },
@@ -122,7 +122,7 @@ export default {
       { title: 'Topluluk widget ödül programını finanse et', tag: 'Hazine', pct: 72, votes: 341 },
       { title: 'Pazaryeri üreticileri için gelir paylaşımı', tag: 'Ödüller', pct: 87, votes: 512 },
       { title: 'Widget çalışma zamanını açık kaynak yap', tag: 'Yol haritası', pct: 64, votes: 289 },
-      { title: "NEXO teklif eşiğini 1.000’e düşür", tag: "Yönetişim", pct: 58, votes: 203 },
+      { title: "NXW teklif eşiğini 1.000’e düşür", tag: "Yönetişim", pct: 58, votes: 203 },
       { title: "Solana pazaryeri ücretlerini %2,5’e indir", tag: "Ücretler", pct: 81, votes: 456 },
       { title: "Araştırma panosu moderatörlerini seç", tag: "Moderasyon", pct: 69, votes: 318 },
     ],

@@ -594,8 +594,8 @@ export const tr = {
         },
         {
           icon: 'sparkles',
-          title: 'Önce kredi, sonra NEXO',
-          body: 'Erken ödüller kredi olarak gelir; NEXO’ya bağlı bonuslar DAO ile açılır. Aynı itibar yüzeyi, yeni kazanma yolları.',
+          title: 'Önce kredi, sonra NXW',
+          body: 'Erken ödüller kredi olarak gelir; NXW’ya bağlı bonuslar DAO ile açılır. Aynı itibar yüzeyi, yeni kazanma yolları.',
         },
       ],
       cta: '@handle’ınızı alın',
@@ -684,13 +684,13 @@ export const tr = {
       eyebrow: 'Yönetişim',
       badge: 'Yakında',
       title: 'Nexow DAO ile yol haritasına sahip olun.',
-      subtitle: 'NEXO yönetişim token’ıdır. İnşa edip yayınlayarak kazanın; önererek, oy vererek ve ortak hazinede yön vererek harcayın.',
+      subtitle: 'NXW yönetişim token’ıdır. İnşa edip yayınlayarak kazanın; önererek, oy vererek ve ortak hazinede yön vererek harcayın.',
       body: 'DAO sekmesi zaten topluluk panelinde bir teaser olarak var — gerçek oylamalar, hazine ve üretici ödülleri sonra gelir. O zamana kadar itibar ve madalyalar canlıdır; erken üreticiler önde başlar.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Öner',
-          body: 'Özellikler, bağlayıcılar ve kurallar önerin. NEXO tutan herkes bir fikri oylamaya koyabilir.',
+          body: 'Özellikler, bağlayıcılar ve kurallar önerin. NXW tutan herkes bir fikri oylamaya koyabilir.',
         },
         {
           icon: 'vote',
@@ -732,7 +732,7 @@ export const tr = {
           votes: 289,
         },
         {
-          title: 'NEXO teklif eşiğini 1.000’e düşür',
+          title: 'NXW teklif eşiğini 1.000’e düşür',
           tag: 'Yönetişim',
           pct: 58,
           votes: 203,
@@ -989,7 +989,7 @@ export const tr = {
       },
       {
         q: "Kredi ve token ödülleri ne zaman gelir?",
-        a: "Rozetler ve puanlar bugün canlı. Bunları kredilere ve NEXO yönetişim token’larına dönüştürmek Nexow DAO ile gelir; ilk oylama nihai takvimi onaylar. Bu sayfadaki sayılar sunduğumuz öneridir.",
+        a: "Rozetler ve puanlar bugün canlı. Bunları kredilere ve NXW yönetişim token’larına dönüştürmek Nexow DAO ile gelir; ilk oylama nihai takvimi onaylar. Bu sayfadaki sayılar sunduğumuz öneridir.",
       },
     ],
   },

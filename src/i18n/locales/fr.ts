@@ -638,8 +638,8 @@ export const fr: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'Crédits & NEXO ensuite',
-          body: 'Les premières récompenses arrivent en crédits ; les bonus liés au NEXO s’ouvrent avec la DAO. Même surface de réputation, de nouvelles façons de gagner.',
+          title: 'Crédits & NXW ensuite',
+          body: 'Les premières récompenses arrivent en crédits ; les bonus liés au NXW s’ouvrent avec la DAO. Même surface de réputation, de nouvelles façons de gagner.',
         },
       ],
       cta: 'Réclamez votre handle',
@@ -728,13 +728,13 @@ export const fr: SiteContent = {
       eyebrow: 'Gouvernance',
       badge: 'Bientôt',
       title: 'Possédez la roadmap avec la Nexow DAO.',
-      subtitle: 'NEXO est le token de gouvernance. Gagnez-le en construisant et en shippant ; dépensez-le en proposant, votant et pilotant un trésor partagé.',
+      subtitle: 'NXW est le token de gouvernance. Gagnez-le en construisant et en shippant ; dépensez-le en proposant, votant et pilotant un trésor partagé.',
       body: 'L’onglet DAO est déjà dans le panneau communauté en teaser — vrais ballots, trésor et récompenses creators arrivent ensuite. En attendant, réputation et médailles sont live pour que les makers précoces partent devant.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Proposer',
-          body: 'Proposez des features, connecteurs et règles. Quiconque détient du NEXO peut mettre une idée au vote.',
+          body: 'Proposez des features, connecteurs et règles. Quiconque détient du NXW peut mettre une idée au vote.',
         },
         {
           icon: 'vote',
@@ -776,7 +776,7 @@ export const fr: SiteContent = {
           votes: 289,
         },
         {
-          title: 'Baisser le seuil de proposition NEXO à 1 000',
+          title: 'Baisser le seuil de proposition NXW à 1 000',
           tag: 'Gouvernance',
           pct: 58,
           votes: 203,
@@ -1105,7 +1105,7 @@ export const fr: SiteContent = {
       },
       {
         q: "Quand arrivent les récompenses en crédits et tokens ?",
-        a: "Badges et points sont déjà live. Les convertir en crédits et tokens de gouvernance NEXO arrive avec la Nexow DAO ; le premier vote ratifie le calendrier final. Les chiffres de cette page sont la proposition à laquelle nous nous engageons.",
+        a: "Badges et points sont déjà live. Les convertir en crédits et tokens de gouvernance NXW arrive avec la Nexow DAO ; le premier vote ratifie le calendrier final. Les chiffres de cette page sont la proposition à laquelle nous nous engageons.",
       },
     ],
   },
@@ -1115,7 +1115,7 @@ export const fr: SiteContent = {
     subtitle: 'Chaque post, widget, bot et publication alimente un même score. Le score débloque des badges, les badges débloquent des niveaux — et à l’ouverture de la DAO, les deux se paient en crédits et en tokens de gouvernance.',
     live: 'Actif dans l’app',
     planned: 'Prévu',
-    plannedNote: 'Les points, badges et niveaux sont déjà actifs dans l’app. Les versements en crédits et en NEXO arrivent avec la Nexow DAO — le tableau ci-dessous est la proposition soumise au premier vote.',
+    plannedNote: 'Les points, badges et niveaux sont déjà actifs dans l’app. Les versements en crédits et en NXW arrivent avec la Nexow DAO — le tableau ci-dessous est la proposition soumise au premier vote.',
     teaser: {
       badges: 'Médailles pour ce que vous construisez',
       levels: 'Rangs débloqués par la réputation',
@@ -1240,14 +1240,14 @@ export const fr: SiteContent = {
     },
     ledger: {
       title: 'L’échelle des récompenses',
-      body: 'Chaque déblocage paie deux fois : des crédits IA à dépenser, et du NEXO — le token de gouvernance de la Nexow DAO. Le même barème pour tout le monde, sur tous les plans.',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO est le token de gouvernance de la Nexow DAO. {pct} de l’offre est réservé à l’échelle communautaire ; les détenteurs proposent, votent et pilotent la trésorerie.',
+      body: 'Chaque déblocage paie deux fois : des crédits IA à dépenser, et du NXW — le token de gouvernance de la Nexow DAO. Le même barème pour tout le monde, sur tous les plans.',
+      tokenName: 'NXW',
+      tokenNote: 'NXW est le token de gouvernance de la Nexow DAO. {pct} de l’offre est réservé à l’échelle communautaire ; les détenteurs proposent, votent et pilotent la trésorerie.',
       colUnlock: 'Déblocage',
       colCount: 'Disponibles',
       colPoints: 'Points',
       colCredits: 'Crédits',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'Palier bronze',
         silver: 'Palier argent',
@@ -1259,15 +1259,15 @@ export const fr: SiteContent = {
       totalTitle: 'Compléter la collection',
       totalBody: 'Tous les paliers, toutes les médailles, tous les niveaux — le catalogue entier, réclamé une fois.',
       creditsLabel: 'crédits',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ {usd} de génération IA au tarif public',
       months: '= {n} mois de génération au niveau Sponsor, gagnés',
     },
     dao: {
       title: 'Ce que la DAO en fait',
-      body: 'NEXO n’est pas une quête annexe — c’est ainsi que la feuille de route se décide. On le gagne en construisant, on le dépense en votant.',
+      body: 'NXW n’est pas une quête annexe — c’est ainsi que la feuille de route se décide. On le gagne en construisant, on le dépense en votant.',
       cards: [
-        { icon: 'lightbulb', title: 'Proposer', body: 'Proposez des fonctions, des connecteurs et des règles. Tout détenteur de NEXO peut mettre une idée au vote.' },
+        { icon: 'lightbulb', title: 'Proposer', body: 'Proposez des fonctions, des connecteurs et des règles. Tout détenteur de NXW peut mettre une idée au vote.' },
         { icon: 'vote', title: 'Voter', body: 'Des votes publics et transparents décident de ce qui est construit, et dans quel ordre.' },
         { icon: 'vault', title: 'Trésorerie', body: 'Une trésorerie commune finance les primes et les bourses votées par la communauté.' },
         { icon: 'gift', title: 'Récompenses', body: 'Les créateurs touchent une part quand la DAO publie et met en avant leur travail.' },

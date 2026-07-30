@@ -607,8 +607,8 @@ export const de: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'Credits & später NEXO',
-          body: 'Frühe Rewards kommen als Credits; NEXO-gebundene Boni öffnen sich mit der DAO. Gleiche Reputation, neue Earn-Wege.',
+          title: 'Credits & später NXW',
+          body: 'Frühe Rewards kommen als Credits; NXW-gebundene Boni öffnen sich mit der DAO. Gleiche Reputation, neue Earn-Wege.',
         },
       ],
       cta: 'Handle sichern',
@@ -697,13 +697,13 @@ export const de: SiteContent = {
       eyebrow: 'Governance',
       badge: 'Demnächst',
       title: 'Besitze die Roadmap mit der Nexow DAO.',
-      subtitle: 'NEXO ist der Governance-Token. Verdiene ihn durch Bauen und Shippen; gib ihn aus, indem du vorschlägst, abstimmst und eine gemeinsame Treasury steuerst.',
+      subtitle: 'NXW ist der Governance-Token. Verdiene ihn durch Bauen und Shippen; gib ihn aus, indem du vorschlägst, abstimmst und eine gemeinsame Treasury steuerst.',
       body: 'Der DAO-Tab ist schon im Community-Panel als Teaser — echte Ballots, Treasury und Creator-Rewards folgen. Bis dahin sind Reputation und Medaillen live, damit frühe Maker voraus starten.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Vorschlagen',
-          body: 'Schlage Features, Connectoren und Regeln vor. Wer NEXO hält, kann eine Idee auf den Stimmzettel setzen.',
+          body: 'Schlage Features, Connectoren und Regeln vor. Wer NXW hält, kann eine Idee auf den Stimmzettel setzen.',
         },
         {
           icon: 'vote',
@@ -745,7 +745,7 @@ export const de: SiteContent = {
           votes: 289,
         },
         {
-          title: 'NEXO-Proposal-Schwelle auf 1.000 senken',
+          title: 'NXW-Proposal-Schwelle auf 1.000 senken',
           tag: 'Governance',
           pct: 58,
           votes: 203,
@@ -1074,7 +1074,7 @@ export const de: SiteContent = {
       },
       {
         q: "Wann kommen Credit- und Token-Belohnungen?",
-        a: "Badges und Punkte sind heute live. Die Umwandlung in Credits und NEXO-Governance-Tokens kommt mit der Nexow DAO; die erste Abstimmung ratifiziert den finalen Zeitplan. Die Zahlen auf dieser Seite sind der Vorschlag, den wir einbringen.",
+        a: "Badges und Punkte sind heute live. Die Umwandlung in Credits und NXW-Governance-Tokens kommt mit der Nexow DAO; die erste Abstimmung ratifiziert den finalen Zeitplan. Die Zahlen auf dieser Seite sind der Vorschlag, den wir einbringen.",
       },
     ],
   },
@@ -1084,7 +1084,7 @@ export const de: SiteContent = {
     subtitle: 'Jeder Post, jedes Widget, jeder Bot und jede Veröffentlichung fließt in eine Punktzahl. Die Punktzahl schaltet Abzeichen frei, die Abzeichen schalten Level frei — und wenn die DAO öffnet, zahlen beide in Credits und Governance-Tokens aus.',
     live: 'Live in der App',
     planned: 'Geplant',
-    plannedNote: 'Punkte, Abzeichen und Level sind heute schon in der App live. Auszahlungen in Credits und NEXO kommen mit der Nexow DAO — die Tabelle unten ist der Vorschlag für die erste Abstimmung.',
+    plannedNote: 'Punkte, Abzeichen und Level sind heute schon in der App live. Auszahlungen in Credits und NXW kommen mit der Nexow DAO — die Tabelle unten ist der Vorschlag für die erste Abstimmung.',
     teaser: {
       badges: 'Medaillen für das, was du baust und shippst',
       levels: 'Ränge, freigeschaltet durch Reputation',
@@ -1209,14 +1209,14 @@ export const de: SiteContent = {
     },
     ledger: {
       title: 'Die Belohnungsleiter',
-      body: 'Jede Freischaltung zahlt doppelt: KI-Credits zum Ausgeben und NEXO — den Governance-Token der Nexow DAO. Dieselbe Staffel für alle, in jedem Tarif.',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO ist der Governance-Token der Nexow DAO. {pct} des Angebots sind für die Community-Leiter reserviert; Halter schlagen vor, stimmen ab und steuern die Treasury.',
+      body: 'Jede Freischaltung zahlt doppelt: KI-Credits zum Ausgeben und NXW — den Governance-Token der Nexow DAO. Dieselbe Staffel für alle, in jedem Tarif.',
+      tokenName: 'NXW',
+      tokenNote: 'NXW ist der Governance-Token der Nexow DAO. {pct} des Angebots sind für die Community-Leiter reserviert; Halter schlagen vor, stimmen ab und steuern die Treasury.',
       colUnlock: 'Freischaltung',
       colCount: 'Verfügbar',
       colPoints: 'Punkte',
       colCredits: 'Credits',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'Bronze-Stufe',
         silver: 'Silber-Stufe',
@@ -1228,15 +1228,15 @@ export const de: SiteContent = {
       totalTitle: 'Alles einsammeln',
       totalBody: 'Jede Stufe, jede Medaille, jedes Level — der komplette Katalog, einmal abgeholt.',
       creditsLabel: 'Credits',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ {usd} KI-Generierung zum Listenpreis',
       months: '= {n} Monate Generierung auf Sponsor-Niveau, verdient',
     },
     dao: {
       title: 'Was die DAO damit macht',
-      body: 'NEXO ist keine Nebenquest — so wird die Roadmap entschieden. Verdiene ihn durchs Bauen, gib ihn durchs Abstimmen aus.',
+      body: 'NXW ist keine Nebenquest — so wird die Roadmap entschieden. Verdiene ihn durchs Bauen, gib ihn durchs Abstimmen aus.',
       cards: [
-        { icon: 'lightbulb', title: 'Vorschlagen', body: 'Schlage Funktionen, Konnektoren und Regeln vor. Wer NEXO hält, kann eine Idee zur Abstimmung stellen.' },
+        { icon: 'lightbulb', title: 'Vorschlagen', body: 'Schlage Funktionen, Konnektoren und Regeln vor. Wer NXW hält, kann eine Idee zur Abstimmung stellen.' },
         { icon: 'vote', title: 'Abstimmen', body: 'Öffentliche, transparente Abstimmungen entscheiden, was als Nächstes gebaut wird und in welcher Reihenfolge.' },
         { icon: 'vault', title: 'Treasury', body: 'Eine gemeinsame Treasury finanziert Bounties und Förderungen, die die Community beschließt.' },
         { icon: 'gift', title: 'Creator-Anteil', body: 'Bauende bekommen einen Anteil, wenn die DAO ihre Arbeit ausliefert und bewirbt.' },

@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Verdienen mit Referrals", body: "Teile deine Invite. Wenn jemand, den du bringst, baut, shippt oder upgradet, verdienst du einen Anteil am Upside." },
       { icon: "users", title: "Verdienen mit neuen Followern", body: "Ziehe Audience an und werde belohnt, während dein Netzwerk wächst — Reputation, die in beide Richtungen zahlt." },
-      { icon: "sparkles", title: "Credits & später NEXO", body: "Frühe Rewards kommen als Credits; NEXO-gebundene Boni öffnen sich mit der DAO. Gleiche Reputation, neue Earn-Wege." },
+      { icon: "sparkles", title: "Credits & später NXW", body: "Frühe Rewards kommen als Credits; NXW-gebundene Boni öffnen sich mit der DAO. Gleiche Reputation, neue Earn-Wege." },
     ],
     cta: "Handle sichern",
   },
@@ -105,11 +105,11 @@ export default {
     badge: 'Demnächst',
     title: 'Besitze die Roadmap mit der Nexow DAO.',
     subtitle:
-      'NEXO ist der Governance-Token. Verdiene ihn durch Bauen und Shippen; gib ihn aus, indem du vorschlägst, abstimmst und eine gemeinsame Treasury steuerst.',
+      'NXW ist der Governance-Token. Verdiene ihn durch Bauen und Shippen; gib ihn aus, indem du vorschlägst, abstimmst und eine gemeinsame Treasury steuerst.',
     body:
       'Der DAO-Tab ist schon im Community-Panel als Teaser — echte Ballots, Treasury und Creator-Rewards folgen. Bis dahin sind Reputation und Medaillen live, damit frühe Maker voraus starten.',
     pillars: [
-      { icon: 'lightbulb', title: 'Vorschlagen', body: 'Schlage Features, Connectoren und Regeln vor. Wer NEXO hält, kann eine Idee auf den Stimmzettel setzen.' },
+      { icon: 'lightbulb', title: 'Vorschlagen', body: 'Schlage Features, Connectoren und Regeln vor. Wer NXW hält, kann eine Idee auf den Stimmzettel setzen.' },
       { icon: 'vote', title: 'Abstimmen', body: 'Öffentliche, transparente Votes entscheiden, was als Nächstes gebaut wird und in welcher Reihenfolge.' },
       { icon: 'vault', title: 'Treasury', body: 'Eine gemeinsame Treasury finanziert Bounties und Grants, die die Community einstimmt.' },
       { icon: 'gift', title: 'Creator-Rewards', body: 'Builder verdienen einen Anteil, wenn die DAO ihre Arbeit shippt und pusht.' },
@@ -122,7 +122,7 @@ export default {
       { title: 'Community-Widget-Bounty-Programm finanzieren', tag: 'Treasury', pct: 72, votes: 341 },
       { title: 'Umsatzbeteiligung für Marketplace-Creators', tag: 'Rewards', pct: 87, votes: 512 },
       { title: 'Widget-Runtime open-sourcen', tag: 'Roadmap', pct: 64, votes: 289 },
-      { title: "NEXO-Proposal-Schwelle auf 1.000 senken", tag: "Governance", pct: 58, votes: 203 },
+      { title: "NXW-Proposal-Schwelle auf 1.000 senken", tag: "Governance", pct: 58, votes: 203 },
       { title: "Solana-Marketplace-Fees auf 2,5 % senken", tag: "Fees", pct: 81, votes: 456 },
       { title: "Moderatoren für Research Boards wählen", tag: "Moderation", pct: 69, votes: 318 },
     ],

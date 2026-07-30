@@ -594,8 +594,8 @@ export const ko: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: '크레딧, 이후 NEXO',
-          body: '초기 보상은 크레딧으로, NEXO 연동 보너스는 DAO와 함께 열립니다. 같은 평판, 새로운 수익 방식.',
+          title: '크레딧, 이후 NXW',
+          body: '초기 보상은 크레딧으로, NXW 연동 보너스는 DAO와 함께 열립니다. 같은 평판, 새로운 수익 방식.',
         },
       ],
       cta: '@handle 확보하기',
@@ -684,13 +684,13 @@ export const ko: SiteContent = {
       eyebrow: '거버넌스',
       badge: '곧 출시',
       title: 'Nexow DAO로 로드맵을 소유하세요.',
-      subtitle: 'NEXO는 거버넌스 토큰입니다. 만들고 배포해 얻고, 제안·투표·공유 트레저리 조율로 쓰세요.',
+      subtitle: 'NXW는 거버넌스 토큰입니다. 만들고 배포해 얻고, 제안·투표·공유 트레저리 조율로 쓰세요.',
       body: 'DAO 탭은 이미 커뮤니티 패널에 티저로 있습니다 — 실제 투표, 트레저리, 크리에이터 보상은 다음입니다. 그때까지 평판과 메달이 라이브라 초기 메이커가 앞서 갑니다.',
       pillars: [
         {
           icon: 'lightbulb',
           title: '제안',
-          body: '기능, 커넥터, 규칙을 제안하세요. NEXO 보유자라면 누구나 아이디어를 투표에 올릴 수 있습니다.',
+          body: '기능, 커넥터, 규칙을 제안하세요. NXW 보유자라면 누구나 아이디어를 투표에 올릴 수 있습니다.',
         },
         {
           icon: 'vote',
@@ -732,7 +732,7 @@ export const ko: SiteContent = {
           votes: 289,
         },
         {
-          title: 'NEXO 제안 문턱을 1,000으로 낮추기',
+          title: 'NXW 제안 문턱을 1,000으로 낮추기',
           tag: '거버넌스',
           pct: 58,
           votes: 203,
@@ -1061,7 +1061,7 @@ export const ko: SiteContent = {
       },
       {
         q: "크레딧·토큰 보상은 언제인가요?",
-        a: "배지와 포인트는 오늘 이미 라이브입니다. 크레딧과 NEXO 거버넌스 토큰으로 전환하는 것은 Nexow DAO와 함께 출시되며, 첫 투표가 최종 일정을 비준합니다. 이 페이지의 숫자는 우리가 제출하는 제안입니다.",
+        a: "배지와 포인트는 오늘 이미 라이브입니다. 크레딧과 NXW 거버넌스 토큰으로 전환하는 것은 Nexow DAO와 함께 출시되며, 첫 투표가 최종 일정을 비준합니다. 이 페이지의 숫자는 우리가 제출하는 제안입니다.",
       },
     ],
   },
@@ -1071,7 +1071,7 @@ export const ko: SiteContent = {
     subtitle: '게시물, 위젯, 봇, 게시 — 모두가 하나의 점수로 모입니다. 점수는 배지를, 배지는 등급을 열고, DAO가 열리면 둘 다 크레딧과 거버넌스 토큰으로 지급됩니다.',
     live: '앱에서 사용 중',
     planned: '예정',
-    plannedNote: '포인트 · 배지 · 등급은 이미 앱에서 동작합니다. 크레딧과 NEXO 지급은 Nexow DAO와 함께 시작되며, 아래 표는 첫 투표에 올릴 제안입니다.',
+    plannedNote: '포인트 · 배지 · 등급은 이미 앱에서 동작합니다. 크레딧과 NXW 지급은 Nexow DAO와 함께 시작되며, 아래 표는 첫 투표에 올릴 제안입니다.',
     teaser: {
       badges: '만들고 배포한 결과에 대한 메달',
       levels: '평판 포인트로 여는 등급',
@@ -1196,14 +1196,14 @@ export const ko: SiteContent = {
     },
     ledger: {
       title: '보상 사다리',
-      body: '해제될 때마다 두 번 지급됩니다. 바로 쓰는 AI 크레딧과, Nexow DAO의 거버넌스 토큰 NEXO입니다. 요금제와 상관없이 모두 같은 기준입니다.',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO는 Nexow DAO의 거버넌스 토큰입니다. 총 공급량의 {pct}가 커뮤니티 사다리에 배정되어 있으며, 보유자가 제안하고 투표하고 트레저리를 이끕니다.',
+      body: '해제될 때마다 두 번 지급됩니다. 바로 쓰는 AI 크레딧과, Nexow DAO의 거버넌스 토큰 NXW입니다. 요금제와 상관없이 모두 같은 기준입니다.',
+      tokenName: 'NXW',
+      tokenNote: 'NXW는 Nexow DAO의 거버넌스 토큰입니다. 총 공급량의 {pct}가 커뮤니티 사다리에 배정되어 있으며, 보유자가 제안하고 투표하고 트레저리를 이끕니다.',
       colUnlock: '해제',
       colCount: '획득 가능',
       colPoints: '포인트',
       colCredits: '크레딧',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: '브론즈 단계',
         silver: '실버 단계',
@@ -1215,15 +1215,15 @@ export const ko: SiteContent = {
       totalTitle: '전부 모으면',
       totalBody: '모든 단계, 모든 메달, 모든 등급 — 도감 전체를 한 번씩 받은 경우입니다.',
       creditsLabel: '크레딧',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ 정가 기준 {usd}어치 AI 생성',
       months: '= Sponsor 수준 생성 {n}개월치를 직접 벌어들이는 셈',
     },
     dao: {
       title: 'DAO는 그것으로 무엇을 하나요',
-      body: 'NEXO는 곁다리가 아닙니다 — 로드맵이 이렇게 정해집니다. 만들어서 벌고, 투표해서 씁니다.',
+      body: 'NXW는 곁다리가 아닙니다 — 로드맵이 이렇게 정해집니다. 만들어서 벌고, 투표해서 씁니다.',
       cards: [
-        { icon: 'lightbulb', title: '제안', body: '기능 · 커넥터 · 규칙을 제안하세요. NEXO를 가진 사람은 누구나 안건을 올릴 수 있습니다.' },
+        { icon: 'lightbulb', title: '제안', body: '기능 · 커넥터 · 규칙을 제안하세요. NXW를 가진 사람은 누구나 안건을 올릴 수 있습니다.' },
         { icon: 'vote', title: '투표', body: '공개적이고 투명한 투표로 무엇을 어떤 순서로 만들지 정합니다.' },
         { icon: 'vault', title: '트레저리', body: '공동 트레저리가 커뮤니티가 승인한 현상금과 지원금을 댑니다.' },
         { icon: 'gift', title: '창작자 보상', body: 'DAO가 작품을 배포하고 홍보하면 만든 사람이 몫을 받습니다.' },

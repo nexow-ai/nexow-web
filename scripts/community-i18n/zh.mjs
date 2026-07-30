@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "从推荐中赚钱", body: "分享你的邀请。当你带来的人构建、发布或升级时，你获得一部分收益。" },
       { icon: "users", title: "从新关注者赚钱", body: "吸引受众，并在网络成长时获得奖励——双向回报的声誉。" },
-      { icon: "sparkles", title: "先积分，后 NEXO", body: "早期奖励以积分落地；与 NEXO 绑定的奖金随 DAO 解锁。同一声誉层，新的赚钱方式。" },
+      { icon: "sparkles", title: "先积分，后 NXW", body: "早期奖励以积分落地；与 NXW 绑定的奖金随 DAO 解锁。同一声誉层，新的赚钱方式。" },
     ],
     cta: "领取你的 handle",
   },
@@ -105,11 +105,11 @@ export default {
     badge: '即将推出',
     title: '用 Nexow DAO 拥有路线图。',
     subtitle:
-      'NEXO 是治理代币。通过构建与发布获得；通过提案、投票与共同金库调度来花费。',
+      'NXW 是治理代币。通过构建与发布获得；通过提案、投票与共同金库调度来花费。',
     body:
       '社区面板里已有 DAO 标签作为预告 — 真正的投票、金库与创作者奖励随后上线。在此之前，声誉与勋章已上线，让早期创作者抢先一步。',
     pillars: [
-      { icon: 'lightbulb', title: '提案', body: '提出功能、连接器与规则。持有 NEXO 即可把想法放上选票。' },
+      { icon: 'lightbulb', title: '提案', body: '提出功能、连接器与规则。持有 NXW 即可把想法放上选票。' },
       { icon: 'vote', title: '投票', body: '公开透明的投票决定下一步构建什么、以何顺序。' },
       { icon: 'vault', title: '金库', body: '共享金库资助社区投票通过的赏金与资助。' },
       { icon: 'gift', title: '创作者奖励', body: '当 DAO 发布并推广其作品时，构建者获得分成。' },
@@ -122,7 +122,7 @@ export default {
       { title: '资助社区小组件赏金计划', tag: '金库', pct: 72, votes: 341 },
       { title: '市场创作者收入分成', tag: '奖励', pct: 87, votes: 512 },
       { title: '开源小组件运行时', tag: '路线图', pct: 64, votes: 289 },
-      { title: "将 NEXO 提案门槛降至 1,000", tag: "治理", pct: 58, votes: 203 },
+      { title: "将 NXW 提案门槛降至 1,000", tag: "治理", pct: 58, votes: 203 },
       { title: "将 Solana 市场手续费降至 2.5%", tag: "费用", pct: 81, votes: 456 },
       { title: "选举社区研究看板版主", tag: "审核", pct: 69, votes: 318 },
     ],

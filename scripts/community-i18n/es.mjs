@@ -109,7 +109,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Gana por referidos", body: "Comparte tu invitación. Cuando alguien que traes construye, shippea o sube de plan, te llevas una parte del upside." },
       { icon: "users", title: "Gana con nuevos seguidores", body: "Atrae audiencia y recibe recompensas mientras crece tu red — reputación que paga en ambos sentidos." },
-      { icon: "sparkles", title: "Créditos y NEXO después", body: "Las primeras recompensas llegan como créditos; los bonos ligados a NEXO se abren con la DAO. Misma reputación, nuevas formas de ganar." },
+      { icon: "sparkles", title: "Créditos y NXW después", body: "Las primeras recompensas llegan como créditos; los bonos ligados a NXW se abren con la DAO. Misma reputación, nuevas formas de ganar." },
     ],
     cta: "Reclama tu handle",
   },
@@ -186,14 +186,14 @@ export default {
     badge: 'Próximamente',
     title: 'Sé dueño del roadmap con la Nexow DAO.',
     subtitle:
-      'NEXO es el token de gobernanza. Gánalo construyendo y publicando; gástalo proponiendo, votando y dirigiendo un tesoro compartido.',
+      'NXW es el token de gobernanza. Gánalo construyendo y publicando; gástalo proponiendo, votando y dirigiendo un tesoro compartido.',
     body:
       'La pestaña DAO ya está en el panel de comunidad como avance — las votaciones reales, el tesoro y las recompensas a creators llegan después. Mientras, la reputación y las medallas están en vivo para que los makers tempranos empiecen por delante.',
     pillars: [
       {
         icon: 'lightbulb',
         title: 'Proponer',
-        body: 'Propón funciones, conectores y reglas. Quien tenga NEXO puede poner una idea en la urna.',
+        body: 'Propón funciones, conectores y reglas. Quien tenga NXW puede poner una idea en la urna.',
       },
       {
         icon: 'vote',
@@ -219,7 +219,7 @@ export default {
       { title: 'Financiar un programa de bounties de widgets', tag: 'Tesoro', pct: 72, votes: 341 },
       { title: 'Reparto de ingresos para creators del marketplace', tag: 'Recompensas', pct: 87, votes: 512 },
       { title: 'Abrir el runtime de widgets en código abierto', tag: 'Roadmap', pct: 64, votes: 289 },
-      { title: "Bajar el umbral de propuestas NEXO a 1.000", tag: "Gobernanza", pct: 58, votes: 203 },
+      { title: "Bajar el umbral de propuestas NXW a 1.000", tag: "Gobernanza", pct: 58, votes: 203 },
       { title: "Bajar las fees del marketplace Solana al 2,5%", tag: "Fees", pct: 81, votes: 456 },
       { title: "Elegir moderadores de research boards", tag: "Moderación", pct: 69, votes: 318 },
     ],

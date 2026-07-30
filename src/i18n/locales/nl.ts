@@ -596,8 +596,8 @@ export const nl: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'Credits & later NEXO',
-          body: 'Vroege rewards landen als credits; NEXO-gebonden bonussen openen met de DAO. Zelfde reputatie, nieuwe manieren om te verdienen.',
+          title: 'Credits & later NXW',
+          body: 'Vroege rewards landen als credits; NXW-gebonden bonussen openen met de DAO. Zelfde reputatie, nieuwe manieren om te verdienen.',
         },
       ],
       cta: 'Claim je handle',
@@ -686,13 +686,13 @@ export const nl: SiteContent = {
       eyebrow: 'Governance',
       badge: 'Binnenkort',
       title: 'Bezit de roadmap met de Nexow DAO.',
-      subtitle: 'NEXO is de governance-token. Verdien ’m door te bouwen en te shippen; geef ’m uit door voorstellen, stemmen en een gedeelde treasury te sturen.',
+      subtitle: 'NXW is de governance-token. Verdien ’m door te bouwen en te shippen; geef ’m uit door voorstellen, stemmen en een gedeelde treasury te sturen.',
       body: 'De DAO-tab zit al als teaser in het community-paneel — echte ballots, treasury en creator-rewards volgen. Tot die tijd zijn reputatie en medailles live zodat vroege makers voorop starten.',
       pillars: [
         {
           icon: 'lightbulb',
           title: 'Voorstellen',
-          body: 'Stel features, connectors en regels voor. Wie NEXO houdt, kan een idee op de stemming zetten.',
+          body: 'Stel features, connectors en regels voor. Wie NXW houdt, kan een idee op de stemming zetten.',
         },
         {
           icon: 'vote',
@@ -734,7 +734,7 @@ export const nl: SiteContent = {
           votes: 289,
         },
         {
-          title: 'NEXO-voorsteldrempel verlagen naar 1.000',
+          title: 'NXW-voorsteldrempel verlagen naar 1.000',
           tag: 'Governance',
           pct: 58,
           votes: 203,
@@ -1063,7 +1063,7 @@ export const nl: SiteContent = {
       },
       {
         q: "Wanneer landen credit- en tokenbeloningen?",
-        a: "Badges en punten zijn vandaag live. Ze omzetten in credits en NEXO-governance-tokens komt met de Nexow DAO; de eerste stemming bekrachtigt het definitieve schema. De cijfers op deze pagina zijn het voorstel waaraan we ons verbinden.",
+        a: "Badges en punten zijn vandaag live. Ze omzetten in credits en NXW-governance-tokens komt met de Nexow DAO; de eerste stemming bekrachtigt het definitieve schema. De cijfers op deze pagina zijn het voorstel waaraan we ons verbinden.",
       },
     ],
   },
@@ -1073,7 +1073,7 @@ export const nl: SiteContent = {
     subtitle: 'Elke post, widget, bot en publicatie voedt één score. De score ontgrendelt badges, badges ontgrendelen levels — en zodra de DAO opengaat, keren beide uit in credits en governance-tokens.',
     live: 'Live in de app',
     planned: 'Gepland',
-    plannedNote: 'Punten, badges en levels zijn vandaag al live in de app. Uitkeringen in credits en NEXO komen met de Nexow DAO — de tabel hieronder is het voorstel voor de eerste stemming.',
+    plannedNote: 'Punten, badges en levels zijn vandaag al live in de app. Uitkeringen in credits en NXW komen met de Nexow DAO — de tabel hieronder is het voorstel voor de eerste stemming.',
     teaser: {
       badges: 'Medailles voor wat je bouwt en shippt',
       levels: 'Rangen vrijgespeeld met reputatie',
@@ -1198,14 +1198,14 @@ export const nl: SiteContent = {
     },
     ledger: {
       title: 'De beloningsladder',
-      body: 'Elke ontgrendeling betaalt twee keer: AI-credits om uit te geven, en NEXO — het governance-token van de Nexow DAO. Dezelfde staffel voor iedereen, op elk plan.',
-      tokenName: 'NEXO',
-      tokenNote: 'NEXO is het governance-token van de Nexow DAO. {pct} van de voorraad is gereserveerd voor de communityladder; houders doen voorstellen, stemmen en sturen de treasury.',
+      body: 'Elke ontgrendeling betaalt twee keer: AI-credits om uit te geven, en NXW — het governance-token van de Nexow DAO. Dezelfde staffel voor iedereen, op elk plan.',
+      tokenName: 'NXW',
+      tokenNote: 'NXW is het governance-token van de Nexow DAO. {pct} van de voorraad is gereserveerd voor de communityladder; houders doen voorstellen, stemmen en sturen de treasury.',
       colUnlock: 'Ontgrendeling',
       colCount: 'Beschikbaar',
       colPoints: 'Punten',
       colCredits: 'Credits',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'Bronzen trede',
         silver: 'Zilveren trede',
@@ -1217,15 +1217,15 @@ export const nl: SiteContent = {
       totalTitle: 'Maak de set compleet',
       totalBody: 'Elke trede, elke medaille, elk level — de hele catalogus, één keer geïnd.',
       creditsLabel: 'credits',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ {usd} aan AI-generatie tegen listprijs',
       months: '= {n} maanden generatie op Sponsor-niveau, verdiend',
     },
     dao: {
       title: 'Wat de DAO ermee doet',
-      body: 'NEXO is geen zijmissie — zo wordt de roadmap bepaald. Je verdient het door te bouwen en geeft het uit door te stemmen.',
+      body: 'NXW is geen zijmissie — zo wordt de roadmap bepaald. Je verdient het door te bouwen en geeft het uit door te stemmen.',
       cards: [
-        { icon: 'lightbulb', title: 'Voorstellen', body: 'Stel functies, connectoren en regels voor. Iedereen met NEXO kan een idee op de stemming zetten.' },
+        { icon: 'lightbulb', title: 'Voorstellen', body: 'Stel functies, connectoren en regels voor. Iedereen met NXW kan een idee op de stemming zetten.' },
         { icon: 'vote', title: 'Stemmen', body: 'Openbare, transparante stemmingen bepalen wat er wordt gebouwd en in welke volgorde.' },
         { icon: 'vault', title: 'Treasury', body: 'Een gedeelde treasury financiert de bounties en beurzen waar de community voor stemt.' },
         { icon: 'gift', title: 'Makersdeel', body: 'Bouwers krijgen een deel wanneer de DAO hun werk uitbrengt en promoot.' },

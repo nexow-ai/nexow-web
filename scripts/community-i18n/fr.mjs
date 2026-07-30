@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Gagnez sur les parrainages", body: "Partagez votre invite. Quand quelqu’un que vous amenez construit, shippe ou upgrade, vous touchez une part de l’upside." },
       { icon: "users", title: "Gagnez grâce aux nouveaux followers", body: "Attirez une audience et soyez récompensé à mesure que votre réseau grandit — une réputation qui paie dans les deux sens." },
-      { icon: "sparkles", title: "Crédits & NEXO ensuite", body: "Les premières récompenses arrivent en crédits ; les bonus liés au NEXO s’ouvrent avec la DAO. Même surface de réputation, de nouvelles façons de gagner." },
+      { icon: "sparkles", title: "Crédits & NXW ensuite", body: "Les premières récompenses arrivent en crédits ; les bonus liés au NXW s’ouvrent avec la DAO. Même surface de réputation, de nouvelles façons de gagner." },
     ],
     cta: "Réclamez votre handle",
   },
@@ -105,11 +105,11 @@ export default {
     badge: 'Bientôt',
     title: 'Possédez la roadmap avec la Nexow DAO.',
     subtitle:
-      'NEXO est le token de gouvernance. Gagnez-le en construisant et en shippant ; dépensez-le en proposant, votant et pilotant un trésor partagé.',
+      'NXW est le token de gouvernance. Gagnez-le en construisant et en shippant ; dépensez-le en proposant, votant et pilotant un trésor partagé.',
     body:
       'L’onglet DAO est déjà dans le panneau communauté en teaser — vrais ballots, trésor et récompenses creators arrivent ensuite. En attendant, réputation et médailles sont live pour que les makers précoces partent devant.',
     pillars: [
-      { icon: 'lightbulb', title: 'Proposer', body: 'Proposez des features, connecteurs et règles. Quiconque détient du NEXO peut mettre une idée au vote.' },
+      { icon: 'lightbulb', title: 'Proposer', body: 'Proposez des features, connecteurs et règles. Quiconque détient du NXW peut mettre une idée au vote.' },
       { icon: 'vote', title: 'Voter', body: 'Des votes publics et transparents décident de ce qui se construit ensuite et dans quel ordre.' },
       { icon: 'vault', title: 'Trésor', body: 'Un trésor partagé finance les bounties et grants que la communauté vote.' },
       { icon: 'gift', title: 'Récompenses creators', body: 'Les builders touchent une part quand la DAO shippe et promeut leur travail.' },
@@ -122,7 +122,7 @@ export default {
       { title: 'Financer un programme de bounties widgets', tag: 'Trésor', pct: 72, votes: 341 },
       { title: 'Partage de revenus pour les creators marketplace', tag: 'Récompenses', pct: 87, votes: 512 },
       { title: 'Open-sourcer le runtime des widgets', tag: 'Roadmap', pct: 64, votes: 289 },
-      { title: "Baisser le seuil de proposition NEXO à 1 000", tag: "Gouvernance", pct: 58, votes: 203 },
+      { title: "Baisser le seuil de proposition NXW à 1 000", tag: "Gouvernance", pct: 58, votes: 203 },
       { title: "Réduire les fees marketplace Solana à 2,5 %", tag: "Fees", pct: 81, votes: 456 },
       { title: "Élire les modérateurs des research boards", tag: "Modération", pct: 69, votes: 318 },
     ],

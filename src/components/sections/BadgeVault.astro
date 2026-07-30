@@ -4,7 +4,7 @@
  *
  * Front: hex medallion, badge name, how-to (the action that earns it), unlock
  * thresholds beside each tier, and the reward ladder payout (points, credits,
- * NEXO). Back: denser TRACKS + UNLOCKS AT detail with the same per-tier rewards.
+ * NXW). Back: denser TRACKS + UNLOCKS AT detail with the same per-tier rewards.
  *
  * Flip is CSS on hover/focus; the click handler toggles `data-flipped` so touch
  * visitors get the same card back without a hover state to fight.
@@ -95,7 +95,15 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
               class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
               style={`--from:${RARITY_COLORS[r.key].from};--to:${RARITY_COLORS[r.key].to}`}
             >
-              <Hex icon={r.icon} from={RARITY_COLORS[r.key].from} to={RARITY_COLORS[r.key].to} ink={INK[r.key]} delay={i * 400} />
+              <Hex
+                icon={r.icon}
+                from={RARITY_COLORS[r.key].from}
+                to={RARITY_COLORS[r.key].to}
+                ink={INK[r.key]}
+                size="lg"
+                delay={i * 400}
+                class="hex-float"
+              />
               <div class="min-w-0">
                 <p class="flex flex-wrap items-center gap-2 font-display text-sm font-semibold text-white">
                   {t.rarity[r.key]}
@@ -171,14 +179,22 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                   class="flip-face relative z-[1] flex h-full min-h-64 w-full flex-col rounded-xl border border-white/10 bg-white/[0.03] p-2.5 transition-colors group-hover:border-white/20"
                   style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 55%)`}
                 >
-                  <span class="flex flex-col items-center gap-1 text-center">
-                    <span class="relative">
+                  <span class="flex flex-col items-center gap-2 text-center">
+                    <span class="relative my-0.5">
                       <span
-                        class="aura pointer-events-none absolute -inset-1.5 rounded-full blur-md"
+                        class="aura pointer-events-none absolute -inset-4 rounded-full blur-lg"
                         style={`background:radial-gradient(circle, ${colors.to}, transparent 70%);--d:${(i % 8) * 300}ms`}
                         aria-hidden="true"
                       />
-                      <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="sm" delay={(i % 8) * 300} />
+                      <Hex
+                        icon={badge.icon}
+                        from={colors.from}
+                        to={colors.to}
+                        ink={INK[badge.rarity]}
+                        size="lg"
+                        delay={(i % 8) * 300}
+                        class="hex-float"
+                      />
                     </span>
                     <span class="font-display text-xs font-semibold leading-tight text-white">{t.names[badge.id]}</span>
                     <span class="block text-[0.6rem] leading-snug text-ink-300">{how}</span>

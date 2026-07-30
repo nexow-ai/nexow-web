@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "추천으로 수익", body: "초대를 공유하세요. 당신이 데려온 사람이 만들고, 출시하거나 업그레이드하면 업사이드의 일부를 얻습니다." },
       { icon: "users", title: "새 팔로워로 수익", body: "오디언스를 모으고 네트워크가 성장할수록 보상받으세요 — 양방향으로 보상하는 평판." },
-      { icon: "sparkles", title: "크레딧, 이후 NEXO", body: "초기 보상은 크레딧으로, NEXO 연동 보너스는 DAO와 함께 열립니다. 같은 평판, 새로운 수익 방식." },
+      { icon: "sparkles", title: "크레딧, 이후 NXW", body: "초기 보상은 크레딧으로, NXW 연동 보너스는 DAO와 함께 열립니다. 같은 평판, 새로운 수익 방식." },
     ],
     cta: "@handle 확보하기",
   },
@@ -105,11 +105,11 @@ export default {
     badge: '곧 출시',
     title: 'Nexow DAO로 로드맵을 소유하세요.',
     subtitle:
-      'NEXO는 거버넌스 토큰입니다. 만들고 배포해 얻고, 제안·투표·공유 트레저리 조율로 쓰세요.',
+      'NXW는 거버넌스 토큰입니다. 만들고 배포해 얻고, 제안·투표·공유 트레저리 조율로 쓰세요.',
     body:
       'DAO 탭은 이미 커뮤니티 패널에 티저로 있습니다 — 실제 투표, 트레저리, 크리에이터 보상은 다음입니다. 그때까지 평판과 메달이 라이브라 초기 메이커가 앞서 갑니다.',
     pillars: [
-      { icon: 'lightbulb', title: '제안', body: '기능, 커넥터, 규칙을 제안하세요. NEXO 보유자라면 누구나 아이디어를 투표에 올릴 수 있습니다.' },
+      { icon: 'lightbulb', title: '제안', body: '기능, 커넥터, 규칙을 제안하세요. NXW 보유자라면 누구나 아이디어를 투표에 올릴 수 있습니다.' },
       { icon: 'vote', title: '투표', body: '공개·투명한 투표가 다음에 무엇을 어떤 순서로 만들지 정합니다.' },
       { icon: 'vault', title: '트레저리', body: '공유 트레저리가 커뮤니티가 가결한 바운티와 그랜트를 지원합니다.' },
       { icon: 'gift', title: '크리에이터 보상', body: 'DAO가 작업을 배포하고 홍보할 때 빌더가 몫을 받습니다.' },
@@ -122,7 +122,7 @@ export default {
       { title: '커뮤니티 위젯 바운티 프로그램 기금', tag: '트레저리', pct: 72, votes: 341 },
       { title: '마켓플레이스 크리에이터 수익 공유', tag: '보상', pct: 87, votes: 512 },
       { title: '위젯 런타임 오픈소스화', tag: '로드맵', pct: 64, votes: 289 },
-      { title: "NEXO 제안 문턱을 1,000으로 낮추기", tag: "거버넌스", pct: 58, votes: 203 },
+      { title: "NXW 제안 문턱을 1,000으로 낮추기", tag: "거버넌스", pct: 58, votes: 203 },
       { title: "Solana 마켓 수수료를 2.5%로 인하", tag: "수수료", pct: 81, votes: 456 },
       { title: "커뮤니티 리서치 보드 모더레이터 선출", tag: "모더레이션", pct: 69, votes: 318 },
     ],

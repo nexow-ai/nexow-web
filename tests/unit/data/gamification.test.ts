@@ -5,13 +5,17 @@ import {
   CREDIT_MARGIN_PCT,
   CREDIT_PACKS,
   CREDIT_SALE_CENTS,
-  DAO_COMMUNITY_ALLOCATION_PCT,
   LEGENDARY_BADGES,
   LEGENDARY_BONUS,
   LEVELS,
   LEVEL_REWARDS,
   MATRIX,
   MAX_BADGE_POINTS,
+  NXW_DRY_MINT_ISO,
+  NXW_OPEN_MINT_PRICE_USDC,
+  NXW_OPEN_MINT_SUPPLY,
+  NXW_TOTAL_SUPPLY,
+  NXW_UTILITY_SUPPLY,
   PEG_CENTS,
   PLANS,
   POINT_WEIGHTS,
@@ -621,7 +625,7 @@ describe('reward ladder (planned)', () => {
     }
   });
 
-  it('totals exactly 1,600,000 credits and 25,000 NEXO for a complete set', () => {
+  it('totals exactly 1,600,000 credits and 25,000 NXW for a complete set', () => {
     expect(TOTAL_REWARD_CREDITS).toBe(1_600_000);
     expect(TOTAL_REWARD_TOKENS).toBe(25_000);
   });
@@ -647,10 +651,14 @@ describe('reward ladder (planned)', () => {
     expect(TOTAL_REWARD_SPONSOR_MONTHS).toBe(Math.round(TOTAL_REWARD_CREDITS / planCredits(69.99)));
   });
 
-  it('reserves a tenth of the NEXO supply for the community', () => {
-    expect(DAO_COMMUNITY_ALLOCATION_PCT).toBe(10);
-    expect(DAO_COMMUNITY_ALLOCATION_PCT).toBeGreaterThan(0);
-    expect(DAO_COMMUNITY_ALLOCATION_PCT).toBeLessThan(100);
+  it('caps NXW at 20M with a dry mint, utility pool, and 1 USDC open mint', () => {
+    expect(NXW_DRY_MINT_ISO).toBe('2026-08-14');
+    expect(NXW_UTILITY_SUPPLY).toBe(10_000_000);
+    expect(NXW_OPEN_MINT_SUPPLY).toBe(10_000_000);
+    expect(NXW_OPEN_MINT_PRICE_USDC).toBe(1);
+    expect(NXW_TOTAL_SUPPLY).toBe(NXW_UTILITY_SUPPLY + NXW_OPEN_MINT_SUPPLY);
+    expect(NXW_TOTAL_SUPPLY).toBe(20_000_000);
+    expect(TOTAL_REWARD_TOKENS).toBeLessThanOrEqual(NXW_UTILITY_SUPPLY);
   });
 
   it('names every ladder row and level reward in the English bundle', () => {

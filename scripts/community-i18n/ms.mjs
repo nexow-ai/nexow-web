@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Dapat ganjaran dari rujukan", body: "Kongsi jemputan anda. Bila seseorang yang anda bawa bina, hantar atau naik taraf, anda dapat bahagian upside." },
       { icon: "users", title: "Dapat ganjaran dari pengikut baharu", body: "Tarik audiens dan diganjarkan apabila rangkaian anda berkembang — reputasi yang membayar dua arah." },
-      { icon: "sparkles", title: "Kredit & kemudian NEXO", body: "Ganjaran awal datang sebagai kredit; bonus terikat NEXO dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana." },
+      { icon: "sparkles", title: "Kredit & kemudian NXW", body: "Ganjaran awal datang sebagai kredit; bonus terikat NXW dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana." },
     ],
     cta: "Tuntut @handle anda",
   },
@@ -105,11 +105,11 @@ export default {
     badge: 'Tidak lama lagi',
     title: 'Miliki peta jalan dengan Nexow DAO.',
     subtitle:
-      'NEXO ialah token tadbir urus. Perolehnya dengan membina dan menghantar; belanjakannya dengan mencadang, mengundi dan mengemudi perbendaharaan bersama.',
+      'NXW ialah token tadbir urus. Perolehnya dengan membina dan menghantar; belanjakannya dengan mencadang, mengundi dan mengemudi perbendaharaan bersama.',
     body:
       'Tab DAO sudah ada dalam panel komuniti sebagai teaser — undian sebenar, perbendaharaan dan ganjaran pencipta datang seterusnya. Sementara itu reputasi dan pingat sudah langsung supaya pembuat awal bermula di hadapan.',
     pillars: [
-      { icon: 'lightbulb', title: 'Cadang', body: 'Cadangkan ciri, penyambung dan peraturan. Sesiapa yang memegang NEXO boleh meletakkan idea pada undian.' },
+      { icon: 'lightbulb', title: 'Cadang', body: 'Cadangkan ciri, penyambung dan peraturan. Sesiapa yang memegang NXW boleh meletakkan idea pada undian.' },
       { icon: 'vote', title: 'Undi', body: 'Undian awam dan telus memutuskan apa yang dibina seterusnya dan dalam urutan apa.' },
       { icon: 'vault', title: 'Perbendaharaan', body: 'Perbendaharaan bersama membiayai baunti dan geran yang komuniti undi.' },
       { icon: 'gift', title: 'Ganjaran pencipta', body: 'Pembina mendapat bahagian apabila DAO menghantar dan mempromosikan kerja mereka.' },
@@ -122,7 +122,7 @@ export default {
       { title: 'Biayai program baunti widget komuniti', tag: 'Perbendaharaan', pct: 72, votes: 341 },
       { title: 'Kongsi hasil untuk pencipta pasaran', tag: 'Ganjaran', pct: 87, votes: 512 },
       { title: 'Sumber terbuka runtime widget', tag: 'Peta jalan', pct: 64, votes: 289 },
-      { title: "Turunkan ambang cadangan NEXO kepada 1,000", tag: "Tadbir urus", pct: 58, votes: 203 },
+      { title: "Turunkan ambang cadangan NXW kepada 1,000", tag: "Tadbir urus", pct: 58, votes: 203 },
       { title: "Potong yuran pasaran Solana kepada 2.5%", tag: "Yuran", pct: 81, votes: 456 },
       { title: "Pilih moderator papan penyelidikan", tag: "Moderasi", pct: 69, votes: 318 },
     ],

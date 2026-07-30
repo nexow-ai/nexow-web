@@ -932,6 +932,53 @@
   }
 }
 
+/* Idle bob for vault medallions — shine (::after) keeps its own transform. */
+@keyframes hex-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  40% {
+    transform: translateY(-5px) rotate(2.5deg) scale(1.04);
+  }
+  70% {
+    transform: translateY(-2px) rotate(-1.5deg) scale(1.02);
+  }
+}
+.hex-float {
+  animation: hex-float 3.4s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+  will-change: transform;
+}
+
+/* Glyph inside the medallion breathes on a shorter, offset cycle. */
+@keyframes hex-glyph {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+.hex-float > svg {
+  animation: hex-glyph 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--d, 0ms) + 400ms);
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-float {
+    animation: none;
+  }
+  .hex-float > svg {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Breathing halo behind a rare / legendary medallion. */
 @keyframes aura-pulse {
   0%,

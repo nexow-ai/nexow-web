@@ -504,9 +504,9 @@ export const MAX_BADGE_POINTS =
  *
  * Two currencies, one ladder:
  *   • CREDITS  — spendable AI generation, priced at the same $87 / 1M as a pack.
- *   • NEXO     — the DAO's governance token, from the community allocation.
+ *   • NXW     — the DAO's Solana governance token, from the community allocation.
  *
- * Totals are exact by construction: 1,600,000 credits and 25,000 NEXO for a
+ * Totals are exact by construction: 1,600,000 credits and 25,000 NXW for a
  * complete set. Change a row and the totals below move with it.
  * ------------------------------------------------------------------ */
 
@@ -595,7 +595,7 @@ const sum = (ns: number[]) => ns.reduce((a, b) => a + b, 0);
 export const TOTAL_REWARD_CREDITS =
   sum(REWARD_LADDER.map((r) => r.credits * r.count)) + sum(LEVEL_REWARDS.map((r) => r.credits));
 
-/** Every NEXO on the ladder: 25,000 for a complete set. */
+/** Every NXW on the ladder: 25,000 for a complete set. */
 export const TOTAL_REWARD_TOKENS =
   sum(REWARD_LADDER.map((r) => r.tokens * r.count)) + sum(LEVEL_REWARDS.map((r) => r.tokens));
 
@@ -605,8 +605,18 @@ export const TOTAL_REWARD_USD = creditsToUsd(TOTAL_REWARD_CREDITS);
 /** Months of Sponsor-grade generation the full haul covers (1.6M ÷ 800K = 2). */
 export const TOTAL_REWARD_SPONSOR_MONTHS = Math.round(TOTAL_REWARD_CREDITS / planCredits(69.99));
 
-/** Reserved share of the NEXO supply that funds the ladder. */
-export const DAO_COMMUNITY_ALLOCATION_PCT = 10;
+/** Dry-mint day — NXW goes live on Solana (UTC calendar date). */
+export const NXW_DRY_MINT_ISO = '2026-08-14';
+
+/** Utility pool: minted and burned when NXW is exchanged for goods & services. */
+export const NXW_UTILITY_SUPPLY = 10_000_000;
+
+/** Open mint on dry-mint day via the DAO, priced 1:1 in USDC. */
+export const NXW_OPEN_MINT_SUPPLY = 10_000_000;
+export const NXW_OPEN_MINT_PRICE_USDC = 1;
+
+/** Hard cap: utility pool + open mint. */
+export const NXW_TOTAL_SUPPLY = NXW_UTILITY_SUPPLY + NXW_OPEN_MINT_SUPPLY;
 
 /* ------------------------------------------------------------------ *
  * Points simulator — the interactive "what am I worth" panel.

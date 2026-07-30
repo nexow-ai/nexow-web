@@ -60,7 +60,7 @@ export default {
     pillars: [
       { icon: "gift", title: "Verdien op referrals", body: "Deel je invite. Wanneer iemand die jij meebrengt bouwt, shipt of upgradet, verdien jij een deel van de upside." },
       { icon: "users", title: "Verdien via nieuwe followers", body: "Trek een audience aan en word beloond terwijl je netwerk groeit — reputatie die beide kanten op betaalt." },
-      { icon: "sparkles", title: "Credits & later NEXO", body: "Vroege rewards landen als credits; NEXO-gebonden bonussen openen met de DAO. Zelfde reputatie, nieuwe manieren om te verdienen." },
+      { icon: "sparkles", title: "Credits & later NXW", body: "Vroege rewards landen als credits; NXW-gebonden bonussen openen met de DAO. Zelfde reputatie, nieuwe manieren om te verdienen." },
     ],
     cta: "Claim je handle",
   },
@@ -105,11 +105,11 @@ export default {
     badge: 'Binnenkort',
     title: 'Bezit de roadmap met de Nexow DAO.',
     subtitle:
-      'NEXO is de governance-token. Verdien ’m door te bouwen en te shippen; geef ’m uit door voorstellen, stemmen en een gedeelde treasury te sturen.',
+      'NXW is de governance-token. Verdien ’m door te bouwen en te shippen; geef ’m uit door voorstellen, stemmen en een gedeelde treasury te sturen.',
     body:
       'De DAO-tab zit al als teaser in het community-paneel — echte ballots, treasury en creator-rewards volgen. Tot die tijd zijn reputatie en medailles live zodat vroege makers voorop starten.',
     pillars: [
-      { icon: 'lightbulb', title: 'Voorstellen', body: 'Stel features, connectors en regels voor. Wie NEXO houdt, kan een idee op de stemming zetten.' },
+      { icon: 'lightbulb', title: 'Voorstellen', body: 'Stel features, connectors en regels voor. Wie NXW houdt, kan een idee op de stemming zetten.' },
       { icon: 'vote', title: 'Stemmen', body: 'Publieke, transparante stemmen bepalen wat als volgende wordt gebouwd en in welke volgorde.' },
       { icon: 'vault', title: 'Treasury', body: 'Een gedeelde treasury financiert bounties en grants die de community instemt.' },
       { icon: 'gift', title: 'Creator-rewards', body: 'Builders verdienen een aandeel wanneer de DAO hun werk shippt en promoot.' },
@@ -122,7 +122,7 @@ export default {
       { title: 'Community widget-bountyprogramma financieren', tag: 'Treasury', pct: 72, votes: 341 },
       { title: 'Omzetaandeel voor marketplace-creators', tag: 'Rewards', pct: 87, votes: 512 },
       { title: 'Widget-runtime open-sourcen', tag: 'Roadmap', pct: 64, votes: 289 },
-      { title: "NEXO-voorsteldrempel verlagen naar 1.000", tag: "Governance", pct: 58, votes: 203 },
+      { title: "NXW-voorsteldrempel verlagen naar 1.000", tag: "Governance", pct: 58, votes: 203 },
       { title: "Solana marketplace-fees naar 2,5% snijden", tag: "Fees", pct: 81, votes: 456 },
       { title: "Research board-moderators verkiezen", tag: "Moderatie", pct: 69, votes: 318 },
     ],
