@@ -85,7 +85,7 @@ export const pt: SiteContent = {
     ticker: { label: 'Conectores ativos' },
     trust: 'Um canvas para todos os mercados — FX, cripto, ações, futuros, opções e mercados de previsão.',
     stats: [
-      { n: 90, suffix: '+', label: 'conectores ativos para dados, carteiras, redes sociais e mercados' },
+      { n: 90, label: 'conectores ativos para dados, carteiras, redes sociais e mercados' },
       { n: 6, label: 'classes de ativos num só canvas' },
       { n: 10, suffix: 'K', label: 'créditos de IA grátis reservados no registo' },
       { n: 30, prefix: '<', suffix: 's', label: 'da frase ao widget em funcionamento' },

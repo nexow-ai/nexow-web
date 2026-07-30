@@ -85,7 +85,7 @@ export const de: SiteContent = {
     ticker: { label: 'Live-Konnektoren' },
     trust: 'Ein Canvas für jeden Markt — FX, Krypto, Aktien, Futures, Optionen & Prognosemärkte.',
     stats: [
-      { n: 90, suffix: '+', label: 'Live-Konnektoren für Daten, Wallets, Socials und Märkte' },
+      { n: 90, label: 'Live-Konnektoren für Daten, Wallets, Socials und Märkte' },
       { n: 6, label: 'Anlageklassen auf einem Canvas' },
       { n: 10, suffix: 'K', label: 'kostenlose KI-Credits bei der Anmeldung reserviert' },
       { n: 30, prefix: '<', suffix: 's', label: 'vom Satz zum laufenden Widget' },

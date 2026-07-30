@@ -72,7 +72,7 @@ export const ms = {
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',
     stats: [
-      { n: 90, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
+      { n: 90, label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
       { n: 6, label: 'kelas aset pada satu kanvas' },
       { n: 10, suffix: 'K', label: 'kredit AI percuma yang dikhaskan semasa mendaftar' },
       { n: 30, prefix: '<', suffix: 's', label: 'daripada ayat kepada widget yang berjalan' },

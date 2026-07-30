@@ -72,7 +72,7 @@ export const tr = {
     ticker: { label: 'Canlı bağlantılar' },
     trust: 'Her pazar için bir tuval — Döviz, kripto, hisse senedi, vadeli işlem, opsiyon ve tahmin piyasaları.',
     stats: [
-      { n: 90, suffix: '+', label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
+      { n: 90, label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
       { n: 6, label: 'bir tuval üzerinde varlık sınıfı' },
       { n: 10, suffix: 'K', label: 'kayıt sırasında ayrılmış ücretsiz yapay zeka kredisi' },
       { n: 30, prefix: '<', suffix: 's', label: 'cümleden çalışan widgete kadar' },

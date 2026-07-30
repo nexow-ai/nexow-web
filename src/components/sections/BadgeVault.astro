@@ -148,7 +148,7 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
     </div>
 
     <!-- The vault -->
-    <div id="badge-grid" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+    <div id="badge-grid" class="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {
         badges.map((badge, i) => {
           const colors = RARITY_COLORS[badge.rarity];
@@ -159,58 +159,58 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
           return (
             <button
               type="button"
-              class="flip group min-h-80 w-full text-left"
+              class="flip group min-h-64 w-full text-left"
               data-badge
               data-rarity={badge.rarity}
               data-flipped="false"
               aria-label={`${t.names[badge.id]} — ${how}; ${t.unlocks} ${badge.thresholds.map((n) => nf(n)).join(', ')}`}
             >
-              <span class="flip-inner block h-full min-h-80 w-full">
+              <span class="flip-inner block h-full min-h-64 w-full">
                 {/* Front — how-to + exact thresholds + rewards always visible */}
                 <span
-                  class="flip-face relative z-[1] flex h-full min-h-80 w-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 transition-colors group-hover:border-white/20"
+                  class="flip-face relative z-[1] flex h-full min-h-64 w-full flex-col rounded-xl border border-white/10 bg-white/[0.03] p-2.5 transition-colors group-hover:border-white/20"
                   style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 55%)`}
                 >
-                  <span class="flex flex-col items-center gap-1.5 text-center">
+                  <span class="flex flex-col items-center gap-1 text-center">
                     <span class="relative">
                       <span
-                        class="aura pointer-events-none absolute -inset-2 rounded-full blur-lg"
+                        class="aura pointer-events-none absolute -inset-1.5 rounded-full blur-md"
                         style={`background:radial-gradient(circle, ${colors.to}, transparent 70%);--d:${(i % 8) * 300}ms`}
                         aria-hidden="true"
                       />
-                      <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="md" delay={(i % 8) * 300} />
+                      <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="sm" delay={(i % 8) * 300} />
                     </span>
-                    <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
-                    <span class="block text-[0.65rem] leading-snug text-ink-300">{how}</span>
+                    <span class="font-display text-xs font-semibold leading-tight text-white">{t.names[badge.id]}</span>
+                    <span class="block text-[0.6rem] leading-snug text-ink-300">{how}</span>
                   </span>
 
-                  <span class="mt-auto flex w-full flex-col gap-1.5 border-t border-white/[0.06] pt-2.5">
-                    <span class="block text-[0.58rem] uppercase tracking-wider text-ink-500">{t.unlocks}</span>
+                  <span class="mt-auto flex w-full flex-col gap-1 border-t border-white/[0.06] pt-2">
+                    <span class="block text-[0.55rem] uppercase tracking-wider text-ink-500">{t.unlocks}</span>
                     {tiered ? (
-                      <span class="flex flex-col gap-1.5">
+                      <span class="flex flex-col gap-1">
                         {rows.map((row, ri) => (
-                          <span class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-baseline gap-x-2 font-mono text-[0.62rem] leading-none">
-                            <span class="flex items-center gap-1.5 text-ink-400">
+                          <span class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-baseline gap-x-1.5 font-mono text-[0.58rem] leading-none">
+                            <span class="flex items-center gap-1 text-ink-400">
                               <span
-                                class="size-1.5 shrink-0 rounded-full"
+                                class="size-1 shrink-0 rounded-full"
                                 style={`background:${RARITY_COLORS[row.key as (typeof TIER_KEYS)[number]].from}`}
                                 aria-hidden="true"
                               />
                               <span class="truncate">{tierShort[row.key as (typeof TIER_KEYS)[number]]}</span>
                             </span>
-                            <span class="tabular-nums text-sm font-semibold text-white">{nf(badge.thresholds[ri])}</span>
+                            <span class="tabular-nums text-xs font-semibold text-white">{nf(badge.thresholds[ri])}</span>
                             <span class="tabular-nums text-brand-300">{nf(row.credits)}</span>
-                            <span class="w-5 text-end tabular-nums text-accent-300">{nf(row.tokens)}</span>
+                            <span class="w-4 text-end tabular-nums text-accent-300">{nf(row.tokens)}</span>
                           </span>
                         ))}
                       </span>
                     ) : (
-                      <span class="flex flex-col gap-1.5">
-                        <span class="flex items-baseline justify-between gap-2 font-mono text-[0.62rem]">
+                      <span class="flex flex-col gap-1">
+                        <span class="flex items-baseline justify-between gap-1.5 font-mono text-[0.58rem]">
                           <span class="text-ink-400">{t.rarity[badge.rarity]}</span>
-                          <span class="text-sm font-semibold tabular-nums text-white">{nf(badge.thresholds[0])}</span>
+                          <span class="text-xs font-semibold tabular-nums text-white">{nf(badge.thresholds[0])}</span>
                         </span>
-                        <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-[0.62rem]">
+                        <span class="flex flex-wrap items-center gap-x-1 gap-y-0.5 font-mono text-[0.58rem]">
                           <span class="text-ink-300">{t.worth.replace('{n}', String(rows[0].points))}</span>
                           <span class="text-ink-600" aria-hidden="true">·</span>
                           <span class="text-brand-300">{nf(rows[0].credits)}</span>
@@ -220,8 +220,8 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                       </span>
                     )}
                     {tiered && (
-                      <span class="mt-0.5 flex items-center gap-1 text-[0.58rem] text-ink-500">
-                        <Icon name="bolt" class="size-2.5" />
+                      <span class="mt-0.5 flex items-center gap-1 text-[0.55rem] text-ink-500">
+                        <Icon name="bolt" class="size-2" />
                         {t.worth.replace('{n}', String(RARITY_POINTS.tiered))}
                         <span class="ms-auto text-ink-600">
                           <span class="text-brand-300">{ledger.creditsLabel}</span>
@@ -235,30 +235,30 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
 
                 {/* Back — tracks + thresholds + full per-tier rewards */}
                 <span
-                  class="flip-face flip-back flex h-full min-h-80 w-full flex-col justify-between rounded-2xl border p-3.5"
+                  class="flip-face flip-back flex h-full min-h-64 w-full flex-col justify-between rounded-xl border p-2.5"
                   style={`border-color:color-mix(in oklab, ${colors.to} 45%, transparent);background-image:linear-gradient(160deg, color-mix(in oklab, ${colors.to} 22%, #0b0d13), #0b0d13)`}
                 >
                   <span class="block">
-                    <span class="block font-display text-sm font-semibold text-white">{t.names[badge.id]}</span>
-                    <span class="mt-1.5 block text-[0.62rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
-                    <span class="block text-xs leading-snug text-ink-200">{track}</span>
-                    <span class="mt-1.5 block text-[0.65rem] leading-snug text-ink-300">{how}</span>
+                    <span class="block font-display text-xs font-semibold text-white">{t.names[badge.id]}</span>
+                    <span class="mt-1 block text-[0.55rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
+                    <span class="block text-[0.65rem] leading-snug text-ink-200">{track}</span>
+                    <span class="mt-1 block text-[0.6rem] leading-snug text-ink-300">{how}</span>
                   </span>
 
                   <span class="block">
-                    <span class="block text-[0.62rem] uppercase tracking-wider text-ink-400">{t.unlocks}</span>
-                    <span class="mt-1.5 flex flex-col gap-1.5">
+                    <span class="block text-[0.55rem] uppercase tracking-wider text-ink-400">{t.unlocks}</span>
+                    <span class="mt-1 flex flex-col gap-1">
                       {badge.thresholds.map((n, ti) => {
                         const row = rows[ti] ?? rows[0];
                         const label = tiered ? tierLabels[ti] : t.rarity[badge.rarity];
                         const pipKey = tiered ? TIER_KEYS[ti] : badge.rarity;
                         return (
                           <span class="block">
-                            <span class="flex items-baseline justify-between gap-2 font-mono text-[0.68rem]">
-                              <span class="flex items-center gap-1.5 text-ink-300">
+                            <span class="flex items-baseline justify-between gap-1.5 font-mono text-[0.62rem]">
+                              <span class="flex items-center gap-1 text-ink-300">
                                 {tiered && (
                                   <span
-                                    class="size-1.5 rounded-full"
+                                    class="size-1 rounded-full"
                                     style={`background:${RARITY_COLORS[pipKey].from}`}
                                     aria-hidden="true"
                                   />
@@ -267,7 +267,7 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                               </span>
                               <span class="font-semibold text-white">{n.toLocaleString(lang)}</span>
                             </span>
-                            <span class="mt-0.5 flex flex-wrap items-center gap-x-1.5 ps-3 font-mono text-[0.58rem]">
+                            <span class="mt-0.5 flex flex-wrap items-center gap-x-1 ps-2.5 font-mono text-[0.55rem]">
                               <span class="text-ink-400">{t.worth.replace('{n}', String(row.points))}</span>
                               <span class="text-ink-600" aria-hidden="true">·</span>
                               <span class="text-brand-300">{nf(row.credits)} {ledger.creditsLabel}</span>

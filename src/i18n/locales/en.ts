@@ -132,7 +132,7 @@ export const en: SiteContent = {
     },
     trust: 'One canvas for anything you can describe — moodboards, planners, games, social widgets, data tools and markets.',
     stats: [
-      { n: 90, suffix: '+', label: 'live connectors for data, wallets, socials and markets' },
+      { n: 90, label: 'live connectors for data, wallets, socials and markets' },
       { n: 6, label: 'example workspaces from one canvas' },
       { n: 10, suffix: 'K', label: 'starter AI credits on Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
@@ -591,7 +591,7 @@ export const en: SiteContent = {
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publish widgets, themes, screens and bots from your library, and install what others share — with lineage that credits every remake. Buying and selling comes next.',
+          body: 'Publish widgets, themes, screens, bots and agents from your library, and install what others share — free, or priced in USDC and settled wallet-to-wallet on Solana, with lineage that credits every remake.',
           status: 'live',
         },
         {
@@ -651,7 +651,7 @@ export const en: SiteContent = {
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
         { status: 'shipped', title: 'Agents & Copilot', body: 'Cloud agents with a full harness, deployed with tool grants and run history — plus a Copilot that builds and arranges your workspace.' },
-        { status: 'shipped', title: 'Marketplace', body: 'Publish and install widgets, themes, screens and bots — with lineage that credits every remake.' },
+        { status: 'shipped', title: 'Marketplace & USDC sales', body: 'Publish widgets, screens, workspaces, bots, agents and themes — free or priced in USDC on Solana, wallet to wallet, with lineage that credits every remake.' },
         { status: 'shipped', title: 'Reputation & medals', body: 'Points, tiered achievements, rare medals and levels for what you build and share.' },
         { status: 'soon', title: 'Premium widgets & signals', body: 'Publish premium widgets and strategy signals, let others subscribe, and earn on what you run.' },
         { status: 'soon', title: 'Paid plans & reward credits', body: 'Supporter and Sponsor checkout, platform credits, and converting reputation into reward credits.' },
@@ -672,7 +672,7 @@ export const en: SiteContent = {
         },
         {
           q: 'Do I need an account?',
-          a: 'You can try Nexow without one. A free account unlocks starter AI credits, cloud sync across devices, community, reputation and marketplace — no credit card required. Prefer fully local? Bring your own Anthropic key and keep generation in the browser.',
+          a: 'Yes — the canvas lives behind sign-in. A free account takes a moment and unlocks starter AI credits, cloud sync across devices, community, reputation and marketplace, with no credit card required. Prefer to keep things off our servers? Turn on privacy mode to store the workspace on your device, and bring your own Anthropic key so generation runs in the browser.',
         },
         {
           q: 'How does Nexow handle privacy?',
@@ -1008,7 +1008,7 @@ export const en: SiteContent = {
         items: [
           { icon: 'users', title: 'Community', body: 'Follow makers, like and comment in a social feed for builders, explore boards, and share widgets others can add straight to their library — with public maker profiles.' },
           { icon: 'mail', title: 'Realtime chats', body: 'Message friends and contacts live from Account or the dock — 1:1 and group DMs with presence, reactions, followers/following and a contacts inbox.' },
-          { icon: 'store', title: 'Marketplace', body: 'Publish and install widgets, themes, screens, bots and agents — with lineage that credits every remake. Buying and selling comes next.' },
+          { icon: 'store', title: 'Marketplace', body: 'Publish and install widgets, themes, screens, bots and agents — free or priced in USDC on Solana, with no escrow, no platform cut, and lineage that credits every remake.' },
           { icon: 'trophy', title: 'Reputation & medals', body: 'Earn reputation points for building and sharing, unlock tiered achievements and rare medals — live today. Reward credits come next.' },
         ],
       },
@@ -1050,12 +1050,12 @@ export const en: SiteContent = {
         {
           icon: 'bot',
           title: 'More automation',
-          body: 'Bot and agent quotas climb from 10 / 3 on Free to 300 / 100 on Sponsor, plus Connector Builder for APIs we do not ship yet.',
+          body: 'Bot and agent quotas climb from 10 / 3 on Free to 300 / 100 on Sponsor — with Connector Builder, for APIs we do not ship yet, landing on Sponsor after that.',
         },
         {
           icon: 'sparkles',
           title: 'Premium appearance',
-          body: 'Paid plans unlock gradients, canvas patterns, the animated aurora backdrop, animated boot loaders and your own logo in the header.',
+          body: 'Paid plans unlock gradient accents, eight more canvas patterns, widget surfaces and panel glass, animated boot loaders, and your avatar in the header brand slot.',
         },
       ],
     },
@@ -1105,10 +1105,10 @@ export const en: SiteContent = {
         features: [
           '115,000 credits every month',
           'Up to 30 bots & 10 agents',
-          'A Copilot per workspace',
           'Second accent colour (gradients)',
-          'Premium canvas patterns & animated aurora',
+          'Eight more canvas patterns, widget surfaces & panel glass',
           'Animated boot loaders and your avatar as the header brand',
+          'A Copilot per workspace (coming soon)',
         ],
       },
       {
@@ -1119,7 +1119,7 @@ export const en: SiteContent = {
         billedYearly: '$699.90 billed yearly',
         cadence: '/mo',
         badge: 'Best return',
-        stats: ['800,000 credits/mo', '300 bots · 100 agents', 'Connector Builder'],
+        stats: ['800,000 credits/mo', '300 bots · 100 agents', 'Priority support'],
         note: 'Everything in Supporter, plus:',
         cta: 'Become a Sponsor',
         ctaHref: 'https://x.nexow.ai',
@@ -1127,10 +1127,11 @@ export const en: SiteContent = {
         features: [
           '800,000 credits every month',
           'Up to 300 bots & 100 agents',
-          'Custom connections with Connector Builder',
-          'A Copilot per screen',
-          'Upload your own logo',
+          'Two more canvas patterns and boot loaders, plus aurora tuning',
           'Priority support for complex setups',
+          'A Copilot per screen (coming soon)',
+          'Custom connections with Connector Builder (coming soon)',
+          'Upload your own logo (coming soon)',
         ],
       },
       {
@@ -1139,7 +1140,7 @@ export const en: SiteContent = {
         priceMonthly: 'Custom',
         priceYearly: 'Custom',
         cadence: '',
-        stats: ['Private infra', 'Unlimited bots & agents', 'Dedicated support'],
+        stats: ['Private infra', 'Custom bot & agent quotas', 'Dedicated support'],
         note: 'Everything in Sponsor, plus:',
         cta: 'Contact us',
         ctaHref: '/contact?type=partnership',

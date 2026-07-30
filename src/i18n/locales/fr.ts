@@ -116,7 +116,7 @@ export const fr: SiteContent = {
     },
     trust: 'Un canvas pour tout ce que vous pouvez décrire — moodboards, planners, jeux, widgets sociaux, outils data et marchés.',
     stats: [
-      { n: 90, suffix: '+', label: 'connecteurs live pour données, wallets, réseaux sociaux et marchés' },
+      { n: 90, label: 'connecteurs live pour données, wallets, réseaux sociaux et marchés' },
       { n: 6, label: 'exemples d’espaces depuis un même canvas' },
       { n: 10, suffix: 'K', label: 'crédits IA de départ sur Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },

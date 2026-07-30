@@ -244,7 +244,17 @@ export const MATRIX: MatrixGroup[] = [
       },
       { key: 'creditsBuy', cells: yes },
       { key: 'models', cells: yes },
-      { key: 'copilot', cells: [{ t: 'copilotGlobal' }, { t: 'copilotWorkspace' }, { t: 'copilotScreen' }, { t: 'copilotScreen' }] },
+      // Copilot is global today; the per-workspace / per-screen scopes are
+      // announced plan perks with no implementation in the app yet.
+      {
+        key: 'copilot',
+        cells: [
+          { t: 'copilotGlobal' },
+          { t: 'copilotWorkspace', soon: true },
+          { t: 'copilotScreen', soon: true },
+          { t: 'copilotScreen', soon: true },
+        ],
+      },
       { key: 'codegen', cells: yes },
     ],
   },
@@ -271,7 +281,9 @@ export const MATRIX: MatrixGroup[] = [
       // grid, Supporter seven more, Sponsor `topo` + `circuit` on top (10 total);
       // SPLASH_LOADER_TIER gives Free 3, Supporter 3 more, Sponsor 2 more (8).
       { key: 'patterns', cells: [{ t: 'patternsDots' }, { n: '8' }, { t: 'patternsAll' }, { t: 'patternsAll' }] },
-      { key: 'aurora', cells: [false, true, true, true] },
+      // The aurora backdrop itself is free (AURORA_MOTION_TIER.balanced) — only
+      // tuning its strength/pace is gated, and to Sponsor rather than Supporter.
+      { key: 'aurora', cells: yes },
       { key: 'loaders', cells: [{ n: '3' }, { n: '6' }, { t: 'loadersAll' }, { t: 'loadersAll' }] },
       // LOGO_TIER tops out at `account` (your avatar) — a custom logo upload is
       // announced for Sponsor but not built, so that cell carries the Soon chip.

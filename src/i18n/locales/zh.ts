@@ -72,7 +72,7 @@ export const zh: SiteContent = {
     ticker: { label: '实时连接器' },
     trust: '一块画布，覆盖每个市场——FX、加密货币、股票、期货、期权与预测市场。',
     stats: [
-      { n: 90, suffix: '+', label: '个覆盖数据、钱包、社交与市场的实时连接器' },
+      { n: 90, label: '个覆盖数据、钱包、社交与市场的实时连接器' },
       { n: 6, label: '类资产同处一块画布' },
       { n: 10, suffix: 'K', label: '注册即预留的免费 AI 积分' },
       { n: 30, prefix: '<', suffix: 's', label: '从一句话到运行中的组件' },

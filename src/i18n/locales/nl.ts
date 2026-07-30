@@ -74,7 +74,7 @@ export const nl: SiteContent = {
     ticker: { label: 'Live connectoren' },
     trust: 'Één canvas voor elke markt — FX, crypto, aandelen, futures, opties & voorspellingsmarkten.',
     stats: [
-      { n: 90, suffix: '+', label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
+      { n: 90, label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
       { n: 6, label: 'activaklassen op één canvas' },
       { n: 10, suffix: 'K', label: 'gratis AI-credits gereserveerd bij aanmelding' },
       { n: 30, prefix: '<', suffix: 's', label: 'van zin tot werkende widget' },

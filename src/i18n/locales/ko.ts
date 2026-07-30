@@ -72,7 +72,7 @@ export const ko: SiteContent = {
     ticker: { label: '라이브 커넥터' },
     trust: '모든 마켓을 위한 하나의 캔버스 — FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓.',
     stats: [
-      { n: 90, suffix: '+', label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
+      { n: 90, label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
       { n: 6, label: '하나의 캔버스에서 자산 클래스' },
       { n: 10, suffix: 'K', label: '가입 시 무료 AI 크레딧 예약' },
       { n: 30, prefix: '<', suffix: 's', label: '문장에서 실행 중인 위젯까지' },

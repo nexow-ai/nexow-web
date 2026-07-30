@@ -85,7 +85,7 @@ export const es: SiteContent = {
     ticker: { label: 'Conectores en vivo' },
     trust: 'Un lienzo para todos los mercados — FX, cripto, acciones, futuros, opciones y mercados de predicción.',
     stats: [
-      { n: 90, suffix: '+', label: 'conectores en vivo para datos, wallets, redes sociales y mercados' },
+      { n: 90, label: 'conectores en vivo para datos, wallets, redes sociales y mercados' },
       { n: 6, label: 'clases de activos en un solo lienzo' },
       { n: 10, suffix: 'K', label: 'créditos de IA reservados al registrarte' },
       { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
