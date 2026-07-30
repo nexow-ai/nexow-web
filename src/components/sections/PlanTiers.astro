@@ -56,7 +56,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
   <div class="container-page pb-14">
     {/* The cards are the section's content but carry no visible section title;
         an off-screen heading keeps the document outline continuous. */}
-    <h2 class="sr-only">{t.hero.title}</h2>
+    <h2 class="sr-only">{t.hero.badge}</h2>
     <div class="stage-3d reveal-stagger grid items-start gap-5 lg:grid-cols-4">
       {
         cards.map(({ tier, spec }) => {

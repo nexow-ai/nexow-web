@@ -65,15 +65,11 @@ const D = {
       <!-- Copy -->
       <div class="max-w-xl">
         <p
-          class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3 text-sm font-medium text-ink-600 shadow-sm backdrop-blur dark:border-white/12 dark:bg-white/[0.06] dark:text-ink-300"
+          class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-brand-100 px-3 py-1.5 text-xs font-semibold text-brand-700 shadow-sm dark:border-brand-400/20 dark:bg-brand-400/15 dark:text-brand-300"
           style={`--enter-delay:${D.badge}`}
         >
-          <span
-            class="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700 dark:bg-brand-400/15 dark:text-brand-300"
-          >
-            <span class="size-1.5 animate-pulse rounded-full bg-brand-500 dark:bg-brand-400"></span>
-            {t.badge}
-          </span>
+          <span class="size-1.5 animate-pulse rounded-full bg-brand-500 dark:bg-brand-400"></span>
+          {t.badge}
         </p>
 
         {/* Phone size is fluid, not a fixed 2.7rem: locales with long compounds
@@ -142,7 +138,7 @@ const D = {
           </div>
         </form>
 
-        <!-- Starter prompts: click fills the composer and re-points the CTAs. -->
+        <!-- Starter prompts: click fills the composer and syncs the form action. -->
         {
           examples.length > 0 && (
             <div class="enter mt-5" style={`--enter-delay:${D.examples}`} data-prompt-examples>
