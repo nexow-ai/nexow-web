@@ -13,6 +13,11 @@
     "astro": "astro",
     "check": "astro check",
     "content:sync": "astro sync --force",
+    "test": "astro sync --force && vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "astro sync --force && vitest run tests/integration",
+    "test:coverage": "astro sync --force && vitest run --coverage",
     "deploy": "astro build && wrangler deploy",
     "cf:serve": "astro build && wrangler dev"
   },

@@ -18,9 +18,8 @@ export default getViteConfig({
       provider: 'v8',
       reportsDirectory: 'coverage',
       reporter: ['text', 'html', 'lcov'],
-      // Every shipped module, whether or not a test imports it — so a new
-      // untested file fails the run instead of silently scoring 100 %.
-      all: true,
+      // Vitest reports on every file matched by `include`, imported or not, so a
+      // new untested module drags the score down instead of scoring 100 % unseen.
       include: ['src/**/*.{ts,js}', 'scripts/**/*.mjs'],
       exclude: [
         // Type-only declarations and generated Astro types.
