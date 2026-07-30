@@ -498,7 +498,6 @@ const sections = [
     const logoImg = document.getElementById('connector-modal-logo') as HTMLImageElement | null;
     const titleEl = document.getElementById('connector-modal-title');
     const kindEl = document.getElementById('connector-modal-kind');
-    const soonEl = document.getElementById('connector-modal-soon');
     const notesEl = document.getElementById('connector-modal-notes');
     const assetsEl = document.getElementById('connector-modal-assets');
     const connectEl = document.getElementById('connector-modal-connect') as HTMLAnchorElement | null;
@@ -673,7 +672,6 @@ const sections = [
       }
 
       const isSoon = item.status === 'soon';
-      soonEl?.classList.toggle('hidden', !isSoon);
       soonHint?.classList.toggle('hidden', !isSoon);
 
       if (assetsEl) {
