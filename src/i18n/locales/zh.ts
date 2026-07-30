@@ -952,7 +952,7 @@ export const zh: SiteContent = {
         stats: ['私有基础设施', '专属服务', 'SLA'],
         note: '包含 Sponsor 的一切，另加：',
         cta: '联系我们',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           '私有基础设施',
           '专属设置服务',

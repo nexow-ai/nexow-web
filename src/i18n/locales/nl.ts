@@ -954,7 +954,7 @@ export const nl: SiteContent = {
         stats: ['Private infra', 'White-glove', 'SLA'],
         note: 'Alles in Sponsor, plus:',
         cta: 'Neem contact op',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Private infrastructuur',
           'White-glove setup',

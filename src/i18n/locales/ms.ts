@@ -952,7 +952,7 @@ export const ms = {
         stats: ['Infrastruktur swasta', 'Sarung tangan putih', 'SLA'],
         note: 'Semua dalam Penaja, tambah:',
         cta: 'Hubungi kami',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Infrastruktur swasta',
           'Persediaan sarung tangan putih',

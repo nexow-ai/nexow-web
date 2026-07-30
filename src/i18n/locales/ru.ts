@@ -952,7 +952,7 @@ export const ru: SiteContent = {
         stats: ['Приватная инфра', 'White-glove', 'SLA'],
         note: 'Все в Sponsor плюс:',
         cta: 'Связаться с нами',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Приватная инфраструктура',
           'White-glove настройка',

@@ -952,7 +952,7 @@ export const tr = {
         stats: ['Özel Altyapı', 'Beyaz Eldiven', 'SLA'],
         note: 'Sponsor İçinde Her Şey, Artı:',
         cta: 'Bize Ulaşın',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Özel Altyapı',
           'Beyaz Eldiven Kurulumu',

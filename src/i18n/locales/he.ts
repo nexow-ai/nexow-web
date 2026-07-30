@@ -952,7 +952,7 @@ export const he: SiteContent = {
         stats: ['תשתיות פרטיות', 'שירות לבן כפפה', 'SLA'],
         note: 'הכל ב-Sponsor, בתוספת:',
         cta: 'צרו קשר',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'תשתיות פרטיות',
           'הגדרה שירות לבן כפפה',

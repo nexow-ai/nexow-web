@@ -965,7 +965,7 @@ export const it: SiteContent = {
         stats: ['Infra privata', 'White-glove', 'SLA'],
         note: 'Tutto ciò che c’è in Sponsor, più:',
         cta: 'Contattaci',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Infrastruttura privata',
           'Configurazione white-glove',

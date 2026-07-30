@@ -965,7 +965,7 @@ export const es: SiteContent = {
         stats: ['Infra privada', 'A tu lado', 'SLA'],
         note: 'Todo lo de Sponsor, y además:',
         cta: 'Contáctanos',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Infraestructura privada',
           'Puesta en marcha guiada',

@@ -952,7 +952,7 @@ export const el = {
         stats: ['Ιδιωτική υποδομή', 'White-glove', 'SLA'],
         note: 'Όλα στο Sponsor, συν:',
         cta: 'Επικοινωνήστε μαζί μας',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Ιδιωτική υποδομή',
           'Ρύθμιση white-glove',

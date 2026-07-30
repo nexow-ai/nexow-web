@@ -952,7 +952,7 @@ export const ko: SiteContent = {
         stats: ['개인 인프라', '화이트 글로브', 'SLA'],
         note: 'Sponsor의 모든 것, 더하기:',
         cta: '문의하기',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           '개인 인프라',
           '화이트 글로브 설정',

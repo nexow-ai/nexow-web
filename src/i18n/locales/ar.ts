@@ -952,7 +952,7 @@ export const ar: SiteContent = {
         stats: ['بنية خاصة', 'عناية بيضاء', 'SLA'],
         note: 'كل شيء في Sponsor، بالإضافة إلى:',
         cta: 'اتصل بنا',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'بنية خاصة',
           'إعداد عناية بيضاء',

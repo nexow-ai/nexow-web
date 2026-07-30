@@ -952,7 +952,7 @@ export const uk: SiteContent = {
         stats: ['Приватна інфра', 'Білі рукавиці', 'SLA'],
         note: 'Усе у спонсорі, плюс:',
         cta: 'Зв\'яжіться з нами',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Приватна інфраструктура',
           'Установка з білими рукавицями',

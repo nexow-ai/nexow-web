@@ -965,7 +965,7 @@ export const pt: SiteContent = {
         stats: ['Infraestrutura privada', 'Serviço dedicado', 'SLA'],
         note: 'Tudo do Sponsor, e ainda:',
         cta: 'Contacte-nos',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Infraestrutura privada',
           'Configuração dedicada',

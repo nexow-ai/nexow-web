@@ -952,7 +952,7 @@ export const ja: SiteContent = {
         stats: ['プライベートインフラ', '手厚いサポート', 'SLA'],
         note: 'Sponsor のすべてに加えて：',
         cta: 'お問い合わせ',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'プライベートインフラストラクチャ',
           '手厚い導入サポート',
