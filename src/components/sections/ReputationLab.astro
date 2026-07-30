@@ -21,6 +21,7 @@ import {
   MAX_BADGE_POINTS,
   type StatKey,
 } from '../../data/gamification';
+import { levelInk } from '../../lib/reputation';
 import Icon from '../Icon.astro';
 import Hex from '../Hex.astro';
 
@@ -205,7 +206,7 @@ const simConfig = {
                   from={level.from}
                   to={level.to}
                   size="lg"
-                  ink={i === 4 ? '#f6efff' : i === 0 ? '#fff7ec' : '#131722'}
+                  ink={levelInk(level.id)}
                   delay={i * 320}
                 />
               </span>
@@ -227,8 +228,11 @@ const simConfig = {
   /**
    * Points simulator. Runs the app's own arithmetic — tap counts × real weights,
    * bucketed into the real level bands — so the number a visitor watches climb
-   * is the number Nexow would compute for that activity.
+   * is the number Nexow would compute for that activity. The arithmetic itself
+   * lives in src/lib/reputation.ts, where it is tested against the real weights.
    */
+  import { levelInk, levelProgress, nextLevelLabel, totalPoints } from '../../lib/reputation';
+
   interface SimLevel {
     id: string;
     min: number;
@@ -264,11 +268,11 @@ const simConfig = {
     const counts = new Map<string, number>();
 
     function render() {
-      let points = 0;
+      const weights: Record<string, number> = {};
       for (const btn of actions) {
         const stat = btn.dataset.simAction ?? '';
         const n = counts.get(stat) ?? 0;
-        points += n * Number(btn.dataset.points ?? 0);
+        weights[stat] = Number(btn.dataset.points ?? 0);
 
         const chip = btn.querySelector<HTMLElement>('[data-sim-count]');
         if (chip) {
@@ -277,27 +281,21 @@ const simConfig = {
         }
       }
 
-      // Highest band whose floor the score has cleared.
-      let index = 0;
-      for (let i = 0; i < config.levels.length; i++) {
-        if (points >= config.levels[i].min) index = i;
-      }
-      const level = config.levels[index];
-      const next = config.levels[index + 1];
-      const progress = next ? Math.min(1, (points - level.min) / (next.min - level.min)) : 1;
+      const points = totalPoints(counts, weights);
+      const { level, next, progress, remaining } = levelProgress(points, config.levels);
 
       if (pointsEl) pointsEl.textContent = points.toLocaleString();
       if (levelEl) levelEl.textContent = level.name;
       if (nextEl) {
         nextEl.textContent = next
-          ? ` · ${config.next.replace('{n}', (next.min - points).toLocaleString()).replace('{level}', next.name)}`
+          ? ` · ${nextLevelLabel(config.next, remaining, next.name)}`
           : ` · ${config.maxed}`;
       }
       if (barEl) barEl.style.width = `${Math.round(progress * 100)}%`;
       if (hexEl) {
         hexEl.style.setProperty('--from', level.from);
         hexEl.style.setProperty('--to', level.to);
-        hexEl.style.setProperty('--hex-ink', index === 0 || index === 4 ? '#fff7ec' : '#131722');
+        hexEl.style.setProperty('--hex-ink', levelInk(level.id));
       }
     }
 
