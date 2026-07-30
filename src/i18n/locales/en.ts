@@ -73,7 +73,7 @@ export const en: SiteContent = {
       placeholder: 'you@email.com',
       submit: 'Subscribe',
       submitting: 'Subscribing…',
-      success: 'You\'re in. Thanks for subscribing.',
+      success: 'You’re in. Thanks for subscribing.',
       error: 'Something went wrong. Please try again.',
       invalid: 'Enter a valid email address.',
     },
