@@ -783,9 +783,11 @@
   .js [data-motion~='dim'] { opacity: calc(0.5 + var(--pb, 1) * 0.5); }
 
   /* Small screens get the drift and the breathing but not the lean — a tilted
-   * card next to the viewport edge reads as a rendering bug on a phone. */
+   * card next to the viewport edge reads as a rendering bug on a phone.
+   * The sideways drift goes too: a full-width block has no slack to move into,
+   * so the 34px shift only pushes its text under the section's overflow clip. */
   @media (max-width: 640px) {
-    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; }
+    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; --m-slide: 0px; }
   }
 }
 

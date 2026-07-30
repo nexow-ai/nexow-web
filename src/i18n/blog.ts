@@ -5,7 +5,8 @@ export type Post = CollectionEntry<'blog'>;
 
 /** Locale prefix of a post id, e.g. `en/foo` → `en`. */
 export function localeOf(entry: Post): Lang {
-  return (entry.id.split('/')[0] as Lang) ?? 'en';
+  // `split` always yields at least one element, so index 0 is never undefined.
+  return entry.id.split('/')[0] as Lang;
 }
 
 /** Slug of a post id, e.g. `en/foo` → `foo`. */

@@ -62,13 +62,13 @@ const names = c.tiers.map((tier) => tier.name);
     <div
       id="plan-matrix"
       data-pick="2"
-      class="reveal mt-8 overflow-hidden rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40"
+      class="reveal mt-8 overflow-x-auto rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40"
     >
       <table class="w-full border-collapse text-left">
         <caption class="sr-only">{t.title}</caption>
         <thead class="bg-white/95 dark:bg-ink-950/85">
           <tr class="border-b border-ink-900/10 dark:border-white/10">
-            <th scope="col" class="px-4 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6">
+            <th scope="col" class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6">
               {t.feature}
             </th>
             {
@@ -77,7 +77,7 @@ const names = c.tiers.map((tier) => tier.name);
                   scope="col"
                   data-col={i}
                   class:list={[
-                    'px-3 py-4 text-center text-sm font-semibold text-ink-950 dark:text-white sm:px-4',
+                    'px-2 py-4 text-center text-sm font-semibold text-ink-950 dark:text-white sm:px-4',
                     i > 0 && 'plan-col',
                   ]}
                 >
@@ -104,7 +104,7 @@ const names = c.tiers.map((tier) => tier.name);
                 <th
                   scope="colgroup"
                   colspan={5}
-                  class="px-4 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6"
+                  class="px-3 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6"
                 >
                   <span class="inline-flex items-center gap-2">
                     <Icon name={group.icon} class="size-3.5 text-brand-600 dark:text-brand-300" />
@@ -114,7 +114,7 @@ const names = c.tiers.map((tier) => tier.name);
               </tr>
               {group.rows.map((row) => (
                 <tr class="border-t border-ink-900/[0.06] dark:border-white/8">
-                  <th scope="row" class="px-4 py-3 text-sm font-normal text-ink-700 dark:text-ink-200 sm:px-6">
+                  <th scope="row" class="px-3 py-3 text-sm font-normal text-ink-700 dark:text-ink-200 sm:px-6">
                     {t.rows[row.key]}
                     {row.soon && (
                       <span class="ms-2 rounded-full bg-accent-500/10 px-1.5 py-0.5 align-middle font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
@@ -128,7 +128,7 @@ const names = c.tiers.map((tier) => tier.name);
                       <td
                         data-col={i}
                         class:list={[
-                          'px-3 py-3 text-center text-sm sm:px-4',
+                          'px-2 py-3 text-center text-sm sm:px-4',
                           i > 0 && 'plan-col',
                         ]}
                       >

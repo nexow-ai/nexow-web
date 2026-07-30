@@ -147,10 +147,13 @@ const D = {
         {
           examples.length > 0 && (
             <div class="enter mt-5" style={`--enter-delay:${D.examples}`} data-prompt-examples>
-              <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500">
+              <p
+                id="hero-examples-label"
+                class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500"
+              >
                 {t.promptExamplesLabel}
               </p>
-              <div class="mt-2.5 flex flex-wrap gap-2">
+              <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="hero-examples-label">
                 {examples.map((example, i) => (
                   <button
                     type="button"

@@ -67,6 +67,14 @@ const allSchema = [orgSchema, ...schema];
 }
 <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
 
+<!-- Feed for this locale, so readers and crawlers can discover /rss.xml -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE.name} — ${languages[lang]}`}
+  href={localizePath('/rss.xml', lang)}
+/>
+
 <!-- Icons — system color scheme: black mark (light), white mark (dark) -->
 <link id="site-favicon" rel="icon" href="/favicon-black.png" type="image/png" />
 <link rel="icon" href="/favicon-black.png" type="image/png" media="(prefers-color-scheme: light)" />

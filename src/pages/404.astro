@@ -29,7 +29,7 @@ const variants = Object.fromEntries(
       <p class="mt-8 font-mono text-7xl font-bold tracking-tight text-ink-900 sm:text-8xl dark:text-white">404</p>
       <h1 id="nf-title" class="mt-4 font-display text-2xl font-semibold text-ink-950 dark:text-white sm:text-3xl">{t.title}</h1>
       <p id="nf-body" class="mx-auto mt-3 max-w-md text-ink-600 dark:text-ink-300">{t.body}</p>
-      <div class="mt-8 flex justify-center gap-3">
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
         <Button href="/" size="lg" icon="arrow" class="[&_svg]:rotate-180"><span id="nf-home">{t.cta}</span></Button>
         <Button href={SITE.appUrl} variant="secondary" size="lg" external><span id="nf-launch">{useContent('en').nav.launch}</span></Button>
       </div>

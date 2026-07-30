@@ -128,7 +128,7 @@ const sections = [
             <div class="container-page relative">
               <div class="grid items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
                 <!-- Copy -->
-                <div class:list={['reveal', reverse && 'lg:order-2']}>
+                <div class:list={['reveal min-w-0', reverse && 'lg:order-2']}>
                   <span class="eyebrow inline-flex items-center gap-3 text-brand-600">
                     <span class="font-mono text-2xl font-bold text-ink-950 dark:text-white">{String(i + 1).padStart(2, '0')}</span>
                     {group.title}
@@ -161,8 +161,9 @@ const sections = [
                   </div>
                 </div>
 
-                <!-- Visual -->
-                <div class:list={['reveal lg:sticky lg:top-28', reverse && 'lg:order-1']}>
+                <!-- Visual — `min-w-0` so the mock's intrinsic width cannot inflate
+                     the single mobile column and push the copy past the viewport. -->
+                <div class:list={['reveal min-w-0 lg:sticky lg:top-28', reverse && 'lg:order-1']}>
                   <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white dark:ring-offset-ink-950">
                     {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
                     {i === 1 && <CanvasMock />}
