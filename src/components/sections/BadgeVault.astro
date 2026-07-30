@@ -2,9 +2,9 @@
 /**
  * The badge vault — all 34 achievements, flippable.
  *
- * Front: the hex medallion, badge name, the stat it tracks, and the reward
- * ladder payout for each tier (points, credits, NEXO). Back: exact unlock
- * thresholds with the same per-tier rewards beside them.
+ * Front: hex medallion, badge name, how-to (the action that earns it), unlock
+ * thresholds beside each tier, and the reward ladder payout (points, credits,
+ * NEXO). Back: denser TRACKS + UNLOCKS AT detail with the same per-tier rewards.
  *
  * Flip is CSS on hover/focus; the click handler toggles `data-flipped` so touch
  * visitors get the same card back without a hover state to fight.
@@ -155,22 +155,23 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
           const tiered = badge.rarity === 'tiered';
           const rows = rewardRowsFor(badge);
           const track = t.stats[badge.stat];
+          const how = t.how?.[badge.stat] ?? track;
           return (
             <button
               type="button"
-              class="flip group h-72 w-full text-left"
+              class="flip group min-h-80 w-full text-left"
               data-badge
               data-rarity={badge.rarity}
               data-flipped="false"
-              aria-label={`${t.names[badge.id]} — ${track}`}
+              aria-label={`${t.names[badge.id]} — ${how}; ${t.unlocks} ${badge.thresholds.map((n) => nf(n)).join(', ')}`}
             >
-              <span class="flip-inner block h-full w-full">
-                {/* Front — tracks + rewards always visible */}
+              <span class="flip-inner block h-full min-h-80 w-full">
+                {/* Front — how-to + exact thresholds + rewards always visible */}
                 <span
-                  class="flip-face flex h-full w-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 transition-colors group-hover:border-white/20"
+                  class="flip-face relative z-[1] flex h-full min-h-80 w-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 transition-colors group-hover:border-white/20"
                   style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 55%)`}
                 >
-                  <span class="flex flex-col items-center gap-2 text-center">
+                  <span class="flex flex-col items-center gap-1.5 text-center">
                     <span class="relative">
                       <span
                         class="aura pointer-events-none absolute -inset-2 rounded-full blur-lg"
@@ -180,27 +181,34 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                       <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="md" delay={(i % 8) * 300} />
                     </span>
                     <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
-                    <span class="block text-[0.65rem] leading-snug text-ink-300">{track}</span>
+                    <span class="block text-[0.65rem] leading-snug text-ink-300">{how}</span>
                   </span>
 
-                  <span class="mt-auto flex w-full flex-col gap-1 border-t border-white/[0.06] pt-2.5">
+                  <span class="mt-auto flex w-full flex-col gap-1.5 border-t border-white/[0.06] pt-2.5">
+                    <span class="block text-[0.58rem] uppercase tracking-wider text-ink-500">{t.unlocks}</span>
                     {tiered ? (
-                      rows.map((row) => (
-                        <span class="flex items-center gap-1.5 font-mono text-[0.58rem] leading-none">
-                          <span
-                            class="size-1.5 shrink-0 rounded-full"
-                            style={`background:${RARITY_COLORS[row.key as (typeof TIER_KEYS)[number]].from}`}
-                            aria-hidden="true"
-                          />
-                          <span class="w-9 shrink-0 truncate text-ink-400">{tierShort[row.key as (typeof TIER_KEYS)[number]]}</span>
-                          <span class="ms-auto tabular-nums text-brand-300">{nf(row.credits)}</span>
-                          <span class="tabular-nums text-accent-300">{nf(row.tokens)}</span>
-                        </span>
-                      ))
+                      <span class="flex flex-col gap-1.5">
+                        {rows.map((row, ri) => (
+                          <span class="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-baseline gap-x-2 font-mono text-[0.62rem] leading-none">
+                            <span class="flex items-center gap-1.5 text-ink-400">
+                              <span
+                                class="size-1.5 shrink-0 rounded-full"
+                                style={`background:${RARITY_COLORS[row.key as (typeof TIER_KEYS)[number]].from}`}
+                                aria-hidden="true"
+                              />
+                              <span class="truncate">{tierShort[row.key as (typeof TIER_KEYS)[number]]}</span>
+                            </span>
+                            <span class="tabular-nums text-sm font-semibold text-white">{nf(badge.thresholds[ri])}</span>
+                            <span class="tabular-nums text-brand-300">{nf(row.credits)}</span>
+                            <span class="w-5 text-end tabular-nums text-accent-300">{nf(row.tokens)}</span>
+                          </span>
+                        ))}
+                      </span>
                     ) : (
-                      <span class="flex flex-col gap-1">
-                        <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
-                          {t.rarity[badge.rarity]}
+                      <span class="flex flex-col gap-1.5">
+                        <span class="flex items-baseline justify-between gap-2 font-mono text-[0.62rem]">
+                          <span class="text-ink-400">{t.rarity[badge.rarity]}</span>
+                          <span class="text-sm font-semibold tabular-nums text-white">{nf(badge.thresholds[0])}</span>
                         </span>
                         <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-[0.62rem]">
                           <span class="text-ink-300">{t.worth.replace('{n}', String(rows[0].points))}</span>
@@ -225,15 +233,16 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                   </span>
                 </span>
 
-                {/* Back — thresholds + full per-tier rewards */}
+                {/* Back — tracks + thresholds + full per-tier rewards */}
                 <span
-                  class="flip-face flip-back flex h-full w-full flex-col justify-between rounded-2xl border p-3.5"
+                  class="flip-face flip-back flex h-full min-h-80 w-full flex-col justify-between rounded-2xl border p-3.5"
                   style={`border-color:color-mix(in oklab, ${colors.to} 45%, transparent);background-image:linear-gradient(160deg, color-mix(in oklab, ${colors.to} 22%, #0b0d13), #0b0d13)`}
                 >
                   <span class="block">
                     <span class="block font-display text-sm font-semibold text-white">{t.names[badge.id]}</span>
                     <span class="mt-1.5 block text-[0.62rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
                     <span class="block text-xs leading-snug text-ink-200">{track}</span>
+                    <span class="mt-1.5 block text-[0.65rem] leading-snug text-ink-300">{how}</span>
                   </span>
 
                   <span class="block">

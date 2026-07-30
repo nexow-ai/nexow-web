@@ -5,7 +5,7 @@ import { localizePath } from '../../i18n/utils';
 import SectionHeading from '../SectionHeading.astro';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
-import { CONNECTORS } from '../../data/connectors';
+import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 
 interface Props {
   lang: Lang;
@@ -17,6 +17,12 @@ const t = useContent(lang).home.connectors;
 const explore = useContent(lang).connectorsPage.exploreCta;
 const dark = tone === 'dark';
 const live = CONNECTORS.filter((c) => c.status === 'live');
+// Counts come from the generated catalog, never from the copy — the headline
+// number and the note used to be hand-typed and drifted apart. Locales that
+// still hard-code the numbers in `note` simply render unchanged.
+const note = t.note
+  .replace('{live}', String(CONNECTOR_LIVE_COUNT))
+  .replace('{total}', String(CONNECTOR_COUNT));
 ---
 
 <section id="connectors" class:list={['relative overflow-hidden py-20 sm:py-24', dark && 'text-white']}>
@@ -44,7 +50,7 @@ const live = CONNECTORS.filter((c) => c.status === 'live');
           dark ? 'text-ink-400' : 'text-ink-500',
         ]}
       >
-        <span class="text-gradient text-3xl font-bold">{t.count}+</span>
+        <span class="text-gradient text-3xl font-bold">{CONNECTOR_LIVE_COUNT}</span>
         {t.countLabel}
       </span>
     </div>
@@ -77,7 +83,7 @@ const live = CONNECTORS.filter((c) => c.status === 'live');
 
     <p class="reveal mx-auto mt-10 flex max-w-2xl items-start justify-center gap-2 text-center text-sm text-ink-500">
       <Icon name="globe" class="mt-0.5 size-4 shrink-0 opacity-60" />
-      {t.note}
+      {note}
     </p>
 
     <div class="reveal mt-8 flex justify-center">

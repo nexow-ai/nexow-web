@@ -78,7 +78,7 @@ export const fr: SiteContent = {
         'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir la démo',
-      note: 'Preview en ligne · 45+ connecteurs · 10K crédits de départ',
+      note: 'Preview en ligne · 90 connecteurs · 10K crédits de départ',
       promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
     },
@@ -116,7 +116,7 @@ export const fr: SiteContent = {
     },
     trust: 'Un canvas pour tout ce que vous pouvez décrire — moodboards, planners, jeux, widgets sociaux, outils data et marchés.',
     stats: [
-      { n: 45, suffix: '+', label: 'connecteurs live pour données, wallets, réseaux sociaux et marchés' },
+      { n: 90, suffix: '+', label: 'connecteurs live pour données, wallets, réseaux sociaux et marchés' },
       { n: 6, label: 'exemples d’espaces depuis un même canvas' },
       { n: 10, suffix: 'K', label: 'crédits IA de départ sur Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'd’une phrase à un widget fonctionnel' },
@@ -379,7 +379,6 @@ export const fr: SiteContent = {
       subtitle:
         'Des connecteurs branchables diffusent prix en direct, carnets d’ordres et données de référence directement dans vos widgets — FX, crypto, actions, futures, options, marchés de prédiction, bases de données et flux sociaux.',
       note: '90 connecteurs sont en direct aujourd’hui et 155 figurent au catalogue — venues de trading, APIs de données de marché, bases de données, sources sociales, wallets crypto et services web. Beaucoup diffusent directement depuis votre navigateur ; les autres passent par un proxy léger.',
-      count: 90,
       countLabel: 'connecteurs en direct',
       groups: {
         fx: 'FX',
@@ -919,7 +918,7 @@ export const fr: SiteContent = {
       title: 'Inclus dans chaque plan',
       items: [
         'Écrans, espaces et widgets illimités',
-        '45+ connecteurs de données de marché en direct',
+        '90 connecteurs de données de marché en direct',
         'Runtime de widgets en bac à sable',
         'Copilot global (bientôt)',
         'Accès communauté et marketplace',
@@ -1066,9 +1065,9 @@ export const fr: SiteContent = {
         accentOne: 'Une',
         accentTwo: 'Deux (dégradé)',
         patternsDots: 'Points seulement',
-        patternsAll: 'Les 6',
-        loadersAll: 'Les 5',
-        connectorsAll: 'Les 155',
+        patternsAll: 'Les 10',
+        loadersAll: 'Les 8',
+        connectorsAll: 'Les {n}',
         brandNexow: 'Marque Nexow',
         brandAvatar: 'Votre avatar',
         brandCustom: 'Votre logo',

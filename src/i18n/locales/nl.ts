@@ -56,7 +56,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Nexow — Bouw marktdashboards met AI, in normaal Nederlands',
       description:
-        'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 45+ connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
+        'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 90 connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
     },
     hero: {
       badge: 'Preview nu live',
@@ -74,7 +74,7 @@ export const nl: SiteContent = {
     ticker: { label: 'Live connectoren' },
     trust: 'Één canvas voor elke markt — FX, crypto, aandelen, futures, opties & voorspellingsmarkten.',
     stats: [
-      { n: 45, suffix: '+', label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
+      { n: 90, suffix: '+', label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
       { n: 6, label: 'activaklassen op één canvas' },
       { n: 10, suffix: 'K', label: 'gratis AI-credits gereserveerd bij aanmelding' },
       { n: 30, prefix: '<', suffix: 's', label: 'van zin tot werkende widget' },
@@ -228,7 +228,7 @@ export const nl: SiteContent = {
           {
             icon: 'plug',
             title: 'Connectoren',
-            body: '45+ live connectoren over markten, databases, wallets en social apps — rechtstreeks vanuit de browser waar CORS het toelaat.',
+            body: '90 live connectoren over markten, databases, wallets en social apps — rechtstreeks vanuit de browser waar CORS het toelaat.',
           },
           {
             icon: 'globe',
@@ -337,7 +337,6 @@ export const nl: SiteContent = {
       subtitle:
         'Pluggable connectoren streamen live prijzen, orderboeken en referentiegegevens rechtstreeks in je widgets — over FX, crypto, aandelen, futures, opties, voorspellingsmarkten, databases en social feeds.',
       note: '90 connectoren zijn vandaag live en 155 zitten in de catalogus — makelaars, beurzen, gegevensleveranciers, databases, sociale media, cryptowallets en webdiensten. Velen streamen rechtstreeks vanuit je browser; de rest routeren via een dun proxy.',
-      count: 90,
       countLabel: 'live connectoren',
       groups: {
         fx: 'FX',
@@ -420,7 +419,7 @@ export const nl: SiteContent = {
       soon: 'Komt binnenkort',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Widgets in normaal Nederlands draaiend in sandbox op het canvas.' },
-        { status: 'shipped', title: '45+ marktgegevenscommunicatoren', body: 'Databases, sociale media, makelaars, beurzen, wallets, open data en webdiensten streamen live.' },
+        { status: 'shipped', title: '90 marktgegevenscommunicatoren', body: 'Databases, sociale media, makelaars, beurzen, wallets, open data en webdiensten streamen live.' },
         { status: 'shipped', title: 'Cloud bots & waarschuwingen', body: 'Automatisering die je gegevens bewaakt en signalen naar je widgets stuurt, tab gesloten.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Gratis accounts met werkruimten gesynchroniseerd op elk apparaat — 10K credits gereserveerd voor platformlancering.' },
         { status: 'shipped', title: 'Community feed & profielen', body: 'Volg makers, deel widgets naar de feed, en claim je openbare @handle.' },
@@ -458,7 +457,7 @@ export const nl: SiteContent = {
         },
         {
           q: "Wat zijn connectors?",
-          a: "Connectors koppelen widgets aan live data — vandaag 45+ over databases, wallets, social apps, brokers, exchanges en open data. Waar CORS het toelaat, gaan calls rechtstreeks vanuit de browser. Veel widgets hebben geen connector nodig en houden state lokaal tot je synchroniseert.",
+          a: "Connectors koppelen widgets aan live data — vandaag 90 over databases, wallets, social apps, brokers, exchanges en open data. Waar CORS het toelaat, gaan calls rechtstreeks vanuit de browser. Veel widgets hebben geen connector nodig en houden state lokaal tot je synchroniseert.",
         },
         {
           q: "Wat zijn bots en agents?",
@@ -801,7 +800,7 @@ export const nl: SiteContent = {
         title: 'Connectoren',
         body: 'Live data van markten, databases, wallets en social apps.',
         items: [
-          { icon: 'plug', title: '45+ live connectoren', body: 'Databases, markten, wallets en webdiensten — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi en meer.' },
+          { icon: 'plug', title: '90 live connectoren', body: 'Databases, markten, wallets en webdiensten — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi en meer.' },
           { icon: 'globe', title: 'Social media-integraties', body: 'Verbind X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to en Hacker News zodat widgets kunnen lezen en reageren op de feeds die je al gebruikt.' },
           { icon: 'signal', title: 'Rechtstreeks vanuit de browser waar mogelijk', body: 'Waar CORS het toelaat, lopen geauthenticeerde calls rechtstreeks vanuit je browser en omzeilen onze proxy volledig.' },
           { icon: 'database', title: 'Ook lokale state', body: 'Veel widgets hebben helemaal geen externe data nodig: games, planners, moodboards en private trackers kunnen in de browser leven tot je kiest te syncen.' },
@@ -877,7 +876,7 @@ export const nl: SiteContent = {
       title: 'Inbegrepen in elk plan',
       items: [
         'Onbeperkte schermen, werkruimten & widgets',
-        '45+ live marktgegevenscommunicatoren',
+        '90 live marktgegevenscommunicatoren',
         'Sandbox widget runtime',
         'Globale Copilot (komt binnenkort)',
         'Toegang tot gemeenschap & marketplace',
@@ -1024,9 +1023,9 @@ export const nl: SiteContent = {
         accentOne: 'Eén',
         accentTwo: 'Twee (gradiënt)',
         patternsDots: 'Alleen stippen',
-        patternsAll: 'Alle 6',
-        loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 155',
+        patternsAll: 'Alle 10',
+        loadersAll: 'Alle 8',
+        connectorsAll: 'Alle {n}',
         brandNexow: 'Nexow-merk',
         brandAvatar: 'Je avatar',
         brandCustom: 'Je logo',

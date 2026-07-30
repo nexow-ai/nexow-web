@@ -85,7 +85,7 @@ export const pt: SiteContent = {
     ticker: { label: 'Conectores ativos' },
     trust: 'Um canvas para todos os mercados — FX, cripto, ações, futuros, opções e mercados de previsão.',
     stats: [
-      { n: 45, suffix: '+', label: 'conectores ativos para dados, carteiras, redes sociais e mercados' },
+      { n: 90, suffix: '+', label: 'conectores ativos para dados, carteiras, redes sociais e mercados' },
       { n: 6, label: 'classes de ativos num só canvas' },
       { n: 10, suffix: 'K', label: 'créditos de IA grátis reservados no registo' },
       { n: 30, prefix: '<', suffix: 's', label: 'da frase ao widget em funcionamento' },
@@ -348,7 +348,6 @@ export const pt: SiteContent = {
       subtitle:
         'Conectores plugáveis transmitem preços em tempo real, order books e dados de referência diretamente para os seus widgets — em FX, cripto, ações, futuros, opções, mercados de previsão, bases de dados e feeds sociais.',
       note: '90 conectores estão disponíveis hoje e 155 fazem parte do catálogo — plataformas de trading, APIs de dados de mercado, bases de dados, fontes sociais, carteiras cripto e serviços web. Muitos transmitem diretamente do seu navegador; os restantes passam por um proxy leve.',
-      count: 90,
       countLabel: 'conectores ativos',
       groups: {
         fx: 'FX',
@@ -1035,9 +1034,9 @@ export const pt: SiteContent = {
         accentOne: 'Uma',
         accentTwo: 'Duas (gradiente)',
         patternsDots: 'Só pontos',
-        patternsAll: 'Os 6',
-        loadersAll: 'Os 5',
-        connectorsAll: 'Os 155',
+        patternsAll: 'Os 10',
+        loadersAll: 'Os 8',
+        connectorsAll: 'Os {n}',
         brandNexow: 'Marca Nexow',
         brandAvatar: 'O teu avatar',
         brandCustom: 'O teu logo',

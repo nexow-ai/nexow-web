@@ -94,7 +94,7 @@ export const en: SiteContent = {
         'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'See it live',
-      note: 'Preview live · 45+ connectors · 10K starter credits',
+      note: 'Preview live · 90 connectors · 10K starter credits',
       promptExample: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
       promptPlaceholder: 'Describe a widget…',
     },
@@ -132,7 +132,7 @@ export const en: SiteContent = {
     },
     trust: 'One canvas for anything you can describe — moodboards, planners, games, social widgets, data tools and markets.',
     stats: [
-      { n: 45, suffix: '+', label: 'live connectors for data, wallets, socials and markets' },
+      { n: 90, suffix: '+', label: 'live connectors for data, wallets, socials and markets' },
       { n: 6, label: 'example workspaces from one canvas' },
       { n: 10, suffix: 'K', label: 'starter AI credits on Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
@@ -306,7 +306,7 @@ export const en: SiteContent = {
             {
               icon: 'plug',
               title: 'Connectors',
-              body: '45+ live connectors across markets, databases, wallets and social apps — browser-direct where CORS allows.',
+              body: '90 live connectors across markets, databases, wallets and social apps — browser-direct where CORS allows.',
             },
             {
               icon: 'globe',
@@ -563,8 +563,7 @@ export const en: SiteContent = {
       title: 'Trading-grade data, optional everywhere',
       subtitle:
         'Nexow started with trading, so live APIs and data connectors are built into the base. Use them for markets, databases, social feeds or any widget that needs live information.',
-      note: '90 connectors are live today and 155 sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
-      count: 90,
+      note: '{live} connectors are live today and {total} sit in the catalog — trading venues, market data APIs, databases, social sources, crypto wallets and web services.',
       countLabel: 'live connectors',
       groups: {
         fx: 'FX',
@@ -647,7 +646,7 @@ export const en: SiteContent = {
       soon: 'Coming soon',
       items: [
         { status: 'shipped', title: 'AI widget codegen', body: 'Natural-language widgets running sandboxed on the canvas.' },
-        { status: 'shipped', title: '45+ connectors', body: 'Databases, socials, brokers, exchanges, wallets, open data and web services streaming live.' },
+        { status: 'shipped', title: '90 connectors', body: 'Databases, socials, brokers, exchanges, wallets, open data and web services streaming live.' },
         { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
         { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
@@ -685,7 +684,7 @@ export const en: SiteContent = {
         },
         {
           q: 'What are connectors?',
-          a: 'Connectors wire widgets to live data — 45+ today across databases, wallets, social apps, brokers, exchanges and open data. Where CORS allows, calls can run straight from your browser. Many widgets need no connector at all and keep state local until you choose to sync.',
+          a: 'Connectors wire widgets to live data — 90 today across databases, wallets, social apps, brokers, exchanges and open data. Where CORS allows, calls can run straight from your browser. Many widgets need no connector at all and keep state local until you choose to sync.',
         },
         {
           q: 'What are bots and agents?',
@@ -988,7 +987,7 @@ export const en: SiteContent = {
         title: 'Connectors',
         body: 'Live data from markets, databases, wallets and social apps.',
         items: [
-          { icon: 'plug', title: '45+ live connectors', body: 'Databases, markets, wallets and web services — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi and more.' },
+          { icon: 'plug', title: '90 live connectors', body: 'Databases, markets, wallets and web services — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi and more.' },
           { icon: 'globe', title: 'Social media integrations', body: 'Connect X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to and Hacker News so widgets can read and react to the feeds you already use.' },
           { icon: 'signal', title: 'Browser-direct where possible', body: 'Where CORS allows, authenticated calls run straight from your browser and bypass our proxy entirely.' },
           { icon: 'database', title: 'Local state too', body: 'Many widgets need no external data at all: games, planners, moodboards and private trackers can live in the browser until you choose to sync.' },
@@ -1064,7 +1063,7 @@ export const en: SiteContent = {
       title: 'Included in every plan',
       items: [
         'Unlimited screens, workspaces & widgets',
-        '45+ live connectors',
+        '90 live connectors',
         'Sandboxed widget runtime',
         'Cross-device cloud sync',
         'Reusable widget library',
@@ -1214,9 +1213,9 @@ export const en: SiteContent = {
         accentOne: 'One',
         accentTwo: 'Two (gradient)',
         patternsDots: 'Dots only',
-        patternsAll: 'All 6',
-        loadersAll: 'All 5',
-        connectorsAll: 'All 155',
+        patternsAll: 'All 10',
+        loadersAll: 'All 8',
+        connectorsAll: 'All {n}',
         brandNexow: 'Nexow mark',
         brandAvatar: 'Your avatar',
         brandCustom: 'Your logo',
@@ -1301,7 +1300,7 @@ export const en: SiteContent = {
     badges: {
       title: 'The badge vault',
       body:
-        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows what it tracks and what every tier pays in credits and NEXO.',
+        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows how to earn it, the unlock thresholds, and what every tier pays in credits and NEXO.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
       unit: 'badges',
@@ -1315,7 +1314,7 @@ export const en: SiteContent = {
         rare: 'A single hard bar set past gold. No tiers, no partial credit — 10 medals.',
         legendary: 'One outrageous threshold each. Six medals, and most accounts will never see them.',
       },
-      flipHint: 'Tap a badge for its thresholds',
+      flipHint: 'Tap a badge for full reward detail',
       stats: {
         accountAgeDays: 'Days on Nexow',
         posts: 'Posts published',
@@ -1335,6 +1334,26 @@ export const en: SiteContent = {
         reactionsGiven: 'Reactions given',
         nightPosts: 'Posts between 00:00 and 05:00',
         dmThreads: 'DM threads opened',
+      },
+      how: {
+        accountAgeDays: 'Keep your account — counted as days since you joined Nexow.',
+        posts: 'Publish posts to the community feed.',
+        likesReceived: 'Get likes on your posts and published work.',
+        commentsWritten: 'Write comments on other people’s posts.',
+        commentsReceived: 'Receive comments on your posts.',
+        followers: 'Gain followers on your profile.',
+        following: 'Follow other people on Nexow.',
+        contacts: 'Add mutual contacts — people you follow who follow you back.',
+        widgetsBuilt: 'Build widgets on your canvas.',
+        assetsPublished: 'Publish assets to the marketplace.',
+        installsReceived: 'Get installs of your published widgets, bots or themes.',
+        boards: 'Create boards on your profile.',
+        bots: 'Create and run bots.',
+        reportsFiled: 'File moderation reports that help keep the community clean.',
+        likesGiven: 'Like other people’s posts.',
+        reactionsGiven: 'React to posts with emoji.',
+        nightPosts: 'Publish posts between 00:00 and 05:00 local time.',
+        dmThreads: 'Open direct-message threads with other people.',
       },
       names: {
         pioneer: 'Pioneer',
@@ -1642,7 +1661,7 @@ export const en: SiteContent = {
       {
         icon: 'plug',
         title: 'Wire live data',
-        body: 'Browse 45+ connectors across markets, wallets, socials and databases.',
+        body: 'Browse 90 connectors across markets, wallets, socials and databases.',
         href: '/connectors',
         cta: 'Browse connectors',
       },

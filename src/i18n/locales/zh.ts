@@ -54,7 +54,7 @@ export const zh: SiteContent = {
     meta: {
       title: 'Nexow — 用自然语言，借助 AI 构建市场仪表盘',
       description:
-        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 45+ 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
+        'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 90 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
     },
     hero: {
       badge: '预览版现已上线',
@@ -72,7 +72,7 @@ export const zh: SiteContent = {
     ticker: { label: '实时连接器' },
     trust: '一块画布，覆盖每个市场——FX、加密货币、股票、期货、期权与预测市场。',
     stats: [
-      { n: 45, suffix: '+', label: '个覆盖数据、钱包、社交与市场的实时连接器' },
+      { n: 90, suffix: '+', label: '个覆盖数据、钱包、社交与市场的实时连接器' },
       { n: 6, label: '类资产同处一块画布' },
       { n: 10, suffix: 'K', label: '注册即预留的免费 AI 积分' },
       { n: 30, prefix: '<', suffix: 's', label: '从一句话到运行中的组件' },
@@ -226,7 +226,7 @@ export const zh: SiteContent = {
           {
             icon: 'plug',
             title: '连接器',
-            body: '45+ 个实时连接器，覆盖市场、数据库、钱包与社交应用 — 在 CORS 允许处浏览器直连。',
+            body: '90 个实时连接器，覆盖市场、数据库、钱包与社交应用 — 在 CORS 允许处浏览器直连。',
           },
           {
             icon: 'globe',
@@ -335,7 +335,6 @@ export const zh: SiteContent = {
       subtitle:
         '可插拔的连接器将实时价格、订单簿和参考数据直接流式送入你的组件——覆盖 FX、加密货币、股票、期货、期权、预测市场、数据库和社交信息流。',
       note: '如今已有 90 个连接器上线，另有 155 个在目录中——交易场所、市场数据 API、数据库、社交来源、加密钱包和网络服务。许多直接从你的浏览器流式传输；其余则通过一层轻量代理路由。',
-      count: 90,
       countLabel: '个实时连接器',
       groups: {
         fx: 'FX',
@@ -418,7 +417,7 @@ export const zh: SiteContent = {
       soon: '即将推出',
       items: [
         { status: 'shipped', title: 'AI 组件代码生成', body: '自然语言组件在画布上沙箱化运行。' },
-        { status: 'shipped', title: '45+ 个市场数据连接器', body: '数据库、社交平台、券商、交易所、钱包、开放数据和网络服务实时流式传输。' },
+        { status: 'shipped', title: '90 个市场数据连接器', body: '数据库、社交平台、券商、交易所、钱包、开放数据和网络服务实时流式传输。' },
         { status: 'shipped', title: '云端机器人与提醒', body: '自动化监视你的数据并向组件推送信号，即使标签页已关闭。' },
         { status: 'shipped', title: '账户与云同步', body: '免费账户，工作区在每台设备间同步——为平台上线预留 10K 积分。' },
         { status: 'shipped', title: '社区信息流与主页', body: '关注创作者、将组件分享到信息流，并认领你的公开 @handle。' },
@@ -456,7 +455,7 @@ export const zh: SiteContent = {
         },
         {
           q: "连接器是什么？",
-          a: "连接器把小组件接到实时数据——今天已有 45+ 个，覆盖数据库、钱包、社交应用、券商、交易所与开放数据。在 CORS 允许时，请求可直接从浏览器发出。许多小组件无需连接器，状态先存本地，直到你选择同步。",
+          a: "连接器把小组件接到实时数据——今天已有 90 个，覆盖数据库、钱包、社交应用、券商、交易所与开放数据。在 CORS 允许时，请求可直接从浏览器发出。许多小组件无需连接器，状态先存本地，直到你选择同步。",
         },
         {
           q: "机器人和智能体是什么？",
@@ -799,7 +798,7 @@ export const zh: SiteContent = {
         title: '连接器',
         body: '来自市场、数据库、钱包与社交应用的实时数据。',
         items: [
-          { icon: 'plug', title: '45+ 个实时连接器', body: '数据库、市场、钱包与 Web 服务 — Postgres、ClickHouse、Qdrant、OANDA、Binance、Coinbase、MetaMask、Ledger、Polygon、Kalshi 等。' },
+          { icon: 'plug', title: '90 个实时连接器', body: '数据库、市场、钱包与 Web 服务 — Postgres、ClickHouse、Qdrant、OANDA、Binance、Coinbase、MetaMask、Ledger、Polygon、Kalshi 等。' },
           { icon: 'globe', title: '社交媒体集成', body: '连接 X、YouTube、Discord、Telegram、Reddit、Bluesky、Mastodon、Lemmy、Dev.to 与 Hacker News，让组件读取并响应你已用的信息流。' },
           { icon: 'signal', title: '尽可能浏览器直连', body: '在 CORS 允许时，认证请求直接从浏览器发起，完全绕过我们的代理。' },
           { icon: 'database', title: '也支持本地状态', body: '许多组件根本不需要外部数据：游戏、计划器、情绪板与私人追踪器可在浏览器中运行，直到你选择同步。' },
@@ -875,7 +874,7 @@ export const zh: SiteContent = {
       title: '每个方案都包含',
       items: [
         '无限屏幕、工作区和组件',
-        '45+ 个实时市场数据连接器',
+        '90 个实时市场数据连接器',
         '沙箱化组件运行时',
         '全局 Copilot（即将推出）',
         '社区与市场访问权',
@@ -1022,9 +1021,9 @@ export const zh: SiteContent = {
         accentOne: '一种',
         accentTwo: '两种（渐变）',
         patternsDots: '仅圆点',
-        patternsAll: '全部 6 种',
-        loadersAll: '全部 5 种',
-        connectorsAll: '全部 155 个',
+        patternsAll: '全部 10 种',
+        loadersAll: '全部 8 种',
+        connectorsAll: '全部 {n} 个',
         brandNexow: 'Nexow 标识',
         brandAvatar: '你的头像',
         brandCustom: '你的 Logo',

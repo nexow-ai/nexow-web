@@ -18,6 +18,8 @@
  * Copy lives in `src/i18n/locales/*.ts`; this file holds only keys, icons and numbers.
  */
 
+import { CONNECTOR_COUNT } from './connectors';
+
 /* ------------------------------------------------------------------ *
  * Credit economics — mirrors app/billing/pricing.ts
  * ------------------------------------------------------------------ */
@@ -149,8 +151,11 @@ export const PLANS: PlanSpec[] = [
     accentInk: '#a16207',
     monthly: null,
     monthlyCredits: 0,
-    bots: '∞',
-    agents: '∞',
+    // Partner is a bespoke contract, not an uncapped tier — the app's
+    // AGENT_QUOTAS caps `partner` at 100 deployed agents, the same as Sponsor.
+    // 'custom' renders as the translated "Custom", like its price.
+    bots: 'custom',
+    agents: 'custom',
     inherits: 'sponsor',
     features: ['infra', 'setup', 'dev', 'personalization', 'support'],
     ctaHref: '/contact?type=partnership',
@@ -177,7 +182,13 @@ export function yearlyPerMonth(plan: PlanSpec): number | null {
  * number, a quota, "∞"). Both together render as "115,000 / month".
  * ------------------------------------------------------------------ */
 
-export type MatrixCell = boolean | { n?: string; t?: string };
+export type MatrixCell = boolean | {
+  n?: string;
+  t?: string;
+  /** This one cell is a defined-but-unbuilt capability (row-level `soon` marks
+   *  the whole capability; this marks a single tier's version of it). */
+  soon?: boolean;
+};
 
 export interface MatrixRow {
   /** i18n leaf under `plansPage.matrix.rows`. */
@@ -196,6 +207,13 @@ export interface MatrixGroup {
 
 const num = (n: number) => ({ n: n.toLocaleString('en-US') });
 const all = (t: string): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] => [{ t }, { t }, { t }, { t }];
+/** Every plan sees the whole connector catalogue. The size is read from the
+ *  generated catalog and dropped into the locale's `{n}` slot, so it can never
+ *  drift from what /connectors actually lists. */
+const allCatalog = (): [MatrixCell, MatrixCell, MatrixCell, MatrixCell] => {
+  const cell = { n: String(CONNECTOR_COUNT), t: 'connectorsAll' };
+  return [cell, cell, cell, cell];
+};
 const yes: [MatrixCell, MatrixCell, MatrixCell, MatrixCell] = [true, true, true, true];
 
 export const MATRIX: MatrixGroup[] = [
@@ -234,10 +252,12 @@ export const MATRIX: MatrixGroup[] = [
     key: 'automation',
     icon: 'bot',
     rows: [
-      { key: 'bots', cells: [num(10), num(30), num(300), { t: 'unlimited' }] },
-      { key: 'agents', cells: [num(3), num(10), num(100), { t: 'unlimited' }] },
-      { key: 'connectors', cells: all('connectorsAll') },
-      { key: 'builder', cells: [false, false, true, true] },
+      { key: 'bots', cells: [num(10), num(30), num(300), { t: 'custom' }] },
+      { key: 'agents', cells: [num(3), num(10), num(100), { t: 'custom' }] },
+      { key: 'connectors', cells: allCatalog() },
+      // Connector Builder is an announced Sponsor capability with no
+      // implementation in the app yet — flagged, not quietly claimed.
+      { key: 'builder', cells: [false, false, true, true], soon: true },
       { key: 'signals', cells: [false, false, true, true], soon: true },
     ],
   },
@@ -247,10 +267,15 @@ export const MATRIX: MatrixGroup[] = [
     rows: [
       { key: 'themes', cells: yes },
       { key: 'accent', cells: [{ t: 'accentOne' }, { t: 'accentTwo' }, { t: 'accentTwo' }, { t: 'accentTwo' }] },
-      { key: 'patterns', cells: [{ t: 'patternsDots' }, { t: 'patternsAll' }, { t: 'patternsAll' }, { t: 'patternsAll' }] },
+      // Counts mirror app/themes/tiers.ts: CANVAS_PATTERN_TIER gives Free the dot
+      // grid, Supporter seven more, Sponsor `topo` + `circuit` on top (10 total);
+      // SPLASH_LOADER_TIER gives Free 3, Supporter 3 more, Sponsor 2 more (8).
+      { key: 'patterns', cells: [{ t: 'patternsDots' }, { n: '8' }, { t: 'patternsAll' }, { t: 'patternsAll' }] },
       { key: 'aurora', cells: [false, true, true, true] },
-      { key: 'loaders', cells: [{ n: '2' }, { t: 'loadersAll' }, { t: 'loadersAll' }, { t: 'loadersAll' }] },
-      { key: 'brand', cells: [{ t: 'brandNexow' }, { t: 'brandAvatar' }, { t: 'brandCustom' }, { t: 'brandBespoke' }] },
+      { key: 'loaders', cells: [{ n: '3' }, { n: '6' }, { t: 'loadersAll' }, { t: 'loadersAll' }] },
+      // LOGO_TIER tops out at `account` (your avatar) — a custom logo upload is
+      // announced for Sponsor but not built, so that cell carries the Soon chip.
+      { key: 'brand', cells: [{ t: 'brandNexow' }, { t: 'brandAvatar' }, { t: 'brandCustom', soon: true }, { t: 'brandBespoke' }] },
     ],
   },
   {

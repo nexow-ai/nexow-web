@@ -27,6 +27,9 @@ const t = c.matrix;
 function text(cell: MatrixCell): string | null {
   if (typeof cell === 'boolean') return null;
   const value = t.values[cell.t ?? ''] ?? cell.t ?? '';
+  // A `{n}` slot lets a locale place the number where its grammar wants it
+  // ("All 156" / "156 件すべて"); otherwise the number simply leads.
+  if (cell.n && value.includes('{n}')) return value.replace('{n}', cell.n);
   if (cell.n && cell.t) return `${cell.n} ${value}`;
   return cell.n ?? value;
 }
@@ -63,7 +66,7 @@ const names = c.tiers.map((tier) => tier.name);
     >
       <table class="w-full border-collapse text-left">
         <caption class="sr-only">{t.title}</caption>
-        <thead class="sticky top-16 z-10 bg-white/95 backdrop-blur dark:bg-ink-950/85">
+        <thead class="bg-white/95 dark:bg-ink-950/85">
           <tr class="border-b border-ink-900/10 dark:border-white/10">
             <th scope="col" class="px-4 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6">
               {t.feature}
@@ -130,7 +133,14 @@ const names = c.tiers.map((tier) => tier.name);
                         ]}
                       >
                         {label ? (
-                          <span class="font-medium text-ink-800 dark:text-ink-200">{label}</span>
+                          <span class="font-medium text-ink-800 dark:text-ink-200">
+                            {label}
+                            {typeof cell === 'object' && cell.soon && (
+                              <span class="ms-1.5 rounded-full bg-accent-500/10 px-1.5 py-0.5 align-middle font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
+                                {t.soon}
+                              </span>
+                            )}
+                          </span>
                         ) : cell === true ? (
                           <Icon
                             name="check"
@@ -164,6 +174,7 @@ const names = c.tiers.map((tier) => tier.name);
       display: none;
     }
   }
+
 </style>
 
 <script>

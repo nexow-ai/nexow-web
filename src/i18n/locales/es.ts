@@ -85,7 +85,7 @@ export const es: SiteContent = {
     ticker: { label: 'Conectores en vivo' },
     trust: 'Un lienzo para todos los mercados — FX, cripto, acciones, futuros, opciones y mercados de predicción.',
     stats: [
-      { n: 45, suffix: '+', label: 'conectores en vivo para datos, wallets, redes sociales y mercados' },
+      { n: 90, suffix: '+', label: 'conectores en vivo para datos, wallets, redes sociales y mercados' },
       { n: 6, label: 'clases de activos en un solo lienzo' },
       { n: 10, suffix: 'K', label: 'créditos de IA reservados al registrarte' },
       { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
@@ -348,7 +348,6 @@ export const es: SiteContent = {
       subtitle:
         'Conectores conectables transmiten precios en vivo, order books y datos de referencia directo a tus widgets — en FX, cripto, acciones, futuros, opciones, mercados de predicción, bases de datos y feeds sociales.',
       note: 'Hoy hay 90 conectores en vivo y 155 en el catálogo — venues de trading, APIs de datos de mercado, bases de datos, fuentes sociales, wallets cripto y servicios web. Muchos transmiten directo desde tu navegador; el resto pasa por un proxy ligero.',
-      count: 90,
       countLabel: 'conectores en vivo',
       groups: {
         fx: 'FX',
@@ -888,7 +887,7 @@ export const es: SiteContent = {
       title: 'Incluido en todos los planes',
       items: [
         'Pantallas, espacios y widgets ilimitados',
-        '45+ conectores de datos de mercado en vivo',
+        '90 conectores de datos de mercado en vivo',
         'Runtime de widgets en sandbox',
         'Copilot global (próximamente)',
         'Acceso a comunidad y marketplace',
@@ -1035,9 +1034,9 @@ export const es: SiteContent = {
         accentOne: 'Uno',
         accentTwo: 'Dos (gradiente)',
         patternsDots: 'Solo puntos',
-        patternsAll: 'Los 6',
-        loadersAll: 'Los 5',
-        connectorsAll: 'Los 155',
+        patternsAll: 'Los 10',
+        loadersAll: 'Los 8',
+        connectorsAll: 'Los {n}',
         brandNexow: 'Marca Nexow',
         brandAvatar: 'Tu avatar',
         brandCustom: 'Tu logo',

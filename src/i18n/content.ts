@@ -212,6 +212,11 @@ export interface RewardsContent {
     flipHint: string;
     /** One label per tracked stat — the badge's "Tracks" line. */
     stats: Record<string, string>;
+    /**
+     * Imperative how-to per tracked stat — the action that earns the badge.
+     * Optional so partial locales compile; `useContent` merges English at runtime.
+     */
+    how?: Record<string, string>;
     /** One name per badge id (18 tiered + 10 rare + 6 legendary). */
     names: Record<string, string>;
   };
@@ -444,8 +449,8 @@ export interface SiteContent {
       eyebrow: string;
       title: string;
       subtitle: string;
+      /** May contain `{live}` / `{total}` — filled from the generated catalog. */
       note: string;
-      count: number;
       countLabel: string;
       groups: Record<ConnectorGroupKey, string>;
     };

@@ -54,7 +54,7 @@ export const tr = {
     meta: {
       title: 'Nexow — Yapay Zeka ile Sade Dilde Pazar Panolarını Yapın',
       description:
-        'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade İngilizce ile bir widget açıklayın ve Nexow onu kurar, 45+ bağlantıdan canlı verilere bağlar ve bulut botları, yapay zeka ajanları, bir yapıcı topluluğu ve XP ödülü ekler — varsayılan olarak özel, başlangıç için ücretsiz.',
+        'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade İngilizce ile bir widget açıklayın ve Nexow onu kurar, 90 bağlantıdan canlı verilere bağlar ve bulut botları, yapay zeka ajanları, bir yapıcı topluluğu ve XP ödülü ekler — varsayılan olarak özel, başlangıç için ücretsiz.',
     },
     hero: {
       badge: 'Ön izleme şimdi canlı',
@@ -72,7 +72,7 @@ export const tr = {
     ticker: { label: 'Canlı bağlantılar' },
     trust: 'Her pazar için bir tuval — Döviz, kripto, hisse senedi, vadeli işlem, opsiyon ve tahmin piyasaları.',
     stats: [
-      { n: 45, suffix: '+', label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
+      { n: 90, suffix: '+', label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
       { n: 6, label: 'bir tuval üzerinde varlık sınıfı' },
       { n: 10, suffix: 'K', label: 'kayıt sırasında ayrılmış ücretsiz yapay zeka kredisi' },
       { n: 30, prefix: '<', suffix: 's', label: 'cümleden çalışan widgete kadar' },
@@ -226,7 +226,7 @@ export const tr = {
           {
             icon: 'plug',
             title: 'Bağlayıcılar',
-            body: 'Piyasalar, veritabanları, cüzdanlar ve sosyal uygulamalar genelinde 45+ canlı bağlayıcı — CORS izin verdiğinde doğrudan tarayıcıdan.',
+            body: 'Piyasalar, veritabanları, cüzdanlar ve sosyal uygulamalar genelinde 90 canlı bağlayıcı — CORS izin verdiğinde doğrudan tarayıcıdan.',
           },
           {
             icon: 'globe',
@@ -335,7 +335,6 @@ export const tr = {
       subtitle:
         'Bağlanabilir bağlantılar, canlı fiyatları, emir defterlerini ve referans verilerini widget\'lerinize doğrudan akış yapılır — döviz, kripto, hisse senedi, vadeli işlem, opsiyon, tahmin piyasaları, veritabanları ve sosyal ortam kaynakları arasında.',
       note: '90 bağlantı bugün canlı ve 155 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları, sosyal ortamlar, kripto cüzdanları ve web hizmetleri. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
-      count: 90,
       countLabel: 'canlı bağlantı',
       groups: {
         fx: 'Döviz',
@@ -418,7 +417,7 @@ export const tr = {
       soon: 'Yakında',
       items: [
         { status: 'shipped', title: 'Yapay zeka widget kod oluşturma', body: 'Tuval üzerinde çalışan sade dil widget\'leri.' },
-        { status: 'shipped', title: '45+ pazar veri bağlantısı', body: 'Veritabanları, sosyal ortamlar, aracılar, borsalar, cüzdanlar, açık veri ve web hizmetleri canlı akış yapılır.' },
+        { status: 'shipped', title: '90 pazar veri bağlantısı', body: 'Veritabanları, sosyal ortamlar, aracılar, borsalar, cüzdanlar, açık veri ve web hizmetleri canlı akış yapılır.' },
         { status: 'shipped', title: 'Bulut botları ve uyarıları', body: 'Verilerinizi izleyen ve widget\'lerinize sinyaller gönderen otomasyonlar, sekme kapalı.' },
         { status: 'shipped', title: 'Hesaplar ve bulut senkronizasyonu', body: 'Her cihaz genelinde senkronize edilen çalışma alanları olan ücretsiz hesaplar — platform başlatılması için ayrılmış 10K kredi.' },
         { status: 'shipped', title: 'Topluluk beslemesi ve profilleri', body: 'Yapıcıları takip edin, beslemede widget\'ler paylaşın ve herkese açık @handle\'inizi talep edin.' },
@@ -456,7 +455,7 @@ export const tr = {
         },
         {
           q: "Bağlayıcılar nedir?",
-          a: "Bağlayıcılar widget’ları canlı verilere bağlar — bugün veritabanları, cüzdanlar, sosyal uygulamalar, brokerlar, borsalar ve açık veri arasında 45+. CORS izin verdiğinde çağrılar doğrudan tarayıcıdan gider. Birçok widget bağlayıcıya ihtiyaç duymaz ve senkronlayana kadar durumu yerelde tutar.",
+          a: "Bağlayıcılar widget’ları canlı verilere bağlar — bugün veritabanları, cüzdanlar, sosyal uygulamalar, brokerlar, borsalar ve açık veri arasında 90. CORS izin verdiğinde çağrılar doğrudan tarayıcıdan gider. Birçok widget bağlayıcıya ihtiyaç duymaz ve senkronlayana kadar durumu yerelde tutar.",
         },
         {
           q: "Botlar ve ajanlar nedir?",
@@ -799,7 +798,7 @@ export const tr = {
         title: 'Bağlayıcılar',
         body: 'Piyasalardan, veritabanlarından, cüzdanlardan ve sosyal uygulamalardan canlı veri.',
         items: [
-          { icon: 'plug', title: '45+ canlı bağlayıcı', body: 'Veritabanları, piyasalar, cüzdanlar ve web hizmetleri — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi ve daha fazlası.' },
+          { icon: 'plug', title: '90 canlı bağlayıcı', body: 'Veritabanları, piyasalar, cüzdanlar ve web hizmetleri — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi ve daha fazlası.' },
           { icon: 'globe', title: 'Sosyal medya entegrasyonları', body: "X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to ve Hacker News'i bağlayın; widget'ler zaten kullandığınız akışları okuyup tepki verebilsin." },
           { icon: 'signal', title: 'Mümkün olduğunda doğrudan tarayıcıdan', body: "CORS izin verdiğinde, kimlik doğrulamalı çağrılar doğrudan tarayıcınızdan çalışır ve proxy'mizi tamamen atlar." },
           { icon: 'database', title: 'Yerel durum da', body: "Birçok widget'in harici veriye ihtiyacı yoktur: oyunlar, planlayıcılar, moodboard'lar ve özel takipçiler senkronize etmeyi seçene kadar tarayıcıda kalır." },
@@ -875,7 +874,7 @@ export const tr = {
       title: 'Her Planda Dahil',
       items: [
         'Sınırsız Ekran, Çalışma Alanı ve Widget',
-        '45+ canlı pazar veri bağlantısı',
+        '90 canlı pazar veri bağlantısı',
         'Korumalı Widget Çalışma Zamanı',
         'Genel Copilot (yakında)',
         'Topluluk ve Pazaryeri Erişimi',

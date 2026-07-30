@@ -72,7 +72,7 @@ export const ko: SiteContent = {
     ticker: { label: '라이브 커넥터' },
     trust: '모든 마켓을 위한 하나의 캔버스 — FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓.',
     stats: [
-      { n: 45, suffix: '+', label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
+      { n: 90, suffix: '+', label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
       { n: 6, label: '하나의 캔버스에서 자산 클래스' },
       { n: 10, suffix: 'K', label: '가입 시 무료 AI 크레딧 예약' },
       { n: 30, prefix: '<', suffix: 's', label: '문장에서 실행 중인 위젯까지' },
@@ -335,7 +335,6 @@ export const ko: SiteContent = {
       subtitle:
         '플러그형 커넥터는 실시간 가격, 오더북 및 참조 데이터를 위젯으로 직접 스트리밍합니다 — FX, 암호화폐, 주식, 선물, 옵션, 예측 마켓, 데이터베이스 및 소셜 피드 전체.',
       note: '90개의 커넥터가 오늘 라이브이고 155개는 카탈로그에 있습니다 — 거래소, 마켓 데이터 API, 데이터베이스, 소셜 소스, 암호화폐 지갑 및 웹 서비스입니다. 많은 커넥터가 브라우저에서 직접 스트리밍되고, 나머지는 얇은 프록시를 통해 라우팅됩니다.',
-      count: 90,
       countLabel: '라이브 커넥터',
       groups: {
         fx: 'FX',
@@ -456,7 +455,7 @@ export const ko: SiteContent = {
         },
         {
           q: "커넥터란 무엇인가요?",
-          a: "커넥터는 위젯을 라이브 데이터에 연결합니다 — 오늘 데이터베이스, 지갑, 소셜 앱, 브로커, 거래소, 오픈 데이터 등 45+. CORS가 허용되면 브라우저에서 직접 호출합니다. 많은 위젯은 커넥터 없이 동기화할 때까지 상태를 로컬에 둡니다.",
+          a: "커넥터는 위젯을 라이브 데이터에 연결합니다 — 오늘 데이터베이스, 지갑, 소셜 앱, 브로커, 거래소, 오픈 데이터 등 90. CORS가 허용되면 브라우저에서 직접 호출합니다. 많은 위젯은 커넥터 없이 동기화할 때까지 상태를 로컬에 둡니다.",
         },
         {
           q: "봇과 에이전트란 무엇인가요?",
@@ -1022,9 +1021,9 @@ export const ko: SiteContent = {
         accentOne: '1개',
         accentTwo: '2개(그라데이션)',
         patternsDots: '점무늬만',
-        patternsAll: '6종 전부',
-        loadersAll: '5종 전부',
-        connectorsAll: '155개 전부',
+        patternsAll: '10종 전부',
+        loadersAll: '8종 전부',
+        connectorsAll: '{n}개 전부',
         brandNexow: 'Nexow 마크',
         brandAvatar: '내 아바타',
         brandCustom: '내 로고',

@@ -85,7 +85,7 @@ export const de: SiteContent = {
     ticker: { label: 'Live-Konnektoren' },
     trust: 'Ein Canvas für jeden Markt — FX, Krypto, Aktien, Futures, Optionen & Prognosemärkte.',
     stats: [
-      { n: 45, suffix: '+', label: 'Live-Konnektoren für Daten, Wallets, Socials und Märkte' },
+      { n: 90, suffix: '+', label: 'Live-Konnektoren für Daten, Wallets, Socials und Märkte' },
       { n: 6, label: 'Anlageklassen auf einem Canvas' },
       { n: 10, suffix: 'K', label: 'kostenlose KI-Credits bei der Anmeldung reserviert' },
       { n: 30, prefix: '<', suffix: 's', label: 'vom Satz zum laufenden Widget' },
@@ -239,7 +239,7 @@ export const de: SiteContent = {
           {
             icon: 'plug',
             title: 'Konnektoren',
-            body: '45+ Live-Konnektoren für Märkte, Datenbanken, Wallets und Social-Apps — browser-direkt, wo CORS es erlaubt.',
+            body: '90 Live-Konnektoren für Märkte, Datenbanken, Wallets und Social-Apps — browser-direkt, wo CORS es erlaubt.',
           },
           {
             icon: 'globe',
@@ -348,7 +348,6 @@ export const de: SiteContent = {
       subtitle:
         'Modulare Konnektoren streamen Live-Kurse, Orderbücher und Referenzdaten direkt in deine Widgets — über FX, Krypto, Aktien, Futures, Optionen, Prognosemärkte, Datenbanken und Social-Feeds hinweg.',
       note: '90 Konnektoren sind heute live und 155 stehen im Katalog — Broker, Börsen, Datenanbieter, Datenbanken, Socials, Krypto-Wallets und Web-Dienste. Viele streamen direkt aus deinem Browser; der Rest läuft über einen schlanken Proxy.',
-      count: 90,
       countLabel: 'Live-Konnektoren',
       groups: {
         fx: 'FX',
@@ -812,7 +811,7 @@ export const de: SiteContent = {
         title: 'Konnektoren',
         body: 'Live-Daten aus Märkten, Datenbanken, Wallets und Social-Apps.',
         items: [
-          { icon: 'plug', title: '45+ Live-Konnektoren', body: 'Datenbanken, Märkte, Wallets und Web-Dienste — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi und mehr.' },
+          { icon: 'plug', title: '90 Live-Konnektoren', body: 'Datenbanken, Märkte, Wallets und Web-Dienste — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi und mehr.' },
           { icon: 'globe', title: 'Social-Media-Integrationen', body: 'Verbinde X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to und Hacker News, damit Widgets die Feeds lesen und darauf reagieren können, die du schon nutzt.' },
           { icon: 'signal', title: 'Browser-direkt, wo möglich', body: 'Wo CORS es erlaubt, laufen authentifizierte Aufrufe direkt aus deinem Browser und umgehen unseren Proxy vollständig.' },
           { icon: 'database', title: 'Auch lokaler State', body: 'Viele Widgets brauchen gar keine externen Daten: Spiele, Planer, Moodboards und private Tracker können im Browser leben, bis du syncen willst.' },
@@ -1035,9 +1034,9 @@ export const de: SiteContent = {
         accentOne: 'Eine',
         accentTwo: 'Zwei (Verlauf)',
         patternsDots: 'Nur Punkte',
-        patternsAll: 'Alle 6',
-        loadersAll: 'Alle 5',
-        connectorsAll: 'Alle 155',
+        patternsAll: 'Alle 10',
+        loadersAll: 'Alle 8',
+        connectorsAll: 'Alle {n}',
         brandNexow: 'Nexow-Marke',
         brandAvatar: 'Dein Avatar',
         brandCustom: 'Dein Logo',

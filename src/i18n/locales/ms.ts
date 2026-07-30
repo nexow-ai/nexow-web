@@ -54,7 +54,7 @@ export const ms = {
     meta: {
       title: 'Nexow — Bina papan pemuka pasaran dengan AI, dalam bahasa biasa',
       description:
-        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 45+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
+        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 90 penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
     },
     hero: {
       badge: 'Pratonton kini langsung',
@@ -72,7 +72,7 @@ export const ms = {
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',
     stats: [
-      { n: 45, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
+      { n: 90, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
       { n: 6, label: 'kelas aset pada satu kanvas' },
       { n: 10, suffix: 'K', label: 'kredit AI percuma yang dikhaskan semasa mendaftar' },
       { n: 30, prefix: '<', suffix: 's', label: 'daripada ayat kepada widget yang berjalan' },
@@ -226,7 +226,7 @@ export const ms = {
           {
             icon: 'plug',
             title: 'Penyambung',
-            body: '45+ penyambung langsung merentasi pasaran, pangkalan data, dompet dan apl sosial — terus dari pelayar di mana CORS membenarkan.',
+            body: '90 penyambung langsung merentasi pasaran, pangkalan data, dompet dan apl sosial — terus dari pelayar di mana CORS membenarkan.',
           },
           {
             icon: 'globe',
@@ -335,7 +335,6 @@ export const ms = {
       subtitle:
         'Penyambung yang boleh pasang mengalirkan harga langsung, buku pesanan dan data rujukan terus ke widget anda — merentasi FX, kripto, ekuiti, niaga hadapan, opsyen, pasaran ramalan, pangkalan data dan suapan sosial.',
       note: '90 penyambung langsung hari ini dan 155 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
-      count: 90,
       countLabel: 'penyambung langsung',
       groups: {
         fx: 'FX',
@@ -418,7 +417,7 @@ export const ms = {
       soon: 'Segera hadir',
       items: [
         { status: 'shipped', title: 'Penghasilan widget AI', body: 'Widget bahasa biasa berjalan sandbok pada kanvas.' },
-        { status: 'shipped', title: '45+ penyambung data pasaran', body: 'Pangkalan data, sosial, broker, pertukaran, dompet, data terbuka dan perkhidmatan web mengalir secara langsung.' },
+        { status: 'shipped', title: '90 penyambung data pasaran', body: 'Pangkalan data, sosial, broker, pertukaran, dompet, data terbuka dan perkhidmatan web mengalir secara langsung.' },
         { status: 'shipped', title: 'Bot & amaran awan', body: 'Automasi yang memantau data anda dan menembak isyarat ke widget anda, tab ditutup.' },
         { status: 'shipped', title: 'Akaun & segerak awan', body: 'Akaun percuma dengan ruang kerja disegerak ke setiap peranti — 10K kredit dikhaskan untuk pelancaran platform.' },
         { status: 'shipped', title: 'Suapan komuniti & profil', body: 'Ikuti pembuat, kongsi widget ke suapan, dan tuntut @handle awam anda.' },
@@ -456,7 +455,7 @@ export const ms = {
         },
         {
           q: "Apakah penyambung?",
-          a: "Penyambung menyambungkan widget kepada data langsung — 45+ hari ini merentas pangkalan data, dompet, apl sosial, broker, bursa dan data terbuka. Di mana CORS membenarkan, panggilan boleh berjalan terus dari pelayar. Banyak widget tidak memerlukan penyambung dan menyimpan keadaan secara tempatan sehingga anda sync.",
+          a: "Penyambung menyambungkan widget kepada data langsung — 90 hari ini merentas pangkalan data, dompet, apl sosial, broker, bursa dan data terbuka. Di mana CORS membenarkan, panggilan boleh berjalan terus dari pelayar. Banyak widget tidak memerlukan penyambung dan menyimpan keadaan secara tempatan sehingga anda sync.",
         },
         {
           q: "Apakah bot dan ejen?",
@@ -799,7 +798,7 @@ export const ms = {
         title: 'Penyambung',
         body: 'Data langsung daripada pasaran, pangkalan data, dompet dan apl sosial.',
         items: [
-          { icon: 'plug', title: '45+ penyambung langsung', body: 'Pangkalan data, pasaran, dompet dan perkhidmatan web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi dan banyak lagi.' },
+          { icon: 'plug', title: '90 penyambung langsung', body: 'Pangkalan data, pasaran, dompet dan perkhidmatan web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi dan banyak lagi.' },
           { icon: 'globe', title: 'Integrasi media sosial', body: 'Sambung X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to dan Hacker News supaya widget boleh membaca dan bertindak balas kepada suapan yang anda sudah guna.' },
           { icon: 'signal', title: 'Terus dari pelayar jika boleh', body: 'Di mana CORS membenarkan, panggilan disahkan berjalan terus dari pelayar anda dan memintas proksi kami sepenuhnya.' },
           { icon: 'database', title: 'Keadaan tempatan juga', body: 'Ramai widget tidak perlukan data luaran langsung: permainan, perancang, papan mood dan penjejak peribadi boleh hidup dalam pelayar sehingga anda pilih untuk segerak.' },
@@ -875,7 +874,7 @@ export const ms = {
       title: 'Termasuk dalam setiap pelan',
       items: [
         'Skrin, ruang kerja & widget tanpa had',
-        '45+ penyambung data pasaran langsung',
+        '90 penyambung data pasaran langsung',
         'Masa jalan widget sandbok',
         'Copilot global (akan datang segera)',
         'Akses komuniti & pasaran',
