@@ -24,8 +24,8 @@ const {
 const base =
   'group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-all duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-offset-2 whitespace-nowrap';
 
-// Brand gradient (teal → sky → indigo on light; teal → indigo → plasma on
-// `.dark` via --grad-* tokens). Same stops as `.text-gradient` / hero CTAs.
+// Brand gradient (teal → sky → indigo). Same stops as `.text-gradient` /
+// hero CTAs — identical in light and dark via shared --grad-* tokens.
 const brandGradient =
   'bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] text-white shadow-[0_1px_0_rgba(255,255,255,0.22)_inset,0_12px_28px_-14px_color-mix(in_oklab,var(--grad-b)_70%,transparent)] hover:brightness-[1.06] hover:shadow-[0_1px_0_rgba(255,255,255,0.28)_inset,0_16px_34px_-14px_color-mix(in_oklab,var(--grad-c)_55%,transparent)] hover:-translate-y-0.5';
 
