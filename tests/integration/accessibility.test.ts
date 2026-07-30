@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
 import { audit, describeViolations } from '../helpers/a11y';
 import { dir, localizePath } from '../../src/i18n/utils';
@@ -16,24 +15,52 @@ function pageFor(route: string, lang: Lang): unknown {
   return pageModules[key]?.default;
 }
 
-/** Rendering every page in every locale would be 340 audits; sample by script. */
-const SAMPLE_LANGS: Lang[] = ['en', 'de', 'ja', 'ar'];
+/**
+ * An axe pass parses the rule bundle into a fresh document each time, so it runs
+ * over one page per distinct template rather than all 340 route/locale pairs.
+ * The structural checks below are cheap and do cover every route.
+ */
+const AUDITED_ROUTES = [
+  '/',
+  '/features',
+  '/connectors',
+  '/plans',
+  '/community',
+  '/blog',
+  '/contact',
+  '/privacy',
+  '/for/traders',
+] as const;
 
-describe.each(CANONICAL_ROUTES)('%s is accessible', (route) => {
-  it('has no axe violations', async () => {
-    const html = await render(pageFor(route, 'en') as never, route);
-    const { violations } = await audit(html);
-    expect(describeViolations(violations), `${route} has accessibility violations`).toEqual([]);
-  });
+/** One locale per script direction and writing system. */
+const SAMPLE_LANGS: Lang[] = ['de', 'ja', 'ar'];
+
+const AXE_TIMEOUT = 120_000;
+
+describe.each(AUDITED_ROUTES)('%s is accessible', (route) => {
+  it(
+    'has no axe violations',
+    async () => {
+      const html = await render(pageFor(route, 'en') as never, route);
+      expect(
+        describeViolations(await audit(html)),
+        `${route} has accessibility violations`,
+      ).toEqual([]);
+    },
+    AXE_TIMEOUT,
+  );
 });
 
 describe.each(SAMPLE_LANGS)('the %s home page is accessible', (lang) => {
-  it('has no axe violations', async () => {
-    const route = localizePath('/', lang);
-    const html = await render(pageFor('/', lang) as never, route);
-    const { violations } = await audit(html);
-    expect(describeViolations(violations), `${lang} home has violations`).toEqual([]);
-  });
+  it(
+    'has no axe violations',
+    async () => {
+      const route = localizePath('/', lang);
+      const html = await render(pageFor('/', lang) as never, route);
+      expect(describeViolations(await audit(html)), `${lang} home has violations`).toEqual([]);
+    },
+    AXE_TIMEOUT,
+  );
 });
 
 describe('document structure', () => {

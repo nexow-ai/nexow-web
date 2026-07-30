@@ -1,14 +1,18 @@
 /**
  * Accessibility auditing over server-rendered HTML.
  *
- * axe runs against jsdom, which has no layout engine — so rules that need
- * geometry or painted colour (colour-contrast, target size, overlap) cannot
+ * axe is evaluated *inside* each JSDOM window rather than imported into the test
+ * realm: axe captures its window on load, so a single imported copy cannot audit
+ * a series of separate documents.
+ *
+ * jsdom has no layout engine, so rules needing geometry or painted colour cannot
  * produce a trustworthy result and are disabled. What remains is everything
- * decidable from the markup itself: landmarks, names, roles, heading order,
- * language, labels and duplicate ids.
+ * decidable from the markup: landmarks, names, roles, heading order, language,
+ * labels and duplicate ids.
  */
-import axe, { type AxeResults, type Result, type RunOptions } from 'axe-core';
-import { JSDOM } from 'jsdom';
+import fs from 'node:fs';
+import { createRequire } from 'node:module';
+import { JSDOM, VirtualConsole } from 'jsdom';
 
 /** Rules jsdom cannot evaluate without layout — excluded rather than trusted. */
 export const LAYOUT_DEPENDENT_RULES = [
@@ -25,29 +29,52 @@ export interface Violation {
   nodes: string[];
 }
 
+const require = createRequire(import.meta.url);
+let axeSource: string | undefined;
+
+function axeBundle(): string {
+  axeSource ??= fs.readFileSync(require.resolve('axe-core'), 'utf8');
+  return axeSource;
+}
+
 /** Run axe over a full HTML document string. */
-export async function audit(
-  html: string,
-  options: RunOptions = {},
-): Promise<{ violations: Violation[]; raw: AxeResults }> {
-  const dom = new JSDOM(html, { url: 'https://nexow.ai/', pretendToBeVisual: true });
-  const { window } = dom;
+export async function audit(html: string): Promise<Violation[]> {
+  // jsdom logs "not implemented" for the page's own inline scripts; the audit
+  // does not need them to run, so keep the console quiet.
+  const virtualConsole = new VirtualConsole();
+  const dom = new JSDOM(html, {
+    url: 'https://nexow.ai/',
+    runScripts: 'outside-only',
+    pretendToBeVisual: true,
+    virtualConsole,
+  });
 
   try {
-    // axe reads globals from the document it is handed.
-    const results = await axe.run(window.document.documentElement, {
-      resultTypes: ['violations'],
-      rules: Object.fromEntries(LAYOUT_DEPENDENT_RULES.map((id) => [id, { enabled: false }])),
-      ...options,
-    });
+    dom.window.eval(axeBundle());
 
-    return { violations: results.violations.map(summarize), raw: results };
+    const results = (await dom.window.eval(`
+      window.axe.run(document, {
+        resultTypes: ['violations'],
+        rules: ${JSON.stringify(
+          Object.fromEntries(LAYOUT_DEPENDENT_RULES.map((id) => [id, { enabled: false }])),
+        )},
+      })
+    `)) as { violations: RawResult[] };
+
+    return results.violations.map(summarize);
   } finally {
-    window.close();
+    dom.window.close();
   }
 }
 
-function summarize(result: Result): Violation {
+interface RawResult {
+  id: string;
+  impact: string | null;
+  help: string;
+  nodes: { html: string }[];
+}
+
+function summarize(result: RawResult): Violation {
   return {
     id: result.id,
     impact: result.impact ?? 'unknown',
@@ -56,7 +83,7 @@ function summarize(result: Result): Violation {
   };
 }
 
-/** A compact, readable failure message for an expect(...).toEqual([]) assertion. */
+/** A compact, readable failure message for an `expect(...).toEqual([])`. */
 export function describeViolations(violations: Violation[]): string[] {
   return violations.map((v) => `${v.id} (${v.impact}): ${v.help} — ${v.nodes[0] ?? ''}`);
 }
