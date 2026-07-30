@@ -28,7 +28,7 @@ const badgeIcon = getPageBadgeIcon('/features');
 
 <Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-40 dark:bg-transparent">
+  <section class="relative overflow-hidden pt-32 pb-16 sm:pt-40">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
         class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
@@ -90,7 +90,7 @@ const badgeIcon = getPageBadgeIcon('/features');
   </section>
 
   <!-- Feature pillars (zig-zag, each paired with an animated visual) -->
-  <div class="bg-white dark:bg-transparent">
+  <div>
     {
       t.groups.map((group, i) => {
         const reverse = i % 2 === 1;

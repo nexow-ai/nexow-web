@@ -79,8 +79,8 @@ const themeLocked = theme === 'light' || theme === 'dark';
       Skip to content
     </a>
 
-    {/* Dot field backdrop — visible in dark mode only. */}
-    <DotField class="fixed inset-0 z-0 hidden dark:block" />
+    {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
+    <DotField class="fixed inset-0 z-0" />
 
     <Header />
 
