@@ -45,6 +45,7 @@ import {
 } from '../../../src/data/gamification';
 import { ICON_PATHS } from '../../../src/components/icon-paths';
 import { useContent } from '../../../src/i18n/content';
+import { LANGS } from '../../helpers/locales';
 
 const HEX = /^#[0-9a-f]{6}$/;
 
@@ -123,11 +124,14 @@ describe('niceRound', () => {
     expect(niceRound(1_012_500)).toBe(1_025_000);
   });
 
-  it('always lands on a multiple of its band step', () => {
+  it('always lands on a multiple of its band step, within half a step', () => {
+    const stepFor = (n: number) =>
+      n < 20_000 ? 1_000 : n < 200_000 ? 5_000 : n < 1_000_000 ? 10_000 : 25_000;
     for (const n of [500, 12_345, 87_654, 543_210, 4_321_098]) {
       const rounded = niceRound(n);
-      expect(rounded % 1_000, `${n}`).toBe(0);
-      expect(Math.abs(rounded - n) / n, `${n}`).toBeLessThan(0.05);
+      const step = stepFor(n);
+      expect(rounded % step, `${n}`).toBe(0);
+      expect(Math.abs(rounded - n), `${n}`).toBeLessThanOrEqual(step / 2);
     }
   });
 });
@@ -207,15 +211,12 @@ describe('PLANS', () => {
     }
   });
 
-  it('lists non-empty, unique feature keys that resolve in every locale', () => {
-    const t = useContent('en').plansPage as unknown as {
-      tiers: Record<string, { features: Record<string, string> }>;
-    };
+  it('lists non-empty, unique feature keys', () => {
     for (const plan of PLANS) {
       expect(plan.features.length, plan.key).toBeGreaterThan(0);
       expect(new Set(plan.features).size, `${plan.key} duplicates`).toBe(plan.features.length);
       for (const feature of plan.features) {
-        expect(t.tiers[plan.key]?.features?.[feature], `en.${plan.key}.${feature}`).toBeTruthy();
+        expect(feature, plan.key).toMatch(/^[a-z][a-zA-Z]*$/);
       }
     }
   });
@@ -256,6 +257,57 @@ describe('yearly pricing', () => {
     for (const plan of PLANS.filter((p) => p.monthly !== null)) {
       expect(yearlyPerMonth(plan)!, plan.key).toBeLessThan(plan.monthly!);
     }
+  });
+});
+
+/**
+ * The visible plan cards are hand-written copy in the locale bundles while the
+ * numbers behind them are derived here. These are the assertions that catch the
+ * two drifting apart.
+ */
+describe('plan cards vs. billing math', () => {
+  it('renders one card per plan spec, in the same order, in every locale', () => {
+    for (const lang of LANGS) {
+      const tiers = useContent(lang).plansPage.tiers;
+      expect(tiers.length, lang).toBe(PLANS.length);
+      tiers.forEach((tier, i) => {
+        expect(tier.ctaHref, `${lang}.${PLANS[i].key}`).toBe(PLANS[i].ctaHref);
+        expect(Boolean(tier.featured), `${lang}.${PLANS[i].key}`).toBe(Boolean(PLANS[i].featured));
+        expect(tier.name?.trim(), `${lang}.${PLANS[i].key}`).toBeTruthy();
+        expect(tier.features.length, `${lang}.${PLANS[i].key}`).toBeGreaterThan(0);
+        expect(tier.stats.length, `${lang}.${PLANS[i].key}`).toBeGreaterThan(0);
+      });
+    }
+  });
+
+  it('quotes the monthly and yearly prices the pricing functions compute', () => {
+    const tiers = useContent('en').plansPage.tiers;
+    tiers.forEach((tier, i) => {
+      const spec = PLANS[i];
+      if (spec.monthly !== null) {
+        expect(tier.priceMonthly, spec.key).toBe(`$${spec.monthly}`);
+        expect(tier.priceYearly, spec.key).toBe(`$${yearlyPerMonth(spec)}`);
+        return;
+      }
+      // Free is free at both cadences; Partner is quoted, so it carries no figure.
+      const expected = spec.key === 'free' ? '$0' : 'Custom';
+      expect(tier.priceMonthly, spec.key).toBe(expected);
+      expect(tier.priceYearly, spec.key).toBe(expected);
+    });
+  });
+
+  it('quotes the bot, agent and credit numbers from the specs', () => {
+    const tiers = useContent('en').plansPage.tiers;
+    tiers.forEach((tier, i) => {
+      const spec = PLANS[i];
+      const stats = tier.stats.join(' · ');
+      if (spec.bots !== '∞') expect(stats, spec.key).toContain(spec.bots);
+      if (spec.agents !== '∞') expect(stats, spec.key).toContain(spec.agents);
+      const credits = spec.key === 'free' ? SIGNUP_BONUS_CREDITS : spec.monthlyCredits;
+      if (credits > 0) {
+        expect(stats, spec.key).toContain(credits.toLocaleString('en-US'));
+      }
+    });
   });
 });
 
@@ -347,14 +399,20 @@ describe('MATRIX', () => {
 });
 
 describe('credit packs', () => {
-  it('grants the shipped catalog numbers', () => {
-    expect(CREDIT_PACKS.map(packCredits)).toEqual([20_000, 75_000, 250_000, 750_000]);
+  it('grants credits derived from the price, the bonus and the sale rate', () => {
+    // The pack `id` is the app's opaque catalog key (it encodes the grant from
+    // an earlier margin) — the grant shown to visitors is always derived.
+    for (const pack of CREDIT_PACKS) {
+      const expected = niceRound((pack.priceUsd * 100 * (1 + pack.volumeBonus)) / CREDIT_SALE_CENTS);
+      expect(packCredits(pack), pack.id).toBe(expected);
+    }
+    expect(CREDIT_PACKS.map(packCredits)).toEqual([55_000, 210_000, 640_000, 1_800_000]);
   });
 
-  it('names each pack after the credits it grants', () => {
+  it('gives every pack a unique catalog id', () => {
+    expect(new Set(CREDIT_PACKS.map((p) => p.id)).size).toBe(CREDIT_PACKS.length);
     for (const pack of CREDIT_PACKS) {
-      const thousands = packCredits(pack) / 1_000;
-      expect(pack.id, pack.id).toBe(`cr${thousands}k`);
+      expect(pack.id, pack.id).toMatch(/^cr\d+k$/);
     }
   });
 
@@ -589,13 +647,13 @@ describe('reward ladder (planned)', () => {
   it('names every ladder row and level reward in the English bundle', () => {
     const rewards = useContent('en').rewards as unknown as {
       ledger: { rows: Record<string, unknown> };
-      levels: Record<string, unknown>;
+      levels: { names: Record<string, string> };
     };
     for (const row of REWARD_LADDER) {
       expect(rewards.ledger.rows[row.key], `ledger.rows.${row.key}`).toBeTruthy();
     }
-    for (const reward of LEVEL_REWARDS) {
-      expect(rewards.levels[reward.id], `levels.${reward.id}`).toBeTruthy();
+    for (const level of LEVELS) {
+      expect(rewards.levels.names[level.id], `levels.names.${level.id}`).toBeTruthy();
     }
   });
 });
