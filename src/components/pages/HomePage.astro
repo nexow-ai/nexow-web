@@ -1,6 +1,7 @@
 ---
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../sections/Hero.astro';
 import Stats from '../sections/Stats.astro';
@@ -41,7 +42,7 @@ const softwareSchema = {
   featureList: [
     ...(t.features.groups?.flatMap((g) => g.items.map((f) => f.title)) ??
       t.features.items.map((f) => f.title)),
-    `${t.connectors.count}+ ${t.connectors.countLabel}`,
+    `${CONNECTOR_LIVE_COUNT} ${t.connectors.countLabel}`,
   ],
 };
 
