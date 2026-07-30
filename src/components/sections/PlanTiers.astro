@@ -30,7 +30,9 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
 <section id="tiers" class="relative">
   <!-- Billing toggle -->
   <div id="plans-billing" data-mode="monthly" class="container-page -mt-4 flex justify-center pb-10">
-    <div class="inline-flex items-center rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-1 shadow-sm">
+    {/* `max-w-full` + wrapping: the two labels plus the savings badge are wider
+        than a 320px phone in some locales (ru) and would widen the page. */}
+    <div class="inline-flex max-w-full flex-wrap items-center justify-center rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-1 shadow-sm">
       <button
         type="button"
         data-billing="monthly"
