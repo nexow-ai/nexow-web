@@ -1246,4 +1246,98 @@ export const ms = {
     readMore: 'Baca kemas kini',
     viewBlog: 'Lihat semua siaran',
   },
+  contactPage: {
+    meta: {
+      title: 'Hubungi kami — Nexow',
+      description: 'Hubungi Nexow untuk sokongan, jualan atau pertanyaan perkongsian. Kami membaca setiap mesej.',
+    },
+    hero: {
+      badge: 'Hubungi kami',
+      title: 'Bercakap dengan pasukan Nexow',
+      subtitle: 'Soalan sokongan, jualan untuk pasukan atau idea perkongsian — pilih satu jenis dan kami akan hantar ke peti masuk yang betul.',
+    },
+    form: {
+      name: 'Nama',
+      email: 'E-mel',
+      type: 'Jenis pertanyaan',
+      types: [
+        {
+          value: 'support',
+          label: 'Sokongan',
+        },
+        {
+          value: 'sales',
+          label: 'Jualan',
+        },
+        {
+          value: 'partnership',
+          label: 'Perkongsian',
+        },
+        {
+          value: 'other',
+          label: 'Lain-lain',
+        },
+      ],
+      message: 'Bagaimana kami boleh membantu?',
+      submit: 'Hantar mesej',
+      submitting: 'Membuka e-mel…',
+      success: 'Klien e-mel anda sepatutnya dibuka dengan mesej sedia. Terima kasih kerana menghubungi kami.',
+      error: 'Sesuatu tidak kena. Sila e-mel kami terus.',
+      invalid: 'Sila isi e-mel yang sah dan mesej ringkas.',
+    },
+    aside: {
+      title: 'Lebih suka e-mel terus?',
+      body: 'Kami membalas daripada alamat di bawah. Permintaan perkongsian dan pelan Partner pergi ke partners@.',
+      channels: [
+        {
+          label: 'Umum',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Sokongan',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Rakan kongsi',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Jemput — Nexow',
+      description: 'Jemput pencipta ke Nexow. Tuntut nama pengguna anda, kongsi pautan dan berkembang bersama komuniti.',
+    },
+    hero: {
+      badge: 'Rujukan',
+      title: 'Jemput pencipta yang menghantar',
+      subtitle: 'Nexow berkembang apabila pembina membawa pembina. Tuntut nama pengguna anda, kongsi jemputan dan bersedia apabila ganjaran rujukan bermula.',
+    },
+    body: 'Ganjaran rujukan dan bonus pengikut berada dalam pelan komuniti. Pautan jemputan anda membuka terus aplikasi supaya rakan tiba sedia menuntut nama pengguna.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Kongsi jemputan anda',
+        body: 'Hantar pautan. Sesiapa yang masuk melaluinya tiba di komuniti dengan pendaftaran dibuka.',
+      },
+      {
+        icon: 'users',
+        title: 'Kembangkan orbit anda',
+        body: 'Ikuti pencipta, kongsi widget dan bina rangkaian yang terkumpul pada reputasi yang sama.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Ganjaran akan tiba',
+        body: 'Ganjaran awal tiba sebagai kredit; bonus terikat NXW dibuka bersama DAO. Lapisan permainan sama, cara baharu untuk memperoleh.',
+      },
+    ],
+    ctaPrimary: 'Tuntut nama pengguna',
+    ctaSecondary: 'Terokai komuniti',
+    codeLabel: 'Kod jemputan',
+    codeHint: 'Pautan ini menyertakan kod jemputan anda untuk apabila penjejakan rujukan bermula.',
+  },
 } as unknown as SiteContent;

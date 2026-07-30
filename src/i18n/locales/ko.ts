@@ -1499,4 +1499,98 @@ export const ko: SiteContent = {
     readMore: '업데이트 읽기',
     viewBlog: '모든 게시글 보기',
   },
+  contactPage: {
+    meta: {
+      title: '문의하기 — Nexow',
+      description: '지원, 영업 또는 파트너십 문의는 Nexow로 연락하세요. 모든 메시지를 읽습니다.',
+    },
+    hero: {
+      badge: '문의하기',
+      title: 'Nexow 팀에 문의하기',
+      subtitle: '지원 문의, 팀 영업 또는 파트너십 아이디어 — 유형을 선택하면 알맞은 담당자에게 전달됩니다.',
+    },
+    form: {
+      name: '이름',
+      email: '이메일',
+      type: '문의 유형',
+      types: [
+        {
+          value: 'support',
+          label: '지원',
+        },
+        {
+          value: 'sales',
+          label: '영업',
+        },
+        {
+          value: 'partnership',
+          label: '파트너십',
+        },
+        {
+          value: 'other',
+          label: '기타',
+        },
+      ],
+      message: '무엇을 도와드릴까요?',
+      submit: '메시지 보내기',
+      submitting: '메일 앱 여는 중…',
+      success: '메일 클라이언트가 메시지가 준비된 상태로 열립니다. 연락 주셔서 감사합니다.',
+      error: '문제가 발생했습니다. 직접 이메일로 보내주세요.',
+      invalid: '유효한 이메일과 짧은 메시지를 입력해 주세요.',
+    },
+    aside: {
+      title: '이메일로 직접 보내시겠어요?',
+      body: '아래 주소에서 답변드립니다. 파트너십 및 Partner 요금제 문의는 partners@로 보내주세요.',
+      channels: [
+        {
+          label: '일반',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: '지원',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: '파트너',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: '초대 — Nexow',
+      description: 'Nexow에 메이커를 초대하세요. 핸들을 확보하고 링크를 공유하며 커뮤니티와 함께 성장하세요.',
+    },
+    hero: {
+      badge: '리퍼럴',
+      title: '직접 만드는 메이커를 초대하세요',
+      subtitle: 'Nexow는 빌더가 빌더를 데려올 때 성장합니다. 핸들을 확보하고 초대를 공유해, 리퍼럴 보상이 시작될 때 준비된 상태로 맞이하세요.',
+    },
+    body: '리퍼럴 보상과 팔로워 보너스는 커뮤니티 로드맵에 있습니다. 초대 링크는 앱으로 바로 연결되어 친구가 핸들을 바로 확보할 수 있습니다.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: '초대 공유하기',
+        body: '링크를 보내세요. 그 링크로 들어온 사람은 가입이 열린 상태로 커뮤니티에 도착합니다.',
+      },
+      {
+        icon: 'users',
+        title: '내 궤도를 넓히기',
+        body: '메이커를 팔로우하고 위젯을 공유하며, 같은 평판 기반 위에 쌓이는 네트워크를 만드세요.',
+      },
+      {
+        icon: 'sparkles',
+        title: '보상이 곧 옵니다',
+        body: '초기 보상은 크레딧으로 지급되고, NXW 연동 보너스는 DAO와 함께 해제됩니다. 같은 게임 레이어, 새로운 적립 방식.',
+      },
+    ],
+    ctaPrimary: '핸들 확보하기',
+    ctaSecondary: '커뮤니티 둘러보기',
+    codeLabel: '초대 코드',
+    codeHint: '이 링크에는 리퍼럴 추적이 시작될 때 사용할 초대 코드가 포함되어 있습니다.',
+  },
 };

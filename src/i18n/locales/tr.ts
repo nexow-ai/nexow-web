@@ -1246,4 +1246,98 @@ export const tr = {
     readMore: 'Güncellemeyi oku',
     viewBlog: 'Tüm yazıları gör',
   },
+  contactPage: {
+    meta: {
+      title: 'İletişim — Nexow',
+      description: 'Destek, satış veya iş birliği için Nexow ile iletişime geçin. Her mesajı okuyoruz.',
+    },
+    hero: {
+      badge: 'İletişim',
+      title: 'Nexow ekibiyle konuşun',
+      subtitle: 'Destek soruları, ekipler için satış veya iş birliği fikirleri — bir tür seçin, doğru kutuya yönlendirelim.',
+    },
+    form: {
+      name: 'Ad',
+      email: 'E-posta',
+      type: 'Talep türü',
+      types: [
+        {
+          value: 'support',
+          label: 'Destek',
+        },
+        {
+          value: 'sales',
+          label: 'Satış',
+        },
+        {
+          value: 'partnership',
+          label: 'İş birliği',
+        },
+        {
+          value: 'other',
+          label: 'Diğer',
+        },
+      ],
+      message: 'Nasıl yardımcı olabiliriz?',
+      submit: 'Mesaj gönder',
+      submitting: 'E-posta açılıyor…',
+      success: 'E-posta istemciniz mesaj hazır halde açılmalı. Bize yazdığınız için teşekkürler.',
+      error: 'Bir şeyler ters gitti. Bunun yerine doğrudan e-posta gönderin.',
+      invalid: 'Lütfen geçerli bir e-posta ve kısa bir mesaj girin.',
+    },
+    aside: {
+      title: 'Doğrudan e-posta mı tercih edersiniz?',
+      body: 'Aşağıdaki adreslerden yanıtlıyoruz. İş birliği ve Partner planı talepleri partners@ adresine gider.',
+      channels: [
+        {
+          label: 'Genel',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Destek',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'İş ortakları',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Davet — Nexow',
+      description: 'Nexow’a üreticileri davet edin. Kullanıcı adınızı alın, bağlantınızı paylaşın ve toplulukla büyüyün.',
+    },
+    hero: {
+      badge: 'Referanslar',
+      title: 'Üreten yaratıcıları davet edin',
+      subtitle: 'Nexow, geliştiriciler geliştirici getirdiğinde büyür. Kullanıcı adınızı alın, bir davet paylaşın ve referans ödülleri açıldığında hazır olun.',
+    },
+    body: 'Referans ödülleri ve takipçi bonusları topluluk yol haritasında. Davet bağlantınız doğrudan uygulamayı açar, böylece arkadaşlarınız kullanıcı adı almaya hazır gelir.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Davetinizi paylaşın',
+        body: 'Bir bağlantı gönderin. Oradan katılanlar kayıt açıkken topluluğa iner.',
+      },
+      {
+        icon: 'users',
+        title: 'Yörüngenizi büyütün',
+        body: 'Üreticileri takip edin, widget paylaşın ve aynı itibar yüzeyinde birikin bir ağ kurun.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Ödüller yolda',
+        body: 'İlk ödüller kredi olarak gelir; NXW’ye bağlı bonuslar DAO ile açılır. Aynı oyun katmanı, yeni kazanma yolları.',
+      },
+    ],
+    ctaPrimary: 'Kullanıcı adını al',
+    ctaSecondary: 'Topluluğu keşfet',
+    codeLabel: 'Davet kodu',
+    codeHint: 'Bu bağlantı, referans takibi açıldığında kullanılacak davet kodunuzu içerir.',
+  },
 } as unknown as SiteContent;

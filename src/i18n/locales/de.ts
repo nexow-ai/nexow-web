@@ -1501,4 +1501,98 @@ export const de: SiteContent = {
     readMore: 'Update lesen',
     viewBlog: 'Alle Beiträge ansehen',
   },
+  contactPage: {
+    meta: {
+      title: 'Kontakt — Nexow',
+      description: 'Kontaktiere Nexow für Support, Vertrieb oder Partnerschaftsanfragen. Wir lesen jede Nachricht.',
+    },
+    hero: {
+      badge: 'Kontakt',
+      title: 'Sprich mit dem Nexow-Team',
+      subtitle: 'Support-Fragen, Vertrieb für Teams oder Partnerschaftsideen — wähle eine Art und wir leiten sie an das richtige Postfach weiter.',
+    },
+    form: {
+      name: 'Name',
+      email: 'E-Mail',
+      type: 'Art der Anfrage',
+      types: [
+        {
+          value: 'support',
+          label: 'Support',
+        },
+        {
+          value: 'sales',
+          label: 'Vertrieb',
+        },
+        {
+          value: 'partnership',
+          label: 'Partnerschaft',
+        },
+        {
+          value: 'other',
+          label: 'Sonstiges',
+        },
+      ],
+      message: 'Wie können wir helfen?',
+      submit: 'Nachricht senden',
+      submitting: 'E-Mail-Programm wird geöffnet…',
+      success: 'Dein Mailprogramm sollte sich mit der fertigen Nachricht öffnen. Danke für deine Nachricht.',
+      error: 'Etwas ist schiefgelaufen. Schreib uns stattdessen direkt.',
+      invalid: 'Bitte gib eine gültige E-Mail und eine kurze Nachricht an.',
+    },
+    aside: {
+      title: 'Lieber direkt per E-Mail?',
+      body: 'Wir antworten von den Adressen unten. Partnerschafts- und Partner-Plan-Anfragen gehen an partners@.',
+      channels: [
+        {
+          label: 'Allgemein',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Support',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Partner',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Einladen — Nexow',
+      description: 'Lade Maker zu Nexow ein. Sichere dir deinen Handle, teile deinen Link und wachse mit der Community.',
+    },
+    hero: {
+      badge: 'Empfehlungen',
+      title: 'Lade Maker ein, die liefern',
+      subtitle: 'Nexow wächst, wenn Builder Builder mitbringen. Sichere dir deinen Handle, teile eine Einladung und sei bereit, wenn die Empfehlungsprämien starten.',
+    },
+    body: 'Empfehlungsprämien und Follower-Boni stehen auf der Community-Roadmap. Dein Einladungslink führt direkt in die App, damit Freunde bereit zum Handle-Sichern ankommen.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Teile deine Einladung',
+        body: 'Schick einen Link. Wer darüber kommt, landet in der Community mit offener Anmeldung.',
+      },
+      {
+        icon: 'users',
+        title: 'Erweitere deinen Orbit',
+        body: 'Folge Makern, teile Widgets und baue ein Netzwerk auf derselben Reputationsfläche auf.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Prämien kommen',
+        body: 'Erste Prämien kommen als Credits; NXW-gebundene Boni schalten mit der DAO frei. Gleiche Spielebene, neue Wege zu verdienen.',
+      },
+    ],
+    ctaPrimary: 'Handle sichern',
+    ctaSecondary: 'Community entdecken',
+    codeLabel: 'Einladungscode',
+    codeHint: 'Dieser Link enthält deinen Einladungscode für den Start des Empfehlungs-Trackings.',
+  },
 };

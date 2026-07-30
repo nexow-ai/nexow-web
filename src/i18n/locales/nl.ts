@@ -1501,4 +1501,98 @@ export const nl: SiteContent = {
     readMore: 'Update lezen',
     viewBlog: 'Alle berichten bekijken',
   },
+  contactPage: {
+    meta: {
+      title: 'Contact — Nexow',
+      description: 'Neem contact op met Nexow voor support, sales of samenwerkingen. We lezen elk bericht.',
+    },
+    hero: {
+      badge: 'Contact',
+      title: 'Praat met het Nexow-team',
+      subtitle: 'Supportvragen, sales voor teams of ideeën voor samenwerking — kies een type en wij sturen het naar de juiste inbox.',
+    },
+    form: {
+      name: 'Naam',
+      email: 'E-mail',
+      type: 'Soort vraag',
+      types: [
+        {
+          value: 'support',
+          label: 'Support',
+        },
+        {
+          value: 'sales',
+          label: 'Sales',
+        },
+        {
+          value: 'partnership',
+          label: 'Samenwerking',
+        },
+        {
+          value: 'other',
+          label: 'Overig',
+        },
+      ],
+      message: 'Hoe kunnen we helpen?',
+      submit: 'Bericht versturen',
+      submitting: 'E-mailprogramma openen…',
+      success: 'Je mailprogramma zou moeten openen met het bericht klaar. Bedankt voor je bericht.',
+      error: 'Er ging iets mis. Mail ons rechtstreeks.',
+      invalid: 'Vul een geldig e-mailadres en een kort bericht in.',
+    },
+    aside: {
+      title: 'Liever direct mailen?',
+      body: 'We antwoorden vanaf onderstaande adressen. Samenwerkings- en Partner-planaanvragen gaan naar partners@.',
+      channels: [
+        {
+          label: 'Algemeen',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Support',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Partners',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Uitnodigen — Nexow',
+      description: 'Nodig makers uit voor Nexow. Claim je handle, deel je link en groei met de community.',
+    },
+    hero: {
+      badge: 'Referrals',
+      title: 'Nodig makers uit die opleveren',
+      subtitle: 'Nexow groeit als bouwers bouwers meenemen. Claim je handle, deel een uitnodiging en wees klaar wanneer referral-beloningen live gaan.',
+    },
+    body: 'Referral-beloningen en volgersbonussen staan op de community-roadmap. Je uitnodigingslink opent direct de app, zodat vrienden klaar aankomen om een handle te claimen.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Deel je uitnodiging',
+        body: 'Stuur een link. Wie er via binnenkomt, landt in de community met open aanmelding.',
+      },
+      {
+        icon: 'users',
+        title: 'Laat je baan groeien',
+        body: 'Volg makers, deel widgets en bouw een netwerk dat optelt op hetzelfde reputatievlak.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Beloningen komen eraan',
+        body: 'Eerste beloningen komen als credits; NXW-gebonden bonussen ontgrendelen met de DAO. Dezelfde speellaag, nieuwe manieren om te verdienen.',
+      },
+    ],
+    ctaPrimary: 'Claim je handle',
+    ctaSecondary: 'Community verkennen',
+    codeLabel: 'Uitnodigingscode',
+    codeHint: 'Deze link bevat je uitnodigingscode voor wanneer referral-tracking live gaat.',
+  },
 };

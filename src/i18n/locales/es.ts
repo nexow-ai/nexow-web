@@ -1501,4 +1501,98 @@ export const es: SiteContent = {
     readMore: 'Leer novedad',
     viewBlog: 'Ver todos los artículos',
   },
+  contactPage: {
+    meta: {
+      title: 'Contacto — Nexow',
+      description: 'Contacta con Nexow para soporte, ventas o propuestas de colaboración. Leemos todos los mensajes.',
+    },
+    hero: {
+      badge: 'Contacto',
+      title: 'Habla con el equipo de Nexow',
+      subtitle: 'Dudas de soporte, ventas para equipos o ideas de colaboración: elige un tipo y lo enviaremos al buzón correcto.',
+    },
+    form: {
+      name: 'Nombre',
+      email: 'Email',
+      type: 'Tipo de consulta',
+      types: [
+        {
+          value: 'support',
+          label: 'Soporte',
+        },
+        {
+          value: 'sales',
+          label: 'Ventas',
+        },
+        {
+          value: 'partnership',
+          label: 'Colaboración',
+        },
+        {
+          value: 'other',
+          label: 'Otro',
+        },
+      ],
+      message: '¿En qué podemos ayudarte?',
+      submit: 'Enviar mensaje',
+      submitting: 'Abriendo el correo…',
+      success: 'Tu cliente de correo debería abrirse con el mensaje listo. Gracias por escribirnos.',
+      error: 'Algo salió mal. Escríbenos directamente.',
+      invalid: 'Introduce un email válido y un mensaje breve.',
+    },
+    aside: {
+      title: '¿Prefieres el email directo?',
+      body: 'Respondemos desde las direcciones de abajo. Las propuestas de colaboración y del plan Partner van a partners@.',
+      channels: [
+        {
+          label: 'General',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Soporte',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Partners',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Invitar — Nexow',
+      description: 'Invita a makers a Nexow. Reserva tu nombre de usuario, comparte tu enlace y crece con la comunidad.',
+    },
+    hero: {
+      badge: 'Referidos',
+      title: 'Invita a makers que lanzan',
+      subtitle: 'Nexow crece cuando los creadores traen creadores. Reserva tu usuario, comparte una invitación y prepárate para cuando lleguen las recompensas por referidos.',
+    },
+    body: 'Las recompensas por referidos y los bonus por seguidores están en la hoja de ruta de comunidad. Tu enlace de invitación lleva directo a la app para que tus amigos lleguen listos para reservar su usuario.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Comparte tu invitación',
+        body: 'Envía un enlace. Quien entre desde él aterriza en la comunidad con el registro abierto.',
+      },
+      {
+        icon: 'users',
+        title: 'Haz crecer tu órbita',
+        body: 'Sigue a otros makers, comparte widgets y construye una red que se acumula sobre la misma reputación.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Recompensas en camino',
+        body: 'Las primeras recompensas llegan como créditos; los bonus ligados a NXW se desbloquean con la DAO. La misma capa de juego, nuevas formas de ganar.',
+      },
+    ],
+    ctaPrimary: 'Reserva tu usuario',
+    ctaSecondary: 'Explorar la comunidad',
+    codeLabel: 'Código de invitación',
+    codeHint: 'Este enlace incluye tu código de invitación para cuando se active el seguimiento de referidos.',
+  },
 };

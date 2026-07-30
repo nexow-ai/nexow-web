@@ -1532,4 +1532,98 @@ export const fr: SiteContent = {
     readMore: 'Lire la mise à jour',
     viewBlog: 'Voir tous les articles',
   },
+  contactPage: {
+    meta: {
+      title: 'Contact — Nexow',
+      description: 'Contactez Nexow pour le support, les ventes ou un partenariat. Nous lisons chaque message.',
+    },
+    hero: {
+      badge: 'Contact',
+      title: 'Parlez à l’équipe Nexow',
+      subtitle: 'Questions de support, ventes pour les équipes ou idées de partenariat : choisissez un type et nous transmettrons à la bonne boîte.',
+    },
+    form: {
+      name: 'Nom',
+      email: 'E-mail',
+      type: 'Type de demande',
+      types: [
+        {
+          value: 'support',
+          label: 'Support',
+        },
+        {
+          value: 'sales',
+          label: 'Ventes',
+        },
+        {
+          value: 'partnership',
+          label: 'Partenariat',
+        },
+        {
+          value: 'other',
+          label: 'Autre',
+        },
+      ],
+      message: 'Comment pouvons-nous aider ?',
+      submit: 'Envoyer le message',
+      submitting: 'Ouverture de la messagerie…',
+      success: 'Votre client mail devrait s’ouvrir avec le message prêt. Merci de nous avoir écrit.',
+      error: 'Une erreur est survenue. Écrivez-nous directement.',
+      invalid: 'Renseignez un e-mail valide et un court message.',
+    },
+    aside: {
+      title: 'Vous préférez l’e-mail direct ?',
+      body: 'Nous répondons depuis les adresses ci-dessous. Les demandes de partenariat et de plan Partner vont à partners@.',
+      channels: [
+        {
+          label: 'Général',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Support',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Partenaires',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Inviter — Nexow',
+      description: 'Invitez des créateurs sur Nexow. Réservez votre pseudo, partagez votre lien et grandissez avec la communauté.',
+    },
+    hero: {
+      badge: 'Parrainage',
+      title: 'Invitez des créateurs qui livrent',
+      subtitle: 'Nexow grandit quand les builders amènent des builders. Réservez votre pseudo, partagez une invitation et soyez prêt quand les récompenses de parrainage arriveront.',
+    },
+    body: 'Les récompenses de parrainage et les bonus d’abonnés sont sur la feuille de route communautaire. Votre lien d’invitation ouvre directement l’app pour que vos amis arrivent prêts à réserver un pseudo.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Partagez votre invitation',
+        body: 'Envoyez un lien. Ceux qui le suivent arrivent dans la communauté avec l’inscription ouverte.',
+      },
+      {
+        icon: 'users',
+        title: 'Élargissez votre orbite',
+        body: 'Suivez des créateurs, partagez des widgets et bâtissez un réseau qui se cumule sur la même réputation.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Récompenses à venir',
+        body: 'Les premières récompenses arrivent en crédits ; les bonus liés au NXW se débloquent avec la DAO. Même couche de jeu, nouvelles façons de gagner.',
+      },
+    ],
+    ctaPrimary: 'Réserver votre pseudo',
+    ctaSecondary: 'Explorer la communauté',
+    codeLabel: 'Code d’invitation',
+    codeHint: 'Ce lien contient votre code d’invitation pour l’activation du suivi de parrainage.',
+  },
 };

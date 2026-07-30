@@ -1499,4 +1499,98 @@ export const ja: SiteContent = {
     readMore: 'アップデートを読む',
     viewBlog: 'すべての記事を見る',
   },
+  contactPage: {
+    meta: {
+      title: 'お問い合わせ — Nexow',
+      description: 'サポート、セールス、パートナーシップについては Nexow までご連絡ください。すべてのメッセージに目を通しています。',
+    },
+    hero: {
+      badge: 'お問い合わせ',
+      title: 'Nexow チームに相談する',
+      subtitle: 'サポートのご質問、チーム向けセールス、パートナーシップのご提案 — 種類を選ぶと適切な窓口へお繋ぎします。',
+    },
+    form: {
+      name: 'お名前',
+      email: 'メールアドレス',
+      type: 'お問い合わせ種別',
+      types: [
+        {
+          value: 'support',
+          label: 'サポート',
+        },
+        {
+          value: 'sales',
+          label: 'セールス',
+        },
+        {
+          value: 'partnership',
+          label: 'パートナーシップ',
+        },
+        {
+          value: 'other',
+          label: 'その他',
+        },
+      ],
+      message: 'どのようなご用件でしょうか？',
+      submit: 'メッセージを送信',
+      submitting: 'メールを開いています…',
+      success: 'メールクライアントが本文入りで開きます。ご連絡ありがとうございます。',
+      error: 'エラーが発生しました。直接メールでご連絡ください。',
+      invalid: '有効なメールアドレスと短いメッセージをご入力ください。',
+    },
+    aside: {
+      title: '直接メールを送りますか？',
+      body: '以下のアドレスから返信します。パートナーシップおよび Partner プランのご相談は partners@ へ。',
+      channels: [
+        {
+          label: '全般',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'サポート',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'パートナー',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: '招待 — Nexow',
+      description: 'Nexow にメイカーを招待しましょう。ハンドルを取得し、リンクを共有して、コミュニティとともに成長できます。',
+    },
+    hero: {
+      badge: 'リファラル',
+      title: 'つくる人を招待する',
+      subtitle: 'Nexow はビルダーがビルダーを連れてくることで成長します。ハンドルを取得し、招待を共有して、リファラル報酬の開始に備えましょう。',
+    },
+    body: 'リファラル報酬とフォロワーボーナスはコミュニティのロードマップにあります。招待リンクはアプリへ直接つながるので、友人はハンドルをすぐ取得できます。',
+    pillars: [
+      {
+        icon: 'gift',
+        title: '招待を共有する',
+        body: 'リンクを送るだけ。そこから参加した人は、サインアップが開いた状態でコミュニティに到着します。',
+      },
+      {
+        icon: 'users',
+        title: '自分の輪を広げる',
+        body: 'メイカーをフォローし、ウィジェットを共有して、同じ評価基盤の上で積み上がるネットワークを築きます。',
+      },
+      {
+        icon: 'sparkles',
+        title: '報酬は近日公開',
+        body: '初期の報酬はクレジットで付与され、NXW 連動のボーナスは DAO とともに解放されます。同じゲームレイヤーで、新しい稼ぎ方を。',
+      },
+    ],
+    ctaPrimary: 'ハンドルを取得',
+    ctaSecondary: 'コミュニティを見る',
+    codeLabel: '招待コード',
+    codeHint: 'このリンクには、リファラル計測の開始時に使われる招待コードが含まれています。',
+  },
 };

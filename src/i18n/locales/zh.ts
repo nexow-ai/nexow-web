@@ -1499,4 +1499,98 @@ export const zh: SiteContent = {
     readMore: '阅读更新',
     viewBlog: '查看全部文章',
   },
+  contactPage: {
+    meta: {
+      title: '联系我们 — Nexow',
+      description: '就支持、销售或合作事宜联系 Nexow。我们会阅读每一条消息。',
+    },
+    hero: {
+      badge: '联系我们',
+      title: '与 Nexow 团队交流',
+      subtitle: '支持问题、团队销售或合作想法——选择一个类型，我们会转给对应的邮箱。',
+    },
+    form: {
+      name: '姓名',
+      email: '邮箱',
+      type: '咨询类型',
+      types: [
+        {
+          value: 'support',
+          label: '支持',
+        },
+        {
+          value: 'sales',
+          label: '销售',
+        },
+        {
+          value: 'partnership',
+          label: '合作',
+        },
+        {
+          value: 'other',
+          label: '其他',
+        },
+      ],
+      message: '我们能帮你什么？',
+      submit: '发送消息',
+      submitting: '正在打开邮件…',
+      success: '你的邮件客户端应会打开并填好内容。感谢你的来信。',
+      error: '出了点问题，请直接发邮件给我们。',
+      invalid: '请填写有效的邮箱和简短的消息。',
+    },
+    aside: {
+      title: '更想直接发邮件？',
+      body: '我们会从下列地址回复。合作与 Partner 方案的请求请发至 partners@。',
+      channels: [
+        {
+          label: '综合',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: '支持',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: '合作伙伴',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: '邀请 — Nexow',
+      description: '邀请创作者加入 Nexow。认领你的用户名，分享链接，与社区一同成长。',
+    },
+    hero: {
+      badge: '推荐',
+      title: '邀请真正在做东西的创作者',
+      subtitle: 'Nexow 因为创作者带来创作者而成长。认领用户名，分享邀请，等推荐奖励上线时你已准备就绪。',
+    },
+    body: '推荐奖励与粉丝奖金在社区路线图上。你的邀请链接会直接深入应用，让朋友一进来就能认领用户名。',
+    pillars: [
+      {
+        icon: 'gift',
+        title: '分享你的邀请',
+        body: '发送一个链接。通过它加入的人会在注册开放的状态下进入社区。',
+      },
+      {
+        icon: 'users',
+        title: '扩大你的轨道',
+        body: '关注创作者、分享组件，在同一套声望体系上构建可以累积的人脉网络。',
+      },
+      {
+        icon: 'sparkles',
+        title: '奖励即将到来',
+        body: '早期奖励以积分发放；与 NXW 挂钩的奖金将随 DAO 解锁。同一套玩法，新的赚取方式。',
+      },
+    ],
+    ctaPrimary: '认领用户名',
+    ctaSecondary: '探索社区',
+    codeLabel: '邀请码',
+    codeHint: '此链接包含你的邀请码，推荐追踪上线后即可生效。',
+  },
 };
