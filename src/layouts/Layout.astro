@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ScrollMotion from '../components/ScrollMotion.astro';
 import DotField from '../components/DotField.astro';
+import TextAppear from '../components/TextAppear.astro';
 import SectionNav from '../components/SectionNav.astro';
 import { ClientRouter, fade } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
@@ -97,6 +98,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
     <Footer />
 
     <ScrollMotion />
+    <TextAppear />
 
     <script>
       // Scroll-reveal: re-init after client-side navigations (view transitions).

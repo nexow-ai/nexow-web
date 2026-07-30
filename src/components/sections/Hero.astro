@@ -78,11 +78,10 @@ const D = {
         <h1
           class="mt-7 font-display text-[2.7rem] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
         >
-          <span class="enter block" style={`--enter-delay:${D.line1}`}>{t.titleLead}</span>
-          <span class="enter block" style={`--enter-delay:${D.line2}`}>
-            <span class="text-gradient-live">{t.titleGradient}</span>
-          </span>
-          <span class="enter block" style={`--enter-delay:${D.line3}`}>{t.titleTail}</span>
+          {/* Particle assemble — inverse of the app composer vanish-on-send. */}
+          <span class="block" data-text-appear data-text-appear-delay={D.line1.replace('s', '')}>{t.titleLead}</span>
+          <span class="block text-gradient-live" data-text-appear data-text-appear-delay={D.line2.replace('s', '')}>{t.titleGradient}</span>
+          <span class="block" data-text-appear data-text-appear-delay={D.line3.replace('s', '')}>{t.titleTail}</span>
         </h1>
 
         {
