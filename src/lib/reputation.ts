@@ -52,8 +52,18 @@ export function levelProgress<T extends LevelBand>(points: number, levels: T[]):
   if (!next) return { level, next: null, progress: 1, remaining: 0 };
 
   const span = next.min - level.min;
-  const progress = span > 0 ? Math.min(1, Math.max(0, (points - level.min) / span)) : 1;
+  const progress = span > 0 ? clamp01((points - level.min) / span) : 1;
   return { level, next, progress, remaining: Math.max(0, next.min - points) };
+}
+
+/**
+ * Clamp a ratio into 0–1 for the progress bar. `levelProgress` can only produce
+ * a value below 0 (a score under the first floor), but the bar is also driven
+ * from callers that may not honour that contract, so both ends are guarded.
+ */
+export function clamp01(ratio: number): number {
+  if (!Number.isFinite(ratio)) return 0;
+  return Math.min(1, Math.max(0, ratio));
 }
 
 /**
