@@ -1697,4 +1697,63 @@ export const de: SiteContent = {
     ctaPrimary: 'Datenschutzerklärung',
     ctaSecondary: 'Kontakt aufnehmen',
   },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow für Trader',
+        description: 'Baue aus einem Prompt ein Live-Trading-Desk — Charts, Watchlists, Orderbücher und Markt-Heatmaps auf einem Canvas, den du kontrollierst.',
+      },
+      hero: {
+        badge: 'Für Trader',
+        title: 'Ein Desk, der sich neu baut, wenn der Markt sich dreht',
+        subtitle: 'Beschreibe die Widgets, die du brauchst. Nexow generiert sie, verbindet Live-Konnektoren und legt sie auf einen Canvas — von Candlesticks bis Prognosemärkten.',
+      },
+      prompt: 'Bau mir ein Krypto-Desk: Candlestick-Chart, Watchlist, Orderbuchtiefe, Heatmap und Derivate.',
+      points: [
+        'Live-Marktdaten aus öffentlichen APIs — Binance, BitMEX, Kalshi und mehr.',
+        'Bots, die Bedingungen überwachen und Alerts auslösen, auch bei geschlossenem Tab.',
+        'Jedes Widget in der Sandbox, damit ein schlechtes Skript nie dein Desk übernimmt.',
+      ],
+      ctaPrimary: 'Trading-Desk bauen',
+      ctaSecondary: 'Konnektoren ansehen',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow für Gründer',
+        description: 'Stell aus einem Prompt ein Gründer-HQ auf — Pipeline, Launch-Checkliste, Content-Kalender und MRR auf einem Canvas.',
+      },
+      hero: {
+        badge: 'Für Gründer',
+        title: 'Deine Kommandozentrale aus einem Satz',
+        subtitle: 'Solo-Gründer brauchen keine fünf Tools. Beschreibe das Dashboard, das du willst, und Nexow baut die Widgets — Pipeline, Umsatz, Launch-Plan und Notizen zusammen.',
+      },
+      prompt: 'Bau ein Solo-Gründer-Dashboard: Lead-Pipeline, Launch-Checkliste, Content-Kalender, MRR-Chart und Kurznotizen.',
+      points: [
+        'Fünf Widgets aus einem einzigen Prompt — angeordnet, wie du wirklich arbeitest.',
+        'Cloud-Sync über alle Geräte, damit das HQ mitreist.',
+        'Teile Live-Widgets mit Mitgründern, ohne Screenshots zu exportieren.',
+      ],
+      ctaPrimary: 'Gründer-HQ bauen',
+      ctaSecondary: 'Beispiele ansehen',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow für Entwickler',
+        description: 'Liefere interaktive Widgets, Bots und Agenten auf einem Sandbox-Canvas — und veröffentliche sie auf einem Community-Marktplatz.',
+      },
+      hero: {
+        badge: 'Für Entwickler',
+        title: 'Software im Tempo eines Prompts ausliefern',
+        subtitle: 'Nexow ist eine Widget-Runtime mit Bots, Agenten, Konnektoren und einer Maker-Community. Generieren, im Gespräch verfeinern und veröffentlichen, was funktioniert.',
+      },
+      prompt: 'Erstelle eine Projekt-Kommandozentrale: Kanban-Board, Gantt-Timeline, KPIs, Risiken und Team-Auslastung.',
+      points: [
+        'Einsehbarer, versionierter Quellcode für jedes generierte Widget.',
+        'Cloud-Bots und -Agenten mit vollem Harness — Modell, Tools, Trigger.',
+        'Marktplatz-Herkunft, damit Remakes den ursprünglichen Entwickler nennen.',
+      ],
+      ctaPrimary: 'Loslegen',
+      ctaSecondary: 'Community beitreten',
+    },
+  },
 };

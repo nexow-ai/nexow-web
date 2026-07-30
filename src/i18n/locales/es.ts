@@ -1697,4 +1697,63 @@ export const es: SiteContent = {
     ctaPrimary: 'Política de Privacidad',
     ctaSecondary: 'Contactar',
   },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow para traders',
+        description: 'Crea una mesa de trading en vivo desde un solo prompt: gráficos, listas de seguimiento, order books y heatmaps de mercado en un lienzo que controlas.',
+      },
+      hero: {
+        badge: 'Para traders',
+        title: 'Una mesa que se reconstruye cuando cambia el mercado',
+        subtitle: 'Describe los widgets que necesitas. Nexow los genera, conecta los datos en vivo y los coloca en un solo lienzo — de las velas a los mercados de predicción.',
+      },
+      prompt: 'Créame una mesa de cripto: gráfico de velas, watchlist, profundidad del order book, heatmap y derivados.',
+      points: [
+        'Datos de mercado en vivo desde APIs públicas — Binance, BitMEX, Kalshi y más.',
+        'Bots que vigilan condiciones y lanzan alertas con la pestaña cerrada.',
+        'Cada widget en sandbox para que un script malo nunca se adueñe de tu mesa.',
+      ],
+      ctaPrimary: 'Crear una mesa de trading',
+      ctaSecondary: 'Ver conectores',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow para fundadores',
+        description: 'Monta un cuartel general de fundador desde un solo prompt: pipeline, checklist de lanzamiento, calendario de contenido y MRR en un mismo lienzo.',
+      },
+      hero: {
+        badge: 'Para fundadores',
+        title: 'Tu centro de mando desde una frase',
+        subtitle: 'Los fundadores en solitario no necesitan cinco herramientas. Describe el dashboard que quieres y Nexow crea los widgets: pipeline, ingresos, plan de lanzamiento y notas juntos.',
+      },
+      prompt: 'Crea un dashboard de fundador en solitario: pipeline de leads, checklist de lanzamiento, calendario de contenido, gráfico de MRR y notas rápidas.',
+      points: [
+        'Cinco widgets desde un solo prompt, colocados como realmente trabajas.',
+        'Sync en la nube entre dispositivos para que el cuartel general viaje contigo.',
+        'Comparte widgets en vivo con tus cofundadores sin exportar capturas.',
+      ],
+      ctaPrimary: 'Crear el cuartel general',
+      ctaSecondary: 'Ver ejemplos',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow para creadores',
+        description: 'Lanza widgets interactivos, bots y agentes en un lienzo con sandbox, y publícalos en un marketplace comunitario.',
+      },
+      hero: {
+        badge: 'Para creadores',
+        title: 'Lanza software a la velocidad de un prompt',
+        subtitle: 'Nexow es un runtime de widgets con bots, agentes, conectores y una comunidad de makers. Genera, refina conversando y publica lo que funciona.',
+      },
+      prompt: 'Crea un centro de mando de proyecto: tablero kanban, cronograma Gantt, KPIs, riesgos y carga del equipo.',
+      points: [
+        'Código fuente inspeccionable y versionado para cada widget generado.',
+        'Bots y agentes en la nube con un harness completo: modelo, herramientas, disparadores.',
+        'Linaje del marketplace para que las versiones acrediten al creador original.',
+      ],
+      ctaPrimary: 'Empezar a crear',
+      ctaSecondary: 'Unirse a la comunidad',
+    },
+  },
 };

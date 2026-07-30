@@ -1442,4 +1442,63 @@ export const ms = {
     ctaPrimary: 'Dasar Privasi',
     ctaSecondary: 'Hubungi kami',
   },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow untuk pedagang',
+        description: 'Bina meja dagangan langsung daripada satu gesaan — carta, senarai pantau, buku pesanan dan peta haba pasaran pada kanvas yang anda kawal.',
+      },
+      hero: {
+        badge: 'Untuk pedagang',
+        title: 'Meja yang membina semula apabila pasaran berubah',
+        subtitle: 'Terangkan widget yang anda perlukan. Nexow menjananya, menyambung penyambung langsung dan menyusunnya pada satu kanvas — daripada candlestick ke pasaran ramalan.',
+      },
+      prompt: 'Bina saya meja kripto: carta candlestick, senarai pantau, kedalaman buku pesanan, peta haba dan derivatif.',
+      points: [
+        'Data pasaran langsung daripada API awam — Binance, BitMEX, Kalshi dan banyak lagi.',
+        'Bot yang memantau keadaan dan mencetuskan amaran walaupun tab ditutup.',
+        'Setiap widget dalam sandbox supaya skrip buruk tidak pernah menguasai meja anda.',
+      ],
+      ctaPrimary: 'Bina meja dagangan',
+      ctaSecondary: 'Lihat penyambung',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow untuk pengasas',
+        description: 'Bina ibu pejabat pengasas daripada satu gesaan — saluran paip, senarai semak pelancaran, kalendar kandungan dan MRR pada satu kanvas.',
+      },
+      hero: {
+        badge: 'Untuk pengasas',
+        title: 'Pusat kawalan anda daripada satu ayat',
+        subtitle: 'Pengasas solo tidak perlukan lima alat. Terangkan papan pemuka yang anda mahu dan Nexow membina widgetnya — saluran paip, hasil, pelan pelancaran dan nota bersama.',
+      },
+      prompt: 'Bina papan pemuka pengasas solo: saluran paip prospek, senarai semak pelancaran, kalendar kandungan, carta MRR dan nota pantas.',
+      points: [
+        'Lima widget daripada satu gesaan — disusun mengikut cara anda bekerja.',
+        'Penyegerakan awan merentas peranti supaya ibu pejabat mengikut anda.',
+        'Kongsi widget langsung dengan rakan pengasas tanpa mengeksport tangkapan skrin.',
+      ],
+      ctaPrimary: 'Bina ibu pejabat',
+      ctaSecondary: 'Lihat contoh',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow untuk pembina',
+        description: 'Hantar widget interaktif, bot dan ejen pada kanvas bersandbox — kemudian terbitkan ke pasaran komuniti.',
+      },
+      hero: {
+        badge: 'Untuk pembina',
+        title: 'Hantar perisian pada kelajuan satu gesaan',
+        subtitle: 'Nexow ialah runtime widget dengan bot, ejen, penyambung dan komuniti pencipta. Jana, perhalus melalui perbualan dan terbitkan apa yang berkesan.',
+      },
+      prompt: 'Cipta pusat kawalan projek: papan kanban, garis masa Gantt, KPI, risiko dan beban kerja pasukan.',
+      points: [
+        'Kod sumber boleh diperiksa dan berversi untuk setiap widget yang dijana.',
+        'Bot dan ejen awan dengan harness penuh — model, alat, pencetus.',
+        'Salasilah pasaran supaya penciptaan semula memberi kredit kepada pembina asal.',
+      ],
+      ctaPrimary: 'Mula membina',
+      ctaSecondary: 'Sertai komuniti',
+    },
+  },
 } as unknown as SiteContent;

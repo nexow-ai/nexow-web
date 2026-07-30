@@ -1697,4 +1697,63 @@ export const nl: SiteContent = {
     ctaPrimary: 'Privacybeleid',
     ctaSecondary: 'Neem contact op',
   },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow voor traders',
+        description: 'Bouw een live trading desk vanuit één prompt — grafieken, watchlists, orderboeken en markt-heatmaps op een canvas dat jij beheert.',
+      },
+      hero: {
+        badge: 'Voor traders',
+        title: 'Een desk die zich herbouwt als de markt verandert',
+        subtitle: 'Beschrijf de widgets die je nodig hebt. Nexow genereert ze, koppelt live connectoren en zet ze op één canvas — van candlesticks tot voorspellingsmarkten.',
+      },
+      prompt: 'Bouw een crypto-desk: candlestickgrafiek, watchlist, orderboekdiepte, heatmap en derivaten.',
+      points: [
+        'Live marktdata uit publieke API’s — Binance, BitMEX, Kalshi en meer.',
+        'Bots die condities bewaken en alerts afvuren met je tabblad dicht.',
+        'Elk widget in een sandbox, zodat een slecht script nooit je desk overneemt.',
+      ],
+      ctaPrimary: 'Bouw een trading desk',
+      ctaSecondary: 'Bekijk connectoren',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow voor oprichters',
+        description: 'Zet vanuit één prompt een founder-HQ op — pipeline, launch-checklist, contentkalender en MRR op één canvas.',
+      },
+      hero: {
+        badge: 'Voor oprichters',
+        title: 'Je commandocentrum vanuit één zin',
+        subtitle: 'Solo-oprichters hebben geen vijf tools nodig. Beschrijf het dashboard dat je wilt en Nexow bouwt de widgets — pipeline, omzet, launchplan en notities samen.',
+      },
+      prompt: 'Bouw een solo-oprichtersdashboard: leadpipeline, launch-checklist, contentkalender, MRR-grafiek en snelle notities.',
+      points: [
+        'Vijf widgets uit één prompt — ingedeeld zoals jij echt werkt.',
+        'Cloudsync over apparaten zodat het HQ met je meereist.',
+        'Deel live widgets met medeoprichters zonder screenshots te exporteren.',
+      ],
+      ctaPrimary: 'Bouw je founder-HQ',
+      ctaSecondary: 'Bekijk voorbeelden',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow voor bouwers',
+        description: 'Lever interactieve widgets, bots en agents op een sandboxed canvas — en publiceer op een community-marktplaats.',
+      },
+      hero: {
+        badge: 'Voor bouwers',
+        title: 'Lever software op de snelheid van een prompt',
+        subtitle: 'Nexow is een widget-runtime met bots, agents, connectoren en een makerscommunity. Genereer, verfijn via gesprek en publiceer wat werkt.',
+      },
+      prompt: 'Maak een projectcommandocentrum: kanbanbord, Gantt-tijdlijn, KPI’s, risico’s en teambelasting.',
+      points: [
+        'Inspecteerbare, geversioneerde broncode voor elk gegenereerd widget.',
+        'Cloudbots en -agents met een volledig harnas — model, tools, triggers.',
+        'Marktplaats-herkomst zodat remakes de oorspronkelijke bouwer crediteren.',
+      ],
+      ctaPrimary: 'Begin met bouwen',
+      ctaSecondary: 'Word lid van de community',
+    },
+  },
 };

@@ -1442,4 +1442,63 @@ export const tr = {
     ctaPrimary: 'Gizlilik Politikası',
     ctaSecondary: 'Bize ulaşın',
   },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Trader’lar için Nexow',
+        description: 'Tek bir komuttan canlı bir işlem masası kurun — grafikler, izleme listeleri, emir defterleri ve piyasa ısı haritaları, sizin kontrolünüzdeki bir kanvasta.',
+      },
+      hero: {
+        badge: 'Yatırımcılar için',
+        title: 'Piyasa değiştiğinde kendini yeniden kuran bir masa',
+        subtitle: 'İhtiyacınız olan widget’ları anlatın. Nexow bunları üretir, canlı bağlantıları kurar ve tek bir kanvasa yerleştirir — mumlardan tahmin piyasalarına.',
+      },
+      prompt: 'Bana bir kripto masası kur: mum grafiği, izleme listesi, emir defteri derinliği, ısı haritası ve türevler.',
+      points: [
+        'Genel API’lerden canlı piyasa verisi — Binance, BitMEX, Kalshi ve daha fazlası.',
+        'Koşulları izleyen ve sekmeniz kapalıyken uyarı tetikleyen botlar.',
+        'Her widget sandbox içinde; kötü bir betik masanızı asla ele geçirmez.',
+      ],
+      ctaPrimary: 'İşlem masası kur',
+      ctaSecondary: 'Bağlantıları gör',
+    },
+    founders: {
+      meta: {
+        title: 'Kurucular için Nexow',
+        description: 'Tek bir komuttan kurucu karargâhı oluşturun — potansiyel müşteri hattı, lansman kontrol listesi, içerik takvimi ve MRR tek kanvasta.',
+      },
+      hero: {
+        badge: 'Kurucular için',
+        title: 'Tek cümleyle komuta merkeziniz',
+        subtitle: 'Tek başına kurucuların beş araca ihtiyacı yok. İstediğiniz panoyu anlatın, Nexow widget’ları kursun — hat, gelir, lansman planı ve notlar bir arada.',
+      },
+      prompt: 'Tek kişilik kurucu panosu kur: potansiyel müşteri hattı, lansman kontrol listesi, içerik takvimi, MRR grafiği ve hızlı notlar.',
+      points: [
+        'Tek komuttan beş widget — gerçekte çalıştığınız düzende.',
+        'Cihazlar arası bulut senkronizasyonu, karargâh sizinle gelsin.',
+        'Ekran görüntüsü dışa aktarmadan kurucu ortaklarınızla canlı widget paylaşın.',
+      ],
+      ctaPrimary: 'Kurucu karargâhı kur',
+      ctaSecondary: 'Örnekleri gör',
+    },
+    builders: {
+      meta: {
+        title: 'Geliştiriciler için Nexow',
+        description: 'Sandbox’lı bir kanvasta etkileşimli widget’lar, botlar ve ajanlar yayınlayın — sonra topluluk pazarına çıkarın.',
+      },
+      hero: {
+        badge: 'Geliştiriciler için',
+        title: 'Yazılımı bir komut hızında yayınlayın',
+        subtitle: 'Nexow; botlar, ajanlar, bağlantılar ve bir üretici topluluğuyla gelen bir widget çalışma zamanıdır. Üretin, konuşarak iyileştirin ve işe yarayanı yayınlayın.',
+      },
+      prompt: 'Bir proje komuta merkezi oluştur: kanban panosu, Gantt zaman çizelgesi, KPI’lar, riskler ve ekip iş yükü.',
+      points: [
+        'Üretilen her widget için incelenebilir, sürümlenmiş kaynak kod.',
+        'Tam bir harness ile bulut botları ve ajanları — model, araçlar, tetikleyiciler.',
+        'Pazar yeri soy kütüğü sayesinde yeniden yapımlar asıl geliştiriciyi anar.',
+      ],
+      ctaPrimary: 'Kurmaya başla',
+      ctaSecondary: 'Topluluğa katıl',
+    },
+  },
 } as unknown as SiteContent;
