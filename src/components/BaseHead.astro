@@ -66,12 +66,15 @@ const allSchema = [orgSchema, ...schema];
 
 <!-- Canonical + language alternates -->
 <link rel="canonical" href={canonical} />
+{/* A noindex page (404) has no localized twins to point at — Cloudflare serves
+    the one 404.html for every missing path, so the alternates would dangle. */}
 {
-  (Object.keys(languages) as Lang[]).map((l) => (
-    <link rel="alternate" hreflang={l} href={alternates[l]} />
-  ))
+  !noindex &&
+    (Object.keys(languages) as Lang[]).map((l) => (
+      <link rel="alternate" hreflang={l} href={alternates[l]} />
+    ))
 }
-<link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
+{!noindex && <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />}
 
 <!-- Feed for this locale, so readers and crawlers can discover /rss.xml -->
 <link
