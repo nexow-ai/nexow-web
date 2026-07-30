@@ -127,7 +127,7 @@ export const privacyPage: LegalPageContent = {
     {
       h: '14. Asia-Pacific notes (high level)',
       paragraphs: [
-        'If you are in jurisdictions such as Singapore (PDPA), Japan (APPI), South Korea (PIPA), or other Asia-Pacific regions with personal-data laws, we process information as described in this Policy and in accordance with applicable local requirements to the extent they apply to ${ENTITY} as a U.S. provider of online Services.',
+        `If you are in jurisdictions such as Singapore (PDPA), Japan (APPI), South Korea (PIPA), or other Asia-Pacific regions with personal-data laws, we process information as described in this Policy and in accordance with applicable local requirements to the extent they apply to ${ENTITY} as a U.S. provider of online Services.`,
         `You may contact us at ${EMAIL} to inquire about access, correction, or deletion consistent with applicable law. Where local law requires a local representative or additional notices, we will update this Policy or provide region-specific notices.`,
       ],
     },
