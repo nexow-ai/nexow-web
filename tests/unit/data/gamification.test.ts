@@ -281,7 +281,7 @@ describe('plan cards vs. billing math', () => {
         expect(Boolean(tier.featured), `${lang}.${PLANS[i].key}`).toBe(Boolean(PLANS[i].featured));
         expect(tier.name?.trim(), `${lang}.${PLANS[i].key}`).toBeTruthy();
         expect(tier.features.length, `${lang}.${PLANS[i].key}`).toBeGreaterThan(0);
-        expect(tier.stats.length, `${lang}.${PLANS[i].key}`).toBeGreaterThan(0);
+        expect((tier.stats ?? []).length, `${lang}.${PLANS[i].key}`).toBeGreaterThan(0);
       });
     }
   });
@@ -306,7 +306,7 @@ describe('plan cards vs. billing math', () => {
     const tiers = useContent('en').plansPage.tiers;
     tiers.forEach((tier, i) => {
       const spec = PLANS[i];
-      const stats = tier.stats.join(' · ');
+      const stats = (tier.stats ?? []).join(' · ');
       if (spec.bots !== 'custom') expect(stats, spec.key).toContain(spec.bots);
       if (spec.agents !== 'custom') expect(stats, spec.key).toContain(spec.agents);
       const credits = spec.key === 'free' ? SIGNUP_BONUS_CREDITS : spec.monthlyCredits;

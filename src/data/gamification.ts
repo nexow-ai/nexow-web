@@ -430,50 +430,51 @@ export interface BadgeSpec {
   thresholds: number[];
 }
 
-/** The 18 tiered achievements: bronze → silver → gold on one stat. */
+/** The 18 tiered achievements: bronze → silver → gold on one stat.
+ *  Curves are steep on purpose — bronze is a real habit, gold is a grind. */
 export const TIERED_BADGES: BadgeSpec[] = [
-  { id: 'pioneer', icon: 'history', stat: 'accountAgeDays', rarity: 'tiered', thresholds: [1, 30, 365] },
-  { id: 'storyteller', icon: 'pen', stat: 'posts', rarity: 'tiered', thresholds: [1, 10, 50] },
-  { id: 'crowdPleaser', icon: 'heart', stat: 'likesReceived', rarity: 'tiered', thresholds: [10, 100, 1000] },
-  { id: 'conversationalist', icon: 'chat', stat: 'commentsWritten', rarity: 'tiered', thresholds: [10, 100, 500] },
-  { id: 'hypeTrain', icon: 'megaphone', stat: 'commentsReceived', rarity: 'tiered', thresholds: [10, 100, 500] },
-  { id: 'magnet', icon: 'users', stat: 'followers', rarity: 'tiered', thresholds: [5, 25, 100] },
-  { id: 'socialButterfly', icon: 'sparkles', stat: 'following', rarity: 'tiered', thresholds: [10, 50, 200] },
-  { id: 'innerCircle', icon: 'handshake', stat: 'contacts', rarity: 'tiered', thresholds: [3, 10, 25] },
-  { id: 'architect', icon: 'layers', stat: 'widgetsBuilt', rarity: 'tiered', thresholds: [1, 10, 50] },
-  { id: 'shipwright', icon: 'store', stat: 'assetsPublished', rarity: 'tiered', thresholds: [1, 5, 20] },
-  { id: 'sensation', icon: 'flame', stat: 'installsReceived', rarity: 'tiered', thresholds: [10, 100, 1000] },
-  { id: 'curator', icon: 'grid', stat: 'boards', rarity: 'tiered', thresholds: [1, 5, 15] },
-  { id: 'automator', icon: 'bot', stat: 'bots', rarity: 'tiered', thresholds: [1, 3, 10] },
-  { id: 'bugHunter', icon: 'bug', stat: 'reportsFiled', rarity: 'tiered', thresholds: [1, 5, 25] },
-  { id: 'cheerleader', icon: 'gift', stat: 'likesGiven', rarity: 'tiered', thresholds: [25, 250, 1000] },
-  { id: 'emojiSommelier', icon: 'smile', stat: 'reactionsGiven', rarity: 'tiered', thresholds: [10, 100, 500] },
-  { id: 'nightOwl', icon: 'moon', stat: 'nightPosts', rarity: 'tiered', thresholds: [1, 15, 75] },
-  { id: 'penPal', icon: 'mail', stat: 'dmThreads', rarity: 'tiered', thresholds: [1, 10, 40] },
+  { id: 'pioneer', icon: 'history', stat: 'accountAgeDays', rarity: 'tiered', thresholds: [30, 180, 730] },
+  { id: 'storyteller', icon: 'pen', stat: 'posts', rarity: 'tiered', thresholds: [10, 100, 1_000] },
+  { id: 'crowdPleaser', icon: 'heart', stat: 'likesReceived', rarity: 'tiered', thresholds: [100, 2_500, 25_000] },
+  { id: 'conversationalist', icon: 'chat', stat: 'commentsWritten', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
+  { id: 'hypeTrain', icon: 'megaphone', stat: 'commentsReceived', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
+  { id: 'magnet', icon: 'users', stat: 'followers', rarity: 'tiered', thresholds: [25, 250, 2_500] },
+  { id: 'socialButterfly', icon: 'sparkles', stat: 'following', rarity: 'tiered', thresholds: [50, 500, 2_500] },
+  { id: 'innerCircle', icon: 'handshake', stat: 'contacts', rarity: 'tiered', thresholds: [10, 50, 250] },
+  { id: 'architect', icon: 'layers', stat: 'widgetsBuilt', rarity: 'tiered', thresholds: [5, 50, 500] },
+  { id: 'shipwright', icon: 'store', stat: 'assetsPublished', rarity: 'tiered', thresholds: [3, 25, 150] },
+  { id: 'sensation', icon: 'flame', stat: 'installsReceived', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
+  { id: 'curator', icon: 'grid', stat: 'boards', rarity: 'tiered', thresholds: [3, 25, 100] },
+  { id: 'automator', icon: 'bot', stat: 'bots', rarity: 'tiered', thresholds: [3, 15, 75] },
+  { id: 'bugHunter', icon: 'bug', stat: 'reportsFiled', rarity: 'tiered', thresholds: [5, 50, 250] },
+  { id: 'cheerleader', icon: 'gift', stat: 'likesGiven', rarity: 'tiered', thresholds: [100, 2_500, 25_000] },
+  { id: 'emojiSommelier', icon: 'smile', stat: 'reactionsGiven', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
+  { id: 'nightOwl', icon: 'moon', stat: 'nightPosts', rarity: 'tiered', thresholds: [10, 100, 1_000] },
+  { id: 'penPal', icon: 'mail', stat: 'dmThreads', rarity: 'tiered', thresholds: [5, 50, 500] },
 ];
 
-/** The 10 rare medals: one-shot bars past gold on the same stat. */
+/** The 10 rare medals: one-shot bars past gold — months of work, not a weekend. */
 export const RARE_BADGES: BadgeSpec[] = [
-  { id: 'oracle', icon: 'scroll', stat: 'posts', rarity: 'rare', thresholds: [500] },
-  { id: 'agora', icon: 'chat', stat: 'commentsWritten', rarity: 'rare', thresholds: [5000] },
-  { id: 'catalyst', icon: 'bolt', stat: 'commentsReceived', rarity: 'rare', thresholds: [5000] },
-  { id: 'foundry', icon: 'factory', stat: 'assetsPublished', rarity: 'rare', thresholds: [100] },
-  { id: 'pantheon', icon: 'landmark', stat: 'boards', rarity: 'rare', thresholds: [75] },
-  { id: 'dynasty', icon: 'gem', stat: 'contacts', rarity: 'rare', thresholds: [100] },
-  { id: 'warden', icon: 'shield', stat: 'reportsFiled', rarity: 'rare', thresholds: [100] },
-  { id: 'benefactor', icon: 'gift', stat: 'likesGiven', rarity: 'rare', thresholds: [10000] },
-  { id: 'midnightSun', icon: 'moon', stat: 'nightPosts', rarity: 'rare', thresholds: [500] },
-  { id: 'nexus', icon: 'signal', stat: 'dmThreads', rarity: 'rare', thresholds: [200] },
+  { id: 'oracle', icon: 'scroll', stat: 'posts', rarity: 'rare', thresholds: [5_000] },
+  { id: 'agora', icon: 'chat', stat: 'commentsWritten', rarity: 'rare', thresholds: [50_000] },
+  { id: 'catalyst', icon: 'bolt', stat: 'commentsReceived', rarity: 'rare', thresholds: [50_000] },
+  { id: 'foundry', icon: 'factory', stat: 'assetsPublished', rarity: 'rare', thresholds: [500] },
+  { id: 'pantheon', icon: 'landmark', stat: 'boards', rarity: 'rare', thresholds: [500] },
+  { id: 'dynasty', icon: 'gem', stat: 'contacts', rarity: 'rare', thresholds: [1_000] },
+  { id: 'warden', icon: 'shield', stat: 'reportsFiled', rarity: 'rare', thresholds: [1_000] },
+  { id: 'benefactor', icon: 'gift', stat: 'likesGiven', rarity: 'rare', thresholds: [100_000] },
+  { id: 'midnightSun', icon: 'moon', stat: 'nightPosts', rarity: 'rare', thresholds: [5_000] },
+  { id: 'nexus', icon: 'signal', stat: 'dmThreads', rarity: 'rare', thresholds: [2_500] },
 ];
 
-/** The 6 legendary medals: a single, outrageous bar. */
+/** The 6 legendary medals: a single, absurd bar almost nobody should clear. */
 export const LEGENDARY_BADGES: BadgeSpec[] = [
-  { id: 'immortal', icon: 'hourglass', stat: 'accountAgeDays', rarity: 'legendary', thresholds: [1000] },
-  { id: 'folkHero', icon: 'crown', stat: 'likesReceived', rarity: 'legendary', thresholds: [10000] },
-  { id: 'luminary', icon: 'sun', stat: 'followers', rarity: 'legendary', thresholds: [1000] },
-  { id: 'blockbuster', icon: 'trophy', stat: 'installsReceived', rarity: 'legendary', thresholds: [10000] },
-  { id: 'grandArchitect', icon: 'castle', stat: 'widgetsBuilt', rarity: 'legendary', thresholds: [250] },
-  { id: 'overmind', icon: 'cpu', stat: 'bots', rarity: 'legendary', thresholds: [50] },
+  { id: 'immortal', icon: 'hourglass', stat: 'accountAgeDays', rarity: 'legendary', thresholds: [1_825] },
+  { id: 'folkHero', icon: 'crown', stat: 'likesReceived', rarity: 'legendary', thresholds: [100_000] },
+  { id: 'luminary', icon: 'sun', stat: 'followers', rarity: 'legendary', thresholds: [25_000] },
+  { id: 'blockbuster', icon: 'trophy', stat: 'installsReceived', rarity: 'legendary', thresholds: [100_000] },
+  { id: 'grandArchitect', icon: 'castle', stat: 'widgetsBuilt', rarity: 'legendary', thresholds: [2_500] },
+  { id: 'overmind', icon: 'cpu', stat: 'bots', rarity: 'legendary', thresholds: [500] },
 ];
 
 export const ALL_BADGES: BadgeSpec[] = [...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES];
@@ -634,6 +635,10 @@ export interface SimAction {
   step: number;
 }
 
+/* `POINT_WEIGHTS` is a Partial map — badge-only stats (accountAgeDays,
+ * nightPosts) carry no weight — so the fallback is required by the type. No
+ * simulator chip uses a weightless stat, hence no runtime path to it. */
+/* v8 ignore next */
 const weight = (s: StatKey) => POINT_WEIGHTS[s] ?? 0;
 
 export const SIM_ACTIONS: SimAction[] = [

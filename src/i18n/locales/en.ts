@@ -1385,7 +1385,7 @@ export const en: SiteContent = {
     badges: {
       title: 'The badge vault',
       body:
-        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows how to earn it, the unlock thresholds, and what every tier pays in credits and NXW.',
+        '34 badges in three rarities — and the bars are steep on purpose. Eighteen climb bronze → silver → gold with real unlock numbers (e.g. Conversationalist: 50 / 1,000 / 10,000 comments); ten rare medals sit past gold; six legendary medals ask for something almost nobody should clear. Each card shows how to earn it, the exact thresholds, and what every tier pays in credits and NXW.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
       unit: 'badges',
@@ -1395,9 +1395,9 @@ export const en: SiteContent = {
       tiers: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold' },
       rarity: { tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       rarityBody: {
-        tiered: 'Three thresholds on one stat — bronze, silver, then gold. 18 badges, 54 tiers to collect.',
-        rare: 'A single hard bar set past gold. No tiers, no partial credit — 10 medals.',
-        legendary: 'One outrageous threshold each. Six medals, and most accounts will never see them.',
+        tiered: 'Three hard thresholds on one stat — bronze, silver, then gold. Bronze is a habit; gold is a grind. 18 badges, 54 tiers.',
+        rare: 'A single brutal bar set past gold. No tiers, no partial credit — 10 medals.',
+        legendary: 'One absurd threshold each. Six medals. Most accounts will never see them.',
       },
       flipHint: 'Tap a badge for full reward detail',
       stats: {

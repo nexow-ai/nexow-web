@@ -37,17 +37,20 @@ can install; one point for a like.
 
 On top of raw activity sit **34 badges**, each tracking exactly one stat.
 
-**18 tiered achievements** come in bronze, silver and gold — 54 tiers in total.
-*Storyteller* wants 1, 10 then 50 posts. *Architect* wants 1, 10 then 50
-widgets. *Automator* wants 1, 3 then 10 bots. *Night owl* only counts posts
-published between 00:00 and 05:00 local time.
+**18 tiered achievements** come in bronze, silver and gold — 54 tiers in total,
+and the bars are steep on purpose. *Conversationalist* wants **50 / 1,000 /
+10,000** comments written. *Storyteller* wants 10, 100 then 1,000 posts.
+*Architect* wants 5, 50 then 500 widgets. *Night owl* only counts posts
+published between 00:00 and 05:00 local time — and still asks for 10 / 100 /
+1,000 of them.
 
 **10 rare medals** are single hard bars set past gold, with no partial credit —
-*Oracle* at 500 posts, *Foundry* at 100 published assets, *Benefactor* at 10,000
-likes given.
+*Oracle* at 5,000 posts, *Agora* at 50,000 comments written, *Foundry* at 500
+published assets, *Benefactor* at 100,000 likes given.
 
-**6 legendary medals** ask for something absurd: *Overmind* at 50 bots, *Grand
-architect* at 250 widgets, *Immortal* at 1,000 days on Nexow.
+**6 legendary medals** ask for something absurd: *Overmind* at 500 bots, *Grand
+architect* at 2,500 widgets, *Immortal* at 1,825 days on Nexow (~5 years),
+*Folk hero* / *Blockbuster* at 100,000 likes or installs.
 
 Every unlock adds a flat bonus on top of the activity that earned it — **+20**
 per tier, **+100** per rare medal, **+250** per legendary. Clear the entire
