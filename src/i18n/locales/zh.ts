@@ -1073,6 +1073,12 @@ export const zh: SiteContent = {
     live: '已在应用中上线',
     planned: '规划中',
     plannedNote: '积分、徽章和等级今天已经在应用里运行。积分与 NEXO 的发放将随 Nexow DAO 一起上线——下方的表格是提交首次投票的提案。',
+    teaser: {
+      badges: '为你构建与发布的成果颁发勋章',
+      levels: '凭声誉积分解锁的等级',
+      credits: '解锁后可用于 AI 生成的积分',
+      tokens: '你赚取的 DAO 治理代币',
+    },
     points: {
       title: '积分就是你的成果，如实计数',
       body: 'Nexow 在你的设备上，根据你自己的活动计算声望，没有任何服务器拿你和别人排名。每个动作都有固定权重；徽章再叠加一份固定奖励。',

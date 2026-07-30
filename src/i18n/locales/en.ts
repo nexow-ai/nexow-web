@@ -1267,6 +1267,12 @@ export const en: SiteContent = {
     planned: 'Planned',
     plannedNote:
       'Points, badges and levels are live in the app today. Credit and NEXO payouts ship with the Nexow DAO — the schedule below is the proposal going to the first ballot.',
+    teaser: {
+      badges: 'Medals for what you build and ship',
+      levels: 'Ranks unlocked by reputation points',
+      credits: 'Spendable AI generation from unlocks',
+      tokens: 'DAO governance tokens you earn',
+    },
     points: {
       title: 'Points are just your work, counted',
       body:
@@ -1295,7 +1301,7 @@ export const en: SiteContent = {
     badges: {
       title: 'The badge vault',
       body:
-        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Flip any card to see what it tracks.',
+        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows what it tracks and what every tier pays in credits and NEXO.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
       unit: 'badges',

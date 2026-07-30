@@ -1086,6 +1086,12 @@ export const de: SiteContent = {
     live: 'Live in der App',
     planned: 'Geplant',
     plannedNote: 'Punkte, Abzeichen und Level sind heute schon in der App live. Auszahlungen in Credits und NEXO kommen mit der Nexow DAO — die Tabelle unten ist der Vorschlag für die erste Abstimmung.',
+    teaser: {
+      badges: 'Medaillen für das, was du baust und shippst',
+      levels: 'Ränge, freigeschaltet durch Reputation',
+      credits: 'Ausgebbare KI-Generierung durch Freischaltungen',
+      tokens: 'DAO-Governance-Token, die du verdienst',
+    },
     points: {
       title: 'Punkte sind einfach deine Arbeit, gezählt',
       body: 'Nexow berechnet Reputation aus deiner eigenen Aktivität, auf deinem Gerät, ohne Server, der dich mit anderen vergleicht. Jede Aktion hat ein festes Gewicht; Abzeichen legen einen Bonus obendrauf.',

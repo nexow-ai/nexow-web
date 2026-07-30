@@ -63,10 +63,10 @@ const faqSchema = {
 // The four numbers that make the game layer concrete, teased right under the
 // hero so nobody has to scroll to learn it exists.
 const teasers = [
-  { icon: 'award', value: ALL_BADGES.length, label: c.rewards.badges.unit },
-  { icon: 'trophy', value: LEVELS.length, label: c.rewards.levels.unit },
-  { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: c.rewards.ledger.creditsLabel, soon: true },
-  { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: c.rewards.ledger.tokensLabel, soon: true },
+  { icon: 'award', value: ALL_BADGES.length, label: c.rewards.badges.unit, hint: c.rewards.teaser.badges },
+  { icon: 'trophy', value: LEVELS.length, label: c.rewards.levels.unit, hint: c.rewards.teaser.levels },
+  { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: c.rewards.ledger.creditsLabel, hint: c.rewards.teaser.credits, soon: true },
+  { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: c.rewards.ledger.tokensLabel, hint: c.rewards.teaser.tokens, soon: true },
 ];
 
 const sections = [
@@ -94,23 +94,26 @@ const sections = [
   <div class="container-page -mt-6 pb-8">
     <a
       href="#rewards"
-      class="reveal group mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-4 rounded-2xl border border-ink-900/10 bg-white dark:bg-white/[0.04] px-6 py-5 shadow-sm shadow-ink-950/[0.03] transition-colors hover:border-brand-500/30 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40 dark:hover:border-brand-400/30"
+      class="reveal group mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-6 gap-y-5 rounded-2xl border border-ink-900/10 bg-white px-6 py-5 shadow-sm shadow-ink-950/[0.03] transition-colors hover:border-brand-500/30 dark:border-white/10 dark:bg-ink-850 dark:shadow-black/40 dark:hover:border-brand-400/30"
     >
       {
         teasers.map((item) => (
-          <span class="flex items-center gap-2.5">
-            <Icon name={item.icon} class="size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+          <span class="flex max-w-[9.5rem] items-start gap-2.5 sm:max-w-[10.5rem]">
+            <Icon name={item.icon} class="mt-1 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
             <span class="flex flex-col leading-tight">
               <span class="font-display text-lg font-bold tabular-nums text-ink-950 dark:text-white">
                 {item.value.toLocaleString(lang)}
               </span>
-              <span class="flex items-center gap-1.5 text-[0.7rem] uppercase tracking-wider text-ink-500 dark:text-ink-400">
+              <span class="mt-0.5 flex items-center gap-1.5 text-[0.7rem] uppercase tracking-wider text-ink-500 dark:text-ink-400">
                 {item.label}
                 {item.soon && (
                   <span class="rounded-full bg-accent-500/10 px-1.5 font-mono text-[0.55rem] font-medium text-accent-600">
                     {c.rewards.planned}
                   </span>
                 )}
+              </span>
+              <span class="mt-1 text-[0.7rem] leading-snug normal-case tracking-normal text-ink-500 dark:text-ink-400">
+                {item.hint}
               </span>
             </span>
           </span>

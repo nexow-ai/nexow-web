@@ -1073,6 +1073,12 @@ export const ko: SiteContent = {
     live: '앱에서 사용 중',
     planned: '예정',
     plannedNote: '포인트 · 배지 · 등급은 이미 앱에서 동작합니다. 크레딧과 NEXO 지급은 Nexow DAO와 함께 시작되며, 아래 표는 첫 투표에 올릴 제안입니다.',
+    teaser: {
+      badges: '만들고 배포한 결과에 대한 메달',
+      levels: '평판 포인트로 여는 등급',
+      credits: '해금으로 얻는 사용 가능 AI 크레딧',
+      tokens: '획득하는 DAO 거버넌스 토큰',
+    },
     points: {
       title: '포인트는 당신이 한 일을 그대로 센 것',
       body: 'Nexow는 평판을 당신의 기기에서, 당신의 활동만으로 계산합니다. 남과 순위를 매기는 서버는 없습니다. 각 행동에는 고정 가중치가 있고, 배지가 그 위에 정액 보너스를 더합니다.',

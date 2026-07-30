@@ -1075,6 +1075,12 @@ export const nl: SiteContent = {
     live: 'Live in de app',
     planned: 'Gepland',
     plannedNote: 'Punten, badges en levels zijn vandaag al live in de app. Uitkeringen in credits en NEXO komen met de Nexow DAO — de tabel hieronder is het voorstel voor de eerste stemming.',
+    teaser: {
+      badges: 'Medailles voor wat je bouwt en shippt',
+      levels: 'Rangen vrijgespeeld met reputatie',
+      credits: 'Uitgeefbare AI-generatie via unlocks',
+      tokens: 'DAO-governancetokens die je verdient',
+    },
     points: {
       title: 'Punten zijn gewoon je werk, geteld',
       body: 'Nexow berekent reputatie uit je eigen activiteit, op je apparaat, zonder server die je met anderen vergelijkt. Elke actie heeft een vast gewicht; badges leggen er een bonus bovenop.',

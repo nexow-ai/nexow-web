@@ -1086,6 +1086,12 @@ export const it: SiteContent = {
     live: 'Attivo nell’app',
     planned: 'Pianificato',
     plannedNote: 'Punti, badge e livelli sono già attivi nell’app. I pagamenti in crediti e NEXO arrivano con la Nexow DAO — la tabella qui sotto è la proposta che andrà al primo voto.',
+    teaser: {
+      badges: 'Medaglie per ciò che costruisci e pubblichi',
+      levels: 'Gradi sbloccati con la reputazione',
+      credits: 'Generazione AI spendibile dagli unlock',
+      tokens: 'Token di governance della DAO',
+    },
     points: {
       title: 'I punti sono il tuo lavoro, contato',
       body: 'Nexow calcola la reputazione dalla tua attività, sul tuo dispositivo, senza nessun server che ti classifichi rispetto ad altri. Ogni azione ha un peso fisso; i badge aggiungono un bonus.',

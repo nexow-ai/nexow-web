@@ -156,6 +156,13 @@ export interface RewardsContent {
   live: string;
   planned: string;
   plannedNote: string;
+  /** One-line glosses for the plans-page teaser strip. */
+  teaser: {
+    badges: string;
+    levels: string;
+    credits: string;
+    tokens: string;
+  };
   points: {
     title: string;
     body: string;

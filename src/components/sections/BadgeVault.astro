@@ -2,9 +2,9 @@
 /**
  * The badge vault — all 34 achievements, flippable.
  *
- * Front: the hex medallion and the badge name. Back: the stat it tracks and the
- * exact thresholds, which are the app's real numbers (three tiers for a tiered
- * badge, one hard bar for a rare or legendary medal).
+ * Front: the hex medallion, badge name, the stat it tracks, and the reward
+ * ladder payout for each tier (points, credits, NEXO). Back: exact unlock
+ * thresholds with the same per-tier rewards beside them.
  *
  * Flip is CSS on hover/focus; the click handler toggles `data-flipped` so touch
  * visitors get the same card back without a hover state to fight.
@@ -17,7 +17,9 @@ import {
   LEGENDARY_BADGES,
   RARITY_COLORS,
   RARITY_POINTS,
+  REWARD_LADDER,
   type BadgeSpec,
+  type RewardRow,
 } from '../../data/gamification';
 import Icon from '../Icon.astro';
 import Hex from '../Hex.astro';
@@ -26,7 +28,9 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).rewards.badges;
+const rewards = useContent(lang).rewards;
+const t = rewards.badges;
+const ledger = rewards.ledger;
 
 const badges: BadgeSpec[] = [...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES];
 
@@ -46,6 +50,25 @@ const INK: Record<string, string> = { tiered: '#3d2b05', rare: '#eff6ff', legend
 
 /** Tier labels for the card back — tiered badges list three, medals list one. */
 const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
+
+const TIER_KEYS = ['bronze', 'silver', 'gold'] as const;
+
+/** Ladder rows that apply to a badge — three tiers, or one medal payout. */
+function rewardRowsFor(badge: BadgeSpec): RewardRow[] {
+  if (badge.rarity === 'tiered') {
+    return REWARD_LADDER.filter((r) => (TIER_KEYS as readonly string[]).includes(r.key));
+  }
+  return REWARD_LADDER.filter((r) => r.key === badge.rarity);
+}
+
+const nf = (n: number) => n.toLocaleString(lang);
+
+/** Short tier label on the dense front face. */
+const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
+  bronze: t.tiers.bronze,
+  silver: t.tiers.silver,
+  gold: t.tiers.gold,
+};
 ---
 
 <section class="relative overflow-hidden bg-ink-950 py-16 text-white">
@@ -63,23 +86,47 @@ const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
     <!-- Rarity legend -->
     <div class="reveal-stagger mt-8 grid gap-3 sm:grid-cols-3">
       {
-        RARITIES.map((r, i) => (
-          <div
-            class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-            style={`--from:${RARITY_COLORS[r.key].from};--to:${RARITY_COLORS[r.key].to}`}
-          >
-            <Hex icon={r.icon} from={RARITY_COLORS[r.key].from} to={RARITY_COLORS[r.key].to} ink={INK[r.key]} delay={i * 400} />
-            <div class="min-w-0">
-              <p class="flex items-center gap-2 font-display text-sm font-semibold text-white">
-                {t.rarity[r.key]}
-                <span class="rounded-full bg-white/[0.07] px-1.5 py-0.5 font-mono text-[0.6rem] font-medium text-ink-300">
-                  {t.worth.replace('{n}', String(RARITY_POINTS[r.key]))}
-                </span>
-              </p>
-              <p class="mt-1 text-xs leading-relaxed text-ink-400">{t.rarityBody[r.key]}</p>
+        RARITIES.map((r, i) => {
+          const bronze = REWARD_LADDER.find((row) => row.key === 'bronze')!;
+          const gold = REWARD_LADDER.find((row) => row.key === 'gold')!;
+          const medal = REWARD_LADDER.find((row) => row.key === r.key);
+          return (
+            <div
+              class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+              style={`--from:${RARITY_COLORS[r.key].from};--to:${RARITY_COLORS[r.key].to}`}
+            >
+              <Hex icon={r.icon} from={RARITY_COLORS[r.key].from} to={RARITY_COLORS[r.key].to} ink={INK[r.key]} delay={i * 400} />
+              <div class="min-w-0">
+                <p class="flex flex-wrap items-center gap-2 font-display text-sm font-semibold text-white">
+                  {t.rarity[r.key]}
+                  <span class="rounded-full bg-white/[0.07] px-1.5 py-0.5 font-mono text-[0.6rem] font-medium text-ink-300">
+                    {t.worth.replace('{n}', String(RARITY_POINTS[r.key]))}
+                  </span>
+                </p>
+                <p class="mt-1 text-xs leading-relaxed text-ink-400">{t.rarityBody[r.key]}</p>
+                <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[0.65rem]">
+                  {r.key === 'tiered' ? (
+                    <>
+                      <span class="text-brand-300">
+                        {nf(bronze.credits)}–{nf(gold.credits)} {ledger.creditsLabel}
+                      </span>
+                      <span class="text-ink-600" aria-hidden="true">·</span>
+                      <span class="text-accent-300">
+                        {nf(bronze.tokens)}–{nf(gold.tokens)} {ledger.tokensLabel}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span class="text-brand-300">{nf(medal!.credits)} {ledger.creditsLabel}</span>
+                      <span class="text-ink-600" aria-hidden="true">·</span>
+                      <span class="text-accent-300">{nf(medal!.tokens)} {ledger.tokensLabel}</span>
+                    </>
+                  )}
+                </p>
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       }
     </div>
 
@@ -101,74 +148,126 @@ const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
     </div>
 
     <!-- The vault -->
-    <div id="badge-grid" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+    <div id="badge-grid" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {
         badges.map((badge, i) => {
           const colors = RARITY_COLORS[badge.rarity];
           const tiered = badge.rarity === 'tiered';
+          const rows = rewardRowsFor(badge);
+          const track = t.stats[badge.stat];
           return (
             <button
               type="button"
-              class="flip group h-52 w-full text-left"
+              class="flip group h-72 w-full text-left"
               data-badge
               data-rarity={badge.rarity}
               data-flipped="false"
-              aria-label={t.names[badge.id]}
+              aria-label={`${t.names[badge.id]} — ${track}`}
             >
               <span class="flip-inner block h-full w-full">
-                {/* Front */}
+                {/* Front — tracks + rewards always visible */}
                 <span
-                  class="flip-face flex h-full w-full flex-col items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center transition-colors group-hover:border-white/20"
-                  style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 62%)`}
+                  class="flip-face flex h-full w-full flex-col rounded-2xl border border-white/10 bg-white/[0.03] p-3.5 transition-colors group-hover:border-white/20"
+                  style={`background-image:linear-gradient(180deg, color-mix(in oklab, ${colors.to} 16%, transparent), transparent 55%)`}
                 >
-                  <span class="relative">
-                    <span
-                      class="aura pointer-events-none absolute -inset-2.5 rounded-full blur-lg"
-                      style={`background:radial-gradient(circle, ${colors.to}, transparent 70%);--d:${(i % 8) * 300}ms`}
-                      aria-hidden="true"
-                    />
-                    <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="lg" delay={(i % 8) * 300} />
+                  <span class="flex flex-col items-center gap-2 text-center">
+                    <span class="relative">
+                      <span
+                        class="aura pointer-events-none absolute -inset-2 rounded-full blur-lg"
+                        style={`background:radial-gradient(circle, ${colors.to}, transparent 70%);--d:${(i % 8) * 300}ms`}
+                        aria-hidden="true"
+                      />
+                      <Hex icon={badge.icon} from={colors.from} to={colors.to} ink={INK[badge.rarity]} size="md" delay={(i % 8) * 300} />
+                    </span>
+                    <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
+                    <span class="block text-[0.65rem] leading-snug text-ink-300">{track}</span>
                   </span>
-                  <span class="font-display text-sm font-semibold leading-tight text-white">{t.names[badge.id]}</span>
-                  {/* Three pips say "this one has bronze, silver and gold tiers"
-                      at a glance — the medals below carry a single bar instead. */}
-                  {tiered ? (
-                    <span class="flex items-center gap-1" aria-hidden="true">
-                      {(['bronze', 'silver', 'gold'] as const).map((tier) => (
-                        <span class="size-1.5 rounded-full" style={`background:${RARITY_COLORS[tier].from}`} />
-                      ))}
-                    </span>
-                  ) : (
-                    <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
-                      {t.rarity[badge.rarity]}
-                    </span>
-                  )}
+
+                  <span class="mt-auto flex w-full flex-col gap-1 border-t border-white/[0.06] pt-2.5">
+                    {tiered ? (
+                      rows.map((row) => (
+                        <span class="flex items-center gap-1.5 font-mono text-[0.58rem] leading-none">
+                          <span
+                            class="size-1.5 shrink-0 rounded-full"
+                            style={`background:${RARITY_COLORS[row.key as (typeof TIER_KEYS)[number]].from}`}
+                            aria-hidden="true"
+                          />
+                          <span class="w-9 shrink-0 truncate text-ink-400">{tierShort[row.key as (typeof TIER_KEYS)[number]]}</span>
+                          <span class="ms-auto tabular-nums text-brand-300">{nf(row.credits)}</span>
+                          <span class="tabular-nums text-accent-300">{nf(row.tokens)}</span>
+                        </span>
+                      ))
+                    ) : (
+                      <span class="flex flex-col gap-1">
+                        <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-400">
+                          {t.rarity[badge.rarity]}
+                        </span>
+                        <span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono text-[0.62rem]">
+                          <span class="text-ink-300">{t.worth.replace('{n}', String(rows[0].points))}</span>
+                          <span class="text-ink-600" aria-hidden="true">·</span>
+                          <span class="text-brand-300">{nf(rows[0].credits)}</span>
+                          <span class="text-ink-600" aria-hidden="true">·</span>
+                          <span class="text-accent-300">{nf(rows[0].tokens)} {ledger.tokensLabel}</span>
+                        </span>
+                      </span>
+                    )}
+                    {tiered && (
+                      <span class="mt-0.5 flex items-center gap-1 text-[0.58rem] text-ink-500">
+                        <Icon name="bolt" class="size-2.5" />
+                        {t.worth.replace('{n}', String(RARITY_POINTS.tiered))}
+                        <span class="ms-auto text-ink-600">
+                          <span class="text-brand-300">{ledger.creditsLabel}</span>
+                          {' / '}
+                          <span class="text-accent-300">{ledger.tokensLabel}</span>
+                        </span>
+                      </span>
+                    )}
+                  </span>
                 </span>
 
-                {/* Back */}
+                {/* Back — thresholds + full per-tier rewards */}
                 <span
-                  class="flip-face flip-back flex h-full w-full flex-col justify-between rounded-2xl border p-4"
+                  class="flip-face flip-back flex h-full w-full flex-col justify-between rounded-2xl border p-3.5"
                   style={`border-color:color-mix(in oklab, ${colors.to} 45%, transparent);background-image:linear-gradient(160deg, color-mix(in oklab, ${colors.to} 22%, #0b0d13), #0b0d13)`}
                 >
                   <span class="block">
                     <span class="block font-display text-sm font-semibold text-white">{t.names[badge.id]}</span>
-                    <span class="mt-1 block text-[0.68rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
-                    <span class="block text-xs leading-snug text-ink-200">{t.stats[badge.stat]}</span>
+                    <span class="mt-1.5 block text-[0.62rem] uppercase tracking-wider text-ink-400">{t.tracks}</span>
+                    <span class="block text-xs leading-snug text-ink-200">{track}</span>
                   </span>
 
                   <span class="block">
-                    <span class="block text-[0.68rem] uppercase tracking-wider text-ink-400">{t.unlocks}</span>
-                    <span class="mt-1 flex flex-col gap-0.5">
-                      {badge.thresholds.map((n, ti) => (
-                        <span class="flex items-baseline justify-between gap-2 font-mono text-[0.7rem]">
-                          <span class="text-ink-300">{tiered ? tierLabels[ti] : t.rarity[badge.rarity]}</span>
-                          <span class="font-semibold text-white">{n.toLocaleString(lang)}</span>
-                        </span>
-                      ))}
-                    </span>
-                    <span class="mt-2 flex items-center gap-1.5 text-[0.65rem] text-ink-400">
-                      <Icon name="bolt" class="size-3" />
-                      {t.worth.replace('{n}', String(RARITY_POINTS[badge.rarity]))}
+                    <span class="block text-[0.62rem] uppercase tracking-wider text-ink-400">{t.unlocks}</span>
+                    <span class="mt-1.5 flex flex-col gap-1.5">
+                      {badge.thresholds.map((n, ti) => {
+                        const row = rows[ti] ?? rows[0];
+                        const label = tiered ? tierLabels[ti] : t.rarity[badge.rarity];
+                        const pipKey = tiered ? TIER_KEYS[ti] : badge.rarity;
+                        return (
+                          <span class="block">
+                            <span class="flex items-baseline justify-between gap-2 font-mono text-[0.68rem]">
+                              <span class="flex items-center gap-1.5 text-ink-300">
+                                {tiered && (
+                                  <span
+                                    class="size-1.5 rounded-full"
+                                    style={`background:${RARITY_COLORS[pipKey].from}`}
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                {label}
+                              </span>
+                              <span class="font-semibold text-white">{n.toLocaleString(lang)}</span>
+                            </span>
+                            <span class="mt-0.5 flex flex-wrap items-center gap-x-1.5 ps-3 font-mono text-[0.58rem]">
+                              <span class="text-ink-400">{t.worth.replace('{n}', String(row.points))}</span>
+                              <span class="text-ink-600" aria-hidden="true">·</span>
+                              <span class="text-brand-300">{nf(row.credits)} {ledger.creditsLabel}</span>
+                              <span class="text-ink-600" aria-hidden="true">·</span>
+                              <span class="text-accent-300">{nf(row.tokens)} {ledger.tokensLabel}</span>
+                            </span>
+                          </span>
+                        );
+                      })}
                     </span>
                   </span>
                 </span>
