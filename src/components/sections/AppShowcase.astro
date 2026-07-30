@@ -33,31 +33,17 @@ const shots = t.shots.map((shot, i) => ({ ...shot, ...SHOT_MEDIA[i] }));
 <section id="app-showcase" class="relative overflow-x-clip py-20 text-ink-950 sm:py-24 dark:text-white">
   <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div class="aurora-mesh absolute inset-[-10%] opacity-70"></div>
-    <!-- Light -->
     <div
-      class="aurora-a absolute -top-32 left-[8%] h-[520px] w-[520px] rounded-full opacity-45 blur-3xl dark:hidden"
+      class="aurora-a absolute -top-32 left-[8%] h-[520px] w-[520px] rounded-full opacity-45 blur-3xl dark:opacity-40"
       style="background:radial-gradient(circle at 45% 40%, var(--color-brand-200), transparent 68%)"
     ></div>
     <div
-      class="aurora-b absolute -bottom-40 right-[4%] h-[560px] w-[560px] rounded-full opacity-35 blur-3xl dark:hidden"
+      class="aurora-b absolute -bottom-40 right-[4%] h-[560px] w-[560px] rounded-full opacity-35 blur-3xl dark:opacity-30"
       style="background:radial-gradient(circle at 55% 45%, var(--color-sky-200), transparent 68%)"
     ></div>
     <div
-      class="aurora-c absolute left-[40%] top-[30%] size-[400px] rounded-full opacity-30 blur-3xl dark:hidden"
+      class="aurora-c absolute left-[40%] top-[30%] size-[400px] rounded-full opacity-30 blur-3xl dark:opacity-25"
       style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
-    ></div>
-    <!-- Dark -->
-    <div
-      class="aurora-a absolute -top-32 left-[8%] hidden h-[520px] w-[520px] rounded-full opacity-40 blur-3xl dark:block"
-      style="background:radial-gradient(circle at 45% 40%, var(--color-brand-500), transparent 68%)"
-    ></div>
-    <div
-      class="aurora-b absolute -bottom-40 right-[4%] hidden h-[560px] w-[560px] rounded-full opacity-30 blur-3xl dark:block"
-      style="background:radial-gradient(circle at 55% 45%, var(--color-sky-500), transparent 68%)"
-    ></div>
-    <div
-      class="aurora-c absolute left-[40%] top-[30%] hidden size-[400px] rounded-full opacity-25 blur-3xl dark:block"
-      style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
     ></div>
     <div
       class="absolute inset-0 opacity-25 [mask-image:radial-gradient(70%_55%_at_50%_40%,black,transparent)]"

@@ -24,20 +24,12 @@ const live = CONNECTORS.filter((c) => c.status === 'live');
     !dark && (
       <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div
-          class="aurora-a absolute -top-24 left-[15%] size-[480px] rounded-full opacity-45 blur-3xl dark:hidden"
+          class="aurora-a absolute -top-24 left-[15%] size-[480px] rounded-full opacity-45 blur-3xl dark:opacity-35"
           style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
         />
         <div
-          class="aurora-b absolute -top-16 right-[10%] size-[420px] rounded-full opacity-35 blur-3xl dark:hidden"
+          class="aurora-b absolute -top-16 right-[10%] size-[420px] rounded-full opacity-35 blur-3xl dark:opacity-28"
           style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
-        />
-        <div
-          class="aurora-a absolute -top-24 left-[15%] hidden size-[480px] rounded-full opacity-35 blur-3xl dark:block"
-          style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
-        />
-        <div
-          class="aurora-b absolute -top-16 right-[10%] hidden size-[420px] rounded-full opacity-28 blur-3xl dark:block"
-          style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
         />
       </div>
     )
