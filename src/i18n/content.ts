@@ -241,6 +241,21 @@ export interface RewardsContent {
     worth: string;
     /** "= {n} months of Sponsor-grade generation". */
     months: string;
+    /**
+     * NXW mint / supply / utility facts for the plans ledger.
+     * Optional so partial locales fall back to English via `useContent` merge.
+     */
+    tokenomics?: {
+      eyebrow: string;
+      title: string;
+      body: string;
+      /** Short chip labels under the headline, e.g. Immutable. */
+      traits: string[];
+      /** Big number tiles — label + value + optional note. */
+      facts: { label: string; value: string; note: string }[];
+      usesTitle: string;
+      uses: { icon: string; title: string; body: string }[];
+    };
   };
   dao: {
     title: string;
@@ -334,6 +349,16 @@ export interface SiteContent {
       note: string;
       promptExample: string;
       promptPlaceholder: string;
+      /**
+       * Starter prompts under the hero composer. Clicking one fills the
+       * textarea and re-points the launch CTA at that prompt. Optional so
+       * locales can omit them and fall back to English via `useContent` merge.
+       * `icon` is a stable `icon-paths` id (locale-agnostic); the first
+       * `HERO_EXAMPLES_VISIBLE` entries show up front, the rest behind “more”.
+       */
+      promptExamplesLabel?: string;
+      promptExamplesMore?: string;
+      promptExamples?: { icon: string; label: string; prompt: string }[];
     };
     ticker: { label: string };
     /**

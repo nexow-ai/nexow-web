@@ -13,6 +13,10 @@ const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
 const defaultPromptUrl = promptAppUrl(t.promptExample);
 
+const examples = t.promptExamples ?? [];
+/** Starter prompts shown before the “more examples” chip reveals the rest. */
+const EXAMPLES_VISIBLE = 8;
+
 /** Entrance order. The headline leads, everything else follows it up. */
 const D = {
   badge: '0.05s',
@@ -22,8 +26,9 @@ const D = {
   kicker: '0.40s',
   sub: '0.48s',
   forge: '0.54s',
-  cta: '0.62s',
-  note: '0.70s',
+  examples: '0.60s',
+  cta: '0.68s',
+  note: '0.76s',
   mock: '0.30s',
 };
 ---
@@ -138,8 +143,48 @@ const D = {
           </div>
         </form>
 
-        <div class="enter mt-5 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
-          <Button href={defaultPromptUrl} size="lg" external iconRight="arrow">
+        <!-- Starter prompts: click fills the composer and re-points the CTAs. -->
+        {
+          examples.length > 0 && (
+            <div class="enter mt-5" style={`--enter-delay:${D.examples}`} data-prompt-examples>
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500">
+                {t.promptExamplesLabel}
+              </p>
+              <div class="mt-2.5 flex flex-wrap gap-2">
+                {examples.map((example, i) => (
+                  <button
+                    type="button"
+                    data-prompt-example
+                    data-prompt={example.prompt}
+                    data-example-extra={i >= EXAMPLES_VISIBLE ? '' : undefined}
+                    aria-pressed="false"
+                    title={example.prompt}
+                    class="group inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white/70 py-1.5 pl-2.5 pr-3 text-xs font-medium text-ink-600 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-ink-900 aria-pressed:border-brand-400 aria-pressed:bg-brand-50 aria-pressed:text-brand-700 dark:border-white/12 dark:bg-white/[0.05] dark:text-ink-300 dark:hover:border-brand-400/40 dark:hover:text-white dark:aria-pressed:border-brand-400/50 dark:aria-pressed:bg-brand-400/12 dark:aria-pressed:text-brand-200"
+                  >
+                    <Icon
+                      name={example.icon}
+                      class="size-3.5 shrink-0 text-brand-600 transition-transform group-hover:scale-110 dark:text-brand-300"
+                    />
+                    {example.label}
+                  </button>
+                ))}
+                {examples.length > EXAMPLES_VISIBLE && (
+                  <button
+                    type="button"
+                    data-prompt-examples-more
+                    class="hidden items-center gap-1.5 rounded-full border border-dashed border-ink-900/15 px-3 py-1.5 text-xs font-medium text-ink-500 transition-colors hover:border-brand-300 hover:text-brand-700 dark:border-white/15 dark:text-ink-400 dark:hover:border-brand-400/40 dark:hover:text-brand-200"
+                  >
+                    {t.promptExamplesMore}
+                    <span class="font-mono text-[0.7rem]">+{examples.length - EXAMPLES_VISIBLE}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        }
+
+        <div class="enter mt-6 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
+          <Button href={defaultPromptUrl} size="lg" external iconRight="arrow" class="js-launch-prompt">
             {t.ctaPrimary}
           </Button>
           <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
@@ -165,6 +210,19 @@ const D = {
   </div>
 </section>
 
+<style>
+  /* Extra starter prompts stay collapsed only where JS can reveal them. */
+  :global(.js) [data-prompt-examples]:not([data-open]) [data-example-extra] {
+    display: none;
+  }
+  :global(.js) [data-prompt-examples-more] {
+    display: inline-flex;
+  }
+  [data-prompt-examples][data-open] [data-prompt-examples-more] {
+    display: none;
+  }
+</style>
+
 <script>
   function initHeroForge() {
     const form = document.getElementById('forge') as HTMLFormElement | null;
@@ -175,19 +233,59 @@ const D = {
     const input = form.querySelector<HTMLTextAreaElement>('#hero-prompt');
     if (!input) return;
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const prompt = input.value.trim();
+    /** `/?signup&prompt=…` — mirrors appDeepLinks.promptAppUrl (bare `signup` flag). */
+    const promptUrl = (prompt: string) => {
       const params = new URLSearchParams();
       params.set('signup', '');
       if (prompt) params.set('prompt', prompt);
-      // Bare `signup` flag (no `=`) to match appDeepLinks.appUrl convention.
       const qs = params
         .toString()
         .split('&')
         .map((part) => (part.endsWith('=') ? part.slice(0, -1) : part))
         .join('&');
-      window.open(`${base}/?${qs}`, '_blank', 'noopener,noreferrer');
+      return `${base}/?${qs}`;
+    };
+
+    // Keep the visible CTA pointing at whatever the composer currently holds.
+    const launchCta = document.querySelector<HTMLAnchorElement>('.js-launch-prompt');
+    const syncLinks = () => {
+      const url = promptUrl(input.value.trim());
+      form.action = url;
+      if (launchCta) launchCta.href = url;
+    };
+
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-prompt-example]'));
+    const markActive = (active: HTMLButtonElement | null) => {
+      chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip === active)));
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const prompt = chip.dataset.prompt ?? '';
+        input.value = prompt;
+        markActive(chip);
+        syncLinks();
+        input.focus({ preventScroll: true });
+        input.setSelectionRange(prompt.length, prompt.length);
+      });
+    });
+
+    input.addEventListener('input', () => {
+      const value = input.value.trim();
+      const match = chips.find((chip) => chip.dataset.prompt === value) ?? null;
+      markActive(match);
+      syncLinks();
+    });
+
+    const rail = document.querySelector<HTMLElement>('[data-prompt-examples]');
+    rail?.querySelector<HTMLButtonElement>('[data-prompt-examples-more]')?.addEventListener('click', () => {
+      rail.dataset.open = '';
+      rail.querySelector<HTMLButtonElement>('[data-example-extra]')?.focus({ preventScroll: true });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      window.open(promptUrl(input.value.trim()), '_blank', 'noopener,noreferrer');
     });
   }
 

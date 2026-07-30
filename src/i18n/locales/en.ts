@@ -97,6 +97,90 @@ export const en: SiteContent = {
       note: 'Preview live · 90 connectors · 10K starter credits',
       promptExample: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
       promptPlaceholder: 'Describe a widget…',
+      promptExamplesLabel: 'Or start from an example',
+      promptExamplesMore: 'More examples',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Crypto desk',
+          prompt: 'Build a crypto desk: BTC-USD candles from Binance with EMA 20 and 50, order book depth and a funding-rate panel.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Stock watchlist',
+          prompt: 'Make a stock watchlist with live quotes, day change, earnings dates and a one-year performance chart.',
+        },
+        {
+          icon: 'radar',
+          label: 'Earthquake map',
+          prompt: 'Map every USGS earthquake above magnitude 4 from the last 24 hours, with a magnitude histogram and a live event feed.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Weather board',
+          prompt: 'Build a weather board for three cities: hourly forecast, rain probability and a week-ahead temperature chart.',
+        },
+        {
+          icon: 'grid',
+          label: 'Project board',
+          prompt: 'Create a project command center: kanban board, sprint burndown, blockers by owner and a timeline.',
+        },
+        {
+          icon: 'flame',
+          label: 'Habit tracker',
+          prompt: 'Make a habit streak tracker for six daily habits with a monthly heatmap and a weekly score.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'News desk',
+          prompt: 'Make a news desk with top stories from Reuters, The Guardian and Hacker News, filtered by keyword.',
+        },
+        {
+          icon: 'rocket',
+          label: 'Founder HQ',
+          prompt: 'Build a founder dashboard: lead pipeline, MRR chart, launch checklist and a content calendar.',
+        },
+        {
+          icon: 'activity',
+          label: 'Air quality',
+          prompt: 'Show air quality for my city from OpenAQ with a PM2.5 gauge, a 7-day trend and health bands.',
+        },
+        {
+          icon: 'earth',
+          label: 'World indicators',
+          prompt: 'Compare GDP per capita, inflation and population for five countries using World Bank indicators.',
+        },
+        {
+          icon: 'target',
+          label: 'Prediction markets',
+          prompt: 'Show Polymarket and Kalshi odds side by side with a probability timeline and a biggest-movers table.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Wallet tracker',
+          prompt: 'Track my wallet: token balances, 30-day performance and a pie chart of allocation by asset.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini game',
+          prompt: 'Build a tiny memory card game with a move counter, a timer and a best-score record.',
+        },
+        {
+          icon: 'music',
+          label: 'Listening stats',
+          prompt: 'Make a listening dashboard from Spotify: top artists, a genre pie chart and plays per week.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'My database',
+          prompt: 'Connect my Postgres and chart daily signups, churn and revenue by plan, with a KPI row on top.',
+        },
+        {
+          icon: 'heart',
+          label: 'Training log',
+          prompt: 'Show my Strava runs this month with pace trend, weekly volume and a personal-record table.',
+        },
+      ],
     },
     ticker: { label: 'What people build' },
     appShowcase: {
@@ -823,8 +907,8 @@ export const en: SiteContent = {
         },
         {
           icon: 'sparkles',
-          title: 'Credits & NEXO later',
-          body: 'Early rewards land as credits; NEXO-tied bonuses unlock with the DAO. Same reputation surface, new ways to earn.',
+          title: 'Credits & NXW later',
+          body: 'Early rewards land as credits; NXW-tied bonuses unlock with the DAO. Same reputation surface, new ways to earn.',
         },
       ],
       cta: 'Claim your handle',
@@ -902,29 +986,29 @@ export const en: SiteContent = {
       badge: 'Coming soon',
       title: 'Own the roadmap with the Nexow DAO.',
       subtitle:
-        'NEXO is the governance token. Earn it by building and shipping; spend it by proposing, voting and steering a shared treasury.',
+        'NXW is the Solana token for governance, treasury, dividends, buying credits, and random rewards. Dry mint August 14, 2026 — 20M hard cap.',
       body:
         'The DAO tab is already in the community panel as a teaser — real ballots, treasury and creator rewards land next. Until then, reputation and medals are live so early makers start ahead.',
       pillars: [
         {
-          icon: 'lightbulb',
-          title: 'Propose',
-          body: 'Pitch features, connectors and rules. Anyone holding NEXO can put an idea on the ballot.',
-        },
-        {
           icon: 'vote',
-          title: 'Vote',
-          body: 'Public, transparent votes decide what gets built next and in what order.',
+          title: 'Governance',
+          body: 'Propose features and vote in public. NXW is how the roadmap gets decided — not a slide deck in private.',
         },
         {
           icon: 'vault',
           title: 'Treasury',
-          body: 'A shared treasury funds the bounties and grants the community votes in.',
+          body: 'Steer a shared treasury: bounties, grants, and whatever the ballots fund next.',
         },
         {
-          icon: 'gift',
-          title: 'Creator rewards',
-          body: 'Builders earn a share when the DAO ships and promotes their work.',
+          icon: 'coins',
+          title: 'Dividends',
+          body: 'Holders earn a cut when the DAO distributes — skin in the game, paid on-chain.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Credits & drops',
+          body: 'Spend NXW on AI credits, or catch random rewards when the DAO feels generous.',
         },
       ],
       previewTitle: 'First ballots',
@@ -935,7 +1019,7 @@ export const en: SiteContent = {
         { title: 'Fund a community widget bounty program', tag: 'Treasury', pct: 72, votes: 341 },
         { title: 'Revenue share for marketplace creators', tag: 'Rewards', pct: 87, votes: 512 },
         { title: 'Open-source the widget runtime', tag: 'Roadmap', pct: 64, votes: 289 },
-        { title: 'Lower the NEXO proposal threshold to 1,000', tag: 'Governance', pct: 58, votes: 203 },
+        { title: 'Lower the NXW proposal threshold to 1,000', tag: 'Governance', pct: 58, votes: 203 },
         { title: 'Cut Solana marketplace fees to 2.5%', tag: 'Fees', pct: 81, votes: 456 },
         { title: 'Elect community research board moderators', tag: 'Moderation', pct: 69, votes: 318 },
       ],
@@ -1254,7 +1338,7 @@ export const en: SiteContent = {
       },
       {
         q: 'When do credit and token rewards land?',
-        a: 'Badges and points are live today. Turning them into credits and NEXO governance tokens ships with the Nexow DAO; the first ballot ratifies the final schedule. The numbers on this page are the proposal we are committing to.',
+        a: 'Badges and points are live today. Credit and NXW payouts ship with the Nexow DAO. NXW dry-mints on Solana on August 14, 2026 — 10M utility (mint/burn for goods & services) plus 10M open mint at 1 USDC each. The ladder numbers on this page are the proposal we are committing to.',
       },
     ],
   },
@@ -1266,12 +1350,12 @@ export const en: SiteContent = {
     live: 'Live in the app',
     planned: 'Planned',
     plannedNote:
-      'Points, badges and levels are live in the app today. Credit and NEXO payouts ship with the Nexow DAO — the schedule below is the proposal going to the first ballot.',
+      'Points, badges and levels are live in the app today. Credit and NXW payouts ship with the Nexow DAO — NXW dry-mints August 14, 2026. The schedule below is the proposal going to the first ballot.',
     teaser: {
       badges: 'Medals for what you build and ship',
       levels: 'Ranks unlocked by reputation points',
       credits: 'Spendable AI generation from unlocks',
-      tokens: 'DAO governance tokens you earn',
+      tokens: 'NXW — governance, treasury, dividends & more',
     },
     points: {
       title: 'Points are just your work, counted',
@@ -1301,7 +1385,7 @@ export const en: SiteContent = {
     badges: {
       title: 'The badge vault',
       body:
-        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows how to earn it, the unlock thresholds, and what every tier pays in credits and NEXO.',
+        '34 badges in three rarities. Eighteen come in bronze, silver and gold tiers; ten rare medals sit past gold; six legendary medals ask for something absurd. Each card shows how to earn it, the unlock thresholds, and what every tier pays in credits and NXW.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
       unit: 'badges',
@@ -1396,15 +1480,15 @@ export const en: SiteContent = {
     ledger: {
       title: 'The reward ladder',
       body:
-        'Each unlock pays twice: spendable AI credits, and NEXO — the governance token of the Nexow DAO. Same schedule for everyone, on every plan.',
-      tokenName: 'NEXO',
+        'Each unlock pays twice: spendable AI credits, and NXW — the Solana token for governance, treasury, dividends, credits, and random rewards. Same schedule for everyone, on every plan.',
+      tokenName: 'NXW',
       tokenNote:
-        'NEXO is the Nexow DAO governance token. {pct} of supply is reserved for the community ladder; holders propose, vote and steer the treasury.',
+        'Ladder NXW comes from the 10M utility pool — minted and burned when it is spent on goods and services.',
       colUnlock: 'Unlock',
       colCount: 'Available',
       colPoints: 'Points',
       colCredits: 'Credits',
-      colTokens: 'NEXO',
+      colTokens: 'NXW',
       rows: {
         bronze: 'Bronze tier',
         silver: 'Silver tier',
@@ -1416,19 +1500,77 @@ export const en: SiteContent = {
       totalTitle: 'Complete the set',
       totalBody: 'Every tier, every medal, every level — the whole catalogue, claimed once.',
       creditsLabel: 'credits',
-      tokensLabel: 'NEXO',
+      tokensLabel: 'NXW',
       worth: '≈ {usd} of AI generation at list price',
       months: '= {n} months of Sponsor-grade generation, earned',
+      tokenomics: {
+        eyebrow: 'NXW · Solana',
+        title: 'One token. Five jobs. Twenty million max.',
+        body:
+          'NXW is how the DAO actually runs — not a sticker on a roadmap slide. Vote, fund, earn, spend, get surprised. Rules are immutable. The token is transferable. It trades.',
+        traits: ['Immutable', 'Transferable', 'Traded'],
+        facts: [
+          {
+            label: 'Dry mint',
+            value: 'Aug 14, 2026',
+            note: 'NXW goes live on Solana. Mark the day.',
+          },
+          {
+            label: 'Utility pool',
+            value: '10M NXW',
+            note: 'Minted and burned when exchanged for goods & services.',
+          },
+          {
+            label: 'Open mint',
+            value: '10M · 1 USDC',
+            note: 'Anyone can mint in the DAO on dry-mint day — one USDC each.',
+          },
+          {
+            label: 'Hard cap',
+            value: '20M NXW',
+            note: 'Utility + open mint. That is the ceiling.',
+          },
+        ],
+        usesTitle: 'What you do with it',
+        uses: [
+          {
+            icon: 'vote',
+            title: 'Governance',
+            body: 'Propose features, connectors, rules. Hold NXW, put ideas on the ballot, vote in public.',
+          },
+          {
+            icon: 'vault',
+            title: 'Treasury',
+            body: 'Steer the shared pot — bounties, grants, and whatever the community funds next.',
+          },
+          {
+            icon: 'coins',
+            title: 'Dividends',
+            body: 'When the DAO distributes, holders get a cut. Skin in the game, paid on-chain.',
+          },
+          {
+            icon: 'sparkles',
+            title: 'Buy credits',
+            body: 'Spend NXW for AI fuel — same credits you use to generate and refine widgets.',
+          },
+          {
+            icon: 'gift',
+            title: 'Random rewards',
+            body: 'Drops, surprises, lottery-style payouts. Build enough and the DAO can gift you back.',
+          },
+        ],
+      },
     },
     dao: {
-      title: 'What the DAO does with it',
+      title: 'Not a side quest',
       body:
-        'NEXO is not a side quest — it is how the roadmap gets decided. Earn it by building, spend it by voting.',
+        'NXW is the Solana token that decides the roadmap, moves the treasury, pays dividends, buys credits, and drops random rewards. Earn it by building. Use it like you mean it.',
       cards: [
-        { icon: 'lightbulb', title: 'Propose', body: 'Pitch features, connectors and rules. Anyone holding NEXO can put an idea on the ballot.' },
-        { icon: 'vote', title: 'Vote', body: 'Public, transparent votes decide what gets built next and in what order.' },
+        { icon: 'vote', title: 'Governance', body: 'Propose and vote. Anyone holding NXW can put an idea on the ballot.' },
         { icon: 'vault', title: 'Treasury', body: 'A shared treasury funds bounties and grants the community votes in.' },
-        { icon: 'gift', title: 'Creator rewards', body: 'Builders earn a share when the DAO ships and promotes their work.' },
+        { icon: 'coins', title: 'Dividends', body: 'Holders earn a cut when the DAO distributes on-chain.' },
+        { icon: 'sparkles', title: 'Buy credits', body: 'Spend NXW for AI generation — fuel for the canvas.' },
+        { icon: 'gift', title: 'Random rewards', body: 'Surprise drops and lottery-style payouts from the DAO.' },
       ],
     },
     credits: {
@@ -1772,7 +1914,7 @@ export const en: SiteContent = {
       {
         icon: 'sparkles',
         title: 'Rewards coming',
-        body: 'Early rewards land as credits; NEXO-tied bonuses unlock with the DAO. Same game layer, new ways to earn.',
+        body: 'Early rewards land as credits; NXW-tied bonuses unlock with the DAO. Same game layer, new ways to earn.',
       },
     ],
     ctaPrimary: 'Claim your handle',
