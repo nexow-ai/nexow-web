@@ -5,6 +5,9 @@
  * Pass an explicit `sections` list (id + label). Pages own discovery and i18n;
  * the rail only renders, spies, and navigates. Hidden below `lg` so mobile
  * keeps a clean full-bleed reading surface.
+ *
+ * Dots live in a fixed-width end column so variable label lengths never push
+ * them off a straight vertical axis.
  */
 export interface SectionNavItem {
   id: string;
@@ -28,10 +31,10 @@ const { sections, label = 'On this page' } = Astro.props;
       aria-label={label}
       data-section-nav
     >
-      <ol class="section-nav__list pointer-events-auto relative flex flex-col gap-1 py-2 text-ink-500 dark:text-ink-300">
-        {/* Vertical track behind the dots */}
+      <ol class="section-nav__list pointer-events-auto relative flex w-max flex-col items-stretch gap-1 py-2 text-ink-500 dark:text-ink-300">
+        {/* Vertical track centered on the fixed-width dot column */}
         <span
-          class="section-nav__track pointer-events-none absolute top-3 bottom-3 end-[0.4375rem] w-px bg-ink-900/10 dark:bg-white/10"
+          class="section-nav__track pointer-events-none absolute top-3 bottom-3 end-[calc(0.4375rem-0.5px)] w-px bg-ink-900/15 dark:bg-white/20"
           aria-hidden="true"
         />
 
@@ -39,7 +42,7 @@ const { sections, label = 'On this page' } = Astro.props;
           <li>
             <a
               href={`#${s.id}`}
-              class="section-nav__link group relative flex items-center gap-3 py-1.5 text-ink-500 outline-none transition-colors duration-200 hover:text-ink-950 focus-visible:text-ink-950 dark:text-ink-400 dark:hover:text-white dark:focus-visible:text-white"
+              class="section-nav__link group relative flex w-full items-center justify-end gap-3 py-1.5 text-ink-500 outline-none transition-colors duration-200 hover:text-ink-950 focus-visible:text-ink-950 dark:text-ink-400 dark:hover:text-white dark:focus-visible:text-white"
               data-section-link={s.id}
             >
               <span
@@ -47,7 +50,9 @@ const { sections, label = 'On this page' } = Astro.props;
               >
                 {s.label}
               </span>
-              <span class="section-nav__dot relative z-10 size-2.5 shrink-0 rounded-full border transition-all duration-200" aria-hidden="true" />
+              <span class="section-nav__dot-slot relative z-10 flex size-3.5 shrink-0 items-center justify-center" aria-hidden="true">
+                <span class="section-nav__dot size-2.5 rounded-full border transition-all duration-200" />
+              </span>
             </a>
           </li>
         ))}
@@ -62,27 +67,30 @@ const { sections, label = 'On this page' } = Astro.props;
   }
 
   .section-nav__label {
-    transform: translateX(0.25rem);
-    opacity: 0;
+    color: color-mix(in oklab, var(--color-ink-900) 42%, transparent);
   }
   :global([dir='rtl']) .section-nav__label {
-    transform: translateX(-0.25rem);
     text-align: start;
+  }
+  :global(.dark) .section-nav__label {
+    color: color-mix(in oklab, white 42%, transparent);
   }
 
   .section-nav__link:hover .section-nav__label,
-  .section-nav__link:focus-visible .section-nav__label,
-  .section-nav__link[aria-current='true'] .section-nav__label {
-    transform: translateX(0);
-    opacity: 1;
+  .section-nav__link:focus-visible .section-nav__label {
+    color: var(--color-ink-950);
+  }
+  :global(.dark) .section-nav__link:hover .section-nav__label,
+  :global(.dark) .section-nav__link:focus-visible .section-nav__label {
+    color: white;
   }
 
   .section-nav__dot {
-    border-color: color-mix(in oklab, var(--color-ink-900) 20%, transparent);
+    border-color: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
     background: white;
   }
   :global(.dark) .section-nav__dot {
-    border-color: color-mix(in oklab, white 25%, transparent);
+    border-color: color-mix(in oklab, white 40%, transparent);
     background: var(--color-ink-900);
   }
 
