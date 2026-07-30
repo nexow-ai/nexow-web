@@ -201,13 +201,15 @@ describe('PLANS', () => {
   });
 
   it('quotes bot and agent limits that grow up the ladder', () => {
-    const finite = PLANS.filter((p) => p.bots !== '∞');
+    const finite = PLANS.filter((p) => p.bots !== 'custom');
     const counts = finite.map((p) => Number(p.bots));
     expect(counts).toEqual([...counts].sort((a, b) => a - b));
-    expect(PLANS.at(-1)?.bots).toBe('∞');
-    expect(PLANS.at(-1)?.agents).toBe('∞');
+    // Partner is a bespoke contract, not an uncapped tier — the app caps its
+    // deployed agents at 100 like Sponsor, so it must not advertise "unlimited".
+    expect(PLANS.at(-1)?.bots).toBe('custom');
+    expect(PLANS.at(-1)?.agents).toBe('custom');
     for (const plan of PLANS) {
-      expect(plan.agents, plan.key).toMatch(/^(\d+|∞)$/);
+      expect(plan.agents, plan.key).toMatch(/^(\d+|custom)$/);
     }
   });
 
@@ -301,8 +303,8 @@ describe('plan cards vs. billing math', () => {
     tiers.forEach((tier, i) => {
       const spec = PLANS[i];
       const stats = tier.stats.join(' · ');
-      if (spec.bots !== '∞') expect(stats, spec.key).toContain(spec.bots);
-      if (spec.agents !== '∞') expect(stats, spec.key).toContain(spec.agents);
+      if (spec.bots !== 'custom') expect(stats, spec.key).toContain(spec.bots);
+      if (spec.agents !== 'custom') expect(stats, spec.key).toContain(spec.agents);
       const credits = spec.key === 'free' ? SIGNUP_BONUS_CREDITS : spec.monthlyCredits;
       if (credits > 0) {
         expect(stats, spec.key).toContain(credits.toLocaleString('en-US'));
@@ -382,9 +384,16 @@ describe('MATRIX', () => {
     expect(grant.cells[2]).toEqual({ n: (800_000).toLocaleString('en-US'), t: 'perMonth' });
   });
 
-  it('marks the capabilities that are not live yet', () => {
+  it('marks the capabilities that are not live yet, and labels them', () => {
     const soon = MATRIX.flatMap((g) => g.rows.filter((r) => r.soon).map((r) => r.key));
-    expect(soon.sort()).toEqual(['dao', 'rewards', 'signals']);
+    // The reward ladder and the DAO are documented as planned, so they must
+    // always carry the chip — see the header comment in gamification.ts.
+    expect(soon).toContain('rewards');
+    expect(soon).toContain('dao');
+    expect(new Set(soon).size, 'a row is marked soon twice').toBe(soon.length);
+
+    const t = useContent('en').plansPage.matrix as unknown as { soon?: string };
+    expect(t.soon?.trim(), 'plansPage.matrix.soon must exist to render the chip').toBeTruthy();
   });
 
   it('never lets a lower tier beat a higher one on a boolean row', () => {

@@ -64,7 +64,9 @@ beforeEach(() => {
   spawnResult = { status: 0 };
   copyFileSync.mockClear();
   mkdirSync.mockClear();
-  spawnSync.mockClear();
+  // Reset, not clear: cases below swap in their own spawn behaviour.
+  spawnSync.mockReset();
+  spawnSync.mockImplementation(() => spawnResult);
   exitSpy = vi.spyOn(process, 'exit').mockImplementation(((code?: number) => {
     throw new Exit(code);
   }) as never);

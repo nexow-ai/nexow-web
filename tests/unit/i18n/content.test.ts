@@ -5,10 +5,11 @@ import { LANGS, PREFIXED_LANGS } from '../../helpers/locales';
 /** Every `a.b.c` path to a primitive leaf, plus the type found there. */
 function shape(value: unknown, prefix = '', out = new Map<string, string>()): Map<string, string> {
   if (Array.isArray(value)) {
-    // Arrays may legitimately differ in length between locales; describe the
-    // element shape from the first entry instead of every index.
+    // Arrays may legitimately differ in length between locales, and entries can
+    // carry optional fields (a stat with a `suffix`, one without). Describe the
+    // union of every entry's shape rather than indexing.
     out.set(`${prefix}[]`, 'array');
-    if (value.length) shape(value[0], `${prefix}[]`, out);
+    for (const item of value) shape(item, `${prefix}[]`, out);
     return out;
   }
   if (value !== null && typeof value === 'object') {
