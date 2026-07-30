@@ -24,8 +24,8 @@ const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
 const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 ---
 
-<header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
-  <div class="container-page">
+<header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50" data-hidden="false">
+  <div class="container-page" id="site-header-bar">
     <nav
       class="mt-3 flex h-16 items-center justify-between rounded-full border border-transparent px-3 pl-4 transition-all duration-300"
       id="site-nav"
@@ -160,8 +160,31 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   </div>
 </header>
 
+<style>
+  /* Only the bar translates — the mobile menu stays a viewport-anchored overlay. */
+  #site-header-bar {
+    transition:
+      transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 250ms ease;
+    will-change: transform;
+  }
+
+  #site-header[data-hidden='true'] #site-header-bar {
+    transform: translateY(-130%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #site-header-bar {
+      transition: none;
+    }
+  }
+</style>
+
 <script>
-  // Header: solidify on scroll + mobile menu toggle. Re-inits on view transitions.
+  // Header: solidify on scroll, hide on scroll down / reveal on scroll up,
+  // plus mobile menu toggle. Re-inits on view transitions.
   let headerAbort: AbortController | undefined;
 
   const lightSolid = ['bg-white/95', 'backdrop-blur-md', '!border-ink-900/10', 'shadow-sm'] as const;
@@ -174,6 +197,11 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   ] as const;
   const allSolid = [...lightSolid, ...darkSolid];
 
+  // Distance from top below which the header always stays visible.
+  const REVEAL_ZONE = 96;
+  // Minimum scroll delta before we react, so tiny jitters don't flip the header.
+  const DELTA = 6;
+
   function initHeader() {
     headerAbort?.abort();
     headerAbort = new AbortController();
@@ -183,7 +211,18 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     const nav = document.getElementById('site-nav');
     if (!header || !nav) return;
 
-    const onScroll = () => {
+    const menu = document.getElementById('mobile-menu');
+    const toggle = document.getElementById('menu-toggle');
+    const close = document.getElementById('menu-close');
+
+    let lastY = Math.max(0, window.scrollY);
+    let ticking = false;
+
+    const setHidden = (hidden: boolean) => {
+      header.dataset.hidden = String(hidden);
+    };
+
+    const paintSolid = () => {
       const solid = window.scrollY > 8;
       allSolid.forEach((c) => nav.classList.remove(c));
       if (solid) {
@@ -192,19 +231,45 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       }
       header.classList.toggle('is-scrolled', solid);
     };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true, signal });
-    document.addEventListener('nexow:themechange', onScroll, { signal });
 
-    const menu = document.getElementById('mobile-menu');
-    const toggle = document.getElementById('menu-toggle');
-    const close = document.getElementById('menu-close');
+    const update = () => {
+      ticking = false;
+      paintSolid();
+
+      const y = Math.max(0, window.scrollY);
+      const menuOpen = !!menu && !menu.hidden;
+
+      if (y <= REVEAL_ZONE || menuOpen) {
+        setHidden(false);
+        lastY = y;
+        return;
+      }
+
+      const diff = y - lastY;
+      if (Math.abs(diff) < DELTA) return;
+      setHidden(diff > 0);
+      lastY = y;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+    document.addEventListener('nexow:themechange', paintSolid, { signal });
+    // Keyboard users tabbing back into the header should never chase a hidden bar.
+    header.addEventListener('focusin', () => setHidden(false), { signal });
+
     const setMenu = (open: boolean) => {
       if (!menu) return;
       menu.hidden = !open;
       menu.classList.toggle('hidden', !open);
       toggle?.setAttribute('aria-expanded', String(open));
       document.body.style.overflow = open ? 'hidden' : '';
+      if (open) setHidden(false);
     };
     toggle?.addEventListener('click', () => setMenu(true), { signal });
     close?.addEventListener('click', () => setMenu(false), { signal });
