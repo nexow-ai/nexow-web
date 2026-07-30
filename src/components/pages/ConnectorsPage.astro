@@ -306,6 +306,9 @@ const sections = [
       </div>
 
       <!-- Grid -->
+      {/* The catalog carries no visible section title; an off-screen heading
+          keeps the outline continuous between the h1 and the card h3s. */}
+      <h2 class="sr-only">{t.hero.badge}</h2>
       <div id="connector-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {CONNECTORS.map((c) => <ConnectorCard c={c} t={t} />)}
       </div>
