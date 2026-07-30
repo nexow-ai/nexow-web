@@ -7,6 +7,7 @@ export const el = {
       { label: 'Κοινότητα', href: '/community' },
       { label: 'Συνδέσμοι', href: '/connectors' },
       { label: 'Σχέδια', href: '/plans' },
+      { label: 'Βοήθεια', href: '/help' },
       { label: 'Ιστολόγιο', href: '/blog' },
       { label: 'Σχετικά', href: '/about' },
     ],
@@ -22,9 +23,12 @@ export const el = {
         links: [
           { label: 'Χαρακτηριστικά', href: '/features' },
           { label: 'Κοινότητα', href: '/community' },
-          { label: 'Σχέδια', href: '/plans' },
           { label: 'Συνδέσμοι', href: '/connectors' },
-          { label: 'Αυτοματισμός', href: '/#automate' },
+          { label: 'Σχέδια', href: '/plans' },
+          { label: 'Βοήθεια', href: '/help' },
+          { label: 'Για traders', href: '/for/traders' },
+          { label: 'Για ιδρυτές', href: '/for/founders' },
+          { label: 'Για δημιουργούς', href: '/for/builders' },
         ],
       },
       {
@@ -32,6 +36,10 @@ export const el = {
         links: [
           { label: 'Σχετικά', href: '/about' },
           { label: 'Ιστολόγιο', href: '/blog' },
+          { label: 'Αρχείο αλλαγών', href: '/changelog' },
+          { label: 'Ασφάλεια', href: '/security' },
+          { label: 'Επικοινωνία', href: '/contact' },
+          { label: 'Πρόσκληση', href: '/invite' },
           { label: 'Νομικά', href: '/legal' },
         ],
       },
@@ -418,7 +426,7 @@ export const el = {
       title: 'Συνδεθείτε σε κάθε αγορά',
       subtitle:
         'Σύνδεσμοι που μπορούν να συνδεθούν ρέουν ζωντανές τιμές, βιβλία παραγγελιών και δεδομένα αναφοράς κατευθείαν στα widgets σας — σε FX, κρυπτονόμισμα, μετοχές, futures, δικαιώματα, αγορές πρόβλεψης, βάσεις δεδομένων και ροές κοινωνικών μέσων.',
-      note: '90 σύνδεσμοι είναι ζωντανοί σήμερα και 155 κάθονται στο κατάλογο — broker, ανταλλαγές, προμηθευτές δεδομένων, βάσεις δεδομένων, κοινωνικές πηγές, πορτοφόλια κρύπτο και υπηρεσίες web. Πολλά ρέουν κατευθείαν από το πρόγραμμα περιήγησής σας· τα υπόλοιπα δρομολογούνται μέσα από ένα λεπτό proxy.',
+      note: 'Σήμερα είναι ενεργοί {live} σύνδεσμοι και {total} βρίσκονται στον κατάλογο: χώροι συναλλαγών, API δεδομένων αγοράς, βάσεις δεδομένων, κοινωνικές πηγές, πορτοφόλια κρύπτο και υπηρεσίες web.',
       countLabel: 'ζωντανοί σύνδεσμοι',
       groups: {
         fx: 'FX',
@@ -991,7 +999,6 @@ export const el = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 τιμολογείται ετησίως',
         cadence: '/μήν',
-        badge: 'Σύντομα',
         stats: ['50K credits/μήν', '30 bots', '10 agents'],
         note: 'Όλα στο Δωρεάν, συν:',
         cta: 'Γίνε Supporter',

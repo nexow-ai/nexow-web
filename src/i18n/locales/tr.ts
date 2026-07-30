@@ -7,6 +7,7 @@ export const tr = {
       { label: 'Topluluk', href: '/community' },
       { label: 'Bağlantılar', href: '/connectors' },
       { label: 'Planlar', href: '/plans' },
+      { label: 'Yardım', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'Hakkında', href: '/about' },
     ],
@@ -22,9 +23,12 @@ export const tr = {
         links: [
           { label: 'Özellikler', href: '/features' },
           { label: 'Topluluk', href: '/community' },
-          { label: 'Planlar', href: '/plans' },
           { label: 'Bağlantılar', href: '/connectors' },
-          { label: 'Otomasyonlar', href: '/#automate' },
+          { label: 'Planlar', href: '/plans' },
+          { label: 'Yardım', href: '/help' },
+          { label: 'Yatırımcılar için', href: '/for/traders' },
+          { label: 'Kurucular için', href: '/for/founders' },
+          { label: 'Geliştiriciler için', href: '/for/builders' },
         ],
       },
       {
@@ -32,6 +36,10 @@ export const tr = {
         links: [
           { label: 'Hakkında', href: '/about' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Sürüm notları', href: '/changelog' },
+          { label: 'Güvenlik', href: '/security' },
+          { label: 'İletişim', href: '/contact' },
+          { label: 'Davet et', href: '/invite' },
           { label: 'Yasal', href: '/legal' },
         ],
       },
@@ -418,7 +426,7 @@ export const tr = {
       title: 'Her piyasaya bağlanın',
       subtitle:
         'Bağlanabilir bağlantılar, canlı fiyatları, emir defterlerini ve referans verilerini widget\'lerinize doğrudan akış yapılır — döviz, kripto, hisse senedi, vadeli işlem, opsiyon, tahmin piyasaları, veritabanları ve sosyal ortam kaynakları arasında.',
-      note: '90 bağlantı bugün canlı ve 155 katalogda var — aracılar, borsalar, veri sağlayıcıları, veritabanları, sosyal ortamlar, kripto cüzdanları ve web hizmetleri. Çoğu doğrudan tarayıcınızdan akış yapılır; kalanı ince bir vekil aracılığıyla yönlendirilir.',
+      note: 'Bugün {live} bağlantı canlı, {total} tanesi katalogda: işlem platformları, piyasa verisi API\'leri, veritabanları, sosyal kaynaklar, kripto cüzdanları ve web hizmetleri.',
       countLabel: 'canlı bağlantı',
       groups: {
         fx: 'Döviz',
@@ -991,7 +999,6 @@ export const tr = {
         priceYearly: '$8.33',
         billedYearly: 'Yıllık $99.90 Faturalandırılır',
         cadence: '/ay',
-        badge: 'Yakında',
         stats: ['50K Kredi/Ay', '30 Bot', '10 Ajan'],
         note: 'Ücretsiz İçinde Her Şey, Artı:',
         cta: 'Supporter Olun',

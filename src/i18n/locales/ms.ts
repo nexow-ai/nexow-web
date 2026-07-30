@@ -7,6 +7,7 @@ export const ms = {
       { label: 'Komuniti', href: '/community' },
       { label: 'Penyambung', href: '/connectors' },
       { label: 'Pelan', href: '/plans' },
+      { label: 'Bantuan', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'Tentang', href: '/about' },
     ],
@@ -22,9 +23,12 @@ export const ms = {
         links: [
           { label: 'Ciri-ciri', href: '/features' },
           { label: 'Komuniti', href: '/community' },
-          { label: 'Pelan', href: '/plans' },
           { label: 'Penyambung', href: '/connectors' },
-          { label: 'Automasi', href: '/#automate' },
+          { label: 'Pelan', href: '/plans' },
+          { label: 'Bantuan', href: '/help' },
+          { label: 'Untuk pedagang', href: '/for/traders' },
+          { label: 'Untuk pengasas', href: '/for/founders' },
+          { label: 'Untuk pembina', href: '/for/builders' },
         ],
       },
       {
@@ -32,6 +36,10 @@ export const ms = {
         links: [
           { label: 'Tentang', href: '/about' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Log perubahan', href: '/changelog' },
+          { label: 'Keselamatan', href: '/security' },
+          { label: 'Hubungi kami', href: '/contact' },
+          { label: 'Jemput', href: '/invite' },
           { label: 'Undang-undang', href: '/legal' },
         ],
       },
@@ -418,7 +426,7 @@ export const ms = {
       title: 'Pasang ke setiap pasaran',
       subtitle:
         'Penyambung yang boleh pasang mengalirkan harga langsung, buku pesanan dan data rujukan terus ke widget anda — merentasi FX, kripto, ekuiti, niaga hadapan, opsyen, pasaran ramalan, pangkalan data dan suapan sosial.',
-      note: '90 penyambung langsung hari ini dan 155 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
+      note: '{live} penyambung aktif hari ini dan {total} ada dalam katalog: tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web.',
       countLabel: 'penyambung langsung',
       groups: {
         fx: 'FX',
@@ -991,7 +999,6 @@ export const ms = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 dibilkan tahunan',
         cadence: '/bln',
-        badge: 'Akan datang segera',
         stats: ['50K kredit/bln', '30 bot', '10 ejen'],
         note: 'Semua dalam Percuma, tambah:',
         cta: 'Menjadi Penyokong',
