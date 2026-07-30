@@ -1,7 +1,7 @@
 ---
 /**
- * Community hero atmosphere — soft light planes and a few refined arcs.
- * Spacious, brand-first; no constellation / wire-graph clutter.
+ * Community hero atmosphere — drifting brand/accent/plasma auroras.
+ * Replaces the old soft-light vignette (harsh white edges in dark mode).
  * Pauses when `.is-offscreen` (ScrollMotion) or prefers-reduced-motion.
  */
 ---
@@ -12,141 +12,178 @@
   data-motion="dim"
   data-community-aura
 >
-  <!-- Soft glow planes -->
+  <!-- Animated multi-stop gradient mesh -->
+  <div class="caura-mesh absolute inset-[-12%]"></div>
+
+  <!-- Drifting aurora blobs (light) -->
   <div
-    class="caura-plane caura-plane--a absolute left-1/2 top-[-8%] size-[min(92vw,720px)] -translate-x-1/2 rounded-full opacity-70 blur-3xl"
-    style="background:radial-gradient(circle at 50% 42%, color-mix(in oklab, var(--color-brand-200) 75%, transparent), transparent 68%)"
+    class="aurora-a caura-blob absolute -top-32 left-[2%] size-[min(70vw,640px)] rounded-full opacity-60 blur-3xl dark:hidden"
+    style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
   >
   </div>
   <div
-    class="caura-plane caura-plane--b absolute left-[8%] top-[18%] size-[min(55vw,380px)] rounded-full opacity-45 blur-3xl"
-    style="background:radial-gradient(circle at 40% 40%, color-mix(in oklab, var(--color-sky-200) 70%, transparent), transparent 70%)"
+    class="aurora-b caura-blob absolute -top-24 right-[-6%] size-[min(72vw,680px)] rounded-full opacity-50 blur-3xl dark:hidden"
+    style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
   >
   </div>
   <div
-    class="caura-plane caura-plane--c absolute right-[4%] top-[12%] size-[min(58vw,400px)] rounded-full opacity-40 blur-3xl"
-    style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-accent-200) 65%, transparent), transparent 70%)"
+    class="aurora-c caura-blob absolute left-[28%] top-[32%] size-[min(58vw,520px)] rounded-full opacity-45 blur-3xl dark:hidden"
+    style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+  >
+  </div>
+  <div
+    class="caura-blob caura-blob--d absolute bottom-[-8%] left-[12%] size-[min(50vw,440px)] rounded-full opacity-40 blur-3xl dark:hidden"
+    style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
   >
   </div>
 
-  <!-- Refined horizon arcs — premium, quiet -->
+  <!-- Drifting aurora blobs (dark) — mid-tone brand colors that actually glow on ink -->
+  <div
+    class="aurora-a caura-blob absolute -top-32 left-[2%] hidden size-[min(70vw,640px)] rounded-full opacity-50 blur-3xl dark:block"
+    style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+  >
+  </div>
+  <div
+    class="aurora-b caura-blob absolute -top-24 right-[-6%] hidden size-[min(72vw,680px)] rounded-full opacity-40 blur-3xl dark:block"
+    style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
+  >
+  </div>
+  <div
+    class="aurora-c caura-blob absolute left-[28%] top-[32%] hidden size-[min(58vw,520px)] rounded-full opacity-35 blur-3xl dark:block"
+    style="background:radial-gradient(circle, var(--color-plasma-500), transparent 65%)"
+  >
+  </div>
+  <div
+    class="caura-blob caura-blob--d absolute bottom-[-8%] left-[12%] hidden size-[min(50vw,440px)] rounded-full opacity-30 blur-3xl dark:block"
+    style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
+  >
+  </div>
+
+  <!-- Quiet horizon arc — keeps the community cue without the old light planes -->
   <svg
-    class="caura-svg absolute left-1/2 top-[6%] h-[min(58vw,420px)] w-[min(118%,880px)] -translate-x-1/2"
-    viewBox="0 0 880 420"
+    class="caura-svg absolute left-1/2 top-[8%] h-[min(52vw,380px)] w-[min(110%,820px)] -translate-x-1/2 opacity-70 dark:opacity-55"
+    viewBox="0 0 820 380"
     fill="none"
   >
     <defs>
       <linearGradient id="caura-arc" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
-        <stop offset="28%" stop-color="var(--color-brand-400)" stop-opacity="0.45"></stop>
-        <stop offset="50%" stop-color="var(--color-sky-400)" stop-opacity="0.55"></stop>
-        <stop offset="72%" stop-color="var(--color-accent-400)" stop-opacity="0.4"></stop>
+        <stop offset="30%" stop-color="var(--color-brand-400)" stop-opacity="0.5"></stop>
+        <stop offset="50%" stop-color="var(--color-sky-400)" stop-opacity="0.6"></stop>
+        <stop offset="70%" stop-color="var(--color-accent-400)" stop-opacity="0.45"></stop>
         <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0"></stop>
       </linearGradient>
-      <linearGradient id="caura-arc-soft" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0"></stop>
-        <stop offset="50%" stop-color="var(--color-brand-400)" stop-opacity="0.28"></stop>
-        <stop offset="100%" stop-color="var(--color-sky-300)" stop-opacity="0"></stop>
-      </linearGradient>
-      <radialGradient id="caura-core" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0.55"></stop>
-        <stop offset="55%" stop-color="var(--color-brand-400)" stop-opacity="0.18"></stop>
-        <stop offset="100%" stop-color="var(--color-brand-500)" stop-opacity="0"></stop>
-      </radialGradient>
       <filter id="caura-soft" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="6" result="b"></feGaussianBlur>
+        <feGaussianBlur stdDeviation="5" result="b"></feGaussianBlur>
         <feMerge>
           <feMergeNode in="b"></feMergeNode>
           <feMergeNode in="SourceGraphic"></feMergeNode>
         </feMerge>
       </filter>
     </defs>
-
-    <!-- Soft core light behind the headline -->
-    <ellipse class="caura-core" cx="440" cy="168" rx="160" ry="90" fill="url(#caura-core)"></ellipse>
-
-    <!-- Wide horizon bowls -->
     <path
       class="caura-arc"
       pathLength="1"
-      d="M80 210 C 220 110 360 90 440 90 C 520 90 660 110 800 210"
+      d="M70 200 C 200 100 330 78 410 78 C 490 78 620 100 750 200"
       stroke="url(#caura-arc)"
-      stroke-width="1.6"
+      stroke-width="1.5"
       stroke-linecap="round"
     >
     </path>
-    <path
-      class="caura-arc caura-arc--2"
-      pathLength="1"
-      d="M140 248 C 260 168 360 148 440 148 C 520 148 620 168 740 248"
-      stroke="url(#caura-arc-soft)"
-      stroke-width="1.2"
-      stroke-linecap="round"
-    >
-    </path>
-    <path
-      class="caura-arc caura-arc--3"
-      pathLength="1"
-      d="M210 286 C 300 230 380 210 440 210 C 500 210 580 230 670 286"
-      stroke="url(#caura-arc-soft)"
-      stroke-width="1"
-      stroke-linecap="round"
-      opacity="0.7"
-    >
-    </path>
-
-    <!-- Quiet accent marks (not a graph) -->
-    <circle class="caura-dot" cx="440" cy="90" r="3.2" fill="var(--color-brand-400)" filter="url(#caura-soft)"></circle>
-    <circle class="caura-dot caura-dot--late" cx="300" cy="132" r="2.2" fill="var(--color-sky-400)" opacity="0.7"></circle>
-    <circle class="caura-dot caura-dot--late" cx="580" cy="132" r="2.2" fill="var(--color-accent-400)" opacity="0.65"></circle>
+    <circle class="caura-dot" cx="410" cy="78" r="3" fill="var(--color-brand-400)" filter="url(#caura-soft)"></circle>
   </svg>
-
-  <!-- Soft fade so copy stays crisp -->
-  <div
-    class="absolute inset-0"
-    style="background:radial-gradient(65% 50% at 50% 28%, transparent 20%, color-mix(in oklab, white 55%, transparent) 78%, white 100%)"
-  >
-  </div>
 </div>
 
 <style>
-  .caura-plane {
+  .caura-mesh {
+    background:
+      radial-gradient(
+        ellipse 55% 45% at 18% 22%,
+        color-mix(in oklab, var(--color-brand-300) 55%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 82% 18%,
+        color-mix(in oklab, var(--color-accent-300) 48%, transparent),
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 48% 42% at 58% 75%,
+        color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 35% at 42% 42%,
+        color-mix(in oklab, var(--color-sky-300) 32%, transparent),
+        transparent 65%
+      );
+    animation: caura-mesh-shift 28s ease-in-out infinite;
     will-change: transform, opacity;
-  }
-  .caura-plane--a {
-    animation: caura-drift-a 22s ease-in-out infinite;
-  }
-  .caura-plane--b {
-    animation: caura-drift-b 26s ease-in-out infinite;
-  }
-  .caura-plane--c {
-    animation: caura-drift-c 30s ease-in-out infinite;
+    opacity: 0.85;
   }
 
-  .caura-core {
-    animation: caura-breathe 10s ease-in-out infinite;
-    transform-origin: center;
-    transform-box: fill-box;
+  :global(.dark) .caura-mesh {
+    background:
+      radial-gradient(
+        ellipse 55% 45% at 18% 22%,
+        color-mix(in oklab, var(--color-brand-500) 32%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 82% 18%,
+        color-mix(in oklab, var(--color-accent-500) 28%, transparent),
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 48% 42% at 58% 75%,
+        color-mix(in oklab, var(--color-plasma-500) 22%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 35% at 42% 42%,
+        color-mix(in oklab, var(--color-sky-500) 20%, transparent),
+        transparent 65%
+      );
+    opacity: 0.7;
+  }
+
+  .caura-blob--d {
+    animation: caura-drift-d 24s ease-in-out infinite;
+    will-change: transform, opacity;
   }
 
   .caura-arc {
     fill: none;
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    animation: caura-draw 2.2s var(--ease-out-expo) 0.15s forwards;
-  }
-  .caura-arc--2 {
-    animation-delay: 0.35s;
-  }
-  .caura-arc--3 {
-    animation-delay: 0.55s;
+    animation: caura-draw 2s var(--ease-out-expo) 0.2s forwards;
   }
 
   .caura-dot {
-    animation: caura-dot-in 1s var(--ease-out-expo) 0.9s both;
+    animation: caura-dot-in 1s var(--ease-out-expo) 1s both;
   }
-  .caura-dot--late {
-    animation-delay: 1.15s;
+
+  @keyframes caura-mesh-shift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+    33% {
+      transform: translate3d(2.5%, -2%, 0) scale(1.05) rotate(1.5deg);
+    }
+    66% {
+      transform: translate3d(-2%, 2.5%, 0) scale(0.96) rotate(-1.2deg);
+    }
+  }
+
+  @keyframes caura-drift-d {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(4%, -3%, 0) scale(1.1);
+    }
   }
 
   @keyframes caura-draw {
@@ -154,6 +191,7 @@
       stroke-dashoffset: 0;
     }
   }
+
   @keyframes caura-dot-in {
     from {
       opacity: 0;
@@ -164,61 +202,19 @@
       transform: none;
     }
   }
-  @keyframes caura-breathe {
-    0%,
-    100% {
-      opacity: 0.85;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.06);
-    }
-  }
-  @keyframes caura-drift-a {
-    0%,
-    100% {
-      transform: translate3d(-50%, 0, 0) scale(1);
-      opacity: 0.65;
-    }
-    50% {
-      transform: translate3d(-50%, 2%, 0) scale(1.05);
-      opacity: 0.8;
-    }
-  }
-  @keyframes caura-drift-b {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0);
-      opacity: 0.4;
-    }
-    50% {
-      transform: translate3d(3%, -2%, 0);
-      opacity: 0.55;
-    }
-  }
-  @keyframes caura-drift-c {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0);
-      opacity: 0.35;
-    }
-    50% {
-      transform: translate3d(-2%, 3%, 0);
-      opacity: 0.5;
-    }
-  }
 
-  .is-offscreen .caura-plane,
-  .is-offscreen .caura-core,
+  .is-offscreen .caura-mesh,
+  .is-offscreen .caura-blob,
+  .is-offscreen .caura-blob--d,
   .is-offscreen .caura-arc,
   .is-offscreen .caura-dot {
     animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .caura-plane,
-    .caura-core,
+    .caura-mesh,
+    .caura-blob,
+    .caura-blob--d,
     .caura-dot {
       animation: none;
     }
@@ -230,12 +226,11 @@
 
   @media (max-width: 640px) {
     .caura-svg {
-      opacity: 0.75;
-      top: 2%;
+      opacity: 0.55;
+      top: 4%;
     }
-    .caura-plane--b,
-    .caura-plane--c {
-      opacity: 0.28;
+    .caura-mesh {
+      opacity: 0.65;
     }
   }
 </style>
