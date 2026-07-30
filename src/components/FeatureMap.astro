@@ -6,6 +6,7 @@
 import { localizePath } from '../i18n/utils';
 import type { Lang } from '../i18n/config';
 import { ICON_PATHS } from './icon-paths';
+import FeatureMapArt from './FeatureMapArt.astro';
 import {
   featureMapAppHref,
   type FeatureMapGroup,
@@ -157,6 +158,8 @@ function iconPath(icon: string) {
           </div>
         </div>
 
+        <FeatureMapArt initial={initial?.id} />
+
         <div class="flex flex-wrap gap-2">
           <a
             class="inline-flex h-10 items-center justify-center rounded-full bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-4 text-sm font-medium text-white shadow-sm transition hover:brightness-105"
@@ -223,6 +226,7 @@ function iconPath(icon: string) {
       const openEl = root.querySelector<HTMLAnchorElement>('[data-fm-open]');
       const moreEl = root.querySelector<HTMLAnchorElement>('[data-fm-more]');
       const detailPath = root.querySelector<SVGPathElement>('[data-fm-detail-path]');
+      const scenes = Array.from(root.querySelectorAll<SVGElement>('[data-fm-art]'));
       const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-fm-node]'));
       if (!buttons.length) return;
 
@@ -260,6 +264,10 @@ function iconPath(icon: string) {
         if (titleEl) titleEl.textContent = node.title;
         if (bodyEl) bodyEl.textContent = node.body;
         if (detailPath) detailPath.setAttribute('d', node.iconPath);
+        // Hidden scenes are `display: none`, so showing one replays its intro.
+        scenes.forEach((scene) => {
+          scene.classList.toggle('is-active', scene.getAttribute('data-fm-art') === id);
+        });
         if (openEl) {
           openEl.href = node.openHref;
           openEl.textContent = node.openLabel;

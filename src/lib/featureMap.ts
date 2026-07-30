@@ -104,10 +104,10 @@ function resolveCopy(
   const grid = local.get('grid') ?? en.get('grid');
 
   let copy = local.get(icon) ?? en.get(icon);
+  // `themes` and `dock` need no fallback of their own: their icons *are* `moon`
+  // and `grid`, so the lookup above already resolved them.
   if (!copy && surfaceId === 'settings' && moon) copy = moon;
-  if (!copy && surfaceId === 'themes' && moon) copy = moon;
   if (!copy && surfaceId === 'toolbar' && grid) copy = grid;
-  if (!copy && surfaceId === 'dock' && grid) copy = grid;
   if (!copy) {
     copy = { icon, title: surfaceId, body: '' };
   }
