@@ -508,11 +508,11 @@ const swatches = [
     ))}
 
     <g class="fma-float" style="--d:.6s">
-      <rect x="150" y="150" width="98" height="32" rx="11" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
+      <rect x="24" y="156" width="98" height="32" rx="11" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
       {[0, 1, 2].map((n) => (
-        <circle class="fma-blink" style={`--d:${n * 0.22}s`} cx={170 + n * 14} cy="166" r="4" fill="var(--fma-brand)" />
+        <circle class="fma-blink" style={`--d:${n * 0.22}s`} cx={44 + n * 14} cy="172" r="4" fill="var(--fma-brand)" />
       ))}
-      <rect class="fma-bar" x="212" y="162" width="26" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="86" y="168" width="26" height="6" rx="3"></rect>
     </g>
   </svg>
 
@@ -556,10 +556,6 @@ const swatches = [
       <rect class="fma-progress" style="--d:.7s" x="126" y="134" width="68" height="16" rx="8" fill="var(--fma-brand)"></rect>
     </g>
 
-    <g class="fma-coin">
-      <circle cx="0" cy="0" r="9" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.3" transform="translate(160 176)"></circle>
-      <circle cx="0" cy="0" r="3.4" fill="var(--fma-brand)" transform="translate(160 176)"></circle>
-    </g>
   </svg>
 
   <!-- Realtime chats -->
@@ -823,8 +819,8 @@ const swatches = [
       </g>
     ))}
     <g class="fma-pop" style="--d:1.1s">
-      <circle cx="205" cy="150" r="7.5" fill="var(--fma-brand)"></circle>
-      <circle class="fma-ripple" cx="205" cy="150" r="7.5" fill="none" stroke="var(--fma-brand)" stroke-width="1.2"></circle>
+      <circle cx="209" cy="147" r="6" fill="var(--fma-brand)" stroke="var(--fma-panel-solid)" stroke-width="2"></circle>
+      <circle class="fma-ripple" cx="209" cy="147" r="6" fill="none" stroke="var(--fma-brand)" stroke-width="1.2"></circle>
     </g>
   </svg>
 </div>
@@ -964,9 +960,6 @@ const swatches = [
   }
   .fma-cursor {
     animation: fma-cursor 6s ease-in-out infinite;
-  }
-  .fma-coin {
-    animation: fma-coin 3.2s ease-in-out infinite;
   }
   .fma-check {
     stroke-dasharray: 1;
@@ -1176,19 +1169,6 @@ const swatches = [
       transform: translate(168px, 104px);
     }
   }
-  @keyframes fma-coin {
-    0% {
-      opacity: 0;
-      transform: translate(0, 0) scale(0.6);
-    }
-    25% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      transform: translate(46px, -104px) scale(1);
-    }
-  }
   @keyframes fma-check-dot {
     from {
       opacity: 0;
@@ -1313,7 +1293,6 @@ const swatches = [
       stroke-dashoffset: 0;
     }
     .fma-packet,
-    .fma-coin,
     .fma-sweep,
     .fma-swap-alt,
     .fma-swatch-alt {
