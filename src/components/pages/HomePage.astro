@@ -11,7 +11,6 @@ import Automate from '../sections/Automate.astro';
 import BotsAgents from '../sections/BotsAgents.astro';
 import Connectors from '../sections/Connectors.astro';
 import Privacy from '../sections/Privacy.astro';
-import Roadmap from '../sections/Roadmap.astro';
 import Plans from '../sections/Plans.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
@@ -75,7 +74,6 @@ const sections = [
   { id: 'bots-agents', label: t.botsAgents?.eyebrow ?? 'Bots & Agents' },
   { id: 'connectors', label: t.connectors.eyebrow },
   { id: 'privacy', label: t.privacy.eyebrow },
-  { id: 'roadmap', label: t.roadmap.eyebrow },
   { id: 'plans', label: t.plans.eyebrow },
   { id: 'faq', label: t.faq.eyebrow },
   { id: 'cta', label: t.cta.primary },
@@ -99,7 +97,6 @@ const sections = [
   <BotsAgents lang={lang} />
   <Connectors lang={lang} />
   <Privacy lang={lang} />
-  <Roadmap lang={lang} />
   <Plans lang={lang} />
   <Faq lang={lang} group="home-faq" />
   <CtaBand lang={lang} />
