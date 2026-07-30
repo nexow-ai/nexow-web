@@ -579,6 +579,37 @@ export const ko: SiteContent = {
       primary: 'Nexow 실행',
       secondary: '기능 살펴보기',
     },
+    appShowcase: {
+      eyebrow: '앱에서 그대로',
+      title: '목업이 아닙니다 — 이것이 Nexow입니다',
+      subtitle: '실제 워크스페이스를 캔버스에서 캡처했습니다. 한 문장이 들어가고, 연결된 위젯 한 세트가 나옵니다.',
+      badge: '실제 스크린샷',
+      cta: '직접 사용해 보기',
+      ctaNote: '무료 · 신용카드 불필요 · 브라우저에서 실행',
+      shots: [
+        {
+          label: '트레이딩 데스크',
+          prompt: '크립토 데스크를 만들어줘: 캔들 차트, 관심목록, 오더북 심도, 히트맵, 파생상품.',
+          alt: 'BTC 캔들 차트, 크립토 관심목록, 오더북 심도, 마켓 히트맵, 파생상품, 예측 시장 위젯이 있는 Nexow 워크스페이스',
+          chip: '실시간 시장 데이터 · Binance, BitMEX, Kalshi',
+          caption: '트레이더를 위해: 모든 위젯이 공개 API에서 실제 시장 데이터를 스트리밍합니다 — 수동으로 설정할 것이 없습니다.',
+        },
+        {
+          label: '프로젝트 보드',
+          prompt: '프로젝트 커맨드 센터를 만들어줘: 칸반 보드, 간트 타임라인, KPI, 리스크, 팀 업무량.',
+          alt: '칸반 프로젝트 보드, 간트 타임라인, KPI 스코어카드, 리스크 레지스터, 팀 업무량, 스프린트 번다운 위젯이 있는 Nexow 워크스페이스',
+          chip: '38개 작업 · 7명 · 하나의 캔버스',
+          caption: '프로젝트 리더를 위해: 스프린트 보드, 번다운, 리스크 레지스터가 함께 생성되어 팀이 읽는 방식대로 배치됩니다.',
+        },
+        {
+          label: '창업자 본부',
+          prompt: '1인 창업자 대시보드를 만들어줘: 리드 파이프라인, 출시 체크리스트, 콘텐츠 캘린더, MRR 차트, 빠른 메모.',
+          alt: '리드 파이프라인, MRR 및 이탈률 KPI가 있는 매출 대시보드, 제품 출시 체크리스트, 주간 콘텐츠 캘린더, 메모 위젯이 있는 Nexow 워크스페이스',
+          chip: '파이프라인, MRR, 출시 계획 · 프롬프트 하나',
+          caption: '1인 창업자를 위해: 프롬프트 하나로 위젯 다섯 개 — 파이프라인, 매출 KPI, 출시 계획, 콘텐츠 캘린더, 메모.',
+        },
+      ],
+    },
   },
   communityPage: {
     meta: {
@@ -1298,6 +1329,26 @@ export const ko: SiteContent = {
         grandArchitect: '대건축가',
         overmind: '오버마인드',
       },
+      how: {
+        accountAgeDays: '계정을 유지하세요 — Nexow에 가입한 날부터의 일수로 계산됩니다.',
+        posts: '커뮤니티 피드에 게시글을 올리세요.',
+        likesReceived: '게시글과 공개한 작업에 좋아요를 받으세요.',
+        commentsWritten: '다른 사람의 게시글에 댓글을 작성하세요.',
+        commentsReceived: '내 게시글에 댓글을 받으세요.',
+        followers: '프로필에서 팔로워를 늘리세요.',
+        following: 'Nexow에서 다른 사람을 팔로우하세요.',
+        contacts: '맞팔 연락처를 늘리세요 — 서로 팔로우하는 사람들.',
+        widgetsBuilt: '캔버스에서 위젯을 만드세요.',
+        assetsPublished: '마켓플레이스에 애셋을 게시하세요.',
+        installsReceived: '공개한 위젯, 봇, 테마가 설치되도록 하세요.',
+        boards: '프로필에 보드를 만드세요.',
+        bots: '봇을 만들고 실행하세요.',
+        reportsFiled: '커뮤니티를 건전하게 유지하는 신고를 제출하세요.',
+        likesGiven: '다른 사람의 게시글에 좋아요를 누르세요.',
+        reactionsGiven: '이모지로 게시글에 반응하세요.',
+        nightPosts: '현지 시각 00:00~05:00 사이에 게시글을 올리세요.',
+        dmThreads: '다른 사람과 다이렉트 메시지 대화를 시작하세요.',
+      },
     },
     ledger: {
       title: '보상 사다리',
@@ -1323,6 +1374,66 @@ export const ko: SiteContent = {
       tokensLabel: 'NXW',
       worth: '≈ 정가 기준 {usd}어치 AI 생성',
       months: '= Sponsor 수준 생성 {n}개월치를 직접 벌어들이는 셈',
+      tokenomics: {
+        eyebrow: 'NXW · Solana',
+        title: '토큰 하나. 다섯 가지 역할. 최대 2천만 개.',
+        body: 'NXW는 DAO가 실제로 작동하는 방식입니다 — 로드맵 슬라이드에 붙은 스티커가 아닙니다. 투표하고, 자금을 대고, 벌고, 쓰고, 뜻밖의 보상을 받으세요. 규칙은 변경할 수 없고, 토큰은 전송 가능하며, 거래됩니다.',
+        traits: [
+          '변경 불가',
+          '전송 가능',
+          '거래 가능',
+        ],
+        facts: [
+          {
+            label: 'Dry mint',
+            value: '2026년 8월 14일',
+            note: 'NXW가 Solana에서 가동됩니다. 날짜를 기억해 두세요.',
+          },
+          {
+            label: '유틸리티 풀',
+            value: '1,000만 NXW',
+            note: '상품과 서비스로 교환될 때 발행되고 소각됩니다.',
+          },
+          {
+            label: '공개 민팅',
+            value: '1,000만 · 1 USDC',
+            note: 'dry mint 당일에는 누구나 DAO에서 민팅할 수 있습니다 — 개당 1 USDC.',
+          },
+          {
+            label: '하드 캡',
+            value: '2,000만 NXW',
+            note: '유틸리티 + 공개 민팅. 그것이 상한입니다.',
+          },
+        ],
+        usesTitle: '무엇을 할 수 있나요',
+        uses: [
+          {
+            icon: 'vote',
+            title: '거버넌스',
+            body: '기능, 커넥터, 규칙을 제안하세요. NXW를 보유하고 아이디어를 투표에 올리고 공개적으로 투표하세요.',
+          },
+          {
+            icon: 'vault',
+            title: '트레저리',
+            body: '공동 자금을 운용하세요 — 바운티, 그랜트, 그리고 커뮤니티가 다음에 지원할 것들.',
+          },
+          {
+            icon: 'coins',
+            title: '배당',
+            body: 'DAO가 분배할 때 보유자는 몫을 받습니다. 직접 참여한 만큼, 온체인으로 지급됩니다.',
+          },
+          {
+            icon: 'sparkles',
+            title: '크레딧 구매',
+            body: 'NXW를 AI 연료로 쓰세요 — 위젯을 생성하고 다듬는 데 쓰는 바로 그 크레딧입니다.',
+          },
+          {
+            icon: 'gift',
+            title: '랜덤 보상',
+            body: '드롭, 서프라이즈, 복권식 지급. 충분히 만들면 DAO가 되돌려줄 수도 있습니다.',
+          },
+        ],
+      },
     },
     dao: {
       title: 'DAO는 그것으로 무엇을 하나요',
