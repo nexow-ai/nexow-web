@@ -78,7 +78,7 @@ export const ms = {
         'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 90 penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
     },
     hero: {
-      badge: 'Pratonton kini langsung',
+      badge: 'Akses awal',
       titleLead: 'Terangkan.',
       titleGradient: 'Nexow membinanya.',
       titleTail: 'Dagangannya.',

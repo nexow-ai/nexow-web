@@ -78,7 +78,7 @@ export const it: SiteContent = {
         'Nexow è un workspace AI-native per i mercati. Descrivi un widget in linguaggio naturale e Nexow lo costruisce, lo collega ai dati in tempo reale di oltre 45 connettori e aggiunge bot cloud, agenti AI, una community di maker e ricompense XP — privato di default, gratis per iniziare.',
     },
     hero: {
-      badge: 'Anteprima ora disponibile',
+      badge: 'Accesso anticipato',
       titleLead: 'Descrivilo.',
       titleGradient: 'Nexow lo costruisce.',
       titleTail: 'Fai trading.',

@@ -78,7 +78,7 @@ export const de: SiteContent = {
         'Nexow ist ein KI-nativer Workspace für Märkte. Beschreibe ein Widget in einfacher Sprache und Nexow baut es, verbindet es mit Live-Daten aus über 45 Konnektoren und ergänzt Cloud-Bots, KI-Agenten, eine Maker-Community und XP-Belohnungen — standardmäßig privat, kostenlos zum Start.',
     },
     hero: {
-      badge: 'Preview jetzt live',
+      badge: 'Früher Zugang',
       titleLead: 'Beschreib es.',
       titleGradient: 'Nexow baut es.',
       titleTail: 'Handle es.',

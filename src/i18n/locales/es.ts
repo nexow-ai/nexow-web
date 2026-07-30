@@ -78,7 +78,7 @@ export const es: SiteContent = {
         'Nexow es un espacio de trabajo nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo crea, lo conecta a datos en vivo de más de 45 conectores y suma bots en la nube, agentes de IA, una comunidad de makers y recompensas XP — privado por defecto, gratis para empezar.',
     },
     hero: {
-      badge: 'Preview ya disponible',
+      badge: 'Acceso anticipado',
       titleLead: 'Descríbelo.',
       titleGradient: 'Nexow lo crea.',
       titleTail: 'Opéralo.',

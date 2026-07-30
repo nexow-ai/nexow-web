@@ -78,7 +78,7 @@ export const ja: SiteContent = {
         'Nexow は市場向けの AI ネイティブなワークスペースです。自然な言葉でウィジェットを説明するだけで、Nexow が構築し、45 以上のコネクタからのライブデータに接続。さらにクラウドボット、AI エージェント、メイカーコミュニティ、XP 報酬を追加します。デフォルトでプライベート、無料で始められます。',
     },
     hero: {
-      badge: 'プレビュー公開中',
+      badge: '早期アクセス',
       titleLead: '説明する。',
       titleGradient: 'Nexow が構築する。',
       titleTail: '取引する。',

@@ -78,7 +78,7 @@ export const zh: SiteContent = {
         'Nexow 是一个面向市场的 AI 原生工作区。用平实的中文描述一个组件，Nexow 就会构建它、接入来自 90 连接器的实时数据，并加入云端机器人、AI 智能体、创作者社区和 XP 奖励——默认私密，免费起步。',
     },
     hero: {
-      badge: '预览版现已上线',
+      badge: '抢先体验',
       titleLead: '描述它。',
       titleGradient: 'Nexow 构建它。',
       titleTail: '交易它。',

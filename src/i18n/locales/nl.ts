@@ -78,7 +78,7 @@ export const nl: SiteContent = {
         'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 90 connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
     },
     hero: {
-      badge: 'Preview nu live',
+      badge: 'Vroege toegang',
       titleLead: 'Beschrijf het.',
       titleGradient: 'Nexow bouwt het.',
       titleTail: 'Verhandel het.',

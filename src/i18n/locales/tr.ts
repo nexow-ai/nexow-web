@@ -78,7 +78,7 @@ export const tr = {
         'Nexow, piyasalar için yapay zeka tabanlı bir çalışma alanıdır. Sade İngilizce ile bir widget açıklayın ve Nexow onu kurar, 90 bağlantıdan canlı verilere bağlar ve bulut botları, yapay zeka ajanları, bir yapıcı topluluğu ve XP ödülü ekler — varsayılan olarak özel, başlangıç için ücretsiz.',
     },
     hero: {
-      badge: 'Ön izleme şimdi canlı',
+      badge: 'Erken erişim',
       titleLead: 'Açıklayın.',
       titleGradient: 'Nexow kurar.',
       titleTail: 'Ticaret yapın.',

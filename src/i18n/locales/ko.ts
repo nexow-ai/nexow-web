@@ -78,7 +78,7 @@ export const ko: SiteContent = {
         'Nexow는 마켓을 위한 AI 네이티브 워크스페이스입니다. 위젯을 자연어로 설명하면 Nexow가 만들고, 45개 이상의 커넥터에서 실시간 데이터를 연결한 후 클라우드 봇, AI 에이전트, 메이커 커뮤니티 및 XP 보상을 추가합니다 — 기본적으로 개인정보 보호, 무료로 시작.',
     },
     hero: {
-      badge: '미리보기 현재 라이브',
+      badge: '얼리 액세스',
       titleLead: '설명하세요.',
       titleGradient: 'Nexow가 만듭니다.',
       titleTail: '거래하세요.',

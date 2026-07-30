@@ -78,7 +78,7 @@ export const fr: SiteContent = {
         'Nexow transforme vos idées en widgets vivants sur un canvas. Créez moodboards, planners, mini-jeux, widgets sociaux, dashboards de marché ou outils personnalisés sans repartir de zéro.',
     },
     hero: {
-      badge: 'Preview disponible',
+      badge: 'Accès anticipé',
       titleLead: 'Décrivez.',
       titleGradient: 'Obtenez un widget.',
       titleTail: 'Organisez.',
@@ -87,7 +87,7 @@ export const fr: SiteContent = {
         'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir la démo',
-      note: 'Preview en ligne · 90 connecteurs · 10K crédits de départ',
+      note: 'Aucun compte pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits réservés',
       promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
       promptExamplesLabel: 'Ou partez d’un exemple',
