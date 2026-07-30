@@ -39,6 +39,22 @@ const tokens = (s: string) => [...s.matchAll(/\{[a-zA-Z]+\}/g)].map(([m]) => m).
 const stripAddresses = (s: string) =>
   s.replace(/https?:\/\/\S+/g, ' ').replace(/[\w.+-]+@[\w.-]+/g, ' ');
 
+/**
+ * The numeric amount in a price string, ignoring currency symbol, digit grouping
+ * and decimal separator. `null` for a quoted price like "Custom".
+ */
+function amount(price: string): number | null {
+  const digits = price.replace(/[^\d.,]/g, '');
+  if (!/\d/.test(digits)) return null;
+  // Whichever separator comes last is the decimal one.
+  const normalized =
+    digits.lastIndexOf(',') > digits.lastIndexOf('.')
+      ? digits.replace(/\./g, '').replace(',', '.')
+      : digits.replace(/,/g, '');
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : null;
+}
+
 /** Leaves that are identifiers rather than prose, so translation rules do not apply. */
 const isIdentifier = (path: string) =>
   /\b(href|ctaHref|url|icon|id|key|src|logo|banner|placeholder)\b/i.test(path) ||
@@ -147,12 +163,13 @@ describe.each(PREFIXED_LANGS)('%s translations', (lang) => {
 });
 
 describe('shared facts across locales', () => {
-  it('quotes the same plan prices everywhere', () => {
-    const prices = (lang: Lang) =>
-      useContent(lang).plansPage.tiers.map((t) => [t.priceMonthly, t.priceYearly].join('/'));
-    const reference = prices('en');
+  it('quotes the same plan amounts everywhere, however the currency is formatted', () => {
+    // Presentation is localized ("$9.99" vs "9,99 €"); the amount must not be.
+    const amounts = (lang: Lang) =>
+      useContent(lang).plansPage.tiers.map((t) => [amount(t.priceMonthly), amount(t.priceYearly)]);
+    const reference = amounts('en');
     for (const lang of PREFIXED_LANGS) {
-      expect(prices(lang), `${lang} prices drifted`).toEqual(reference);
+      expect(amounts(lang), `${lang} plan amounts drifted`).toEqual(reference);
     }
   });
 
@@ -188,9 +205,11 @@ describe('shared facts across locales', () => {
       const titles = metas.map(([, m]) => m.title);
       expect(new Set(titles).size, `${lang} repeats a meta title`).toBe(titles.length);
 
+      // CJK packs far more meaning per character, so the floor is script-aware.
+      const floor = ['zh', 'ja', 'ko'].includes(lang) ? 20 : 50;
       for (const [page, meta] of metas) {
         expect(meta.title.trim(), `${lang}.${page}.meta.title`).not.toBe('');
-        expect(meta.description.length, `${lang}.${page}.meta.description too short`).toBeGreaterThan(50);
+        expect(meta.description.length, `${lang}.${page}.meta.description too short`).toBeGreaterThan(floor);
         expect(meta.description.length, `${lang}.${page}.meta.description too long`).toBeLessThan(400);
       }
     }
