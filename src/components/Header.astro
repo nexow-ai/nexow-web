@@ -8,8 +8,18 @@ import Button from './Button.astro';
 import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
+interface Props {
+  /**
+   * Route the language switcher should point at, when it differs from the
+   * current one — a page with no localized twin (404) sends you to the
+   * locale home rather than a URL that does not exist.
+   */
+  switchRoute?: string;
+}
+
 const lang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
+const switchRoute = Astro.props.switchRoute ?? route;
 const t = useContent(lang);
 
 const links = t.nav.links.map((l) => ({
@@ -77,7 +87,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
               otherLangs.map((l) => (
                 <li>
                   <a
-                    href={localizePath(route, l)}
+                    href={localizePath(switchRoute, l)}
                     class="block px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-600 transition-colors hover:bg-ink-900/5 hover:text-ink-950 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white"
                   >
                     {languages[l]}
@@ -155,7 +165,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
           {
             otherLangs.map((l) => (
               <a
-                href={localizePath(route, l)}
+                href={localizePath(switchRoute, l)}
                 class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider text-ink-600 dark:text-ink-300"
               >
                 <Icon name="globe" class="size-4" />

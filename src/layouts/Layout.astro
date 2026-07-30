@@ -83,7 +83,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
     {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
     <DotField class="fixed inset-0 z-0" />
 
-    <Header />
+    <Header switchRoute={head.noindex ? '/' : route} />
 
     {
       sections && sections.length > 0 && (
