@@ -37,9 +37,15 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
 </style>
 
 <script>
-  const STORAGE_KEY = 'nexow-theme';
-
-  type Theme = 'light' | 'dark';
+  import {
+    THEME_CHANGE_EVENT,
+    THEME_STORAGE_KEY as STORAGE_KEY,
+    faviconHref,
+    nextTheme,
+    themeColor,
+    toggleLabel,
+    type Theme,
+  } from '../lib/theme';
 
   function currentTheme(): Theme {
     return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
@@ -55,22 +61,25 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
     }
 
     const meta = document.querySelector('meta[name="theme-color"]:not([media])');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#08090d' : '#06a086');
+    if (meta) meta.setAttribute('content', themeColor(theme));
 
     const favicon = document.getElementById('site-favicon') as HTMLLinkElement | null;
-    if (favicon) favicon.href = theme === 'dark' ? '/favicon.png' : '/favicon-black.png';
+    if (favicon) favicon.href = faviconHref(theme);
 
-    document.dispatchEvent(new CustomEvent('nexow:themechange', { detail: { theme } }));
+    document.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
   }
 
   function syncToggle(btn: HTMLButtonElement) {
-    const dark = currentTheme() === 'dark';
-    btn.setAttribute('aria-label', dark ? btn.dataset.toLight! : btn.dataset.toDark!);
-    btn.setAttribute('aria-pressed', String(dark));
+    const theme = currentTheme();
+    btn.setAttribute(
+      'aria-label',
+      toggleLabel(theme, { toDark: btn.dataset.toDark!, toLight: btn.dataset.toLight! }),
+    );
+    btn.setAttribute('aria-pressed', String(theme === 'dark'));
   }
 
   async function toggleTheme(btn: HTMLButtonElement) {
-    const next: Theme = currentTheme() === 'dark' ? 'light' : 'dark';
+    const next: Theme = nextTheme(currentTheme());
     const reduce =
       window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
       typeof document.startViewTransition !== 'function';

@@ -1,6 +1,12 @@
 ---
 import { SITE, SOCIALS, languages, type Lang } from '../i18n/config';
 import { localizePath, getAlternates, withTrailingSlash, ogLocale } from '../i18n/utils';
+import {
+  THEME_CHANGE_EVENT,
+  THEME_COLORS,
+  THEME_FAVICONS,
+  THEME_STORAGE_KEY,
+} from '../lib/theme';
 import '../styles/global.css';
 
 interface Props {
@@ -84,33 +90,44 @@ const allSchema = [orgSchema, ...schema];
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16-black.png" media="(prefers-color-scheme: light)" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" media="(prefers-color-scheme: dark)" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script is:inline>
+{/* Runs before paint, so it cannot import — the values come from src/lib/theme
+    via define:vars, keeping one source of truth with ThemeToggle. */}
+<script
+  is:inline
+  define:vars={{
+    storageKey: THEME_STORAGE_KEY,
+    colors: THEME_COLORS,
+    favicons: THEME_FAVICONS,
+    changeEvent: THEME_CHANGE_EVENT,
+  }}
+>
   (function () {
     function isDark() {
       if (document.documentElement.dataset.themeLocked !== undefined) {
         return document.documentElement.classList.contains('dark');
       }
       try {
-        var stored = localStorage.getItem('nexow-theme');
+        var stored = localStorage.getItem(storageKey);
         if (stored === 'dark' || stored === 'light') return stored === 'dark';
       } catch (e) {}
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     function apply() {
+      var theme = isDark() ? 'dark' : 'light';
       var link = document.getElementById('site-favicon');
       if (!link) return;
-      link.href = isDark() ? '/favicon.png' : '/favicon-black.png';
+      link.href = favicons[theme];
       var meta = document.querySelector('meta[name="theme-color"]:not([media])');
-      if (meta) meta.setAttribute('content', isDark() ? '#08090d' : '#06a086');
+      if (meta) meta.setAttribute('content', colors[theme]);
     }
     apply();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', apply);
-    document.addEventListener('nexow:themechange', apply);
+    document.addEventListener(changeEvent, apply);
   })();
 </script>
-<meta name="theme-color" content="#06a086" />
-<meta name="theme-color" content="#06a086" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#08090d" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content={THEME_COLORS.light} />
+<meta name="theme-color" content={THEME_COLORS.light} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={THEME_COLORS.dark} media="(prefers-color-scheme: dark)" />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
