@@ -1,6 +1,6 @@
 ---
 title: 'Reputation, badges and the reward ladder: what building on Nexow earns you'
-description: 'Every post, widget, bot and publish feeds one score. 34 badges in three rarities, five levels, and a reward ladder that pays a complete set 1,600,000 credits and 25,000 NEXO when the DAO opens.'
+description: 'Every post, widget, bot and publish feeds one score. 34 badges in three rarities, five levels, and a reward ladder that pays a complete set 1,600,000 credits and 25,000 NXW when the DAO opens.'
 pubDate: 2026-07-28
 heroImage: ../../../assets/blog/rewards.svg
 tags: ['product', 'reputation', 'rewards']
@@ -71,32 +71,32 @@ the strip is already populated with whatever you've built so far.
 
 Here's the part that ships with the DAO. Each unlock is scheduled to pay twice:
 in **credits**, the spendable AI generation you use to build widgets, and in
-**NEXO**, the governance token of the Nexow DAO.
+**NXW**, the Solana governance token of the Nexow DAO.
 
 Badge unlocks, per badge:
 
-- **Bronze tier** — 500 credits + 10 NEXO, on each of 18 badges
-- **Silver tier** — 1,500 credits + 25 NEXO, on each of 18 badges
-- **Gold tier** — 5,000 credits + 90 NEXO, on each of 18 badges
-- **Rare medal** — 25,000 credits + 250 NEXO, on each of 10 medals
-- **Legendary medal** — 100,000 credits + 1,000 NEXO, on each of 6 medals
+- **Bronze tier** — 500 credits + 10 NXW, on each of 18 badges
+- **Silver tier** — 1,500 credits + 25 NXW, on each of 18 badges
+- **Gold tier** — 5,000 credits + 90 NXW, on each of 18 badges
+- **Rare medal** — 25,000 credits + 250 NXW, on each of 10 medals
+- **Legendary medal** — 100,000 credits + 1,000 NXW, on each of 6 medals
 
 Level-ups, claimed once each:
 
-- **Reach Silver** — 4,000 credits + 250 NEXO
-- **Reach Gold** — 20,000 credits + 1,000 NEXO
-- **Reach Platinum** — 100,000 credits + 3,000 NEXO
-- **Reach Legend** — 500,000 credits + 10,000 NEXO
+- **Reach Silver** — 4,000 credits + 250 NXW
+- **Reach Gold** — 20,000 credits + 1,000 NXW
+- **Reach Platinum** — 100,000 credits + 3,000 NXW
+- **Reach Legend** — 500,000 credits + 10,000 NXW
 
 Claim every tier, every medal and every level and the complete set comes to
-**1,600,000 credits and 25,000 NEXO**. At the list rate of $87 per million
+**1,600,000 credits and 25,000 NXW**. At the list rate of $87 per million
 credits, that's roughly **$139 of AI generation** — about two months of
 Sponsor-grade building, earned rather than billed.
 
 Same schedule for everyone, on every plan, **including Free**.
 
 We're publishing the numbers before they're live on purpose. Points, badges and
-levels work today; the credit and NEXO payouts arrive with the DAO, and this
+levels work today; the credit and NXW payouts arrive with the DAO, and this
 schedule is the proposal going to the first ballot. Every surface that shows it
 carries a *planned* chip until it does.
 

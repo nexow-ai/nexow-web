@@ -1,6 +1,6 @@
 ---
-title: 'The Nexow DAO: NEXO, open ballots and a treasury the community steers'
-description: 'NEXO is the governance token you earn by building. Propose features, vote in public, fund bounties from a shared treasury — and earn on referrals and followers while the ledger comes online.'
+title: 'The Nexow DAO: NXW, open ballots and a treasury the community steers'
+description: 'NXW is the Solana token for governance, treasury, dividends, credits, and random rewards. Dry mint August 14, 2026 — 20M hard cap, open mint at 1 USDC.'
 pubDate: 2026-07-29
 heroImage: ../../../assets/blog/dao.svg
 tags: ['product', 'community', 'dao']
@@ -13,29 +13,33 @@ teaser — the ballots, the treasury and the reward ledger are still landing —
 what it teases is the part of Nexow we're least willing to keep to ourselves:
 **who decides what gets built next**.
 
-## NEXO: earned by building, spent by voting
+## NXW: five jobs, one Solana token
 
-**NEXO** is the governance token of the Nexow DAO. You don't buy your way in.
-You earn it the same way you earn reputation — by publishing widgets, running
-bots, shipping assets other people install, and climbing the badge ladder. Then
-you spend it on the only thing it's for: steering the product.
+**NXW** is the Solana token of the Nexow DAO. You earn it by building — publishing
+widgets, running bots, shipping assets other people install, climbing the badge
+ladder — and you use it for more than a vanity vote:
 
-Four things it does:
+- **Governance** — propose features, connectors and rules; hold NXW and put ideas
+  on the ballot.
+- **Treasury** — steer a shared pot that funds bounties and grants.
+- **Dividends** — holders get a cut when the DAO distributes on-chain.
+- **Buy credits** — spend NXW for AI fuel on the canvas.
+- **Random rewards** — drops and lottery-style payouts from the DAO.
 
-- **Propose** — pitch features, connectors and rules. Anyone holding NEXO can
-  put an idea on the ballot.
-- **Vote** — public, transparent votes decide what gets built next and in what
-  order.
-- **Treasury** — a shared treasury funds the bounties and grants the community
-  votes in.
-- **Creator rewards** — builders earn a share when the DAO ships and promotes
-  their work.
+It is **immutable**, **transferable**, and **traded**. Utility NXW is minted and
+burned when exchanged for goods and services.
 
-**10% of the NEXO supply is reserved** for the community reward ladder: the
-credits-and-tokens schedule attached to every badge tier, rare medal and level
-you unlock. Governance weight comes out of the same pool that rewards building,
-which is the point — the people shipping the most work end up holding the most
-say.
+### Dry mint — August 14, 2026
+
+On dry-mint day, NXW goes live on Solana with a **20M hard cap**:
+
+- **10M utility pool** — minted and burned when spent on goods & services
+  (including the community reward ladder).
+- **10M open mint** — anyone can mint in the DAO that day at **1 USDC each**.
+
+The ladder on the plans page pays from the utility pool. Governance weight and
+builder rewards come out of the same economy — the people shipping the most work
+end up with the most say.
 
 ## The first ballots
 
@@ -45,7 +49,7 @@ decorative:
 - Fund a community widget bounty program
 - Revenue share for marketplace creators
 - Open-source the widget runtime
-- Lower the NEXO proposal threshold to 1,000
+- Lower the NXW proposal threshold to 1,000
 - Cut Solana marketplace fees to 2.5%
 - Elect community research board moderators
 
@@ -72,7 +76,7 @@ Alongside the DAO, the community track is getting **referrals**. The shape:
   ships or upgrades, you earn a cut of the upside.
 - **Earn from new followers** — attract an audience and get rewarded as your
   network grows. Reputation that pays both ways.
-- **Credits now, NEXO later** — early rewards land as credits; NEXO-tied bonuses
+- **Credits now, NXW later** — early rewards land as credits; NXW-tied bonuses
   unlock with the DAO. Same reputation surface, new ways to earn.
 
 Your invite link already deep-links into the app, so anyone you send arrives with
@@ -82,7 +86,7 @@ ledger backfills nothing, and handles are first come, first served.
 ## Honest about what's live
 
 Reputation, badges, levels, the feed and the USDC marketplace are **live in the
-app today**. Referral payouts and the DAO — ballots, treasury, NEXO — are
+app today**. Referral payouts and the DAO — ballots, treasury, NXW — are
 **coming**, and every surface that mentions them says so rather than quietly
 implying otherwise.
 
