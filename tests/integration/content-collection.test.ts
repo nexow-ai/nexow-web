@@ -13,6 +13,27 @@ const BLOG_CONTENT = path.join(ROOT, 'src/content/blog');
 
 const all = await getCollection('blog');
 
+/**
+ * The collection schema is a factory so Astro can inject `image()`. Resolve it
+ * once with a stand-in image type, and validate frontmatter against it.
+ */
+type Frontmatter = {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  author: string;
+  tags: string[];
+  draft: boolean;
+};
+
+function blogSchema(): { parse: (value: unknown) => Frontmatter } {
+  const factory = collections.blog as unknown as {
+    schema: (context: { image: () => unknown }) => { parse: (value: unknown) => Frontmatter };
+  };
+  return factory.schema({ image: () => z.string() });
+}
+
 describe('blog collection config', () => {
   it('loads markdown and MDX from the per-locale content tree', () => {
     expect(collections.blog).toBeDefined();
@@ -20,9 +41,7 @@ describe('blog collection config', () => {
   });
 
   it('validates a well-formed entry through the shipped schema', () => {
-    // The schema is a factory so `image()` can be injected by Astro.
-    const schema = (collections.blog as { schema: (ctx: { image: () => z.ZodTypeAny }) => z.ZodTypeAny })
-      .schema({ image: () => z.string() });
+    const schema = blogSchema();
 
     const parsed = schema.parse({
       title: 'Hello',
@@ -40,8 +59,7 @@ describe('blog collection config', () => {
   });
 
   it('accepts the optional fields posts actually use', () => {
-    const schema = (collections.blog as { schema: (ctx: { image: () => z.ZodTypeAny }) => z.ZodTypeAny })
-      .schema({ image: () => z.string() });
+    const schema = blogSchema();
 
     const parsed = schema.parse({
       title: 'Hello',
@@ -58,8 +76,7 @@ describe('blog collection config', () => {
   });
 
   it('rejects an entry missing the required frontmatter', () => {
-    const schema = (collections.blog as { schema: (ctx: { image: () => z.ZodTypeAny }) => z.ZodTypeAny })
-      .schema({ image: () => z.string() });
+    const schema = blogSchema();
 
     expect(() => schema.parse({ description: 'no title', pubDate: '2026-01-02' })).toThrow();
     expect(() => schema.parse({ title: 'no date', description: 'x' })).toThrow();

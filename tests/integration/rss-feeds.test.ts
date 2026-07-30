@@ -19,6 +19,21 @@ function localeOfEndpoint(file: string): Lang {
 
 const feeds = Object.entries(endpoints).map(([file, mod]) => [localeOfEndpoint(file), mod] as const);
 
+/**
+ * Decode the entities `@astrojs/rss` emits, so assertions can compare against
+ * the copy as authored instead of guessing which escaping style it used.
+ */
+function decodeXml(xml: string): string {
+  return xml
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(parseInt(code, 16)))
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 describe('RSS endpoints', () => {
   it('ships one feed per locale', () => {
     const locales = feeds.map(([lang]) => lang);
@@ -43,12 +58,10 @@ describe.each(feeds)('%s feed', (lang, mod) => {
   });
 
   it('titles and describes the channel from the locale bundle', async () => {
-    const xml = await (await render()).text();
+    const xml = decodeXml(await (await render()).text());
     const t = useContent(lang).blog.meta;
-    // The generator escapes copy, so compare on the escaped form.
-    const escape = (s: string) => s.replace(/&/g, '&#38;').replace(/</g, '&#60;');
-    expect(xml).toContain(`<title>${escape(t.title)}</title>`);
-    expect(xml).toContain(`<description>${escape(t.description)}</description>`);
+    expect(xml).toContain(`<title>${t.title}</title>`);
+    expect(xml).toContain(`<description>${t.description}</description>`);
   });
 
   it('declares its own language', async () => {
@@ -94,7 +107,7 @@ describe.each(feeds)('%s feed', (lang, mod) => {
   });
 
   it('carries each post’s tags as categories', async () => {
-    const xml = await (await render()).text();
+    const xml = decodeXml(await (await render()).text());
     for (const post of await getPosts(lang)) {
       for (const tag of post.data.tags) {
         expect(xml, `${lang} → ${tag}`).toContain(`<category>${tag}</category>`);

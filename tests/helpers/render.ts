@@ -26,6 +26,28 @@ export async function render(
   });
 }
 
+/** Decode the HTML entities Astro escapes, so assertions can use copy as authored. */
+export function decodeHtml(html: string): string {
+  return html
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(parseInt(code, 16)))
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
+/** Visible text of a rendered document: markup and scripts stripped, entities decoded. */
+export function text(html: string): string {
+  return decodeHtml(
+    html
+      .replace(/<script[\s\S]*?<\/script>/g, ' ')
+      .replace(/<style[\s\S]*?<\/style>/g, ' ')
+      .replace(/<[^>]*>/g, ' '),
+  );
+}
+
 /** Collect every `attr` value of the matching tags in a rendered document. */
 export function attrs(html: string, tag: string, attr: string): string[] {
   const pattern = new RegExp(`<${tag}\\b[^>]*\\b${attr}="([^"]*)"`, 'g');

@@ -83,14 +83,14 @@ describe('getPosts', () => {
   });
 
   it('keeps drafts in development so authors can preview them', async () => {
-    vi.stubEnv('PROD', '');
+    vi.stubEnv('PROD', false);
     vi.resetModules();
     const dev = await import('../../../src/i18n/blog');
     expect((await dev.getPosts('en')).map((p) => p.id)).toContain('en/draft-post');
   });
 
   it('drops drafts in production', async () => {
-    vi.stubEnv('PROD', 'true');
+    vi.stubEnv('PROD', true);
     vi.resetModules();
     const prod = await import('../../../src/i18n/blog');
     const posts = await prod.getPosts('en');

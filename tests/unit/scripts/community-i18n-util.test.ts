@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-// @ts-expect-error — plain ESM build script, no types.
 import { injectCommunityPage, toTsLiteral } from '../../../scripts/community-i18n/util.mjs';
 
 /** Evaluate an emitted literal back into a value, to prove it is valid syntax. */
