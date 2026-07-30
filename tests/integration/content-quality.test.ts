@@ -35,6 +35,10 @@ const english = new Map(englishLeaves);
 /** `{n}`, `{level}`, `{usd}` — the interpolation slots the UI fills at runtime. */
 const tokens = (s: string) => [...s.matchAll(/\{[a-zA-Z]+\}/g)].map(([m]) => m).sort();
 
+/** Remove URLs and email addresses, whose lowercase domain is not a brand slip. */
+const stripAddresses = (s: string) =>
+  s.replace(/https?:\/\/\S+/g, ' ').replace(/[\w.+-]+@[\w.-]+/g, ' ');
+
 /** Leaves that are identifiers rather than prose, so translation rules do not apply. */
 const isIdentifier = (path: string) =>
   /\b(href|ctaHref|url|icon|id|key|src|logo|banner|placeholder)\b/i.test(path) ||
@@ -80,8 +84,10 @@ describe.each(PREFIXED_LANGS)('%s translations', (lang) => {
     expect(leaked).toEqual([]);
   });
 
-  it('spells the brand consistently', () => {
+  it('spells the brand consistently in prose', () => {
     const wrong = localeLeaves
+      // The domain is legitimately lowercase inside a URL or an address.
+      .map(([p, v]) => [p, stripAddresses(v)] as Leaf)
       .filter(([, v]) => /\b(nexow|NEXOW|NexOw|Nexlow)\b/.test(v))
       .map(([p, v]) => `${p}: ${v.slice(0, 60)}`);
     expect(wrong, 'brand must be written "Nexow"').toEqual([]);
@@ -102,8 +108,10 @@ describe.each(PREFIXED_LANGS)('%s translations', (lang) => {
     expect(sloppy).toEqual([]);
   });
 
-  it('never leaves a prose string empty', () => {
-    const empty = localeLeaves.filter(([, v]) => v.trim() === '').map(([p]) => p);
+  it('never empties a string English fills', () => {
+    const empty = localeLeaves
+      .filter(([path, v]) => v.trim() === '' && (english.get(path) ?? '').trim() !== '')
+      .map(([p]) => p);
     expect(empty).toEqual([]);
   });
 
