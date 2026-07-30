@@ -25,9 +25,14 @@ const secondaryHref =
     : slug === 'founders'
       ? `${localizePath('/', lang)}#app-showcase`
       : localizePath('/community', lang);
+
+const sections = [
+  { id: 'prompt', label: t.hero.badge },
+  { id: 'cta', label: t.ctaPrimary },
+];
 ---
 
-<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description} sections={sections}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon(route)}
@@ -35,7 +40,7 @@ const secondaryHref =
     subtitle={t.hero.subtitle}
   />
 
-  <section class="container-page pb-12">
+  <section id="prompt" class="container-page scroll-mt-20 pb-12">
     <div class="reveal mx-auto max-w-2xl">
       <div class="rounded-2xl border border-ink-900/10 bg-white p-5 shadow-sm sm:p-6 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40">
         <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">Try this prompt</p>

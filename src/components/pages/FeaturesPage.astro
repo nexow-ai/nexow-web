@@ -24,25 +24,55 @@ const t = useContent(lang).features;
 const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
 const badgeIcon = getPageBadgeIcon('/features');
+
+/** Stable ids across locales (group order matches `en`). */
+const GROUP_IDS = ['widgets', 'workspace', 'connectors', 'automate', 'network', 'account'] as const;
+
+const sections = [
+  { id: 'hero', label: t.hero.badge },
+  ...t.groups.map((group, i) => ({
+    id: GROUP_IDS[i] ?? `group-${i + 1}`,
+    label: group.title,
+  })),
+  { id: 'cta', label: home.ctaPrimary },
+];
 ---
 
-<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description} sections={sections}>
   <!-- Hero -->
-  <section class="relative overflow-hidden pt-32 pb-16 sm:pt-40">
-    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+  <section id="hero" class="relative scroll-mt-20 overflow-hidden pt-32 pb-16 sm:pt-40">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="aurora-mesh absolute inset-[-12%]"></div>
+      <!-- Light -->
       <div
-        class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
-      >
-      </div>
-      <div
-        class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-40 blur-3xl"
+        class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-50 blur-3xl dark:hidden"
         style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
       >
       </div>
       <div
-        class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-35 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+        class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-45 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-c absolute left-1/2 top-[20%] size-[420px] -translate-x-1/2 rounded-full opacity-40 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+      >
+      </div>
+      <!-- Dark -->
+      <div
+        class="aurora-a absolute -top-20 left-[8%] hidden size-[480px] rounded-full opacity-40 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-b absolute -top-16 right-[6%] hidden size-[520px] rounded-full opacity-35 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-c absolute left-1/2 top-[20%] hidden size-[420px] -translate-x-1/2 rounded-full opacity-30 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
       >
       </div>
       <div
@@ -96,7 +126,10 @@ const badgeIcon = getPageBadgeIcon('/features');
         const reverse = i % 2 === 1;
         const openHref = featureGroupAppHref(i);
         return (
-          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80 dark:border-white/8']}>
+          <section
+            id={GROUP_IDS[i] ?? `group-${i + 1}`}
+            class:list={['relative scroll-mt-20 overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80 dark:border-white/8']}
+          >
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
               <div
                 class:list={[

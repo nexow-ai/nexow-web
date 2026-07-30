@@ -31,17 +31,31 @@ const KIND_ICONS = ['bolt', 'cpu'];
   id="bots-agents"
   class="relative overflow-x-clip border-y border-ink-900/5 dark:border-white/8 bg-[#f7fbfb]/70 dark:bg-white/[0.02] py-20 text-ink-950 dark:text-white sm:py-24"
 >
-  <div class="pointer-events-none absolute inset-0 dark:hidden" aria-hidden="true">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <!-- Light -->
     <div
       data-motion="sink-lg"
-      class="absolute -top-24 right-[6%] h-[520px] w-[520px] rounded-full opacity-25 blur-3xl"
-      style="background:radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-brand-200) 70%, transparent), transparent 68%)"
+      class="aurora-a absolute -top-24 right-[6%] h-[520px] w-[520px] rounded-full opacity-40 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle at 50% 45%, var(--color-brand-200), transparent 68%)"
     >
     </div>
     <div
       data-motion="rise-lg"
-      class="absolute bottom-0 left-[2%] h-[460px] w-[460px] rounded-full opacity-20 blur-3xl"
-      style="background:radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--color-sky-200) 68%, transparent), transparent 68%)"
+      class="aurora-b absolute bottom-0 left-[2%] h-[460px] w-[460px] rounded-full opacity-30 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle at 50% 45%, var(--color-sky-200), transparent 68%)"
+    >
+    </div>
+    <!-- Dark -->
+    <div
+      data-motion="sink-lg"
+      class="aurora-a absolute -top-24 right-[6%] hidden h-[520px] w-[520px] rounded-full opacity-35 blur-3xl dark:block"
+      style="background:radial-gradient(circle at 50% 45%, var(--color-brand-500), transparent 68%)"
+    >
+    </div>
+    <div
+      data-motion="rise-lg"
+      class="aurora-b absolute bottom-0 left-[2%] hidden h-[460px] w-[460px] rounded-full opacity-25 blur-3xl dark:block"
+      style="background:radial-gradient(circle at 50% 45%, var(--color-sky-500), transparent 68%)"
     >
     </div>
   </div>

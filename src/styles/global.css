@@ -258,8 +258,8 @@
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-700);
 
-  /* Gradient stops — three of them once we are on a dark surface, where the
-   * secondary accent finally has room to glow. */
+  /* Gradient stops — identical in light and dark (Launch app / text-gradient).
+   * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
   --grad-a: var(--color-brand-600);
   --grad-b: var(--color-sky-500);
   --grad-c: var(--color-accent-600);
@@ -274,10 +274,6 @@
   --text-body: var(--color-ink-300);
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-300);
-
-  --grad-a: var(--color-brand-300);
-  --grad-b: var(--color-accent-300);
-  --grad-c: var(--color-plasma-400);
 }
 
 /* ------------------------------------------------------------------ *
@@ -378,9 +374,7 @@
     }
   }
 
-  /* Brand gradient text. Teal → sky → indigo on light; on `.dark` the stops
-   * swap to teal → indigo → plasma, which is where the secondary accent earns
-   * its keep. */
+  /* Brand gradient text — same teal → sky → indigo stops in light and dark. */
   .text-gradient {
     background-image: linear-gradient(
       100deg,
@@ -611,6 +605,63 @@
 .aurora-c { animation: aurora-c 26s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .aurora-c { animation: none; }
+}
+
+/* Multi-stop brand/accent/plasma/sky mesh for page heroes & CTA bands.
+ * Same soft *-300 hues in light and dark (opacity only may differ).
+ * Prefer this over pale *-100 / white vignette fades. */
+@keyframes aurora-mesh-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(2.5%, -2%, 0) scale(1.05) rotate(1.5deg);
+  }
+  66% {
+    transform: translate3d(-2%, 2.5%, 0) scale(0.96) rotate(-1.2deg);
+  }
+}
+.aurora-mesh {
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 18% 22%,
+      color-mix(in oklab, var(--color-brand-300) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 82% 18%,
+      color-mix(in oklab, var(--color-accent-300) 48%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 48% 42% at 58% 75%,
+      color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 35% at 42% 42%,
+      color-mix(in oklab, var(--color-sky-300) 32%, transparent),
+      transparent 65%
+    );
+  animation: aurora-mesh-shift 28s ease-in-out infinite;
+  will-change: transform, opacity;
+  opacity: 0.85;
+}
+.dark .aurora-mesh {
+  /* Same hues as light; slightly softer so *-300 still reads on ink. */
+  opacity: 0.75;
+}
+.is-offscreen .aurora-mesh,
+.is-offscreen .aurora-a,
+.is-offscreen .aurora-b,
+.is-offscreen .aurora-c {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-mesh {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ *

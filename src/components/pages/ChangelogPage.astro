@@ -17,9 +17,14 @@ const all = await getPosts(lang);
 /** Product-tagged posts double as the marketing changelog. */
 const PRODUCT_TAGS = new Set(['product', 'roadmap', 'agents', 'automation', 'marketplace', 'community']);
 const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))).slice(0, 24);
+
+const sections = [
+  { id: 'hero', label: t.hero.badge },
+  { id: 'updates', label: t.readMore },
+];
 ---
 
-<Layout lang={lang} route="/changelog" title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route="/changelog" title={t.meta.title} description={t.meta.description} sections={sections}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon('/changelog')}
@@ -27,7 +32,7 @@ const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))
     subtitle={t.hero.subtitle}
   />
 
-  <section class="container-page pb-20">
+  <section id="updates" class="container-page scroll-mt-20 pb-20">
     {
       posts.length === 0 ? (
         <p class="reveal mx-auto max-w-xl text-center text-ink-600 dark:text-ink-300">{t.empty}</p>

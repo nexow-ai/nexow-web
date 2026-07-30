@@ -47,6 +47,12 @@ const articleSchema = {
   mainEntityOfPage: new URL(localizePath(route, lang), SITE.url).href,
   keywords: tags.join(', '),
 };
+
+const cta = useContent(lang).home.cta;
+const sections = [
+  { id: 'article', label: title },
+  { id: 'cta', label: cta.primary },
+];
 ---
 
 <Layout
@@ -56,9 +62,28 @@ const articleSchema = {
   description={description}
   type="article"
   schema={[articleSchema]}
+  sections={sections}
 >
-  <article class="pt-28 sm:pt-36">
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(50%_60%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70"></div>
+  <article id="article" class="relative scroll-mt-20 overflow-hidden pt-28 sm:pt-36">
+    <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div class="aurora-mesh absolute inset-[-10%] opacity-70 dark:opacity-60"></div>
+      <div
+        class="aurora-a absolute -top-24 left-[8%] size-[min(70vw,480px)] rounded-full opacity-50 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-b absolute -top-16 right-[6%] size-[min(60vw,420px)] rounded-full opacity-40 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-a absolute -top-24 left-[8%] hidden size-[min(70vw,480px)] rounded-full opacity-40 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-b absolute -top-16 right-[6%] hidden size-[min(60vw,420px)] rounded-full opacity-30 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
+      ></div>
+    </div>
 
     <div class="container-page">
       <div class="mx-auto max-w-3xl">
@@ -125,13 +150,13 @@ const articleSchema = {
       </div>
     </div>
 
-    <div class="container-page mt-16 mb-24">
+    <div id="cta" class="container-page scroll-mt-20 mt-16 mb-24">
       <div class="mx-auto max-w-3xl rounded-2xl border border-ink-900/8 dark:border-white/8 bg-slate-50/70 dark:bg-white/[0.03] p-8 text-center">
-        <h2 class="font-display text-2xl font-semibold text-ink-950 dark:text-white">{useContent(lang).home.cta.title}</h2>
-        <p class="mx-auto mt-2 max-w-md text-ink-600 dark:text-ink-300">{useContent(lang).home.cta.subtitle}</p>
+        <h2 class="font-display text-2xl font-semibold text-ink-950 dark:text-white">{cta.title}</h2>
+        <p class="mx-auto mt-2 max-w-md text-ink-600 dark:text-ink-300">{cta.subtitle}</p>
         <div class="mt-6 flex justify-center">
           <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
-            {useContent(lang).home.cta.primary}
+            {cta.primary}
           </Button>
         </div>
       </div>

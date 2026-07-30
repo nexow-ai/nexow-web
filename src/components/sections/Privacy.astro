@@ -15,7 +15,24 @@ const securityHref = localizePath('/security', lang);
 ---
 
 <section id="privacy" class="relative overflow-x-clip border-y border-ink-900/5 bg-[#f7fbfb]/70 py-20 text-ink-950 sm:py-24 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
-  <div class="pointer-events-none absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,var(--color-brand-100),transparent_60%)] opacity-60 blur-2xl dark:hidden"></div>
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div
+      class="aurora-a absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-50 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-brand-200), transparent 60%)"
+    ></div>
+    <div
+      class="aurora-b absolute -right-32 top-[20%] size-[420px] rounded-full opacity-35 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+    ></div>
+    <div
+      class="aurora-a absolute -left-40 top-1/2 hidden size-[500px] -translate-y-1/2 rounded-full opacity-40 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-brand-500), transparent 60%)"
+    ></div>
+    <div
+      class="aurora-b absolute -right-32 top-[20%] hidden size-[420px] rounded-full opacity-30 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
+    ></div>
+  </div>
   <div class="container-page relative">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
       <!-- Copy -->

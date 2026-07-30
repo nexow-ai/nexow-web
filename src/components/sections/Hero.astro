@@ -32,23 +32,43 @@ const D = {
   id="hero"
   class="relative overflow-x-clip pb-16 pt-32 text-ink-950 sm:pb-24 sm:pt-40 dark:text-white"
 >
-  <!-- Backdrop: soft brand auroras matching Features / PageHero language. -->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+  <!-- Backdrop: colored aurora mesh + drifting brand/accent/plasma blobs. -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="aurora-mesh absolute inset-[-12%]"></div>
+    <!-- Light -->
     <div
       data-motion="sink-lg"
-      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-60 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
-    >
-    </div>
-    <div
-      data-motion="rise-lg"
-      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-40 blur-3xl"
+      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-60 blur-3xl dark:hidden"
       style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
     >
     </div>
     <div
-      class="aurora-c absolute left-[38%] top-[38%] h-[520px] w-[520px] rounded-full opacity-35 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+      data-motion="rise-lg"
+      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-45 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-c absolute left-[38%] top-[38%] h-[520px] w-[520px] rounded-full opacity-40 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+    >
+    </div>
+    <!-- Dark -->
+    <div
+      data-motion="sink-lg"
+      class="aurora-a absolute -top-48 left-[2%] hidden h-[640px] w-[640px] rounded-full opacity-50 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+    >
+    </div>
+    <div
+      data-motion="rise-lg"
+      class="aurora-b absolute -top-40 right-[-4%] hidden h-[700px] w-[700px] rounded-full opacity-40 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-c absolute left-[38%] top-[38%] hidden h-[520px] w-[520px] rounded-full opacity-35 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-plasma-500), transparent 65%)"
     >
     </div>
     <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>

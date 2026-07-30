@@ -14,8 +14,10 @@ interface Props {
   tags: string[];
   heroImage?: ImageMetadata;
   featured?: boolean;
+  /** Anchor for the blog index section rail. */
+  id?: string;
 }
-const { lang, slug, title, description, pubDate, tags, heroImage, featured = false } = Astro.props;
+const { lang, slug, title, description, pubDate, tags, heroImage, featured = false, id } = Astro.props;
 const t = useContent(lang).blog;
 const href = localizePath(`/blog/${slug}`, lang);
 const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
@@ -26,8 +28,9 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
 ---
 
 <article
+  id={id}
   class:list={[
-    'group relative flex flex-col overflow-hidden rounded-2xl border border-ink-900/8 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-900/5 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-brand-400/30 dark:hover:shadow-black/40',
+    'group relative flex scroll-mt-20 flex-col overflow-hidden rounded-2xl border border-ink-900/8 bg-white transition-all duration-300 ease-out-expo hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-xl hover:shadow-brand-900/5 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-brand-400/30 dark:hover:shadow-black/40',
     featured && 'md:col-span-2 md:flex-row',
   ]}
 >

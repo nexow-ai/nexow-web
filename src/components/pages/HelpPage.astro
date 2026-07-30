@@ -16,9 +16,14 @@ const c = useContent(lang);
 const t = c.helpPage!;
 const localize = (href: string) =>
   href.startsWith('/') ? localizePath(href, lang) : href;
+
+const sections = [
+  { id: 'guides', label: t.hero.badge },
+  { id: 'cta', label: t.cta },
+];
 ---
 
-<Layout lang={lang} route="/help" title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route="/help" title={t.meta.title} description={t.meta.description} sections={sections}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon('/help')}
@@ -26,7 +31,7 @@ const localize = (href: string) =>
     subtitle={t.hero.subtitle}
   />
 
-  <section class="container-page pb-16">
+  <section id="guides" class="container-page scroll-mt-20 pb-16">
     <div class="reveal-stagger mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         t.guides.map((g) => {

@@ -18,9 +18,15 @@ const { lang, code } = Astro.props;
 const t = useContent(lang).invitePage!;
 /** `ref` is reserved for referral attribution when the app ledger goes live. */
 const primaryHref = code ? signupAppUrl({ ref: code }) : claimHandleAppUrl();
+
+const sections = [
+  { id: 'overview', label: t.hero.badge },
+  { id: 'pillars', label: t.pillars[1]?.title ?? t.hero.badge },
+  { id: 'cta', label: t.ctaPrimary },
+];
 ---
 
-<Layout lang={lang} route={code ? `/r/${code}` : '/invite'} title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route={code ? `/r/${code}` : '/invite'} title={t.meta.title} description={t.meta.description} sections={sections}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon('/invite')}
@@ -28,7 +34,7 @@ const primaryHref = code ? signupAppUrl({ ref: code }) : claimHandleAppUrl();
     subtitle={t.hero.subtitle}
   />
 
-  <section class="container-page pb-8">
+  <section id="overview" class="container-page scroll-mt-20 pb-8">
     <p class="reveal mx-auto max-w-2xl text-center text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.body}</p>
     {
       code && (
@@ -41,7 +47,7 @@ const primaryHref = code ? signupAppUrl({ ref: code }) : claimHandleAppUrl();
     }
   </section>
 
-  <section class="container-page py-10 sm:py-14">
+  <section id="pillars" class="container-page scroll-mt-20 py-10 sm:py-14">
     <div class="reveal-stagger mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
       {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
     </div>

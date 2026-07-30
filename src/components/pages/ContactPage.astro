@@ -13,9 +13,14 @@ const { lang } = Astro.props;
 const t = useContent(lang).contactPage!;
 const typeParam = Astro.url.searchParams.get('type') ?? '';
 const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam : 'support';
+
+const sections = [
+  { id: 'contact-form', label: t.form.submit },
+  { id: 'contact-aside', label: t.aside.title },
+];
 ---
 
-<Layout lang={lang} route="/contact" title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route="/contact" title={t.meta.title} description={t.meta.description} sections={sections}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon('/contact')}
@@ -27,7 +32,7 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
     <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_0.8fr]">
       <form
         id="contact-form"
-        class="reveal space-y-5"
+        class="reveal scroll-mt-20 space-y-5"
         data-hello={SITE.email}
         data-support={SITE.supportEmail}
         data-partners={SITE.partnersEmail}
@@ -104,7 +109,7 @@ const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam 
         <p id="contact-status" class="min-h-[1.25rem] text-sm" role="status" aria-live="polite"></p>
       </form>
 
-      <aside class="reveal rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-6 sm:p-7 dark:border-white/10 dark:bg-white/[0.02]">
+      <aside id="contact-aside" class="reveal scroll-mt-20 rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-6 sm:p-7 dark:border-white/10 dark:bg-white/[0.02]">
         <h2 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{t.aside.title}</h2>
         <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{t.aside.body}</p>
         <ul class="mt-6 space-y-4">

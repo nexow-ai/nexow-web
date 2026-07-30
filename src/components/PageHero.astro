@@ -7,12 +7,48 @@ interface Props {
   icon?: string;
   title: string;
   subtitle?: string;
+  /** Anchor for the in-page section rail. */
+  id?: string;
 }
-const { badge, icon, title, subtitle } = Astro.props;
+const { badge, icon, title, subtitle, id = 'hero' } = Astro.props;
 ---
 
-<section class="relative overflow-hidden pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-20 dark:text-white">
-  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(55%_60%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70 dark:opacity-35"></div>
+<section id={id} class="relative scroll-mt-20 overflow-hidden pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-20 dark:text-white">
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="aurora-mesh absolute inset-[-10%]"></div>
+    <!-- Light: soft *-200 blobs -->
+    <div
+      class="aurora-a absolute -top-28 left-[6%] size-[min(70vw,520px)] rounded-full opacity-55 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-b absolute -top-20 right-[4%] size-[min(65vw,480px)] rounded-full opacity-45 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-c absolute left-[38%] top-[28%] size-[min(50vw,400px)] rounded-full opacity-40 blur-3xl dark:hidden"
+      style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+    >
+    </div>
+    <!-- Dark: mid-tone glows that read on ink -->
+    <div
+      class="aurora-a absolute -top-28 left-[6%] hidden size-[min(70vw,520px)] rounded-full opacity-45 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-b absolute -top-20 right-[4%] hidden size-[min(65vw,480px)] rounded-full opacity-35 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-c absolute left-[38%] top-[28%] hidden size-[min(50vw,400px)] rounded-full opacity-30 blur-3xl dark:block"
+      style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
+    >
+    </div>
+  </div>
   <div class="container-page">
     <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
       <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:border-brand-400/25 dark:bg-brand-400/12 dark:text-brand-300">

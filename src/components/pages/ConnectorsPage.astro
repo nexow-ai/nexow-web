@@ -100,6 +100,11 @@ const pillBtn =
   'rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 const chipBtn =
   'rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+
+const sections = [
+  { id: 'connectors-app', label: t.hero.badge },
+  { id: 'cta', label: useContent(lang).home.cta.primary },
+];
 ---
 
 <Layout
@@ -108,12 +113,36 @@ const chipBtn =
   title={t.meta.title}
   description={t.meta.description}
   schema={[itemListSchema]}
+  sections={sections}
 >
   <section class="relative overflow-hidden bg-[#f7fbfb]/70 pt-32 pb-12 text-ink-950 sm:pt-40 dark:bg-white/[0.015] dark:text-white">
-    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="aurora-mesh absolute inset-[-12%]"></div>
+      <!-- Light -->
       <div
-        class="absolute -top-28 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-65 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+        class="aurora-a absolute -top-28 left-[10%] size-[520px] rounded-full opacity-55 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-b absolute -top-20 right-[6%] size-[480px] rounded-full opacity-45 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-c absolute left-1/2 top-[18%] size-[400px] -translate-x-1/2 rounded-full opacity-35 blur-3xl dark:hidden"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      ></div>
+      <!-- Dark -->
+      <div
+        class="aurora-a absolute -top-28 left-[10%] hidden size-[520px] rounded-full opacity-45 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-brand-500), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-b absolute -top-20 right-[6%] hidden size-[480px] rounded-full opacity-35 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-sky-500), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-c absolute left-1/2 top-[18%] hidden size-[400px] -translate-x-1/2 rounded-full opacity-30 blur-3xl dark:block"
+        style="background:radial-gradient(circle, var(--color-accent-500), transparent 65%)"
       ></div>
       <div
         class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"
@@ -137,7 +166,7 @@ const chipBtn =
     </div>
   </section>
 
-  <section id="connectors-app" class="bg-[#f7fbfb]/70 pb-24 text-ink-950 sm:pb-32 dark:bg-white/[0.015] dark:text-white">
+  <section id="connectors-app" class="scroll-mt-20 bg-[#f7fbfb]/70 pb-24 text-ink-950 sm:pb-32 dark:bg-white/[0.015] dark:text-white">
     <div class="container-page">
       <!-- Controls -->
       <div
