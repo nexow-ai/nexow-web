@@ -57,6 +57,17 @@ export const zh: SiteContent = {
     rights: '保留所有权利。',
     disclaimer:
       'Nexow 是一个工具与可视化平台。此处内容均不构成投资建议。市场有风险，交易需谨慎。',
+    newsletter: {
+      eyebrow: '订阅',
+      title: '保持关注',
+      subtitle: '产品更新、画布技巧与发布说明——偶尔发送，绝不发垃圾邮件。',
+      placeholder: 'you@email.com',
+      submit: '订阅',
+      submitting: '订阅中…',
+      success: '订阅成功，感谢你的关注。',
+      error: '出了点问题，请重试。',
+      invalid: '请输入有效的邮箱地址。',
+    },
   },
   home: {
     meta: {
@@ -69,6 +80,7 @@ export const zh: SiteContent = {
       titleLead: '描述它。',
       titleGradient: 'Nexow 构建它。',
       titleTail: '交易它。',
+      titleKicker: '几秒完成，而不是几周或几个月。',
       subtitle:
         '一个面向市场的 AI 原生工作区。用自然语言描述任意组件——Nexow 会编写代码、安全地运行它，并将实时数据流式呈现到自由画布上。用云端机器人和智能体让它自动运转，再接入创作者社区。',
       ctaPrimary: '启动应用',
@@ -1461,5 +1473,30 @@ export const zh: SiteContent = {
     title: '这个页面飘出了画布',
     body: '你要找的页面并不存在——但你的下一个仪表盘或许存在。',
     cta: '返回首页',
+  },
+  waitlist: {
+    eyebrow: '计费候补名单',
+    title: '结账功能即将上线',
+    subtitle: 'Supporter 和 Sponsor 计费即将上线。留下邮箱，结账开放当天我们会通知你——绝不发垃圾邮件。',
+    placeholder: 'you@email.com',
+    submit: '加入候补名单',
+    submitting: '加入中…',
+    success: '你已在名单中。计费开放时我们会发邮件通知你。',
+    error: '出了点问题，请重试。',
+    invalid: '请输入有效的邮箱地址。',
+  },
+  changelogPage: {
+    meta: {
+      title: '更新日志 — Nexow',
+      description: 'Nexow 最新的产品更新、已上线功能与博客中的发布说明。',
+    },
+    hero: {
+      badge: '更新日志',
+      title: '我们最近发布了什么',
+      subtitle: '来自 Nexow 博客的产品更新——最新的在前。',
+    },
+    empty: '暂无产品更新——去博客看看指南和笔记。',
+    readMore: '阅读更新',
+    viewBlog: '查看全部文章',
   },
 };

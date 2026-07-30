@@ -57,6 +57,17 @@ export const ko: SiteContent = {
     rights: '모든 권리 보유.',
     disclaimer:
       'Nexow는 도구 및 시각화 플랫폼입니다. 여기의 어떤 내용도 금융 조언이 아닙니다. 시장에는 위험이 있으므로 책임감 있게 거래하세요.',
+    newsletter: {
+      eyebrow: '뉴스레터',
+      title: '소식 받아보기',
+      subtitle: '제품 업데이트, 캔버스 팁, 릴리스 노트 — 가끔씩, 스팸은 없습니다.',
+      placeholder: 'you@email.com',
+      submit: '구독하기',
+      submitting: '구독 중…',
+      success: '구독이 완료되었습니다. 감사합니다.',
+      error: '문제가 발생했습니다. 다시 시도해 주세요.',
+      invalid: '유효한 이메일 주소를 입력하세요.',
+    },
   },
   home: {
     meta: {
@@ -69,6 +80,7 @@ export const ko: SiteContent = {
       titleLead: '설명하세요.',
       titleGradient: 'Nexow가 만듭니다.',
       titleTail: '거래하세요.',
+      titleKicker: '몇 주나 몇 달이 아니라, 몇 초 만에.',
       subtitle:
         'AI 네이티브 마켓 워크스페이스입니다. 자연어로 원하는 위젯을 요청하면 Nexow가 코드를 작성하고 안전하게 실행한 후 실시간 데이터를 자유형 캔버스에 스트리밍합니다. 클라우드 봇 및 에이전트로 자동화한 후 메이커 커뮤니티에 연결하세요.',
       ctaPrimary: '앱 실행',
@@ -1461,5 +1473,30 @@ export const ko: SiteContent = {
     title: '이 페이지가 캔버스에서 떨어져 나갔습니다',
     body: '찾는 페이지가 없습니다 — 하지만 다음 대시보드는 있을 수 있습니다.',
     cta: '홈으로 돌아가기',
+  },
+  waitlist: {
+    eyebrow: '결제 대기자 명단',
+    title: '결제가 곧 열립니다',
+    subtitle: 'Supporter와 Sponsor 결제가 곧 시작됩니다. 이메일을 남겨주시면 결제가 열리는 날 알려드립니다 — 스팸은 없습니다.',
+    placeholder: 'you@email.com',
+    submit: '대기자 명단 참여',
+    submitting: '참여 중…',
+    success: '명단에 등록되었습니다. 결제가 열리면 이메일로 알려드립니다.',
+    error: '문제가 발생했습니다. 다시 시도해 주세요.',
+    invalid: '유효한 이메일 주소를 입력하세요.',
+  },
+  changelogPage: {
+    meta: {
+      title: '변경 로그 — Nexow',
+      description: 'Nexow의 최신 제품 업데이트, 출시된 기능 및 블로그의 릴리스 노트.',
+    },
+    hero: {
+      badge: '변경 로그',
+      title: '최근에 출시한 것들',
+      subtitle: 'Nexow 블로그의 제품 업데이트 — 최신순.',
+    },
+    empty: '아직 제품 업데이트가 없습니다 — 가이드와 노트는 블로그를 확인하세요.',
+    readMore: '업데이트 읽기',
+    viewBlog: '모든 게시글 보기',
   },
 };

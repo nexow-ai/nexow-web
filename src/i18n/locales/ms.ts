@@ -57,6 +57,17 @@ export const ms = {
     rights: 'Semua hak terpelihara.',
     disclaimer:
       'Nexow adalah platform alatan dan visualisasi. Tiada di sini adalah nasihat kewangan. Pasaran membawa risiko; berdagang dengan bertanggungjawab.',
+    newsletter: {
+      eyebrow: 'Surat berita',
+      title: 'Kekal dimaklumkan',
+      subtitle: 'Kemas kini produk, tip kanvas dan nota keluaran — sekali-sekala, tiada spam.',
+      placeholder: 'anda@email.com',
+      submit: 'Langgan',
+      submitting: 'Melanggan…',
+      success: 'Anda telah berjaya. Terima kasih kerana melanggan.',
+      error: 'Sesuatu tidak kena. Sila cuba lagi.',
+      invalid: 'Masukkan alamat e-mel yang sah.',
+    },
   },
   home: {
     meta: {
@@ -69,6 +80,7 @@ export const ms = {
       titleLead: 'Terangkan.',
       titleGradient: 'Nexow membinanya.',
       titleTail: 'Dagangannya.',
+      titleKicker: 'Dalam beberapa saat — bukan minggu atau bulan.',
       subtitle:
         'Ruang kerja asli AI untuk pasaran. Minta mana-mana widget dalam bahasa biasa — Nexow menulis kod, menjalankannya dengan selamat, dan mengalirkan data langsung ke kanvas bentuk bebas. Otomatkannya dengan bot awan dan ejen, kemudian pasangkannya ke komuniti pembuat.',
       ctaPrimary: 'Lancarkan aplikasi',
@@ -1208,5 +1220,30 @@ export const ms = {
     title: 'Laman ini hanyut ke luar kanvas',
     body: 'Laman yang anda cari tidak wujud — tetapi papan pemuka berikutnya anda mungkin.',
     cta: 'Kembali ke rumah',
+  },
+  waitlist: {
+    eyebrow: 'Senarai menunggu pengebilan',
+    title: 'Pembayaran hampir tiba',
+    subtitle: 'Pengebilan Supporter dan Sponsor akan tiba tidak lama lagi. Tinggalkan e-mel anda dan kami akan memberitahu pada hari pembayaran dibuka — tiada spam.',
+    placeholder: 'anda@email.com',
+    submit: 'Sertai senarai menunggu',
+    submitting: 'Menyertai…',
+    success: 'Anda dalam senarai. Kami akan e-mel apabila pengebilan dibuka.',
+    error: 'Sesuatu tidak kena. Sila cuba lagi.',
+    invalid: 'Masukkan alamat e-mel yang sah.',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Log perubahan — Nexow',
+      description: 'Kemas kini produk Nexow terkini, ciri yang dihantar dan nota keluaran daripada blog.',
+    },
+    hero: {
+      badge: 'Log perubahan',
+      title: 'Apa yang kami hantar baru-baru ini',
+      subtitle: 'Kemas kini produk daripada blog Nexow — terbaharu dahulu.',
+    },
+    empty: 'Belum ada kemas kini produk — lihat blog untuk panduan dan nota.',
+    readMore: 'Baca kemas kini',
+    viewBlog: 'Lihat semua siaran',
   },
 } as unknown as SiteContent;

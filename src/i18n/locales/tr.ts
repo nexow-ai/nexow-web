@@ -57,6 +57,17 @@ export const tr = {
     rights: 'Tüm hakları saklıdır.',
     disclaimer:
       'Nexow bir araçlama ve görselleştirme platformudur. Burada hiçbir şey finansal tavsiye değildir. Piyasalar riski taşır; sorumlu bir şekilde ticaret yapın.',
+    newsletter: {
+      eyebrow: 'Bülten',
+      title: 'Gelişmelerden haberdar olun',
+      subtitle: 'Ürün güncellemeleri, kanvas ipuçları ve sürüm notları — ara sıra, spam yok.',
+      placeholder: 'siz@email.com',
+      submit: 'Abone ol',
+      submitting: 'Abone olunuyor…',
+      success: 'Kaydınız alındı. Abone olduğunuz için teşekkürler.',
+      error: 'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
+      invalid: 'Geçerli bir e-posta adresi girin.',
+    },
   },
   home: {
     meta: {
@@ -69,6 +80,7 @@ export const tr = {
       titleLead: 'Açıklayın.',
       titleGradient: 'Nexow kurar.',
       titleTail: 'Ticaret yapın.',
+      titleKicker: 'Saniyeler içinde — haftalar ya da aylar değil.',
       subtitle:
         'Piyasalar için yapay zeka tabanlı bir çalışma alanı. Sade dilde herhangi bir widget isteyin — Nexow kodu yazar, güvenle çalıştırır ve canlı verileri serbest biçimli bir tuvale akışa sokar. Bulut botları ve ajanları ile otomatikleştirin, ardından yapıcı topluluğuna bağlanın.',
       ctaPrimary: 'Uygulamayı Başlat',
@@ -1208,5 +1220,30 @@ export const tr = {
     title: 'Bu Sayfa Tuvali Kaymış',
     body: 'Aradığınız Sayfa Yok — Ama Sonraki Gösterge Paneliniz Olabilir.',
     cta: 'Başa Dön',
+  },
+  waitlist: {
+    eyebrow: 'Faturalandırma bekleme listesi',
+    title: 'Ödeme çok yakında',
+    subtitle: 'Supporter ve Sponsor faturalandırması çok yakında geliyor. E-postanızı bırakın, ödeme açıldığı gün haber verelim — spam yok.',
+    placeholder: 'siz@email.com',
+    submit: 'Bekleme listesine katıl',
+    submitting: 'Katılıyor…',
+    success: 'Listedesiniz. Faturalandırma açıldığında e-posta göndereceğiz.',
+    error: 'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
+    invalid: 'Geçerli bir e-posta adresi girin.',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Sürüm notları — Nexow',
+      description: 'Nexow’un son ürün güncellemeleri, yayınlanan özellikler ve blogdaki sürüm notları.',
+    },
+    hero: {
+      badge: 'Sürüm notları',
+      title: 'Son zamanlarda neler yayınladık',
+      subtitle: 'Nexow blogundan ürün güncellemeleri — en yeniler önce.',
+    },
+    empty: 'Henüz ürün güncellemesi yok — rehberler ve notlar için bloga göz atın.',
+    readMore: 'Güncellemeyi oku',
+    viewBlog: 'Tüm yazıları gör',
   },
 } as unknown as SiteContent;

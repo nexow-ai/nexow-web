@@ -57,6 +57,17 @@ export const ja: SiteContent = {
     rights: '無断複製・転載を禁じます。',
     disclaimer:
       'Nexow はツールおよび可視化のプラットフォームです。ここに記載の内容は金融アドバイスではありません。市場にはリスクが伴います。責任を持って取引してください。',
+    newsletter: {
+      eyebrow: 'ニュースレター',
+      title: '最新情報をチェック',
+      subtitle: 'プロダクトアップデート、キャンバスのヒント、リリースノート — ときどき配信、スパムはありません。',
+      placeholder: 'you@email.com',
+      submit: '登録する',
+      submitting: '登録中…',
+      success: '登録が完了しました。ありがとうございます。',
+      error: 'エラーが発生しました。もう一度お試しください。',
+      invalid: '有効なメールアドレスを入力してください。',
+    },
   },
   home: {
     meta: {
@@ -69,6 +80,7 @@ export const ja: SiteContent = {
       titleLead: '説明する。',
       titleGradient: 'Nexow が構築する。',
       titleTail: '取引する。',
+      titleKicker: '数秒で完成 — 数週間や数か月ではありません。',
       subtitle:
         '市場向けの AI ネイティブなワークスペース。自然な言葉で好きなウィジェットをリクエストすると、Nexow がコードを書き、安全に実行し、自由配置のキャンバスにライブデータを配信します。クラウドボットとエージェントで自動化し、メイカーのコミュニティにつながりましょう。',
       ctaPrimary: 'アプリを起動',
@@ -1461,5 +1473,30 @@ export const ja: SiteContent = {
     title: 'このページはキャンバスから外れてしまいました',
     body: 'お探しのページは存在しません — でも、あなたの次のダッシュボードは存在するかもしれません。',
     cta: 'ホームに戻る',
+  },
+  waitlist: {
+    eyebrow: '課金ウェイトリスト',
+    title: 'チェックアウトはもうすぐです',
+    subtitle: 'Supporter と Sponsor の課金がまもなく開始します。メールアドレスをご登録いただければ、開始当日にお知らせします — スパムはありません。',
+    placeholder: 'you@email.com',
+    submit: 'ウェイトリストに登録',
+    submitting: '登録中…',
+    success: '登録が完了しました。課金開始時にメールでお知らせします。',
+    error: 'エラーが発生しました。もう一度お試しください。',
+    invalid: '有効なメールアドレスを入力してください。',
+  },
+  changelogPage: {
+    meta: {
+      title: '変更履歴 — Nexow',
+      description: 'Nexow の最新プロダクトアップデート、リリースされた機能、ブログのリリースノート。',
+    },
+    hero: {
+      badge: '変更履歴',
+      title: '最近リリースしたもの',
+      subtitle: 'Nexow ブログのプロダクトアップデート — 新しい順。',
+    },
+    empty: 'まだプロダクトアップデートはありません — ガイドやノートはブログをご覧ください。',
+    readMore: 'アップデートを読む',
+    viewBlog: 'すべての記事を見る',
   },
 };

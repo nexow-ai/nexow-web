@@ -59,6 +59,17 @@ export const nl: SiteContent = {
     rights: 'Alle rechten voorbehouden.',
     disclaimer:
       'Nexow is een tooling- en visualisatieplatform. Niets hiervan is financieel advies. Markten dragen risico mee; handel verantwoord.',
+    newsletter: {
+      eyebrow: 'Nieuwsbrief',
+      title: 'Blijf op de hoogte',
+      subtitle: 'Product-updates, canvas-tips en release notes — af en toe, geen spam.',
+      placeholder: 'jij@email.com',
+      submit: 'Abonneren',
+      submitting: 'Bezig met abonneren…',
+      success: 'Je bent binnen. Bedankt voor je aanmelding.',
+      error: 'Er ging iets mis. Probeer het opnieuw.',
+      invalid: 'Voer een geldig e-mailadres in.',
+    },
   },
   home: {
     meta: {
@@ -71,6 +82,7 @@ export const nl: SiteContent = {
       titleLead: 'Beschrijf het.',
       titleGradient: 'Nexow bouwt het.',
       titleTail: 'Verhandel het.',
+      titleKicker: 'In seconden — niet in weken of maanden.',
       subtitle:
         'Een AI-native werkruimte voor markten. Vraag om welke widget dan ook in normaal Nederlands — Nexow schrijft de code, voert het veilig uit, en streamt live gegevens naar een canvas met vrije vorm. Automatiseer het met cloud bots en agenten, vervolgens plug in de maker-gemeenschap.',
       ctaPrimary: 'Start de app',
@@ -1463,5 +1475,30 @@ export const nl: SiteContent = {
     title: 'Deze pagina is van het canvas afgegleden',
     body: 'De pagina die je zoekt bestaat niet — maar je volgende dashboard misschien.',
     cta: 'Terug naar home',
+  },
+  waitlist: {
+    eyebrow: 'Wachtlijst facturatie',
+    title: 'De checkout komt eraan',
+    subtitle: 'Facturatie voor Supporter en Sponsor komt binnenkort. Laat je e-mail achter en we laten het weten zodra de checkout opengaat — geen spam.',
+    placeholder: 'jij@email.com',
+    submit: 'Zet me op de wachtlijst',
+    submitting: 'Bezig…',
+    success: 'Je staat op de lijst. We mailen je zodra facturatie opengaat.',
+    error: 'Er ging iets mis. Probeer het opnieuw.',
+    invalid: 'Voer een geldig e-mailadres in.',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Wijzigingen — Nexow',
+      description: 'Recente product-updates van Nexow, opgeleverde functies en release notes uit de blog.',
+    },
+    hero: {
+      badge: 'Wijzigingen',
+      title: 'Wat we onlangs hebben opgeleverd',
+      subtitle: 'Product-updates uit de Nexow-blog — nieuwste eerst.',
+    },
+    empty: 'Nog geen product-updates — bekijk de blog voor gidsen en notities.',
+    readMore: 'Update lezen',
+    viewBlog: 'Alle berichten bekijken',
   },
 };

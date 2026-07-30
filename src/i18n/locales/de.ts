@@ -82,6 +82,7 @@ export const de: SiteContent = {
       titleLead: 'Beschreib es.',
       titleGradient: 'Nexow baut es.',
       titleTail: 'Handle es.',
+      titleKicker: 'In Sekunden — nicht in Wochen oder Monaten.',
       subtitle:
         'Ein KI-nativer Workspace für Märkte. Frag nach jedem Widget in einfacher Sprache — Nexow schreibt den Code, führt ihn sicher aus und streamt Live-Daten auf ein freies Canvas. Automatisiere es mit Cloud-Bots und Agenten und verbinde dich dann mit einer Community von Makern.',
       ctaPrimary: 'App starten',
@@ -1474,5 +1475,30 @@ export const de: SiteContent = {
     title: 'Diese Seite ist vom Canvas gedriftet',
     body: 'Die Seite, die du suchst, existiert nicht — aber dein nächstes Dashboard vielleicht schon.',
     cta: 'Zurück zur Startseite',
+  },
+  waitlist: {
+    eyebrow: 'Warteliste Abrechnung',
+    title: 'Der Checkout kommt bald',
+    subtitle: 'Die Abrechnung für Supporter und Sponsor startet bald. Hinterlasse deine E-Mail und wir melden uns am Tag der Freischaltung — kein Spam.',
+    placeholder: 'du@email.com',
+    submit: 'Auf die Warteliste',
+    submitting: 'Wird eingetragen…',
+    success: 'Du stehst auf der Liste. Wir schreiben dir, sobald die Abrechnung startet.',
+    error: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
+    invalid: 'Gib eine gültige E-Mail-Adresse ein.',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Neuerungen — Nexow',
+      description: 'Aktuelle Produkt-Updates von Nexow, ausgelieferte Funktionen und Release Notes aus dem Blog.',
+    },
+    hero: {
+      badge: 'Neuerungen',
+      title: 'Was wir zuletzt ausgeliefert haben',
+      subtitle: 'Produkt-Updates aus dem Nexow-Blog — die neuesten zuerst.',
+    },
+    empty: 'Noch keine Produkt-Updates — im Blog findest du Guides und Notizen.',
+    readMore: 'Update lesen',
+    viewBlog: 'Alle Beiträge ansehen',
   },
 };

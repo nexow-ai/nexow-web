@@ -82,6 +82,7 @@ export const fr: SiteContent = {
       titleLead: 'Décrivez.',
       titleGradient: 'Obtenez un widget.',
       titleTail: 'Organisez.',
+      titleKicker: 'En quelques secondes — pas en semaines ni en mois.',
       subtitle:
         'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
       ctaPrimary: 'Ouvrir l’app',
@@ -1505,5 +1506,30 @@ export const fr: SiteContent = {
     title: 'Cette page a dérivé hors du canvas',
     body: 'La page que vous cherchez n’existe pas — mais votre prochain tableau de bord, peut-être.',
     cta: 'Retour à l’accueil',
+  },
+  waitlist: {
+    eyebrow: 'Liste d’attente facturation',
+    title: 'Le paiement arrive bientôt',
+    subtitle: 'La facturation Supporter et Sponsor arrive bientôt. Laissez votre e-mail et nous vous préviendrons le jour de l’ouverture — sans spam.',
+    placeholder: 'vous@email.com',
+    submit: 'Rejoindre la liste',
+    submitting: 'Inscription…',
+    success: 'Vous êtes sur la liste. Nous vous écrirons à l’ouverture de la facturation.',
+    error: 'Une erreur s’est produite. Réessayez.',
+    invalid: 'Entrez une adresse e-mail valide.',
+  },
+  changelogPage: {
+    meta: {
+      title: 'Notes de version — Nexow',
+      description: 'Dernières mises à jour produit de Nexow, fonctionnalités livrées et notes de version du blog.',
+    },
+    hero: {
+      badge: 'Notes de version',
+      title: 'Ce que nous avons livré',
+      subtitle: 'Mises à jour produit du blog Nexow — les plus récentes en premier.',
+    },
+    empty: 'Pas encore de mise à jour produit — consultez le blog pour des guides et des notes.',
+    readMore: 'Lire la mise à jour',
+    viewBlog: 'Voir tous les articles',
   },
 };
