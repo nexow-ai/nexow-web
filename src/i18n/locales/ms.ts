@@ -1340,4 +1340,106 @@ export const ms = {
     codeLabel: 'Kod jemputan',
     codeHint: 'Pautan ini menyertakan kod jemputan anda untuk apabila penjejakan rujukan bermula.',
   },
+  helpPage: {
+    meta: {
+      title: 'Bantuan — Nexow',
+      description: 'Bermula dengan Nexow: buka aplikasi, baca panduan, terokai ciri dan cari bantuan komuniti.',
+    },
+    hero: {
+      badge: 'Bantuan',
+      title: 'Mulakan dengan Nexow',
+      subtitle: 'Laluan ringkas ke dalam produk — buka kanvas, ikut panduan, atau selami ciri dan komuniti.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Buka aplikasi',
+        body: 'Terangkan widget dalam bahasa biasa dan letakkannya pada kanvas anda. Akaun percuma termasuk kredit permulaan.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Lancarkan Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Daripada gesaan ke widget langsung',
+        body: 'Panduan tentang bagaimana penjanaan kod, sandbox dan kanvas bergabung.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Baca panduan',
+      },
+      {
+        icon: 'layers',
+        title: 'Terokai setiap permukaan',
+        body: 'Widget, penyambung, bot, ejen, komuniti, pasaran — peta produk penuh.',
+        href: '/features',
+        cta: 'Lihat ciri',
+      },
+      {
+        icon: 'plug',
+        title: 'Sambungkan data langsung',
+        body: 'Layari 90 penyambung merentas pasaran, dompet, sosial dan pangkalan data.',
+        href: '/connectors',
+        cta: 'Layari penyambung',
+      },
+      {
+        icon: 'users',
+        title: 'Sertai komuniti',
+        body: 'Kongsi widget, ikuti pencipta dan tuntut @nama anda.',
+        href: '/community',
+        cta: 'Buka komuniti',
+      },
+      {
+        icon: 'shield',
+        title: 'Keselamatan & kepercayaan',
+        body: 'Bagaimana sandbox, kelayakan dan sempadan ruang kerja berfungsi.',
+        href: '/security',
+        cta: 'Baca keselamatan',
+      },
+    ],
+    ctaTitle: 'Masih tersekat?',
+    ctaBody: 'E-mel sokongan atau hantar borang hubungan — kami membaca setiap mesej.',
+    cta: 'Hubungi kami',
+  },
+  securityPage: {
+    meta: {
+      title: 'Keselamatan & kepercayaan — Nexow',
+      description: 'Bagaimana Nexow menghadkan widget, kelayakan, versi dan penyegerakan — runtime sandbox, penyambung keistimewaan minimum, pemilikan ruang kerja.',
+    },
+    hero: {
+      badge: 'Keselamatan',
+      title: 'Kepercayaan terbina dalam kanvas',
+      subtitle: 'Nexow direka supaya kuasa tidak pernah bermakna akses terbuka. Kod yang dijana berjalan dalam sandbox, kelayakan kekal terhad dan sejarah ruang kerja anda kekal milik anda.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widget dalam sandbox',
+        body: 'Setiap widget yang dijana berjalan dalam iframe terpencil dengan sempadan ketat — ia boleh memapar dan mengambil data, bukan mencapai akaun anda atau widget lain.',
+      },
+      {
+        icon: 'lock',
+        title: 'Kelayakan terhad',
+        body: 'Kelayakan penyambung terhad kepada perkhidmatan yang anda sambungkan dan widget yang memerlukannya. Keistimewaan minimum secara lalai.',
+      },
+      {
+        icon: 'history',
+        title: 'Asal usul ruang kerja',
+        body: 'Versi, log dan kod sumber yang dijana kekal terikat pada sejarah ruang kerja anda supaya anda boleh memeriksa, mengundur dan mengaudit apa yang berjalan.',
+      },
+      {
+        icon: 'sync',
+        title: 'Penyegerakan yang anda kawal',
+        body: 'Penyegerakan awan memastikan ruang kerja tersedia merentas peranti tanpa menjadikan kanvas anda produk orang lain.',
+      },
+    ],
+    principlesTitle: 'Apa yang kami janjikan',
+    principles: [
+      'Kod yang dijana tidak pernah berjalan dengan akses tanpa had ke akaun anda.',
+      'Gesaan peribadi, sejarah sembang dan id sambungan kekal dengan pengarang.',
+      'Pemasangan pasaran tiba dijeda atau belum digunakan — larian pertama sentiasa pilihan anda.',
+      'Butiran privasi undang-undang ada dalam Dasar Privasi kami; halaman ini ialah pandangan produk.',
+    ],
+    ctaTitle: 'Baca butiran halus',
+    ctaBody: 'Seni bina produk di sini; Dasar Privasi merangkumi butiran pemprosesan undang-undang.',
+    ctaPrimary: 'Dasar Privasi',
+    ctaSecondary: 'Hubungi kami',
+  },
 } as unknown as SiteContent;

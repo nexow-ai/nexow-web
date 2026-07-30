@@ -1595,4 +1595,106 @@ export const es: SiteContent = {
     codeLabel: 'Código de invitación',
     codeHint: 'Este enlace incluye tu código de invitación para cuando se active el seguimiento de referidos.',
   },
+  helpPage: {
+    meta: {
+      title: 'Ayuda — Nexow',
+      description: 'Primeros pasos con Nexow: abre la app, lee guías, explora funciones y encuentra ayuda de la comunidad.',
+    },
+    hero: {
+      badge: 'Ayuda',
+      title: 'Empieza con Nexow',
+      subtitle: 'Un camino corto hacia el producto: abre el lienzo, sigue una guía o profundiza en funciones y comunidad.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Abre la app',
+        body: 'Describe un widget en lenguaje natural y colócalo en tu lienzo. Las cuentas gratis incluyen créditos iniciales.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Abrir Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Del prompt al widget en vivo',
+        body: 'Un recorrido por cómo encajan la generación de código, el sandbox y el lienzo.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Leer la guía',
+      },
+      {
+        icon: 'layers',
+        title: 'Explora cada superficie',
+        body: 'Widgets, conectores, bots, agentes, comunidad, marketplace: el mapa completo del producto.',
+        href: '/features',
+        cta: 'Ver funciones',
+      },
+      {
+        icon: 'plug',
+        title: 'Conecta datos en vivo',
+        body: 'Explora 90 conectores de mercados, wallets, redes sociales y bases de datos.',
+        href: '/connectors',
+        cta: 'Ver conectores',
+      },
+      {
+        icon: 'users',
+        title: 'Únete a la comunidad',
+        body: 'Comparte widgets, sigue a otros makers y reserva tu @usuario.',
+        href: '/community',
+        cta: 'Abrir comunidad',
+      },
+      {
+        icon: 'shield',
+        title: 'Seguridad y confianza',
+        body: 'Cómo funcionan el sandbox, las credenciales y los límites del espacio de trabajo.',
+        href: '/security',
+        cta: 'Leer sobre seguridad',
+      },
+    ],
+    ctaTitle: '¿Sigues atascado?',
+    ctaBody: 'Escríbenos por email o envía el formulario de contacto: leemos todos los mensajes.',
+    cta: 'Contactar',
+  },
+  securityPage: {
+    meta: {
+      title: 'Seguridad y confianza — Nexow',
+      description: 'Cómo Nexow acota widgets, credenciales, versiones y sincronización: runtime en sandbox, conectores con privilegio mínimo y propiedad del espacio de trabajo.',
+    },
+    hero: {
+      badge: 'Seguridad',
+      title: 'Confianza integrada en el lienzo',
+      subtitle: 'Nexow está diseñado para que la potencia nunca signifique acceso abierto. El código generado se ejecuta en sandbox, las credenciales quedan acotadas y el historial de tu espacio sigue siendo tuyo.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widgets en sandbox',
+        body: 'Cada widget generado se ejecuta en un iframe aislado con un límite estricto: puede renderizar y hacer peticiones, no llegar a tu cuenta ni a otros widgets.',
+      },
+      {
+        icon: 'lock',
+        title: 'Credenciales acotadas',
+        body: 'Las credenciales de los conectores se limitan a los servicios que conectas y a los widgets que las necesitan. Privilegio mínimo por defecto.',
+      },
+      {
+        icon: 'history',
+        title: 'Trazabilidad del espacio',
+        body: 'Versiones, logs y código generado quedan ligados al historial de tu espacio de trabajo para que puedas inspeccionar, revertir y auditar lo que se ejecuta.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sincronización que controlas',
+        body: 'La sincronización en la nube mantiene tus espacios disponibles en todos los dispositivos sin convertir tu lienzo en el producto de otro.',
+      },
+    ],
+    principlesTitle: 'Nuestros compromisos',
+    principles: [
+      'El código generado nunca se ejecuta con acceso sin restricciones a tu cuenta.',
+      'Los prompts privados, el historial de chat y los ids de conexión se quedan con su autor.',
+      'Las instalaciones del marketplace llegan en pausa o sin desplegar: la primera ejecución siempre la decides tú.',
+      'Los detalles legales de privacidad están en nuestra Política de Privacidad; esta página es la visión de producto.',
+    ],
+    ctaTitle: 'Lee la letra pequeña',
+    ctaBody: 'Aquí está la arquitectura del producto; la Política de Privacidad cubre los detalles legales del tratamiento.',
+    ctaPrimary: 'Política de Privacidad',
+    ctaSecondary: 'Contactar',
+  },
 };

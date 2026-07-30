@@ -1593,4 +1593,106 @@ export const zh: SiteContent = {
     codeLabel: '邀请码',
     codeHint: '此链接包含你的邀请码，推荐追踪上线后即可生效。',
   },
+  helpPage: {
+    meta: {
+      title: '帮助 — Nexow',
+      description: '开始使用 Nexow：打开应用、阅读指南、探索功能，并获得社区帮助。',
+    },
+    hero: {
+      badge: '帮助',
+      title: '开始使用 Nexow',
+      subtitle: '通往产品的一条捷径——打开画布、跟着指南走，或深入了解功能与社区。',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: '打开应用',
+        body: '用平实的语言描述一个组件，并把它放到画布上。免费账户包含起步积分。',
+        href: 'https://x.nexow.ai/?signup',
+        cta: '启动 Nexow',
+      },
+      {
+        icon: 'library',
+        title: '从提示词到实时组件',
+        body: '一次完整讲解：代码生成、沙箱与画布如何协同。',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: '阅读指南',
+      },
+      {
+        icon: 'layers',
+        title: '探索每一处',
+        body: '组件、连接器、机器人、智能体、社区、市场——完整的产品地图。',
+        href: '/features',
+        cta: '查看功能',
+      },
+      {
+        icon: 'plug',
+        title: '接入实时数据',
+        body: '浏览覆盖市场、钱包、社交与数据库的 90 个连接器。',
+        href: '/connectors',
+        cta: '浏览连接器',
+      },
+      {
+        icon: 'users',
+        title: '加入社区',
+        body: '分享组件、关注创作者，并认领你的 @用户名。',
+        href: '/community',
+        cta: '打开社区',
+      },
+      {
+        icon: 'shield',
+        title: '安全与信任',
+        body: '沙箱、凭据与工作区边界如何运作。',
+        href: '/security',
+        cta: '阅读安全说明',
+      },
+    ],
+    ctaTitle: '还是卡住了？',
+    ctaBody: '发邮件给支持团队或提交联系表单——我们会阅读每一条消息。',
+    cta: '联系我们',
+  },
+  securityPage: {
+    meta: {
+      title: '安全与信任 — Nexow',
+      description: 'Nexow 如何限定组件、凭据、版本与同步——沙箱化运行时、最小权限连接器、工作区归属。',
+    },
+    hero: {
+      badge: '安全',
+      title: '把信任内建进画布',
+      subtitle: 'Nexow 的设计让强大从不等于开放访问。生成的代码在沙箱中运行，凭据保持受限，你的工作区历史依然属于你。',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: '沙箱化组件',
+        body: '每个生成的组件都在隔离的 iframe 中运行，边界严格——它可以渲染和请求数据，但触及不到你的账户或其他组件。',
+      },
+      {
+        icon: 'lock',
+        title: '受限凭据',
+        body: '连接器凭据仅限于你所连接的服务，以及确实需要它们的组件。默认最小权限。',
+      },
+      {
+        icon: 'history',
+        title: '工作区溯源',
+        body: '版本、日志与生成的源码都附着在工作区历史上，你可以检视、回滚并审计正在运行的内容。',
+      },
+      {
+        icon: 'sync',
+        title: '由你掌控的同步',
+        body: '云同步让工作区在各设备间保持可用，而不会把你的画布变成别人的产品。',
+      },
+    ],
+    principlesTitle: '我们的承诺',
+    principles: [
+      '生成的代码绝不会以不受限的权限访问你的账户。',
+      '私有提示词、聊天记录与连接 id 始终归作者所有。',
+      '从市场安装的内容会以暂停或未部署状态到达——第一次运行始终由你决定。',
+      '法律层面的隐私细节见我们的隐私政策；本页是产品视角。',
+    ],
+    ctaTitle: '阅读细则',
+    ctaBody: '这里是产品架构；隐私政策涵盖法律层面的处理细节。',
+    ctaPrimary: '隐私政策',
+    ctaSecondary: '联系我们',
+  },
 };

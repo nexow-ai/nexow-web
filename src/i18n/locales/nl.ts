@@ -1595,4 +1595,106 @@ export const nl: SiteContent = {
     codeLabel: 'Uitnodigingscode',
     codeHint: 'Deze link bevat je uitnodigingscode voor wanneer referral-tracking live gaat.',
   },
+  helpPage: {
+    meta: {
+      title: 'Help — Nexow',
+      description: 'Aan de slag met Nexow: open de app, lees gidsen, verken functies en vind hulp in de community.',
+    },
+    hero: {
+      badge: 'Help',
+      title: 'Begin met Nexow',
+      subtitle: 'Een kort pad het product in — open het canvas, volg een gids, of duik in functies en community.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Open de app',
+        body: 'Beschrijf een widget in gewone taal en zet hem op je canvas. Gratis accounts bevatten startcredits.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Nexow starten',
+      },
+      {
+        icon: 'library',
+        title: 'Van prompt naar live widget',
+        body: 'Een doorloop van hoe codegeneratie, de sandbox en het canvas samenkomen.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Lees de gids',
+      },
+      {
+        icon: 'layers',
+        title: 'Verken elk onderdeel',
+        body: 'Widgets, connectoren, bots, agents, community, marktplaats — de volledige productkaart.',
+        href: '/features',
+        cta: 'Bekijk functies',
+      },
+      {
+        icon: 'plug',
+        title: 'Koppel live data',
+        body: 'Blader door 90 connectoren voor markten, wallets, socials en databases.',
+        href: '/connectors',
+        cta: 'Bekijk connectoren',
+      },
+      {
+        icon: 'users',
+        title: 'Word lid van de community',
+        body: 'Deel widgets, volg makers en claim je @handle.',
+        href: '/community',
+        cta: 'Open community',
+      },
+      {
+        icon: 'shield',
+        title: 'Beveiliging & vertrouwen',
+        body: 'Hoe sandboxing, inloggegevens en workspace-grenzen werken.',
+        href: '/security',
+        cta: 'Lees beveiliging',
+      },
+    ],
+    ctaTitle: 'Nog steeds vast?',
+    ctaBody: 'Mail support of stuur het contactformulier — we lezen elk bericht.',
+    cta: 'Neem contact op',
+  },
+  securityPage: {
+    meta: {
+      title: 'Beveiliging & vertrouwen — Nexow',
+      description: 'Hoe Nexow widgets, inloggegevens, versies en sync afbakent — sandboxed runtime, connectoren met minimale rechten, eigendom van je workspace.',
+    },
+    hero: {
+      badge: 'Beveiliging',
+      title: 'Vertrouwen ingebouwd in het canvas',
+      subtitle: 'Nexow is zo ontworpen dat kracht nooit open toegang betekent. Gegenereerde code draait in een sandbox, inloggegevens blijven afgebakend en je workspace-historie blijft van jou.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widgets in een sandbox',
+        body: 'Elk gegenereerd widget draait in een geïsoleerde iframe met een strikte grens — het kan renderen en data ophalen, niet bij je account of andere widgets komen.',
+      },
+      {
+        icon: 'lock',
+        title: 'Afgebakende inloggegevens',
+        body: 'Connector-inloggegevens gelden alleen voor de diensten die je koppelt en de widgets die ze nodig hebben. Minimale rechten standaard.',
+      },
+      {
+        icon: 'history',
+        title: 'Herleidbare workspace',
+        body: 'Versies, logs en gegenereerde broncode blijven aan je workspace-historie hangen, zodat je kunt inspecteren, terugdraaien en auditen wat er draait.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sync die jij beheert',
+        body: 'Cloudsync houdt workspaces beschikbaar op al je apparaten zonder je canvas het product van iemand anders te maken.',
+      },
+    ],
+    principlesTitle: 'Waar wij ons aan houden',
+    principles: [
+      'Gegenereerde code draait nooit met onbeperkte toegang tot je account.',
+      'Privéprompts, chatgeschiedenis en connectie-ids blijven bij de auteur.',
+      'Marktplaats-installaties komen gepauzeerd of niet uitgerold binnen — de eerste run is altijd jouw keuze.',
+      'Juridische privacydetails staan in ons Privacybeleid; deze pagina is de productweergave.',
+    ],
+    ctaTitle: 'Lees de kleine lettertjes',
+    ctaBody: 'Hier de productarchitectuur; het Privacybeleid dekt de juridische verwerkingsdetails.',
+    ctaPrimary: 'Privacybeleid',
+    ctaSecondary: 'Neem contact op',
+  },
 };

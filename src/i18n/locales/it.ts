@@ -1595,4 +1595,106 @@ export const it: SiteContent = {
     codeLabel: 'Codice di invito',
     codeHint: 'Questo link include il tuo codice di invito per quando il tracciamento referral sarà attivo.',
   },
+  helpPage: {
+    meta: {
+      title: 'Aiuto — Nexow',
+      description: 'Primi passi con Nexow: apri l’app, leggi le guide, esplora le funzionalità e trova aiuto nella community.',
+    },
+    hero: {
+      badge: 'Aiuto',
+      title: 'Inizia con Nexow',
+      subtitle: 'Un percorso breve nel prodotto: apri il canvas, segui una guida o approfondisci funzionalità e community.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Apri l’app',
+        body: 'Descrivi un widget in linguaggio naturale e mettilo sul canvas. Gli account gratuiti includono crediti iniziali.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Apri Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Dal prompt al widget live',
+        body: 'Una panoramica su come si incastrano generazione del codice, sandbox e canvas.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Leggi la guida',
+      },
+      {
+        icon: 'layers',
+        title: 'Esplora ogni superficie',
+        body: 'Widget, connettori, bot, agenti, community, marketplace — la mappa completa del prodotto.',
+        href: '/features',
+        cta: 'Vedi le funzionalità',
+      },
+      {
+        icon: 'plug',
+        title: 'Collega dati in tempo reale',
+        body: 'Sfoglia 90 connettori per mercati, wallet, social e database.',
+        href: '/connectors',
+        cta: 'Sfoglia i connettori',
+      },
+      {
+        icon: 'users',
+        title: 'Entra nella community',
+        body: 'Condividi widget, segui altri maker e prenota il tuo @handle.',
+        href: '/community',
+        cta: 'Apri la community',
+      },
+      {
+        icon: 'shield',
+        title: 'Sicurezza e fiducia',
+        body: 'Come funzionano sandbox, credenziali e confini del workspace.',
+        href: '/security',
+        cta: 'Leggi la sicurezza',
+      },
+    ],
+    ctaTitle: 'Ancora bloccato?',
+    ctaBody: 'Scrivi al supporto o invia il modulo di contatto — leggiamo ogni messaggio.',
+    cta: 'Contattaci',
+  },
+  securityPage: {
+    meta: {
+      title: 'Sicurezza e fiducia — Nexow',
+      description: 'Come Nexow delimita widget, credenziali, versioni e sincronizzazione — runtime in sandbox, connettori a privilegio minimo, proprietà del workspace.',
+    },
+    hero: {
+      badge: 'Sicurezza',
+      title: 'La fiducia integrata nel canvas',
+      subtitle: 'Nexow è progettato perché la potenza non significhi mai accesso libero. Il codice generato gira in sandbox, le credenziali restano delimitate e la cronologia del tuo workspace resta tua.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widget in sandbox',
+        body: 'Ogni widget generato gira in un iframe isolato con un confine rigido: può disegnare e fare richieste, non raggiungere il tuo account o altri widget.',
+      },
+      {
+        icon: 'lock',
+        title: 'Credenziali delimitate',
+        body: 'Le credenziali dei connettori sono limitate ai servizi che colleghi e ai widget che ne hanno bisogno. Privilegio minimo di default.',
+      },
+      {
+        icon: 'history',
+        title: 'Tracciabilità del workspace',
+        body: 'Versioni, log e codice generato restano legati alla cronologia del workspace, così puoi ispezionare, ripristinare e verificare ciò che gira.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sync che controlli tu',
+        body: 'La sincronizzazione cloud tiene i workspace disponibili su ogni dispositivo senza trasformare il tuo canvas nel prodotto di qualcun altro.',
+      },
+    ],
+    principlesTitle: 'I nostri impegni',
+    principles: [
+      'Il codice generato non gira mai con accesso illimitato al tuo account.',
+      'Prompt privati, cronologia chat e id di connessione restano all’autore.',
+      'Le installazioni dal marketplace arrivano in pausa o non distribuite: la prima esecuzione è sempre una tua scelta.',
+      'I dettagli legali sulla privacy sono nella nostra Informativa sulla privacy; questa pagina è la vista di prodotto.',
+    ],
+    ctaTitle: 'Leggi i dettagli',
+    ctaBody: 'Qui l’architettura di prodotto; l’Informativa sulla privacy copre i dettagli legali del trattamento.',
+    ctaPrimary: 'Informativa sulla privacy',
+    ctaSecondary: 'Contattaci',
+  },
 };

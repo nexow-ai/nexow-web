@@ -1595,4 +1595,106 @@ export const de: SiteContent = {
     codeLabel: 'Einladungscode',
     codeHint: 'Dieser Link enthält deinen Einladungscode für den Start des Empfehlungs-Trackings.',
   },
+  helpPage: {
+    meta: {
+      title: 'Hilfe — Nexow',
+      description: 'Erste Schritte mit Nexow: App starten, Guides lesen, Funktionen erkunden und Hilfe aus der Community finden.',
+    },
+    hero: {
+      badge: 'Hilfe',
+      title: 'Leg mit Nexow los',
+      subtitle: 'Ein kurzer Weg ins Produkt — öffne den Canvas, folge einem Guide oder tauche in Funktionen und Community ein.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'App öffnen',
+        body: 'Beschreibe ein Widget in normaler Sprache und setze es auf deinen Canvas. Kostenlose Accounts enthalten Startguthaben.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Nexow starten',
+      },
+      {
+        icon: 'library',
+        title: 'Vom Prompt zum Live-Widget',
+        body: 'Ein Durchlauf, wie Codegenerierung, Sandbox und Canvas zusammenspielen.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Guide lesen',
+      },
+      {
+        icon: 'layers',
+        title: 'Jede Oberfläche erkunden',
+        body: 'Widgets, Konnektoren, Bots, Agenten, Community, Marktplatz — die vollständige Produktkarte.',
+        href: '/features',
+        cta: 'Funktionen ansehen',
+      },
+      {
+        icon: 'plug',
+        title: 'Live-Daten anbinden',
+        body: 'Durchstöbere 90 Konnektoren für Märkte, Wallets, Socials und Datenbanken.',
+        href: '/connectors',
+        cta: 'Konnektoren ansehen',
+      },
+      {
+        icon: 'users',
+        title: 'Der Community beitreten',
+        body: 'Teile Widgets, folge Makern und sichere dir deinen @Handle.',
+        href: '/community',
+        cta: 'Community öffnen',
+      },
+      {
+        icon: 'shield',
+        title: 'Sicherheit & Vertrauen',
+        body: 'Wie Sandboxing, Zugangsdaten und Workspace-Grenzen funktionieren.',
+        href: '/security',
+        cta: 'Sicherheit lesen',
+      },
+    ],
+    ctaTitle: 'Immer noch festgefahren?',
+    ctaBody: 'Schreib dem Support oder nutze das Kontaktformular — wir lesen jede Nachricht.',
+    cta: 'Kontakt aufnehmen',
+  },
+  securityPage: {
+    meta: {
+      title: 'Sicherheit & Vertrauen — Nexow',
+      description: 'Wie Nexow Widgets, Zugangsdaten, Versionen und Sync eingrenzt — Sandbox-Runtime, Konnektoren mit minimalen Rechten, Workspace-Eigentum.',
+    },
+    hero: {
+      badge: 'Sicherheit',
+      title: 'Vertrauen, eingebaut in den Canvas',
+      subtitle: 'Nexow ist so gebaut, dass Leistungsfähigkeit nie offenen Zugriff bedeutet. Generierter Code läuft in der Sandbox, Zugangsdaten bleiben eingegrenzt und deine Workspace-Historie bleibt deine.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widgets in der Sandbox',
+        body: 'Jedes generierte Widget läuft in einem isolierten iframe mit strenger Grenze — es kann rendern und Daten holen, aber nicht auf dein Konto oder andere Widgets zugreifen.',
+      },
+      {
+        icon: 'lock',
+        title: 'Eingegrenzte Zugangsdaten',
+        body: 'Konnektor-Zugangsdaten gelten nur für die Dienste, die du verbindest, und die Widgets, die sie brauchen. Minimale Rechte als Standard.',
+      },
+      {
+        icon: 'history',
+        title: 'Nachvollziehbarer Workspace',
+        body: 'Versionen, Logs und generierter Quellcode bleiben an deiner Workspace-Historie, sodass du prüfen, zurückrollen und auditieren kannst, was läuft.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sync unter deiner Kontrolle',
+        body: 'Cloud-Sync hält Workspaces auf allen Geräten verfügbar, ohne deinen Canvas zum Produkt eines anderen zu machen.',
+      },
+    ],
+    principlesTitle: 'Worauf wir uns festlegen',
+    principles: [
+      'Generierter Code läuft nie mit uneingeschränktem Zugriff auf dein Konto.',
+      'Private Prompts, Chatverlauf und Verbindungs-IDs bleiben beim Autor.',
+      'Marktplatz-Installationen kommen pausiert oder nicht ausgerollt an — der erste Lauf ist immer deine Entscheidung.',
+      'Rechtliche Datenschutzdetails stehen in unserer Datenschutzerklärung; diese Seite ist die Produktsicht.',
+    ],
+    ctaTitle: 'Lies das Kleingedruckte',
+    ctaBody: 'Hier die Produktarchitektur; die Datenschutzerklärung deckt die rechtlichen Verarbeitungsdetails ab.',
+    ctaPrimary: 'Datenschutzerklärung',
+    ctaSecondary: 'Kontakt aufnehmen',
+  },
 };

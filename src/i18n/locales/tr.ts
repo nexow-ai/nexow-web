@@ -1340,4 +1340,106 @@ export const tr = {
     codeLabel: 'Davet kodu',
     codeHint: 'Bu bağlantı, referans takibi açıldığında kullanılacak davet kodunuzu içerir.',
   },
+  helpPage: {
+    meta: {
+      title: 'Yardım — Nexow',
+      description: 'Nexow’a başlangıç: uygulamayı açın, rehberleri okuyun, özellikleri keşfedin ve topluluk desteği bulun.',
+    },
+    hero: {
+      badge: 'Yardım',
+      title: 'Nexow ile başlayın',
+      subtitle: 'Ürüne kısa bir giriş — kanvası açın, bir rehberi izleyin ya da özellikleri ve topluluğu keşfedin.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Uygulamayı aç',
+        body: 'Bir widget’ı gündelik dille anlatın ve kanvasınıza yerleştirin. Ücretsiz hesaplar başlangıç kredisi içerir.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Nexow’u başlat',
+      },
+      {
+        icon: 'library',
+        title: 'Komuttan canlı widget’a',
+        body: 'Kod üretimi, sandbox ve kanvasın nasıl birleştiğine dair bir tur.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Rehberi oku',
+      },
+      {
+        icon: 'layers',
+        title: 'Her yüzeyi keşfedin',
+        body: 'Widget’lar, bağlantılar, botlar, ajanlar, topluluk, pazar yeri — tam ürün haritası.',
+        href: '/features',
+        cta: 'Özellikleri gör',
+      },
+      {
+        icon: 'plug',
+        title: 'Canlı veriyi bağlayın',
+        body: 'Piyasalar, cüzdanlar, sosyal ağlar ve veritabanları için 90 bağlantıya göz atın.',
+        href: '/connectors',
+        cta: 'Bağlantılara göz at',
+      },
+      {
+        icon: 'users',
+        title: 'Topluluğa katılın',
+        body: 'Widget paylaşın, üreticileri takip edin ve @kullanıcı adınızı alın.',
+        href: '/community',
+        cta: 'Topluluğu aç',
+      },
+      {
+        icon: 'shield',
+        title: 'Güvenlik ve güven',
+        body: 'Sandbox, kimlik bilgileri ve çalışma alanı sınırlarının nasıl işlediği.',
+        href: '/security',
+        cta: 'Güvenliği oku',
+      },
+    ],
+    ctaTitle: 'Hâlâ takıldınız mı?',
+    ctaBody: 'Destek ekibine e-posta gönderin ya da iletişim formunu doldurun — her mesajı okuyoruz.',
+    cta: 'Bize ulaşın',
+  },
+  securityPage: {
+    meta: {
+      title: 'Güvenlik ve güven — Nexow',
+      description: 'Nexow widget’ları, kimlik bilgilerini, sürümleri ve senkronizasyonu nasıl sınırlar — sandbox çalışma zamanı, en az ayrıcalıklı bağlantılar, çalışma alanı sahipliği.',
+    },
+    hero: {
+      badge: 'Güvenlik',
+      title: 'Kanvasa işlenmiş güven',
+      subtitle: 'Nexow, gücün asla açık erişim anlamına gelmemesi için tasarlandı. Üretilen kod sandbox içinde çalışır, kimlik bilgileri sınırlı kalır ve çalışma alanı geçmişiniz sizin kalır.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Sandbox’lanmış widget’lar',
+        body: 'Üretilen her widget, katı bir sınırla izole bir iframe içinde çalışır — render edebilir ve veri çekebilir, hesabınıza veya diğer widget’lara erişemez.',
+      },
+      {
+        icon: 'lock',
+        title: 'Sınırlı kimlik bilgileri',
+        body: 'Bağlantı kimlik bilgileri yalnızca bağladığınız servisler ve bunlara ihtiyaç duyan widget’larla sınırlıdır. Varsayılan olarak en az ayrıcalık.',
+      },
+      {
+        icon: 'history',
+        title: 'Çalışma alanı izlenebilirliği',
+        body: 'Sürümler, günlükler ve üretilen kaynak kod çalışma alanı geçmişinize bağlı kalır; böylece çalışanı inceleyebilir, geri alabilir ve denetleyebilirsiniz.',
+      },
+      {
+        icon: 'sync',
+        title: 'Kontrolü sizde olan senkronizasyon',
+        body: 'Bulut senkronizasyonu, kanvasınızı başkasının ürününe dönüştürmeden çalışma alanlarını tüm cihazlarda erişilebilir tutar.',
+      },
+    ],
+    principlesTitle: 'Taahhütlerimiz',
+    principles: [
+      'Üretilen kod, hesabınıza sınırsız erişimle asla çalışmaz.',
+      'Özel komutlar, sohbet geçmişi ve bağlantı kimlikleri yazarında kalır.',
+      'Pazar yeri kurulumları duraklatılmış veya dağıtılmamış gelir — ilk çalıştırma her zaman sizin tercihinizdir.',
+      'Yasal gizlilik ayrıntıları Gizlilik Politikamızdadır; bu sayfa ürün görünümüdür.',
+    ],
+    ctaTitle: 'Ayrıntıları okuyun',
+    ctaBody: 'Ürün mimarisi burada; Gizlilik Politikası yasal işleme ayrıntılarını kapsar.',
+    ctaPrimary: 'Gizlilik Politikası',
+    ctaSecondary: 'Bize ulaşın',
+  },
 } as unknown as SiteContent;

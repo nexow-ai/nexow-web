@@ -1595,4 +1595,106 @@ export const pt: SiteContent = {
     codeLabel: 'Código de convite',
     codeHint: 'Este link inclui o seu código de convite para quando o rastreio de referências ficar ativo.',
   },
+  helpPage: {
+    meta: {
+      title: 'Ajuda — Nexow',
+      description: 'Primeiros passos com a Nexow: abra a app, leia guias, explore funcionalidades e encontre ajuda da comunidade.',
+    },
+    hero: {
+      badge: 'Ajuda',
+      title: 'Comece com a Nexow',
+      subtitle: 'Um caminho curto para o produto: abra o canvas, siga um guia ou explore funcionalidades e comunidade.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Abrir a app',
+        body: 'Descreva um widget em linguagem natural e coloque-o no seu canvas. As contas grátis incluem créditos iniciais.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Abrir a Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Do prompt ao widget em direto',
+        body: 'Um percurso por como encaixam a geração de código, a sandbox e o canvas.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Ler o guia',
+      },
+      {
+        icon: 'layers',
+        title: 'Explore todas as superfícies',
+        body: 'Widgets, conectores, bots, agentes, comunidade, marketplace — o mapa completo do produto.',
+        href: '/features',
+        cta: 'Ver funcionalidades',
+      },
+      {
+        icon: 'plug',
+        title: 'Ligue dados em direto',
+        body: 'Explore 90 conectores de mercados, carteiras, redes sociais e bases de dados.',
+        href: '/connectors',
+        cta: 'Ver conectores',
+      },
+      {
+        icon: 'users',
+        title: 'Junte-se à comunidade',
+        body: 'Partilhe widgets, siga criadores e reserve o seu @identificador.',
+        href: '/community',
+        cta: 'Abrir comunidade',
+      },
+      {
+        icon: 'shield',
+        title: 'Segurança e confiança',
+        body: 'Como funcionam a sandbox, as credenciais e os limites do espaço de trabalho.',
+        href: '/security',
+        cta: 'Ler sobre segurança',
+      },
+    ],
+    ctaTitle: 'Ainda com dúvidas?',
+    ctaBody: 'Envie email ao suporte ou use o formulário de contacto — lemos todas as mensagens.',
+    cta: 'Contacte-nos',
+  },
+  securityPage: {
+    meta: {
+      title: 'Segurança e confiança — Nexow',
+      description: 'Como a Nexow delimita widgets, credenciais, versões e sincronização — runtime em sandbox, conectores com privilégio mínimo, propriedade do espaço de trabalho.',
+    },
+    hero: {
+      badge: 'Segurança',
+      title: 'Confiança integrada no canvas',
+      subtitle: 'A Nexow foi desenhada para que poder nunca signifique acesso aberto. O código gerado corre em sandbox, as credenciais ficam delimitadas e o histórico do seu espaço continua seu.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widgets em sandbox',
+        body: 'Cada widget gerado corre num iframe isolado com uma fronteira estrita — pode desenhar e obter dados, não alcançar a sua conta ou outros widgets.',
+      },
+      {
+        icon: 'lock',
+        title: 'Credenciais delimitadas',
+        body: 'As credenciais dos conectores limitam-se aos serviços que liga e aos widgets que delas precisam. Privilégio mínimo por omissão.',
+      },
+      {
+        icon: 'history',
+        title: 'Rastreabilidade do espaço',
+        body: 'Versões, registos e código gerado ficam ligados ao histórico do seu espaço para poder inspecionar, reverter e auditar o que corre.',
+      },
+      {
+        icon: 'sync',
+        title: 'Sincronização que controla',
+        body: 'A sincronização na cloud mantém os espaços disponíveis em todos os dispositivos sem tornar o seu canvas no produto de outra pessoa.',
+      },
+    ],
+    principlesTitle: 'Os nossos compromissos',
+    principles: [
+      'O código gerado nunca corre com acesso irrestrito à sua conta.',
+      'Prompts privados, histórico de conversa e ids de ligação ficam com o autor.',
+      'As instalações do marketplace chegam em pausa ou por implantar — a primeira execução é sempre escolha sua.',
+      'Os detalhes legais de privacidade estão na nossa Política de Privacidade; esta página é a visão de produto.',
+    ],
+    ctaTitle: 'Leia os detalhes',
+    ctaBody: 'Aqui a arquitetura do produto; a Política de Privacidade cobre os detalhes legais do tratamento.',
+    ctaPrimary: 'Política de Privacidade',
+    ctaSecondary: 'Contacte-nos',
+  },
 };

@@ -1626,4 +1626,106 @@ export const fr: SiteContent = {
     codeLabel: 'Code d’invitation',
     codeHint: 'Ce lien contient votre code d’invitation pour l’activation du suivi de parrainage.',
   },
+  helpPage: {
+    meta: {
+      title: 'Aide — Nexow',
+      description: 'Débuter avec Nexow : lancez l’app, lisez les guides, explorez les fonctionnalités et trouvez de l’aide dans la communauté.',
+    },
+    hero: {
+      badge: 'Aide',
+      title: 'Démarrer avec Nexow',
+      subtitle: 'Un chemin court vers le produit — ouvrez le canvas, suivez un guide, ou creusez les fonctionnalités et la communauté.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Ouvrir l’app',
+        body: 'Décrivez un widget en langage naturel et posez-le sur votre canvas. Les comptes gratuits incluent des crédits de départ.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Lancer Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Du prompt au widget en direct',
+        body: 'Un parcours de la génération de code au sandbox et au canvas.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Lire le guide',
+      },
+      {
+        icon: 'layers',
+        title: 'Explorer chaque surface',
+        body: 'Widgets, connecteurs, bots, agents, communauté, marketplace — la carte complète du produit.',
+        href: '/features',
+        cta: 'Voir les fonctionnalités',
+      },
+      {
+        icon: 'plug',
+        title: 'Brancher des données live',
+        body: 'Parcourez 90 connecteurs pour marchés, wallets, réseaux sociaux et bases de données.',
+        href: '/connectors',
+        cta: 'Voir les connecteurs',
+      },
+      {
+        icon: 'users',
+        title: 'Rejoindre la communauté',
+        body: 'Partagez des widgets, suivez des créateurs et réservez votre @pseudo.',
+        href: '/community',
+        cta: 'Ouvrir la communauté',
+      },
+      {
+        icon: 'shield',
+        title: 'Sécurité et confiance',
+        body: 'Comment fonctionnent le sandbox, les identifiants et les limites de l’espace de travail.',
+        href: '/security',
+        cta: 'Lire la sécurité',
+      },
+    ],
+    ctaTitle: 'Toujours bloqué ?',
+    ctaBody: 'Écrivez au support ou envoyez le formulaire de contact — nous lisons chaque message.',
+    cta: 'Nous contacter',
+  },
+  securityPage: {
+    meta: {
+      title: 'Sécurité et confiance — Nexow',
+      description: 'Comment Nexow encadre widgets, identifiants, versions et synchronisation — runtime en sandbox, connecteurs à moindre privilège, propriété de l’espace de travail.',
+    },
+    hero: {
+      badge: 'Sécurité',
+      title: 'La confiance intégrée au canvas',
+      subtitle: 'Nexow est conçu pour que la puissance ne rime jamais avec accès ouvert. Le code généré s’exécute en sandbox, les identifiants restent limités et l’historique de votre espace reste le vôtre.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widgets en sandbox',
+        body: 'Chaque widget généré s’exécute dans une iframe isolée avec une frontière stricte — il peut afficher et récupérer des données, pas atteindre votre compte ni les autres widgets.',
+      },
+      {
+        icon: 'lock',
+        title: 'Identifiants limités',
+        body: 'Les identifiants de connecteurs sont limités aux services que vous connectez et aux widgets qui en ont besoin. Moindre privilège par défaut.',
+      },
+      {
+        icon: 'history',
+        title: 'Traçabilité de l’espace',
+        body: 'Versions, journaux et code généré restent attachés à l’historique de votre espace pour inspecter, revenir en arrière et auditer ce qui s’exécute.',
+      },
+      {
+        icon: 'sync',
+        title: 'Une synchronisation que vous maîtrisez',
+        body: 'La synchronisation cloud garde vos espaces disponibles sur tous vos appareils sans transformer votre canvas en produit d’un autre.',
+      },
+    ],
+    principlesTitle: 'Nos engagements',
+    principles: [
+      'Le code généré ne s’exécute jamais avec un accès illimité à votre compte.',
+      'Les prompts privés, l’historique de conversation et les identifiants de connexion restent chez leur auteur.',
+      'Les installations depuis la marketplace arrivent en pause ou non déployées — la première exécution est toujours votre choix.',
+      'Les détails juridiques de confidentialité figurent dans notre Politique de confidentialité ; cette page est la vue produit.',
+    ],
+    ctaTitle: 'Lire les détails',
+    ctaBody: 'L’architecture produit est ici ; la Politique de confidentialité couvre les détails juridiques du traitement.',
+    ctaPrimary: 'Politique de confidentialité',
+    ctaSecondary: 'Nous contacter',
+  },
 };
