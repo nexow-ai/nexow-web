@@ -16,7 +16,9 @@ const home = localizePath('/', lang);
 const imgClass = ['w-auto select-none', className];
 ---
 
-<a href={home} class="inline-flex items-center" aria-label={`${SITE.name} — home`}>
+{/* `shrink-0`: as a flex item in the header bar the wordmark would otherwise be
+    the first thing squeezed, and long-locale navs collapsed it to zero width. */}
+<a href={home} class="inline-flex shrink-0 items-center" aria-label={`${SITE.name} — home`}>
   {
     tone === 'auto' ? (
       <>

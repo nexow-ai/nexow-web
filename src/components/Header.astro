@@ -34,15 +34,17 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       <Logo lang={lang} class="h-7" />
 
       <!-- Desktop nav — `lg` not `md`: seven links plus the language picker and
-           the CTA need ~870px, so at 768px they would run off the right edge. -->
-      <ul class="hidden items-center gap-1 lg:flex">
+           the CTA need ~870px, so at 768px they would run off the right edge.
+           Between `lg` and `xl` the row runs compact so the longest locales
+           (el, ru) still fit at 1024; `xl` restores the roomier spacing. -->
+      <ul class="hidden items-center gap-0.5 lg:flex xl:gap-1">
         {
           links.map((l) => (
             <li>
               <a
                 href={l.url}
                 class:list={[
-                  'inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-colors',
+                  'inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[0.8125rem] font-medium transition-colors xl:px-3.5 xl:text-sm',
                   l.active
                     ? 'text-brand-600 dark:text-brand-300'
                     : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
