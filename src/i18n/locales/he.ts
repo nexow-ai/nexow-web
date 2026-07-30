@@ -14,6 +14,8 @@ export const he: SiteContent = {
     launch: 'הפעלת האפליקציה',
     menu: 'פתיחת תפריט',
     close: 'סגירת תפריט',
+    themeToDark: 'מעבר למצב כהה',
+    themeToLight: 'מעבר למצב בהיר',
   },
   footer: {
     tagline: 'תארו ווידג׳ט. Nexow בונה אותו, מחבר אותו לנתוני שוק חיים, ומניח אותו על הקנבס שלכם.',

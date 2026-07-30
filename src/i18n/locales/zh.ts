@@ -14,6 +14,8 @@ export const zh: SiteContent = {
     launch: '启动应用',
     menu: '打开菜单',
     close: '关闭菜单',
+    themeToDark: '切换到深色模式',
+    themeToLight: '切换到浅色模式',
   },
   footer: {
     tagline: '描述一个组件。Nexow 会构建它、接入实时市场数据，并放到你的画布上。',

@@ -14,6 +14,8 @@ export const ja: SiteContent = {
     launch: 'アプリを起動',
     menu: 'メニューを開く',
     close: 'メニューを閉じる',
+    themeToDark: 'ダークモードに切り替え',
+    themeToLight: 'ライトモードに切り替え',
   },
   footer: {
     tagline: 'ウィジェットを説明するだけ。Nexow が構築し、ライブ市場データに接続して、キャンバスに配置します。',

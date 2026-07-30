@@ -14,6 +14,8 @@ export const ko: SiteContent = {
     launch: '앱 실행',
     menu: '메뉴 열기',
     close: '메뉴 닫기',
+    themeToDark: '다크 모드로 전환',
+    themeToLight: '라이트 모드로 전환',
   },
   footer: {
     tagline: '위젯을 설명하세요. Nexow가 만들고, 실시간 시장 데이터를 연결한 후 캔버스에 배치합니다.',

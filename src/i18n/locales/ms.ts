@@ -14,6 +14,8 @@ export const ms = {
     launch: 'Lancarkan aplikasi',
     menu: 'Buka menu',
     close: 'Tutup menu',
+    themeToDark: 'Tukar ke mod gelap',
+    themeToLight: 'Tukar ke mod cerah',
   },
   footer: {
     tagline: 'Terangkan widget. Nexow membinanya, menghubungkannya dengan data pasaran langsung, dan meletakkannya di kanvas anda.',

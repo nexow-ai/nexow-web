@@ -14,6 +14,8 @@ export const ar: SiteContent = {
     launch: 'تشغيل التطبيق',
     menu: 'فتح القائمة',
     close: 'إغلاق القائمة',
+    themeToDark: 'التبديل إلى الوضع الداكن',
+    themeToLight: 'التبديل إلى الوضع الفاتح',
   },
   footer: {
     tagline: 'صِف أداة. Nexow تبنيها، وتربطها ببيانات السوق الحية، وتضعها على لوحتك.',

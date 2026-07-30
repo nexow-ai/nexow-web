@@ -14,6 +14,8 @@ export const tr = {
     launch: 'Uygulamayı Başlat',
     menu: 'Menüyü Aç',
     close: 'Menüyü Kapat',
+    themeToDark: 'Koyu moda geç',
+    themeToLight: 'Açık moda geç',
   },
   footer: {
     tagline: 'Bir widget açıklayın. Nexow onu kurar, canlı pazar verilerine bağlar ve tuvalinize koyar.',
