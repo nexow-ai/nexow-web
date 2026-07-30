@@ -1,6 +1,7 @@
 ---
 import type { Connector } from '../data/connectors';
 import type { SiteContent } from '../i18n/content';
+import { toFacets } from '../lib/connectorFilter';
 
 interface Props {
   c: Connector;
@@ -13,9 +14,9 @@ const catLabel = t.categories[c.category] ?? c.category;
 const assetLabels = c.assets.map((a) => t.assets[a] ?? a);
 const shown = assetLabels.slice(0, 2);
 const more = assetLabels.length - shown.length;
-const letter = (c.name.match(/[A-Za-z]/)?.[0] ?? c.name[0] ?? '').toUpperCase();
-// Lowercased haystack for the client-side search (id, notes, localized terms).
-const search = [c.id, c.name, c.notes, kindLabel, catLabel, ...assetLabels, ...c.assets].join(' ').toLowerCase();
+// The filter predicate reads these back from the dataset — keep both sides in
+// `src/lib/connectorFilter.ts` so they cannot drift.
+const { letter, search } = toFacets(c, t);
 ---
 
 <button
