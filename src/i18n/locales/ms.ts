@@ -68,6 +68,90 @@ export const ms = {
       note: 'Tiada pendaftaran untuk mencuba · Swasta dalam penyemak imbas anda · Atau akaun percuma dengan 10K kredit yang dikhaskan',
       promptExample: 'Tunjukkan carta batang lilin BTC-USD daripada Coinbase dengan EMA 20 & 50 dan RSI di bawah.',
       promptPlaceholder: 'Terangkan widget…',
+      promptExamplesLabel: 'Atau mula dengan contoh',
+      promptExamplesMore: 'Lagi contoh',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Meja kripto',
+          prompt: 'Bina meja kripto: lilin BTC-USD daripada Binance dengan EMA 20 dan 50, kedalaman buku pesanan dan panel kadar funding.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Senarai saham',
+          prompt: 'Buat senarai pantau saham dengan harga langsung, perubahan harian, tarikh pendapatan dan carta setahun.',
+        },
+        {
+          icon: 'radar',
+          label: 'Peta gempa bumi',
+          prompt: 'Petakan semua gempa bumi USGS melebihi magnitud 4 dalam 24 jam lalu, dengan histogram magnitud dan suapan peristiwa.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Papan cuaca',
+          prompt: 'Bina papan cuaca untuk tiga bandar: ramalan setiap jam, kebarangkalian hujan dan carta suhu seminggu.',
+        },
+        {
+          icon: 'grid',
+          label: 'Papan projek',
+          prompt: 'Cipta pusat kawalan projek: papan kanban, burndown sprint, penghalang mengikut pemilik dan garis masa.',
+        },
+        {
+          icon: 'flame',
+          label: 'Penjejak tabiat',
+          prompt: 'Buat penjejak rentetan untuk enam tabiat harian dengan peta haba bulanan dan skor mingguan.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Meja berita',
+          prompt: 'Buat meja berita dengan berita utama dari Reuters, The Guardian dan Hacker News, ditapis mengikut kata kunci.',
+        },
+        {
+          icon: 'rocket',
+          label: 'HQ pengasas',
+          prompt: 'Bina papan pemuka pengasas: saluran prospek, carta MRR, senarai semak pelancaran dan kalendar kandungan.',
+        },
+        {
+          icon: 'activity',
+          label: 'Kualiti udara',
+          prompt: 'Tunjukkan kualiti udara bandar saya daripada OpenAQ dengan tolok PM2.5, trend 7 hari dan jalur kesihatan.',
+        },
+        {
+          icon: 'earth',
+          label: 'Penunjuk dunia',
+          prompt: 'Bandingkan KDNK per kapita, inflasi dan populasi lima negara menggunakan penunjuk Bank Dunia.',
+        },
+        {
+          icon: 'target',
+          label: 'Pasaran ramalan',
+          prompt: 'Tunjukkan odds Polymarket dan Kalshi bersebelahan dengan garis masa kebarangkalian dan jadual pergerakan terbesar.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Penjejak wallet',
+          prompt: 'Jejak wallet saya: baki token, prestasi 30 hari dan carta pai agihan mengikut aset.',
+        },
+        {
+          icon: 'play',
+          label: 'Permainan mini',
+          prompt: 'Bina permainan memori kecil dengan pengira langkah, pemasa dan rekod skor terbaik.',
+        },
+        {
+          icon: 'music',
+          label: 'Statistik lagu',
+          prompt: 'Buat papan pemuka pendengaran daripada Spotify: artis teratas, carta pai genre dan mainan setiap minggu.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Pangkalan data saya',
+          prompt: 'Sambungkan Postgres saya dan cartakan pendaftaran harian, churn dan hasil mengikut pelan, dengan baris KPI di atas.',
+        },
+        {
+          icon: 'heart',
+          label: 'Log latihan',
+          prompt: 'Tunjukkan larian Strava saya bulan ini dengan trend pace, jumlah mingguan dan jadual rekod peribadi.',
+        },
+      ],
     },
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',

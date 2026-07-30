@@ -81,6 +81,90 @@ export const es: SiteContent = {
       note: 'Sin registro para probar · Privado en tu navegador · O cuenta gratis con 10K créditos reservados',
       promptExample: 'Muestra un gráfico de velas de BTC-USD de Coinbase con EMA 20 y 50 y RSI debajo.',
       promptPlaceholder: 'Describe un widget…',
+      promptExamplesLabel: 'O empieza con un ejemplo',
+      promptExamplesMore: 'Más ejemplos',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Mesa de cripto',
+          prompt: 'Crea una mesa de cripto: velas de BTC-USD de Binance con EMA 20 y 50, profundidad del order book y un panel de funding.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Watchlist de acciones',
+          prompt: 'Haz una watchlist de acciones con cotizaciones en vivo, variación del día, fechas de resultados y un gráfico de un año.',
+        },
+        {
+          icon: 'radar',
+          label: 'Mapa de terremotos',
+          prompt: 'Mapea todos los terremotos del USGS de magnitud superior a 4 en las últimas 24 horas, con histograma de magnitud y feed de eventos.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Panel del tiempo',
+          prompt: 'Crea un panel del tiempo para tres ciudades: previsión por horas, probabilidad de lluvia y temperatura de la semana.',
+        },
+        {
+          icon: 'grid',
+          label: 'Tablero de proyecto',
+          prompt: 'Crea un centro de mando de proyecto: tablero kanban, burndown del sprint, bloqueos por responsable y una línea de tiempo.',
+        },
+        {
+          icon: 'flame',
+          label: 'Rachas de hábitos',
+          prompt: 'Haz un tracker de rachas para seis hábitos diarios con un mapa de calor mensual y una puntuación semanal.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Mesa de noticias',
+          prompt: 'Haz una mesa de noticias con titulares de Reuters, The Guardian y Hacker News, filtrados por palabra clave.',
+        },
+        {
+          icon: 'rocket',
+          label: 'Panel de founder',
+          prompt: 'Crea un panel de founder: pipeline de leads, gráfico de MRR, checklist de lanzamiento y calendario de contenido.',
+        },
+        {
+          icon: 'activity',
+          label: 'Calidad del aire',
+          prompt: 'Muestra la calidad del aire de mi ciudad desde OpenAQ con un medidor de PM2.5, tendencia de 7 días y bandas de salud.',
+        },
+        {
+          icon: 'earth',
+          label: 'Indicadores mundiales',
+          prompt: 'Compara PIB per cápita, inflación y población de cinco países con los indicadores del Banco Mundial.',
+        },
+        {
+          icon: 'target',
+          label: 'Mercados de predicción',
+          prompt: 'Muestra las probabilidades de Polymarket y Kalshi lado a lado con una línea temporal y una tabla de mayores movimientos.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Seguimiento de wallet',
+          prompt: 'Sigue mi wallet: saldos de tokens, rendimiento a 30 días y un gráfico circular de asignación por activo.',
+        },
+        {
+          icon: 'play',
+          label: 'Minijuego',
+          prompt: 'Crea un pequeño juego de memoria con contador de movimientos, cronómetro y récord de puntuación.',
+        },
+        {
+          icon: 'music',
+          label: 'Estadísticas de música',
+          prompt: 'Haz un panel de escucha desde Spotify: artistas top, gráfico circular de géneros y reproducciones por semana.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Mi base de datos',
+          prompt: 'Conecta mi Postgres y grafica registros diarios, churn e ingresos por plan, con una fila de KPIs arriba.',
+        },
+        {
+          icon: 'heart',
+          label: 'Registro de entrenos',
+          prompt: 'Muestra mis carreras de Strava de este mes con tendencia de ritmo, volumen semanal y tabla de récords personales.',
+        },
+      ],
     },
     ticker: { label: 'Conectores en vivo' },
     trust: 'Un lienzo para todos los mercados — FX, cripto, acciones, futuros, opciones y mercados de predicción.',

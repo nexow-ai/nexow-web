@@ -70,6 +70,90 @@ export const nl: SiteContent = {
       note: 'Geen aanmelding nodig om te proberen · Privé in je browser · Of een gratis account met 10K gereserveerde credits',
       promptExample: 'Toon een candlestick chart van BTC-USD van Coinbase met 20 & 50 EMA en RSI eronder.',
       promptPlaceholder: 'Beschrijf een widget…',
+      promptExamplesLabel: 'Of begin met een voorbeeld',
+      promptExamplesMore: 'Meer voorbeelden',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Cryptodesk',
+          prompt: 'Bouw een cryptodesk: BTC-USD candles van Binance met EMA 20 en 50, orderboekdiepte en een funding-paneel.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Aandelen-watchlist',
+          prompt: 'Maak een aandelen-watchlist met live koersen, dagverandering, earningsdata en een jaargrafiek.',
+        },
+        {
+          icon: 'radar',
+          label: 'Aardbevingskaart',
+          prompt: 'Zet alle USGS-aardbevingen boven magnitude 4 van de laatste 24 uur op een kaart, met magnitudehistogram en een eventfeed.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Weerbord',
+          prompt: 'Bouw een weerbord voor drie steden: uurverwachting, regenkans en temperaturen voor de week.',
+        },
+        {
+          icon: 'grid',
+          label: 'Projectbord',
+          prompt: 'Maak een projectcommandocentrum: kanbanbord, sprint burndown, blockers per eigenaar en een tijdlijn.',
+        },
+        {
+          icon: 'flame',
+          label: 'Habit-tracker',
+          prompt: 'Maak een streak-tracker voor zes dagelijkse gewoontes met een maandheatmap en een weekscore.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Newsdesk',
+          prompt: 'Maak een newsdesk met topverhalen van Reuters, The Guardian en Hacker News, gefilterd op trefwoord.',
+        },
+        {
+          icon: 'rocket',
+          label: 'Founder-HQ',
+          prompt: 'Bouw een founder-dashboard: leadpijplijn, MRR-grafiek, launch-checklist en een contentkalender.',
+        },
+        {
+          icon: 'activity',
+          label: 'Luchtkwaliteit',
+          prompt: 'Toon de luchtkwaliteit van mijn stad via OpenAQ met een PM2.5-meter, een 7-daagse trend en gezondheidsbanden.',
+        },
+        {
+          icon: 'earth',
+          label: 'Wereldindicatoren',
+          prompt: 'Vergelijk bbp per hoofd, inflatie en bevolking van vijf landen met Wereldbank-indicatoren.',
+        },
+        {
+          icon: 'target',
+          label: 'Voorspellingsmarkten',
+          prompt: 'Toon de odds van Polymarket en Kalshi naast elkaar met een kansentijdlijn en een tabel met de grootste bewegingen.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Wallet-tracker',
+          prompt: 'Volg mijn wallet: tokenbalansen, prestatie over 30 dagen en een cirkeldiagram van de verdeling per asset.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini-game',
+          prompt: 'Bouw een klein memoryspel met zettenteller, timer en een topscore-record.',
+        },
+        {
+          icon: 'music',
+          label: 'Luisterstats',
+          prompt: 'Maak een luisterdashboard uit Spotify: topartiesten, een genre-cirkeldiagram en plays per week.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Mijn database',
+          prompt: 'Verbind mijn Postgres en maak grafieken van dagelijkse signups, churn en omzet per plan, met een KPI-rij bovenaan.',
+        },
+        {
+          icon: 'heart',
+          label: 'Trainingslog',
+          prompt: 'Toon mijn Strava-runs van deze maand met pace-trend, weekvolume en een tabel met persoonlijke records.',
+        },
+      ],
     },
     ticker: { label: 'Live connectoren' },
     trust: 'Één canvas voor elke markt — FX, crypto, aandelen, futures, opties & voorspellingsmarkten.',

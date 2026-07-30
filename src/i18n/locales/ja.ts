@@ -68,6 +68,90 @@ export const ja: SiteContent = {
       note: '試すのにサインアップ不要 · ブラウザ内でプライベート · または 10K クレジット付きの無料アカウント',
       promptExample: 'Coinbase の BTC-USD のローソク足チャートを、20 と 50 の EMA、下に RSI を付けて表示して。',
       promptPlaceholder: 'ウィジェットを説明…',
+      promptExamplesLabel: '例から始める',
+      promptExamplesMore: 'ほかの例',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: '暗号資産デスク',
+          prompt: 'Binance の BTC-USD ローソク足に 20 と 50 の EMA、板の深さ、ファンディングレートのパネルを付けたデスクを作って。',
+        },
+        {
+          icon: 'lineChart',
+          label: '株のウォッチリスト',
+          prompt: 'リアルタイム株価、当日の変化率、決算日、1 年チャートを載せた株のウォッチリストを作って。',
+        },
+        {
+          icon: 'radar',
+          label: '地震マップ',
+          prompt: '過去 24 時間の USGS のマグニチュード 4 以上の地震を地図に表示して、マグニチュードのヒストグラムとイベントフィードも付けて。',
+        },
+        {
+          icon: 'cloudSun',
+          label: '天気ボード',
+          prompt: '3 都市の天気ボードを作って：時間ごとの予報、降水確率、一週間の気温チャート。',
+        },
+        {
+          icon: 'grid',
+          label: 'プロジェクトボード',
+          prompt: 'プロジェクトの司令塔を作って：かんばん、スプリントバーンダウン、担当者別のブロッカー、タイムライン。',
+        },
+        {
+          icon: 'flame',
+          label: '習慣トラッカー',
+          prompt: '6 つの毎日の習慣の連続記録トラッカーを作って。月間ヒートマップと週間スコア付きで。',
+        },
+        {
+          icon: 'newspaper',
+          label: 'ニュースデスク',
+          prompt: 'Reuters、The Guardian、Hacker News のトップ記事をキーワードで絞り込めるニュースデスクを作って。',
+        },
+        {
+          icon: 'rocket',
+          label: 'ファウンダー HQ',
+          prompt: '創業者向けダッシュボードを作って：リードパイプライン、MRR チャート、ローンチのチェックリスト、コンテンツカレンダー。',
+        },
+        {
+          icon: 'activity',
+          label: '大気質',
+          prompt: 'OpenAQ から自分の街の大気質を表示して。PM2.5 のゲージ、7 日間の推移、健康区分付きで。',
+        },
+        {
+          icon: 'earth',
+          label: '世界指標',
+          prompt: '世界銀行の指標で 5 か国の一人あたり GDP、インフレ率、人口を比較して。',
+        },
+        {
+          icon: 'target',
+          label: '予測市場',
+          prompt: 'Polymarket と Kalshi のオッズを並べて、確率の推移と変動の大きい銘柄の表も出して。',
+        },
+        {
+          icon: 'wallet',
+          label: 'ウォレット追跡',
+          prompt: '自分のウォレットを追跡して：トークン残高、30 日間の成績、資産別の円グラフ。',
+        },
+        {
+          icon: 'play',
+          label: 'ミニゲーム',
+          prompt: '手数カウンター、タイマー、ベストスコア記録付きの小さな記憶ゲームを作って。',
+        },
+        {
+          icon: 'music',
+          label: '再生統計',
+          prompt: 'Spotify の再生ダッシュボードを作って：トップアーティスト、ジャンルの円グラフ、週ごとの再生数。',
+        },
+        {
+          icon: 'databaseZap',
+          label: '自分のデータベース',
+          prompt: '自分の Postgres につないで、日次の登録数、解約率、プラン別の売上をチャートにして、上に KPI 行を置いて。',
+        },
+        {
+          icon: 'heart',
+          label: 'トレーニング記録',
+          prompt: '今月の Strava のランを表示して。ペースの推移、週ごとの距離、自己ベストの表も付けて。',
+        },
+      ],
     },
     ticker: { label: 'ライブコネクタ' },
     trust: 'あらゆる市場を 1 つのキャンバスに — FX、暗号資産、株式、先物、オプション、予測市場。',

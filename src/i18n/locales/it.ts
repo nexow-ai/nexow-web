@@ -81,6 +81,90 @@ export const it: SiteContent = {
       note: 'Nessuna registrazione per provare · Privato nel tuo browser · Oppure un account gratuito con 10K crediti riservati',
       promptExample: 'Mostra un grafico a candele di BTC-USD da Coinbase con EMA 20 e 50 e RSI sotto.',
       promptPlaceholder: 'Descrivi un widget…',
+      promptExamplesLabel: 'Oppure parti da un esempio',
+      promptExamplesMore: 'Altri esempi',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Desk crypto',
+          prompt: 'Crea un desk crypto: candele BTC-USD da Binance con EMA 20 e 50, profondità del book e un pannello funding.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Watchlist azioni',
+          prompt: 'Crea una watchlist di azioni con quotazioni live, variazione del giorno, date degli utili e un grafico a un anno.',
+        },
+        {
+          icon: 'radar',
+          label: 'Mappa dei terremoti',
+          prompt: 'Mappa tutti i terremoti USGS sopra magnitudo 4 delle ultime 24 ore, con istogramma delle magnitudo e feed degli eventi.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Pannello meteo',
+          prompt: 'Crea un pannello meteo per tre città: previsioni orarie, probabilità di pioggia e temperature della settimana.',
+        },
+        {
+          icon: 'grid',
+          label: 'Board di progetto',
+          prompt: 'Crea un centro di comando progetto: board kanban, burndown dello sprint, blocchi per responsabile e una timeline.',
+        },
+        {
+          icon: 'flame',
+          label: 'Tracker abitudini',
+          prompt: 'Crea un tracker di streak per sei abitudini quotidiane con heatmap mensile e punteggio settimanale.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Desk news',
+          prompt: 'Crea un desk news con i titoli di Reuters, The Guardian e Hacker News, filtrati per parola chiave.',
+        },
+        {
+          icon: 'rocket',
+          label: 'HQ del founder',
+          prompt: 'Crea una dashboard da founder: pipeline di lead, grafico MRR, checklist di lancio e calendario dei contenuti.',
+        },
+        {
+          icon: 'activity',
+          label: 'Qualità dell’aria',
+          prompt: 'Mostra la qualità dell’aria della mia città da OpenAQ con indicatore PM2.5, trend a 7 giorni e fasce di salute.',
+        },
+        {
+          icon: 'earth',
+          label: 'Indicatori mondiali',
+          prompt: 'Confronta PIL per abitante, inflazione e popolazione di cinque paesi con gli indicatori della Banca Mondiale.',
+        },
+        {
+          icon: 'target',
+          label: 'Mercati predittivi',
+          prompt: 'Mostra le quote di Polymarket e Kalshi affiancate con una timeline di probabilità e una tabella dei maggiori movimenti.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Tracker wallet',
+          prompt: 'Monitora il mio wallet: saldi dei token, performance a 30 giorni e un grafico a torta dell’allocazione per asset.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini gioco',
+          prompt: 'Crea un piccolo gioco di memoria con contatore di mosse, timer e record di punteggio.',
+        },
+        {
+          icon: 'music',
+          label: 'Statistiche d’ascolto',
+          prompt: 'Crea una dashboard di ascolto da Spotify: artisti top, torta dei generi e ascolti per settimana.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Il mio database',
+          prompt: 'Collega il mio Postgres e traccia iscrizioni giornaliere, churn e ricavi per piano, con una riga di KPI in alto.',
+        },
+        {
+          icon: 'heart',
+          label: 'Diario di allenamento',
+          prompt: 'Mostra le mie corse Strava di questo mese con trend del ritmo, volume settimanale e tabella dei record.',
+        },
+      ],
     },
     ticker: { label: 'Connettori attivi' },
     trust: 'Un canvas per ogni mercato — FX, crypto, azioni, futures, opzioni e prediction market.',

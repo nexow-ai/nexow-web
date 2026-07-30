@@ -68,6 +68,90 @@ export const zh: SiteContent = {
       note: '无需注册即可试用 · 在你的浏览器中私密运行 · 或注册免费账户，预留 10K 积分',
       promptExample: '展示一张来自 Coinbase 的 BTC-USD K 线图，叠加 20 和 50 EMA，并在下方显示 RSI。',
       promptPlaceholder: '描述一个组件……',
+      promptExamplesLabel: '或从示例开始',
+      promptExamplesMore: '更多示例',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: '加密行情台',
+          prompt: '搭建一个加密行情台：来自 Binance 的 BTC-USD K 线并叠加 20 与 50 EMA、订单簿深度和资金费率面板。',
+        },
+        {
+          icon: 'lineChart',
+          label: '股票自选列表',
+          prompt: '做一个股票自选列表，包含实时报价、当日涨跌、财报日期和一年走势图。',
+        },
+        {
+          icon: 'radar',
+          label: '地震地图',
+          prompt: '把过去 24 小时 USGS 记录的 4 级以上地震标在地图上，并加上震级直方图和事件流。',
+        },
+        {
+          icon: 'cloudSun',
+          label: '天气面板',
+          prompt: '为三个城市做一个天气面板：逐小时预报、降雨概率和未来一周气温图。',
+        },
+        {
+          icon: 'grid',
+          label: '项目看板',
+          prompt: '创建项目指挥中心：看板、迭代燃尽图、按负责人分组的阻塞项和时间线。',
+        },
+        {
+          icon: 'flame',
+          label: '习惯打卡',
+          prompt: '做一个六个日常习惯的连续打卡追踪器，带月度热力图和每周评分。',
+        },
+        {
+          icon: 'newspaper',
+          label: '新闻台',
+          prompt: '做一个新闻台，汇总路透社、卫报和 Hacker News 的头条，并支持关键词筛选。',
+        },
+        {
+          icon: 'rocket',
+          label: '创始人仪表盘',
+          prompt: '搭建创始人仪表盘：线索管道、MRR 曲线、发布清单和内容日历。',
+        },
+        {
+          icon: 'activity',
+          label: '空气质量',
+          prompt: '用 OpenAQ 显示我所在城市的空气质量，带 PM2.5 仪表盘、7 天趋势和健康分级。',
+        },
+        {
+          icon: 'earth',
+          label: '世界指标',
+          prompt: '用世界银行指标对比五个国家的人均 GDP、通胀率和人口。',
+        },
+        {
+          icon: 'target',
+          label: '预测市场',
+          prompt: '并排显示 Polymarket 与 Kalshi 的赔率，加上概率时间线和涨跌幅榜。',
+        },
+        {
+          icon: 'wallet',
+          label: '钱包追踪',
+          prompt: '追踪我的钱包：代币余额、30 天收益和按资产分布的饼图。',
+        },
+        {
+          icon: 'play',
+          label: '小游戏',
+          prompt: '做一个小型记忆翻牌游戏，带步数计数、计时器和最佳成绩记录。',
+        },
+        {
+          icon: 'music',
+          label: '听歌统计',
+          prompt: '用 Spotify 做一个收听仪表盘：热门歌手、流派饼图和每周播放次数。',
+        },
+        {
+          icon: 'databaseZap',
+          label: '我的数据库',
+          prompt: '连接我的 Postgres，绘制每日注册、流失和各套餐收入，并在顶部加一排 KPI。',
+        },
+        {
+          icon: 'heart',
+          label: '训练记录',
+          prompt: '显示我本月的 Strava 跑步记录，带配速趋势、每周里程和个人最佳表格。',
+        },
+      ],
     },
     ticker: { label: '实时连接器' },
     trust: '一块画布，覆盖每个市场——FX、加密货币、股票、期货、期权与预测市场。',

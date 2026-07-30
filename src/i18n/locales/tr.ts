@@ -68,6 +68,90 @@ export const tr = {
       note: 'Uygulamayı denemek için kayıt gerekmez · Tarayıcınızda özel · Veya 10K kredi ayrılmış bir ücretsiz hesap',
       promptExample: 'Coinbase\'ten 20 & 50 EMA ve altında RSI ile BTC-USD\'nin mum grafik gösterimini göster.',
       promptPlaceholder: 'Bir widget açıklayın…',
+      promptExamplesLabel: 'Ya da bir örnekle başla',
+      promptExamplesMore: 'Daha fazla örnek',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Kripto masası',
+          prompt: 'Bir kripto masası kur: Binance\'ten BTC-USD mumları, 20 ve 50 EMA, emir defteri derinliği ve funding paneli.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Hisse listesi',
+          prompt: 'Canlı fiyatlar, günlük değişim, bilanço tarihleri ve bir yıllık grafikle bir hisse takip listesi yap.',
+        },
+        {
+          icon: 'radar',
+          label: 'Deprem haritası',
+          prompt: 'Son 24 saatte 4 büyüklüğünün üzerindeki tüm USGS depremlerini haritada göster; büyüklük histogramı ve canlı olay akışı ekle.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Hava panosu',
+          prompt: 'Üç şehir için hava panosu kur: saatlik tahmin, yağış olasılığı ve haftalık sıcaklık grafiği.',
+        },
+        {
+          icon: 'grid',
+          label: 'Proje panosu',
+          prompt: 'Proje komuta merkezi oluştur: kanban panosu, sprint burndown, sorumluya göre engeller ve zaman çizelgesi.',
+        },
+        {
+          icon: 'flame',
+          label: 'Alışkanlık takibi',
+          prompt: 'Altı günlük alışkanlık için seri takipçisi yap; aylık ısı haritası ve haftalık puan olsun.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Haber masası',
+          prompt: 'Reuters, The Guardian ve Hacker News manşetlerini anahtar kelimeyle filtreleyen bir haber masası yap.',
+        },
+        {
+          icon: 'rocket',
+          label: 'Kurucu paneli',
+          prompt: 'Kurucu panosu kur: potansiyel müşteri hattı, MRR grafiği, lansman kontrol listesi ve içerik takvimi.',
+        },
+        {
+          icon: 'activity',
+          label: 'Hava kalitesi',
+          prompt: 'Şehrimin hava kalitesini OpenAQ\'dan göster: PM2.5 göstergesi, 7 günlük trend ve sağlık bantları.',
+        },
+        {
+          icon: 'earth',
+          label: 'Dünya göstergeleri',
+          prompt: 'Dünya Bankası göstergeleriyle beş ülkenin kişi başı GSYH, enflasyon ve nüfusunu karşılaştır.',
+        },
+        {
+          icon: 'target',
+          label: 'Tahmin piyasaları',
+          prompt: 'Polymarket ve Kalshi oranlarını yan yana göster; olasılık zaman çizelgesi ve en çok hareket edenler tablosu ekle.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Cüzdan takibi',
+          prompt: 'Cüzdanımı izle: token bakiyeleri, 30 günlük performans ve varlığa göre dağılım pastası.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini oyun',
+          prompt: 'Hamle sayacı, kronometre ve en iyi skor kaydı olan küçük bir hafıza oyunu yap.',
+        },
+        {
+          icon: 'music',
+          label: 'Dinleme istatistikleri',
+          prompt: 'Spotify\'dan dinleme panosu yap: en çok dinlenen sanatçılar, tür pastası ve haftalık çalma sayısı.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Veritabanım',
+          prompt: 'Postgres\'imi bağla; günlük kayıtları, churn\'ü ve plana göre geliri grafikle, üstte bir KPI satırı olsun.',
+        },
+        {
+          icon: 'heart',
+          label: 'Antrenman kaydı',
+          prompt: 'Bu ayki Strava koşularımı tempo trendi, haftalık hacim ve kişisel rekor tablosuyla göster.',
+        },
+      ],
     },
     ticker: { label: 'Canlı bağlantılar' },
     trust: 'Her pazar için bir tuval — Döviz, kripto, hisse senedi, vadeli işlem, opsiyon ve tahmin piyasaları.',

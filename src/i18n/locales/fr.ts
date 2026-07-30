@@ -81,6 +81,90 @@ export const fr: SiteContent = {
       note: 'Preview en ligne · 90 connecteurs · 10K crédits de départ',
       promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
+      promptExamplesLabel: 'Ou partez d’un exemple',
+      promptExamplesMore: 'Plus d’exemples',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Desk crypto',
+          prompt: 'Crée un desk crypto : chandeliers BTC-USD de Binance avec EMA 20 et 50, profondeur du carnet et un panneau de funding.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Watchlist actions',
+          prompt: 'Fais une watchlist d’actions avec cours en direct, variation du jour, dates de résultats et un graphique sur un an.',
+        },
+        {
+          icon: 'radar',
+          label: 'Carte des séismes',
+          prompt: 'Cartographie tous les séismes USGS de magnitude supérieure à 4 des dernières 24 heures, avec histogramme et fil d’événements.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Tableau météo',
+          prompt: 'Crée un tableau météo pour trois villes : prévisions horaires, probabilité de pluie et températures de la semaine.',
+        },
+        {
+          icon: 'grid',
+          label: 'Tableau projet',
+          prompt: 'Crée un centre de pilotage projet : tableau kanban, burndown de sprint, blocages par responsable et une timeline.',
+        },
+        {
+          icon: 'flame',
+          label: 'Suivi d’habitudes',
+          prompt: 'Fais un suivi de séries pour six habitudes quotidiennes avec une heatmap mensuelle et un score hebdomadaire.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Desk d’actualité',
+          prompt: 'Fais un desk d’actualité avec les titres de Reuters, The Guardian et Hacker News, filtrés par mot-clé.',
+        },
+        {
+          icon: 'rocket',
+          label: 'QG de fondateur',
+          prompt: 'Crée un dashboard de fondateur : pipeline de leads, courbe de MRR, checklist de lancement et calendrier de contenu.',
+        },
+        {
+          icon: 'activity',
+          label: 'Qualité de l’air',
+          prompt: 'Affiche la qualité de l’air de ma ville depuis OpenAQ avec une jauge PM2.5, une tendance sur 7 jours et les seuils sanitaires.',
+        },
+        {
+          icon: 'earth',
+          label: 'Indicateurs mondiaux',
+          prompt: 'Compare PIB par habitant, inflation et population de cinq pays avec les indicateurs de la Banque mondiale.',
+        },
+        {
+          icon: 'target',
+          label: 'Marchés de prédiction',
+          prompt: 'Affiche les cotes Polymarket et Kalshi côte à côte avec une frise des probabilités et un tableau des plus fortes variations.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Suivi de wallet',
+          prompt: 'Suis mon wallet : soldes de tokens, performance sur 30 jours et un camembert de répartition par actif.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini-jeu',
+          prompt: 'Crée un petit jeu de mémoire avec compteur de coups, chronomètre et record de score.',
+        },
+        {
+          icon: 'music',
+          label: 'Stats d’écoute',
+          prompt: 'Fais un dashboard d’écoute depuis Spotify : artistes préférés, camembert des genres et écoutes par semaine.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Ma base de données',
+          prompt: 'Connecte mon Postgres et trace les inscriptions quotidiennes, le churn et le revenu par plan, avec une ligne de KPI en haut.',
+        },
+        {
+          icon: 'heart',
+          label: 'Carnet d’entraînement',
+          prompt: 'Montre mes sorties Strava du mois avec tendance d’allure, volume hebdomadaire et tableau des records.',
+        },
+      ],
     },
     ticker: { label: 'Ce que les gens construisent' },
     appShowcase: {

@@ -68,6 +68,90 @@ export const ko: SiteContent = {
       note: '가입 불필요 · 브라우저에서 개인정보 보호 · 또는 10K 크레딧이 예약된 무료 계정',
       promptExample: 'Coinbase의 BTC-USD 캔들 차트를 20 & 50 EMA와 아래의 RSI로 표시하기.',
       promptPlaceholder: '위젯을 설명하세요…',
+      promptExamplesLabel: '예시로 시작하기',
+      promptExamplesMore: '예시 더 보기',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: '크립토 데스크',
+          prompt: 'Binance의 BTC-USD 캔들에 20·50 EMA, 오더북 심도, 펀딩비 패널을 붙인 크립토 데스크를 만들어 줘.',
+        },
+        {
+          icon: 'lineChart',
+          label: '주식 관심목록',
+          prompt: '실시간 시세, 당일 변동, 실적 발표일, 1년 차트가 있는 주식 관심목록을 만들어 줘.',
+        },
+        {
+          icon: 'radar',
+          label: '지진 지도',
+          prompt: '지난 24시간 USGS 규모 4 이상 지진을 지도에 표시하고 규모 히스토그램과 이벤트 피드를 추가해 줘.',
+        },
+        {
+          icon: 'cloudSun',
+          label: '날씨 보드',
+          prompt: '세 도시의 날씨 보드를 만들어 줘: 시간별 예보, 강수 확률, 다음 주 기온 차트.',
+        },
+        {
+          icon: 'grid',
+          label: '프로젝트 보드',
+          prompt: '프로젝트 관제 센터를 만들어 줘: 칸반 보드, 스프린트 번다운, 담당자별 블로커, 타임라인.',
+        },
+        {
+          icon: 'flame',
+          label: '습관 트래커',
+          prompt: '매일 하는 습관 6개의 연속 기록 트래커를 월간 히트맵과 주간 점수와 함께 만들어 줘.',
+        },
+        {
+          icon: 'newspaper',
+          label: '뉴스 데스크',
+          prompt: 'Reuters, The Guardian, Hacker News의 주요 기사를 키워드로 걸러 보는 뉴스 데스크를 만들어 줘.',
+        },
+        {
+          icon: 'rocket',
+          label: '파운더 HQ',
+          prompt: '창업자 대시보드를 만들어 줘: 리드 파이프라인, MRR 차트, 출시 체크리스트, 콘텐츠 캘린더.',
+        },
+        {
+          icon: 'activity',
+          label: '대기질',
+          prompt: 'OpenAQ에서 내 도시의 대기질을 PM2.5 게이지, 7일 추이, 건강 등급과 함께 보여 줘.',
+        },
+        {
+          icon: 'earth',
+          label: '세계 지표',
+          prompt: '세계은행 지표로 다섯 국가의 1인당 GDP, 물가상승률, 인구를 비교해 줘.',
+        },
+        {
+          icon: 'target',
+          label: '예측 시장',
+          prompt: 'Polymarket과 Kalshi의 배당을 나란히 보여 주고 확률 추이와 변동 상위 표도 넣어 줘.',
+        },
+        {
+          icon: 'wallet',
+          label: '지갑 추적',
+          prompt: '내 지갑을 추적해 줘: 토큰 잔액, 30일 성과, 자산별 배분 파이 차트.',
+        },
+        {
+          icon: 'play',
+          label: '미니 게임',
+          prompt: '이동 횟수 카운터, 타이머, 최고 점수 기록이 있는 작은 메모리 카드 게임을 만들어 줘.',
+        },
+        {
+          icon: 'music',
+          label: '청취 통계',
+          prompt: 'Spotify로 청취 대시보드를 만들어 줘: 최다 재생 아티스트, 장르 파이 차트, 주간 재생 수.',
+        },
+        {
+          icon: 'databaseZap',
+          label: '내 데이터베이스',
+          prompt: '내 Postgres에 연결해서 일별 가입, 이탈, 플랜별 매출을 차트로 만들고 위에 KPI 행을 넣어 줘.',
+        },
+        {
+          icon: 'heart',
+          label: '훈련 기록',
+          prompt: '이번 달 Strava 러닝을 페이스 추이, 주간 거리, 개인 기록 표와 함께 보여 줘.',
+        },
+      ],
     },
     ticker: { label: '라이브 커넥터' },
     trust: '모든 마켓을 위한 하나의 캔버스 — FX, 암호화폐, 주식, 선물, 옵션 및 예측 마켓.',

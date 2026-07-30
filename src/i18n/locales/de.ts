@@ -81,6 +81,90 @@ export const de: SiteContent = {
       note: 'Kein Sign-up zum Ausprobieren · Privat in deinem Browser · Oder ein kostenloses Konto mit 10.000 reservierten Credits',
       promptExample: 'Zeig einen Candlestick-Chart von BTC-USD von Coinbase mit 20er & 50er EMA und RSI darunter.',
       promptPlaceholder: 'Beschreibe ein Widget…',
+      promptExamplesLabel: 'Oder mit einem Beispiel starten',
+      promptExamplesMore: 'Mehr Beispiele',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Krypto-Desk',
+          prompt: 'Bau einen Krypto-Desk: BTC-USD-Kerzen von Binance mit EMA 20 und 50, Orderbuch-Tiefe und ein Funding-Panel.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Aktien-Watchlist',
+          prompt: 'Mach eine Aktien-Watchlist mit Live-Kursen, Tagesveränderung, Earnings-Terminen und einem Ein-Jahres-Chart.',
+        },
+        {
+          icon: 'radar',
+          label: 'Erdbebenkarte',
+          prompt: 'Zeig alle USGS-Erdbeben über Magnitude 4 der letzten 24 Stunden auf einer Karte, mit Magnituden-Histogramm und Event-Feed.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Wetterboard',
+          prompt: 'Bau ein Wetterboard für drei Städte: Stundenprognose, Regenwahrscheinlichkeit und Temperaturen der kommenden Woche.',
+        },
+        {
+          icon: 'grid',
+          label: 'Projektboard',
+          prompt: 'Erstell eine Projektzentrale: Kanban-Board, Sprint-Burndown, Blocker nach Verantwortlichem und eine Timeline.',
+        },
+        {
+          icon: 'flame',
+          label: 'Habit-Tracker',
+          prompt: 'Mach einen Streak-Tracker für sechs tägliche Habits mit Monats-Heatmap und Wochen-Score.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'News-Desk',
+          prompt: 'Bau einen News-Desk mit Topmeldungen von Reuters, The Guardian und Hacker News, gefiltert nach Keyword.',
+        },
+        {
+          icon: 'rocket',
+          label: 'Founder-HQ',
+          prompt: 'Bau ein Founder-Dashboard: Lead-Pipeline, MRR-Chart, Launch-Checkliste und Content-Kalender.',
+        },
+        {
+          icon: 'activity',
+          label: 'Luftqualität',
+          prompt: 'Zeig die Luftqualität meiner Stadt von OpenAQ mit PM2.5-Anzeige, 7-Tage-Trend und Gesundheitsbändern.',
+        },
+        {
+          icon: 'earth',
+          label: 'Weltindikatoren',
+          prompt: 'Vergleich BIP pro Kopf, Inflation und Bevölkerung von fünf Ländern mit Weltbank-Indikatoren.',
+        },
+        {
+          icon: 'target',
+          label: 'Prognosemärkte',
+          prompt: 'Zeig Polymarket- und Kalshi-Quoten nebeneinander mit Wahrscheinlichkeitsverlauf und einer Tabelle der größten Bewegungen.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Wallet-Tracker',
+          prompt: 'Verfolg mein Wallet: Token-Bestände, 30-Tage-Performance und ein Kreisdiagramm der Aufteilung nach Asset.',
+        },
+        {
+          icon: 'play',
+          label: 'Mini-Spiel',
+          prompt: 'Bau ein kleines Memory-Spiel mit Zugzähler, Timer und Bestwert-Rekord.',
+        },
+        {
+          icon: 'music',
+          label: 'Hörstatistik',
+          prompt: 'Mach ein Hör-Dashboard aus Spotify: Top-Künstler, Genre-Kreisdiagramm und Plays pro Woche.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Meine Datenbank',
+          prompt: 'Verbinde mein Postgres und zeig tägliche Signups, Churn und Umsatz pro Plan, mit einer KPI-Zeile oben.',
+        },
+        {
+          icon: 'heart',
+          label: 'Trainingslog',
+          prompt: 'Zeig meine Strava-Läufe diesen Monat mit Pace-Trend, Wochenvolumen und einer Rekord-Tabelle.',
+        },
+      ],
     },
     ticker: { label: 'Live-Konnektoren' },
     trust: 'Ein Canvas für jeden Markt — FX, Krypto, Aktien, Futures, Optionen & Prognosemärkte.',
