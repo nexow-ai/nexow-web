@@ -17,6 +17,7 @@
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",
     "test:integration": "astro sync --force && vitest run tests/integration",
+    "test:build": "vitest run tests/build",
     "test:coverage": "astro sync --force && vitest run --coverage",
     "deploy": "astro build && wrangler deploy",
     "cf:serve": "astro build && wrangler dev"

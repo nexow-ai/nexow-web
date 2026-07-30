@@ -29,10 +29,6 @@ export default getViteConfig({
         'src/i18n/locales/dist/**',
         'src/i18n/locales/node_modules/**',
         'src/i18n/locales/.astro/**',
-        // Asset pipeline scripts: thin `sharp` wrappers run by hand, not shipped.
-        'scripts/make-favicon.mjs',
-        'scripts/make-og.mjs',
-        'scripts/optimize-assets.mjs',
         // One-off translation payloads + the driver that injects them.
         'scripts/community-i18n/inject.mjs',
         'scripts/community-i18n/[a-z][a-z].mjs',
