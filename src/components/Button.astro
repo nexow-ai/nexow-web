@@ -21,8 +21,11 @@ const {
   class: className = '',
 } = Astro.props;
 
+// No `whitespace-nowrap`: CTA labels are translated, and the long ones
+// (el "Διαβάστε την αρχιτεκτονική λειτουργίας τοπικού") cannot fit one line on a
+// phone — they used to run straight out of the section and get clipped.
 const base =
-  'group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-all duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-offset-2 whitespace-nowrap';
+  'group inline-flex items-center justify-center gap-2 rounded-full text-center font-medium tracking-tight transition-all duration-200 ease-out-expo focus-visible:outline-2 focus-visible:outline-offset-2';
 
 // Brand gradient (teal → sky → indigo). Same stops as `.text-gradient` /
 // hero CTAs — identical in light and dark via shared --grad-* tokens.
@@ -41,10 +44,12 @@ const variants: Record<string, string> = {
   ghost: 'text-ink-700 hover:text-ink-950 hover:bg-ink-900/5',
 };
 
+// `min-h` rather than `h`, so a label that wraps grows the pill instead of
+// spilling out of it. Single-line labels render at exactly the same height.
 const sizes: Record<string, string> = {
-  sm: 'h-9 px-4 text-sm',
-  md: 'h-11 px-5 text-[0.95rem]',
-  lg: 'h-13 px-7 text-base',
+  sm: 'min-h-9 px-4 py-2 text-sm',
+  md: 'min-h-11 px-5 py-2.5 text-[0.95rem]',
+  lg: 'min-h-13 px-7 py-3 text-base',
 };
 
 const rel = external ? 'noopener noreferrer' : undefined;
