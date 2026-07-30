@@ -146,7 +146,7 @@ const { class: className = 'fixed inset-0', tone } = Astro.props;
       }
 
       const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.25);
-      glow.addColorStop(0, rgba(0.09));
+      glow.addColorStop(0, rgba(0.035));
       glow.addColorStop(1, rgba(0));
       ctx.fillStyle = glow;
       ctx.fillRect(cx - R * 1.3, cy - R * 1.3, R * 2.6, R * 2.6);

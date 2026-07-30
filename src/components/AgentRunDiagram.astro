@@ -94,7 +94,7 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
       class="relative overflow-hidden rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-3 shadow-xl shadow-ink-950/[0.06] dark:shadow-black/50 sm:p-6"
     >
       <div
-        class="pointer-events-none absolute inset-0 opacity-60"
+        class="pointer-events-none absolute inset-0 opacity-60 dark:opacity-35"
         aria-hidden="true"
         style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 9%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 8%, transparent) 1px, transparent 1px); background-size:44px 44px; mask-image:radial-gradient(70%_60%_at_50%_45%,black,transparent)"
       >
@@ -339,6 +339,11 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke-width: 1.5;
     stroke-opacity: calc(0.45 + var(--on) * 0.55);
   }
+  :global(.dark) .wire {
+    stroke: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    stroke-width: 2.25;
+    stroke-opacity: calc(0.55 + var(--on) * 0.45);
+  }
   .pulse {
     stroke: var(--color-brand-500);
     stroke-width: 3;
@@ -347,8 +352,16 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke-dashoffset: 100;
     opacity: 0;
   }
+  :global(.dark) .pulse {
+    stroke: var(--color-brand-300);
+    stroke-width: 3.75;
+    filter: drop-shadow(0 0 4px color-mix(in oklab, var(--color-brand-400) 55%, transparent));
+  }
   .s-act.pulse {
     stroke: var(--color-sky-500);
+  }
+  :global(.dark) .s-act.pulse {
+    stroke: var(--color-sky-300);
   }
   [data-stage='1'] .s-gather.pulse,
   [data-stage='2'] .s-gather.pulse,
@@ -371,11 +384,21 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
     stroke-width: 1;
   }
+  :global(.dark) .chip rect {
+    fill: color-mix(in oklab, white 92%, transparent);
+    stroke: color-mix(in oklab, white 18%, transparent);
+  }
   .chip.lit rect {
     stroke: color-mix(in oklab, var(--color-brand-500) calc(12% + var(--on) * 48%), transparent);
   }
+  :global(.dark) .chip.lit rect {
+    stroke: color-mix(in oklab, var(--color-brand-400) calc(28% + var(--on) * 52%), transparent);
+  }
   .chip-disc {
     fill: color-mix(in oklab, var(--color-brand-500) calc(6% + var(--on) * 12%), white);
+  }
+  :global(.dark) .chip-disc {
+    fill: color-mix(in oklab, var(--color-brand-400) calc(18% + var(--on) * 22%), white);
   }
   .chip-glyph {
     stroke: var(--color-brand-700);
@@ -384,19 +407,34 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke-linejoin: round;
     stroke-opacity: calc(0.45 + var(--on) * 0.55);
   }
+  :global(.dark) .chip-glyph {
+    stroke: var(--color-brand-600);
+    stroke-opacity: calc(0.65 + var(--on) * 0.35);
+  }
   .chip-text {
     font-size: 15px;
     fill: var(--color-ink-700);
     fill-opacity: calc(0.55 + var(--on) * 0.45);
   }
+  :global(.dark) .chip-text {
+    fill: var(--color-ink-800);
+    fill-opacity: calc(0.7 + var(--on) * 0.3);
+  }
 
   .core-halo {
     fill: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
+  }
+  :global(.dark) .core-halo {
+    fill: color-mix(in oklab, var(--color-brand-400) 28%, transparent);
   }
   .core-disc {
     fill: white;
     stroke: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
     stroke-width: 1.5;
+  }
+  :global(.dark) .core-disc {
+    stroke: color-mix(in oklab, var(--color-brand-400) 70%, transparent);
+    stroke-width: 2;
   }
   .core-ring {
     stroke: color-mix(in oklab, var(--color-brand-500) 32%, transparent);
@@ -405,6 +443,10 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     animation: ring-spin 34s linear infinite;
     transform-box: fill-box;
     transform-origin: center;
+  }
+  :global(.dark) .core-ring {
+    stroke: color-mix(in oklab, var(--color-brand-300) 65%, transparent);
+    stroke-width: 1.6;
   }
   @keyframes ring-spin {
     to {
@@ -416,6 +458,10 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke-width: 1.1;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+  :global(.dark) .core-glyph {
+    stroke: var(--color-brand-600);
+    stroke-width: 1.35;
   }
   [data-stage='2'] .core-glyph {
     animation: think 1.6s ease-in-out infinite;
@@ -438,6 +484,10 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     transform-box: fill-box;
     transform-origin: center;
   }
+  :global(.dark) .core-tick {
+    stroke: var(--color-brand-300);
+    stroke-width: 2.5;
+  }
   [data-stage='0'] .core-tick {
     animation: tick 2.2s ease-out infinite;
   }
@@ -458,12 +508,20 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
     stroke: color-mix(in oklab, var(--color-brand-500) calc(20% + var(--on) * 45%), transparent);
     stroke-width: 1.2;
   }
+  :global(.dark) .dot-disc {
+    stroke: color-mix(in oklab, var(--color-brand-400) calc(40% + var(--on) * 50%), transparent);
+    stroke-width: 1.6;
+  }
   .dot-glyph {
     stroke: var(--color-brand-700);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-opacity: calc(0.4 + var(--on) * 0.6);
+  }
+  :global(.dark) .dot-glyph {
+    stroke: var(--color-brand-600);
+    stroke-opacity: calc(0.65 + var(--on) * 0.35);
   }
   [data-stage='2'] .dot {
     animation: dot-pop 1.8s ease-in-out infinite;
@@ -517,6 +575,15 @@ const harnessChips = harness.map((label, i) => ({ label, icon: HARNESS_ICONS[i] 
       color-mix(in oklab, var(--color-sky-400) 40%, transparent)
     );
     opacity: calc(0.35 + var(--on) * 0.65);
+  }
+  :global(.dark) .rail {
+    width: 3px;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-brand-300) 75%, transparent),
+      color-mix(in oklab, var(--color-sky-300) 65%, transparent)
+    );
+    opacity: calc(0.5 + var(--on) * 0.5);
   }
   .rail-dot {
     position: absolute;
