@@ -15,18 +15,18 @@ const { tiers, billing } = c.plansPage;
 const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
 ---
 
-<section id="plans" class="relative bg-white py-20 text-ink-950 sm:py-24">
+<section id="plans" class="relative py-20 text-ink-950 sm:py-24 dark:text-white">
   <div class="container-page">
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
 
     <!-- Billing toggle -->
     <div id="plans-billing" data-mode="monthly" class="reveal mt-8 flex flex-col items-center gap-3">
-      <div class="inline-flex items-center rounded-full border border-ink-900/10 bg-[#f7fbfb] p-1">
+      <div class="inline-flex max-w-full flex-wrap items-center justify-center rounded-full border border-ink-900/10 dark:border-white/10 bg-[#f7fbfb] dark:bg-white/[0.02] p-1">
         <button
           type="button"
           data-billing="monthly"
           aria-pressed="true"
-          class="rounded-full px-4 py-1.5 text-sm font-medium text-ink-600 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950 aria-[pressed=true]:shadow-sm"
+          class="rounded-full px-4 py-1.5 text-sm font-medium text-ink-600 dark:text-ink-300 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950 aria-[pressed=true]:shadow-sm"
         >
           {billing.monthly}
         </button>
@@ -34,10 +34,10 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
           type="button"
           data-billing="yearly"
           aria-pressed="false"
-          class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium text-ink-600 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950 aria-[pressed=true]:shadow-sm"
+          class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium text-ink-600 dark:text-ink-300 transition-colors aria-[pressed=true]:bg-white aria-[pressed=true]:text-ink-950 aria-[pressed=true]:shadow-sm"
         >
           {billing.yearly}
-          <span class="rounded-full bg-brand-50 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-700">{billing.save}</span>
+          <span class="rounded-full bg-brand-50 dark:bg-brand-400/12 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-700 dark:text-brand-300">{billing.save}</span>
         </button>
       </div>
     </div>
@@ -50,40 +50,40 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
           return (
             <div
               class:list={[
-                'relative flex flex-col rounded-2xl border p-6 shadow-sm shadow-ink-950/[0.03]',
+                'relative flex flex-col rounded-2xl border p-6 shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40',
                 featured
-                  ? 'border-brand-200 bg-brand-50/50 ring-1 ring-brand-200'
-                  : 'border-ink-900/10 bg-white',
+                  ? 'border-brand-200 dark:border-brand-400/30 bg-brand-50/50 ring-1 ring-brand-200'
+                  : 'border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04]',
               ]}
             >
               <div class="flex items-center justify-between gap-2">
-                <h3 class="font-display text-lg font-semibold text-ink-950">{tier.name}</h3>
+                <h3 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{tier.name}</h3>
                 {tier.badge && (
                   <span
                     class:list={[
                       'rounded-full px-2 py-0.5 font-mono text-[0.6rem] font-medium uppercase tracking-wider',
-                      featured ? 'bg-brand-100 text-brand-700' : 'bg-sky-50 text-sky-700',
+                      featured ? 'bg-brand-100 dark:bg-brand-400/18 text-brand-700 dark:text-brand-300' : 'bg-sky-50 dark:bg-sky-400/12 text-sky-700 dark:text-sky-300',
                     ]}
                   >
                     {tier.badge}
                   </span>
                 )}
               </div>
-              <p class="mt-1 text-sm text-ink-600">{tier.tagline}</p>
+              <p class="mt-1 text-sm text-ink-600 dark:text-ink-300">{tier.tagline}</p>
 
-              <div class="mt-4 flex items-baseline gap-1.5">
-                <span class="font-display text-3xl font-bold text-ink-950">
+              <div class="mt-4 flex min-w-0 flex-wrap items-baseline gap-1.5">
+                <span class="min-w-0 [overflow-wrap:anywhere] font-display text-3xl font-bold text-ink-950 dark:text-white">
                   <span data-price="monthly">{tier.priceMonthly}</span>
                   <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
                 </span>
-                {tier.cadence && <span class="text-sm text-ink-500">{tier.cadence}</span>}
+                {tier.cadence && <span class="text-sm text-ink-500 dark:text-ink-400">{tier.cadence}</span>}
               </div>
-              <p data-billed class="mt-1 hidden font-mono text-[0.7rem] text-ink-500">{tier.billedYearly ?? ' '}</p>
+              <p data-billed class="mt-1 hidden font-mono text-[0.7rem] text-ink-500 dark:text-ink-400">{tier.billedYearly ?? ' '}</p>
 
               {tier.stats && (
                 <div class="mt-4 flex flex-wrap gap-1.5">
                   {tier.stats.map((s) => (
-                    <span class="rounded-md border border-ink-900/10 bg-white px-2 py-0.5 font-mono text-[0.65rem] text-ink-600">{s}</span>
+                    <span class="rounded-md border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] px-2 py-0.5 font-mono text-[0.65rem] text-ink-600 dark:text-ink-300">{s}</span>
                   ))}
                 </div>
               )}
@@ -94,7 +94,7 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
                 rel={isExternal ? 'noopener noreferrer' : undefined}
                 class:list={[
                   'mt-6 inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium transition-all hover:-translate-y-0.5',
-                  featured ? 'bg-brand-600 text-white hover:bg-brand-500' : 'bg-ink-900/5 text-ink-900 ring-1 ring-ink-900/10 hover:bg-ink-900/8',
+                  featured ? 'bg-brand-600 text-white hover:bg-brand-500' : 'bg-ink-900/5 dark:bg-white/8 text-ink-900 dark:text-ink-100 ring-1 ring-ink-900/10 dark:ring-white/10 hover:bg-ink-900/8',
                 ]}
               >
                 {tier.cta}
@@ -106,7 +106,7 @@ const localize = (href: string) => (href.startsWith('/') ? localizePath(href, la
     </div>
 
     <div class="reveal mt-8 text-center">
-      <a href={localize('/plans')} class="inline-flex items-center gap-1.5 font-medium text-brand-700 transition-colors hover:text-brand-600">
+      <a href={localize('/plans')} class="inline-flex items-center gap-1.5 font-medium text-brand-700 dark:text-brand-300 transition-colors hover:text-brand-600">
         {t.cta}
         <Icon name="arrow" class="size-4" />
       </a>

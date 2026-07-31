@@ -1,0 +1,450 @@
+---
+/**
+ * Inverse of the app composer's vanish-on-send
+ * (`../nexow/app/components/common/PlaceholdersAndVanishInput.vue`).
+ *
+ * The real title stays in the DOM and is revealed with clip-path (left→right).
+ * The canvas only draws the forming dots — never a second copy of the glyphs —
+ * so when the effect ends there is no canvas→DOM swap (and no vertical jump).
+ *
+ * Mark page-hero titles with `data-text-appear`. Optional
+ * `data-text-appear-delay` (seconds) staggers multi-line heroes.
+ */
+---
+
+<script>
+  interface Particle {
+    x: number;
+    y: number;
+    tx: number;
+    ty: number;
+    r: number;
+    targetR: number;
+    color: string;
+  }
+
+  interface LineBox {
+    text: string;
+    x: number;
+    y: number;
+  }
+
+  interface AppearHandle {
+    stop: () => void;
+  }
+
+  let handles: AppearHandle[] = [];
+
+  function prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function isRtl(): boolean {
+    return document.documentElement.dir === 'rtl';
+  }
+
+  function cssColor(name: string, fallback: string): string {
+    const probe = document.createElement('span');
+    probe.style.color = `var(${name})`;
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    document.body.appendChild(probe);
+    const resolved = getComputedStyle(probe).color;
+    probe.remove();
+    return resolved && resolved !== 'rgba(0, 0, 0, 0)' ? resolved : fallback;
+  }
+
+  function primaryTextNode(el: HTMLElement): Text | null {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode() as Text | null;
+    while (node && !(node.textContent || '').replace(/\s+/g, '')) {
+      node = walker.nextNode() as Text | null;
+    }
+    return node;
+  }
+
+  function browserLines(el: HTMLElement): LineBox[] {
+    const textNode = primaryTextNode(el);
+    if (!textNode) return [];
+
+    const full = textNode.textContent || '';
+    if (!full) return [];
+
+    const elRect = el.getBoundingClientRect();
+    const range = document.createRange();
+    const lines: LineBox[] = [];
+    let start = 0;
+
+    while (start < full.length && /\s/.test(full[start]!)) start++;
+
+    for (let end = start + 1; end <= full.length; end++) {
+      range.setStart(textNode, start);
+      range.setEnd(textNode, end);
+      const rects = Array.from(range.getClientRects()).filter((r) => r.width > 0 && r.height > 0);
+      if (rects.length <= 1) continue;
+
+      const lineEnd = end - 1;
+      if (lineEnd <= start) continue;
+      range.setStart(textNode, start);
+      range.setEnd(textNode, lineEnd);
+      const box = range.getBoundingClientRect();
+      const text = full.slice(start, lineEnd);
+      if (text.replace(/\s+/g, '').length) {
+        lines.push({
+          text,
+          x: box.left - elRect.left,
+          y: box.top - elRect.top + box.height / 2,
+        });
+      }
+      start = lineEnd;
+      while (start < full.length && /\s/.test(full[start]!)) start++;
+      end = start;
+    }
+
+    if (start < full.length) {
+      range.setStart(textNode, start);
+      range.setEnd(textNode, full.length);
+      const box = range.getBoundingClientRect();
+      if (box.width > 0 && box.height > 0) {
+        lines.push({
+          text: full.slice(start),
+          x: box.left - elRect.left,
+          y: box.top - elRect.top + box.height / 2,
+        });
+      }
+    }
+
+    return lines;
+  }
+
+  function placeCanvas(el: HTMLElement, canvas: HTMLCanvasElement) {
+    canvas.style.left = `${el.offsetLeft}px`;
+    canvas.style.top = `${el.offsetTop}px`;
+    canvas.style.width = `${el.offsetWidth}px`;
+    canvas.style.height = `${el.offsetHeight}px`;
+  }
+
+  /** Reveal the real glyphs up to settleEdge (CSS px). */
+  function setClip(el: HTMLElement, cssW: number, settleEdgeCss: number, rtl: boolean) {
+    const edge = Math.max(0, Math.min(cssW, settleEdgeCss));
+    if (rtl) {
+      el.style.clipPath = `inset(0 0 0 ${edge}px)`;
+    } else {
+      el.style.clipPath = `inset(0 ${cssW - edge}px 0 0)`;
+    }
+  }
+
+  function clearClip(el: HTMLElement) {
+    el.style.clipPath = '';
+  }
+
+  /** Offscreen paint only to harvest particle targets — never shown as the title. */
+  function harvestParticles(
+    el: HTMLElement,
+    canvas: HTMLCanvasElement,
+  ): { particles: Particle[]; dpr: number; width: number; height: number; cssW: number } | null {
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) return null;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cssW = el.offsetWidth;
+    const cssH = el.offsetHeight;
+    if (!cssW || !cssH) return null;
+
+    placeCanvas(el, canvas);
+
+    const width = Math.floor(cssW * dpr);
+    const height = Math.floor(cssH * dpr);
+    canvas.width = width;
+    canvas.height = height;
+
+    const offscreen = document.createElement('canvas');
+    offscreen.width = width;
+    offscreen.height = height;
+    const octx = offscreen.getContext('2d');
+    if (!octx) return null;
+
+    const cs = getComputedStyle(el);
+    const fontSize = parseFloat(cs.fontSize) || 16;
+
+    let lines = browserLines(el);
+    if (!lines.length) {
+      const text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!text) return null;
+      lines = [{ text, x: cssW / 2, y: cssH / 2 }];
+    }
+
+    octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    octx.clearRect(0, 0, cssW, cssH);
+    octx.font = `${cs.fontStyle} ${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
+    if ('letterSpacing' in octx) {
+      (octx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = cs.letterSpacing;
+    }
+    octx.textBaseline = 'middle';
+    octx.textAlign = 'left';
+
+    const gradientHost =
+      el.classList.contains('text-gradient') ||
+      el.classList.contains('text-gradient-live') ||
+      el.querySelector('.text-gradient, .text-gradient-live');
+
+    if (gradientHost) {
+      const grad = octx.createLinearGradient(0, 0, cssW, 0);
+      grad.addColorStop(0, cssColor('--color-brand-600', '#0d9488'));
+      grad.addColorStop(0.52, cssColor('--color-sky-500', '#0ea5e9'));
+      grad.addColorStop(1, cssColor('--color-accent-600', '#4f46e5'));
+      octx.fillStyle = grad;
+    } else {
+      const color = cs.color;
+      const dark = document.documentElement.classList.contains('dark');
+      octx.fillStyle =
+        color === 'rgba(0, 0, 0, 0)' || color === 'transparent'
+          ? dark
+            ? '#ffffff'
+            : cssColor('--color-ink-950', '#0a0f0e')
+          : color;
+    }
+
+    for (const line of lines) {
+      if (lines.length === 1 && Math.abs(line.x - cssW / 2) < 1) {
+        octx.textAlign = 'center';
+        octx.fillText(line.text, line.x, line.y);
+        octx.textAlign = 'left';
+      } else {
+        octx.fillText(line.text, line.x, line.y);
+      }
+    }
+    octx.setTransform(1, 0, 0, 1, 0, 0);
+
+    const { data } = octx.getImageData(0, 0, width, height);
+    const step = Math.max(2, Math.round(dpr * 1.25));
+    const scatter = 28 * dpr;
+    const particles: Particle[] = [];
+    const ahead = isRtl() ? -1 : 1;
+
+    for (let y = 0; y < height; y += step) {
+      const row = y * width * 4;
+      for (let xPx = 0; xPx < width; xPx += step) {
+        const i = row + xPx * 4;
+        const alpha = data[i + 3]!;
+        if (alpha < 24) continue;
+        particles.push({
+          tx: xPx,
+          ty: y,
+          x: xPx + ahead * (8 + Math.random() * scatter) + (Math.random() - 0.5) * scatter * 0.6,
+          y: y + (Math.random() - 0.5) * scatter * 1.4,
+          r: step * 0.35,
+          targetR: step * 0.9,
+          color: `rgba(${data[i]},${data[i + 1]},${data[i + 2]},${alpha / 255})`,
+        });
+      }
+    }
+
+    ctx.clearRect(0, 0, width, height);
+    return { particles, dpr, width, height, cssW };
+  }
+
+  function runAppear(el: HTMLElement): AppearHandle | null {
+    if (el.dataset.textAppearDone === '1') return null;
+
+    const delayMs = Math.max(0, parseFloat(el.dataset.textAppearDelay || '0') || 0) * 1000;
+
+    if (prefersReducedMotion()) {
+      el.dataset.textAppearDone = '1';
+      el.classList.add('is-text-appear-done');
+      return null;
+    }
+
+    const parent = el.parentElement;
+    if (!parent) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.className = 'text-appear-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+
+    const stage = document.createElement('div');
+    stage.className = 'text-appear-stage';
+    const before = getComputedStyle(el);
+    stage.style.marginTop = before.marginTop;
+    stage.style.marginBottom = before.marginBottom;
+    el.style.marginTop = '0';
+    el.style.marginBottom = '0';
+
+    parent.insertBefore(stage, el);
+    stage.appendChild(el);
+    stage.appendChild(canvas);
+
+    // Hide glyphs via clip (layout unchanged) until the wavefront reveals them.
+    const rtl = isRtl();
+    setClip(el, el.offsetWidth || 1, 0, rtl);
+    el.classList.add('is-text-appearing');
+
+    let cancelled = false;
+    let raf = 0;
+    let timer = 0;
+
+    const finish = () => {
+      if (cancelled) return;
+      cancelled = true;
+      if (raf) cancelAnimationFrame(raf);
+      clearClip(el);
+      el.classList.remove('is-text-appearing');
+      el.classList.add('is-text-appear-done');
+      el.dataset.textAppearDone = '1';
+      canvas.remove();
+    };
+
+    const start = () => {
+      if (cancelled) return;
+      void document.fonts.ready.then(() => {
+        if (cancelled) return;
+        void el.offsetWidth;
+        const source = harvestParticles(el, canvas);
+        if (!source || !source.particles.length) {
+          finish();
+          return;
+        }
+        placeCanvas(el, canvas);
+
+        const { particles, dpr, width, cssW } = source;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          finish();
+          return;
+        }
+
+        const formBand = Math.max(48, Math.round(72 * dpr));
+        const tipBand = Math.max(28, Math.round(40 * dpr));
+        const step = Math.max(3, Math.round(5 * dpr));
+
+        const minX = particles.reduce((m, p) => (p.tx < m ? p.tx : m), width);
+        const maxX = particles.reduce((m, p) => (p.tx > m ? p.tx : m), 0);
+        let pos = rtl ? maxX + tipBand : minX - tipBand;
+        const end = rtl ? minX - formBand : maxX + formBand;
+        const advancing = rtl ? -step : step;
+
+        const frame = () => {
+          if (cancelled) return;
+          raf = requestAnimationFrame(() => {
+            if (cancelled) return;
+
+            const settleEdge = rtl ? pos + formBand : pos - formBand;
+            // Real title reveals behind the form band — same box, forever.
+            setClip(el, cssW, settleEdge / dpr, rtl);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const p of particles) {
+              let phase: 'ahead' | 'form' | 'done' | 'wait';
+              if (rtl) {
+                if (p.tx > settleEdge) phase = 'done';
+                else if (p.tx > pos) phase = 'form';
+                else if (p.tx > pos - tipBand) phase = 'ahead';
+                else phase = 'wait';
+              } else {
+                if (p.tx < settleEdge) phase = 'done';
+                else if (p.tx < pos) phase = 'form';
+                else if (p.tx < pos + tipBand) phase = 'ahead';
+                else phase = 'wait';
+              }
+
+              if (phase === 'wait' || phase === 'done') continue;
+
+              if (phase === 'ahead') {
+                p.x += Math.random() > 0.5 ? 1 : -1;
+                p.y += Math.random() > 0.5 ? 1 : -1;
+                p.r = Math.max(0.7 * dpr, p.targetR * 0.5);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.r, p.r);
+                continue;
+              }
+
+              const t = rtl
+                ? Math.min(1, Math.max(0, (p.tx - pos) / formBand))
+                : Math.min(1, Math.max(0, (pos - p.tx) / formBand));
+              const ease = t * t * (3 - 2 * t);
+              p.x += (p.tx - p.x) * (0.22 + 0.55 * ease);
+              p.y += (p.ty - p.y) * (0.22 + 0.55 * ease);
+              if (ease < 0.85) {
+                p.x += (Math.random() - 0.5) * (1 - ease) * 1.6;
+                p.y += (Math.random() - 0.5) * (1 - ease) * 1.6;
+              }
+              p.r = p.targetR * (0.45 + 0.55 * ease);
+              ctx.fillStyle = p.color;
+              ctx.fillRect(p.x, p.y, p.r, p.r);
+            }
+
+            const done = rtl ? pos <= end : pos >= end;
+            if (done) {
+              finish();
+              return;
+            }
+
+            pos += advancing;
+            frame();
+          });
+        };
+
+        frame();
+      });
+    };
+
+    if (delayMs) timer = window.setTimeout(start, delayMs);
+    else start();
+
+    return {
+      stop() {
+        cancelled = true;
+        if (timer) clearTimeout(timer);
+        if (raf) cancelAnimationFrame(raf);
+        if (el.dataset.textAppearDone !== '1') {
+          clearClip(el);
+          el.classList.remove('is-text-appearing');
+          el.classList.add('is-text-appear-done');
+          el.dataset.textAppearDone = '1';
+          canvas.remove();
+        }
+      },
+    };
+  }
+
+  function teardown() {
+    for (const h of handles) h.stop();
+    handles = [];
+  }
+
+  function initTextAppear() {
+    teardown();
+    if (prefersReducedMotion()) {
+      document.querySelectorAll<HTMLElement>('[data-text-appear]').forEach((el) => {
+        el.dataset.textAppearDone = '1';
+        el.classList.add('is-text-appear-done');
+      });
+      return;
+    }
+
+    const els = document.querySelectorAll<HTMLElement>('[data-text-appear]');
+    for (const el of els) {
+      if (el.dataset.textAppearDone === '1') continue;
+      const h = runAppear(el);
+      if (h) handles.push(h);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initTextAppear);
+  document.addEventListener('astro:before-swap', teardown);
+</script>
+
+<style is:global>
+  .text-appear-stage {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .text-appear-canvas {
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+    display: block;
+  }
+</style>

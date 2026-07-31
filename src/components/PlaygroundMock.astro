@@ -44,6 +44,38 @@ const playgroundExamples = [
     tertiary: 'Content',
     note: 'demo\nquote',
   },
+  {
+    prompt: 'Map live earthquakes above magnitude 4 with a histogram and an event feed.',
+    primary: 'Quake map',
+    secondary: 'Magnitude',
+    secondaryMeta: '24h',
+    tertiary: 'Event feed',
+    note: 'M4.6\nM5.1',
+  },
+  {
+    prompt: 'Build a weather board for three cities with hourly forecast and rain odds.',
+    primary: 'Forecast',
+    secondary: 'Rain odds',
+    secondaryMeta: '3 cities',
+    tertiary: 'Week ahead',
+    note: '18°C\n40% rain',
+  },
+  {
+    prompt: 'Make a news desk with top stories, keyword filters and a sentiment split.',
+    primary: 'Top stories',
+    secondary: 'Keywords',
+    secondaryMeta: '12 feeds',
+    tertiary: 'Sentiment',
+    note: 'markets\nenergy',
+  },
+  {
+    prompt: 'Show air quality for my city with a PM2.5 gauge and a seven-day trend.',
+    primary: 'Air quality',
+    secondary: 'PM2.5',
+    secondaryMeta: 'good',
+    tertiary: '7-day trend',
+    note: 'AQI 42\nPM2.5 9',
+  },
 ];
 const initialExample = playgroundExamples[0];
 ---
@@ -51,22 +83,22 @@ const initialExample = playgroundExamples[0];
 <div class="relative" data-playground-mock data-examples={JSON.stringify(playgroundExamples)}>
   <div class="pointer-events-none absolute -inset-8 rounded-[2rem] bg-[radial-gradient(circle_at_35%_20%,rgba(16,197,163,0.18),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(14,165,233,0.16),transparent_42%)]"></div>
 
-  <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10">
-    <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
+  <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-2xl shadow-ink-950/10 dark:shadow-black/50">
+    <div class="flex items-center gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 py-3">
       <BrandMark class="h-4 w-auto" />
-      <span class="font-mono text-xs text-ink-500">nexow playground</span>
-      <span class="ml-auto rounded-full bg-brand-50 px-2.5 py-1 font-mono text-[0.65rem] text-brand-700">
+      <span class="font-mono text-xs text-ink-500 dark:text-ink-400">nexow playground</span>
+      <span class="ml-auto rounded-full bg-brand-50 dark:bg-brand-400/12 px-2.5 py-1 font-mono text-[0.65rem] text-brand-700 dark:text-brand-300">
         local preview
       </span>
     </div>
 
     <div class="p-4 sm:p-5">
-      <div class="rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
+      <div class="rounded-xl border border-ink-900/10 dark:border-white/10 bg-[#f7fbfb] dark:bg-white/[0.02] p-3">
         <div class="flex items-start gap-3">
-          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-400/18 text-brand-700 dark:text-brand-300">
             <Icon name="sparkles" class="size-4" />
           </span>
-          <p class="min-w-0 flex-1 font-mono text-xs leading-relaxed text-ink-700 sm:text-sm">
+          <p class="min-w-0 flex-1 font-mono text-xs leading-relaxed text-ink-700 dark:text-ink-200 sm:text-sm">
             <span data-typed data-text={initialExample.prompt}>{initialExample.prompt}</span><span data-caret class="caret-blink ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-brand-500"></span>
           </p>
         </div>
@@ -75,18 +107,18 @@ const initialExample = playgroundExamples[0];
       <div class="mt-4 grid gap-3 sm:grid-cols-[1.12fr_0.88fr]" data-generated-widgets>
         <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
           <div class="flex items-center justify-between">
-            <h3 data-widget-title="primary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.primary}</h3>
-            <Icon name="layers" class="size-4 text-brand-600" />
+            <p data-widget-title="primary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.primary}</p>
+            <Icon name="layers" class="size-4 text-brand-600 dark:text-brand-300" />
           </div>
           <div class="mt-3 grid h-40 grid-cols-5 grid-rows-4 gap-2">
             <div class="col-span-3 row-span-3 rounded-lg bg-[linear-gradient(135deg,#7dd3fc,#99f6e4)]"></div>
             <div class="col-span-2 rounded-lg bg-[linear-gradient(135deg,#fcd34d,#fda4af)]"></div>
-            <div class="rounded-lg border border-ink-900/10 bg-ink-50"></div>
-            <div class="rounded-lg border border-ink-900/10 bg-sky-50"></div>
-            <div data-widget-note class="col-span-2 overflow-hidden whitespace-pre-line break-words rounded-lg border border-ink-900/10 bg-brand-50 p-2 font-mono text-[0.52rem] leading-tight text-ink-500 [overflow-wrap:anywhere]">
+            <div class="rounded-lg border border-ink-900/10 dark:border-white/10 bg-ink-50 dark:bg-white/[0.04]"></div>
+            <div class="rounded-lg border border-ink-900/10 dark:border-white/10 bg-sky-50 dark:bg-sky-400/12"></div>
+            <div data-widget-note class="col-span-2 overflow-hidden whitespace-pre-line break-words rounded-lg border border-ink-900/10 dark:border-white/10 bg-brand-50 dark:bg-brand-400/12 p-2 font-mono text-[0.52rem] leading-tight text-ink-500 dark:text-ink-400 [overflow-wrap:anywhere]">
               {initialExample.note}
             </div>
-            <div class="col-span-2 flex items-end gap-1 rounded-lg border border-ink-900/10 bg-white p-2">
+            <div class="col-span-2 flex items-end gap-1 rounded-lg border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-2">
               {[42, 70, 35, 82, 55].map((v) => (
                 <span class="w-full rounded-sm bg-brand-400/70" style={`height:${v}%`}></span>
               ))}
@@ -97,8 +129,8 @@ const initialExample = playgroundExamples[0];
         <div class="grid gap-3">
           <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
             <div class="flex items-center justify-between">
-              <h3 data-widget-title="secondary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.secondary}</h3>
-              <span data-widget-meta class="rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700">{initialExample.secondaryMeta}</span>
+              <p data-widget-title="secondary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.secondary}</p>
+              <span data-widget-meta class="rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 dark:text-brand-300">{initialExample.secondaryMeta}</span>
             </div>
             <div class="mt-3 grid grid-cols-7 gap-1.5">
               {Array.from({ length: 21 }).map((_, i) => (
@@ -106,8 +138,8 @@ const initialExample = playgroundExamples[0];
                   class:list={[
                     'aspect-square rounded-md border',
                     [0, 1, 2, 4, 7, 8, 10, 14, 15, 16, 18].includes(i)
-                      ? 'border-brand-200 bg-brand-100'
-                      : 'border-ink-900/8 bg-ink-50',
+                      ? 'border-brand-200 dark:border-brand-400/30 bg-brand-100 dark:bg-brand-400/18'
+                      : 'border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.04]',
                   ]}
                 ></span>
               ))}
@@ -116,8 +148,8 @@ const initialExample = playgroundExamples[0];
 
           <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
             <div class="flex items-center justify-between">
-              <h3 data-widget-title="tertiary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.tertiary}</h3>
-              <Icon name="trophy" class="size-4 text-sky-600" />
+              <p data-widget-title="tertiary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.tertiary}</p>
+              <Icon name="trophy" class="size-4 text-sky-600 dark:text-sky-300" />
             </div>
             <div class="mt-3 grid grid-cols-5 gap-1.5">
               {Array.from({ length: 15 }).map((_, i) => (
@@ -127,8 +159,8 @@ const initialExample = playgroundExamples[0];
                     [1, 8, 12].includes(i)
                       ? 'border-sky-200 bg-sky-200'
                       : [4, 6, 13].includes(i)
-                        ? 'border-brand-200 bg-brand-200'
-                        : 'border-ink-900/8 bg-ink-50',
+                        ? 'border-brand-200 dark:border-brand-400/30 bg-brand-200'
+                        : 'border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.04]',
                   ]}
                 ></span>
               ))}

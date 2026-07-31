@@ -1,0 +1,194 @@
+---
+/**
+ * Community hero atmosphere — drifting brand/accent/plasma auroras.
+ * Replaces the old soft-light vignette (harsh white edges in dark mode).
+ * Pauses when `.is-offscreen` (ScrollMotion) or prefers-reduced-motion.
+ */
+---
+
+<div
+  class="community-aura pointer-events-none absolute inset-0 overflow-hidden"
+  aria-hidden="true"
+  data-motion="dim"
+  data-community-aura
+>
+  <!-- Animated multi-stop gradient mesh -->
+  <div class="caura-mesh absolute inset-[-12%]"></div>
+
+  <!-- Drifting aurora blobs — same *-200 hues in light and dark -->
+  <div
+    class="aurora-a caura-blob absolute -top-32 left-[2%] size-[min(70vw,640px)] rounded-full opacity-60 blur-3xl dark:opacity-50"
+    style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+  >
+  </div>
+  <div
+    class="aurora-b caura-blob absolute -top-24 right-[-6%] size-[min(72vw,680px)] rounded-full opacity-50 blur-3xl dark:opacity-40"
+    style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+  >
+  </div>
+  <div
+    class="aurora-c caura-blob absolute left-[28%] top-[32%] size-[min(58vw,520px)] rounded-full opacity-45 blur-3xl dark:opacity-35"
+    style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+  >
+  </div>
+  <div
+    class="caura-blob caura-blob--d absolute bottom-[-8%] left-[12%] size-[min(50vw,440px)] rounded-full opacity-40 blur-3xl dark:opacity-30"
+    style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+  >
+  </div>
+
+  <!-- Quiet horizon arc — keeps the community cue without the old light planes -->
+  <svg
+    class="caura-svg absolute left-1/2 top-[8%] h-[min(52vw,380px)] w-[min(110%,820px)] -translate-x-1/2 opacity-70 dark:opacity-55"
+    viewBox="0 0 820 380"
+    fill="none"
+  >
+    <defs>
+      <linearGradient id="caura-arc" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
+        <stop offset="30%" stop-color="var(--color-brand-400)" stop-opacity="0.5"></stop>
+        <stop offset="50%" stop-color="var(--color-sky-400)" stop-opacity="0.6"></stop>
+        <stop offset="70%" stop-color="var(--color-accent-400)" stop-opacity="0.45"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0"></stop>
+      </linearGradient>
+      <filter id="caura-soft" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="5" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+    <path
+      class="caura-arc"
+      pathLength="1"
+      d="M70 200 C 200 100 330 78 410 78 C 490 78 620 100 750 200"
+      stroke="url(#caura-arc)"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    >
+    </path>
+    <circle class="caura-dot" cx="410" cy="78" r="3" fill="var(--color-brand-400)" filter="url(#caura-soft)"></circle>
+  </svg>
+</div>
+
+<style>
+  .caura-mesh {
+    background:
+      radial-gradient(
+        ellipse 55% 45% at 18% 22%,
+        color-mix(in oklab, var(--color-brand-300) 55%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 50% 40% at 82% 18%,
+        color-mix(in oklab, var(--color-accent-300) 48%, transparent),
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 48% 42% at 58% 75%,
+        color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        ellipse 40% 35% at 42% 42%,
+        color-mix(in oklab, var(--color-sky-300) 32%, transparent),
+        transparent 65%
+      );
+    animation: caura-mesh-shift 28s ease-in-out infinite;
+    will-change: transform, opacity;
+    opacity: 0.85;
+  }
+
+  :global(.dark) .caura-mesh {
+    /* Same *-300 hues as light; opacity only. */
+    opacity: 0.75;
+  }
+
+  .caura-blob--d {
+    animation: caura-drift-d 24s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .caura-arc {
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: caura-draw 2s var(--ease-out-expo) 0.2s forwards;
+  }
+
+  .caura-dot {
+    animation: caura-dot-in 1s var(--ease-out-expo) 1s both;
+  }
+
+  @keyframes caura-mesh-shift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+    33% {
+      transform: translate3d(2.5%, -2%, 0) scale(1.05) rotate(1.5deg);
+    }
+    66% {
+      transform: translate3d(-2%, 2.5%, 0) scale(0.96) rotate(-1.2deg);
+    }
+  }
+
+  @keyframes caura-drift-d {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(4%, -3%, 0) scale(1.1);
+    }
+  }
+
+  @keyframes caura-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes caura-dot-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .is-offscreen .caura-mesh,
+  .is-offscreen .caura-blob,
+  .is-offscreen .caura-blob--d,
+  .is-offscreen .caura-arc,
+  .is-offscreen .caura-dot {
+    animation-play-state: paused !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .caura-mesh,
+    .caura-blob,
+    .caura-blob--d,
+    .caura-dot {
+      animation: none;
+    }
+    .caura-arc {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .caura-svg {
+      opacity: 0.55;
+      top: 4%;
+    }
+    .caura-mesh {
+      opacity: 0.65;
+    }
+  }
+</style>

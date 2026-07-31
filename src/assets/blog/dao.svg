@@ -1,0 +1,108 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nexow DAO governance token orbited by open ballots and a shared treasury illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="96" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#dao</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="350" rx="330" ry="230" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- orbit rings -->
+    <ellipse cx="600" cy="350" rx="286" ry="172" fill="none" stroke="url(#edge)" stroke-opacity="0.28" stroke-width="2"/>
+    <ellipse cx="600" cy="350" rx="196" ry="118" fill="none" stroke="url(#edge)" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round"/>
+
+    <!-- NXW governance token at the centre -->
+    <g>
+      <path d="M600 262 l76 44 v88 l-76 44 -76 -44 v-88 z" fill="#08090d" stroke="url(#edge)" stroke-width="3"/>
+      <path d="M600 262 l76 44 v88 l-76 44 -76 -44 v-88 z" fill="#f59e0b" fill-opacity="0.12"/>
+      <path d="M572 386 v-72 l56 72 v-72" fill="none" stroke="#fde68a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- ballots on the orbit: title line + tally bar -->
+    <g>
+      <rect x="196" y="222" width="196" height="76" rx="18" fill="#08090d" stroke="#f59e0b" stroke-opacity="0.45" stroke-width="2"/>
+      <rect x="196" y="222" width="196" height="76" rx="18" fill="#f59e0b" fill-opacity="0.08"/>
+      <rect x="220" y="244" width="118" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+      <rect x="220" y="270" width="148" height="10" rx="5" fill="#f59e0b" fill-opacity="0.18"/>
+      <rect x="220" y="270" width="107" height="10" rx="5" fill="url(#edge)" fill-opacity="0.9"/>
+    </g>
+    <g>
+      <rect x="212" y="404" width="196" height="76" rx="18" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.55" stroke-width="2"/>
+      <rect x="212" y="404" width="196" height="76" rx="18" fill="#f59e0b" fill-opacity="0.06"/>
+      <rect x="236" y="426" width="96" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+      <rect x="236" y="452" width="148" height="10" rx="5" fill="#f59e0b" fill-opacity="0.18"/>
+      <rect x="236" y="452" width="94" height="10" rx="5" fill="url(#edge)" fill-opacity="0.75"/>
+    </g>
+    <g>
+      <rect x="808" y="222" width="196" height="76" rx="18" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.55" stroke-width="2"/>
+      <rect x="808" y="222" width="196" height="76" rx="18" fill="#f59e0b" fill-opacity="0.06"/>
+      <rect x="832" y="244" width="132" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+      <rect x="832" y="270" width="148" height="10" rx="5" fill="#f59e0b" fill-opacity="0.18"/>
+      <rect x="832" y="270" width="129" height="10" rx="5" fill="url(#edge)" fill-opacity="0.75"/>
+    </g>
+    <g>
+      <rect x="792" y="404" width="196" height="76" rx="18" fill="#08090d" stroke="#f59e0b" stroke-opacity="0.45" stroke-width="2"/>
+      <rect x="792" y="404" width="196" height="76" rx="18" fill="#f59e0b" fill-opacity="0.08"/>
+      <rect x="816" y="426" width="110" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+      <rect x="816" y="452" width="148" height="10" rx="5" fill="#f59e0b" fill-opacity="0.18"/>
+      <rect x="816" y="452" width="120" height="10" rx="5" fill="url(#edge)" fill-opacity="0.9"/>
+    </g>
+
+    <!-- treasury vault, top of the orbit -->
+    <g>
+      <rect x="536" y="132" width="128" height="92" rx="20" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <rect x="536" y="132" width="128" height="92" rx="20" fill="#f59e0b" fill-opacity="0.1"/>
+      <circle cx="600" cy="178" r="24" fill="none" stroke="#fde68a" stroke-width="4"/>
+      <path d="M600 158 v10 M600 188 v10 M580 178 h10 M610 178 h10" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+    </g>
+
+    <!-- cast ballot, bottom of the orbit -->
+    <g>
+      <rect x="540" y="486" width="120" height="86" rx="18" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <rect x="540" y="486" width="120" height="86" rx="18" fill="#f59e0b" fill-opacity="0.12"/>
+      <path d="M572 528 l18 18 l36 -40" fill="none" stroke="#fde68a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- holders feeding the ballots -->
+    <g opacity="0.75">
+      <circle cx="392" cy="350" r="8" fill="#fbbf24"/>
+      <circle cx="808" cy="350" r="8" fill="#fbbf24"/>
+    </g>
+  </g>
+</svg>

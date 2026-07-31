@@ -1,0 +1,150 @@
+---
+/**
+ * Scroll-motion engine — the single source of scroll progress for the page.
+ *
+ * Elements opt in with `data-motion="<tokens>"`. While an element is anywhere
+ * near the viewport this writes five progress variables onto it:
+ *
+ *   --p   0 → 1   travelling from just below the fold to just above it
+ *   --pc -1 → 1   the same, centred (0 = exactly mid-screen)
+ *   --pb  0 → 1   bell curve — 1 mid-screen, 0 at both edges
+ *   --pe  0 → 1   one-way entry ramp, 1 once the element has settled in view
+ *   --ps  0 → 1   scrub: how far a tall element has been scrolled through
+ *                 (what a `position: sticky` child travels on)
+ *
+ * `global.css` composes those into one 3D transform, so a token only ever sets
+ * an input (`--m-tilt`, `--m-zoom`, …) and nothing ever fights over `transform`.
+ *
+ * Elements with `data-stages="N"` also get `data-stage="0…N-1"` from `--ps`,
+ * which is how the scroll-scrubbed run diagram advances.
+ *
+ * Tracked elements carry `.is-offscreen` once they are well away from the
+ * viewport, which looping decorative SVGs park their `animation-play-state` on
+ * so a gallery of them costs nothing after it has been scrolled past. The class
+ * marks the *inactive* state deliberately: with no JavaScript, or before the
+ * first observer callback, the default is "playing and legible".
+ *
+ * Reliability rules this file keeps: reads are batched ahead of writes (no
+ * layout thrash), work only happens for elements near the viewport, frames are
+ * coalesced through rAF, and reduced-motion visitors never start the loop.
+ */
+---
+
+<script>
+  const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+  let observer: IntersectionObserver | null = null;
+  let active: HTMLElement[] = [];
+  let frame = 0;
+  let listening = false;
+
+  function measure() {
+    frame = 0;
+    const els = active;
+    if (!els.length) return;
+
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+
+    // Read pass — every rect first, so no write can force a re-layout below.
+    const rects: DOMRect[] = new Array(els.length);
+    for (let i = 0; i < els.length; i++) rects[i] = els[i].getBoundingClientRect();
+
+    // Write pass.
+    for (let i = 0; i < els.length; i++) {
+      const el = els[i];
+      const r = rects[i];
+
+      const span = vh + r.height;
+      const p = span > 0 ? clamp01((vh - r.top) / span) : 0;
+      const pc = p * 2 - 1;
+      const pb = 1 - Math.abs(pc);
+      // Entry ramp: starts as the top edge crosses 92% of the viewport and
+      // completes 42vh later, so cards finish settling well before mid-screen.
+      const pe = clamp01((vh * 0.92 - r.top) / (vh * 0.42));
+      // Sticky travel: 0 when the element's top hits the top of the viewport,
+      // 1 when its bottom does. Only meaningful for elements taller than the
+      // viewport — shorter ones stay at 0 and never scrub.
+      const travel = r.height - vh;
+      const ps = travel > 0 ? clamp01(-r.top / travel) : 0;
+
+      const s = el.style;
+      s.setProperty('--p', p.toFixed(4));
+      s.setProperty('--pc', pc.toFixed(4));
+      s.setProperty('--pb', pb.toFixed(4));
+      s.setProperty('--pe', pe.toFixed(4));
+      s.setProperty('--ps', ps.toFixed(4));
+
+      const stages = Number(el.dataset.stages);
+      if (stages > 1) {
+        const idx = Math.min(stages - 1, Math.floor(ps * stages));
+        const next = String(idx);
+        if (el.dataset.stage !== next) el.dataset.stage = next;
+      }
+    }
+  }
+
+  function schedule() {
+    if (frame || !active.length) return;
+    frame = requestAnimationFrame(measure);
+  }
+
+  function teardown() {
+    observer?.disconnect();
+    observer = null;
+    if (frame) cancelAnimationFrame(frame);
+    frame = 0;
+    for (const el of active) el.style.willChange = '';
+    for (const el of document.querySelectorAll('.is-offscreen')) el.classList.remove('is-offscreen');
+    active = [];
+    if (listening) {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      listening = false;
+    }
+  }
+
+  function initScrollMotion() {
+    teardown();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-motion], [data-stages]'));
+    if (!els.length || !('IntersectionObserver' in window)) return;
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const el = e.target as HTMLElement;
+          const i = active.indexOf(el);
+          if (e.isIntersecting) {
+            el.classList.remove('is-offscreen');
+            if (i === -1) {
+              active.push(el);
+              // Only hint the compositor while the element can actually move.
+              if (el.hasAttribute('data-motion')) el.style.willChange = 'transform';
+            }
+          } else {
+            el.classList.add('is-offscreen');
+            if (i !== -1) {
+              active.splice(i, 1);
+              el.style.willChange = '';
+            }
+          }
+        }
+        schedule();
+      },
+      // Start tracking a screen early so the first write lands off-screen and
+      // nothing visibly snaps into position.
+      { rootMargin: '100% 0px 100% 0px' },
+    );
+
+    for (const el of els) observer.observe(el);
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    listening = true;
+    schedule();
+  }
+
+  document.addEventListener('astro:page-load', initScrollMotion);
+  document.addEventListener('astro:before-swap', teardown);
+</script>

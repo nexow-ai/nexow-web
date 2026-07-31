@@ -1,17 +1,21 @@
 import type { SiteContent } from '../content';
 
-export const ms: SiteContent = {
+export const ms = {
   nav: {
     links: [
       { label: 'Ciri-ciri', href: '/features' },
+      { label: 'Komuniti', href: '/community' },
       { label: 'Penyambung', href: '/connectors' },
       { label: 'Pelan', href: '/plans' },
+      { label: 'Bantuan', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'Tentang', href: '/about' },
     ],
     launch: 'Lancarkan aplikasi',
     menu: 'Buka menu',
     close: 'Tutup menu',
+    themeToDark: 'Tukar ke mod gelap',
+    themeToLight: 'Tukar ke mod cerah',
   },
   footer: {
     tagline: 'Terangkan widget. Nexow membinanya, menghubungkannya dengan data pasaran langsung, dan meletakkannya di kanvas anda.',
@@ -20,11 +24,13 @@ export const ms: SiteContent = {
         title: 'Produk',
         links: [
           { label: 'Ciri-ciri', href: '/features' },
-          { label: 'Pelan', href: '/plans' },
+          { label: 'Komuniti', href: '/community' },
           { label: 'Penyambung', href: '/connectors' },
-          { label: 'Automasi', href: '/#automate' },
-          { label: 'Komuniti', href: '/#network' },
-          { label: 'Peta Jalan', href: '/#roadmap' },
+          { label: 'Pelan', href: '/plans' },
+          { label: 'Bantuan', href: '/help' },
+          { label: 'Untuk pedagang', href: '/for/traders' },
+          { label: 'Untuk pengasas', href: '/for/founders' },
+          { label: 'Untuk pembina', href: '/for/builders' },
         ],
       },
       {
@@ -32,32 +38,51 @@ export const ms: SiteContent = {
         links: [
           { label: 'Tentang', href: '/about' },
           { label: 'Blog', href: '/blog' },
+          { label: 'Log perubahan', href: '/changelog' },
+          { label: 'Keselamatan', href: '/security' },
+          { label: 'Hubungi kami', href: '/contact' },
+          { label: 'Jemput', href: '/invite' },
+          { label: 'Undang-undang', href: '/legal' },
         ],
       },
       {
-        title: 'Sumber',
+        title: 'Undang-undang',
         links: [
-          { label: 'Lancarkan aplikasi', href: 'https://x.nexow.ai' },
           { label: 'Privasi', href: '/privacy' },
+          { label: 'Syarat penggunaan', href: '/terms' },
+          { label: 'Kuki', href: '/cookies' },
+          { label: 'Penggunaan diterima', href: '/acceptable-use' },
+          { label: 'Buka apl', href: 'https://x.nexow.ai' },
         ],
       },
     ],
     rights: 'Semua hak terpelihara.',
     disclaimer:
       'Nexow adalah platform alatan dan visualisasi. Tiada di sini adalah nasihat kewangan. Pasaran membawa risiko; berdagang dengan bertanggungjawab.',
-    builtWith: 'Dibina dengan Astro. Swasta secara lalai.',
+    newsletter: {
+      eyebrow: 'Surat berita',
+      title: 'Kekal dimaklumkan',
+      subtitle: 'Kemas kini produk, tip kanvas dan nota keluaran — sekali-sekala, tiada spam.',
+      placeholder: 'anda@email.com',
+      submit: 'Langgan',
+      submitting: 'Melanggan…',
+      success: 'Anda telah berjaya. Terima kasih kerana melanggan.',
+      error: 'Sesuatu tidak kena. Sila cuba lagi.',
+      invalid: 'Masukkan alamat e-mel yang sah.',
+    },
   },
   home: {
     meta: {
       title: 'Nexow — Bina papan pemuka pasaran dengan AI, dalam bahasa biasa',
       description:
-        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 45+ penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
+        'Nexow adalah ruang kerja asli AI untuk pasaran. Terangkan widget dalam bahasa Inggeris biasa dan Nexow membinanya, menghubungkannya dengan data langsung daripada 90 penyambung, dan menambah bot awan, ejen AI, komuniti pembuat dan ganjaran XP — swasta secara lalai, percuma untuk dimulai.',
     },
     hero: {
-      badge: 'Pratonton kini langsung',
+      badge: 'Akses awal',
       titleLead: 'Terangkan.',
       titleGradient: 'Nexow membinanya.',
       titleTail: 'Dagangannya.',
+      titleKicker: 'Dalam beberapa saat — bukan minggu atau bulan.',
       subtitle:
         'Ruang kerja asli AI untuk pasaran. Minta mana-mana widget dalam bahasa biasa — Nexow menulis kod, menjalankannya dengan selamat, dan mengalirkan data langsung ke kanvas bentuk bebas. Otomatkannya dengan bot awan dan ejen, kemudian pasangkannya ke komuniti pembuat.',
       ctaPrimary: 'Lancarkan aplikasi',
@@ -65,11 +90,95 @@ export const ms: SiteContent = {
       note: 'Tiada pendaftaran untuk mencuba · Swasta dalam penyemak imbas anda · Atau akaun percuma dengan 10K kredit yang dikhaskan',
       promptExample: 'Tunjukkan carta batang lilin BTC-USD daripada Coinbase dengan EMA 20 & 50 dan RSI di bawah.',
       promptPlaceholder: 'Terangkan widget…',
+      promptExamplesLabel: 'Atau mula dengan contoh',
+      promptExamplesMore: 'Lagi contoh',
+      promptExamples: [
+        {
+          icon: 'candlestick',
+          label: 'Meja kripto',
+          prompt: 'Bina meja kripto: lilin BTC-USD daripada Binance dengan EMA 20 dan 50, kedalaman buku pesanan dan panel kadar funding.',
+        },
+        {
+          icon: 'lineChart',
+          label: 'Senarai saham',
+          prompt: 'Buat senarai pantau saham dengan harga langsung, perubahan harian, tarikh pendapatan dan carta setahun.',
+        },
+        {
+          icon: 'radar',
+          label: 'Peta gempa bumi',
+          prompt: 'Petakan semua gempa bumi USGS melebihi magnitud 4 dalam 24 jam lalu, dengan histogram magnitud dan suapan peristiwa.',
+        },
+        {
+          icon: 'cloudSun',
+          label: 'Papan cuaca',
+          prompt: 'Bina papan cuaca untuk tiga bandar: ramalan setiap jam, kebarangkalian hujan dan carta suhu seminggu.',
+        },
+        {
+          icon: 'grid',
+          label: 'Papan projek',
+          prompt: 'Cipta pusat kawalan projek: papan kanban, burndown sprint, penghalang mengikut pemilik dan garis masa.',
+        },
+        {
+          icon: 'flame',
+          label: 'Penjejak tabiat',
+          prompt: 'Buat penjejak rentetan untuk enam tabiat harian dengan peta haba bulanan dan skor mingguan.',
+        },
+        {
+          icon: 'newspaper',
+          label: 'Meja berita',
+          prompt: 'Buat meja berita dengan berita utama dari Reuters, The Guardian dan Hacker News, ditapis mengikut kata kunci.',
+        },
+        {
+          icon: 'rocket',
+          label: 'HQ pengasas',
+          prompt: 'Bina papan pemuka pengasas: saluran prospek, carta MRR, senarai semak pelancaran dan kalendar kandungan.',
+        },
+        {
+          icon: 'activity',
+          label: 'Kualiti udara',
+          prompt: 'Tunjukkan kualiti udara bandar saya daripada OpenAQ dengan tolok PM2.5, trend 7 hari dan jalur kesihatan.',
+        },
+        {
+          icon: 'earth',
+          label: 'Penunjuk dunia',
+          prompt: 'Bandingkan KDNK per kapita, inflasi dan populasi lima negara menggunakan penunjuk Bank Dunia.',
+        },
+        {
+          icon: 'target',
+          label: 'Pasaran ramalan',
+          prompt: 'Tunjukkan odds Polymarket dan Kalshi bersebelahan dengan garis masa kebarangkalian dan jadual pergerakan terbesar.',
+        },
+        {
+          icon: 'wallet',
+          label: 'Penjejak wallet',
+          prompt: 'Jejak wallet saya: baki token, prestasi 30 hari dan carta pai agihan mengikut aset.',
+        },
+        {
+          icon: 'play',
+          label: 'Permainan mini',
+          prompt: 'Bina permainan memori kecil dengan pengira langkah, pemasa dan rekod skor terbaik.',
+        },
+        {
+          icon: 'music',
+          label: 'Statistik lagu',
+          prompt: 'Buat papan pemuka pendengaran daripada Spotify: artis teratas, carta pai genre dan mainan setiap minggu.',
+        },
+        {
+          icon: 'databaseZap',
+          label: 'Pangkalan data saya',
+          prompt: 'Sambungkan Postgres saya dan cartakan pendaftaran harian, churn dan hasil mengikut pelan, dengan baris KPI di atas.',
+        },
+        {
+          icon: 'heart',
+          label: 'Log latihan',
+          prompt: 'Tunjukkan larian Strava saya bulan ini dengan trend pace, jumlah mingguan dan jadual rekod peribadi.',
+        },
+      ],
     },
     ticker: { label: 'Penyambung langsung' },
     trust: 'Satu kanvas untuk setiap pasaran — FX, kripto, ekuiti, niaga hadapan, opsyen & pasaran ramalan.',
     stats: [
-      { n: 45, suffix: '+', label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
+      { n: 90, label: 'penyambung langsung untuk data, dompet, sosial dan pasaran' },
       { n: 6, label: 'kelas aset pada satu kanvas' },
       { n: 10, suffix: 'K', label: 'kredit AI percuma yang dikhaskan semasa mendaftar' },
       { n: 30, prefix: '<', suffix: 's', label: 'daripada ayat kepada widget yang berjalan' },
@@ -104,40 +213,173 @@ export const ms: SiteContent = {
       ],
     },
     features: {
-      eyebrow: 'Mengapa Nexow',
-      title: 'Papan pemuka membina sendirinya',
+      eyebrow: 'Aplikasi',
+      title: 'Setiap permukaan Nexow',
       subtitle:
-        'Berhenti menyambung carta dengan tangan. Terangkan apa yang anda ingin lihat dan Nexow menjana widget sebenar yang berjalan — kemudian biarkan anda menyempurnakannya dalam bahasa biasa.',
+        'Widget pada kanvas bentuk bebas, penyambung langsung, bot dan ejen awan, komuniti pembuat dengan sembang masa nyata, pasaran, tema, serta toolbar dan Dock yang tidak menghalang.',
       items: [
         {
           icon: 'sparkles',
-          title: 'Widget bahasa biasa',
-          body: 'Terangkan carta, jadual, peta haba atau isyarat dalam perkataan biasa. Nexow menulis sumber widget dengan Claude dan menjalankannya secara langsung — tiada penyakit boilerplate, tiada fail konfigurasi.',
-        },
-        {
-          icon: 'shield',
-          title: 'Sandbok & selamat',
-          body: 'Setiap widget berjalan dalam iframe terpencil dengan sempadan ketat. Kod yang dijana dapat membuat dan mengambil data, tetapi tidak pernah menyentuh ruang kerja atau widget lain anda.',
-        },
-        {
-          icon: 'plug',
-          title: '45+ penyambung data langsung',
-          body: 'Pembekal data pasaran yang boleh pasang — OANDA, Binance, Coinbase, Kraken, Polygon, Interactive Brokers, Kalshi, Polymarket dan banyak lagi — laluan data masa nyata ke widget anda.',
+          title: 'Widget',
+          body: 'Terangkan widget dalam perkataan biasa. Nexow menjana antara muka dan logik, menjalankannya dalam sandbok, dan membolehkan anda memperhalusinya melalui perbualan.',
         },
         {
           icon: 'layers',
-          title: 'Kanvas bentuk bebas',
-          body: 'Seret, ubah saiz dan susun widget pada kanvas bentuk bebas dengan ruang kerja dan skrin untuk FX, kripto, penyelidikan — apa yang anda daging. Kelompokkan widget bersama dan paip data langsung di antara mereka dengan Pautan.',
+          title: 'Kanvas & ruang kerja',
+          body: 'Seret, ubah saiz dan susun widget merentasi ruang kerja dan skrin. Kelompokkan, pautkan datanya dengan Links, dan tukar susunan serta-merta.',
         },
         {
-          icon: 'lock',
-          title: 'Swasta secara lalai',
-          body: 'Jalankan sepenuhnya secara tempatan: tambah kunci Anthropic anda sendiri dan penghasilan kod berlaku di penyemak imbas anda. Widget, versi dan log kekal dalam IndexedDB — tidak ada yang dihantar ke pelayan kami.',
+          icon: 'plug',
+          title: 'Penyambung',
+          body: 'Pasang widget ke pasaran, pangkalan data, dompet dan apl sosial — atau kekalkan keadaan tempatan sehingga anda perlukan data langsung.',
         },
         {
-          icon: 'history',
-          title: 'Versi & perpustakaan widget',
-          body: 'Setiap suntingan adalah versi dengan log yang boleh anda periksa. Simpan widget ke perpustakaan peribadi dan gunakan semula mereka di papan pemuka dalam satu klik.',
+          icon: 'bot',
+          title: 'Bot',
+          body: 'Automasi awan yang memantau data anda dan menghantar isyarat kembali ke widget — walaupun tab anda ditutup.',
+        },
+        {
+          icon: 'cpu',
+          title: 'Ejen',
+          body: 'Rakan sepasukan AI dengan model, memori, kemahiran, alatan, pengetahuan dan pencetus — bina, sebar dan semak larian di awan.',
+        },
+        {
+          icon: 'chat',
+          title: 'Copilot',
+          body: 'Pembantu AI untuk seluruh ruang kerja: bina widget, susun kanvas dan tanya apa yang perlu diubah seterusnya.',
+        },
+        {
+          icon: 'users',
+          title: 'Komuniti',
+          body: 'Ikuti pembuat, siarkan ke suapan, kongsi widget ke perpustakaan dan tuntut @handle awam.',
+        },
+        {
+          icon: 'store',
+          title: 'Pasaran',
+          body: 'Terbitkan dan pasang widget, tema, skrin, bot dan ejen — dengan salasilah yang memberi kredit kepada setiap buatan semula.',
+        },
+        {
+          icon: 'mail',
+          title: 'Sembang masa nyata',
+          body: 'Mesej rakan dan kenalan secara langsung — DM 1:1 dan kumpulan dengan kehadiran, reaksi dan peti masuk pada Dock.',
+        },
+        {
+          icon: 'vault',
+          title: 'Akaun',
+          body: 'Akaun percuma dengan kredit, reputasi, penggunaan, pelan, notis, App Lock dan pertukaran berbilang akaun.',
+        },
+        {
+          icon: 'moon',
+          title: 'Tema & tetapan',
+          body: 'Tema seluruh Chrome — warna, fon, ketumpatan, corak — serta pintasan, keselamatan dan keutamaan pemasangan.',
+        },
+        {
+          icon: 'grid',
+          title: 'Toolbar & Dock',
+          body: 'Toolbar header boleh konfigur untuk tindakan kanvas, dan Dock kaca untuk Copilot, panel, pemberitahuan dan mesej.',
+        },
+      ],
+      map: {
+        hint: 'Pilih nod untuk meneroka permukaan — kemudian buka app atau baca lanjut.',
+        moreLabel: 'Lagi info',
+        openLabel: 'Buka dalam app',
+        closeLabel: 'Tutup',
+      },
+      groups: [
+        {
+          title: 'Bina',
+          items: [
+          {
+            icon: 'sparkles',
+            title: 'Widget',
+            body: 'Terangkan widget dalam perkataan biasa. Nexow menjana antara muka dan logik, menjalankannya dalam sandbok, dan membolehkan anda memperhalusinya melalui perbualan.',
+          },
+          {
+            icon: 'layers',
+            title: 'Kanvas & ruang kerja',
+            body: 'Seret, ubah saiz dan susun widget merentasi ruang kerja dan skrin. Kelompokkan, pautkan datanya dengan Links, dan tukar susunan serta-merta.',
+          },
+          {
+            icon: 'library',
+            title: 'Perpustakaan widget',
+            body: 'Simpan mana-mana widget ke perpustakaan anda dan letakkannya ke papan pemuka lain dalam satu klik — versi dan log kekal bersama.',
+          },
+        ],
+        },
+        {
+          title: 'Automasi',
+          items: [
+          {
+            icon: 'bot',
+            title: 'Bot',
+            body: 'Automasi awan yang memantau data anda dan menghantar isyarat kembali ke widget — walaupun tab anda ditutup.',
+          },
+          {
+            icon: 'cpu',
+            title: 'Ejen',
+            body: 'Rakan sepasukan AI dengan model, memori, kemahiran, alatan, pengetahuan dan pencetus — bina, sebar dan semak larian di awan.',
+          },
+          {
+            icon: 'chat',
+            title: 'Copilot',
+            body: 'Pembantu AI untuk seluruh ruang kerja: bina widget, susun kanvas dan tanya apa yang perlu diubah seterusnya.',
+          },
+        ],
+        },
+        {
+          title: 'Sambung & kongsi',
+          items: [
+          {
+            icon: 'plug',
+            title: 'Penyambung',
+            body: '90 penyambung langsung merentasi pasaran, pangkalan data, dompet dan apl sosial — terus dari pelayar di mana CORS membenarkan.',
+          },
+          {
+            icon: 'globe',
+            title: 'Apl media sosial',
+            body: 'Tarik suapan langsung dan isyarat daripada X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon dan banyak lagi ke widget anda.',
+          },
+          {
+            icon: 'users',
+            title: 'Komuniti',
+            body: 'Ikuti pembuat, siarkan ke suapan, kongsi widget ke perpustakaan dan tuntut @handle awam.',
+          },
+          {
+            icon: 'store',
+            title: 'Pasaran',
+            body: 'Terbitkan dan pasang widget, tema, skrin, bot dan ejen — dengan salasilah yang memberi kredit kepada setiap buatan semula.',
+          },
+          {
+            icon: 'mail',
+            title: 'Sembang masa nyata',
+            body: 'Mesej rakan dan kenalan secara langsung — DM 1:1 dan kumpulan dengan kehadiran, reaksi dan peti masuk pada Dock.',
+          },
+        ],
+        },
+        {
+          title: 'Chrome & akaun',
+          items: [
+          {
+            icon: 'vault',
+            title: 'Akaun',
+            body: 'Akaun percuma dengan kredit, reputasi, penggunaan, pelan, notis, App Lock dan pertukaran berbilang akaun.',
+          },
+          {
+            icon: 'moon',
+            title: 'Tema & tetapan',
+            body: 'Tema seluruh Chrome — warna, fon, ketumpatan, corak — serta pintasan, keselamatan dan keutamaan pemasangan.',
+          },
+          {
+            icon: 'sliders',
+            title: 'Toolbar',
+            body: 'Tambah widget, auto-susun, tangkapan skrin, undo/redo, kunci, mod warna, kredit dan segerak — tunjuk atau sembunyikan setiap tindakan.',
+          },
+          {
+            icon: 'grid',
+            title: 'Dock',
+            body: 'Pil kaca boleh seret untuk Copilot, pintasan panel, pemberitahuan dan mesej — auto sembunyi menjadi puck apabila melahu.',
+          },
+        ],
         },
       ],
     },
@@ -198,8 +440,7 @@ export const ms: SiteContent = {
       title: 'Pasang ke setiap pasaran',
       subtitle:
         'Penyambung yang boleh pasang mengalirkan harga langsung, buku pesanan dan data rujukan terus ke widget anda — merentasi FX, kripto, ekuiti, niaga hadapan, opsyen, pasaran ramalan, pangkalan data dan suapan sosial.',
-      note: '45 penyambung langsung hari ini dan 83 duduk dalam katalog — tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web. Ramai mengalir terus daripada penyemak imbas anda; selebihnya laluan melalui proksi nipis.',
-      count: 45,
+      note: '{live} penyambung aktif hari ini dan {total} ada dalam katalog: tempat dagangan, API data pasaran, pangkalan data, sumber sosial, dompet kripto dan perkhidmatan web.',
       countLabel: 'penyambung langsung',
       groups: {
         fx: 'FX',
@@ -282,7 +523,7 @@ export const ms: SiteContent = {
       soon: 'Segera hadir',
       items: [
         { status: 'shipped', title: 'Penghasilan widget AI', body: 'Widget bahasa biasa berjalan sandbok pada kanvas.' },
-        { status: 'shipped', title: '45+ penyambung data pasaran', body: 'Pangkalan data, sosial, broker, pertukaran, dompet, data terbuka dan perkhidmatan web mengalir secara langsung.' },
+        { status: 'shipped', title: '90 penyambung data pasaran', body: 'Pangkalan data, sosial, broker, pertukaran, dompet, data terbuka dan perkhidmatan web mengalir secara langsung.' },
         { status: 'shipped', title: 'Bot & amaran awan', body: 'Automasi yang memantau data anda dan menembak isyarat ke widget anda, tab ditutup.' },
         { status: 'shipped', title: 'Akaun & segerak awan', body: 'Akaun percuma dengan ruang kerja disegerak ke setiap peranti — 10K kredit dikhaskan untuk pelancaran platform.' },
         { status: 'shipped', title: 'Suapan komuniti & profil', body: 'Ikuti pembuat, kongsi widget ke suapan, dan tuntut @handle awam anda.' },
@@ -294,45 +535,41 @@ export const ms: SiteContent = {
       ],
     },
     faq: {
-      eyebrow: 'Soalan Lazim',
-      title: 'Soalan, dijawab',
-      subtitle: 'Semua yang anda perlukan tahu sebelum anda melancarkan aplikasi.',
+      eyebrow: "Soalan Lazim",
+      title: "Soalan sebelum bermula",
+      subtitle: "Jawapan terus tentang apa itu Nexow, cara ia berfungsi, dan berapa kosnya.",
       items: [
         {
-          q: 'Apa itu Nexow?',
-          a: 'Nexow adalah ruang kerja asli AI untuk pasaran. Anda menerangkan widget — carta, jadual, peta haba atau isyarat — dalam bahasa biasa, dan Nexow menjana kod sumbernya, menjalankannya dalam iframe sandbok, dan mengalirkan data pasaran langsung ke kanvas bentuk bebas. Sekitarnya ia menambah bot awan, ejen AI, Copilot dan komuniti pembuat.',
+          q: "Apakah Nexow?",
+          a: "Nexow ialah kanvas widget. Huraikan keperluan anda dalam bahasa biasa dan ia menjana widget yang berfungsi — moodboard, perancang, permainan, alat sosial, pangkalan data, papan pasaran atau aliran kerja tersuai — yang boleh anda susun, edit melalui perbualan, dan guna semula merentas ruang kerja.",
         },
         {
-          q: 'Adakah saya perlu tahu cara mengod?',
-          a: 'Tidak. Anda menerangkan apa yang anda inginkan dalam bahasa biasa dan Nexow menulis dan menjalankan widget untuk anda. Jika anda membaca kod, sumber setiap widget dan sejarah versi tersedia untuk diperiksa dan disempurnakan.',
+          q: "Perlukah saya tahu mengekod?",
+          a: "Tidak. Bahasa semula jadi cukup untuk menjana dan memperhalusi widget. Jika anda membaca kod, sumber, versi dan log setiap widget tersedia untuk diperiksa, digulung balik atau dilaras.",
         },
         {
-          q: 'Adakah data saya swasta? Adakah saya memerlukan akaun?',
-          a: 'Tiada akaun diperlukan. Nexow berjalan sepenuhnya tempatan secara lalai: tambah kunci API Anthropic anda sendiri dan penghasilan widget berlaku di penyemak imbas anda, dengan widget, versi dan log disimpan dalam IndexedDB. Akaun percuma sentiasa pilihan — ia menambah kredit AI, segerak awan dan komuniti, tetapi anda boleh terus membina 100% tempatan.',
+          q: "Perlukah akaun?",
+          a: "Anda boleh mencuba Nexow tanpa akaun. Akaun percuma membuka kredit AI permulaan, sync awan merentas peranti, komuniti, reputasi dan marketplace — tanpa kad kredit. Lebih suka sepenuhnya tempatan? Bawa kunci Anthropic anda sendiri dan kekalkan penjanaan dalam pelayar.",
         },
         {
-          q: 'Pasaran dan tempat apa yang disokong?',
-          a: 'Nexow mempunyai 45 penyambung langsung (83 dalam katalog) merentasi FX (OANDA, LMAX, FXCM), kripto (Binance, Coinbase, Kraken, Deribit, BitMEX), ekuiti dan niaga hadapan (Interactive Brokers, Alpaca, TradeStation, Polygon, Rithmic, IQFeed), pasaran ramalan (Kalshi, Polymarket), pembekal data dan pangkalan data (Alpha Vantage, Intrinio, Trading Economics, Postgres, ClickHouse, Qdrant) dan suapan sosial (X, YouTube, Discord, Telegram, Spotify).',
+          q: "Bagaimana Nexow mengendalikan privasi?",
+          a: "Widget yang dijana berjalan dalam runtime kotak pasir, kelayakan penyambung terhad kepada perkhidmatan yang anda sambungkan, dan versi serta log kekal dengan ruang kerja anda. Sync awan direka supaya widget anda kekal mudah alih dan di bawah kawalan anda.",
         },
         {
-          q: 'Apa itu bot dan ejen?',
-          a: 'Bot adalah automasi awan yang memantau data anda dan menembak isyarat dan amaran ke widget anda walaupun tab anda ditutup — terangkan amaran dalam perkataan biasa atau sambungkannya secara visual dengan ambang, perubahan %, persilangan purata bergerak dan perdagangan baru dalam akaun broker yang disambungkan. Ejen adalah AI dengan tali kendali lengkap (model, memori, kemahiran, alatan, pengetahuan, pencetus) — reka bentuk anda hari ini dalam pembina tali kendali visual; penyebaran awan dan pembantu Copilot akan datang segera.',
+          q: "Adakah Nexow hanya untuk trading?",
+          a: "Tidak. Papan pemuka trading ialah ujian tekanan awal untuk widget langsung, tetapi platform ini tujuan umum: penjejak tabiat, papan projek, suapan penyelidikan, alat dalaman dan aliran kerja tersuai semuanya berjalan pada kanvas yang sama.",
         },
         {
-          q: 'Adakah ada komuniti dan pasaran?',
-          a: 'Komuniti langsung — buat akaun percuma, tuntut @handle awam anda, ikuti pembuat, pos ke suapan, dan kongsi widget yang boleh ditambah oleh orang lain terus ke perpustakaan mereka. Pasaran untuk membeli dan menjual widget dan isyarat strategi yang diaudit yang boleh anda menang akan datang seterusnya.',
+          q: "Apakah penyambung?",
+          a: "Penyambung menyambungkan widget kepada data langsung — 90 hari ini merentas pangkalan data, dompet, apl sosial, broker, bursa dan data terbuka. Di mana CORS membenarkan, panggilan boleh berjalan terus dari pelayar. Banyak widget tidak memerlukan penyambung dan menyimpan keadaan secara tempatan sehingga anda sync.",
         },
         {
-          q: 'Apa itu XP dan ganjaran?',
-          a: 'Nexow menambah lapisan gamifikasi ke akaun: membina widget, menjalankan bot dan berkongsi dengan komuniti akan menang XP dan buka lencana untuk pencapaian — dan pencapaian akan ubah menjadi kredit ganjaran yang boleh anda belanjakan semasa penggunaan AI. Ia bergulir segera; akaun awal adalah baris depan.',
+          q: "Apakah bot dan ejen?",
+          a: "Bot ialah pemerhati awan: mereka menyemak sumber mengikut jadual dan menghantar isyarat atau amaran apabila syarat benar — walaupun tab ditutup. Ejen ialah pekerja AI dengan harness penuh (model, memori, kemahiran, alatan, pengetahuan, pencetus) yang menaakul dalam gelung alatan dan bertindak. Copilot membantu anda bina dan susun ruang kerja itu sendiri.",
         },
         {
-          q: 'Berapa harganya?',
-          a: 'Percuma selamanya untuk membina — secara tempatan dengan kunci anda sendiri, atau dengan 10,000 kredit AI yang dikhaskan pada akaun percuma. Pelan berbayar (Penyokong dan Penaja) menambah kredit bulanan dan had bot dan ejen yang lebih tinggi, dan Rakan adalah untuk pasukan yang memerlukan infrastruktur swasta. Pembayaran berbayar akan datang segera; lihat halaman pelan.',
-        },
-        {
-          q: 'Model AI mana yang kuasa Nexow?',
-          a: 'Nexow menjana dengan model Claude Anthropic melalui SDK Anthropic — Claude Opus 4.8 secara lalai, dengan Sonnet 4.6 dan Haiku 4.5 untuk penghasilan yang lebih cepat dan lebih murah. Dalam mod swasta anda membekalkan kunci anda sendiri, jadi anda kekal dalam kawalan penuh penggunaan dan kos.',
+          q: "Berapa kosnya?",
+          a: "Free merangkumi kanvas widget penuh, perpustakaan, sync awan, 10 bot, 3 ejen, akses komuniti dan 10,000 kredit AI semasa daftar. Supporter dan Sponsor menambah kredit bulanan, kuota automasi lebih tinggi dan rupa premium — pembayaran akan datang tidak lama lagi. Lihat Pelan untuk perbandingan penuh.",
         },
       ],
     },
@@ -342,74 +579,554 @@ export const ms: SiteContent = {
       primary: 'Lancarkan Nexow',
       secondary: 'Teroka ciri-ciri',
     },
+    appShowcase: {
+      eyebrow: 'Terus daripada aplikasi',
+      title: 'Bukan mockup — ini Nexow',
+      subtitle: 'Ruang kerja sebenar, dirakam pada kanvas. Satu ayat masuk, satu set penuh widget bersambung keluar.',
+      badge: 'tangkapan skrin sebenar',
+      cta: 'Cuba sendiri',
+      ctaNote: 'percuma · tiada kad kredit · berjalan dalam pelayar anda',
+      shots: [
+        {
+          label: 'Meja dagangan',
+          prompt: 'Bina saya meja kripto: carta candlestick, senarai pantau, kedalaman buku pesanan, peta haba dan derivatif.',
+          alt: 'Ruang kerja Nexow dengan carta candlestick BTC, senarai pantau kripto, kedalaman buku pesanan, peta haba pasaran, derivatif dan widget pasaran ramalan',
+          chip: 'Data pasaran langsung · Binance, BitMEX, Kalshi',
+          caption: 'Dibina untuk pedagang: setiap widget mengalirkan data pasaran sebenar daripada API awam — tiada apa untuk dikonfigurasi secara manual.',
+        },
+        {
+          label: 'Papan projek',
+          prompt: 'Cipta pusat kawalan projek: papan kanban, garis masa Gantt, KPI, risiko dan beban kerja pasukan.',
+          alt: 'Ruang kerja Nexow dengan papan projek kanban, garis masa Gantt, kad skor KPI, daftar risiko, beban kerja pasukan dan widget burndown sprint',
+          chip: '38 tugasan · 7 orang · satu kanvas',
+          caption: 'Untuk ketua projek: papan sprint, burndown dan daftar risiko dijana bersama, disusun mengikut cara pasukan anda membacanya.',
+        },
+        {
+          label: 'Ibu pejabat pengasas',
+          prompt: 'Bina papan pemuka pengasas solo: saluran paip prospek, senarai semak pelancaran, kalendar kandungan, carta MRR dan nota pantas.',
+          alt: 'Ruang kerja Nexow dengan saluran paip prospek, papan pemuka hasil dengan KPI MRR dan churn, senarai semak pelancaran produk, kalendar kandungan mingguan dan widget nota',
+          chip: 'Saluran paip, MRR, pelan pelancaran · satu gesaan',
+          caption: 'Untuk pengasas solo: lima widget daripada satu gesaan — saluran paip, KPI hasil, pelan pelancaran, kalendar kandungan dan nota.',
+        },
+      ],
+    },
+    botsAgents: {
+      eyebrow: 'Bot & Ejen',
+      title: 'Dua jenis rakan sepasukan, kedua-duanya berjalan di awan',
+      subtitle: 'Bot ialah pemerhati: ia memeriksa satu sumber mengikut jadual dan mencetus sebaik sahaja sesuatu syarat benar. Ejen ialah pekerja: ia menaakul melalui gelung alat, mengingati apa yang dipelajari dan bertindak atasnya. Kedua-duanya tidak memerlukan tab anda dibuka.',
+      kinds: [
+        {
+          badge: 'Berketentuan',
+          title: 'Bot — pemerhati yang mencetus',
+          body: 'Pilih pemproses, halakan ia ke satu sumber, pilih kadar. Tiada model dalam gelung, jadi input yang sama sentiasa menghasilkan isyarat yang sama — dan setiap isyarat boleh pergi ke empat tempat serentak.',
+          points: [
+            'Pemproses: ambang, perubahan, silangan, RSI, lonjakan volum, ringkasan, dagangan baharu, aktiviti dompet, baki dompet',
+            'Sumber: mana-mana tempat dagangan yang disambung, akaun broker, atau alamat dompet baca sahaja',
+            'Penghantaran: bas widget, peti masuk amaran, webhook HTTPS, baris ditambah ke pangkalan data anda',
+          ],
+        },
+        {
+          badge: 'Penaakulan',
+          title: 'Ejen — pekerja yang membuat keputusan',
+          body: 'Himpunkan harness — model, ingatan, kemahiran, alat, pengetahuan, pencetus — kemudian gunakannya. Pada setiap pencetus, ejen menjalankan gelung alat sebenar: lihat, fikir, bertindak, dan catat apa yang dipelajari untuk kali seterusnya.',
+          points: [
+            'Alat diberikan satu demi satu — carian web, sosial, sejarah pasaran, pangkalan data, carian vektor, widget, akaun, pesanan',
+            'Ingatan kekal antara larian; pengetahuan dan kemahiran membentuk cara kerja dilakukan',
+            'Pencetus: manual, setiap 15 minit, setiap jam, setiap empat jam atau harian — dengan garis masa larian penuh',
+          ],
+        },
+      ],
+      run: {
+        eyebrow: 'Anatomi satu larian',
+        title: 'Apa yang sebenarnya berlaku pada setiap detik',
+        subtitle: 'Satu kitaran, empat gerakan. Bentuk yang sama sama ada pekerja itu memerhati harga, suapan tajuk berita, saluran Discord atau jadual dalam pangkalan data anda sendiri.',
+        hint: 'Terus menatal — larian bergerak bersama anda',
+        sources: [
+          'carian web',
+          'suapan sosial',
+          'sejarah pasaran',
+          'data anda',
+        ],
+        harness: [
+          'model',
+          'ingatan',
+          'kemahiran',
+          'alat',
+          'pengetahuan',
+          'pencetus',
+        ],
+        deliveries: [
+          'bas widget',
+          'peti masuk amaran',
+          'webhook',
+          'pangkalan data',
+        ],
+        sourcesLabel: 'Input',
+        harnessLabel: 'Harness',
+        deliveriesLabel: 'Output',
+        stages: [
+          {
+            n: '01',
+            title: 'Pencetus',
+            body: 'Satu kadar berdetik — setiap 15 minit, setiap jam, setiap empat jam, harian — atau anda jalankannya secara manual. Awan mengejutkan pekerja itu. Tiada apa yang bergantung pada pelayar yang terbuka.',
+          },
+          {
+            n: '02',
+            title: 'Kumpul',
+            body: 'Hanya alat yang anda berikan sahaja kelihatan: carian web untuk apa yang berubah di dunia, suapan sosial, sejarah pasaran, pangkalan data anda, stor vektor anda. Selebihnya berada di luar jangkauan secara struktur.',
+          },
+          {
+            n: '03',
+            title: 'Menaakul',
+            body: 'Model menjalankan gelung — baca, timbang, baca semula — dengan kemahiran dan pengetahuan membentuk caranya, dan ingatan membawa apa yang difahami larian lalu. Bot melangkau langkah ini sepenuhnya: peraturan merekalah penaakulan itu.',
+          },
+          {
+            n: '04',
+            title: 'Bertindak',
+            body: 'Hasilnya tersebar. Widget pada bas melukis semula, amaran tiba di peti masuk anda, webhook menghantar ke Slack, Discord atau pelayan anda sendiri, baris ditambah ke pangkalan data — dan setiap langkah muncul dalam garis masa larian.',
+          },
+        ],
+      },
+      cases: {
+        eyebrow: 'Kes penggunaan',
+        title: 'Pasaran ialah masalah sukar yang pertama, bukan satu-satunya',
+        subtitle: 'Gelungnya sama di mana-mana: sesuatu berubah, sesuatu menaakul tentangnya, sesuatu berlaku. Inilah yang orang halakan padanya.',
+        botLabel: 'bot',
+        agentLabel: 'ejen',
+        items: [
+          {
+            scene: 'news',
+            kind: 'agent',
+            title: 'Pemantauan dunia & berita',
+            body: 'Ejen dengan carian web membaca apa yang bergerak sejak larian terakhirnya — tajuk berita, keluaran, pemfailan, dasar, cuaca, gangguan — membandingkannya dengan apa yang sudah diketahui, dan menghantar satu taklimat kepada anda dan bukan empat puluh tab.',
+            recipe: 'every 1h → web search → memory → inbox',
+          },
+          {
+            scene: 'social',
+            kind: 'agent',
+            title: 'Operasi sosial',
+            body: 'Halakan ejen ke X, YouTube, Telegram atau Discord. Ia membaca pemegang dan saluran yang anda namakan, menjejak sebutan, mengesan bebenang yang benar-benar meningkat, dan menolak nadinya ke widget pada kanvas anda.',
+            recipe: 'every 15m → social feed → signal → bus',
+          },
+          {
+            scene: 'monitor',
+            kind: 'bot',
+            title: 'Papan pemantauan langsung',
+            body: 'Bot menyiarkan pada bas yang dilanggan widget anda, jadi papan pemuka mengemas kini sendiri sebaik sahaja syarat berubah. Tiada gelung tinjauan dalam pelayar, tiada tab yang perlu dibiarkan terbuka, tiada nombor basi di skrin.',
+            recipe: 'condition true → bus → widget repaints',
+          },
+          {
+            scene: 'alerts',
+            kind: 'bot',
+            title: 'Amaran & penghalaan',
+            body: 'Satu isyarat, beberapa destinasi, dipilih bagi setiap bot. Peti masuk amaran untuk perkara yang wajar mengganggu anda, dan webhook HTTPS ke Slack, Discord, Telegram atau perkhidmatan anda sendiri untuk perkara yang perlu dilihat pasukan anda.',
+            recipe: 'threshold → inbox + webhook',
+          },
+          {
+            scene: 'reason',
+            kind: 'agent',
+            title: 'Penyelidikan & penaakulan',
+            body: 'Beri ejen satu soalan, pangkalan pengetahuan dan stor vektor. Ia mencari, menyemak silang, menimbang penemuannya, dan menulis kesimpulan ke ingatan supaya larian seterusnya bermula di tempat larian ini berhenti, bukan dari kosong.',
+            recipe: 'web + vector search → memory.write',
+          },
+          {
+            scene: 'execute',
+            kind: 'agent',
+            title: 'Pelaksanaan & tindakan',
+            body: 'Berikan tepat apa yang anda maksudkan dan tiada lebih. Ejen boleh membina, memperhalus dan menyusun semula widget pada skrin, memancarkan isyarat yang direaksi widget lain — dan membuat atau menutup pesanan hanya apabila anda sengaja menghidupkan dagangan tanpa pengawasan.',
+            recipe: 'decide → build widget → emit signal',
+          },
+          {
+            scene: 'pipeline',
+            kind: 'bot',
+            title: 'Saluran paip & arkib',
+            body: 'Hantar setiap isyarat ke jadual. Bot menambah baris ke Postgres atau ClickHouse yang disambung semasa ia mencetus, dan ejen menanyakan jadual yang sama kemudian — sejarah peristiwa anda sendiri, dalam pangkalan data anda sendiri, tidak terkunci dalam kami.',
+            recipe: 'signal → append row → query later',
+          },
+          {
+            scene: 'markets',
+            kind: 'bot',
+            title: 'Pasaran & dompet',
+            body: 'Tugas asal, masih kelas pertama: RSI bertukar terlebih jual, silangan purata bergerak, lonjakan volum, satu jam 5%, kedudukan baharu muncul pada broker anda, atau aktiviti pada dompet baca sahaja merentas rantaian.',
+            recipe: 'rsi(14) < 30 → inbox',
+          },
+        ],
+      },
+      more: {
+        title: 'Dan beberapa ratus lagi seperti ini',
+        items: [
+          'Ringkaskan setiap tajuk pendapatan untuk senarai pantau pada pukul 8 pagi',
+          'Beritahu saya apabila keluaran GitHub dihantar untuk apa-apa yang saya bergantung padanya',
+          'Perhatikan saluran Discord untuk soalan sokongan yang tiada jawapan',
+          'Log setiap amaran ke Postgres supaya saya boleh carta hingarnya kemudian',
+          'Ringkaskan subreddit dan siarkan mood ke papan pagi saya',
+          'Beritahu saya apabila dompet yang saya ikuti memindahkan lebih $50k',
+          'Semak semula kedudukan terbuka saya berbanding berita setiap empat jam',
+          'Bina semula widget trafik apabila nombornya tidak lagi masuk akal',
+        ],
+      },
+      cta: 'Bina bot atau ejen',
+      ctaNote: 'Pelan percuma termasuk bot dan ejen — tiada kad, tiada persediaan awan.',
+    },
+  },
+  communityPage: {
+    meta: {
+      title: 'Komuniti — Nexow',
+      description: 'Nexow ialah ruang kerja sosial untuk pembuat: siaran interaktif, papan penyelidikan, papan pemuka langsung, pasaran USDC di Solana, dan DAO yang akan membiarkan komuniti mengemudi peta jalan.',
+    },
+    hero: {
+      badge: 'Komuniti',
+      titleLead: 'Aplikasi sosial untuk',
+      titleGradient: 'pembuat yang menghantar',
+      titleTail: 'kerja sebenar.',
+      subtitle: 'Kongsi widget interaktif, penyelidikan dan papan pemuka. Ikuti pembuat, berbual secara masa nyata, terbitkan ke pasaran yang diselesaikan dalam USDC di Solana — dan tumbuhkan komuniti yang berganda.',
+      ctaPrimary: 'Sertai komuniti',
+      ctaSecondary: 'Terokai pasaran',
+      chips: [
+        'Suapan langsung',
+        'Papan & papan pemuka',
+        'USDC di Solana',
+        'DAO tidak lama lagi',
+      ],
+    },
+    social: {
+      eyebrow: 'Suapan sosial',
+      title: 'Siaran yang benar-benar berjalan — bukan sekadar tangkapan skrin.',
+      subtitle: 'Suapan dibina untuk pembina. Kongsi widget, imej, video atau nota penyelidikan; orang lain boleh suka, komen, buat semula dan pasang apa yang anda hantar.',
+      items: [
+        {
+          icon: 'sparkles',
+          title: 'Siaran widget interaktif',
+          body: 'Lampirkan widget langsung pada siaran. Penonton pratontonnya dalam suapan, kemudian tambah terus ke pustaka — dengan keturunan yang mengkredit kerja anda.',
+        },
+        {
+          icon: 'chat',
+          title: 'Suka, komen & sebutan',
+          body: 'Balasan berbenang, reaksi dan peti masuk sebutan supaya perbualan kekal pada siaran — bukan berselerak dalam DM.',
+        },
+        {
+          icon: 'mail',
+          title: 'Sembang masa nyata',
+          body: 'DM 1:1 dan kumpulan dengan kehadiran dan reaksi, dari Akaun atau dok — rakan dan kenalan satu klik sahaja.',
+        },
+        {
+          icon: 'users',
+          title: 'Profil pembuat awam',
+          body: 'Tuntut @handle anda, pin siaran, tunjukkan papan dan biarkan orang mengikuti kerja yang anda terbitkan.',
+        },
+      ],
+    },
+    research: {
+      eyebrow: 'Penyelidikan & papan pemuka',
+      title: 'Kumpul sumber. Bina meja. Kekalkan ia langsung.',
+      subtitle: 'Papan memegang jejak penyelidikan — pautan, media dan widget. Papan pemuka dan skrin menjadikannya meja kerja yang boleh dikongsi atau dibuat semula.',
+      items: [
+        {
+          icon: 'library',
+          title: 'Papan profil',
+          body: 'Papan mood untuk pembuat: letak widget, muat naik media, pin siaran dari suapan, dan simpan pautan dari TikTok, YouTube, artikel dan di mana sahaja.',
+        },
+        {
+          icon: 'link',
+          title: 'Kongsi ke Nexow',
+          body: 'Pasang PWA atau guna sasaran kongsi — URL mendarat pada papan dengan pratonton, sedia dibuka pada kanvas anda.',
+        },
+        {
+          icon: 'layers',
+          title: 'Papan pemuka, skrin & ruang kerja',
+          body: 'Susun widget langsung pada kanvas bebas, kumpulkan ke skrin dan ruang kerja, dan tukar persediaan tanpa membina semula dari sifar.',
+        },
+        {
+          icon: 'bolt',
+          title: 'Buka papan pada kanvas',
+          body: 'Tukar pautan tersimpan kepada benaman langsung pada papan pemuka dalam satu tindakan — penyelidikan kekal bersambung dengan alatan yang menggunakannya.',
+        },
+      ],
+    },
+    grow: {
+      eyebrow: 'Tumbuhkan rangkaian',
+      title: 'Reputasi yang mengikuti kerja yang anda kongsi.',
+      subtitle: 'Membina, menghantar dan membantu orang lain mendapat mata, pingat dan tahap pada profil awam anda — permukaan reputasi yang sama merentasi Free dan pelan berbayar.',
+      items: [
+        {
+          icon: 'trophy',
+          title: 'Mata, pingat & tahap',
+          body: 'Peroleh reputasi untuk widget, bot, kongsi dan aktiviti sosial. Buka pencapaian berperingkat dan pingat jarang yang ditunjukkan pada profil anda.',
+        },
+        {
+          icon: 'signal',
+          title: 'Temui & ikut',
+          body: 'Layari suapan Discover, tapis mengikut widget, imej atau video, cari orang dan siaran, dan ikut pembuat yang kerja mereka anda mahu dalam strim anda.',
+        },
+        {
+          icon: 'award',
+          title: 'Kenalan yang berganda',
+          body: 'Ikutan bersama menjadi kenalan. Sembang kumpulan, sebutan dan rangkaian dikongsi menjadikan kerjasama seperti produk — bukan saluran sampingan.',
+        },
+        {
+          icon: 'globe',
+          title: 'Satu akaun percuma membukanya',
+          body: 'Segerak awan, kredit permulaan, suapan, pasaran dan lapisan reputasi datang dengan akaun percuma. Tiada kad diperlukan untuk bermula.',
+        },
+      ],
+    },
+    referrals: {
+      eyebrow: 'Rujukan',
+      badge: 'Tidak lama lagi',
+      title: 'Kembangkan rangkaian. Dapatkan ganjaran bila ia berkompaun.',
+      subtitle: 'Jemput pembuat yang menghantar hasil — dan dapat ganjaran bila pengikut baharu masuk orbit anda.',
+      body: 'Ganjaran rujukan dan bonus pengikut ialah langkah seterusnya pada landasan komuniti. Tuntut @handle sekarang supaya anda bersedia bila lejar live.',
+      pillars: [
+        {
+          icon: 'gift',
+          title: 'Dapat ganjaran dari rujukan',
+          body: 'Kongsi jemputan anda. Bila seseorang yang anda bawa bina, hantar atau naik taraf, anda dapat bahagian upside.',
+        },
+        {
+          icon: 'users',
+          title: 'Dapat ganjaran dari pengikut baharu',
+          body: 'Tarik audiens dan diganjarkan apabila rangkaian anda berkembang — reputasi yang membayar dua arah.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Kredit & kemudian NXW',
+          body: 'Ganjaran awal datang sebagai kredit; bonus terikat NXW dibuka dengan DAO. Reputasi sama, cara baharu untuk menjana.',
+        },
+      ],
+      cta: 'Tuntut @handle anda',
+    },
+    marketplace: {
+      eyebrow: 'Pasaran',
+      title: 'Terbitkan sekali. Jual dalam USDC. Kekalkan keturunan.',
+      subtitle: 'Satu dialog kongsi meliputi widget, skrin, ruang kerja, bot, ejen dan tema — percuma dipasang, atau berharga dalam USDC dan diselesaikan di Solana.',
+      intro: 'Nexow tidak pernah menjaga wang. Jualan ialah pemindahan token SPL terus dari dompet pembeli kepada anda. Platform mengesahkan rantaian, membuka aset, dan hanya menyimpan perakaunan yang kedua-dua pihak perlukan untuk mempercayai hasilnya.',
+      pillars: [
+        {
+          icon: 'store',
+          title: 'Satu dialog, enam jenis',
+          body: 'Kongsi dari Pustaka, Bot, Ejen atau Tema. Pilih percuma atau harga USDC, tambah penerangan dan tag, dan pilihan umumkan ke suapan komuniti.',
+        },
+        {
+          icon: 'history',
+          title: 'Keturunan pada setiap remake',
+          body: 'Jika anda menerbitkan remake, dialog menamakan kerja siapa ia berasal sebelum apa-apa dihantar. Kredit bukan sesuatu yang anda temui kemudian.',
+        },
+        {
+          icon: 'shield',
+          title: 'Tiada escrow, tiada potongan platform',
+          body: 'Phantom menandatangani pemindahan USDC. Nexow tidak memegang dana dan tidak mengambil potongan — hanya mengesahkan resit on-chain sebelum membuka pemasangan.',
+        },
+        {
+          icon: 'check',
+          title: 'Kemas kini kekal dengan pembeli',
+          body: 'Membeli mana-mana versi memberi anda hak kepada versi kemudian daripada pengarang yang sama. Remake orang lain ialah produk berasingan dengan harganya sendiri.',
+        },
+      ],
+      railTitle: 'Bagaimana pembelian USDC berfungsi',
+      railBody: 'Harga disebut dalam USDC di Solana. Pelayan mencipta pesanan; dompet anda membayar; rantaian mesti bersetuju sebelum aset dibuka.',
+      railSteps: [
+        {
+          n: '01',
+          title: 'Cipta pesanan',
+          body: 'Checkout bertanya kepada pelayan untuk harga dan dompet penjual — klien tidak pernah mencipta jumlah.',
+        },
+        {
+          n: '02',
+          title: 'Bayar dengan Phantom',
+          body: 'Dompet anda menandatangani pemindahan USDC dengan id pesanan dalam memo dan menyiarkannya di Solana.',
+        },
+        {
+          n: '03',
+          title: 'Sahkan on-chain',
+          body: 'Nexow membaca semula transaksi: disahkan, memo sepadan, baki USDC penjual naik sekurang-kurangnya jumlah disebut, mint betul.',
+        },
+        {
+          n: '04',
+          title: 'Pasang apa yang anda beli',
+          body: 'Hak dibuka. Pasang widget, tema, bot atau ejen — pratonton berbayar kekal dikunci sehingga penyelesaian.',
+        },
+      ],
+      railNotes: [
+        'Resit disimpan secara setempat sebaik sahaja dompet mengembalikan tandatangan — jika tab ditutup semasa pengesahan, «Selesaikan pembelian» menyambung tanpa membayar dua kali.',
+        'Bot yang dipasang tiba dijeda; ejen tidak dilancarkan; tema tidak pernah digunakan secara automatik. Larian pertama sentiasa pilihan anda.',
+        'Bahagian peribadi tidak bergerak: arahan, sejarah sembang, id sambungan, alamat dompet dan memori ejen kekal dengan pengarang.',
+      ],
+      kindsTitle: 'Apa yang boleh anda terbitkan',
+      kinds: [
+        {
+          label: 'Widget',
+          body: 'Kod versi aktif — bersandbox dan boleh dibuat semula.',
+        },
+        {
+          label: 'Skrin & ruang kerja',
+          body: 'Geometri, kod widget dan pautan sebagai meja boleh alih.',
+        },
+        {
+          label: 'Bot',
+          body: 'Pemproses, parameter dan jadual — tiba dijeda untuk pembeli.',
+        },
+        {
+          label: 'Ejen',
+          body: 'Model, kemahiran, geran alat dan rentak — tidak dilancarkan sehingga mereka sambungkan milik mereka.',
+        },
+        {
+          label: 'Tema',
+          body: 'Warna, fon, jejari dan ketumpatan — ditambah ke pustaka, tidak pernah dipaksa.',
+        },
+      ],
+    },
+    dao: {
+      eyebrow: 'Tadbir urus',
+      badge: 'Tidak lama lagi',
+      title: 'Miliki peta jalan dengan Nexow DAO.',
+      subtitle: 'NXW ialah token tadbir urus. Perolehnya dengan membina dan menghantar; belanjakannya dengan mencadang, mengundi dan mengemudi perbendaharaan bersama.',
+      body: 'Tab DAO sudah ada dalam panel komuniti sebagai teaser — undian sebenar, perbendaharaan dan ganjaran pencipta datang seterusnya. Sementara itu reputasi dan pingat sudah langsung supaya pembuat awal bermula di hadapan.',
+      pillars: [
+        {
+          icon: 'lightbulb',
+          title: 'Cadang',
+          body: 'Cadangkan ciri, penyambung dan peraturan. Sesiapa yang memegang NXW boleh meletakkan idea pada undian.',
+        },
+        {
+          icon: 'vote',
+          title: 'Undi',
+          body: 'Undian awam dan telus memutuskan apa yang dibina seterusnya dan dalam urutan apa.',
+        },
+        {
+          icon: 'vault',
+          title: 'Perbendaharaan',
+          body: 'Perbendaharaan bersama membiayai baunti dan geran yang komuniti undi.',
+        },
+        {
+          icon: 'gift',
+          title: 'Ganjaran pencipta',
+          body: 'Pembina mendapat bahagian apabila DAO menghantar dan mempromosikan kerja mereka.',
+        },
+      ],
+      previewTitle: 'Undian pertama',
+      previewBadge: 'Pratonton',
+      forLabel: '{pct}% menyokong',
+      votesLabel: '{n} undi',
+      proposals: [
+        {
+          title: 'Biayai program baunti widget komuniti',
+          tag: 'Perbendaharaan',
+          pct: 72,
+          votes: 341,
+        },
+        {
+          title: 'Kongsi hasil untuk pencipta pasaran',
+          tag: 'Ganjaran',
+          pct: 87,
+          votes: 512,
+        },
+        {
+          title: 'Sumber terbuka runtime widget',
+          tag: 'Peta jalan',
+          pct: 64,
+          votes: 289,
+        },
+        {
+          title: 'Turunkan ambang cadangan NXW kepada 1,000',
+          tag: 'Tadbir urus',
+          pct: 58,
+          votes: 203,
+        },
+        {
+          title: 'Potong yuran pasaran Solana kepada 2.5%',
+          tag: 'Yuran',
+          pct: 81,
+          votes: 456,
+        },
+        {
+          title: 'Pilih moderator papan penyelidikan',
+          tag: 'Moderasi',
+          pct: 69,
+          votes: 318,
+        },
+      ],
+      footer: 'Dibentuk secara terbuka dengan komuniti — butiran mendarat dahulu dalam tab DAO.',
+    },
+    cta: {
+      title: 'Tuntut @handle anda dan hantar sesuatu.',
+      subtitle: 'Akaun percuma. Suapan langsung. Pasaran dengan USDC. DAO seterusnya.',
+      primary: 'Lancarkan Nexow',
+      secondary: 'Lihat semua ciri',
+    },
   },
   features: {
     meta: {
-      title: 'Ciri-ciri — Nexow',
+      title: 'Ciri — Nexow',
       description:
-        'Penghasilan widget bahasa biasa, masa jalan sandbok, kanvas bentuk bebas dengan kumpulan dan pautan, 45+ penyambung data pasaran, bot dan ejen awan, komuniti pembuat dengan ganjaran XP, mod tempatan swasta dan perpustakaan widget versi. Terokai semua yang Nexow lakukan.',
+        'Terokai setiap permukaan Nexow: widget, kanvas, toolbar dan Dock, penyambung dan apl sosial, bot dan ejen, komuniti dan sembang masa nyata, pasaran, akaun, tema dan tetapan.',
     },
     hero: {
-      badge: 'Ciri-ciri',
-      title: 'Semua yang anda perlukan untuk membina papan pemuka pasaran dengan perkataan',
+      badge: 'Ciri',
+      title: 'Seluruh aplikasi, permukaan demi permukaan',
       subtitle:
-        'Nexow menukar ayat menjadi widget sebenar yang berjalan dan disambungkan data — kemudian memberikan anda kanvas, penyambung, automasi awan dan rangkaian untuk membina stesen kerja sebenar.',
+        'Nexow ialah kanvas widget dengan produk penuh di sekelilingnya — panel sisi untuk akaun, komuniti, pasaran, perpustakaan, bot, ejen, penyambung, tema dan tetapan, serta toolbar dan Dock yang mengekalkan Chrome boleh konfigur.',
     },
     groups: [
       {
-        title: 'Jana',
-        body: 'Terangkan apa yang anda ingin lihat; Nexow menulis dan menjalankannya.',
+        title: 'Widget',
+        body: 'Terangkan apa yang anda mahu. Nexow menjadikannya widget yang berfungsi dan boleh diperiksa.',
         items: [
-          { icon: 'sparkles', title: 'Penghasilan kod bahasa biasa', body: 'Terangkan widget dan Nexow menjana sumbernya yang penuh dengan Claude — carta, jadual, peta haba, buku pesanan, isyarat tersuai.' },
-          { icon: 'wand', title: 'Sempurna berdasarkan perbualan', body: 'Ubah apa-apa dengan bertanya. "Tambah EMA 200", "tukar ke skala log", "warna mengikut kadar pembiayaan" — Nexow suntingan widget di tempat.' },
-          { icon: 'history', title: 'Versi & dapat diperiksa', body: 'Setiap generasi adalah versi dengan log. Gulung balik, bandingkan, dan baca sumber yang tepat berjalan dalam setiap widget.' },
+          { icon: 'sparkles', title: 'Penghasilan kod bahasa biasa', body: 'Terangkan widget dan Nexow menjana sumber penuh dengan Claude — papan mood, perancang, permainan, suapan, carta, jadual dan alatan tersuai.' },
+          { icon: 'wand', title: 'Perhalusi melalui perbualan', body: 'Ubah apa sahaja dengan bertanya. "Jadikan lebih hangat", "tambah kalendar streak", "jadikan permainan" — Nexow menyunting widget di tempat.' },
+          { icon: 'history', title: 'Berversi & boleh diperiksa', body: 'Setiap penjanaan berversi dengan log. Undur, bandingkan, dan baca sumber tepat yang berjalan dalam setiap widget.' },
+          { icon: 'shield', title: 'Runtime sandbok', body: 'Widget berjalan dalam iframe terpencil dengan sempadan ketat — kod yang dijana boleh memapar dan mengambil data, tetapi tidak boleh menyentuh ruang kerja atau widget lain.' },
+          { icon: 'library', title: 'Perpustakaan boleh guna semula', body: 'Simpan mana-mana widget ke perpustakaan anda dan letakkannya ke mana-mana papan pemuka dalam satu klik — versi dan log kekal bersama.' },
         ],
       },
       {
-        title: 'Jalankan',
-        body: 'Masa jalan selamat dan pantas untuk kod yang dijana.',
+        title: 'Ruang kerja',
+        body: 'Kanvas bentuk bebas dengan Chrome yang kekal boleh konfigur.',
         items: [
-          { icon: 'shield', title: 'Iframe sandbok', body: 'Widget melaksanakan dalam iframe terpencil dengan sempadan ketat — kod yang dijana dapat membuat dan mengambil, tetapi tidak boleh sentuh ruang kerja atau widget lain anda.' },
-          { icon: 'bolt', title: 'Data langsung, mengalir', body: 'Widget melanggan harga masa nyata, buku pesanan dan data rujukan dengan latensi minimum.' },
-          { icon: 'layers', title: 'Kanvas bentuk bebas & ruang kerja', body: 'Susun widget pada kanvas bentuk bebas, kelompokkan mereka ke ruang kerja dan skrin, dan tukar antara persediaan secara serta-merta.' },
-          { icon: 'link', title: 'Kumpulan & Pautan', body: 'Bundel widget ke kumpulan dengan susun mozek atau susun tab, dan sambung widget bersama dengan Pautan — paip satu hala atau dua hala yang mengalirkan data satu widget ke yang lain.' },
+          { icon: 'layers', title: 'Kanvas, ruang kerja & skrin', body: 'Susun widget pada kanvas bentuk bebas bertema, kelompokkan ke ruang kerja dan skrin, dan tukar antara susunan serta-merta.' },
+          { icon: 'link', title: 'Kumpulan & Links', body: 'Bundarkan widget ke kumpulan dengan susun atur mozek atau tab, dan sambungkan widget dengan Links — paip sehala atau dua hala yang menstrim data satu widget ke yang lain.' },
+          { icon: 'sliders', title: 'Toolbar', body: 'Dulang boleh konfigur di bawah header: tambah widget, auto-susun, tangkapan skrin, undo/redo, kunci, mod warna, kredit dan segerak awan — tunjuk atau sembunyikan setiap tindakan.' },
+          { icon: 'grid', title: 'Dock', body: 'Pil kaca boleh seret untuk Copilot, pintasan panel, pemberitahuan dan mesej. Sesuaikan item yang dipaparkan, saiz semula, dan biarkan auto sembunyi menjadi puck apabila melahu.' },
+          { icon: 'bolt', title: 'Interaktif secara lalai', body: 'Widget mengekalkan keadaan, bertindak balas kepada acara, melanggan data dan kemas kini secara langsung — ruang kerja anda kekal alat yang berfungsi, bukan mockup statik.' },
         ],
       },
       {
-        title: 'Sambung',
-        body: 'Data yang boleh pasang daripada tempat yang sebenarnya anda gunakan.',
+        title: 'Penyambung',
+        body: 'Data langsung daripada pasaran, pangkalan data, dompet dan apl sosial.',
         items: [
-          { icon: 'plug', title: '45+ penyambung data pasaran', body: 'Pangkalan data, suapan sosial, pasaran, dompet dan perkhidmatan web — Postgres, ClickHouse, Qdrant, X, YouTube, Discord, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi dan banyak lagi.' },
-          { icon: 'globe', title: 'Penyemak imbas langsung di mana mungkin', body: 'Di mana CORS membenarkan, panggilan tempat yang disahkan menjalankan terus dari penyemak imbas anda dan lintasan proksi kami sepenuhnya.' },
-          { icon: 'database', title: 'Pangkalan data & sosial juga', body: 'Arahkan widget ke Postgres, ClickHouse atau Qdrant, atau tarik daripada X, YouTube, Discord dan Telegram bersama pasaran langsung.' },
+          { icon: 'plug', title: '90 penyambung langsung', body: 'Pangkalan data, pasaran, dompet dan perkhidmatan web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi dan banyak lagi.' },
+          { icon: 'globe', title: 'Integrasi media sosial', body: 'Sambung X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to dan Hacker News supaya widget boleh membaca dan bertindak balas kepada suapan yang anda sudah guna.' },
+          { icon: 'signal', title: 'Terus dari pelayar jika boleh', body: 'Di mana CORS membenarkan, panggilan disahkan berjalan terus dari pelayar anda dan memintas proksi kami sepenuhnya.' },
+          { icon: 'database', title: 'Keadaan tempatan juga', body: 'Ramai widget tidak perlukan data luaran langsung: permainan, perancang, papan mood dan penjejak peribadi boleh hidup dalam pelayar sehingga anda pilih untuk segerak.' },
         ],
       },
       {
         title: 'Automasi',
-        body: 'Automasi awan dan AI yang bertindak semasa anda pergi.',
+        body: 'Bot, ejen dan Copilot yang terus bekerja apabila tab anda ditutup.',
         items: [
-          { icon: 'bot', title: 'Bot awan', body: 'Terangkan amaran atau sambungkan secara visual — ambang, perubahan %, persilangan MA, ringkasan, atau perdagangan baru dalam akaun broker yang disambungkan. Bot berjalan pada degup jantung awan dan tolak isyarat ke widget anda, tab ditutup.' },
-          { icon: 'cpu', title: 'Ejen AI', body: 'Ejen dengan tali kendali lengkap — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Bina dalam pembina tali kendali visual dan sebarkan ke awan dengan kebenaran alatan dan sejarah larian langsung.' },
-          { icon: 'chat', title: 'Copilot', body: 'Pembantu untuk ruang kerja anda: pasangkan tangkapan layar atau data widget dan tanya ia untuk menjelaskan, meringkaskan atau mencadangkan apa yang hendak dipantau seterusnya — dalam perbualan selari yang terus membina di latar belakang.' },
+          { icon: 'bot', title: 'Bot', body: 'Automasi awan yang memantau data anda dan menghantar isyarat ke widget. Terangkan amaran dalam perkataan biasa atau sambungkannya secara visual — peringatan streak, ringkasan, kemas kini sosial, ambang atau pergerakan pasaran.' },
+          { icon: 'cpu', title: 'Ejen', body: 'Ejen AI dengan tali kendali sebenar — model, memori, kemahiran, alatan, pengetahuan dan pencetus. Bina secara visual, sebar ke awan dengan kebenaran alatan, dan semak sejarah larian langsung.' },
+          { icon: 'chat', title: 'Copilot', body: 'Pembantu AI untuk seluruh ruang kerja anda. Sembang dalam tab selari, biarkannya membina widget di latar belakang, susun kanvas anda, dan tanya apa yang perlu diubah seterusnya.' },
         ],
       },
       {
         title: 'Rangkaian',
-        body: 'Bina bersama dunia pembuat.',
+        body: 'Komuniti, pasaran dan sembang masa nyata dengan rakan dan kenalan.',
         items: [
-          { icon: 'users', title: 'Komuniti', body: 'Ikuti pembuat, pos ke suapan, dan kongsi widget yang boleh ditambah oleh orang lain terus ke perpustakaan mereka — langsung hari ini, dengan profil pembuat awam.' },
-          { icon: 'store', title: 'Pasaran', body: 'Terbitkan dan pasang widget, tema, skrin dan bot siap pakai — langsung hari ini, dengan salasilah yang memberi kredit kepada setiap buatan semula. Membeli dan menjual datang seterusnya.' },
-          { icon: 'signal', title: 'Isyarat strategi', body: 'Terbitkan rekod jejak yang diaudit, melanggan isyarat yang anda percayai, dan menang dalam strategi yang anda jalankan. Akan datang segera.' },
-          { icon: 'trophy', title: 'Reputasi & pingat', body: 'Peroleh mata reputasi untuk membina dan berkongsi, buka pencapaian berperingkat dan pingat jarang — langsung hari ini. Kredit ganjaran datang seterusnya.' },
+          { icon: 'users', title: 'Komuniti', body: 'Ikuti pembuat, suka dan ulas dalam suapan sosial untuk pembina, terokai papan, dan kongsi widget yang boleh ditambah orang lain terus ke perpustakaan — dengan profil pembuat awam.' },
+          { icon: 'mail', title: 'Sembang masa nyata', body: 'Mesej rakan dan kenalan secara langsung dari Akaun atau Dock — DM 1:1 dan kumpulan dengan kehadiran, reaksi, pengikut/mengikuti dan peti masuk kenalan.' },
+          { icon: 'store', title: 'Pasaran', body: 'Terbitkan dan pasang widget, tema, skrin, bot dan ejen — dengan salasilah yang memberi kredit kepada setiap buatan semula. Membeli dan menjual datang seterusnya.' },
+          { icon: 'trophy', title: 'Reputasi & pingat', body: 'Peroleh mata reputasi kerana membina dan berkongsi, buka pencapaian berperingkat dan pingat jarang — langsung hari ini. Kredit ganjaran datang seterusnya.' },
         ],
       },
       {
-        title: 'Milik',
-        body: 'Swasta secara lalai, milik anda untuk disimpan.',
+        title: 'Akaun & penampilan',
+        body: 'Identiti, tema, tetapan dan segerak merentasi peranti.',
         items: [
-          { icon: 'lock', title: 'Mod tempatan swasta', body: 'Bawa kunci Anthropic anda sendiri dan jana widget sebelah pihak klien. Tiada yang dihantar ke pelayan kami — tiada akaun diperlukan.' },
-          { icon: 'sync', title: 'Segerak awan pilihan', body: 'Buat akaun percuma untuk menyegerak ruang kerja, widget dan tetapan ke setiap peranti — dengan peti kelayakan dienkripsi.' },
-          { icon: 'library', title: 'Perpustakaan boleh diguna semula', body: 'Simpan mana-mana widget ke perpustakaan anda dan lepas ke mana-mana papan pemuka dalam satu klik.' },
+          { icon: 'vault', title: 'Akaun', body: 'Log masuk untuk kredit, reputasi, carta penggunaan, pelan, notis, pek token, App Lock, kawalan keselamatan dan pertukaran berbilang akaun — atau kekal sepenuhnya tempatan dengan kunci anda sendiri.' },
+          { icon: 'moon', title: 'Tema', body: 'Bina tema penampilan untuk warna, fon, radius, ketumpatan, kaca dan corak. Terbitkan ke pasaran atau pasang tema pembuat lain.' },
+          { icon: 'sliders', title: 'Tetapan', body: 'Keutamaan umum, pintasan papan kekunci boleh suai, pilihan keselamatan, sandaran/pulihkan dan kawalan pemasangan/PWA — semuanya dalam panel Tetapan.' },
+          { icon: 'sync', title: 'Segerak awan', body: 'Segerakkan ruang kerja, widget, keutamaan Dock dan toolbar, tema dan tetapan di setiap peranti — dengan peti besi bukti kelayakan disulitkan.' },
+          { icon: 'lock', title: 'Sempadan ruang kerja', body: 'Widget yang dijana berjalan dalam sandbok, dengan akses penyambung terhad kepada perkhidmatan dan data yang setiap widget perlukan.' },
         ],
       },
     ],
@@ -452,7 +1169,7 @@ export const ms: SiteContent = {
       title: 'Termasuk dalam setiap pelan',
       items: [
         'Skrin, ruang kerja & widget tanpa had',
-        '45+ penyambung data pasaran langsung',
+        '90 penyambung data pasaran langsung',
         'Masa jalan widget sandbok',
         'Copilot global (akan datang segera)',
         'Akses komuniti & pasaran',
@@ -485,7 +1202,6 @@ export const ms: SiteContent = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 dibilkan tahunan',
         cadence: '/bln',
-        badge: 'Akan datang segera',
         stats: ['50K kredit/bln', '30 bot', '10 ejen'],
         note: 'Semua dalam Percuma, tambah:',
         cta: 'Menjadi Penyokong',
@@ -529,7 +1245,7 @@ export const ms: SiteContent = {
         stats: ['Infrastruktur swasta', 'Sarung tangan putih', 'SLA'],
         note: 'Semua dalam Penaja, tambah:',
         cta: 'Hubungi kami',
-        ctaHref: 'mailto:partners@nexow.ai',
+        ctaHref: '/contact?type=partnership',
         features: [
           'Infrastruktur swasta',
           'Persediaan sarung tangan putih',
@@ -539,19 +1255,43 @@ export const ms: SiteContent = {
         ],
       },
     ],
-    faqTitle: 'Soalan pelan',
+    faqTitle: "Pelan & bil",
     faq: [
-      { q: 'Adakah Nexow benar-benar percuma?', a: 'Ya. Anda boleh membina percuma selamanya — jalankan sepenuhnya tempatan dengan kunci Anthropic anda sendiri (anda hanya bayar penggunaan API anda sendiri), atau buat akaun percuma yang menempah 10,000 kredit AI untuk apabila mod platform terbuka, jadi tiada kunci anda sendiri diperlukan.' },
-      { q: 'Apa itu kredit?', a: 'Kredit meter penggunaan AI — menjana widget, pautan, bot dan balas Copilot. Akaun percuma menempah 10,000 untuk mula, dan pelan berbayar memberikan elaun bulanan (50K pada Penyokong, 800K pada Penaja). Metering kredit hidup dengan mod platform, dan anda boleh beli lebih banyak bila saja.' },
-      { q: 'Bilakah pelan berbayar dilancarkan?', a: 'Penyokong dan Penaja ditakrifkan dan ditunjukkan dalam aplikasi, tetapi pembayaran berbayar akan datang segera. Semua orang berada pada Percuma hari ini — buat akaun untuk menjadi yang pertama apabila pembilangan terbuka.' },
-      { q: 'Bolehkah saya bayar tahunan?', a: 'Ya. Pembilangan tahunan memberikan anda dua bulan percuma berbanding membayar bulanan. Anda boleh tukar antara bulanan dan tahunan pada bila-bila masa.' },
+      {
+        q: "Adakah Nexow benar-benar percuma?",
+        a: "Ya. Free ialah ruang kerja penuh — skrin, widget dan penyambung tanpa had, perpustakaan boleh guna semula, sync awan, 10 bot, 3 ejen, komuniti dan reputasi, ditambah 10,000 kredit AI yang ditempah semasa daftar. Pelan berbayar menambah muat semula kredit bulanan, kuota lebih tinggi dan rupa premium — teras tidak digate.",
+      },
+      {
+        q: "Apakah kredit?",
+        a: "Kredit mengukur penggunaan AI: menjana widget, mengedit melalui perbualan, mencipta pautan dan menggunakan Copilot. Satu kredit bersamaan satu token output Sonnet kos pembekal, jadi harga tidak bergantung pada model yang dipilih — Haiku meregangkan kredit kepada kira-kira 3 token; Opus menggunakannya dalam kira-kira 0.6. Free menempah 10,000 semasa daftar; Supporter memberi 115,000 sebulan; Sponsor 800,000 — dan anda boleh beli pek bila-bila masa.",
+      },
+      {
+        q: "Bila pelan berbayar dilancarkan?",
+        a: "Supporter dan Sponsor ditakrifkan dan dipaparkan dalam apl, tetapi pembayaran berbayar akan datang tidak lama lagi. Semua orang pada Free hari ini — buat akaun untuk berada di hadapan apabila bil dibuka.",
+      },
+      {
+        q: "Bolehkah saya bayar tahunan?",
+        a: "Ya. Bil tahunan memberi anda dua bulan percuma berbanding bulanan — $99.90 setahun untuk Supporter, $699.90 untuk Sponsor. Anda boleh tukar antara bulanan dan tahunan bila-bila masa.",
+      },
+      {
+        q: "Bagaimana reputasi dikira?",
+        a: "Di pihak klien, daripada aktiviti anda sendiri — Nexow tidak ranking anda berbanding orang lain pada pelayan. Siaran dan widget 5 mata setiap satu, papan 10, bot 15, aset diterbitkan 25, pemasangan 10, pengikut 3 — ditambah bonus lencana (20 setiap peringkat, 100 jarang, 250 legenda). Tahap: Bronze, Silver pada 250, Gold pada 1,000, Platinum pada 5,000, Legend pada 20,000.",
+      },
+      {
+        q: "Adakah lencana terikat pada pelan?",
+        a: "Tidak. Semua 34 lencana, lima tahap dan lapisan komuniti penuh tersedia pada Free. Pelan membeli kapasiti dan rupa, bukan status — akaun Free boleh mencapai Legend.",
+      },
+      {
+        q: "Bila ganjaran kredit dan token tiba?",
+        a: "Lencana dan mata sudah hidup hari ini. Menukarkannya kepada kredit dan token tadbir urus NXW datang bersama Nexow DAO; undian pertama meratifikasi jadual akhir. Nombor pada halaman ini ialah cadangan yang kami komitmenkan.",
+      },
     ],
   },
   connectorsPage: {
     meta: {
       title: 'Penyambung — Nexow',
       description:
-        'Layari setiap penyambung Nexow — 45 langsung dan 83 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
+        'Layari setiap penyambung Nexow — 90 langsung dan 155 dalam katalog. Broker, pertukaran, DEX, pasaran ramalan, pembekal data, pangkalan data dan suapan sosial. Cari, tapis dan sambung.',
     },
     hero: {
       badge: 'Penyambung',
@@ -564,6 +1304,11 @@ export const ms: SiteContent = {
     all: 'Semua',
     categories: { finance: 'Kewangan', wallets: 'Dompet', services: 'Perkhidmatan', data: 'Data', socials: 'Sosial' },
     status: { all: 'Semua', live: 'Langsung', soon: 'Segera hadir' },
+    capability: { all: 'Semua', trading: 'Dagangan', readonly: 'Data sahaja' },
+    filterSubcategories: 'Jenis',
+
+    filterAssets: 'Aset',
+    filterAlpha: 'Nama',
     kinds: {
       broker: 'Broker',
       exchange: 'Pertukaran',
@@ -580,6 +1325,7 @@ export const ms: SiteContent = {
       video: 'Video',
       community: 'Komuniti',
       music: 'Muzik',
+      fitness: 'Kecergasan',
       wallet: 'Dompet kripto',
       browser: 'Automasi penyemak imbas',
       scraping: 'Pengikisan web',
@@ -589,6 +1335,9 @@ export const ms: SiteContent = {
       knowledge: 'Pengetahuan',
       news: 'Berita',
       geo: 'Geo & pengangkutan',
+      analytics: 'Analitik',
+      observability: 'Kebolehcerapan',
+      payments: 'Pembayaran',
     },
     assets: {
       equities: 'Ekuiti',
@@ -601,6 +1350,13 @@ export const ms: SiteContent = {
       prediction_markets: 'Ramalan',
     },
     visit: 'Lawati laman',
+    openDetails: 'Lihat butiran',
+    comingSoon: 'Akan datang',
+    comingSoonHint: 'Penyambung ini belum tersedia dalam apl.',
+    tradingBadge: 'Dagangan',
+    connect: 'Sambung dalam Nexow',
+    visitWebsite: 'Lawati laman web',
+    close: 'Tutup',
     results: '{n} penyambung',
     empty: 'Tiada penyambung sepadan carian anda.',
     exploreCta: 'Teroka semua penyambung',
@@ -638,7 +1394,7 @@ export const ms: SiteContent = {
   },
   blog: {
     meta: {
-      title: 'Blog — Nexow',
+      title: 'Blog Nexow',
       description:
         'Panduan dan penggalian mendalam tentang membina papan pemuka pasaran dengan AI, menyambung data langsung, dan alatan perdagangan — daripada pasukan di Nexow.',
     },
@@ -656,21 +1412,284 @@ export const ms: SiteContent = {
     body: 'Laman yang anda cari tidak wujud — tetapi papan pemuka berikutnya anda mungkin.',
     cta: 'Kembali ke rumah',
   },
-  privacyPage: {
-    badge: 'Privasi',
-    title: 'Dasar Privasi',
-    subtitle: 'Bagaimana Nexow mengendalikan data anda — versi pendek: sebaik mungkin.',
-    meta: {
-      title: 'Dasar Privasi — Nexow',
-      description: 'Nexow swasta secara lalai. Pelajari cara kami mengendalikan data, kunci dan sambungan.',
-    },
-    updated: 'Terakhir dikemas kini: 1 Julai 2026',
-    sections: [
-      { h: 'Swasta secara lalai', p: 'Nexow berjalan sepenuhnya tempatan secara lalai. Dalam mod swasta anda membekalkan kunci API Anthropic anda sendiri dan penghasilan widget berlaku sepenuhnya di penyemak imbas anda. Rumusan dan kod yang dijana anda dihantar daripada penyemak imbas anda terus ke Anthropic — bukan melalui pelayan kami.' },
-      { h: 'Apa yang kami simpan', p: 'Widget, versi, log dan perpustakaan anda disimpan di penyemak imbas anda menggunakan IndexedDB. Mereka kekal di peranti anda dan tidak dimuat naik ke Nexow. Mengosongkan penyimpanan penyemak imbas anda menghapusnya secara kekal.' },
-      { h: 'Sambungan data pasaran', p: 'Di mana tempat membenarkannya, Nexow sambung terus dari penyemak imbas anda, dan bukti kelayakan tempat anda digunakan hanya untuk bercakap dengan tempat itu. Sesetengah tempat memerlukan penghalaan melalui proksi nipis; dalam kes tersebut hanya data yang diperlukan untuk memenuhi permintaan berlalu.' },
-      { h: 'Laman web ini', p: 'Laman pemasaran ini adalah laman statik. Kami mengekalkan analitik minimum dan menghormati privasi, dan kami tidak menjual data peribadi. Pautan keluar (seperti aplikasi) dilabelkan dengan jelas.' },
-      { h: 'Hubungi', p: 'Soalan tentang privasi? Email hello@nexow.ai.' },
-    ],
+  waitlist: {
+    eyebrow: 'Senarai menunggu pengebilan',
+    title: 'Pembayaran hampir tiba',
+    subtitle: 'Pengebilan Supporter dan Sponsor akan tiba tidak lama lagi. Tinggalkan e-mel anda dan kami akan memberitahu pada hari pembayaran dibuka — tiada spam.',
+    placeholder: 'anda@email.com',
+    submit: 'Sertai senarai menunggu',
+    submitting: 'Menyertai…',
+    success: 'Anda dalam senarai. Kami akan e-mel apabila pengebilan dibuka.',
+    error: 'Sesuatu tidak kena. Sila cuba lagi.',
+    invalid: 'Masukkan alamat e-mel yang sah.',
   },
-};
+  changelogPage: {
+    meta: {
+      title: 'Log perubahan — Nexow',
+      description: 'Kemas kini produk Nexow terkini, ciri yang dihantar dan nota keluaran daripada blog.',
+    },
+    hero: {
+      badge: 'Log perubahan',
+      title: 'Apa yang kami hantar baru-baru ini',
+      subtitle: 'Kemas kini produk daripada blog Nexow — terbaharu dahulu.',
+    },
+    empty: 'Belum ada kemas kini produk — lihat blog untuk panduan dan nota.',
+    readMore: 'Baca kemas kini',
+    viewBlog: 'Lihat semua siaran',
+  },
+  contactPage: {
+    meta: {
+      title: 'Hubungi kami — Nexow',
+      description: 'Hubungi Nexow untuk sokongan, jualan atau pertanyaan perkongsian. Kami membaca setiap mesej.',
+    },
+    hero: {
+      badge: 'Hubungi kami',
+      title: 'Bercakap dengan pasukan Nexow',
+      subtitle: 'Soalan sokongan, jualan untuk pasukan atau idea perkongsian — pilih satu jenis dan kami akan hantar ke peti masuk yang betul.',
+    },
+    form: {
+      name: 'Nama',
+      email: 'E-mel',
+      type: 'Jenis pertanyaan',
+      types: [
+        {
+          value: 'support',
+          label: 'Sokongan',
+        },
+        {
+          value: 'sales',
+          label: 'Jualan',
+        },
+        {
+          value: 'partnership',
+          label: 'Perkongsian',
+        },
+        {
+          value: 'other',
+          label: 'Lain-lain',
+        },
+      ],
+      message: 'Bagaimana kami boleh membantu?',
+      submit: 'Hantar mesej',
+      submitting: 'Membuka e-mel…',
+      success: 'Klien e-mel anda sepatutnya dibuka dengan mesej sedia. Terima kasih kerana menghubungi kami.',
+      error: 'Sesuatu tidak kena. Sila e-mel kami terus.',
+      invalid: 'Sila isi e-mel yang sah dan mesej ringkas.',
+    },
+    aside: {
+      title: 'Lebih suka e-mel terus?',
+      body: 'Kami membalas daripada alamat di bawah. Permintaan perkongsian dan pelan Partner pergi ke partners@.',
+      channels: [
+        {
+          label: 'Umum',
+          value: 'hello@nexow.ai',
+          href: 'mailto:hello@nexow.ai',
+        },
+        {
+          label: 'Sokongan',
+          value: 'support@nexow.ai',
+          href: 'mailto:support@nexow.ai',
+        },
+        {
+          label: 'Rakan kongsi',
+          value: 'partners@nexow.ai',
+          href: 'mailto:partners@nexow.ai',
+        },
+      ],
+    },
+  },
+  invitePage: {
+    meta: {
+      title: 'Jemput — Nexow',
+      description: 'Jemput pencipta ke Nexow. Tuntut nama pengguna anda, kongsi pautan dan berkembang bersama komuniti.',
+    },
+    hero: {
+      badge: 'Rujukan',
+      title: 'Jemput pencipta yang menghantar',
+      subtitle: 'Nexow berkembang apabila pembina membawa pembina. Tuntut nama pengguna anda, kongsi jemputan dan bersedia apabila ganjaran rujukan bermula.',
+    },
+    body: 'Ganjaran rujukan dan bonus pengikut berada dalam pelan komuniti. Pautan jemputan anda membuka terus aplikasi supaya rakan tiba sedia menuntut nama pengguna.',
+    pillars: [
+      {
+        icon: 'gift',
+        title: 'Kongsi jemputan anda',
+        body: 'Hantar pautan. Sesiapa yang masuk melaluinya tiba di komuniti dengan pendaftaran dibuka.',
+      },
+      {
+        icon: 'users',
+        title: 'Kembangkan orbit anda',
+        body: 'Ikuti pencipta, kongsi widget dan bina rangkaian yang terkumpul pada reputasi yang sama.',
+      },
+      {
+        icon: 'sparkles',
+        title: 'Ganjaran akan tiba',
+        body: 'Ganjaran awal tiba sebagai kredit; bonus terikat NXW dibuka bersama DAO. Lapisan permainan sama, cara baharu untuk memperoleh.',
+      },
+    ],
+    ctaPrimary: 'Tuntut nama pengguna',
+    ctaSecondary: 'Terokai komuniti',
+    codeLabel: 'Kod jemputan',
+    codeHint: 'Pautan ini menyertakan kod jemputan anda untuk apabila penjejakan rujukan bermula.',
+  },
+  helpPage: {
+    meta: {
+      title: 'Bantuan — Nexow',
+      description: 'Bermula dengan Nexow: buka aplikasi, baca panduan, terokai ciri dan cari bantuan komuniti.',
+    },
+    hero: {
+      badge: 'Bantuan',
+      title: 'Mulakan dengan Nexow',
+      subtitle: 'Laluan ringkas ke dalam produk — buka kanvas, ikut panduan, atau selami ciri dan komuniti.',
+    },
+    guides: [
+      {
+        icon: 'sparkles',
+        title: 'Buka aplikasi',
+        body: 'Terangkan widget dalam bahasa biasa dan letakkannya pada kanvas anda. Akaun percuma termasuk kredit permulaan.',
+        href: 'https://x.nexow.ai/?signup',
+        cta: 'Lancarkan Nexow',
+      },
+      {
+        icon: 'library',
+        title: 'Daripada gesaan ke widget langsung',
+        body: 'Panduan tentang bagaimana penjanaan kod, sandbox dan kanvas bergabung.',
+        href: '/blog/from-prompt-to-live-widget',
+        cta: 'Baca panduan',
+      },
+      {
+        icon: 'layers',
+        title: 'Terokai setiap permukaan',
+        body: 'Widget, penyambung, bot, ejen, komuniti, pasaran — peta produk penuh.',
+        href: '/features',
+        cta: 'Lihat ciri',
+      },
+      {
+        icon: 'plug',
+        title: 'Sambungkan data langsung',
+        body: 'Layari 90 penyambung merentas pasaran, dompet, sosial dan pangkalan data.',
+        href: '/connectors',
+        cta: 'Layari penyambung',
+      },
+      {
+        icon: 'users',
+        title: 'Sertai komuniti',
+        body: 'Kongsi widget, ikuti pencipta dan tuntut @nama anda.',
+        href: '/community',
+        cta: 'Buka komuniti',
+      },
+      {
+        icon: 'shield',
+        title: 'Keselamatan & kepercayaan',
+        body: 'Bagaimana sandbox, kelayakan dan sempadan ruang kerja berfungsi.',
+        href: '/security',
+        cta: 'Baca keselamatan',
+      },
+    ],
+    ctaTitle: 'Masih tersekat?',
+    ctaBody: 'E-mel sokongan atau hantar borang hubungan — kami membaca setiap mesej.',
+    cta: 'Hubungi kami',
+  },
+  securityPage: {
+    meta: {
+      title: 'Keselamatan & kepercayaan — Nexow',
+      description: 'Bagaimana Nexow menghadkan widget, kelayakan, versi dan penyegerakan — runtime sandbox, penyambung keistimewaan minimum, pemilikan ruang kerja.',
+    },
+    hero: {
+      badge: 'Keselamatan',
+      title: 'Kepercayaan terbina dalam kanvas',
+      subtitle: 'Nexow direka supaya kuasa tidak pernah bermakna akses terbuka. Kod yang dijana berjalan dalam sandbox, kelayakan kekal terhad dan sejarah ruang kerja anda kekal milik anda.',
+    },
+    pillars: [
+      {
+        icon: 'shield',
+        title: 'Widget dalam sandbox',
+        body: 'Setiap widget yang dijana berjalan dalam iframe terpencil dengan sempadan ketat — ia boleh memapar dan mengambil data, bukan mencapai akaun anda atau widget lain.',
+      },
+      {
+        icon: 'lock',
+        title: 'Kelayakan terhad',
+        body: 'Kelayakan penyambung terhad kepada perkhidmatan yang anda sambungkan dan widget yang memerlukannya. Keistimewaan minimum secara lalai.',
+      },
+      {
+        icon: 'history',
+        title: 'Asal usul ruang kerja',
+        body: 'Versi, log dan kod sumber yang dijana kekal terikat pada sejarah ruang kerja anda supaya anda boleh memeriksa, mengundur dan mengaudit apa yang berjalan.',
+      },
+      {
+        icon: 'sync',
+        title: 'Penyegerakan yang anda kawal',
+        body: 'Penyegerakan awan memastikan ruang kerja tersedia merentas peranti tanpa menjadikan kanvas anda produk orang lain.',
+      },
+    ],
+    principlesTitle: 'Apa yang kami janjikan',
+    principles: [
+      'Kod yang dijana tidak pernah berjalan dengan akses tanpa had ke akaun anda.',
+      'Gesaan peribadi, sejarah sembang dan id sambungan kekal dengan pengarang.',
+      'Pemasangan pasaran tiba dijeda atau belum digunakan — larian pertama sentiasa pilihan anda.',
+      'Butiran privasi undang-undang ada dalam Dasar Privasi kami; halaman ini ialah pandangan produk.',
+    ],
+    ctaTitle: 'Baca butiran halus',
+    ctaBody: 'Seni bina produk di sini; Dasar Privasi merangkumi butiran pemprosesan undang-undang.',
+    ctaPrimary: 'Dasar Privasi',
+    ctaSecondary: 'Hubungi kami',
+  },
+  useCasePages: {
+    traders: {
+      meta: {
+        title: 'Nexow untuk pedagang',
+        description: 'Bina meja dagangan langsung daripada satu gesaan — carta, senarai pantau, buku pesanan dan peta haba pasaran pada kanvas yang anda kawal.',
+      },
+      hero: {
+        badge: 'Untuk pedagang',
+        title: 'Meja yang membina semula apabila pasaran berubah',
+        subtitle: 'Terangkan widget yang anda perlukan. Nexow menjananya, menyambung penyambung langsung dan menyusunnya pada satu kanvas — daripada candlestick ke pasaran ramalan.',
+      },
+      prompt: 'Bina saya meja kripto: carta candlestick, senarai pantau, kedalaman buku pesanan, peta haba dan derivatif.',
+      points: [
+        'Data pasaran langsung daripada API awam — Binance, BitMEX, Kalshi dan banyak lagi.',
+        'Bot yang memantau keadaan dan mencetuskan amaran walaupun tab ditutup.',
+        'Setiap widget dalam sandbox supaya skrip buruk tidak pernah menguasai meja anda.',
+      ],
+      ctaPrimary: 'Bina meja dagangan',
+      ctaSecondary: 'Lihat penyambung',
+    },
+    founders: {
+      meta: {
+        title: 'Nexow untuk pengasas',
+        description: 'Bina ibu pejabat pengasas daripada satu gesaan — saluran paip, senarai semak pelancaran, kalendar kandungan dan MRR pada satu kanvas.',
+      },
+      hero: {
+        badge: 'Untuk pengasas',
+        title: 'Pusat kawalan anda daripada satu ayat',
+        subtitle: 'Pengasas solo tidak perlukan lima alat. Terangkan papan pemuka yang anda mahu dan Nexow membina widgetnya — saluran paip, hasil, pelan pelancaran dan nota bersama.',
+      },
+      prompt: 'Bina papan pemuka pengasas solo: saluran paip prospek, senarai semak pelancaran, kalendar kandungan, carta MRR dan nota pantas.',
+      points: [
+        'Lima widget daripada satu gesaan — disusun mengikut cara anda bekerja.',
+        'Penyegerakan awan merentas peranti supaya ibu pejabat mengikut anda.',
+        'Kongsi widget langsung dengan rakan pengasas tanpa mengeksport tangkapan skrin.',
+      ],
+      ctaPrimary: 'Bina ibu pejabat',
+      ctaSecondary: 'Lihat contoh',
+    },
+    builders: {
+      meta: {
+        title: 'Nexow untuk pembina',
+        description: 'Hantar widget interaktif, bot dan ejen pada kanvas bersandbox — kemudian terbitkan ke pasaran komuniti.',
+      },
+      hero: {
+        badge: 'Untuk pembina',
+        title: 'Hantar perisian pada kelajuan satu gesaan',
+        subtitle: 'Nexow ialah runtime widget dengan bot, ejen, penyambung dan komuniti pencipta. Jana, perhalus melalui perbualan dan terbitkan apa yang berkesan.',
+      },
+      prompt: 'Cipta pusat kawalan projek: papan kanban, garis masa Gantt, KPI, risiko dan beban kerja pasukan.',
+      points: [
+        'Kod sumber boleh diperiksa dan berversi untuk setiap widget yang dijana.',
+        'Bot dan ejen awan dengan harness penuh — model, alat, pencetus.',
+        'Salasilah pasaran supaya penciptaan semula memberi kredit kepada pembina asal.',
+      ],
+      ctaPrimary: 'Mula membina',
+      ctaSecondary: 'Sertai komuniti',
+    },
+  },
+} as unknown as SiteContent;

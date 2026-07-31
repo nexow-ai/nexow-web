@@ -1,0 +1,39 @@
+---
+/**
+ * Home proof strip — four concrete numbers, not a dashboard of cards.
+ * Sits under the hero as a quiet brand-adjacent signal before the showcase.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const stats = useContent(lang).home.stats;
+---
+
+<section
+  id="stats"
+  class="relative border-y border-ink-900/5 py-10 text-ink-950 sm:py-12 dark:border-white/8 dark:text-white"
+  aria-label="Product stats"
+>
+  <div class="container-page">
+    <dl class="reveal-stagger grid grid-cols-2 gap-8 lg:grid-cols-4 lg:gap-6">
+      {
+        stats.map((stat) => (
+          <div class="flex flex-col gap-1.5 sm:items-start">
+            <dt class="order-2 max-w-[16rem] text-sm leading-snug text-ink-500 dark:text-ink-400">
+              {stat.label}
+            </dt>
+            <dd class="order-1 font-display text-3xl font-semibold tracking-tight tabular-nums text-ink-950 sm:text-4xl dark:text-white">
+              {stat.prefix}
+              <span data-count={stat.n}>{stat.n}</span>
+              {stat.suffix}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

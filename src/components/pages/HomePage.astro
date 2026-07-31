@@ -1,16 +1,18 @@
 ---
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../sections/Hero.astro';
+import Stats from '../sections/Stats.astro';
 import AppShowcase from '../sections/AppShowcase.astro';
 import Features from '../sections/Features.astro';
 import HowItWorks from '../sections/HowItWorks.astro';
 import Automate from '../sections/Automate.astro';
+import BotsAgents from '../sections/BotsAgents.astro';
 import Connectors from '../sections/Connectors.astro';
 import Privacy from '../sections/Privacy.astro';
 import Plans from '../sections/Plans.astro';
-import Roadmap from '../sections/Roadmap.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
 
@@ -38,8 +40,9 @@ const softwareSchema = {
     offerCount: c.plansPage.tiers.length,
   },
   featureList: [
-    ...t.features.items.map((f) => f.title),
-    `${t.connectors.count}+ ${t.connectors.countLabel}`,
+    ...(t.features.groups?.flatMap((g) => g.items.map((f) => f.title)) ??
+      t.features.items.map((f) => f.title)),
+    `${CONNECTOR_LIVE_COUNT} ${t.connectors.countLabel}`,
   ],
 };
 
@@ -60,6 +63,22 @@ const websiteSchema = {
   url: SITE.url,
   inLanguage: lang,
 };
+
+/** Right-rail labels reuse existing section eyebrows (already localized). */
+const sections = [
+  { id: 'hero', label: t.hero.titleLead.replace(/\.$/, '') },
+  { id: 'stats', label: 'Stats' },
+  { id: 'app-showcase', label: t.appShowcase?.eyebrow ?? 'App' },
+  { id: 'how', label: t.how.eyebrow },
+  { id: 'features', label: t.features.eyebrow },
+  { id: 'automate', label: t.automate.eyebrow },
+  { id: 'bots-agents', label: t.botsAgents?.eyebrow ?? 'Bots & Agents' },
+  { id: 'connectors', label: t.connectors.eyebrow },
+  { id: 'privacy', label: t.privacy.eyebrow },
+  { id: 'plans', label: t.plans.eyebrow },
+  { id: 'faq', label: t.faq.eyebrow },
+  { id: 'cta', label: t.cta.primary },
+];
 ---
 
 <Layout
@@ -68,17 +87,18 @@ const websiteSchema = {
   title={t.meta.title}
   description={t.meta.description}
   schema={[websiteSchema, softwareSchema, faqSchema]}
-  theme="light"
+  sections={sections}
 >
   <Hero lang={lang} />
+  <Stats lang={lang} />
   <AppShowcase lang={lang} />
   <HowItWorks lang={lang} />
   <Features lang={lang} />
   <Automate lang={lang} />
-  <Connectors lang={lang} tone="dark" />
+  <BotsAgents lang={lang} />
+  <Connectors lang={lang} />
   <Privacy lang={lang} />
   <Plans lang={lang} />
-  <Roadmap lang={lang} />
-  <Faq lang={lang} />
+  <Faq lang={lang} group="home-faq" />
   <CtaBand lang={lang} />
 </Layout>

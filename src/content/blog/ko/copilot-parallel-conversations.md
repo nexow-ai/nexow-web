@@ -3,7 +3,7 @@ title: 'Copilot 도착: 다른 곳을 보는 동안에도 빌드하는 병렬 �
 description: '워크스페이스 Copilot이 라이브입니다 — 열린 대화의 탭 스트립, 백그라운드에서 계속 실행되는 빌드, 중단된 실행의 복구, 그리고 추측 대신 명확히 묻는 질문과 함께.'
 pubDate: 2026-07-26
 heroImage: ../../../assets/blog/copilot.svg
-tags: ['제품', 'Copilot', 'AI']
+tags: ['제품', 'copilot', 'ai']
 ---
 
 Copilot은 로드맵의 두 번째 약속이었습니다: 프롬프트만이 아니라 캔버스를

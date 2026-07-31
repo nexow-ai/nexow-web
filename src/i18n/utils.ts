@@ -37,7 +37,7 @@ export function getRouteFromUrl(url: URL): string {
 export function localizePath(path: string, lang: Lang): string {
   const clean = path === '/' ? '' : path.replace(/\/$/, '');
   if (lang === defaultLang) return clean || '/';
-  return `/${lang}${clean}` || `/${lang}/`;
+  return `/${lang}${clean}`;
 }
 
 /**

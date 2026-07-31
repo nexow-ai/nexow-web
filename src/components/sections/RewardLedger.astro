@@ -1,0 +1,259 @@
+---
+/**
+ * The reward ladder — what each unlock pays in credits and NXW.
+ *
+ * PLANNED, not live: badges and points ship in the app today, but turning them
+ * into payouts arrives with the Nexow DAO. The panel wears the "planned" chip
+ * throughout and says so in `plannedNote`; do not quietly promote it.
+ *
+ * Every number is computed from `REWARD_LADDER` / `LEVEL_REWARDS`, so the totals
+ * can never drift from the rows above them. NXW supply / mint facts live in
+ * `gamification.ts` and are mirrored in `ledger.tokenomics` copy.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import {
+  REWARD_LADDER,
+  LEVEL_REWARDS,
+  LEVELS,
+  TOTAL_REWARD_CREDITS,
+  TOTAL_REWARD_TOKENS,
+  TOTAL_REWARD_USD,
+  TOTAL_REWARD_SPONSOR_MONTHS,
+  NXW_DRY_MINT_ISO,
+  NXW_UTILITY_SUPPLY,
+  NXW_OPEN_MINT_SUPPLY,
+  NXW_OPEN_MINT_PRICE_USDC,
+  NXW_TOTAL_SUPPLY,
+} from '../../data/gamification';
+import Icon from '../Icon.astro';
+import Hex from '../Hex.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang).rewards;
+const t = c.ledger;
+const tok = t.tokenomics;
+
+const nf = (n: number) => n.toLocaleString(lang);
+const usd = (n: number) =>
+  n.toLocaleString(lang, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+
+const dryMintLabel = new Date(`${NXW_DRY_MINT_ISO}T12:00:00Z`).toLocaleDateString(lang, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+
+/** Live numbers for the tokenomics tiles — copy supplies labels/notes only. */
+const factValues = tok
+  ? [
+      dryMintLabel,
+      `${nf(NXW_UTILITY_SUPPLY)} NXW`,
+      `${nf(NXW_OPEN_MINT_SUPPLY)} · ${NXW_OPEN_MINT_PRICE_USDC} USDC`,
+      `${nf(NXW_TOTAL_SUPPLY)} NXW`,
+    ]
+  : [];
+
+/** Badge rows, then one row per level-up — a single ladder, ordered by effort. */
+const rows = [
+  ...REWARD_LADDER.map((r) => ({
+    label: t.rows[r.key as keyof typeof t.rows],
+    icon: r.icon,
+    from: r.from,
+    to: r.to,
+    count: r.count,
+    points: r.points,
+    credits: r.credits,
+    tokens: r.tokens,
+  })),
+  ...LEVEL_REWARDS.map((r) => {
+    const level = LEVELS.find((l) => l.id === r.id)!;
+    return {
+      label: t.levelRow.replace('{level}', c.levels.names[r.id]),
+      icon: level.icon,
+      from: level.from,
+      to: level.to,
+      count: 1,
+      points: r.at,
+      credits: r.credits,
+      tokens: r.tokens,
+    };
+  }),
+];
+
+/** Widest credit row, so the bars read as a proportion of the biggest prize. */
+const maxCredits = Math.max(...rows.map((r) => r.credits));
+
+const uses = tok?.uses ?? c.dao.cards;
+---
+
+<section class="relative overflow-hidden bg-ink-950 pb-24 pt-16 text-white">
+  <div class="bg-grid pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true"></div>
+  <div
+    class="glow-accent aurora-b pointer-events-none absolute -bottom-40 right-0 h-[460px] w-[620px] opacity-40"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative">
+    <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div class="max-w-xl">
+        <span class="badge-status" data-status="soon">
+          <span class="size-1.5 rounded-full bg-accent-400"></span>
+          {c.planned}
+        </span>
+        <h3 class="mt-4 font-display text-2xl font-semibold text-white sm:text-3xl">{t.title}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-ink-300">{t.body}</p>
+      </div>
+      <p class="max-w-xs text-xs leading-relaxed text-ink-400">{c.plannedNote}</p>
+    </div>
+
+    <!-- The ladder -->
+    <div class="reveal mt-8 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[36rem] border-collapse text-left">
+          <caption class="sr-only">{t.title}</caption>
+          <thead>
+            <tr class="border-b border-white/10 text-[0.68rem] uppercase tracking-wider text-ink-400">
+              <th scope="col" class="px-5 py-3 font-semibold">{t.colUnlock}</th>
+              <th scope="col" class="px-3 py-3 text-right font-semibold">{t.colCount}</th>
+              <th scope="col" class="px-3 py-3 text-right font-semibold">{t.colPoints}</th>
+              <th scope="col" class="px-3 py-3 text-right font-semibold">{t.colCredits}</th>
+              <th scope="col" class="px-5 py-3 text-right font-semibold">{t.colTokens}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map((row, i) => (
+                <tr class="border-b border-white/[0.06] last:border-0">
+                  <th scope="row" class="px-5 py-3.5 font-normal">
+                    <span class="flex items-center gap-3">
+                      <Hex icon={row.icon} from={row.from} to={row.to} size="sm" ink="#131722" delay={i * 260} />
+                      <span class="text-sm font-medium text-white">{row.label}</span>
+                    </span>
+                  </th>
+                  <td class="px-3 py-3.5 text-right font-mono text-xs text-ink-400">×{row.count}</td>
+                  <td class="px-3 py-3.5 text-right font-mono text-xs text-ink-300">+{nf(row.points)}</td>
+                  <td class="px-3 py-3.5 text-right font-mono text-sm font-semibold text-brand-300">
+                    {nf(row.credits)}
+                    {/* Meter: this prize against the biggest one on the ladder.
+                        Narrow and right-aligned, so it reads as a bar under the
+                        figure rather than a rule struck through the cell. */}
+                    <span class="ms-auto mt-1.5 block h-1 w-20 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
+                      <span
+                        class="bar-grow block h-full rounded-full"
+                        style={`width:${Math.max(4, Math.round((row.credits / maxCredits) * 100))}%;background:linear-gradient(90deg, ${row.from}, ${row.to});--d:${i * 70}ms`}
+                      />
+                    </span>
+                  </td>
+                  <td class="px-5 py-3.5 text-right font-mono text-sm font-semibold text-accent-300">
+                    {nf(row.tokens)}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {
+      tok && (
+        <div class="reveal mt-5 relative overflow-hidden rounded-3xl border border-accent-400/30 bg-gradient-to-br from-accent-500/[0.14] via-white/[0.03] to-brand-500/[0.1] p-7 sm:p-8">
+          <span
+            class="glow-accent pointer-events-none absolute -left-20 -top-24 size-72 opacity-40 animate-glow"
+            aria-hidden="true"
+          />
+          <div class="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-xl">
+              <p class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-accent-300">
+                {tok.eyebrow}
+              </p>
+              <h4 class="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl">{tok.title}</h4>
+              <p class="mt-3 text-sm leading-relaxed text-ink-300">{tok.body}</p>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {tok.traits.map((trait) => (
+                  <li class="rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 font-mono text-[0.68rem] uppercase tracking-wider text-ink-200">
+                    {trait}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p class="font-mono text-xs uppercase tracking-wider text-ink-400 lg:text-right">
+              <span class="text-accent-300">{t.tokenName}</span>
+              {' · '}
+              {dryMintLabel}
+            </p>
+          </div>
+
+          <div class="relative mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {tok.facts.map((fact, i) => (
+              <div class="rounded-2xl border border-white/10 bg-ink-950/55 p-4 backdrop-blur-sm">
+                <p class="font-mono text-[0.65rem] uppercase tracking-wider text-ink-400">{fact.label}</p>
+                <p class="mt-2 font-display text-xl font-bold tabular-nums text-white sm:text-2xl">
+                  {factValues[i] ?? fact.value}
+                </p>
+                <p class="mt-2 text-xs leading-relaxed text-ink-400">{fact.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Totals + what NXW does -->
+    <div class="reveal mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <div class="relative overflow-hidden rounded-3xl border border-brand-400/25 bg-gradient-to-br from-brand-500/[0.12] to-accent-500/[0.08] p-7">
+        <span class="glow-brand pointer-events-none absolute -right-16 -top-20 size-64 opacity-50 animate-glow" aria-hidden="true"></span>
+        <div class="relative">
+          <p class="text-[0.7rem] font-semibold uppercase tracking-wider text-brand-300">{t.totalTitle}</p>
+          <p class="mt-2 text-sm leading-relaxed text-ink-300">{t.totalBody}</p>
+
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            <div>
+              <p class="font-display text-3xl font-bold tabular-nums text-white sm:text-4xl">
+                {nf(TOTAL_REWARD_CREDITS)}
+              </p>
+              <p class="mt-0.5 font-mono text-xs uppercase tracking-wider text-brand-300">{t.creditsLabel}</p>
+              <p class="mt-2 text-xs leading-relaxed text-ink-400">
+                {t.worth.replace('{usd}', usd(TOTAL_REWARD_USD))}
+              </p>
+              <p class="text-xs leading-relaxed text-ink-400">
+                {t.months.replace('{n}', String(TOTAL_REWARD_SPONSOR_MONTHS))}
+              </p>
+            </div>
+            <div>
+              <p class="font-display text-3xl font-bold tabular-nums text-white sm:text-4xl">
+                {nf(TOTAL_REWARD_TOKENS)}
+              </p>
+              <p class="mt-0.5 font-mono text-xs uppercase tracking-wider text-accent-300">{t.tokensLabel}</p>
+              <p class="mt-2 text-xs leading-relaxed text-ink-400">{t.tokenNote}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-white/10 bg-white/[0.03] p-7">
+        <h4 class="font-display text-lg font-semibold text-white">{tok?.usesTitle ?? c.dao.title}</h4>
+        <p class="mt-2 text-sm leading-relaxed text-ink-300">{c.dao.body}</p>
+        <ul class="mt-5 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {
+            uses.map((card) => (
+              <li class="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3.5">
+                <span class="inline-flex size-7 items-center justify-center rounded-lg bg-accent-500/12 text-accent-300">
+                  <Icon name={card.icon} class="size-4" />
+                </span>
+                <p class="mt-2 text-sm font-semibold text-white">{card.title}</p>
+                <p class="mt-1 text-xs leading-relaxed text-ink-400">{card.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

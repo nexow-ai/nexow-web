@@ -1,0 +1,21 @@
+# Referral short links. The site is a static assets-only Worker, so `/r/<code>`
+# cannot be rendered per-code — it redirects to the invite page instead, which
+# reads `?code=` on the client. Keep one line per locale so a localized invite
+# link lands on the localized page.
+/r/*     /invite?code=:splat     302
+/ar/r/*  /ar/invite?code=:splat  302
+/de/r/*  /de/invite?code=:splat  302
+/el/r/*  /el/invite?code=:splat  302
+/es/r/*  /es/invite?code=:splat  302
+/fr/r/*  /fr/invite?code=:splat  302
+/he/r/*  /he/invite?code=:splat  302
+/it/r/*  /it/invite?code=:splat  302
+/ja/r/*  /ja/invite?code=:splat  302
+/ko/r/*  /ko/invite?code=:splat  302
+/ms/r/*  /ms/invite?code=:splat  302
+/nl/r/*  /nl/invite?code=:splat  302
+/pt/r/*  /pt/invite?code=:splat  302
+/ru/r/*  /ru/invite?code=:splat  302
+/tr/r/*  /tr/invite?code=:splat  302
+/uk/r/*  /uk/invite?code=:splat  302
+/zh/r/*  /zh/invite?code=:splat  302

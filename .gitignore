@@ -2,6 +2,8 @@
 dist/
 # generated types
 .astro/
+# test coverage reports
+coverage/
 # cloudflare / wrangler
 .wrangler/
 
@@ -24,3 +26,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# generated scratchpad reports
+scratchpad/*-report.json

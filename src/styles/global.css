@@ -46,6 +46,22 @@
   --color-accent-900: #312e81;
   --color-accent-950: #1e1b4b;
 
+  /* Plasma — SECONDARY accent. Never used alone: it is the third stop that
+   * turns the teal→indigo brand gradient into something that actually glows on
+   * a dark surface. Keep it for gradients, glows and hairlines, not for text
+   * or UI state (that is what brand/accent are for). */
+  --color-plasma-50: #fdf4ff;
+  --color-plasma-100: #fae8ff;
+  --color-plasma-200: #f5d0fe;
+  --color-plasma-300: #f0abfc;
+  --color-plasma-400: #e879f9;
+  --color-plasma-500: #d946ef;
+  --color-plasma-600: #c026d3;
+  --color-plasma-700: #a21caf;
+  --color-plasma-800: #86198f;
+  --color-plasma-900: #701a75;
+  --color-plasma-950: #4a044e;
+
   /* Gold — premium accent for light marketing surfaces */
   --color-gold-50: #fdfaf3;
   --color-gold-100: #f6edd6;
@@ -221,6 +237,46 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Semantic surface tokens.
+ *
+ * Marketing pages are light by default; users can flip to dark via the header
+ * toggle (Telegram-style wipe). Layout `theme="dark"|"light"` locks the surface
+ * and hides the toggle. Anything drawn in a component <style> block — the
+ * inline SVG diagrams especially — reads these instead of hard-coding
+ * white/ink, so it flips with no per-component dark rules.
+ *
+ * Tailwind-classed markup keeps using explicit `dark:` variants, which stay
+ * readable at the call site.
+ * ------------------------------------------------------------------ */
+:root {
+  --surface: #ffffff;
+  --surface-sunk: #f7fbfb;
+  --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  --surface-line-soft: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+  --text-strong: var(--color-ink-950);
+  --text-body: var(--color-ink-600);
+  --text-muted: var(--color-ink-400);
+  --glyph: var(--color-brand-700);
+
+  /* Gradient stops — identical in light and dark (Launch app / text-gradient).
+   * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
+  --grad-a: var(--color-brand-600);
+  --grad-b: var(--color-sky-500);
+  --grad-c: var(--color-accent-600);
+}
+
+.dark {
+  --surface: color-mix(in oklab, white 4%, transparent);
+  --surface-sunk: color-mix(in oklab, white 2%, transparent);
+  --surface-line: color-mix(in oklab, white 11%, transparent);
+  --surface-line-soft: color-mix(in oklab, white 7%, transparent);
+  --text-strong: #ffffff;
+  --text-body: var(--color-ink-300);
+  --text-muted: var(--color-ink-400);
+  --glyph: var(--color-brand-300);
+}
+
+/* ------------------------------------------------------------------ *
  * Base
  * ------------------------------------------------------------------ */
 @layer base {
@@ -250,7 +306,29 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    transition: background-color 0.35s var(--ease-out-expo);
+  }
+
+  .dark body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-200);
+  }
+
+  /*
+   * Telegram-style theme wipe — only while `.is-theme-transition` is set so
+   * Astro ClientRouter page fades keep their default root crossfade.
+   */
+  html.is-theme-transition::view-transition-old(root),
+  html.is-theme-transition::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  html.is-theme-transition::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  html.is-theme-transition::view-transition-new(root) {
+    z-index: 2;
   }
 
   h1,
@@ -296,16 +374,52 @@
     }
   }
 
-  /* Brand gradient text (teal → indigo). */
+  /* Brand gradient text — same teal → sky → indigo stops in light and dark. */
   .text-gradient {
     background-image: linear-gradient(
       100deg,
-      var(--color-brand-600),
-      var(--color-sky-500) 85%
+      var(--grad-a),
+      var(--grad-b) 52%,
+      var(--grad-c)
     );
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+  }
+
+  /* The same three stops, but wide enough to drift — used on the hero headline
+   * so the colour slowly travels across the words. */
+  .text-gradient-live {
+    background-image: linear-gradient(
+      100deg,
+      var(--grad-a),
+      var(--grad-b) 30%,
+      var(--grad-c) 55%,
+      var(--grad-b) 78%,
+      var(--grad-a)
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-drift 14s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .text-gradient-live {
+      animation: none;
+    }
+  }
+
+  /* Gradient rule/underline in the same three stops. */
+  .rule-gradient {
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--grad-a) 18%,
+      var(--grad-b) 50%,
+      var(--grad-c) 82%,
+      transparent
+    );
   }
 
   /* Eyebrow / kicker label above headings. */
@@ -339,6 +453,15 @@
     background: radial-gradient(
       60% 60% at 50% 40%,
       color-mix(in oklab, var(--color-accent-500) 28%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Secondary-accent glow — the magenta counterweight to `.glow-brand`. */
+  .glow-plasma {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-plasma-500) 26%, transparent),
       transparent 70%
     );
   }
@@ -466,6 +589,99 @@
   .aurora-a, .aurora-b { animation: none; }
 }
 
+/* Slow travel of a wide gradient across text (see `.text-gradient-live`). */
+@keyframes gradient-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Third aurora blob — the secondary accent, on a longer cycle than the other
+ * two so the three never line up into a single visible pulse. */
+@keyframes aurora-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  35% { transform: translate(-6%, -7%) scale(1.14); }
+  70% { transform: translate(7%, 4%) scale(0.9); }
+}
+.aurora-c { animation: aurora-c 26s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .aurora-c { animation: none; }
+}
+
+/* Multi-stop brand/accent/plasma/sky mesh for page heroes & CTA bands.
+ * Same soft *-300 hues in light and dark (opacity only may differ).
+ * Prefer this over pale *-100 / white vignette fades. */
+@keyframes aurora-mesh-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(2.5%, -2%, 0) scale(1.05) rotate(1.5deg);
+  }
+  66% {
+    transform: translate3d(-2%, 2.5%, 0) scale(0.96) rotate(-1.2deg);
+  }
+}
+.aurora-mesh {
+  background:
+    radial-gradient(
+      ellipse 55% 45% at 18% 22%,
+      color-mix(in oklab, var(--color-brand-300) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 82% 18%,
+      color-mix(in oklab, var(--color-accent-300) 48%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 48% 42% at 58% 75%,
+      color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 40% 35% at 42% 42%,
+      color-mix(in oklab, var(--color-sky-300) 32%, transparent),
+      transparent 65%
+    );
+  animation: aurora-mesh-shift 28s ease-in-out infinite;
+  will-change: transform, opacity;
+  opacity: 0.85;
+}
+.dark .aurora-mesh {
+  /* Same hues as light; slightly softer so *-300 still reads on ink. */
+  opacity: 0.75;
+}
+.is-offscreen .aurora-mesh,
+.is-offscreen .aurora-a,
+.is-offscreen .aurora-b,
+.is-offscreen .aurora-c {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora-mesh {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero entrance — a short staggered rise, run once on load. Separate from
+ * `.reveal` (which is scroll-driven and would otherwise hold the hero hidden
+ * until an IntersectionObserver callback lands, i.e. after first paint).
+ * ------------------------------------------------------------------ */
+@keyframes enter-up {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.js .enter {
+  opacity: 0;
+  animation: enter-up 0.85s var(--ease-out-expo) both;
+  animation-delay: var(--enter-delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .enter { opacity: 1; animation: none; }
+}
+
 /* Blinking caret for the typed hero prompt. */
 @keyframes caret-blink {
   0%, 45% { opacity: 1; }
@@ -520,6 +736,70 @@
 .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.24s; }
 .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.30s; }
 
+/* ------------------------------------------------------------------ *
+ * Scroll motion — progress vars come from src/components/ScrollMotion.astro.
+ *
+ * Every opted-in element shares ONE composed transform, so tokens only set
+ * inputs and never overwrite each other. Defaults are no-ops, which is also
+ * what renders before JavaScript has written anything (and forever, without
+ * JavaScript or with reduced motion).
+ *
+ *   rise / sink      drift against the scroll        (--pc)
+ *   slide-l/-r       the same, horizontally          (--pc)
+ *   breathe          expand mid-screen, contract     (--pb)
+ *   tilt / turn      lean in 3D as it travels        (--pc)
+ *   depth            push away from the camera       (--pb)
+ *   dim              fade at the edges of the trip   (--pb)
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-motion] {
+    transform:
+      perspective(var(--m-persp, 1500px))
+      translate3d(
+        calc(var(--pc, 0) * var(--m-slide, 0px)),
+        calc(var(--pc, 0) * var(--m-shift, 0px)),
+        calc((1 - var(--pb, 1)) * var(--m-depth, 0px))
+      )
+      rotateX(calc(var(--pc, 0) * var(--m-tilt, 0deg)))
+      rotateY(calc(var(--pc, 0) * var(--m-turn, 0deg)))
+      scale(calc(var(--m-base, 1) + var(--pb, 1) * var(--m-zoom, 0)));
+  }
+
+  .js [data-motion~='rise'] { --m-shift: -26px; }
+  .js [data-motion~='rise-lg'] { --m-shift: -58px; }
+  .js [data-motion~='sink'] { --m-shift: 26px; }
+  .js [data-motion~='sink-lg'] { --m-shift: 58px; }
+  /* Kept under the 2rem page gutter: a wider drift pushes the outer columns
+   * past the viewport edge on any screen where the container is not centred
+   * with slack to spare, and the section's overflow clip shaves the text. */
+  .js [data-motion~='slide-l'] { --m-slide: -24px; }
+  .js [data-motion~='slide-r'] { --m-slide: 24px; }
+
+  .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
+  .js [data-motion~='breathe-lg'] { --m-base: 0.918; --m-zoom: 0.082; }
+
+  .js [data-motion~='tilt'] { --m-tilt: 6deg; }
+  .js [data-motion~='tilt-lg'] { --m-tilt: 11deg; }
+  .js [data-motion~='turn'] { --m-turn: 4deg; }
+  .js [data-motion~='depth'] { --m-depth: -150px; }
+
+  .js [data-motion~='dim'] { opacity: calc(0.5 + var(--pb, 1) * 0.5); }
+
+  /* Small screens get the drift and the breathing but not the lean — a tilted
+   * card next to the viewport edge reads as a rendering bug on a phone. */
+  @media (max-width: 640px) {
+    .js [data-motion] { --m-tilt: 0deg; --m-turn: 0deg; --m-depth: 0px; }
+  }
+
+  /* The sideways drift needs horizontal slack to move into. `slide-l/-r` sit on
+   * the columns of two-up grids that only split at `lg`; below that the column
+   * is full width, so the 34px shift has nowhere to go and just pushes text
+   * under the section's overflow clip. */
+  @media (max-width: 63.999rem) {
+    .js [data-motion] { --m-slide: 0px; }
+  }
+}
+
 /* Marquee for the connector / ticker strip. */
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -555,6 +835,253 @@
 .animate-glow { animation: glow-pulse 6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .animate-glow { animation: none; opacity: 0.35; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Plans page — 3D tiers, hex medallions and the badge vault.
+ *
+ * Everything here composes its own transform and is deliberately kept clear of
+ * `[data-motion]` (which owns the scroll-driven transform above) so the two
+ * systems never fight over the same property on one element.
+ * ------------------------------------------------------------------ */
+
+/* Shared camera for a row of 3D cards. */
+.stage-3d {
+  perspective: 1600px;
+  perspective-origin: 50% 35%;
+}
+
+/* Pointer-tracked lean. The section script writes --rx/--ry (deg) while the
+ * pointer is over the card and clears them on leave, so the card eases back. */
+.tilt {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
+  transition:
+    transform 0.55s var(--ease-out-expo),
+    box-shadow 0.55s var(--ease-out-expo);
+  will-change: transform;
+}
+.tilt.is-tilting {
+  transition:
+    transform 0.1s linear,
+    box-shadow 0.4s var(--ease-out-expo);
+}
+
+/* Children that should float off the card face. */
+.tilt-layer {
+  transform: translateZ(var(--z, 34px));
+  transform-style: preserve-3d;
+}
+
+/* Specular sheen that tracks the pointer across the face. */
+.tilt-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+  background: radial-gradient(
+    440px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(255 255 255 / 0.18),
+    transparent 62%
+  );
+}
+.tilt:hover .tilt-sheen,
+.tilt:focus-within .tilt-sheen {
+  opacity: 1;
+}
+
+/* Touch and reduced-motion visitors get the layout, never the lean. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none !important;
+  }
+  .tilt-layer {
+    transform: none;
+  }
+}
+
+/* ---- hex medallion (mirrors the app's ReputationHex) ---- */
+.hex {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background: linear-gradient(140deg, var(--from, #d9dee6), var(--to, #8e99a8));
+  color: var(--hex-ink, #131722);
+}
+.hex[data-locked='true'] {
+  background: linear-gradient(140deg, #e8ecf5, #cdd4e3);
+  color: #7e88a1;
+}
+.hex::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  animation: hex-shine 3.6s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hex-shine {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  75%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hex::after {
+    display: none;
+  }
+}
+
+/* Idle bob for vault medallions — shine (::after) keeps its own transform. */
+@keyframes hex-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  40% {
+    transform: translateY(-5px) rotate(2.5deg) scale(1.04);
+  }
+  70% {
+    transform: translateY(-2px) rotate(-1.5deg) scale(1.02);
+  }
+}
+.hex-float {
+  animation: hex-float 3.4s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+  will-change: transform;
+}
+
+/* Glyph inside the medallion breathes on a shorter, offset cycle. */
+@keyframes hex-glyph {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+.hex-float > svg {
+  animation: hex-glyph 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--d, 0ms) + 400ms);
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-float {
+    animation: none;
+  }
+  .hex-float > svg {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Breathing halo behind a rare / legendary medallion. */
+@keyframes aura-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+}
+.aura {
+  animation: aura-pulse 4.2s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .aura {
+    animation: none;
+    opacity: 0.45;
+  }
+}
+
+/* ---- badge vault flip cards ---- */
+.flip {
+  perspective: 900px;
+}
+.flip-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.flip:hover .flip-inner,
+.flip:focus-visible .flip-inner,
+.flip[data-flipped='true'] .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+/* Left-anchored bar fill, used by the level ladder and the simulator. */
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.bar-grow {
+  transform-origin: left center;
+  animation: bar-grow 1s var(--ease-out-expo) both;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow {
+    animation: none;
+  }
+}
+
+/* Coin for the credit-rate figure. It rocks rather than spinning a full turn:
+ * a 360° rotation spends part of every cycle edge-on, which reads as a glitch
+ * on a still (and in a screenshot) rather than as motion. */
+@keyframes coin-spin {
+  0%,
+  100% {
+    transform: rotateY(-26deg);
+  }
+  50% {
+    transform: rotateY(26deg);
+  }
+}
+.coin-spin {
+  transform-style: preserve-3d;
+  animation: coin-spin 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-spin {
+    animation: none;
+  }
 }
 
 /* ------------------------------------------------------------------ *

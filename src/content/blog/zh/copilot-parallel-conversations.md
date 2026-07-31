@@ -3,7 +3,7 @@ title: 'Copilot 登场：并行对话，你在浏览，它在构建'
 description: '工作区 Copilot 已上线 — 打开的对话排成标签条、构建在后台持续运行、被打断的任务可以恢复，还会在含糊时提出澄清问题而不是靠猜。'
 pubDate: 2026-07-26
 heroImage: ../../../assets/blog/copilot.svg
-tags: ['产品', 'Copilot', 'AI']
+tags: ['产品', 'copilot', 'ai']
 ---
 
 Copilot 是路线图上的第二个承诺：一个理解你画布、而不只是理解提示词的助手。它现已在 Nexow 上线 — 还带来了一个我们原本没有承诺的本事：它可以同时进行 **多个对话**，而且在你移开视线时，它们全都在继续工作。

@@ -1,0 +1,597 @@
+---
+/**
+ * /community — social feed, research boards & dashboards, reputation,
+ * referrals (soon), USDC marketplace on Solana, and the coming Nexow DAO.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import {
+  claimHandleAppUrl,
+  communityAppUrl,
+  communityGrowItemHref,
+  communityHeroChipHref,
+  communityResearchItemHref,
+  communitySocialItemHref,
+  panelAppUrl,
+} from '../../lib/appDeepLinks';
+import Layout from '../../layouts/Layout.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import CommunityMock from '../CommunityMock.astro';
+import CommunityNetwork from '../CommunityNetwork.astro';
+import ResearchBoardMock from '../ResearchBoardMock.astro';
+import MarketplaceFlow from '../MarketplaceFlow.astro';
+import DaoOrbit from '../DaoOrbit.astro';
+import ReferralOrbit from '../ReferralOrbit.astro';
+import BallotGlyph from '../BallotGlyph.astro';
+import CtaBand from '../sections/CtaBand.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).communityPage ?? useContent('en').communityPage!;
+const badgeIcon = getPageBadgeIcon('/community');
+
+const hrefJoin = communityAppUrl({ tab: 'discover', signup: true });
+const hrefMarketplace = panelAppUrl('marketplace');
+const hrefDao = communityAppUrl({ tab: 'dao' });
+
+/** Stable glyph kinds aligned with `en` proposal order (tag copy is localized). */
+const BALLOT_KINDS = ['treasury', 'rewards', 'roadmap', 'governance', 'fees', 'moderation'] as const;
+const hrefClaim = claimHandleAppUrl();
+
+const sections = [
+  { id: 'hero', label: t.hero.badge },
+  { id: 'social', label: t.social.eyebrow },
+  { id: 'research', label: t.research.eyebrow },
+  { id: 'grow', label: t.grow.eyebrow },
+  { id: 'referrals', label: t.referrals.eyebrow },
+  { id: 'marketplace', label: t.marketplace.eyebrow },
+  { id: 'dao', label: t.dao.eyebrow },
+  { id: 'cta', label: t.cta.primary },
+];
+---
+
+<Layout lang={lang} route="/community" title={t.meta.title} description={t.meta.description} sections={sections}>
+  <!-- Hero -->
+  <section id="hero" class="relative scroll-mt-20 overflow-hidden pt-32 pb-28 sm:pt-40 sm:pb-36">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div
+        class="absolute inset-0 opacity-20 [mask-image:radial-gradient(62%_48%_at_50%_8%,black,transparent)]"
+        style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 10%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-brand-300) 10%, transparent) 1px, transparent 1px); background-size:64px 64px"
+      >
+      </div>
+    </div>
+
+    <CommunityNetwork />
+
+    <div class="container-page relative text-center">
+      <span class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-300/40 bg-brand-50/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 backdrop-blur dark:border-white/8 dark:bg-brand-400/12 dark:text-brand-300" style="--enter-delay:0.05s">
+        {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
+        {t.hero.badge}
+      </span>
+      <h1 class="mx-auto mt-8 max-w-4xl text-center font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 dark:text-white sm:mt-9 sm:text-5xl md:text-6xl lg:text-[4.35rem]">
+        <span class="block" data-text-appear data-text-appear-delay="0.12">{t.hero.titleLead}</span>
+        <span class="block text-gradient-live" data-text-appear data-text-appear-delay="0.22">{t.hero.titleGradient}</span>
+        <span class="block" data-text-appear data-text-appear-delay="0.32">{t.hero.titleTail}</span>
+      </h1>
+      <p class="enter mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300" style="--enter-delay:0.42s">
+        {t.hero.subtitle}
+      </p>
+      <div class="enter mt-10 flex flex-wrap items-center justify-center gap-3" style="--enter-delay:0.52s">
+        <Button href={hrefJoin} size="lg" variant="gradient" external iconRight="arrow">{t.hero.ctaPrimary}</Button>
+        <Button href={hrefMarketplace} variant="secondary" size="lg" external icon="store">{t.hero.ctaSecondary}</Button>
+      </div>
+      <ul class="reveal-stagger mx-auto mt-16 flex max-w-3xl flex-wrap items-center justify-center gap-2.5">
+        {
+          t.hero.chips.map((chip, i) => (
+            <li>
+              <a
+                href={communityHeroChipHref(i)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex rounded-full border border-ink-900/8 bg-white/80 px-3.5 py-1.5 font-mono text-xs text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300/50 hover:text-brand-800 dark:border-white/8 dark:bg-white/[0.04] dark:text-ink-300 dark:hover:text-brand-300"
+              >
+                {chip}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="hairline-gold absolute inset-x-0 bottom-0"></div>
+  </section>
+
+  <!-- Social -->
+  <section id="social" class="relative scroll-mt-20 overflow-hidden py-24 sm:py-32">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="animate-glow absolute top-1/2 -right-40 size-[460px] -translate-y-1/2 blur-2xl glow-brand"></div>
+    </div>
+    <div class="container-page relative">
+      <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <div class="reveal min-w-0" data-motion="slide-l">
+          <SectionHeading
+            eyebrow={t.social.eyebrow}
+            title={t.social.title}
+            subtitle={t.social.subtitle}
+            align="left"
+            gradientTitle
+            class="max-w-xl"
+          />
+          <ul class="mt-11 space-y-4">
+            {
+              t.social.items.map((f) => (
+                <li>
+                  <a
+                    href={communitySocialItemHref(f.icon)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-brand-50/60 dark:hover:bg-white/[0.04]"
+                  >
+                    <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:bg-brand-100 group-hover:ring-brand-300/70 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                      <Icon name={f.icon} class="size-5" />
+                    </span>
+                    <div>
+                      <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+                      <p class="mt-1 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+                    </div>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="reveal min-w-0" data-motion="slide-r tilt">
+          <div class="animate-float">
+            <CommunityMock />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="research" class="relative scroll-mt-20 overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb]/70 py-24 sm:py-32 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="animate-glow absolute top-1/2 -left-40 size-[460px] -translate-y-1/2 blur-2xl glow-brand"></div>
+    </div>
+    <div class="container-page relative">
+      <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+        <div class="reveal min-w-0 order-2 lg:order-1" data-motion="slide-l tilt">
+          <ResearchBoardMock />
+        </div>
+        <div class="reveal min-w-0 order-1 lg:order-2" data-motion="slide-r">
+          <SectionHeading
+            eyebrow={t.research.eyebrow}
+            title={t.research.title}
+            subtitle={t.research.subtitle}
+            align="left"
+            gradientTitle
+            class="max-w-xl"
+          />
+          <ul class="mt-11 space-y-4">
+            {
+              t.research.items.map((f) => (
+                <li>
+                  <a
+                    href={communityResearchItemHref(f.icon)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex gap-4 rounded-2xl p-3 transition-colors hover:bg-white/80 dark:hover:bg-white/[0.04]"
+                  >
+                    <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-sm ring-1 ring-brand-200/80 transition-all duration-300 group-hover:scale-105 group-hover:ring-brand-300/70 dark:bg-white/[0.04] dark:text-brand-300 dark:ring-brand-400/25">
+                      <Icon name={f.icon} class="size-5" />
+                    </span>
+                    <div>
+                      <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+                      <p class="mt-1 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+                    </div>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grow -->
+  <section id="grow" class="relative scroll-mt-20 overflow-hidden py-24 sm:py-32">
+    <div class="container-page relative">
+      <SectionHeading
+        eyebrow={t.grow.eyebrow}
+        title={t.grow.title}
+        subtitle={t.grow.subtitle}
+        gradientTitle
+        class="mx-auto"
+      />
+      <div class="reveal-stagger mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          t.grow.items.map((f, i) => (
+            <a
+              href={communityGrowItemHref(f.icon)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 bg-white p-6 shadow-sm shadow-ink-950/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40"
+              data-motion="rise"
+              style={`--d:${i * 0.06}s`}
+            >
+              <div
+                class="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+                style="background:radial-gradient(circle, var(--color-brand-200), transparent 70%)"
+              />
+              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                <Icon name={f.icon} class="size-5" />
+              </span>
+              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Referrals -->
+  <section id="referrals" class="relative scroll-mt-20 overflow-hidden border-t border-brand-100/60 bg-gradient-to-b from-transparent via-[#f5faf9]/80 to-transparent py-28 sm:py-36 dark:border-white/8 dark:bg-white/[0.015] dark:bg-none">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div
+        class="aurora-a absolute -top-24 left-1/3 size-[520px] rounded-full opacity-45 blur-3xl dark:opacity-40"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-b absolute -bottom-28 right-0 size-[480px] rounded-full opacity-35 blur-3xl dark:opacity-30"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      >
+      </div>
+    </div>
+
+    <div class="container-page relative">
+      <div class="grid items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+        <div class="reveal" data-motion="slide-l">
+          <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50/90 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 backdrop-blur dark:border-white/8 dark:bg-brand-400/12 dark:text-brand-300">
+            {t.referrals.eyebrow}
+            <span class="ref-badge-pulse rounded-full bg-accent-500/20 px-2 py-0.5 text-[0.65rem] text-accent-700">{t.referrals.badge}</span>
+          </span>
+          <h2 class="mt-6 max-w-xl font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.85rem] md:leading-[1.08] dark:text-white">
+            <span class="text-gradient">{t.referrals.title}</span>
+          </h2>
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.referrals.subtitle}</p>
+          <p class="mt-4 max-w-xl text-sm leading-relaxed text-ink-500 dark:text-ink-400">{t.referrals.body}</p>
+          <div class="mt-8">
+            <Button href={hrefClaim} size="lg" variant="gradient" external iconRight="arrow">
+              {t.referrals.cta}
+            </Button>
+          </div>
+        </div>
+        <div class="reveal" data-motion="slide-r">
+          <ReferralOrbit />
+        </div>
+      </div>
+
+      <div class="reveal-stagger mt-20 grid gap-5 sm:grid-cols-3">
+        {
+          t.referrals.pillars.map((f, i) => (
+            <a
+              href={hrefClaim}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative overflow-hidden rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-300/50 hover:shadow-lg hover:shadow-brand-500/10 dark:border-white/10 dark:bg-white/[0.04]"
+              data-motion="rise"
+              style={`--d:${i * 0.08}s`}
+            >
+              <div
+                class="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-70"
+                style="background:radial-gradient(circle, var(--color-accent-200), transparent 70%)"
+              />
+              <span class="inline-flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                <Icon name={f.icon} class="size-5" />
+              </span>
+              <h3 class="mt-5 font-display text-lg font-semibold tracking-tight text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Marketplace -->
+  <section id="marketplace" class="relative scroll-mt-20 overflow-hidden border-t border-brand-100/80 bg-[#f7fbfb]/70 py-24 sm:py-36 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div
+        class="aurora-a absolute -top-20 left-1/2 size-[640px] -translate-x-1/2 rounded-full opacity-50 blur-3xl dark:opacity-40"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-b absolute bottom-0 right-0 size-[480px] rounded-full opacity-35 blur-3xl dark:opacity-30"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-c absolute left-[12%] top-[40%] size-[360px] rounded-full opacity-30 blur-3xl dark:opacity-25"
+        style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+      >
+      </div>
+      <!-- Decorative Solana chain SVG -->
+      <svg class="absolute left-1/2 top-24 hidden h-40 w-[min(90%,720px)] -translate-x-1/2 opacity-40 lg:block" viewBox="0 0 720 120" fill="none">
+        <path class="mkt-bg-path" pathLength="1" d="M40 60 C 160 20 240 100 360 60 S 560 20 680 60" stroke="url(#mkt-bg-grad)" stroke-width="1.5" stroke-linecap="round"></path>
+        <defs>
+          <linearGradient id="mkt-bg-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
+            <stop offset="50%" stop-color="var(--color-brand-400)" stop-opacity="0.7"></stop>
+            <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <circle r="3" fill="var(--color-brand-400)">
+          <animateMotion dur="8s" repeatCount="indefinite" path="M40 60 C 160 20 240 100 360 60 S 560 20 680 60"></animateMotion>
+        </circle>
+      </svg>
+    </div>
+
+    <div class="container-page relative">
+      <SectionHeading
+        eyebrow={t.marketplace.eyebrow}
+        title={t.marketplace.title}
+        subtitle={t.marketplace.subtitle}
+        class="mx-auto max-w-3xl"
+      />
+      <p class="reveal mx-auto mt-7 max-w-3xl text-center text-base leading-relaxed text-ink-600 dark:text-ink-300 sm:text-lg">
+        {t.marketplace.intro}
+      </p>
+
+      <div class="reveal-stagger mt-16 grid gap-5 sm:grid-cols-2">
+        {
+          t.marketplace.pillars.map((f) => (
+            <a
+              href={hrefMarketplace}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex gap-4 rounded-3xl border border-ink-900/8 bg-white/90 p-6 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md dark:border-white/10 dark:bg-white/[0.04]"
+            >
+              <span class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80 transition-transform duration-300 group-hover:scale-110 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                <Icon name={f.icon} class="size-5" />
+              </span>
+              <div>
+                <h3 class="font-display text-lg font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="mt-24 rounded-[2rem] border border-brand-200/50 bg-white/70 p-8 shadow-sm backdrop-blur sm:p-12 dark:border-white/8 dark:bg-white/[0.04]">
+        <div class="mx-auto max-w-2xl text-center">
+          <h3 class="font-display text-2xl font-semibold tracking-tight text-ink-950 sm:text-3xl md:text-[2.15rem] dark:text-white" data-motion="rise">
+            <span class="text-gradient">{t.marketplace.railTitle}</span>
+          </h3>
+          <p class="mt-4 text-base leading-relaxed text-ink-600 dark:text-ink-300">{t.marketplace.railBody}</p>
+        </div>
+        <div class="mt-12">
+          <MarketplaceFlow steps={t.marketplace.railSteps.map((s) => ({ n: s.n, title: s.title }))} />
+        </div>
+        <ol class="mt-14 grid gap-4 lg:grid-cols-4">
+          {
+            t.marketplace.railSteps.map((s) => (
+              <li class="group rounded-2xl border border-ink-900/8 bg-white/90 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-300/40 hover:shadow-md dark:border-white/10 dark:bg-white/[0.04]">
+                <span class="font-mono text-xs text-brand-600 dark:text-brand-300">{s.n}</span>
+                <h4 class="mt-2 font-display text-base font-semibold text-ink-950 dark:text-white">{s.title}</h4>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{s.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <ul class="mt-10 space-y-3">
+          {
+            t.marketplace.railNotes.map((note) => (
+              <li class="flex gap-3 text-sm leading-relaxed text-ink-600 dark:text-ink-300">
+                <Icon name="check" class="mt-0.5 size-4 shrink-0 text-brand-600" />
+                <span>{note}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="mt-10 flex justify-center">
+          <Button href={hrefMarketplace} size="lg" external iconRight="arrow" icon="store">
+            {t.hero.ctaSecondary}
+          </Button>
+        </div>
+      </div>
+
+      <div class="mt-20">
+        <h3 class="text-center font-display text-xl font-semibold text-ink-950 dark:text-white sm:text-2xl">
+          {t.marketplace.kindsTitle}
+        </h3>
+        <div class="reveal-stagger mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {
+            t.marketplace.kinds.map((k) => (
+              <a
+                href={hrefMarketplace}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group rounded-2xl border border-brand-200/60 bg-gradient-to-br from-white to-brand-50/60 px-4 py-5 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/50 hover:shadow-md dark:border-white/8 dark:bg-white/[0.04] dark:bg-none"
+              >
+                <p class="font-display text-sm font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{k.label}</p>
+                <p class="mt-2 text-xs leading-relaxed text-ink-600 dark:text-ink-300">{k.body}</p>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAO -->
+  <section id="dao" class="relative scroll-mt-20 overflow-hidden bg-ink-950 py-28 text-white sm:py-36">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="bg-grid absolute inset-0 opacity-[0.35]"></div>
+      <div
+        class="aurora-a absolute -top-24 left-1/4 size-[520px] rounded-full opacity-40 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-b absolute -bottom-32 right-0 size-[560px] rounded-full opacity-35 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      >
+      </div>
+      <div
+        class="aurora-c absolute top-1/3 right-1/4 size-[360px] rounded-full opacity-25 blur-3xl"
+        style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+      >
+      </div>
+    </div>
+
+    <div class="container-page relative">
+      <div class="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+        <div class="reveal order-2 lg:order-1">
+          <DaoOrbit />
+        </div>
+        <div class="reveal order-1 lg:order-2" data-motion="slide-r">
+          <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-300 backdrop-blur">
+            {t.dao.eyebrow}
+            <span class="dao-badge-pulse rounded-full bg-accent-500/25 px-2 py-0.5 text-[0.65rem] text-accent-200">{t.dao.badge}</span>
+          </span>
+          <h2 class="mt-6 max-w-xl font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.85rem] md:leading-[1.08]">
+            <span class="text-gradient-live">{t.dao.title}</span>
+          </h2>
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-300">{t.dao.subtitle}</p>
+          <p class="mt-4 max-w-xl text-sm leading-relaxed text-ink-400">{t.dao.body}</p>
+          <div class="mt-8">
+            <Button href={hrefDao} size="lg" variant="outline" external iconRight="arrow">
+              {t.dao.eyebrow}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-stagger mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          t.dao.pillars.map((f) => (
+            <a
+              href={hrefDao}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-brand-400/30 hover:bg-white/[0.07]"
+            >
+              <span class="inline-flex size-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-300 ring-1 ring-brand-400/20 transition-transform duration-300 group-hover:scale-110">
+                <Icon name={f.icon} class="size-5" />
+              </span>
+              <h3 class="mt-4 font-display text-base font-semibold text-white">{f.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-400">{f.body}</p>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="mt-20 rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur sm:p-9">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h3 class="font-mono text-xs uppercase tracking-widest text-ink-400">{t.dao.previewTitle}</h3>
+          <span class="rounded-full bg-white/8 px-2.5 py-1 font-mono text-[0.65rem] text-ink-300">{t.dao.previewBadge}</span>
+        </div>
+        <ul class="mt-7 grid gap-4 sm:grid-cols-2">
+          {
+            t.dao.proposals.map((p, i) => (
+              <li class="dao-proposal group rounded-2xl border border-white/8 bg-ink-950/40 p-4 transition-colors hover:border-brand-400/25 hover:bg-ink-950/60" style={`--d:${0.15 + i * 0.08}s`}>
+                <a href={hrefDao} target="_blank" rel="noopener noreferrer" class="block">
+                  <div class="flex items-start gap-3.5">
+                    <BallotGlyph kind={BALLOT_KINDS[i % BALLOT_KINDS.length]} class="mt-0.5 transition-transform duration-300 group-hover:scale-105" />
+                    <div class="min-w-0 flex-1">
+                      <div class="flex flex-wrap items-start justify-between gap-3">
+                        <div class="min-w-0">
+                          <span class="rounded-full bg-brand-500/15 px-2 py-0.5 font-mono text-[0.6rem] text-brand-300">{p.tag}</span>
+                          <p class="mt-2 font-display text-sm font-semibold text-white sm:text-base">{p.title}</p>
+                        </div>
+                        <div class="shrink-0 text-right font-mono text-xs text-ink-400">
+                          <p class="text-brand-300">{t.dao.forLabel.replace('{pct}', String(p.pct))}</p>
+                          <p>{t.dao.votesLabel.replace('{n}', String(p.votes))}</p>
+                        </div>
+                      </div>
+                      <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-white/8">
+                        <div
+                          class="dao-bar h-full rounded-full bg-gradient-to-r from-brand-400 via-accent-400 to-plasma-400"
+                          style={`--w:${p.pct}%`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-7 text-center text-sm text-ink-500">{t.dao.footer}</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    lang={lang}
+    title={t.cta.title}
+    subtitle={t.cta.subtitle}
+    primary={t.cta.primary}
+    secondary={t.cta.secondary}
+    secondaryHref={localizePath('/features', lang)}
+    primaryHref={hrefClaim}
+    fireworks
+  />
+</Layout>
+
+<style>
+  .mkt-bg-path {
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: mkt-bg-draw 2.4s var(--ease-out-expo) 0.2s forwards;
+  }
+  .dao-badge-pulse,
+  .ref-badge-pulse {
+    animation: dao-badge 2.2s ease-in-out infinite;
+  }
+  .dao-proposal {
+    animation: dao-prop-in 0.8s var(--ease-out-expo) both;
+    animation-delay: var(--d, 0s);
+  }
+  .dao-bar {
+    width: 0;
+    animation: dao-bar-fill 1.4s var(--ease-out-expo) forwards;
+    animation-delay: calc(var(--d, 0s) + 0.35s);
+  }
+
+  @keyframes mkt-bg-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes dao-badge {
+    0%, 100% { opacity: 0.75; box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent-400) 0%, transparent); }
+    50% { opacity: 1; box-shadow: 0 0 0 6px color-mix(in oklab, var(--color-accent-400) 18%, transparent); }
+  }
+  @keyframes dao-prop-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 0.9; transform: none; }
+  }
+  @keyframes dao-bar-fill {
+    from { width: 0; }
+    to { width: var(--w, 70%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mkt-bg-path { animation: none; stroke-dashoffset: 0; }
+    .dao-badge-pulse,
+    .ref-badge-pulse,
+    .dao-proposal {
+      animation: none;
+    }
+    .dao-bar {
+      animation: none;
+      width: var(--w, 70%);
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath } from '../../i18n/utils';
+import { claimHandleAppUrl } from '../../lib/appDeepLinks';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import FeatureCard from '../FeatureCard.astro';
+import CtaBand from '../sections/CtaBand.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).invitePage!;
+---
+
+<Layout lang={lang} route="/invite" title={t.meta.title} description={t.meta.description} sections={[
+  { id: 'overview', label: t.hero.badge },
+  { id: 'pillars', label: t.pillars[1]?.title ?? t.hero.badge },
+  { id: 'cta', label: t.ctaPrimary },
+]}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon('/invite')}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section id="overview" class="container-page scroll-mt-20 pb-8">
+    <p class="reveal mx-auto max-w-2xl text-center text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.body}</p>
+    {/* Filled in by the script below from `?code=` — `/r/<code>` redirects here. */}
+    <div
+      id="invite-code-card"
+      hidden
+      class="reveal mx-auto mt-8 max-w-md rounded-2xl border border-ink-900/10 bg-[#f7fbfb] px-5 py-4 text-center dark:border-white/10 dark:bg-white/[0.02]"
+    >
+      <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">{t.codeLabel}</p>
+      <p id="invite-code-value" class="mt-1 font-display text-2xl font-semibold tracking-tight text-ink-950 dark:text-white"></p>
+      <p class="mt-2 text-xs text-ink-500 dark:text-ink-400">{t.codeHint}</p>
+    </div>
+  </section>
+
+  <section id="pillars" class="container-page scroll-mt-20 py-10 sm:py-14">
+    <div class="reveal-stagger mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
+      {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
+    </div>
+  </section>
+
+  <div data-invite-cta>
+    <CtaBand
+      lang={lang}
+      title={t.hero.title}
+      subtitle={t.hero.subtitle}
+      primary={t.ctaPrimary}
+      primaryHref={claimHandleAppUrl()}
+      secondary={t.ctaSecondary}
+      secondaryHref={localizePath('/community', lang)}
+    />
+  </div>
+</Layout>
+
+<script>
+  // `/r/<code>` is a `_redirects` rewrite to `/invite?code=<code>`, so the referral
+  // code only exists on the client. Show it, and carry it into the app CTA as `ref`.
+  const params = new URLSearchParams(window.location.search);
+  const code = (params.get('code') ?? params.get('ref') ?? '')
+    .trim()
+    .replace(/[^A-Za-z0-9_-]/g, '')
+    .slice(0, 64);
+
+  if (code) {
+    const value = document.getElementById('invite-code-value');
+    const card = document.getElementById('invite-code-card');
+    if (value && card) {
+      value.textContent = code;
+      card.hidden = false;
+    }
+    const cta = document.querySelector<HTMLAnchorElement>('[data-invite-cta] a[href]');
+    if (cta) {
+      // String-append rather than URLSearchParams: the app URL uses bare flags
+      // (`/?signup`) that a re-serialized query would turn into `signup=`.
+      const sep = cta.href.includes('?') ? '&' : '?';
+      cta.href = `${cta.href}${sep}ref=${encodeURIComponent(code)}`;
+    }
+  }
+</script>

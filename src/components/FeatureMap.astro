@@ -1,0 +1,316 @@
+---
+/**
+ * Interactive surface explorer — grouped chips + detail panel.
+ * Select a surface to read more, open the app, or jump to docs.
+ */
+import { localizePath } from '../i18n/utils';
+import type { Lang } from '../i18n/config';
+import { ICON_PATHS } from './icon-paths';
+import FeatureMapArt from './FeatureMapArt.astro';
+import {
+  featureMapAppHref,
+  type FeatureMapGroup,
+  type FeatureMapNode,
+} from '../lib/featureMap';
+
+interface Props {
+  lang: Lang;
+  groups: FeatureMapGroup[];
+  hint: string;
+  moreLabel: string;
+  openLabel: string;
+  closeLabel: string;
+}
+
+const { lang, groups, hint, moreLabel, openLabel } = Astro.props;
+
+const flatNodes: FeatureMapNode[] = groups.flatMap((g) => g.nodes);
+const initial = flatNodes[0];
+
+const payload = flatNodes.map((n) => ({
+  id: n.id,
+  title: n.title,
+  body: n.body,
+  iconPath: ICON_PATHS[n.icon] ?? ICON_PATHS.sparkles,
+  moreHref: localizePath(n.morePath, lang),
+  openHref: featureMapAppHref(n.app),
+  moreLabel,
+  openLabel,
+}));
+
+function iconPath(icon: string) {
+  return ICON_PATHS[icon] ?? ICON_PATHS.sparkles;
+}
+---
+
+<div
+  class="feature-map reveal relative mx-auto w-full max-w-6xl"
+  data-feature-map
+>
+  <p class="mb-6 text-center font-mono text-xs tracking-wide text-ink-500 dark:text-ink-400">
+    {hint}
+  </p>
+
+  <div
+    class="overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40"
+  >
+    <div class="grid gap-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+      <!-- Surface picker -->
+      <div class="border-b border-ink-900/8 dark:border-white/8 p-5 sm:p-6 lg:border-b-0 lg:border-r">
+        <div class="space-y-6">
+          {
+            groups.map((group) => (
+              <div>
+                {group.title && (
+                  <h3 class="mb-3 font-mono text-[0.65rem] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
+                    {group.title}
+                  </h3>
+                )}
+                <ul class="flex flex-wrap gap-2" role="list">
+                  {group.nodes.map((node) => {
+                    const path = iconPath(node.icon);
+                    const selected = initial?.id === node.id;
+                    return (
+                      <li>
+                        <button
+                          type="button"
+                          class:list={[
+                            'feature-map-node inline-flex items-center gap-2 rounded-full px-3 py-2 text-left text-sm font-medium transition-all duration-200 ring-1',
+                            selected
+                              ? 'bg-brand-500/15 text-brand-700 dark:text-brand-300 ring-brand-400/35'
+                              : 'text-ink-600 dark:text-ink-300 ring-ink-900/10 dark:ring-white/10 hover:text-ink-900 dark:hover:text-white hover:ring-ink-900/20 dark:hover:ring-white/20',
+                          ]}
+                          data-fm-node={node.id}
+                          aria-pressed={selected ? 'true' : 'false'}
+                          aria-controls="fm-detail"
+                        >
+                          <span
+                            class:list={[
+                              'inline-flex size-7 shrink-0 items-center justify-center rounded-lg',
+                              selected
+                                ? 'bg-brand-100 dark:bg-brand-400/18 text-brand-700 dark:text-brand-300'
+                                : 'bg-[#f7fbfb] dark:bg-white/[0.06] text-brand-700 dark:text-brand-300',
+                            ]}
+                            aria-hidden="true"
+                            data-fm-node-icon
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              class="size-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="1.75"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d={path}></path>
+                            </svg>
+                          </span>
+                          <span class="leading-none">{node.title}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Detail panel -->
+      <div
+        class="flex flex-col gap-5 bg-[#f7fbfb] dark:bg-white/[0.02] p-5 sm:p-6"
+        id="fm-detail"
+        data-fm-detail
+        role="region"
+        aria-live="polite"
+      >
+        <div class="flex items-start gap-3">
+          <span
+            class="mt-0.5 inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-400/12 text-brand-700 dark:text-brand-300 ring-1 ring-brand-200/80 dark:ring-brand-400/25"
+            aria-hidden="true"
+            data-fm-detail-icon
+          >
+            {
+              initial && (
+                <svg
+                  viewBox="0 0 24 24"
+                  class="size-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d={iconPath(initial.icon)} data-fm-detail-path></path>
+                </svg>
+              )
+            }
+          </span>
+          <div class="min-w-0">
+            <h3 class="font-display text-xl font-semibold text-ink-950 dark:text-white" data-fm-title>
+              {initial?.title ?? ''}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300" data-fm-body>
+              {initial?.body ?? ''}
+            </p>
+          </div>
+        </div>
+
+        <FeatureMapArt initial={initial?.id} />
+
+        <div class="flex flex-wrap gap-2">
+          <a
+            class="inline-flex h-10 items-center justify-center rounded-full bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-4 text-sm font-medium text-white shadow-sm transition hover:brightness-105"
+            data-fm-open
+            href={initial ? featureMapAppHref(initial.app) : '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {openLabel}
+          </a>
+          <a
+            class="inline-flex h-10 items-center justify-center rounded-full bg-white dark:bg-white/[0.06] px-4 text-sm font-medium text-ink-900 dark:text-white ring-1 ring-ink-900/10 dark:ring-white/12 transition hover:ring-ink-900/20 dark:hover:ring-white/20"
+            data-fm-more
+            href={initial ? localizePath(initial.morePath, lang) : '#'}
+          >
+            {moreLabel}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline type="application/json" id="feature-map-data" set:html={JSON.stringify(payload)} />
+</div>
+
+<style>
+  .feature-map-node:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  type NodePayload = {
+    id: string;
+    title: string;
+    body: string;
+    iconPath: string;
+    moreHref: string;
+    openHref: string;
+    moreLabel: string;
+    openLabel: string;
+  };
+
+  let abort: AbortController | null = null;
+
+  function initFeatureMaps() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+
+    document.querySelectorAll<HTMLElement>('[data-feature-map]').forEach((root) => {
+      const dataEl = root.querySelector<HTMLScriptElement>('#feature-map-data');
+      if (!dataEl?.textContent) return;
+      let nodes: NodePayload[] = [];
+      try {
+        nodes = JSON.parse(dataEl.textContent) as NodePayload[];
+      } catch {
+        return;
+      }
+      const byId = new Map(nodes.map((n) => [n.id, n]));
+      const titleEl = root.querySelector<HTMLElement>('[data-fm-title]');
+      const bodyEl = root.querySelector<HTMLElement>('[data-fm-body]');
+      const openEl = root.querySelector<HTMLAnchorElement>('[data-fm-open]');
+      const moreEl = root.querySelector<HTMLAnchorElement>('[data-fm-more]');
+      const detailPath = root.querySelector<SVGPathElement>('[data-fm-detail-path]');
+      const scenes = Array.from(root.querySelectorAll<SVGElement>('[data-fm-art]'));
+      const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-fm-node]'));
+      if (!buttons.length) return;
+
+      const activeCls = ['bg-brand-500/15', 'text-brand-700', 'dark:text-brand-300', 'ring-brand-400/35'];
+      const idleCls = [
+        'text-ink-600',
+        'dark:text-ink-300',
+        'ring-ink-900/10',
+        'dark:ring-white/10',
+        'hover:text-ink-900',
+        'dark:hover:text-white',
+        'hover:ring-ink-900/20',
+        'dark:hover:ring-white/20',
+      ];
+      const iconActiveCls = ['bg-brand-100', 'dark:bg-brand-400/18'];
+      const iconIdleCls = ['bg-[#f7fbfb]', 'dark:bg-white/[0.06]'];
+
+      const select = (id: string) => {
+        const node = byId.get(id);
+        if (!node) return;
+
+        buttons.forEach((btn) => {
+          const on = btn.dataset.fmNode === id;
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          activeCls.forEach((c) => btn.classList.toggle(c, on));
+          idleCls.forEach((c) => btn.classList.toggle(c, !on));
+
+          const icon = btn.querySelector<HTMLElement>('[data-fm-node-icon]');
+          if (icon) {
+            iconActiveCls.forEach((c) => icon.classList.toggle(c, on));
+            iconIdleCls.forEach((c) => icon.classList.toggle(c, !on));
+          }
+        });
+
+        if (titleEl) titleEl.textContent = node.title;
+        if (bodyEl) bodyEl.textContent = node.body;
+        if (detailPath) detailPath.setAttribute('d', node.iconPath);
+        // Hidden scenes are `display: none`, so showing one replays its intro.
+        scenes.forEach((scene) => {
+          scene.classList.toggle('is-active', scene.getAttribute('data-fm-art') === id);
+        });
+        if (openEl) {
+          openEl.href = node.openHref;
+          openEl.textContent = node.openLabel;
+        }
+        if (moreEl) {
+          moreEl.href = node.moreHref;
+          moreEl.textContent = node.moreLabel;
+        }
+      };
+
+      buttons.forEach((btn, i) => {
+        btn.addEventListener(
+          'click',
+          (e) => {
+            e.preventDefault();
+            const id = btn.dataset.fmNode;
+            if (id) select(id);
+          },
+          { signal },
+        );
+        btn.addEventListener(
+          'keydown',
+          (e) => {
+            if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft' && e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
+              return;
+            }
+            e.preventDefault();
+            const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
+            const next = (i + dir + buttons.length) % buttons.length;
+            const nextId = buttons[next].dataset.fmNode;
+            if (nextId) {
+              select(nextId);
+              buttons[next].focus();
+            }
+          },
+          { signal },
+        );
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initFeatureMaps);
+  initFeatureMaps();
+</script>

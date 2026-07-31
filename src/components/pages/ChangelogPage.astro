@@ -1,0 +1,80 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath, dateLocale } from '../../i18n/utils';
+import { getPosts, slugOf } from '../../i18n/blog';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import Button from '../Button.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).changelogPage!;
+const all = await getPosts(lang);
+/** Product-tagged posts double as the marketing changelog. */
+const PRODUCT_TAGS = new Set(['product', 'roadmap', 'agents', 'automation', 'marketplace', 'community']);
+const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))).slice(0, 24);
+
+const sections = [
+  { id: 'hero', label: t.hero.badge },
+  { id: 'updates', label: t.readMore },
+];
+---
+
+<Layout lang={lang} route="/changelog" title={t.meta.title} description={t.meta.description} sections={sections}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon('/changelog')}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section id="updates" class="container-page scroll-mt-20 pb-20">
+    {
+      posts.length === 0 ? (
+        <p class="reveal mx-auto max-w-xl text-center text-ink-600 dark:text-ink-300">{t.empty}</p>
+      ) : (
+        <ol class="reveal-stagger mx-auto max-w-3xl space-y-0">
+          {posts.map((post) => {
+            const slug = slugOf(post);
+            const href = localizePath(`/blog/${slug}`, lang);
+            const date = post.data.pubDate.toLocaleDateString(dateLocale(lang), {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            });
+            return (
+              <li class="relative border-l border-ink-900/10 dark:border-white/10 py-6 pl-8 first:pt-0 last:pb-0">
+                <span class="absolute -left-1.5 top-8 size-3 rounded-full bg-brand-500 ring-4 ring-white first:top-2 dark:ring-ink-950" />
+                <time class="font-mono text-xs text-ink-400" datetime={post.data.pubDate.toISOString()}>
+                  {date}
+                </time>
+                <h2 class="mt-2 font-display text-xl font-semibold text-ink-950 dark:text-white">
+                  <a href={href} class="transition-colors hover:text-brand-700 dark:hover:text-brand-300">
+                    {post.data.title}
+                  </a>
+                </h2>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{post.data.description}</p>
+                <a
+                  href={href}
+                  class="mt-3 inline-flex text-sm font-medium text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200"
+                >
+                  {t.readMore}
+                </a>
+              </li>
+            );
+          })}
+        </ol>
+      )
+    }
+
+    <div class="mt-12 flex justify-center">
+      <Button href={localizePath('/blog', lang)} variant="secondary" size="md" iconRight="arrow">
+        {t.viewBlog}
+      </Button>
+    </div>
+  </section>
+</Layout>

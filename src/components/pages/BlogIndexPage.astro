@@ -2,6 +2,7 @@
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { getPosts, slugOf } from '../../i18n/blog';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
 import BlogCard from '../BlogCard.astro';
@@ -12,19 +13,26 @@ interface Props {
 const { lang } = Astro.props;
 const t = useContent(lang).blog;
 const posts = await getPosts(lang);
+
+/** Section rail lists each post card (not the hero). */
+const sections = posts.map((post) => ({
+  id: `post-${slugOf(post)}`,
+  label: post.data.title,
+}));
 ---
 
-<Layout lang={lang} route="/blog" title={t.meta.title} description={t.meta.description}>
-  <PageHero badge={t.title} title={t.title} subtitle={t.subtitle} />
+<Layout lang={lang} route="/blog" title={t.meta.title} description={t.meta.description} sections={sections}>
+  <PageHero badge={t.title} icon={getPageBadgeIcon('/blog')} title={t.title} subtitle={t.subtitle} />
 
   <section class="container-page pb-24 sm:pb-32">
     {
       posts.length === 0 ? (
-        <p class="text-center text-ink-500">—</p>
+        <p class="text-center text-ink-500 dark:text-ink-400">—</p>
       ) : (
         <div class="reveal-stagger grid gap-5 md:grid-cols-2">
           {posts.map((post, i) => (
             <BlogCard
+              id={`post-${slugOf(post)}`}
               lang={lang}
               slug={slugOf(post)}
               title={post.data.title}

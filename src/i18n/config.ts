@@ -26,11 +26,27 @@ export const defaultLang: Lang = 'en';
 /** External + brand constants used across the site. */
 export const SITE = {
   name: 'Nexow',
+  /** Legal entity name for contracts, imprint, and copyright. */
+  legalName: 'Nexow, Inc.',
+  /** Registered / mailing address (Delaware, United States). */
+  address: '2810 N Church St STE 89080 Wilmington, DE 19802, United States',
   domain: 'nexow.ai',
   url: 'https://nexow.ai',
   appUrl: 'https://x.nexow.ai',
-  docsUrl: 'https://x.nexow.ai',
+  /**
+   * Marketing-site help hub (localized via `localizePath`).
+   * In-app docs / the product itself remain at `appUrl`.
+   */
+  docsUrl: '/help',
+  /** Marketing newsletter signup (Nuxt API on the app host). */
+  newsletterUrl: 'https://x.nexow.ai/api/newsletter',
+  /** Billing / plans waitlist — same newsletter pipeline with a source tag. */
+  waitlistUrl: 'https://x.nexow.ai/api/newsletter',
   email: 'hello@nexow.ai',
+  /** Partnership / sales inbox. */
+  partnersEmail: 'partners@nexow.ai',
+  /** Support inbox. */
+  supportEmail: 'support@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
   x: '@nexow_ai',
 } as const;
