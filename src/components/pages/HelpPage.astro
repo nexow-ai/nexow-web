@@ -31,7 +31,7 @@ const sections = [
     subtitle={t.hero.subtitle}
   />
 
-  <section id="guides" class="container-page scroll-mt-20 pb-16">
+  <section id="guides" class="container-page scroll-mt-20 pt-8 pb-16 sm:pt-12">
     <div class="reveal-stagger mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
         t.guides.map((g) => {
@@ -66,5 +66,6 @@ const sections = [
     primaryHref={localizePath('/contact', lang)}
     secondary={c.nav.launch}
     secondaryHref={SITE.appUrl}
+    secondaryIcon="rocket"
   />
 </Layout>

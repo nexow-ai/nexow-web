@@ -22,14 +22,20 @@ const sections = posts.map((post) => ({
 ---
 
 <Layout lang={lang} route="/blog" title={t.meta.title} description={t.meta.description} sections={sections}>
-  <PageHero badge={t.title} icon={getPageBadgeIcon('/blog')} title={t.title} subtitle={t.subtitle} />
+  <PageHero
+    badge={t.title}
+    icon={getPageBadgeIcon('/blog')}
+    title={t.title}
+    subtitle={t.subtitle}
+    compact
+  />
 
-  <section class="container-page pb-24 sm:pb-32">
+  <section class="container-page pt-8 pb-24 sm:pt-12 sm:pb-32">
     {
       posts.length === 0 ? (
         <p class="text-center text-ink-500 dark:text-ink-400">—</p>
       ) : (
-        <div class="reveal-stagger grid gap-5 md:grid-cols-2">
+        <div class="grid gap-5 md:grid-cols-2">
           {posts.map((post, i) => (
             <BlogCard
               id={`post-${slugOf(post)}`}

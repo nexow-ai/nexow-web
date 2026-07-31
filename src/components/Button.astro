@@ -54,6 +54,13 @@ const sizes: Record<string, string> = {
 
 const rel = external ? 'noopener noreferrer' : undefined;
 const target = external ? '_blank' : undefined;
+
+// The rocket points up, so it lifts off on hover instead of sliding sideways
+// like the arrow does.
+const iconRightMotion =
+  iconRight === 'rocket'
+    ? 'group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+    : 'group-hover:translate-x-0.5';
 ---
 
 <a
@@ -68,7 +75,10 @@ const target = external ? '_blank' : undefined;
     iconRight && (
       <Icon
         name={iconRight}
-        class="size-[1.15em] -mr-0.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+        class:list={[
+          'size-[1.15em] -mr-0.5 shrink-0 transition-transform duration-200',
+          iconRightMotion,
+        ]}
       />
     )
   }

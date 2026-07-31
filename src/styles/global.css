@@ -255,7 +255,8 @@
   --surface-line-soft: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
   --text-strong: var(--color-ink-950);
   --text-body: var(--color-ink-600);
-  --text-muted: var(--color-ink-400);
+  /* ink-400 measured ~3.3:1 on white — below WCAG AA for normal text. */
+  --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
 
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
@@ -263,6 +264,23 @@
   --grad-a: var(--color-brand-600);
   --grad-b: var(--color-sky-500);
   --grad-c: var(--color-accent-600);
+
+  /* Aurora backdrop hues — the drifting blobs behind heroes, CTA bands and
+   * page headers. Light uses pale *-200 tints on white. Dark can't: a pastel
+   * that glows on white goes milky-grey on ink, so `.dark` swaps in saturated
+   * cores (see below). Everything stays token-derived so the per-page accent
+   * remap above still repaints the backdrop. */
+  --aurora-1: var(--color-brand-200); /* primary  — teal */
+  --aurora-2: var(--color-accent-200); /* companion — indigo */
+  --aurora-3: var(--color-sky-200); /* cool third — sky */
+  --aurora-4: var(--color-plasma-200); /* warm counterweight — magenta */
+
+  /* Mesh stops, pre-mixed: geometry lives once on `.aurora-mesh`. */
+  --aurora-mesh-1: color-mix(in oklab, var(--color-brand-300) 55%, transparent);
+  --aurora-mesh-2: color-mix(in oklab, var(--color-accent-300) 48%, transparent);
+  --aurora-mesh-3: color-mix(in oklab, var(--color-plasma-300) 38%, transparent);
+  --aurora-mesh-4: color-mix(in oklab, var(--color-sky-300) 32%, transparent);
+  --aurora-mesh-opacity: 0.85;
 }
 
 .dark {
@@ -274,6 +292,22 @@
   --text-body: var(--color-ink-300);
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-300);
+
+  /* Cold nebula — teal / indigo / sky, no magenta. Saturated cores read as
+   * coloured light on ink instead of the grey haze pale tints turn into, and
+   * dropping the magenta keeps the backdrop in step with the terminal-style
+   * dark sections downpage. The magenta slot folds into sky; no single
+   * composition uses both, so `--aurora-3` and `--aurora-4` never collide. */
+  --aurora-1: var(--color-brand-500);
+  --aurora-2: var(--color-accent-600);
+  --aurora-3: var(--color-sky-600);
+  --aurora-4: var(--color-sky-600);
+
+  --aurora-mesh-1: color-mix(in oklab, var(--color-brand-500) 44%, transparent);
+  --aurora-mesh-2: color-mix(in oklab, var(--color-accent-500) 40%, transparent);
+  --aurora-mesh-3: color-mix(in oklab, var(--color-sky-600) 34%, transparent);
+  --aurora-mesh-4: color-mix(in oklab, var(--color-brand-700) 34%, transparent);
+  --aurora-mesh-opacity: 0.9;
 }
 
 /* ------------------------------------------------------------------ *
@@ -571,6 +605,34 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Page-to-page slide — pages travel sideways when you change page, so the
+ * tour reads as one horizontal strip (see src/lib/pageTransition.ts, which
+ * hands these names to `transition:animate`, and picks the pair per
+ * direction). Distances are inline-relative via `--page-slide`, so RTL
+ * locales mirror the motion instead of running against the reading order.
+ * Astro's own view-transition CSS drops all of it under reduced motion.
+ * ------------------------------------------------------------------ */
+:root {
+  --page-slide: 1;
+}
+[dir='rtl'] {
+  --page-slide: -1;
+}
+
+@keyframes nexow-page-out-start {
+  to { transform: translate3d(calc(-100% * var(--page-slide)), 0, 0); }
+}
+@keyframes nexow-page-in-end {
+  from { transform: translate3d(calc(100% * var(--page-slide)), 0, 0); }
+}
+@keyframes nexow-page-out-end {
+  to { transform: translate3d(calc(100% * var(--page-slide)), 0, 0); }
+}
+@keyframes nexow-page-in-start {
+  from { transform: translate3d(calc(-100% * var(--page-slide)), 0, 0); }
+}
+
+/* ------------------------------------------------------------------ *
  * Aurora backdrop — two slow-drifting blobs behind the hero.
  * ------------------------------------------------------------------ */
 @keyframes aurora-a {
@@ -607,9 +669,10 @@
   .aurora-c { animation: none; }
 }
 
-/* Multi-stop brand/accent/plasma/sky mesh for page heroes & CTA bands.
- * Same soft *-300 hues in light and dark (opacity only may differ).
- * Prefer this over pale *-100 / white vignette fades. */
+/* Multi-stop mesh for page heroes & CTA bands. Geometry is fixed; the four
+ * stops come from `--aurora-mesh-*` so light and dark can carry different
+ * hues (see the token block above). Prefer this over pale *-100 / white
+ * vignette fades. */
 @keyframes aurora-mesh-shift {
   0%,
   100% {
@@ -624,33 +687,13 @@
 }
 .aurora-mesh {
   background:
-    radial-gradient(
-      ellipse 55% 45% at 18% 22%,
-      color-mix(in oklab, var(--color-brand-300) 55%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 50% 40% at 82% 18%,
-      color-mix(in oklab, var(--color-accent-300) 48%, transparent),
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 48% 42% at 58% 75%,
-      color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 40% 35% at 42% 42%,
-      color-mix(in oklab, var(--color-sky-300) 32%, transparent),
-      transparent 65%
-    );
+    radial-gradient(ellipse 55% 45% at 18% 22%, var(--aurora-mesh-1), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 82% 18%, var(--aurora-mesh-2), transparent 68%),
+    radial-gradient(ellipse 48% 42% at 58% 75%, var(--aurora-mesh-3), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 42% 42%, var(--aurora-mesh-4), transparent 65%);
   animation: aurora-mesh-shift 28s ease-in-out infinite;
   will-change: transform, opacity;
-  opacity: 0.85;
-}
-.dark .aurora-mesh {
-  /* Same hues as light; slightly softer so *-300 still reads on ink. */
-  opacity: 0.75;
+  opacity: var(--aurora-mesh-opacity);
 }
 .is-offscreen .aurora-mesh,
 .is-offscreen .aurora-a,
