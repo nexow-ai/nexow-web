@@ -1,11 +1,16 @@
 /**
  * Astro keeps the content-layer data store in different places:
  *   - `astro sync` / `astro build` → node_modules/.astro/data-store.json
- *   - `astro dev`                 → .astro/data-store.json
+ *   - `astro dev` / Vitest          → .astro/data-store.json
  *
- * If `.astro/data-store.json` is missing (cleared cache, interrupted sync,
- * or a race on first boot), `getCollection('blog')` returns [] and the blog
- * index renders empty. Rebuild / copy the store so local blog pages work.
+ * If `.astro/data-store.json` is missing (fresh CI checkout, cleared cache,
+ * interrupted sync), `getCollection('blog')` returns [] and the blog index,
+ * changelog and related tests render empty. Rebuild / copy the store so those
+ * consumers see the same entries `astro sync` just wrote.
+ *
+ * Usage:
+ *   node ./scripts/ensure-content-store.mjs          # copy only if missing
+ *   node ./scripts/ensure-content-store.mjs --force  # always refresh from prod
  */
 import { copyFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -15,6 +20,7 @@ import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const prodStore = join(root, 'node_modules/.astro/data-store.json');
 const devStore = join(root, '.astro/data-store.json');
+const force = process.argv.includes('--force');
 
 function hasStore(path) {
   try {
@@ -24,7 +30,7 @@ function hasStore(path) {
   }
 }
 
-if (hasStore(devStore)) {
+if (!force && hasStore(devStore)) {
   process.exit(0);
 }
 
@@ -40,8 +46,12 @@ if (!hasStore(prodStore)) {
   }
 }
 
-if (hasStore(prodStore) && !hasStore(devStore)) {
+if (hasStore(prodStore)) {
   mkdirSync(join(root, '.astro'), { recursive: true });
   copyFileSync(prodStore, devStore);
-  console.log('[content] Restored .astro/data-store.json for local blog.');
+  console.log(
+    force
+      ? '[content] Refreshed .astro/data-store.json from sync output.'
+      : '[content] Restored .astro/data-store.json for local blog.',
+  );
 }
