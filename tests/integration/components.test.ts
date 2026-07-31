@@ -218,7 +218,7 @@ describe('Footer', () => {
   });
 });
 
-const SOCIAL_HREFS = ['https://x.com/nexow_ai', 'https://github.com/nexow-ai'];
+const SOCIAL_HREFS = ['https://x.com/nexowofficial', 'https://github.com/nexow-ai'];
 
 describe('Logo and BrandMark', () => {
   it.each(['auto', 'light', 'dark'] as const)('renders the %s logo tone', async (tone) => {
