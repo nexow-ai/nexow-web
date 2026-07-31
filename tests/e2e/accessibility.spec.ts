@@ -29,7 +29,7 @@ const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
  * motion-sensitive visitor actually sees the page, so it is the honest state
  * to measure.
  */
-test.use({ reducedMotion: 'reduce' });
+test.use({ contextOptions: { reducedMotion: 'reduce' } });
 
 /**
  * Contrast is measured across both themes in `contrast.spec.ts`; excluding it

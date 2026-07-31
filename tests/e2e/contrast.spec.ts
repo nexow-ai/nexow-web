@@ -52,7 +52,7 @@ async function contrastOffenders(page: Page): Promise<string[]> {
   }
 }
 
-test.use({ reducedMotion: 'reduce' });
+test.use({ contextOptions: { reducedMotion: 'reduce' } });
 
 test('colour contrast has not regressed', async ({ browser }) => {
   test.setTimeout(600_000);
