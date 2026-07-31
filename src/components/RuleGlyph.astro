@@ -1,0 +1,520 @@
+---
+/**
+ * One animated glyph per community rule — the picture of the rule, not of the
+ * punishment. All eight share a 48×48 viewBox, a stroke-first style and a calm
+ * loop, so the rule grid reads as one set rather than eight clip-art choices.
+ *
+ * Motion idles until the card picks up `.is-visible` from the scroll reveal and
+ * stops again on `.is-offscreen`; reduced motion freezes a legible first frame.
+ */
+interface Props {
+  /** Stable rule kind — index-aligned with `communityRulesPage.rules.items`. */
+  kind:
+    | 'ship'
+    | 'lineage'
+    | 'label'
+    | 'claims'
+    | 'sandbox'
+    | 'limits'
+    | 'listing'
+    | 'respect';
+  class?: string;
+}
+const { kind, class: className = '' } = Astro.props;
+
+/** Unique per instance so two glyphs never share a gradient or filter id. */
+const uid = `rg-${kind}-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<span
+  class:list={['rule-glyph inline-flex size-12 shrink-0 items-center justify-center', className]}
+  aria-hidden="true"
+>
+  <svg class="rule-glyph-svg size-full" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id={`${uid}-g`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)"></stop>
+        <stop offset="55%" stop-color="var(--color-sky-500)"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)"></stop>
+      </linearGradient>
+      <filter id={`${uid}-glow`} x="-45%" y="-45%" width="190%" height="190%">
+        <feGaussianBlur stdDeviation="1.3" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+      <clipPath id={`${uid}-box`}>
+        <rect x="14" y="14" width="20" height="20" rx="4"></rect>
+      </clipPath>
+    </defs>
+
+    <rect
+      x="1.5"
+      y="1.5"
+      width="45"
+      height="45"
+      rx="13"
+      class="rule-glyph-tile"
+      stroke={`url(#${uid}-g)`}
+      stroke-width="1.15"
+      fill="color-mix(in oklab, var(--color-brand-500) 12%, transparent)"
+    >
+    </rect>
+
+    {
+      /* 01 — Ship real things: a crate leaves the pad on a drawn trajectory. */
+      kind === 'ship' ? (
+        <>
+          <path
+            class="rule-glyph-draw"
+            d="M12 34c4-9 10-15 24-17"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-dasharray="3 4"
+            pathLength="1"
+            opacity="0.55"
+          />
+          <g class="rule-glyph-lift">
+            <rect
+              x="18"
+              y="19"
+              width="14"
+              height="12"
+              rx="2.5"
+              stroke={`url(#${uid}-g)`}
+              stroke-width="1.5"
+            />
+            <path d="M18 23h14M25 19v12" stroke={`url(#${uid}-g)`} stroke-width="1.2" opacity="0.7" />
+          </g>
+          <path
+            class="rule-glyph-pulse"
+            d="M22 34h6"
+            stroke="var(--color-accent-400)"
+            stroke-width="2"
+            stroke-linecap="round"
+            filter={`url(#${uid}-glow)`}
+          />
+        </>
+      ) : /* 02 — Keep the lineage: a fork with a token travelling the branch. */
+      kind === 'lineage' ? (
+        <>
+          <path
+            class="rule-glyph-draw"
+            d="M17 17v8a5 5 0 005 5h9"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-linecap="round"
+            fill="none"
+            pathLength="1"
+          />
+          <circle cx="17" cy="15" r="3.6" stroke={`url(#${uid}-g)`} stroke-width="1.5" />
+          <circle cx="33" cy="31" r="3.6" stroke={`url(#${uid}-g)`} stroke-width="1.5" />
+          <circle class="rule-glyph-pulse" cx="17" cy="15" r="1.4" fill="var(--color-brand-300)" />
+          <circle r="2" fill="var(--color-accent-400)" class="rule-glyph-travel" filter={`url(#${uid}-glow)`}>
+            <animateMotion dur="4s" repeatCount="indefinite" path="M17 19 v6 a5 5 0 005 5 h7" />
+          </circle>
+        </>
+      ) : /* 03 — Label your automations: a bot wearing a name tag. */
+      kind === 'label' ? (
+        <>
+          <rect
+            x="14"
+            y="18"
+            width="20"
+            height="15"
+            rx="4"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+          />
+          <path
+            class="rule-glyph-antenna"
+            d="M24 18v-4M21 14h6"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+          />
+          <circle class="rule-glyph-pulse" cx="20" cy="24" r="1.5" fill="var(--color-brand-300)" />
+          <circle
+            class="rule-glyph-pulse rule-glyph-pulse--late"
+            cx="28"
+            cy="24"
+            r="1.5"
+            fill="var(--color-sky-400)"
+          />
+          <rect
+            class="rule-glyph-tag"
+            x="17"
+            y="28"
+            width="14"
+            height="5"
+            rx="2.5"
+            fill="var(--color-accent-400)"
+            opacity="0.85"
+          />
+          <path d="M20 30.5h8" stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.9" />
+        </>
+      ) : /* 04 — No financial fairy tales: a promised moonshot, struck through. */
+      kind === 'claims' ? (
+        <>
+          <path
+            class="rule-glyph-draw"
+            d="M14 31l6-5 5 4 9-10"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            pathLength="1"
+          />
+          <path
+            d="M28 20h6v6"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            opacity="0.8"
+          />
+          <path
+            class="rule-glyph-strike"
+            d="M13 35L35 13"
+            stroke="var(--color-accent-400)"
+            stroke-width="2"
+            stroke-linecap="round"
+            pathLength="1"
+            filter={`url(#${uid}-glow)`}
+          />
+        </>
+      ) : /* 05 — Keep it safe to run: a payload bouncing inside the sandbox. */
+      kind === 'sandbox' ? (
+        <>
+          <rect
+            x="14"
+            y="14"
+            width="20"
+            height="20"
+            rx="4"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+            stroke-dasharray="3 3"
+            class="rule-glyph-fence"
+          />
+          <g clip-path={`url(#${uid}-box)`}>
+            <circle r="2.6" fill="var(--color-accent-400)" filter={`url(#${uid}-glow)`}>
+              <animateMotion
+                dur="5.2s"
+                repeatCount="indefinite"
+                path="M19 19 L29 26 L19 30 L29 19 L19 19"
+              />
+            </circle>
+          </g>
+          <circle class="rule-glyph-pulse" cx="24" cy="24" r="7" stroke={`url(#${uid}-g)`} stroke-width="1" opacity="0.35" fill="none" />
+        </>
+      ) : /* 06 — Respect shared plumbing: a throttled pipe, drips not floods. */
+      kind === 'limits' ? (
+        <>
+          <path
+            d="M12 20h9a4 4 0 014 4v0a4 4 0 004 4h7"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.6"
+            stroke-linecap="round"
+            fill="none"
+          />
+          <circle
+            cx="25"
+            cy="24"
+            r="4.2"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            class="rule-glyph-valve"
+          />
+          <path d="M25 21.5v5" stroke="var(--color-accent-400)" stroke-width="1.6" stroke-linecap="round" class="rule-glyph-valve" />
+          <circle class="rule-glyph-drip" cx="36" cy="31" r="1.7" fill="var(--color-sky-400)" />
+          <circle
+            class="rule-glyph-drip rule-glyph-drip--late"
+            cx="36"
+            cy="31"
+            r="1.7"
+            fill="var(--color-brand-300)"
+          />
+        </>
+      ) : /* 07 — Describe what you publish: a listing card writing itself. */
+      kind === 'listing' ? (
+        <>
+          <rect
+            x="13"
+            y="15"
+            width="22"
+            height="18"
+            rx="3.5"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.5"
+          />
+          <path
+            class="rule-glyph-draw"
+            d="M17 21h14"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+            pathLength="1"
+          />
+          <path
+            class="rule-glyph-draw rule-glyph-draw--2"
+            d="M17 25h10"
+            stroke="var(--color-sky-400)"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            pathLength="1"
+          />
+          <path
+            class="rule-glyph-draw rule-glyph-draw--3"
+            d="M17 29h6"
+            stroke="var(--color-accent-400)"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            pathLength="1"
+          />
+          <circle class="rule-glyph-pulse" cx="31" cy="29" r="2" fill="var(--color-brand-300)" />
+        </>
+      ) : /* 08 — Attack the work, not the worker: two orbits, one handshake. */
+      kind === 'respect' ? (
+        <>
+          <circle cx="18" cy="20" r="4" stroke={`url(#${uid}-g)`} stroke-width="1.5" />
+          <circle cx="30" cy="20" r="4" stroke={`url(#${uid}-g)`} stroke-width="1.5" />
+          <path
+            class="rule-glyph-draw"
+            d="M11 33c1.6-4.2 3.9-6 7-6s5.4 1.8 7 6"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+            pathLength="1"
+            opacity="0.75"
+          />
+          <path
+            class="rule-glyph-draw rule-glyph-draw--2"
+            d="M23 33c1.6-4.2 3.9-6 7-6s5.4 1.8 7 6"
+            stroke={`url(#${uid}-g)`}
+            stroke-width="1.4"
+            stroke-linecap="round"
+            pathLength="1"
+            opacity="0.75"
+          />
+          <path
+            class="rule-glyph-beat"
+            d="M24 15.6c-1.5-2.6-5.4-1.6-5.4 1.3 0 2.2 3 4.2 5.4 6.1 2.4-1.9 5.4-3.9 5.4-6.1 0-2.9-3.9-3.9-5.4-1.3z"
+            fill="var(--color-accent-400)"
+            opacity="0.9"
+            filter={`url(#${uid}-glow)`}
+          />
+        </>
+      ) : null
+    }
+  </svg>
+</span>
+
+<style>
+  .rule-glyph-tile {
+    opacity: 0.95;
+  }
+
+  /* Every loop waits for the reveal — a grid of eight glyphs should not
+     animate behind the fold, and the draw-ins land as the card arrives. */
+  .rule-glyph-draw,
+  .rule-glyph-strike {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  :global(.is-visible) .rule-glyph-draw,
+  :global(.is-visible) .rule-glyph-strike {
+    animation: rg-draw 1.5s var(--ease-out-expo, ease) both;
+  }
+  :global(.is-visible) .rule-glyph-draw--2 {
+    animation-delay: 0.18s;
+  }
+  :global(.is-visible) .rule-glyph-draw--3 {
+    animation-delay: 0.36s;
+  }
+  :global(.is-visible) .rule-glyph-strike {
+    animation: rg-strike 3.6s ease-in-out 0.6s infinite both;
+  }
+
+  .rule-glyph-pulse {
+    animation: rg-pulse 2.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .rule-glyph-pulse--late {
+    animation-delay: 0.5s;
+  }
+  .rule-glyph-lift {
+    animation: rg-lift 4.2s ease-in-out infinite;
+  }
+  .rule-glyph-antenna {
+    animation: rg-nudge 2.4s ease-in-out infinite;
+  }
+  .rule-glyph-tag {
+    animation: rg-tag 4.4s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+  }
+  .rule-glyph-fence {
+    animation: rg-fence 14s linear infinite;
+  }
+  .rule-glyph-valve {
+    animation: rg-valve 5s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .rule-glyph-drip {
+    animation: rg-drip 3s ease-in infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .rule-glyph-drip--late {
+    animation-delay: 1.5s;
+  }
+  .rule-glyph-beat {
+    animation: rg-beat 3s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes rg-draw {
+    from {
+      stroke-dashoffset: 1;
+      opacity: 0.2;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+  /* The strike-through keeps redrawing: the claim comes back, so does the line. */
+  @keyframes rg-strike {
+    0% {
+      stroke-dashoffset: 1;
+      opacity: 0;
+    }
+    18%,
+    72% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+  @keyframes rg-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.16);
+    }
+  }
+  @keyframes rg-lift {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(1.5px, -2.5px);
+    }
+  }
+  @keyframes rg-nudge {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.2px);
+    }
+  }
+  @keyframes rg-tag {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    35% {
+      transform: rotate(-5deg);
+    }
+    65% {
+      transform: rotate(4deg);
+    }
+  }
+  @keyframes rg-fence {
+    to {
+      stroke-dashoffset: -24;
+    }
+  }
+  @keyframes rg-valve {
+    0%,
+    40%,
+    100% {
+      transform: rotate(0deg);
+    }
+    55%,
+    85% {
+      transform: rotate(90deg);
+    }
+  }
+  @keyframes rg-drip {
+    0% {
+      transform: translateY(-4px) scale(0.6);
+      opacity: 0;
+    }
+    25% {
+      opacity: 0.95;
+    }
+    100% {
+      transform: translateY(7px) scale(0.85);
+      opacity: 0;
+    }
+  }
+  @keyframes rg-beat {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    18% {
+      transform: scale(1.18);
+    }
+    36% {
+      transform: scale(1);
+    }
+    54% {
+      transform: scale(1.12);
+    }
+  }
+
+  :global(.is-offscreen) .rule-glyph-svg * {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rule-glyph-draw,
+    .rule-glyph-strike,
+    .rule-glyph-pulse,
+    .rule-glyph-lift,
+    .rule-glyph-antenna,
+    .rule-glyph-tag,
+    .rule-glyph-fence,
+    .rule-glyph-valve,
+    .rule-glyph-beat,
+    :global(.is-visible) .rule-glyph-draw,
+    :global(.is-visible) .rule-glyph-strike {
+      animation: none;
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .rule-glyph-drip,
+    .rule-glyph-travel {
+      display: none;
+    }
+  }
+</style>

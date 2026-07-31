@@ -5,6 +5,8 @@ export type PageAccent = 'brand' | 'gold' | 'sky' | 'violet' | 'amber' | 'rose';
 const ROUTE_ACCENTS: { prefix: string; accent: PageAccent }[] = [
   { prefix: '/features', accent: 'brand' },
   { prefix: '/community', accent: 'sky' },
+  // Same family as /community, so the rules page reads as part of it.
+  { prefix: '/community-rules', accent: 'sky' },
   { prefix: '/connectors', accent: 'brand' },
   { prefix: '/plans', accent: 'brand' },
   { prefix: '/blog', accent: 'brand' },

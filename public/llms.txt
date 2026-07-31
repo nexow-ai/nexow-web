@@ -43,6 +43,7 @@
 - [Connectors](https://nexow.ai/connectors): searchable gallery of all 83 services — 45 live today.
 - [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
+- [Community Rules](https://nexow.ai/community-rules): house rules for the feed, marketplace and automations — eight rules, bot conduct, the enforcement ladder, reports and appeals.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
 
 ## Blog

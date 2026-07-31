@@ -7,7 +7,6 @@ export const nl: SiteContent = {
       { label: 'Gemeenschap', href: '/community' },
       { label: 'Connectoren', href: '/connectors' },
       { label: 'Plannen', href: '/plans' },
-      { label: 'Help', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'Over', href: '/about' },
     ],
@@ -16,9 +15,12 @@ export const nl: SiteContent = {
     close: 'Menu sluiten',
     themeToDark: 'Overschakelen naar donkere modus',
     themeToLight: 'Overschakelen naar lichte modus',
+    home: 'Home',
+    prevPage: 'Vorige pagina',
+    nextPage: 'Volgende pagina',
   },
   footer: {
-    tagline: 'Beschrijf een widget. Nexow bouwt het, verbindt het met live marktgegevens, en zet het op je canvas.',
+    tagline: 'Beschrijf wat je nodig hebt. Nexow maakt er widgets op een canvas van.',
     columns: [
       {
         title: 'Product',
@@ -52,13 +54,15 @@ export const nl: SiteContent = {
           { label: 'Gebruiksvoorwaarden', href: '/terms' },
           { label: 'Cookies', href: '/cookies' },
           { label: 'Acceptabel gebruik', href: '/acceptable-use' },
+          { label: 'Communityregels', href: '/community-rules' },
           { label: 'App openen', href: 'https://x.nexow.ai' },
         ],
       },
     ],
     rights: 'Alle rechten voorbehouden.',
+    status: 'Alle servers online',
     disclaimer:
-      'Nexow is een tooling- en visualisatieplatform. Niets hiervan is financieel advies. Markten dragen risico mee; handel verantwoord.',
+      'Nexow is een tooling- en visualisatieplatform, beheerd door Nexow, Inc. Sommige voorbeelden gebruiken marktdata, maar het canvas is gebouwd voor algemene widgets en workflows. Niets hiervan is financieel, beleggings-, juridisch of fiscaal advies.',
     newsletter: {
       eyebrow: 'Nieuwsbrief',
       title: 'Blijf op de hoogte',
@@ -73,9 +77,9 @@ export const nl: SiteContent = {
   },
   home: {
     meta: {
-      title: 'Nexow — Bouw marktdashboards met AI, in normaal Nederlands',
+      title: 'Nexow — Beschrijf van alles. Krijg een live widget-workspace.',
       description:
-        'Nexow is een AI-native werkruimte voor markten. Beschrijf een widget in normaal Nederlands en Nexow bouwt het, verbindt het met live gegevens van 90 connectoren, en voegt cloud bots, AI agenten, een maker-gemeenschap en XP-beloningen toe — standaard privé, gratis om te beginnen.',
+        'Nexow verandert ideeën in gewone taal in live widgets op een canvas. Bouw moodboards, gewoonteplanners, minigames, sociale widgets, marktdashboards of eigen tools zonder vanaf nul te beginnen.',
     },
     hero: {
       badge: 'Vroege toegang',
@@ -84,10 +88,10 @@ export const nl: SiteContent = {
       titleTail: 'Verhandel het.',
       titleKicker: 'In seconden — niet in weken of maanden.',
       subtitle:
-        'Een AI-native werkruimte voor markten. Vraag om welke widget dan ook in normaal Nederlands — Nexow schrijft de code, voert het veilig uit, en streamt live gegevens naar een canvas met vrije vorm. Automatiseer het met cloud bots en agenten, vervolgens plug in de maker-gemeenschap.',
+        'Beschrijf wat je nodig hebt en Nexow bouwt het: echte werkende widgets, gekoppeld aan live data, neergezet op een canvas dat jij beheert. Aardbevingen, luchtkwaliteit, wereldindicatoren, marktfeeds of je eigen database — visualiseer het, volg het en handel ernaar.',
       ctaPrimary: 'Start de app',
       ctaSecondary: 'Zie hoe het werkt',
-      note: 'Geen aanmelding nodig om te proberen · Privé in je browser · Of een gratis account met 10K gereserveerde credits',
+      note: 'Privé in je browser · Gratis account met 100K gereserveerde credits',
       promptExample: 'Toon een candlestick chart van BTC-USD van Coinbase met 20 & 50 EMA en RSI eronder.',
       promptPlaceholder: 'Beschrijf een widget…',
       promptExamplesLabel: 'Of begin met een voorbeeld',
@@ -221,62 +225,82 @@ export const nl: SiteContent = {
         {
           icon: 'sparkles',
           title: 'Widgets',
-          body: 'Beschrijf een widget in gewone woorden. Nexow genereert interface en logica, draait het sandboxed en laat je het verfijnen via gesprek.',
+          body: 'Beschrijf een widget in gewone woorden. Nexow genereert de interface en logica, draait hem in een sandbox en laat je hem al pratend verfijnen.',
         },
         {
           icon: 'layers',
-          title: 'Canvas en werkruimten',
-          body: 'Sleep, wijzig het formaat en rangschik widgets over werkruimten en schermen. Groepeer ze, koppel hun data en wissel direct van opstelling.',
+          title: 'Canvas en workspaces',
+          body: 'Sleep, verklein en orden widgets over workspaces en schermen. Groepeer ze, koppel hun data en wissel direct van opstelling.',
         },
         {
           icon: 'plug',
           title: 'Connectoren',
-          body: 'Sluit widgets aan op markten, databases, wallets en social apps — of houd status lokaal tot je live data nodig hebt.',
+          body: 'Koppel widgets aan markten, databases, wallets en sociale apps — of houd de status lokaal tot je live data nodig hebt.',
         },
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Cloudautomatisering die je data bewaakt en signalen naar widgets stuurt — zelfs wanneer je tab gesloten is.',
+          body: 'Cloudautomatiseringen die je data bewaken en signalen terugsturen naar widgets — ook met je tabblad dicht.',
         },
         {
           icon: 'cpu',
-          title: 'Agenten',
-          body: 'AI-teamgenoten met model, geheugen, vaardigheden, tools, kennis en triggers — bouw, deploy en bekijk runs in de cloud.',
+          title: 'Agents',
+          body: 'AI-teamgenoten met model, geheugen, skills, tools, kennis en triggers — bouw, rol uit en bekijk runs in de cloud.',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Een AI-assistent voor de hele werkruimte: bouw widgets, orden het canvas en vraag wat je vervolgens wilt wijzigen.',
+          body: 'Een AI-assistent voor de hele workspace: widgets bouwen, het canvas ordenen en vragen wat je hierna moet veranderen.',
         },
         {
           icon: 'users',
-          title: 'Gemeenschap',
-          body: 'Volg makers, post in de feed, deel widgets naar de bibliotheek en claim een openbare @handle.',
+          title: 'Community',
+          body: 'Volg makers, post in de feed, deel widgets in de bibliotheek en claim een openbare @handle.',
         },
         {
           icon: 'store',
-          title: 'Marketplace',
-          body: "Publiceer en installeer widgets, thema's, schermen, bots en agenten — met herkomst die elke remake crediteert.",
+          title: 'Marktplaats',
+          body: 'Publiceer en installeer widgets, thema’s, schermen, bots en agents — met herkomst die elke remake crediteert.',
         },
         {
           icon: 'mail',
           title: 'Realtime chats',
-          body: "Bericht vrienden en contacten live — 1:1- en groeps-DM's met presence, reacties en inbox op de Dock.",
+          body: 'Bericht vrienden en contacten live — 1-op-1 en groeps-DM’s met aanwezigheid, reacties en een inbox op de dock.',
         },
         {
           icon: 'vault',
           title: 'Account',
-          body: 'Gratis accounts met credits, reputatie, gebruik, plannen, meldingen, App Lock en wisselen tussen meerdere accounts.',
+          body: 'Gratis accounts met credits, reputatie, verbruik, plannen, meldingen, App Lock en wisselen tussen meerdere accounts.',
+        },
+        {
+          icon: 'library',
+          title: 'Widgetbibliotheek',
+          body: 'Bewaar elk widget in je bibliotheek en zet het met één klik in een ander dashboard — versies en logs gaan mee.',
+        },
+        {
+          icon: 'globe',
+          title: 'Socialemedia-apps',
+          body: 'Haal live feeds en signalen van X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon en meer je widgets in.',
         },
         {
           icon: 'moon',
-          title: "Thema's en instellingen",
-          body: 'Thema voor de hele interface — kleuren, lettertypen, dichtheid, patronen — plus sneltoetsen, beveiliging en installatievoorkeuren.',
+          title: 'Thema’s',
+          body: 'Bouw weergavethema’s voor kleuren, lettertypen, hoeken, dichtheid, glas en patronen — publiceer ze of installeer ze uit de marktplaats.',
+        },
+        {
+          icon: 'sync',
+          title: 'Instellingen',
+          body: 'Algemene voorkeuren, sneltoetsen, beveiliging, back-up/herstel en PWA-installatieopties in het Instellingen-paneel.',
+        },
+        {
+          icon: 'sliders',
+          title: 'Werkbalk',
+          body: 'Widgets toevoegen, auto-indeling, schermafbeelding, ongedaan maken/opnieuw, vergrendeling, kleurmodus, credits en sync — toon of verberg elke actie.',
         },
         {
           icon: 'grid',
-          title: 'Werkbalk en Dock',
-          body: 'Een configureerbare werkbalk in de header voor canvas-acties, en een glazen Dock voor Copilot, panelen, meldingen en berichten.',
+          title: 'Dock',
+          body: 'Een versleepbare glazen pil voor Copilot, paneelsnelkoppelingen, meldingen en berichten — vouwt zich bij inactiviteit op tot een puck.',
         },
       ],
       map: {
@@ -289,97 +313,102 @@ export const nl: SiteContent = {
         {
           title: 'Bouwen',
           items: [
-          {
-            icon: 'sparkles',
-            title: 'Widgets',
-            body: 'Beschrijf een widget in gewone woorden. Nexow genereert interface en logica, draait het sandboxed en laat je het verfijnen via gesprek.',
-          },
-          {
-            icon: 'layers',
-            title: 'Canvas en werkruimten',
-            body: 'Sleep, wijzig het formaat en rangschik widgets over werkruimten en schermen. Groepeer ze, koppel hun data en wissel direct van opstelling.',
-          },
-          {
-            icon: 'library',
-            title: 'Widgetbibliotheek',
-            body: 'Sla elke widget op in je bibliotheek en zet hem met één klik in een ander dashboard — versies en logs blijven mee.',
-          },
-        ],
+            {
+              icon: 'sparkles',
+              title: 'Widgets',
+              body: 'Beschrijf een widget in gewone woorden. Nexow genereert de interface en logica, draait hem in een sandbox en laat je hem al pratend verfijnen.',
+            },
+            {
+              icon: 'layers',
+              title: 'Canvas en workspaces',
+              body: 'Sleep, verklein en orden widgets over workspaces en schermen. Groepeer ze, koppel hun data en wissel direct van opstelling.',
+            },
+            {
+              icon: 'library',
+              title: 'Widgetbibliotheek',
+              body: 'Bewaar elk widget in je bibliotheek en zet het met één klik in een ander dashboard — versies en logs gaan mee.',
+            },
+          ],
         },
         {
           title: 'Automatiseren',
           items: [
-          {
-            icon: 'bot',
-            title: 'Bots',
-            body: 'Cloudautomatisering die je data bewaakt en signalen naar widgets stuurt — zelfs wanneer je tab gesloten is.',
-          },
-          {
-            icon: 'cpu',
-            title: 'Agenten',
-            body: 'AI-teamgenoten met model, geheugen, vaardigheden, tools, kennis en triggers — bouw, deploy en bekijk runs in de cloud.',
-          },
-          {
-            icon: 'chat',
-            title: 'Copilot',
-            body: 'Een AI-assistent voor de hele werkruimte: bouw widgets, orden het canvas en vraag wat je vervolgens wilt wijzigen.',
-          },
-        ],
+            {
+              icon: 'bot',
+              title: 'Bots',
+              body: 'Cloudautomatiseringen die je data bewaken en signalen terugsturen naar widgets — ook met je tabblad dicht.',
+            },
+            {
+              icon: 'cpu',
+              title: 'Agents',
+              body: 'AI-teamgenoten met model, geheugen, skills, tools, kennis en triggers — bouw, rol uit en bekijk runs in de cloud.',
+            },
+            {
+              icon: 'chat',
+              title: 'Copilot',
+              body: 'Een AI-assistent voor de hele workspace: widgets bouwen, het canvas ordenen en vragen wat je hierna moet veranderen.',
+            },
+          ],
         },
         {
           title: 'Verbinden en delen',
           items: [
-          {
-            icon: 'plug',
-            title: 'Connectoren',
-            body: '90 live connectoren over markten, databases, wallets en social apps — rechtstreeks vanuit de browser waar CORS het toelaat.',
-          },
-          {
-            icon: 'globe',
-            title: 'Social media-apps',
-            body: 'Haal live feeds en signalen binnen van X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon en meer naar je widgets.',
-          },
-          {
-            icon: 'users',
-            title: 'Gemeenschap',
-            body: 'Volg makers, post in de feed, deel widgets naar de bibliotheek en claim een openbare @handle.',
-          },
-          {
-            icon: 'store',
-            title: 'Marketplace',
-            body: "Publiceer en installeer widgets, thema's, schermen, bots en agenten — met herkomst die elke remake crediteert.",
-          },
-          {
-            icon: 'mail',
-            title: 'Realtime chats',
-            body: "Bericht vrienden en contacten live — 1:1- en groeps-DM's met presence, reacties en inbox op de Dock.",
-          },
-        ],
+            {
+              icon: 'plug',
+              title: 'Connectoren',
+              body: '90 actieve connectoren over markten, databases, wallets en sociale apps — rechtstreeks vanuit de browser waar CORS het toestaat.',
+            },
+            {
+              icon: 'globe',
+              title: 'Socialemedia-apps',
+              body: 'Haal live feeds en signalen van X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon en meer je widgets in.',
+            },
+            {
+              icon: 'users',
+              title: 'Community',
+              body: 'Volg makers, post in de feed, deel widgets in de bibliotheek en claim een openbare @handle.',
+            },
+            {
+              icon: 'store',
+              title: 'Marktplaats',
+              body: 'Publiceer en installeer widgets, thema’s, schermen, bots en agents — met herkomst die elke remake crediteert.',
+            },
+            {
+              icon: 'mail',
+              title: 'Realtime chats',
+              body: 'Bericht vrienden en contacten live — 1-op-1 en groeps-DM’s met aanwezigheid, reacties en een inbox op de dock.',
+            },
+          ],
         },
         {
           title: 'Interface en account',
           items: [
-          {
-            icon: 'vault',
-            title: 'Account',
-            body: 'Gratis accounts met credits, reputatie, gebruik, plannen, meldingen, App Lock en wisselen tussen meerdere accounts.',
-          },
-          {
-            icon: 'moon',
-            title: "Thema's en instellingen",
-            body: 'Thema voor de hele interface — kleuren, lettertypen, dichtheid, patronen — plus sneltoetsen, beveiliging en installatievoorkeuren.',
-          },
-          {
-            icon: 'sliders',
-            title: 'Werkbalk',
-            body: 'Widgets toevoegen, auto-layout, screenshot, ongedaan/opnieuw, vergrendelen, kleurmodus, credits en sync — toon of verberg elke actie.',
-          },
-          {
-            icon: 'grid',
-            title: 'Dock',
-            body: 'Een versleepbare glazen pill voor Copilot, paneel-snelkoppelingen, meldingen en berichten — verbergt zich in een puck wanneer idle.',
-          },
-        ],
+            {
+              icon: 'vault',
+              title: 'Account',
+              body: 'Gratis accounts met credits, reputatie, verbruik, plannen, meldingen, App Lock en wisselen tussen meerdere accounts.',
+            },
+            {
+              icon: 'moon',
+              title: 'Thema’s',
+              body: 'Bouw weergavethema’s voor kleuren, lettertypen, hoeken, dichtheid, glas en patronen — publiceer ze of installeer ze uit de marktplaats.',
+            },
+            {
+              icon: 'sync',
+              title: 'Instellingen',
+              body: 'Algemene voorkeuren, sneltoetsen, beveiliging, back-up/herstel en PWA-installatieopties in het Instellingen-paneel.',
+            },
+            {
+              icon: 'sliders',
+              title: 'Werkbalk',
+              body: 'Widgets toevoegen, auto-indeling, schermafbeelding, ongedaan maken/opnieuw, vergrendeling, kleurmodus, credits en sync — toon of verberg elke actie.',
+            },
+            {
+              icon: 'grid',
+              title: 'Dock',
+              body: 'Een versleepbare glazen pil voor Copilot, paneelsnelkoppelingen, meldingen en berichten — vouwt zich bij inactiviteit op tot een puck.',
+            },
+          ],
         },
       ],
     },
@@ -488,7 +517,7 @@ export const nl: SiteContent = {
       accountTitle: 'Één gratis account ontgrendelt het netwerk',
       accountBody: 'Geen creditcard. Blijf bouwen wanneer je wilt — een account is altijd optioneel.',
       accountPoints: [
-        '10.000 gratis AI-credits gereserveerd bij aanmelding',
+        '100.000 gratis AI-credits gereserveerd bij aanmelding',
         'Cloud-synchronisatie over apparaten voor werkruimten & widgets',
         'Gemeenschap, marketplace & widgetbibliotheek',
         'Reputatiepunten, medailles & levels terwijl je bouwt en deelt',
@@ -499,7 +528,7 @@ export const nl: SiteContent = {
       eyebrow: 'Plannen',
       title: 'Gratis beginnen. Groei wanneer je klaar bent.',
       subtitle:
-        'Bouw gratis voor altijd — lokaal met je eigen sleutel, of met 10.000 gereserveerde credits op een gratis account. Upgrade voor meer credits, bots en agenten.',
+        'Bouw gratis voor altijd — lokaal met je eigen sleutel, of met 100.000 gereserveerde credits op een gratis account. Upgrade voor meer credits, bots en agenten.',
       cta: 'Vergelijk alle plannen',
     },
     privacy: {
@@ -525,7 +554,7 @@ export const nl: SiteContent = {
         { status: 'shipped', title: 'AI widget codegen', body: 'Widgets in normaal Nederlands draaiend in sandbox op het canvas.' },
         { status: 'shipped', title: '90 marktgegevenscommunicatoren', body: 'Databases, sociale media, makelaars, beurzen, wallets, open data en webdiensten streamen live.' },
         { status: 'shipped', title: 'Cloud bots & waarschuwingen', body: 'Automatisering die je gegevens bewaakt en signalen naar je widgets stuurt, tab gesloten.' },
-        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Gratis accounts met werkruimten gesynchroniseerd op elk apparaat — 10K credits gereserveerd voor platformlancering.' },
+        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Gratis accounts met werkruimten gesynchroniseerd op elk apparaat — 100K credits gereserveerd voor platformlancering.' },
         { status: 'shipped', title: 'Community feed & profielen', body: 'Volg makers, deel widgets naar de feed, en claim je openbare @handle.' },
         { status: 'shipped', title: 'Agenten & Copilot', body: 'Cloud-agenten met een volledig harnas, geïmplementeerd met tool-rechten en rungeschiedenis — plus een Copilot die je werkruimte bouwt en ordent.' },
         { status: 'shipped', title: 'Marketplace', body: 'Publiceer en installeer widgets, thema\'s, schermen en bots — met herkomst die elke remake crediteert.' },
@@ -569,7 +598,7 @@ export const nl: SiteContent = {
         },
         {
           q: "Wat kost het?",
-          a: "Free omvat het volledige widget-canvas, bibliotheek, cloud sync, 10 bots, 3 agents, communitytoegang en 10.000 AI-credits bij aanmelding. Supporter en Sponsor voegen maandelijkse credits, hogere automatiseringsquota en premium uiterlijk toe — checkout komt binnenkort. Zie Plans voor de volledige vergelijking.",
+          a: "Free omvat het volledige widget-canvas, bibliotheek, cloud sync, 10 bots, 3 agents, communitytoegang en 100.000 AI-credits bij aanmelding. Supporter en Sponsor voegen maandelijkse credits, hogere automatiseringsquota en premium uiterlijk toe — checkout komt binnenkort. Zie Plans voor de volledige vergelijking.",
         },
       ],
     },
@@ -1054,6 +1083,188 @@ export const nl: SiteContent = {
       secondary: 'Alle functies bekijken',
     },
   },
+  communityRulesPage: {
+    meta: {
+      title: 'Communityregels — Nexow',
+      description:
+        'De huisregels van de Nexow-community: wat je publiceert, hoe je een remix crediteert, hoe bots en agents zich moeten gedragen en wat er precies gebeurt als iemand het vergeet.',
+    },
+    hero: {
+      badge: 'Communityregels',
+      titleLead: 'Wees goed',
+      titleGradient: 'voor elkaar',
+      titleTail: 'bots inbegrepen',
+      subtitle:
+        'Nexow is één canvas dat wordt gedeeld door makers, traders, onderzoekers en een groeiende menigte automatiseringen. Dit zijn de regels die het de moeite waard houden om langs te komen. Ze lezen kost minder tijd dan je laatste widget bouwen.',
+      updated: 'Laatst bijgewerkt: juli 2026 · door mensen geschreven, door mensen gehandhaafd',
+      ctaPrimary: 'Lees de regels',
+      ctaSecondary: 'Iets melden',
+    },
+    tldr: {
+      eyebrow: 'De korte versie',
+      title: 'Drie regels, daarna de kleine lettertjes',
+      subtitle:
+        'Lees je maar één stuk, lees dan dit. Al het andere zijn deze drie zinnen met de randgevallen erbij.',
+      items: [
+        {
+          title: 'Wees nuttig',
+          body: 'Publiceer dingen die anderen echt kunnen draaien. Een ruw widget met een eerlijke kanttekening is meer waard dan een gepolijst exemplaar dat niemand kan installeren.',
+        },
+        {
+          title: 'Wees eerlijk',
+          body: 'Crediteer het origineel, label de automatisering en verkoop een backtest nooit als een echt trackrecord. Herkomst is hier een functie, geen formaliteit.',
+        },
+        {
+          title: 'Wees een mens',
+          body: 'Ruzie zo hard je wilt over indicatoren, modellen en indelingen. Dempen is één klik: gebruik dat ruim voor de meldknop.',
+        },
+      ],
+    },
+    rules: {
+      eyebrow: 'De regels',
+      title: 'Acht dingen die deze plek goed houden',
+      subtitle:
+        'Kort genoeg om te onthouden, concreet genoeg om te handhaven. Elke regel bestaat omdat iemand ooit het tegenovergestelde probeerde.',
+      items: [
+        {
+          title: 'Deel echte dingen',
+          body: 'Post widgets, schermen, bots en onderzoek die je echt hebt gebouwd of gedraaid. Werk in uitvoering is welkom — zeg het er gewoon bij. Fictie als afgerond product niet.',
+          note: 'een screenshot is geen pakbon',
+        },
+        {
+          title: 'Houd de herkomst intact',
+          body: 'Remix alles wat je kunt installeren; daar is publiceren voor. Herkomst reist mee met het widget: laat die eraan zitten en vertel wat je hebt veranderd.',
+          note: '“geïnspireerd op” is een link, geen sfeer',
+        },
+        {
+          title: 'Label je automatiseringen',
+          body: 'Bots en agents draaien onder een account dat ze als zodanig aankondigt. Je werk automatiseren is prima; een planning laten doorgaan voor een persoon is de enige vorm van misleiding die we persoonlijk opvatten.',
+          note: 'robots dragen een naambadge',
+        },
+        {
+          title: 'Geen financiële sprookjes',
+          body: 'Nexow tekent marktdata, het onderschrijft jouw instap niet. Geen gegarandeerde rendementen, geen signaalgroepen, geen “stuur me een dm voor de strategie”, geen screenshot van een groene dag als bewijs van een systeem.',
+          note: 'rendement uit het verleden is nog steeds geen belofte',
+        },
+        {
+          title: 'Houd het veilig om te draaien',
+          body: 'Niets dat inloggegevens oogst, munten mint in andermans tabblad of een payload achter een grafiek verstopt. Elk widget draait in een sandbox — zie dat als een ondergrens, niet als uitdaging.',
+          note: 'de sandbox is een grens, geen weddenschap',
+        },
+        {
+          title: 'Respecteer het gedeelde leidingwerk',
+          body: 'Connectoren zijn gedeelde infrastructuur met echte rate limits. Ram je een dienst plat, dan breekt hij voor iedereen — ook voor degene die je wilde imponeren.',
+          note: 'jouw agent is niet de hoofdpersoon',
+        },
+        {
+          title: 'Beschrijf wat je publiceert',
+          body: 'Zeg wat een item doet, welke connectoren het nodig heeft en wat het nog niet kan. Publiceren en installeren is vandaag gratis — eerlijke beschrijvingen maken dat het waard om zo te houden.',
+          note: '“AI-gedreven” is geen functielijst',
+        },
+        {
+          title: 'Val het werk aan, niet de maker',
+          body: 'Sloop een aanname, betwist een model, herontwerp iemands indeling in de reacties. Intimidatie, haat, doxing en meutes zijn waar de lol ophoudt — en het account ook.',
+          note: 'speel de grafiek, niet de persoon',
+        },
+      ],
+    },
+    bots: {
+      eyebrow: 'Niet-mensen',
+      title: 'Huisregels voor de automatiseringen',
+      subtitle:
+        'Bots bewaken markten, brokers en wallets. Agents redeneren, roepen tools aan en leveren. Geen van beide mag de reden zijn dat iemand vertrekt.',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Eén mens per automatisering',
+          body: 'Elke bot en elke agent hoort bij een account. Wat het ook post, verstuurt of verhandelt: een persoon is ervoor aanspreekbaar. “De agent deed het” heeft nog nooit gewerkt.',
+        },
+        {
+          icon: 'sync',
+          title: 'Rem je triggers af',
+          body: 'Gebruik de frequenties die het product biedt en blijf binnen de limieten van de connectoren. Extra accounts om een limiet te omzeilen is diezelfde limiet overtreden met extra stappen.',
+        },
+        {
+          icon: 'chat',
+          title: 'Lever waar je bent uitgenodigd',
+          body: 'Webhooks, alerts en databaseschrijfacties gaan naar kanalen en tabellen die van jou zijn of waar je bent binnengelaten. Niemands server hoort jouw bot eerder te ontmoeten dan jou.',
+        },
+        {
+          icon: 'shield',
+          title: 'Toestemming voor alles wat kost',
+          body: 'Handelen, uitgeven of berichten sturen namens iemand anders blijft expliciet toegekend, per agent, elke keer. Vraag nooit een ander lid om die rechten voor jou aan te zetten.',
+        },
+      ],
+    },
+    enforcement: {
+      eyebrow: 'Handhaving',
+      title: 'Wat er gebeurt als iemand het vergeet',
+      subtitle:
+        'Bijna elke overtreding is een ongeluk en bijna elke reactie is een berichtje. De ladder gaat alleen omhoog als hetzelfde blijft gebeuren.',
+      steps: [
+        {
+          n: '01',
+          title: 'Een zetje',
+          body: 'Je krijgt een bericht, de inhoud krijgt een label, en daarmee is het verhaal meestal klaar. Geen reputatie kwijt, geen drama.',
+        },
+        {
+          n: '02',
+          title: 'Een pauze',
+          body: 'Herhaalt het zich, dan vallen publiceren, posten en automatiseringen een tijdje stil. Je reputatie overleeft het; je vaart niet.',
+        },
+        {
+          n: '03',
+          title: 'Een schorsing',
+          body: 'Bewuste of ernstige overtredingen schorsen het account en halen weg wat het publiceerde, inclusief remixes en installaties.',
+        },
+        {
+          n: '04',
+          title: 'De deur',
+          body: 'Fraude, malware, intimidatiecampagnes en identiteitsmisbruik beëindigen het account definitief. Dat zijn de enkeltjes.',
+        },
+      ],
+      note: 'Automatische signalen leiden nooit alleen tot een permanente maatregel — eerst leest een mens de zaak. Liever traag dan onterecht.',
+    },
+    report: {
+      eyebrow: 'Meldingen & bezwaar',
+      title: 'Vertel het ons, en vertel waarom',
+      subtitle:
+        'Moderatie werkt het best als ze begint met een link en één zin. Beide komen bij hetzelfde kleine team terecht.',
+      cards: [
+        {
+          title: 'Iets melden',
+          body: 'Stuur de link naar de post, het widget, de vermelding of de automatisering, plus één regel over wat eraan schort. Op een onderbuikgevoel kunnen we niets, op een link heel snel iets.',
+          cta: 'Schrijf het team',
+        },
+        {
+          title: 'Bezwaar maken',
+          body: 'Denk je dat we het verkeerd lazen? Reageer binnen 30 dagen op de melding en een andere mens pakt de zaak vanaf het begin op. Uitleggen werkt beter dan escaleren.',
+          cta: 'Bezwaar indienen',
+        },
+      ],
+      legalTitle: 'De versies die juristen schreven',
+      legal: [
+        {
+          label: 'Gebruiksvoorwaarden',
+          body: 'Het contract achter het account: waar je mee akkoord gaat door Nexow te gebruiken.',
+        },
+        {
+          label: 'Acceptabel gebruik',
+          body: 'De afdwingbare lijst van wat nooit op het platform mag draaien.',
+        },
+        {
+          label: 'Privacybeleid',
+          body: 'Wat we verzamelen als je post, publiceert of meldt — en wat niet.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Regels gelezen. Canvas open.',
+      subtitle: 'Bouw nu iets waar het de moeite waard over twisten is — vriendelijk, met bronnen, onder je eigen naam.',
+      primary: 'Nexow starten',
+      secondary: 'Community verkennen',
+    },
+  },
   features: {
     meta: {
       title: 'Functies — Nexow',
@@ -1135,13 +1346,13 @@ export const nl: SiteContent = {
     meta: {
       title: 'Plannen — Nexow',
       description:
-        'Gratis voor altijd om te bouwen — lokaal met je eigen sleutel, of met 10.000 AI-credits gereserveerd op een gratis account. Vergelijk Gratis, Supporter, Sponsor en Partner voor credits, bots, agenten en aanpassingen.',
+        'Gratis voor altijd om te bouwen — lokaal met je eigen sleutel, of met 100.000 AI-credits gereserveerd op een gratis account. Vergelijk Gratis, Supporter, Sponsor en Partner voor credits, bots, agenten en aanpassingen.',
     },
     hero: {
       badge: 'Plannen',
       title: 'Gratis starten. Ruimte voor groei.',
       subtitle:
-        'Bouw gratis — voer lokaal uit met je eigen sleutel, of meld je aan om 10.000 AI-credits te reserveren. Upgrade wanneer je meer capaciteit, automatisering en pooling nodig hebt.',
+        'Bouw gratis — voer lokaal uit met je eigen sleutel, of meld je aan om 100.000 AI-credits te reserveren. Upgrade wanneer je meer capaciteit, automatisering en pooling nodig hebt.',
     },
     comingSoon:
       'Supporter & Sponsor checkout komt binnenkort, en platformcredits worden ermee gelanceerd. Iedereen is vandaag Gratis — maak een account aan om eerst te zijn wanneer facturering opent.',
@@ -1151,7 +1362,7 @@ export const nl: SiteContent = {
         {
           icon: 'coins',
           title: 'AI-credits',
-          body: 'Energiewidget-generatie, Copilot-antwoorden en bot-logica. Gratis reserveert 10K om mee te beginnen; betaalde plannen verversen maandelijks.',
+          body: 'Energiewidget-generatie, Copilot-antwoorden en bot-logica. Gratis reserveert 100K om mee te beginnen; betaalde plannen verversen maandelijks.',
         },
         {
           icon: 'bot',
@@ -1183,16 +1394,18 @@ export const nl: SiteContent = {
         priceMonthly: '$0',
         priceYearly: '$0',
         cadence: 'altijd',
-        stats: ['10K credits', '10 bots', '3 agenten'],
+        stats: ['100K credits bij aanmelding', '10 bots', '3 agenten'],
         cta: 'Gratis aan de slag',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '10.000 AI-credits gereserveerd bij aanmelding',
-          'Onbeperkte schermen, werkruimten & widgets',
+          '100.000 AI-credits gereserveerd bij aanmelding',
+          'Onbeperkte schermen, workspaces en widgets',
           'Onbeperkte browserverbindingen',
-          'Cloud-synchronisatie over apparaten',
-          'Globale Copilot (komt binnenkort)',
-          'Toegang tot gemeenschap & marketplace',
+          'Onbeperkte synchronisatie tussen apparaten',
+          '10 bots en 3 agents',
+          'Globale Copilot',
+          'App Lock en geavanceerde accountbeveiliging',
+          'Toegang tot community, reputatie en marktplaats',
         ],
       },
       {
@@ -1207,11 +1420,12 @@ export const nl: SiteContent = {
         cta: 'Word Supporter',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115.000 credits elke maand',
-          'Tot 30 bots & 10 agenten',
-          'Één Copilot per werkruimte',
-          'Tweede accentkleur (gradient)',
-          'Exclusieve UI & verschijningsopties',
+          '115.000 credits per maand',
+          'Tot 30 bots en 10 agents',
+          'Tweede accentkleur (gradiënten)',
+          'Acht extra canvaspatronen, widgetoppervlakken en paneelglas',
+          'Geanimeerde bootloaders en je avatar als headermerk',
+          'Eén Copilot per workspace (binnenkort)',
         ],
       },
       {
@@ -1228,12 +1442,13 @@ export const nl: SiteContent = {
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800.000 credits elke maand',
-          'Tot 300 bots & 100 agenten',
-          'Aangepaste verbindingen (Connector Builder)',
-          'Één Copilot per scherm',
-          'Upload je eigen logo',
-          'Premium UI-aanpassingen',
+          '800.000 credits per maand',
+          'Tot 300 bots en 100 agents',
+          'Twee extra canvaspatronen en bootloaders, plus aurora-afstemming',
+          'Prioriteitssupport voor complexe opstellingen',
+          'Eén Copilot per scherm (binnenkort)',
+          'Eigen verbindingen met Connector Builder (binnenkort)',
+          'Upload je eigen logo (binnenkort)',
         ],
       },
       {
@@ -1331,11 +1546,11 @@ export const nl: SiteContent = {
     faq: [
       {
         q: "Is Nexow echt gratis?",
-        a: "Ja. Free is een volledige workspace — onbeperkte screens, widgets en connectors, herbruikbare bibliotheek, cloud sync, 10 bots, 3 agents, community en reputatie, plus 10.000 AI-credits gereserveerd bij aanmelding. Betaalde plannen voegen maandelijkse credits, hogere quota en premium uiterlijk toe — de kern is niet geblokkeerd.",
+        a: "Ja. Free is een volledige workspace — onbeperkte screens, widgets en connectors, herbruikbare bibliotheek, cloud sync, 10 bots, 3 agents, community en reputatie, plus 100.000 AI-credits gereserveerd bij aanmelding. Betaalde plannen voegen maandelijkse credits, hogere quota en premium uiterlijk toe — de kern is niet geblokkeerd.",
       },
       {
         q: "Wat zijn credits?",
-        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 3 tokens; Opus gebruikt hem in ongeveer 0,6. Free reserveert 10.000 bij aanmelding; Supporter geeft 115.000 per maand; Sponsor 800.000 — en je kunt altijd packs kopen.",
+        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 3 tokens; Opus gebruikt hem in ongeveer 0,6. Free reserveert 100.000 bij aanmelding; Supporter geeft 115.000 per maand; Sponsor 800.000 — en je kunt altijd packs kopen.",
       },
       {
         q: "Wanneer starten betaalde plannen?",
@@ -1597,10 +1812,31 @@ export const nl: SiteContent = {
       title: 'Wat de DAO ermee doet',
       body: 'NXW is geen zijmissie — zo wordt de roadmap bepaald. Je verdient het door te bouwen en geeft het uit door te stemmen.',
       cards: [
-        { icon: 'lightbulb', title: 'Voorstellen', body: 'Stel functies, connectoren en regels voor. Iedereen met NXW kan een idee op de stemming zetten.' },
-        { icon: 'vote', title: 'Stemmen', body: 'Openbare, transparante stemmingen bepalen wat er wordt gebouwd en in welke volgorde.' },
-        { icon: 'vault', title: 'Treasury', body: 'Een gedeelde treasury financiert de bounties en beurzen waar de community voor stemt.' },
-        { icon: 'gift', title: 'Makersdeel', body: 'Bouwers krijgen een deel wanneer de DAO hun werk uitbrengt en promoot.' },
+        {
+          icon: 'vote',
+          title: 'Governance',
+          body: 'Stel voor en stem. Iedereen met NXW kan een idee op de stemming zetten.',
+        },
+        {
+          icon: 'vault',
+          title: 'Treasury',
+          body: 'Een gedeelde treasury financiert bounties en grants waar de community over stemt.',
+        },
+        {
+          icon: 'coins',
+          title: 'Dividenden',
+          body: 'Houders krijgen een deel wanneer de DAO on-chain uitkeert.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Credits kopen',
+          body: 'Geef NXW uit aan AI-generatie — brandstof voor het canvas.',
+        },
+        {
+          icon: 'gift',
+          title: 'Willekeurige beloningen',
+          body: 'Verrassingsdrops en loterij-achtige uitkeringen vanuit de DAO.',
+        },
       ],
     },
     credits: {
@@ -1804,9 +2040,10 @@ export const nl: SiteContent = {
       ],
       message: 'Hoe kunnen we helpen?',
       submit: 'Bericht versturen',
-      submitting: 'E-mailprogramma openen…',
-      success: 'Je mailprogramma zou moeten openen met het bericht klaar. Bedankt voor je bericht.',
+      submitting: 'Versturen…',
+      success: 'Bedankt, we hebben je bericht ontvangen. We antwoorden per e-mail.',
       error: 'Er ging iets mis. Mail ons rechtstreeks.',
+      fallback: 'We konden onze servers niet bereiken, dus je mailprogramma is geopend met het bericht klaar. Verstuur het van daaruit.',
       invalid: 'Vul een geldig e-mailadres en een kort bericht in.',
     },
     aside: {

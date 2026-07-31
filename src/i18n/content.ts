@@ -112,6 +112,76 @@ export interface CommunityPageContent {
   };
 }
 
+/**
+ * Dedicated /community-rules page copy — the house rules for the feed, the
+ * marketplace and the automations. Every list here is order-sensitive: the
+ * page pairs entries with animated art by index (rule glyphs, ladder rungs,
+ * legal links), so translations reorder wording, never entries.
+ */
+export interface CommunityRulesPageContent {
+  meta: { title: string; description: string };
+  hero: {
+    badge: string;
+    titleLead: string;
+    titleGradient: string;
+    titleTail: string;
+    subtitle: string;
+    /** "Last updated …" line under the CTAs. */
+    updated: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+  };
+  /** The three-word summary, for people who will not read ten rules. */
+  tldr: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    /** Exactly three — paired with the useful / honest / human glyph trio. */
+    items: { title: string; body: string }[];
+  };
+  rules: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    /**
+     * Eight rules, numbered by the component. `note` is the mono one-liner
+     * under the body — the rule restated as something you would say out loud.
+     */
+    items: { title: string; body: string; note: string }[];
+  };
+  /** Rules for bots and agents, whose owners are still humans. */
+  bots: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    items: Feature[];
+  };
+  /** The escalation ladder: nudge → pause → suspension → door. */
+  enforcement: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    steps: Step[];
+    note: string;
+  };
+  report: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    /** [report, appeal] — order matters, the component gives them CTAs. */
+    cards: { title: string; body: string; cta: string }[];
+    legalTitle: string;
+    /** Terms, Acceptable Use, Privacy — hrefs live in the component. */
+    legal: { label: string; body: string }[];
+  };
+  cta: {
+    title: string;
+    subtitle: string;
+    primary: string;
+    secondary: string;
+  };
+}
+
 export interface PlanTier {
   name: string;
   tagline: string;
@@ -308,12 +378,19 @@ export interface SiteContent {
     themeToDark?: string;
     /** Aria label when the page is dark (action switches to light). */
     themeToLight?: string;
+    /** Name of the home route in the page tour (it has no link table entry). */
+    home?: string;
+    /** Aria labels for the fixed corner page arrows (see `PageNav.astro`). */
+    prevPage?: string;
+    nextPage?: string;
   };
   footer: {
     tagline: string;
     columns: { title: string; links: NavLink[] }[];
     rights: string;
     disclaimer: string;
+    /** Live service-health badge next to the footer clock. */
+    status?: string;
     /**
      * Newsletter signup in the site footer. Optional so locales can omit it and
      * fall back to English via `useContent` merge.
@@ -535,6 +612,8 @@ export interface SiteContent {
    * Dedicated Community marketing page (/community).
    */
   communityPage: CommunityPageContent;
+  /** House rules for the community, marketplace and automations (/community-rules). */
+  communityRulesPage: CommunityRulesPageContent;
   plansPage: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
@@ -661,6 +740,8 @@ export interface SiteContent {
       submitting: string;
       success: string;
       error: string;
+      /** Shown when the API is unreachable and we hand off to the mail client. */
+      fallback: string;
       invalid: string;
     };
     aside: {

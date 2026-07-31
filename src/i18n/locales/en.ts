@@ -14,7 +14,6 @@ export const en: SiteContent = {
       { label: 'Community', href: '/community' },
       { label: 'Connectors', href: '/connectors' },
       { label: 'Plans', href: '/plans' },
-      { label: 'Help', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
     ],
@@ -23,6 +22,9 @@ export const en: SiteContent = {
     close: 'Close menu',
     themeToDark: 'Switch to dark mode',
     themeToLight: 'Switch to light mode',
+    home: 'Home',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
   },
   footer: {
     tagline: 'Describe what you need. Nexow turns it into widgets on a canvas.',
@@ -59,11 +61,13 @@ export const en: SiteContent = {
           { label: 'Terms of Use', href: '/terms' },
           { label: 'Cookies', href: '/cookies' },
           { label: 'Acceptable Use', href: '/acceptable-use' },
+          { label: 'Community Rules', href: '/community-rules' },
           { label: 'Launch app', href: 'https://x.nexow.ai' },
         ],
       },
     ],
     rights: 'All rights reserved.',
+    status: 'All servers up',
     disclaimer:
       'Nexow is a tooling and visualization platform operated by Nexow, Inc. Some examples use market data, but the canvas is built for general-purpose widgets and workflows. Nothing here is financial, investment, legal, or tax advice.',
     newsletter: {
@@ -94,7 +98,7 @@ export const en: SiteContent = {
         'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
       ctaPrimary: 'Launch the app',
       ctaSecondary: 'How it works',
-      note: 'No signup to try · Private in your browser · Or a free account with 10K reserved credits',
+      note: 'Private in your browser · Free account with 100K reserved credits',
       promptExample: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
       promptPlaceholder: 'Describe a widget…',
       promptExamplesLabel: 'Or start from an example',
@@ -695,7 +699,7 @@ export const en: SiteContent = {
       accountTitle: 'One free account unlocks the network',
       accountBody: 'No credit card. Your widgets, credits, sync and community tools stay together as your workspace grows.',
       accountPoints: [
-        '10,000 starter AI credits on Free',
+        '100,000 starter AI credits on Free',
         'Cross-device cloud sync for workspaces & widgets',
         'Community, marketplace & the widget library',
         'Reputation points, medals & levels as you build and share',
@@ -732,7 +736,7 @@ export const en: SiteContent = {
         { status: 'shipped', title: 'AI widget codegen', body: 'Natural-language widgets running sandboxed on the canvas.' },
         { status: 'shipped', title: '90 connectors', body: 'Databases, socials, brokers, exchanges, wallets, open data and web services streaming live.' },
         { status: 'shipped', title: 'Cloud bots & alerts', body: 'Automations that watch your data and fire signals to your widgets, tab closed.' },
-        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 10K credits reserved for platform launch.' },
+        { status: 'shipped', title: 'Accounts & cloud sync', body: 'Free accounts with workspaces synced across every device — 100K credits reserved for platform launch.' },
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
         { status: 'shipped', title: 'Agents & Copilot', body: 'Cloud agents with a full harness, deployed with tool grants and run history — plus a Copilot that builds and arranges your workspace.' },
         { status: 'shipped', title: 'Marketplace & USDC sales', body: 'Publish widgets, screens, workspaces, bots, agents and themes — free or priced in USDC on Solana, wallet to wallet, with lineage that credits every remake.' },
@@ -776,7 +780,7 @@ export const en: SiteContent = {
         },
         {
           q: 'How much does it cost?',
-          a: 'Free includes the full widget canvas, library, cloud sync, 10 bots, 3 agents, community access and 10,000 AI credits at sign-up. Supporter and Sponsor add monthly credits, higher automation quotas and premium appearance — checkout is coming soon. See Plans for the full comparison.',
+          a: 'Free includes the full widget canvas, library, cloud sync, 10 bots, 3 agents, community access and 100,000 AI credits at sign-up. Supporter and Sponsor add monthly credits, higher automation quotas and premium appearance — checkout is coming soon. See Plans for the full comparison.',
         },
       ],
     },
@@ -1032,6 +1036,188 @@ export const en: SiteContent = {
       secondary: 'See all features',
     },
   },
+  communityRulesPage: {
+    meta: {
+      title: 'Community Rules — Nexow',
+      description:
+        'The house rules for the Nexow community: what to publish, how to credit a remix, how bots and agents must behave, and exactly what happens when someone forgets.',
+    },
+    hero: {
+      badge: 'Community Rules',
+      titleLead: 'Be excellent',
+      titleGradient: 'to each other',
+      titleTail: 'bots included',
+      subtitle:
+        'Nexow is one canvas shared by makers, traders, researchers and a growing crowd of automations. These are the rules that keep it worth showing up for. Reading them takes less time than your last widget took to build.',
+      updated: 'Last updated July 2026 · written by humans, enforced by humans',
+      ctaPrimary: 'Read the rules',
+      ctaSecondary: 'Report something',
+    },
+    tldr: {
+      eyebrow: 'The short version',
+      title: 'Three rules, then the fine print',
+      subtitle:
+        'If you only read one section, read this one. Everything below is these three sentences with the edge cases filled in.',
+      items: [
+        {
+          title: 'Be useful',
+          body: 'Publish things people can actually run. A rough widget shared with an honest caveat beats a polished one nobody can install.',
+        },
+        {
+          title: 'Be honest',
+          body: 'Credit the original, label the automation, and never dress a backtest up as a track record. Provenance is a feature here, not a formality.',
+        },
+        {
+          title: 'Be human',
+          body: 'Argue about indicators, models and layouts as loudly as you like. Mute is one click away — reach for it long before the report button.',
+        },
+      ],
+    },
+    rules: {
+      eyebrow: 'The rules',
+      title: 'Eight things that keep this place good',
+      subtitle:
+        'Short enough to remember, specific enough to enforce. Each one exists because someone, somewhere, tried the opposite.',
+      items: [
+        {
+          title: 'Ship real things',
+          body: 'Post widgets, screens, bots and research you actually built or ran. Works in progress are welcome — say so. Fiction presented as a finished product is not.',
+          note: 'a screenshot is not a shipping receipt',
+        },
+        {
+          title: 'Keep the lineage',
+          body: 'Remix anything you can install; that is what publishing is for. Provenance travels with the widget, so leave it attached and say what you changed.',
+          note: '“inspired by” is a link, not a vibe',
+        },
+        {
+          title: 'Label your automations',
+          body: 'Bots and agents run under an account that names them as such. Automating your work is encouraged; pretending a schedule is a person is the one impersonation we take personally.',
+          note: 'robots wear name tags',
+        },
+        {
+          title: 'No financial fairy tales',
+          body: 'Nexow renders market data, it does not endorse your entry. No guaranteed returns, no signal groups, no “DM me for the strategy”, no screenshots of a green day as proof of a system.',
+          note: 'past performance is still not a promise',
+        },
+        {
+          title: 'Keep it safe to run',
+          body: 'Nothing that harvests credentials, mines coins in someone else’s tab, or hides a payload behind a chart. Every widget runs sandboxed — treat that as a floor, not as a challenge.',
+          note: 'the sandbox is a boundary, not a dare',
+        },
+        {
+          title: 'Respect shared plumbing',
+          body: 'Connectors are shared infrastructure with real rate limits. Hammer a venue and it breaks for everyone, including the person you were trying to impress.',
+          note: 'your agent is not the main character',
+        },
+        {
+          title: 'Describe what you publish',
+          body: 'Say what a listing does, which connectors it needs, and what it cannot do yet. Publishing and installing are free today — accurate descriptions are what makes that worth keeping.',
+          note: '“AI-powered” is not a feature list',
+        },
+        {
+          title: 'Attack the work, not the worker',
+          body: 'Tear an assumption apart, question a model, redesign someone’s layout in the replies. Harassment, hate, doxxing and pile-ons are where the fun stops and the account does too.',
+          note: 'play the chart, not the person',
+        },
+      ],
+    },
+    bots: {
+      eyebrow: 'Non-humans',
+      title: 'House rules for the automations',
+      subtitle:
+        'Bots watch markets, brokers and wallets. Agents reason, call tools and deliver. Neither of them gets to be the reason someone leaves.',
+      items: [
+        {
+          icon: 'bot',
+          title: 'One human per automation',
+          body: 'Every bot and agent belongs to an account. Whatever it posts, sends or trades, a person is answerable for it — “the agent did it” has never once worked.',
+        },
+        {
+          icon: 'sync',
+          title: 'Throttle your triggers',
+          body: 'Run on the schedules the product gives you and stay inside connector limits. Spinning up extra accounts to dodge a rate limit is a rate limit violation with extra steps.',
+        },
+        {
+          icon: 'chat',
+          title: 'Deliver where you are invited',
+          body: 'Webhooks, alerts and database writes go to rooms and tables you own or were welcomed into. Nobody’s server should meet your bot before they meet you.',
+        },
+        {
+          icon: 'shield',
+          title: 'Consent for anything costly',
+          body: 'Trading, spending and messaging on someone’s behalf stay explicitly granted, per agent, every time. Never ask another member to turn those grants on for you.',
+        },
+      ],
+    },
+    enforcement: {
+      eyebrow: 'Enforcement',
+      title: 'What happens when someone forgets',
+      subtitle:
+        'Almost every breach is an accident, and almost every response is a note. The ladder only goes up when the same thing keeps happening.',
+      steps: [
+        {
+          n: '01',
+          title: 'A nudge',
+          body: 'You get a message, the content gets a label, and that is usually the whole story. No reputation lost, no drama.',
+        },
+        {
+          n: '02',
+          title: 'A pause',
+          body: 'Repeat it and publishing, posting or automation runs go quiet for a while. Your reputation survives; your momentum does not.',
+        },
+        {
+          n: '03',
+          title: 'A suspension',
+          body: 'Deliberate or serious breaches suspend the account and delist what it published, remixes and installs included.',
+        },
+        {
+          n: '04',
+          title: 'The door',
+          body: 'Fraud, malware, harassment campaigns and impersonation end the account for good. Those are the one-way trips.',
+        },
+      ],
+      note: 'Automated flags never trigger a permanent action on their own — a human reads the case first. We would rather be slow than wrong.',
+    },
+    report: {
+      eyebrow: 'Reports & appeals',
+      title: 'Tell us, and tell us why',
+      subtitle:
+        'Moderation works best when it starts with a link and a sentence. Both of these reach the same small team.',
+      cards: [
+        {
+          title: 'Report something',
+          body: 'Send the link to the post, widget, listing or automation, plus one line on what is wrong with it. We cannot act on a vibe, but we act fast on a link.',
+          cta: 'Report to the team',
+        },
+        {
+          title: 'Appeal a decision',
+          body: 'Think we read it wrong? Reply to the notice within 30 days and a different human takes the case from the top. Explaining beats escalating.',
+          cta: 'Open an appeal',
+        },
+      ],
+      legalTitle: 'The versions written by lawyers',
+      legal: [
+        {
+          label: 'Terms of Use',
+          body: 'The contract behind the account — what you agree to by using Nexow.',
+        },
+        {
+          label: 'Acceptable Use',
+          body: 'The enforceable list of what may never run on the platform.',
+        },
+        {
+          label: 'Privacy Policy',
+          body: 'What we collect when you post, publish or report, and what we do not.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Rules read. Canvas open.',
+      subtitle: 'Now go build something worth arguing about — kindly, with sources, under your own name.',
+      primary: 'Launch Nexow',
+      secondary: 'Explore community',
+    },
+  },
   features: {
     meta: {
       title: 'Features — Nexow',
@@ -1129,7 +1315,7 @@ export const en: SiteContent = {
         {
           icon: 'coins',
           title: 'AI credits',
-          body: 'Credits meter every generation and AI edit. Free reserves 10,000 at sign-up; Supporter and Sponsor refresh 115,000 and 800,000 every month.',
+          body: 'Credits meter every generation and AI edit. Free reserves 100,000 at sign-up; Supporter and Sponsor refresh 115,000 and 800,000 every month.',
         },
         {
           icon: 'bot',
@@ -1161,11 +1347,11 @@ export const en: SiteContent = {
         priceMonthly: '$0',
         priceYearly: '$0',
         cadence: 'forever',
-        stats: ['10,000 credits', '10 bots · 3 agents', 'Unlimited widgets'],
+        stats: ['100,000 credits at sign-up', '10 bots · 3 agents', 'Unlimited widgets'],
         cta: 'Get started free',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '10,000 AI credits reserved at sign-up',
+          '100,000 AI credits reserved at sign-up',
           'Unlimited screens, workspaces & widgets',
           'Unlimited browser connections',
           'Unlimited device sync',
@@ -1314,11 +1500,11 @@ export const en: SiteContent = {
     faq: [
       {
         q: 'Is Nexow really free?',
-        a: 'Yes. Free is a full workspace — unlimited screens, widgets and connectors, reusable library, cloud sync, 10 bots, 3 agents, community and reputation, plus 10,000 AI credits reserved at sign-up. Paid plans add monthly credit refreshes, higher quotas and premium appearance — not a gated core.',
+        a: 'Yes. Free is a full workspace — unlimited screens, widgets and connectors, reusable library, cloud sync, 10 bots, 3 agents, community and reputation, plus 100,000 AI credits reserved at sign-up. Paid plans add monthly credit refreshes, higher quotas and premium appearance — not a gated core.',
       },
       {
         q: 'What are credits?',
-        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 10,000 at sign-up; Supporter grants 115,000 a month; Sponsor 800,000 — and you can buy packs anytime.',
+        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 100,000 at sign-up; Supporter grants 115,000 a month; Sponsor 800,000 — and you can buy packs anytime.',
       },
       {
         q: 'When do paid plans launch?',
@@ -1752,9 +1938,10 @@ export const en: SiteContent = {
       ],
       message: 'How can we help?',
       submit: 'Send message',
-      submitting: 'Opening mail…',
-      success: 'Your mail client should open with the message ready. Thanks for reaching out.',
+      submitting: 'Sending…',
+      success: 'Thanks — your message reached us. We’ll reply by email.',
       error: 'Something went wrong. Email us directly instead.',
+      fallback: 'We couldn’t reach our servers, so we opened your mail client with the message ready. Send it from there.',
       invalid: 'Please fill in a valid email and a short message.',
     },
     aside: {
