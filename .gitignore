@@ -29,3 +29,7 @@ pnpm-debug.log*
 
 # generated scratchpad reports
 scratchpad/*-report.json
+
+# playwright artifacts
+test-results/
+playwright-report/
