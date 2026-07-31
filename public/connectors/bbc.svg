@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="BBC News">
+  <rect width="128" height="128" rx="24" fill="#000000"/>
+  <g fill="#ffffff">
+    <rect x="14" y="48" width="28" height="32" rx="2"/>
+    <rect x="50" y="48" width="28" height="32" rx="2"/>
+    <rect x="86" y="48" width="28" height="32" rx="2"/>
+  </g>
+  <g fill="#000000" font-family="Gill Sans, Helvetica Neue, Arial, sans-serif" font-weight="700" font-size="22" text-anchor="middle">
+    <text x="28" y="71">B</text>
+    <text x="64" y="71">B</text>
+    <text x="100" y="71">C</text>
+  </g>
+</svg>

@@ -6,134 +6,408 @@
  */
 import BrandMark from './BrandMark.astro';
 import Icon from './Icon.astro';
+import PlaygroundScene from './PlaygroundScene.astro';
+import { ICON_PATHS } from './icon-paths';
 
 interface Props {
   promptExample: string;
 }
 const { promptExample } = Astro.props;
+/**
+ * One entry per prompt the mock types out. `scene` picks the chart drawn by
+ * PlaygroundScene and `icon` the glyph on the widget header, so every example
+ * generates a visibly different app. The topics track the hero's starter chips.
+ */
 const playgroundExamples = [
   {
+    scene: 'moodboard',
+    icon: 'layers',
     prompt: promptExample,
     primary: 'Moodboard',
     secondary: 'Habits',
     secondaryMeta: '6/8',
     tertiary: 'Mini game',
-    note: 'calm\nclear',
+    note: 'calm · clear',
   },
   {
-    prompt: 'Build a trading desk with a live watchlist, risk notes and two alerts.',
+    scene: 'candles',
+    icon: 'candlestick',
+    prompt: 'Build a crypto desk with BTC candles, EMA 20/50 and a funding panel.',
+    primary: 'BTC-USD',
+    secondary: 'Order book',
+    secondaryMeta: 'depth',
+    tertiary: 'Funding',
+    note: 'EMA 20/50 · 1h',
+  },
+  {
+    scene: 'watchlist',
+    icon: 'lineChart',
+    prompt: 'Track my stock watchlist with day change, sparklines and earnings dates.',
     primary: 'Watchlist',
-    secondary: 'Risk',
-    secondaryMeta: '2 alerts',
-    tertiary: 'Signals',
-    note: 'BTC +2.4%\nrisk 2%',
+    secondary: 'Earnings',
+    secondaryMeta: '4 soon',
+    tertiary: 'Movers',
+    note: '12 tickers · day change',
   },
   {
+    scene: 'quakes',
+    icon: 'radar',
+    prompt: 'Map live earthquakes above magnitude 4 with a histogram and an event feed.',
+    primary: 'Quake map',
+    secondary: 'Magnitude',
+    secondaryMeta: '24h',
+    tertiary: 'Event feed',
+    note: 'M4.6 · M5.1',
+  },
+  {
+    scene: 'weather',
+    icon: 'cloudSun',
+    prompt: 'Build a weather board for three cities with hourly forecast and rain odds.',
+    primary: 'Forecast',
+    secondary: 'Rain odds',
+    secondaryMeta: '3 cities',
+    tertiary: 'Week ahead',
+    note: '18°C · 40% rain',
+  },
+  {
+    scene: 'board',
+    icon: 'grid',
     prompt: 'Create a project command center with sprint tasks and blockers by owner.',
     primary: 'Sprint board',
     secondary: 'Blockers',
     secondaryMeta: '3 open',
     tertiary: 'Timeline',
-    note: 'design\nlaunch',
+    note: 'design · launch',
   },
   {
+    scene: 'rings',
+    icon: 'flame',
+    prompt: 'Make a habit tracker with streaks, weekly goals and a monthly heatmap.',
+    primary: 'Streaks',
+    secondary: 'Weekly goals',
+    secondaryMeta: '5/7',
+    tertiary: 'Heatmap',
+    note: '21-day streak',
+  },
+  {
+    scene: 'feed',
+    icon: 'newspaper',
+    prompt: 'Make a news desk with top stories, keyword filters and a sentiment split.',
+    primary: 'Top stories',
+    secondary: 'Keywords',
+    secondaryMeta: '12 feeds',
+    tertiary: 'Sentiment',
+    note: 'markets · energy',
+  },
+  {
+    scene: 'funnel',
+    icon: 'rocket',
     prompt: 'Make a founder dashboard with warm leads, launch tasks and content ideas.',
     primary: 'Lead pipeline',
     secondary: 'Launch',
     secondaryMeta: '12 leads',
     tertiary: 'Content',
-    note: 'demo\nquote',
+    note: 'demo · quote',
+  },
+  {
+    scene: 'gauge',
+    icon: 'activity',
+    prompt: 'Show air quality for my city with a PM2.5 gauge and a seven-day trend.',
+    primary: 'Air quality',
+    secondary: 'PM2.5',
+    secondaryMeta: 'good',
+    tertiary: '7-day trend',
+    note: 'AQI 42 · PM2.5 9',
+  },
+  {
+    scene: 'world',
+    icon: 'earth',
+    prompt: 'Compare GDP, inflation and population for five countries since 2000.',
+    primary: 'Indicators',
+    secondary: 'Countries',
+    secondaryMeta: '5',
+    tertiary: 'Since 2000',
+    note: 'GDP · CPI',
+  },
+  {
+    scene: 'odds',
+    icon: 'target',
+    prompt: 'Track prediction markets with odds history, volume and a resolution date.',
+    primary: 'Odds history',
+    secondary: 'Volume',
+    secondaryMeta: '24h',
+    tertiary: 'Markets',
+    note: 'yes 62% · no 38%',
+  },
+  {
+    scene: 'donut',
+    icon: 'wallet',
+    prompt: 'Watch my wallet with token balances, an allocation split and transfers.',
+    primary: 'Allocation',
+    secondary: 'Balances',
+    secondaryMeta: '6 tokens',
+    tertiary: 'Transfers',
+    note: 'ETH 41% · SOL 22%',
+  },
+  {
+    scene: 'game',
+    icon: 'play',
+    prompt: 'Build a little arcade game with a high-score table and a daily challenge.',
+    primary: 'Arcade',
+    secondary: 'High scores',
+    secondaryMeta: 'top 10',
+    tertiary: 'Daily run',
+    note: 'level 3 · 1240 pts',
+  },
+  {
+    scene: 'eq',
+    icon: 'music',
+    prompt: 'Show my listening stats with top artists, genres and a weekly recap.',
+    primary: 'Top artists',
+    secondary: 'Genres',
+    secondaryMeta: '8',
+    tertiary: 'Weekly recap',
+    note: '312 min · 48 tracks',
+  },
+  {
+    scene: 'table',
+    icon: 'databaseZap',
+    prompt: 'Connect my Postgres and chart signups, revenue and churn by week.',
+    primary: 'Signups',
+    secondary: 'Revenue',
+    secondaryMeta: 'weekly',
+    tertiary: 'Churn',
+    note: 'postgres · read-only',
+  },
+  {
+    scene: 'route',
+    icon: 'heart',
+    prompt: 'Log my training with weekly volume, a pace trend and a recovery score.',
+    primary: 'Weekly volume',
+    secondary: 'Pace trend',
+    secondaryMeta: '5 runs',
+    tertiary: 'Recovery',
+    note: '42 km · 4:52 /km',
   },
 ];
 const initialExample = playgroundExamples[0];
+
+/**
+ * Screen tabs, mirroring the canvas chrome in the app: one active screen that
+ * stays put and a few that open and close again on a loop. `--w` is the label
+ * width in `ch` — exact in the mono face — so the open/close keyframes can
+ * animate a real width instead of guessing at a max-width.
+ */
+const activeTab = 'Playground';
+const loopTabs = ['Markets', 'Habits', 'Research'];
+
+/**
+ * Workspace rail — the sidebar above the screens: one workspace stays open and
+ * the others open and close on the same beat as the tabs, half a step offset so
+ * the two strips never move in lockstep.
+ */
+const activeWorkspace = { label: 'Personal', tint: 'from-brand-500 to-accent-500' };
+/**
+ * Add or drop ideas freely: the rail's cycle is `--pg-step` per workspace (set
+ * inline from this length), and the keyframes hold each one open for a fixed
+ * share of that cycle — so a longer list rotates through more names without
+ * ever crowding more of them onto the rail at once. Keep labels short enough to
+ * clear the rail: about eight characters in the mono face.
+ */
+const loopWorkspaces = [
+  { label: 'Trading', tint: 'from-accent-500 to-plasma-500' },
+  { label: 'Markets', tint: 'from-sky-500 to-brand-500' },
+  { label: 'Games', tint: 'from-plasma-500 to-sky-500' },
+  { label: 'Studio', tint: 'from-brand-500 to-sky-500' },
+  { label: 'Health', tint: 'from-brand-400 to-accent-500' },
+  { label: 'Travel', tint: 'from-sky-500 to-plasma-500' },
+  { label: 'Music', tint: 'from-plasma-400 to-brand-500' },
+  { label: 'Home', tint: 'from-accent-500 to-sky-500' },
+  { label: 'Team', tint: 'from-plasma-500 to-sky-500' },
+  { label: 'Labs', tint: 'from-brand-400 to-sky-500' },
+  { label: 'Clients', tint: 'from-accent-400 to-brand-500' },
+];
+/** Parked rails (reduced motion) show this many names — enough to read as a sidebar. */
+const PARKED_WORKSPACES = 3;
+
+/**
+ * Header profile switcher — rolls through community handles so the mock reads
+ * like a live workspace instead of a static screenshot. Keep the count at 6:
+ * the `.pg-profile` keyframes split one cycle into six equal slots.
+ */
+const profiles = [
+  { handle: '@quanta', initial: 'Q', tint: 'from-brand-500 to-accent-500' },
+  { handle: '@nova.eth', initial: 'N', tint: 'from-accent-500 to-plasma-500' },
+  { handle: '@mira_dev', initial: 'M', tint: 'from-sky-500 to-brand-500' },
+  { handle: '@0xkaito', initial: 'K', tint: 'from-plasma-500 to-sky-500' },
+  { handle: '@lunaris', initial: 'L', tint: 'from-brand-400 to-sky-500' },
+  { handle: '@vega-01', initial: 'V', tint: 'from-accent-400 to-brand-500' },
+];
 ---
 
 <div class="relative" data-playground-mock data-examples={JSON.stringify(playgroundExamples)}>
   <div class="pointer-events-none absolute -inset-8 rounded-[2rem] bg-[radial-gradient(circle_at_35%_20%,rgba(16,197,163,0.18),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(14,165,233,0.16),transparent_42%)]"></div>
 
-  <div class="relative overflow-hidden rounded-2xl border border-ink-900/10 bg-white shadow-2xl shadow-ink-950/10">
-    <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3">
-      <BrandMark class="h-4 w-auto" />
-      <span class="font-mono text-xs text-ink-500">nexow playground</span>
-      <span class="ml-auto rounded-full bg-brand-50 px-2.5 py-1 font-mono text-[0.65rem] text-brand-700">
-        local preview
+  <div class="pg-chrome relative overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-2xl shadow-ink-950/10 dark:shadow-black/50">
+    {/* Tabs sit flush on the bottom rule, the way the canvas chrome does. */}
+    <div class="flex items-end gap-2 border-b border-ink-900/8 dark:border-white/8 px-4 pt-3">
+      <BrandMark class="mb-1.5 h-4 w-auto shrink-0" />
+      {/* Screen tabs opening and closing on a loop — decorative, so it stays out
+          of the a11y tree. Clipped rather than wrapped when the card is narrow. */}
+      <div
+        class="pg-tabs flex min-w-0 flex-1 items-end overflow-hidden [mask-image:linear-gradient(to_right,black_calc(100%_-_1.25rem),transparent)]"
+        aria-hidden="true"
+      >
+        <span class="pg-tab pg-tab-active">{activeTab}</span>
+        {loopTabs.map((label, i) => (
+          <span class="pg-tab pg-tab-loop" style={`--i:${i};--w:${label.length}ch`}>{label}</span>
+        ))}
+        <span class="pg-tab-add">
+          <svg viewBox="0 0 12 12" class="size-2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 2.5v7M2.5 6h7"></path>
+          </svg>
+        </span>
+      </div>
+      {/* Auto-rolling profile switcher — decorative, so it stays out of the a11y tree. */}
+      <span
+        class="pg-switcher mb-1.5 flex shrink-0 items-center gap-1 rounded-full bg-brand-50 py-1 pl-1 pr-2 dark:bg-brand-400/12"
+        aria-hidden="true"
+      >
+        <span class="grid">
+          {profiles.map((profile, i) => (
+            <span class="pg-profile col-start-1 row-start-1 flex items-center gap-1.5" style={`--i:${i}`}>
+              <span
+                class:list={[
+                  'flex size-[1.15rem] shrink-0 items-center justify-center rounded-full bg-gradient-to-br font-display text-[0.5rem] font-bold text-white shadow-sm',
+                  profile.tint,
+                ]}
+              >
+                {profile.initial}
+              </span>
+              <span class="font-mono text-[0.65rem] text-brand-700 dark:text-brand-300">{profile.handle}</span>
+            </span>
+          ))}
+        </span>
+        <Icon name="chevron" class="size-3 shrink-0 text-brand-600/60 dark:text-brand-300/60" />
       </span>
     </div>
 
-    <div class="p-4 sm:p-5">
-      <div class="rounded-xl border border-ink-900/10 bg-[#f7fbfb] p-3">
-        <div class="flex items-start gap-3">
-          <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
-            <Icon name="sparkles" class="size-4" />
+    <div class="flex items-stretch">
+      {/* Workspace rail: tabs attach to the rail's right rule the way the screen
+          tabs attach to the header rule. Decorative, so it stays out of the a11y
+          tree; dropped on the narrowest phones where it would starve the body. */}
+      <aside
+        class="pg-rail hidden w-[5.75rem] shrink-0 flex-col overflow-hidden border-r border-ink-900/8 bg-ink-50/60 py-3 pl-2 min-[430px]:flex sm:w-[6.5rem] dark:border-white/8 dark:bg-white/[0.02]"
+        style={`--pg-ws-cycle:calc(var(--pg-step) * ${loopWorkspaces.length})`}
+        aria-hidden="true"
+      >
+        <p class="mb-1.5 pl-1.5 font-mono text-[0.5rem] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
+          Workspaces
+        </p>
+        <span class="pg-ws pg-ws-active">
+          <span class:list={['size-1.5 shrink-0 rounded-full bg-gradient-to-br', activeWorkspace.tint]}></span>
+          {activeWorkspace.label}
+        </span>
+        {loopWorkspaces.map((workspace, i) => (
+          <span class:list={['pg-ws pg-ws-loop', i >= PARKED_WORKSPACES && 'pg-ws-extra']} style={`--i:${i}`}>
+            <span class:list={['size-1.5 shrink-0 rounded-full bg-gradient-to-br', workspace.tint]}></span>
+            {workspace.label}
           </span>
-          <p class="min-w-0 flex-1 font-mono text-xs leading-relaxed text-ink-700 sm:text-sm">
-            <span data-typed data-text={initialExample.prompt}>{initialExample.prompt}</span><span data-caret class="caret-blink ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-brand-500"></span>
-          </p>
+        ))}
+        <span class="pg-ws-add">
+          <svg viewBox="0 0 12 12" class="size-2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 2.5v7M2.5 6h7"></path>
+          </svg>
+        </span>
+      </aside>
+
+      <div class="min-w-0 flex-1 p-4 sm:p-5">
+        <div class="rounded-xl border border-ink-900/10 dark:border-white/10 bg-[#f7fbfb] dark:bg-white/[0.02] p-3">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-100 dark:bg-brand-400/18 text-brand-700 dark:text-brand-300">
+              <Icon name="sparkles" class="size-4" />
+            </span>
+            <p class="min-w-0 flex-1 font-mono text-xs leading-relaxed text-ink-700 dark:text-ink-200 sm:text-sm">
+              <span data-typed data-text={initialExample.prompt}>{initialExample.prompt}</span><span data-caret class="caret-blink ml-0.5 inline-block h-4 w-px translate-y-0.5 bg-brand-500"></span>
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div class="mt-4 grid gap-3 sm:grid-cols-[1.12fr_0.88fr]" data-generated-widgets>
-        <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
-          <div class="flex items-center justify-between">
-            <h3 data-widget-title="primary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.primary}</h3>
-            <Icon name="layers" class="size-4 text-brand-600" />
-          </div>
-          <div class="mt-3 grid h-40 grid-cols-5 grid-rows-4 gap-2">
-            <div class="col-span-3 row-span-3 rounded-lg bg-[linear-gradient(135deg,#7dd3fc,#99f6e4)]"></div>
-            <div class="col-span-2 rounded-lg bg-[linear-gradient(135deg,#fcd34d,#fda4af)]"></div>
-            <div class="rounded-lg border border-ink-900/10 bg-ink-50"></div>
-            <div class="rounded-lg border border-ink-900/10 bg-sky-50"></div>
-            <div data-widget-note class="col-span-2 overflow-hidden whitespace-pre-line break-words rounded-lg border border-ink-900/10 bg-brand-50 p-2 font-mono text-[0.52rem] leading-tight text-ink-500 [overflow-wrap:anywhere]">
+        <div class="mt-4 grid gap-3 sm:grid-cols-[1.12fr_0.88fr]" data-generated-widgets>
+          <section class="flex flex-col rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+            <div class="flex items-center justify-between">
+              <p data-widget-title="primary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.primary}</p>
+              {/* One glyph per example, parked behind `scene-off` until its scene runs. */}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-4 shrink-0 text-brand-600 dark:text-brand-300"
+                aria-hidden="true"
+              >
+                {playgroundExamples.map((example) => (
+                  <path
+                    d={ICON_PATHS[example.icon] ?? ''}
+                    data-scene-id={example.scene}
+                    class:list={[example.scene !== initialExample.scene && 'scene-off']}
+                  />
+                ))}
+              </svg>
+            </div>
+            {/* `my-auto` centres the chart when the row stretches to the taller column. */}
+            <PlaygroundScene scene={initialExample.scene} class="my-auto pt-3" />
+            <p
+              data-widget-note
+              class="mt-2.5 truncate rounded-lg bg-brand-50 px-2 py-1 font-mono text-[0.58rem] text-ink-500 dark:bg-brand-400/12 dark:text-ink-400"
+            >
               {initialExample.note}
-            </div>
-            <div class="col-span-2 flex items-end gap-1 rounded-lg border border-ink-900/10 bg-white p-2">
-              {[42, 70, 35, 82, 55].map((v) => (
-                <span class="w-full rounded-sm bg-brand-400/70" style={`height:${v}%`}></span>
-              ))}
-            </div>
+            </p>
+          </section>
+
+          <div class="grid gap-3">
+            <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+              <div class="flex items-center justify-between">
+                <p data-widget-title="secondary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.secondary}</p>
+                <span data-widget-meta class="rounded-full bg-brand-50 dark:bg-brand-400/12 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700 dark:text-brand-300">{initialExample.secondaryMeta}</span>
+              </div>
+              <div class="mt-3 grid grid-cols-7 gap-1.5">
+                {Array.from({ length: 21 }).map((_, i) => (
+                  <span
+                    class:list={[
+                      'aspect-square rounded-md border',
+                      [0, 1, 2, 4, 7, 8, 10, 14, 15, 16, 18].includes(i)
+                        ? 'border-brand-200 dark:border-brand-400/30 bg-brand-100 dark:bg-brand-400/18'
+                        : 'border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.04]',
+                    ]}
+                  ></span>
+                ))}
+              </div>
+            </section>
+
+            <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+              <div class="flex items-center justify-between">
+                <p data-widget-title="tertiary" class="font-mono text-xs font-semibold text-ink-900 dark:text-ink-100">{initialExample.tertiary}</p>
+                <Icon name="trophy" class="size-4 text-sky-600 dark:text-sky-300" />
+              </div>
+              <div class="mt-3 grid grid-cols-5 gap-1.5">
+                {Array.from({ length: 15 }).map((_, i) => (
+                  <span
+                    class:list={[
+                      'aspect-square rounded-md border',
+                      [1, 8, 12].includes(i)
+                        ? 'border-sky-200 bg-sky-200'
+                        : [4, 6, 13].includes(i)
+                          ? 'border-brand-200 dark:border-brand-400/30 bg-brand-200'
+                          : 'border-ink-900/8 dark:border-white/8 bg-ink-50 dark:bg-white/[0.04]',
+                    ]}
+                  ></span>
+                ))}
+              </div>
+            </section>
           </div>
-        </section>
-
-        <div class="grid gap-3">
-          <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
-            <div class="flex items-center justify-between">
-              <h3 data-widget-title="secondary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.secondary}</h3>
-              <span data-widget-meta class="rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.6rem] text-brand-700">{initialExample.secondaryMeta}</span>
-            </div>
-            <div class="mt-3 grid grid-cols-7 gap-1.5">
-              {Array.from({ length: 21 }).map((_, i) => (
-                <span
-                  class:list={[
-                    'aspect-square rounded-md border',
-                    [0, 1, 2, 4, 7, 8, 10, 14, 15, 16, 18].includes(i)
-                      ? 'border-brand-200 bg-brand-100'
-                      : 'border-ink-900/8 bg-ink-50',
-                  ]}
-                ></span>
-              ))}
-            </div>
-          </section>
-
-          <section class="rounded-xl border border-ink-900/10 bg-white p-3 shadow-sm">
-            <div class="flex items-center justify-between">
-              <h3 data-widget-title="tertiary" class="font-mono text-xs font-semibold text-ink-900">{initialExample.tertiary}</h3>
-              <Icon name="trophy" class="size-4 text-sky-600" />
-            </div>
-            <div class="mt-3 grid grid-cols-5 gap-1.5">
-              {Array.from({ length: 15 }).map((_, i) => (
-                <span
-                  class:list={[
-                    'aspect-square rounded-md border',
-                    [1, 8, 12].includes(i)
-                      ? 'border-sky-200 bg-sky-200'
-                      : [4, 6, 13].includes(i)
-                        ? 'border-brand-200 bg-brand-200'
-                        : 'border-ink-900/8 bg-ink-50',
-                  ]}
-                ></span>
-              ))}
-            </div>
-          </section>
         </div>
       </div>
     </div>
@@ -141,6 +415,305 @@ const initialExample = playgroundExamples[0];
 </div>
 
 <style>
+  /* Header glyphs wait their turn the same way the scenes do. */
+  .scene-off {
+    display: none;
+  }
+
+  /* The chrome's shared beat: screen tabs and workspace rail both run off it.
+     `--pg-cycle` is a whole number of `--pg-step`s so the "+" buttons' flash
+     keeps landing on the beat where a tab is born. */
+  .pg-chrome {
+    --pg-step: 1.6s;
+    --pg-cycle: 9.6s;
+    --pg-add-flash: var(--color-brand-100);
+    --pg-add-flash-text: var(--color-brand-600);
+  }
+
+  :global(.dark) .pg-chrome {
+    --pg-add-flash: color-mix(in oklab, var(--color-brand-400) 20%, transparent);
+    --pg-add-flash-text: var(--color-brand-200);
+  }
+
+  .pg-tab {
+    display: flex;
+    height: 1.35rem;
+    flex-shrink: 0;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.375rem 0.375rem 0 0;
+    padding-inline: 0.5rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6rem;
+    color: var(--color-ink-500);
+  }
+
+  :global(.dark) .pg-tab {
+    color: var(--color-ink-400);
+  }
+
+  /* The screen the widgets below belong to: filled, like the open tab in the app. */
+  .pg-tab-active {
+    background: var(--color-brand-50);
+    color: var(--color-brand-700);
+  }
+
+  :global(.dark) .pg-tab-active {
+    background: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
+    color: var(--color-brand-200);
+  }
+
+  .pg-tab-loop {
+    width: 0;
+    margin-inline-start: 0;
+    padding-inline: 0;
+    background: var(--color-ink-100);
+    animation: pg-tab-life var(--pg-cycle) var(--ease-out-expo) infinite both;
+    animation-delay: calc(var(--i) * var(--pg-step));
+  }
+
+  :global(.dark) .pg-tab-loop {
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  /* Open, hold, then close again — the strip never empties because the first tab
+     is already reopening as the last one folds away. */
+  @keyframes pg-tab-life {
+    0% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
+      opacity: 0;
+      transform: translateY(0.3rem);
+    }
+    7% {
+      width: calc(var(--w) + 1rem);
+      margin-inline-start: 0.25rem;
+      padding-inline: 0.5rem;
+      opacity: 1;
+      transform: none;
+    }
+    72% {
+      width: calc(var(--w) + 1rem);
+      margin-inline-start: 0.25rem;
+      padding-inline: 0.5rem;
+      opacity: 1;
+      transform: none;
+    }
+    82%,
+    100% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
+      opacity: 0;
+      transform: translateY(0.3rem);
+    }
+  }
+
+  .pg-tab-add {
+    display: flex;
+    height: 1.35rem;
+    width: 1.35rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-inline-start: 0.25rem;
+    border-radius: 0.375rem 0.375rem 0 0;
+    border: 1px dashed color-mix(in oklab, var(--color-ink-900) 18%, transparent);
+    color: var(--color-ink-400);
+    animation: pg-tab-add-beat var(--pg-step, 1.6s) ease-out infinite;
+  }
+
+  :global(.dark) .pg-tab-add {
+    border-color: rgb(255 255 255 / 0.16);
+  }
+
+  /* A tap on "+" is what opens a screen, so it flashes on the same beat. */
+  @keyframes pg-tab-add-beat {
+    0% {
+      background: var(--pg-add-flash);
+      color: var(--pg-add-flash-text);
+    }
+    30%,
+    100% {
+      background: transparent;
+      color: var(--color-ink-400);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pg-tab-loop {
+      animation: none;
+      width: calc(var(--w) + 1rem);
+      margin-inline-start: 0.25rem;
+      padding-inline: 0.5rem;
+    }
+    .pg-tab-add {
+      animation: none;
+    }
+  }
+
+  /* Workspace rail. Same life as a screen tab, turned on its side: the row
+     grows out of the rail instead of the header, so it animates height rather
+     than width and lands flush against the rail's right rule. */
+  .pg-ws {
+    display: flex;
+    height: 1.4rem;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.375rem;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.375rem 0 0 0.375rem;
+    padding-inline: 0.5rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.6rem;
+    color: var(--color-ink-500);
+  }
+
+  :global(.dark) .pg-ws {
+    color: var(--color-ink-400);
+  }
+
+  /* The workspace the screens above belong to: filled, and it never closes. */
+  .pg-ws-active {
+    background: var(--color-brand-50);
+    color: var(--color-brand-700);
+  }
+
+  :global(.dark) .pg-ws-active {
+    background: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
+    color: var(--color-brand-200);
+  }
+
+  /* The rail runs on the tabs' beat but its own cycle — one step per workspace,
+     set inline from the list length — so the strip stays evenly staggered no
+     matter how many ideas the list holds. */
+  .pg-ws-loop {
+    height: 0;
+    margin-block-start: 0;
+    background: var(--color-ink-100);
+    animation: pg-ws-life var(--pg-ws-cycle, var(--pg-cycle)) var(--ease-out-expo) infinite both;
+    /* Half a step behind the screen tabs, so the two strips never move together. */
+    animation-delay: calc(var(--i) * var(--pg-step) + var(--pg-step) / 2);
+  }
+
+  :global(.dark) .pg-ws-loop {
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  /* Each workspace holds open for roughly a quarter of the cycle, so with one
+     step of stagger per name about three sit on the rail at any moment however
+     long the list grows. */
+  @keyframes pg-ws-life {
+    0% {
+      height: 0;
+      margin-block-start: 0;
+      opacity: 0;
+      transform: translateX(-0.4rem);
+    }
+    4% {
+      height: 1.4rem;
+      margin-block-start: 0.25rem;
+      opacity: 1;
+      transform: none;
+    }
+    22% {
+      height: 1.4rem;
+      margin-block-start: 0.25rem;
+      opacity: 1;
+      transform: none;
+    }
+    27%,
+    100% {
+      height: 0;
+      margin-block-start: 0;
+      opacity: 0;
+      transform: translateX(-0.4rem);
+    }
+  }
+
+  .pg-ws-add {
+    display: flex;
+    height: 1.4rem;
+    flex-shrink: 0;
+    align-items: center;
+    margin-block-start: 0.25rem;
+    border-radius: 0.375rem 0 0 0.375rem;
+    border: 1px dashed color-mix(in oklab, var(--color-ink-900) 18%, transparent);
+    border-inline-end: 0;
+    padding-inline: 0.5rem;
+    color: var(--color-ink-400);
+    animation: pg-tab-add-beat var(--pg-step, 1.6s) ease-out infinite;
+  }
+
+  :global(.dark) .pg-ws-add {
+    border-color: rgb(255 255 255 / 0.16);
+    border-inline-end: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pg-ws-loop {
+      animation: none;
+      height: 1.4rem;
+      margin-block-start: 0.25rem;
+    }
+    /* Parked, the whole list would run past the card — keep the first few. */
+    .pg-ws-extra {
+      display: none;
+    }
+    .pg-ws-add {
+      animation: none;
+    }
+  }
+
+  /* Profile switcher: six handles rolling through one slot, one at a time.
+     The grid stack keeps every row on the same cell, so the chip is sized by
+     the widest handle and never resizes mid-cycle. */
+  .pg-switcher {
+    --pg-slot: 3s;
+  }
+
+  .pg-switcher:hover .pg-profile {
+    animation-play-state: paused;
+  }
+
+  .pg-profile {
+    opacity: 0;
+    animation: pg-roll calc(6 * var(--pg-slot)) var(--ease-out-expo) infinite backwards;
+    animation-delay: calc(var(--i) * var(--pg-slot));
+  }
+
+  /* Slots are 16.667% wide; a handle enters, holds, then rolls up and out. */
+  @keyframes pg-roll {
+    0% {
+      opacity: 0;
+      transform: translateY(0.6rem);
+    }
+    3%,
+    13.6% {
+      opacity: 1;
+      transform: none;
+    }
+    16.667%,
+    100% {
+      opacity: 0;
+      transform: translateY(-0.6rem);
+    }
+  }
+
+  /* No motion: park on the first handle. */
+  @media (prefers-reduced-motion: reduce) {
+    .pg-profile {
+      animation: none;
+      opacity: 0;
+    }
+    .pg-profile:first-child {
+      opacity: 1;
+    }
+  }
+
   :global(.js) [data-playground-mock] [data-generated-widgets] {
     opacity: 0;
     transform: translateY(14px) scale(0.985);
@@ -195,6 +768,7 @@ const initialExample = playgroundExamples[0];
   let playgroundTimers: number[] = [];
 
   interface PlaygroundExample {
+    scene: string;
     prompt: string;
     primary: string;
     secondary: string;
@@ -227,6 +801,19 @@ const initialExample = playgroundExamples[0];
     setText(root, '[data-widget-note]', example.note);
   }
 
+  /**
+   * Reveal one scene (chart + header glyph share the id). Held back until the
+   * widgets fade in: a scene that switches while the panel is still hidden
+   * would play its entrance where nobody can see it. Toggling display also
+   * rewinds the incoming scene's animations to frame one.
+   */
+  function showScene(root: HTMLElement, scene: string) {
+    const parts = root.querySelectorAll<SVGElement>('[data-scene-id]');
+    parts.forEach((el) => el.classList.add('scene-off'));
+    void root.offsetWidth; // reflow, so even a repeat scene replays its entrance
+    parts.forEach((el) => el.classList.toggle('scene-off', el.dataset.sceneId !== scene));
+  }
+
   function initPlaygroundTyped() {
     typedObserver?.disconnect();
     typedObserver = null;
@@ -253,6 +840,7 @@ const initialExample = playgroundExamples[0];
     }
     if (!examples.length) {
       examples = [{
+        scene: 'moodboard',
         prompt: typed.dataset.text ?? '',
         primary: 'Moodboard',
         secondary: 'Habits',
@@ -283,7 +871,10 @@ const initialExample = playgroundExamples[0];
               if (i < example.prompt.length) {
                 later(tick, 16 + Math.random() * 28);
               } else {
-                later(() => root.classList.add('is-generated'), 180);
+                later(() => {
+                  showScene(root, example.scene);
+                  root.classList.add('is-generated');
+                }, 180);
                 later(runExample, 3600);
               }
             };

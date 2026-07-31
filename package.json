@@ -6,11 +6,19 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "predev": "node ./scripts/ensure-content-store.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "content:sync": "astro sync --force && node ./scripts/ensure-content-store.mjs --force",
+    "test": "bun run content:sync && vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "bun run content:sync && vitest run tests/integration",
+    "test:build": "vitest run tests/build",
+    "test:coverage": "bun run content:sync && vitest run --coverage",
     "deploy": "astro build && wrangler deploy",
     "cf:serve": "astro build && wrangler dev"
   },
@@ -30,7 +38,14 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.62.1",
+    "@types/jsdom": "^28.0.3",
+    "@vitest/coverage-v8": "^4.1.10",
+    "axe-core": "^4.12.1",
+    "jsdom": "^30.0.1",
     "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
     "wrangler": "^4.106.0"
   }
 }

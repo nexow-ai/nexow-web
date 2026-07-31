@@ -1,6 +1,7 @@
 ---
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { promptAppUrl } from '../../lib/appDeepLinks';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
 import PlaygroundMock from '../PlaygroundMock.astro';
@@ -10,73 +11,308 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
+const defaultPromptUrl = promptAppUrl(t.promptExample);
+
+const examples = t.promptExamples ?? [];
+/** Starter prompts shown before the “more examples” chip reveals the rest. */
+const EXAMPLES_VISIBLE = 8;
+
+/** Entrance order. The headline leads, everything else follows it up. */
+const D = {
+  badge: '0.05s',
+  line1: '0.14s',
+  line2: '0.22s',
+  line3: '0.30s',
+  kicker: '0.40s',
+  sub: '0.48s',
+  forge: '0.54s',
+  examples: '0.60s',
+  cta: '0.68s',
+  note: '0.76s',
+  mock: '0.30s',
+};
 ---
 
-<section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-14 text-ink-950 sm:pt-40 sm:pb-18">
-  <!-- Backdrop: soft workspace wash + quiet grid -->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+<section
+  id="hero"
+  class="relative overflow-x-clip pb-16 pt-32 text-ink-950 sm:pb-24 sm:pt-40 dark:text-white"
+>
+  <!-- Backdrop: colored aurora mesh + drifting brand/accent/plasma blobs. -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="aurora-mesh absolute inset-[-12%]"></div>
     <div
-      class="aurora-a absolute -top-48 left-[4%] h-[620px] w-[620px] rounded-full opacity-35 blur-3xl"
-      style="background:radial-gradient(circle at 42% 40%, color-mix(in oklab, var(--color-brand-200) 72%, white), transparent 68%)"
+      data-motion="sink-lg"
+      class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-60 blur-3xl dark:opacity-50"
+      style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
     >
     </div>
     <div
-      class="aurora-b absolute -top-36 right-[0%] h-[680px] w-[680px] rounded-full opacity-28 blur-3xl"
-      style="background:radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--color-sky-200) 70%, white), transparent 68%)"
+      data-motion="rise-lg"
+      class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-45 blur-3xl dark:opacity-40"
+      style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
     >
     </div>
     <div
-      class="absolute inset-0 opacity-45 [mask-image:radial-gradient(80%_60%_at_50%_16%,black,transparent)]"
-      style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 13%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
-    ></div>
-    <div class="hairline-gold absolute inset-x-0 bottom-0 opacity-60"></div>
+      class="aurora-c absolute left-[38%] top-[38%] h-[520px] w-[520px] rounded-full opacity-40 blur-3xl dark:opacity-35"
+      style="background:radial-gradient(circle, var(--aurora-4), transparent 65%)"
+    >
+    </div>
+    <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
   </div>
 
   <div class="container-page relative">
     <div class="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
       <!-- Copy -->
       <div class="max-w-xl">
-        <a
-          href={SITE.appUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/75 py-1.5 pl-2 pr-3.5 text-sm font-medium text-ink-600 shadow-sm backdrop-blur transition-colors hover:border-brand-300"
+        <p
+          class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-brand-100 px-3 py-1.5 text-xs font-semibold text-brand-700 shadow-sm dark:border-brand-400/20 dark:bg-brand-400/15 dark:text-brand-300"
+          style={`--enter-delay:${D.badge}`}
         >
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-700">
-            <span class="size-1.5 animate-pulse rounded-full bg-brand-500"></span>
-            {t.badge}
+          <span class="badge-spark grid size-4 place-items-center text-brand-500 dark:text-brand-400">
+            <Icon name="sparkles" class="size-full" />
           </span>
-          <Icon name="arrow" class="size-3.5 text-ink-400 transition-transform group-hover:translate-x-0.5" />
-        </a>
+          {t.badge}
+        </p>
 
-        <h1 class="mt-7 font-display text-5xl font-semibold leading-[1.04] tracking-tight text-ink-950 sm:text-6xl lg:text-[4.1rem]">
-          {t.titleLead}<br />
-          <span class="text-gradient">{t.titleGradient}</span><br />
-          {t.titleTail}
+        {/* Phone size is fluid, not a fixed 2.7rem: locales with long compounds
+            (el "Περιγράψτε", ru "Опишите.") overrun a 320px screen and the hero's
+            overflow clip silently eats the end of the word. */}
+        <h1
+          class="mt-7 font-display text-[clamp(1.9rem,8.5vw,2.7rem)] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
+        >
+          {/* Particle assemble — inverse of the app composer vanish-on-send. */}
+          <span class="block" data-text-appear data-text-appear-delay={D.line1.replace('s', '')}>{t.titleLead}</span>
+          <span class="block text-gradient-live" data-text-appear data-text-appear-delay={D.line2.replace('s', '')}>{t.titleGradient}</span>
+          <span class="block" data-text-appear data-text-appear-delay={D.line3.replace('s', '')}>{t.titleTail}</span>
         </h1>
 
-        <p class="mt-6 max-w-lg text-lg leading-relaxed text-ink-600">
+        {
+          t.titleKicker && (
+            <p
+              class="enter mt-5 flex items-center gap-3 font-display text-lg font-medium text-ink-500 sm:text-xl dark:text-ink-300"
+              style={`--enter-delay:${D.kicker}`}
+            >
+              <span class="rule-gradient hidden h-px w-10 shrink-0 sm:block" />
+              {t.titleKicker}
+            </p>
+          )
+        }
+
+        <p
+          class="enter mt-6 max-w-lg text-lg leading-relaxed text-ink-600 dark:text-ink-300"
+          style={`--enter-delay:${D.sub}`}
+        >
           {t.subtitle}
         </p>
 
-        <div class="mt-9 flex flex-wrap items-center gap-3">
-          <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
-            {t.ctaPrimary}
-          </Button>
+        <!-- Live prompt → app: deep-links with ?prompt= (see appDeepLinks.promptAppUrl). -->
+        <form
+          id="forge"
+          class="enter mt-8"
+          style={`--enter-delay:${D.forge}`}
+          data-app-base={SITE.appUrl}
+          action={defaultPromptUrl}
+          method="get"
+          target="_blank"
+        >
+          <label class="sr-only" for="hero-prompt">{t.promptPlaceholder}</label>
+          <div
+            class="flex flex-col gap-2 rounded-2xl border border-ink-900/10 bg-white/80 p-2 shadow-sm backdrop-blur dark:border-white/12 dark:bg-white/[0.06] sm:flex-row sm:items-stretch"
+          >
+            <div class="flex min-w-0 flex-1 items-start gap-2.5 px-2.5 py-2">
+              <Icon name="sparkles" class="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+              <textarea
+                id="hero-prompt"
+                name="prompt"
+                rows="2"
+                maxlength="500"
+                placeholder={t.promptPlaceholder}
+                class="min-h-[2.75rem] w-full resize-none bg-transparent text-sm leading-relaxed text-ink-800 placeholder:text-ink-400 focus:outline-none dark:text-ink-100 dark:placeholder:text-ink-500"
+              >{t.promptExample}</textarea>
+            </div>
+            <button
+              type="submit"
+              class="group inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-5 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 sm:self-end"
+            >
+              {t.ctaPrimary}
+              <Icon
+                name="rocket"
+                class="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </button>
+          </div>
+        </form>
+
+        <!-- Starter prompts: click fills the composer and syncs the form action. -->
+        {
+          examples.length > 0 && (
+            <div class="enter mt-5" style={`--enter-delay:${D.examples}`} data-prompt-examples>
+              <p
+                id="hero-examples-label"
+                class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500"
+              >
+                {t.promptExamplesLabel}
+              </p>
+              <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="hero-examples-label">
+                {examples.map((example, i) => (
+                  <button
+                    type="button"
+                    data-prompt-example
+                    data-prompt={example.prompt}
+                    data-example-extra={i >= EXAMPLES_VISIBLE ? '' : undefined}
+                    aria-pressed="false"
+                    title={example.prompt}
+                    class="group inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white/70 py-1.5 pl-2.5 pr-3 text-xs font-medium text-ink-600 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-ink-900 aria-pressed:border-brand-400 aria-pressed:bg-brand-50 aria-pressed:text-brand-700 dark:border-white/12 dark:bg-white/[0.05] dark:text-ink-300 dark:hover:border-brand-400/40 dark:hover:text-white dark:aria-pressed:border-brand-400/50 dark:aria-pressed:bg-brand-400/12 dark:aria-pressed:text-brand-200"
+                  >
+                    <Icon
+                      name={example.icon}
+                      class="size-3.5 shrink-0 text-brand-600 transition-transform group-hover:scale-110 dark:text-brand-300"
+                    />
+                    {example.label}
+                  </button>
+                ))}
+                {examples.length > EXAMPLES_VISIBLE && (
+                  <button
+                    type="button"
+                    data-prompt-examples-more
+                    class="hidden items-center gap-1.5 rounded-full border border-dashed border-ink-900/15 px-3 py-1.5 text-xs font-medium text-ink-500 transition-colors hover:border-brand-300 hover:text-brand-700 dark:border-white/15 dark:text-ink-400 dark:hover:border-brand-400/40 dark:hover:text-brand-200"
+                  >
+                    {t.promptExamplesMore}
+                    <span class="font-mono text-[0.7rem]">+{examples.length - EXAMPLES_VISIBLE}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        }
+
+        <div class="enter mt-6 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
           <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
             {t.ctaSecondary}
           </Button>
         </div>
 
-        <p class="mt-7 font-mono text-xs leading-relaxed text-ink-500">
+        <p
+          class="enter mt-7 font-mono text-xs leading-relaxed text-ink-500 dark:text-ink-400"
+          style={`--enter-delay:${D.note}`}
+        >
           {t.note}
         </p>
       </div>
 
       <!-- Product mock -->
-      <div class="reveal lg:pl-4">
-        <PlaygroundMock promptExample={t.promptExample} />
+      <div class="enter lg:pl-4" style={`--enter-delay:${D.mock}`}>
+        <div data-motion="tilt-lg rise depth" style="--m-persp:1100px">
+          <PlaygroundMock promptExample={t.promptExample} />
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* Badge glyph twinkles instead of the old flat dot: a slow scale/rotate beat
+     with a brightness lift at the peak, so the mark reads "live" without
+     pulling focus from the headline. */
+  @keyframes badge-twinkle {
+    0%,
+    100% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0.8;
+    }
+    35% {
+      transform: rotate(12deg) scale(1.16);
+      opacity: 1;
+    }
+    70% {
+      transform: rotate(-6deg) scale(0.94);
+      opacity: 0.85;
+    }
+  }
+  .badge-spark {
+    animation: badge-twinkle 3.2s var(--ease-out-expo, ease-in-out) infinite;
+    transform-origin: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .badge-spark {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* Extra starter prompts stay collapsed only where JS can reveal them. */
+  :global(.js) [data-prompt-examples]:not([data-open]) [data-example-extra] {
+    display: none;
+  }
+  :global(.js) [data-prompt-examples-more] {
+    display: inline-flex;
+  }
+  [data-prompt-examples][data-open] [data-prompt-examples-more] {
+    display: none;
+  }
+</style>
+
+<script>
+  function initHeroForge() {
+    const form = document.getElementById('forge') as HTMLFormElement | null;
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const base = (form.dataset.appBase || 'https://x.nexow.ai').replace(/\/$/, '');
+    const input = form.querySelector<HTMLTextAreaElement>('#hero-prompt');
+    if (!input) return;
+
+    /** `/?signup&prompt=…` — mirrors appDeepLinks.promptAppUrl (bare `signup` flag). */
+    const promptUrl = (prompt: string) => {
+      const params = new URLSearchParams();
+      params.set('signup', '');
+      if (prompt) params.set('prompt', prompt);
+      const qs = params
+        .toString()
+        .split('&')
+        .map((part) => (part.endsWith('=') ? part.slice(0, -1) : part))
+        .join('&');
+      return `${base}/?${qs}`;
+    };
+
+    const syncLinks = () => {
+      form.action = promptUrl(input.value.trim());
+    };
+
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-prompt-example]'));
+    const markActive = (active: HTMLButtonElement | null) => {
+      chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip === active)));
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const prompt = chip.dataset.prompt ?? '';
+        input.value = prompt;
+        markActive(chip);
+        syncLinks();
+        input.focus({ preventScroll: true });
+        input.setSelectionRange(prompt.length, prompt.length);
+      });
+    });
+
+    input.addEventListener('input', () => {
+      const value = input.value.trim();
+      const match = chips.find((chip) => chip.dataset.prompt === value) ?? null;
+      markActive(match);
+      syncLinks();
+    });
+
+    const rail = document.querySelector<HTMLElement>('[data-prompt-examples]');
+    rail?.querySelector<HTMLButtonElement>('[data-prompt-examples-more]')?.addEventListener('click', () => {
+      rail.dataset.open = '';
+      rail.querySelector<HTMLButtonElement>('[data-example-extra]')?.focus({ preventScroll: true });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      window.open(promptUrl(input.value.trim()), '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  document.addEventListener('astro:page-load', initHeroForge);
+</script>

@@ -1,12 +1,26 @@
 // Generate the social share image public/og.png (1200×630).
 // Dark brand card: grid + glow + the white wordmark + tagline.
 import sharp from 'sharp';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const pub = fileURLToPath(new URL('../public/', import.meta.url));
 const W = 1200;
 const H = 630;
+
+/**
+ * Live connector count, read from the catalog rather than typed into the card —
+ * the previous hard-coded "28+" was three months and 60 connectors stale by the
+ * time anyone noticed. The catalog is TypeScript, so parse rather than import.
+ */
+export function liveConnectorCount(
+  source = readFileSync(fileURLToPath(new URL('../src/data/connectors.ts', import.meta.url)), 'utf8'),
+) {
+  return (source.match(/"status":\s*"live"/g) ?? []).length;
+}
+
+const LIVE = liveConnectorCount();
 
 const bg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -39,7 +53,7 @@ const bg = `
   <!-- subline -->
   <text x="${W / 2}" y="480" text-anchor="middle"
     font-family="'DejaVu Sans','Liberation Sans',Arial,sans-serif" font-size="24" fill="#8b93a7">
-    Plain-language widgets · 28+ live connectors · 10K starter credits</text>
+    Plain-language widgets · ${LIVE} live connectors · 100K starter credits</text>
   <!-- url -->
   <text x="${W / 2}" y="560" text-anchor="middle"
     font-family="'DejaVu Sans Mono','Liberation Mono',monospace" font-size="20" fill="#5b6472">nexow.ai</text>

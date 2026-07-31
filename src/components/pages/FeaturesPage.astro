@@ -1,9 +1,12 @@
 ---
-import { SITE, type Lang } from '../../i18n/config';
+import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { featureGroupAppHref, featureItemAppHref } from '../../lib/appDeepLinks';
 import Layout from '../../layouts/Layout.astro';
 import Button from '../Button.astro';
+import FeatureGlyph from '../FeatureGlyph.astro';
 import Icon from '../Icon.astro';
 import PlaygroundMock from '../PlaygroundMock.astro';
 import CanvasMock from '../CanvasMock.astro';
@@ -20,25 +23,39 @@ const { lang } = Astro.props;
 const t = useContent(lang).features;
 const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
+const badgeIcon = getPageBadgeIcon('/features');
+
+/** Stable ids across locales (group order matches `en`). */
+const GROUP_IDS = ['widgets', 'workspace', 'connectors', 'automate', 'network', 'account'] as const;
+
+const sections = [
+  { id: 'hero', label: t.hero.badge },
+  ...t.groups.map((group, i) => ({
+    id: GROUP_IDS[i] ?? `group-${i + 1}`,
+    label: group.title,
+  })),
+  { id: 'cta', label: home.ctaPrimary },
+];
 ---
 
-<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} route="/features" title={t.meta.title} description={t.meta.description} sections={sections}>
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-white pt-32 pb-16 sm:pt-40">
-    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+  <section id="hero" class="relative scroll-mt-20 overflow-hidden pt-32 pb-16 sm:pt-40">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="aurora-mesh absolute inset-[-12%]"></div>
       <div
-        class="absolute -top-32 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+        class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-50 blur-3xl dark:opacity-40"
+        style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
       >
       </div>
       <div
-        class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-40 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+        class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-45 blur-3xl dark:opacity-35"
+        style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
       >
       </div>
       <div
-        class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-35 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+        class="aurora-c absolute left-1/2 top-[20%] size-[420px] -translate-x-1/2 rounded-full opacity-40 blur-3xl dark:opacity-30"
+        style="background:radial-gradient(circle, var(--aurora-3), transparent 65%)"
       >
       </div>
       <div
@@ -46,18 +63,43 @@ const explore = useContent(lang).connectorsPage.exploreCta;
         style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px); background-size:56px 56px"
       >
       </div>
+      <!-- Hero SVG constellation -->
+      <svg class="features-hero-svg absolute left-1/2 top-24 h-[min(55vw,360px)] w-[min(90%,640px)] -translate-x-1/2 opacity-40" viewBox="0 0 640 280" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="fhero-g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.6"></stop>
+            <stop offset="50%" stop-color="var(--color-sky-400)" stop-opacity="0.45"></stop>
+            <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.35"></stop>
+          </linearGradient>
+        </defs>
+        <path class="fhero-wire" pathLength="1" d="M60 90 C 160 40 260 50 320 120" stroke="url(#fhero-g)" stroke-width="1.2"></path>
+        <path class="fhero-wire fhero-wire--2" pathLength="1" d="M580 80 C 480 30 380 50 320 110" stroke="url(#fhero-g)" stroke-width="1.2"></path>
+        <path class="fhero-wire fhero-wire--3" pathLength="1" d="M100 220 C 200 180 260 150 320 130" stroke="url(#fhero-g)" stroke-width="1.1"></path>
+        <circle r="3" fill="var(--color-brand-500)">
+          <animateMotion dur="5.5s" repeatCount="indefinite" path="M60 90 C 160 40 260 50 320 120"></animateMotion>
+        </circle>
+        <circle r="2.4" fill="var(--color-accent-500)" opacity="0.9">
+          <animateMotion dur="6.5s" begin="0.9s" repeatCount="indefinite" path="M580 80 C 480 30 380 50 320 110"></animateMotion>
+        </circle>
+        <circle cx="320" cy="120" r="6" fill="var(--color-brand-400)" opacity="0.55" class="fhero-core"></circle>
+      </svg>
     </div>
 
     <div class="container-page relative text-center">
-      <span class="inline-flex items-center gap-2 rounded-full border border-brand-300/40 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-ink-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-ink-300">
+        {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
       </span>
-      <h1 class="mx-auto mt-6 max-w-4xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1
+        data-text-appear
+        data-text-appear-delay="0.12"
+        class="mx-auto mt-6 max-w-4xl text-center font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl dark:text-white"
+      >
         {t.hero.title}
       </h1>
-      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.hero.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">{home.ctaPrimary}</Button>
+        <Button href={featureGroupAppHref(0)} size="lg" variant="gradient" external iconRight="rocket">{home.ctaPrimary}</Button>
         <Button href={localizePath('/connectors', lang)} variant="secondary" size="lg" icon="plug">{explore}</Button>
       </div>
     </div>
@@ -65,12 +107,16 @@ const explore = useContent(lang).connectorsPage.exploreCta;
   </section>
 
   <!-- Feature pillars (zig-zag, each paired with an animated visual) -->
-  <div class="bg-white">
+  <div>
     {
       t.groups.map((group, i) => {
         const reverse = i % 2 === 1;
+        const openHref = featureGroupAppHref(i);
         return (
-          <section class:list={['relative overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80']}>
+          <section
+            id={GROUP_IDS[i] ?? `group-${i + 1}`}
+            class:list={['relative scroll-mt-20 overflow-hidden py-16 sm:py-24', i > 0 && 'border-t border-brand-100/80 dark:border-white/8']}
+          >
             <div class="pointer-events-none absolute inset-0" aria-hidden="true">
               <div
                 class:list={[
@@ -80,34 +126,45 @@ const explore = useContent(lang).connectorsPage.exploreCta;
               />
             </div>
             <div class="container-page relative">
-              <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+              <div class="grid items-start gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
                 <!-- Copy -->
-                <div class:list={['reveal', reverse && 'lg:order-2']}>
+                <div class:list={['reveal min-w-0', reverse && 'lg:order-2']}>
                   <span class="eyebrow inline-flex items-center gap-3 text-brand-600">
-                    <span class="font-mono text-2xl font-bold text-brand-200">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="font-mono text-2xl font-bold text-ink-950 dark:text-white">{String(i + 1).padStart(2, '0')}</span>
                     {group.title}
                   </span>
-                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1]">
+                  <h2 class="mt-4 font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl md:text-[2.5rem] md:leading-[1.1] dark:text-white">
                     {group.body}
                   </h2>
                   <ul class="mt-8 space-y-5">
                     {group.items.map((f) => (
-                      <li class="flex gap-4">
-                        <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-200/80">
-                          <Icon name={f.icon} class="size-5" />
-                        </span>
-                        <div>
-                          <h3 class="font-display text-base font-semibold text-ink-950">{f.title}</h3>
-                          <p class="mt-1 text-sm leading-relaxed text-ink-600">{f.body}</p>
-                        </div>
+                      <li>
+                        <a
+                          href={featureItemAppHref(f.icon)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="group flex gap-4 rounded-xl p-1 -m-1 transition-colors hover:bg-brand-50/60 dark:hover:bg-white/[0.04]"
+                        >
+                          <FeatureGlyph name={f.icon} />
+                          <div class="min-w-0">
+                            <h3 class="font-display text-base font-semibold text-ink-950 transition-colors group-hover:text-brand-800 dark:text-white dark:group-hover:text-brand-300">{f.title}</h3>
+                            <p class="mt-1 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{f.body}</p>
+                          </div>
+                        </a>
                       </li>
                     ))}
                   </ul>
+                  <div class="mt-8">
+                    <Button href={openHref} variant="gradient" external iconRight="rocket">
+                      {home.ctaPrimary}
+                    </Button>
+                  </div>
                 </div>
 
-                <!-- Visual -->
-                <div class:list={['reveal', reverse && 'lg:order-1']}>
-                  <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white">
+                <!-- Visual — `min-w-0` so the mock's intrinsic width cannot inflate
+                     the single mobile column and push the copy past the viewport. -->
+                <div class:list={['reveal min-w-0 lg:sticky lg:top-28', reverse && 'lg:order-1']}>
+                  <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white dark:ring-offset-ink-950">
                     {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
                     {i === 1 && <CanvasMock />}
                     {i === 2 && <ConnectMock lang={lang} />}
@@ -126,3 +183,39 @@ const explore = useContent(lang).connectorsPage.exploreCta;
 
   <CtaBand lang={lang} />
 </Layout>
+
+<style>
+  .fhero-wire {
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fhero-draw 1.6s var(--ease-out-expo, ease) forwards;
+  }
+  .fhero-wire--2 { animation-delay: 0.18s; }
+  .fhero-wire--3 { animation-delay: 0.36s; }
+  .fhero-core {
+    animation: fhero-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes fhero-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes fhero-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.75; transform: scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fhero-wire {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+    .fhero-core {
+      animation: none;
+    }
+    .features-hero-svg circle[r="3"],
+    .features-hero-svg circle[r="2.4"] {
+      display: none;
+    }
+  }
+</style>

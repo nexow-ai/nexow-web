@@ -1,0 +1,362 @@
+---
+/**
+ * Fixed page-to-page arrows in the bottom corners — crystal-glass pills that
+ * step through `PAGE_ORDER`. Previous sits at the inline start, next at the
+ * inline end, so RTL locales get the pair mirrored for free (the glyphs flip
+ * with `--dir`). Either side is omitted at the ends of the tour, and routes
+ * outside the tour render nothing at all.
+ *
+ * The final stop swaps its next arrow for a brand-filled launch button — the
+ * tour ends in the product rather than a dead corner.
+ */
+import { SITE } from '../i18n/config';
+import { useContent } from '../i18n/content';
+import { getLangFromUrl, getRouteFromUrl } from '../i18n/utils';
+import { getPageNeighbours } from '../i18n/page-order';
+import Icon from './Icon.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useContent(lang);
+const { prev, next } = getPageNeighbours(getRouteFromUrl(Astro.url), lang, t);
+
+const prevLabel = t.nav.prevPage ?? 'Previous page';
+const nextLabel = t.nav.nextPage ?? 'Next page';
+const launchLabel = t.nav.launch;
+/** Last stop on the tour — it has somewhere to come from but nowhere to go. */
+const atEnd = !!prev && !next;
+---
+
+{
+  (prev || next) && (
+    <nav
+      class="page-nav pointer-events-none fixed inset-x-0 bottom-0 z-30"
+      aria-label={`${prevLabel} / ${nextLabel}`}
+      transition:animate="none"
+    >
+      {prev && (
+        <a
+          href={prev.href}
+          rel="prev"
+          class="page-nav__btn page-nav__btn--prev pointer-events-auto absolute bottom-4 start-4 sm:bottom-6 sm:start-6"
+          aria-label={`${prevLabel}: ${prev.label}`}
+        >
+          <Icon name="arrow" class="page-nav__icon size-5" />
+          <span class="page-nav__tip" aria-hidden="true">
+            {prev.label}
+          </span>
+        </a>
+      )}
+
+      {next && (
+        <a
+          href={next.href}
+          rel="next"
+          class="page-nav__btn page-nav__btn--next pointer-events-auto absolute bottom-4 end-4 sm:bottom-6 sm:end-6"
+          aria-label={`${nextLabel}: ${next.label}`}
+        >
+          <Icon name="arrow" class="page-nav__icon size-5" />
+          <span class="page-nav__tip" aria-hidden="true">
+            {next.label}
+          </span>
+        </a>
+      )}
+
+      {atEnd && (
+        <a
+          href={SITE.appUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="page-nav__btn page-nav__btn--launch pointer-events-auto absolute bottom-4 end-4 sm:bottom-6 sm:end-6"
+          aria-label={launchLabel}
+        >
+          <Icon name="rocket" class="page-nav__icon size-5" />
+          <span class="page-nav__tip" aria-hidden="true">
+            {launchLabel}
+          </span>
+        </a>
+      )}
+    </nav>
+  )
+}
+
+<style>
+  /* Inline direction as a number, so one transform serves both writing modes. */
+  .page-nav {
+    --dir: 1;
+  }
+  :global([dir='rtl']) .page-nav {
+    --dir: -1;
+  }
+
+  .page-nav__btn {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    isolation: isolate;
+    color: var(--color-ink-800);
+    border: 1px solid color-mix(in oklab, white 62%, transparent);
+    background:
+      linear-gradient(
+        150deg,
+        color-mix(in oklab, white 62%, transparent),
+        color-mix(in oklab, white 24%, transparent)
+      );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 10px 26px -8px rgb(0 0 0 / 0.28),
+      0 2px 6px -2px rgb(0 0 0 / 0.12),
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.7);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease,
+      color 0.3s ease;
+  }
+
+  @media (min-width: 640px) {
+    .page-nav__btn {
+      width: 3.25rem;
+      height: 3.25rem;
+    }
+  }
+
+  /* Specular pass: a hard highlight top-left, a faint accent bounce bottom-right. */
+  .page-nav__btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(110% 85% at 26% 10%, rgb(255 255 255 / 0.9), transparent 58%),
+      radial-gradient(
+        85% 65% at 80% 94%,
+        color-mix(in oklab, var(--color-brand-300) 55%, transparent),
+        transparent 62%
+      );
+  }
+
+  /* Sheen that sweeps across the face on hover — the "crystal" tell. Driven by
+     background-position, not a transform, so it stays clipped to the circle
+     without an `overflow: hidden` that would also eat the label. */
+  .page-nav__btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 42%,
+      rgb(255 255 255 / 0.65) 50%,
+      transparent 58%
+    );
+    background-size: 300% 100%;
+    background-position: 140% 0;
+    transition: background-position 0.75s ease;
+  }
+
+  .page-nav__btn:hover,
+  .page-nav__btn:focus-visible {
+    transform: translateY(-3px) scale(1.05);
+    border-color: color-mix(in oklab, var(--color-brand-400) 65%, white);
+    box-shadow:
+      0 18px 36px -10px rgb(0 0 0 / 0.34),
+      0 0 0 4px color-mix(in oklab, var(--color-brand-400) 18%, transparent),
+      inset 0 1px 0 rgb(255 255 255 / 0.95),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.8);
+  }
+
+  .page-nav__btn:hover::after,
+  .page-nav__btn:focus-visible::after {
+    background-position: -40% 0;
+  }
+
+  .page-nav__btn:active {
+    transform: translateY(-1px) scale(0.98);
+  }
+
+  .page-nav__btn:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 3px;
+  }
+
+  /* Dark surfaces: less white fill, brighter rim — glass over ink, not frost. */
+  :global(.dark) .page-nav__btn {
+    color: white;
+    border-color: rgb(255 255 255 / 0.2);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
+    box-shadow:
+      0 14px 34px -10px rgb(0 0 0 / 0.7),
+      inset 0 1px 0 rgb(255 255 255 / 0.3),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.22);
+  }
+  :global(.dark) .page-nav__btn::before {
+    background:
+      radial-gradient(110% 85% at 26% 10%, rgb(255 255 255 / 0.35), transparent 58%),
+      radial-gradient(
+        85% 65% at 80% 94%,
+        color-mix(in oklab, var(--color-brand-400) 32%, transparent),
+        transparent 62%
+      );
+  }
+  :global(.dark) .page-nav__btn::after {
+    background: linear-gradient(
+      115deg,
+      transparent 42%,
+      rgb(255 255 255 / 0.28) 50%,
+      transparent 58%
+    );
+  }
+  :global(.dark) .page-nav__btn:hover,
+  :global(.dark) .page-nav__btn:focus-visible {
+    border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    box-shadow:
+      0 20px 44px -12px rgb(0 0 0 / 0.8),
+      0 0 0 4px color-mix(in oklab, var(--color-brand-400) 16%, transparent),
+      inset 0 1px 0 rgb(255 255 255 / 0.34),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.26);
+  }
+
+  /* Final stop: the same glass shell, filled with brand so it reads as the
+     tour's payoff rather than one more step. Both themes get the identical
+     treatment, and the rules sit after the dark block because `.dark
+     .page-nav__btn` outranks a lone modifier class. */
+  .page-nav__btn--launch,
+  :global(.dark) .page-nav__btn--launch {
+    color: white;
+    border-color: color-mix(in oklab, var(--color-brand-300) 70%, white);
+    background: linear-gradient(150deg, var(--color-brand-400), var(--color-brand-600));
+    box-shadow:
+      0 12px 30px -8px color-mix(in oklab, var(--color-brand-500) 60%, transparent),
+      0 2px 6px -2px rgb(0 0 0 / 0.18),
+      inset 0 1px 0 rgb(255 255 255 / 0.45),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.4);
+  }
+  .page-nav__btn--launch::before,
+  :global(.dark) .page-nav__btn--launch::before {
+    background: radial-gradient(110% 85% at 26% 10%, rgb(255 255 255 / 0.5), transparent 58%);
+  }
+  .page-nav__btn--launch:hover,
+  .page-nav__btn--launch:focus-visible,
+  :global(.dark) .page-nav__btn--launch:hover,
+  :global(.dark) .page-nav__btn--launch:focus-visible {
+    border-color: white;
+    box-shadow:
+      0 20px 40px -10px color-mix(in oklab, var(--color-brand-500) 70%, transparent),
+      0 0 0 4px color-mix(in oklab, var(--color-brand-400) 24%, transparent),
+      inset 0 1px 0 rgb(255 255 255 / 0.5),
+      inset 0 -8px 14px -10px rgb(255 255 255 / 0.45);
+  }
+
+  /* `--sx` mirrors the glyph; the nudge then rides its own direction.
+     `<Icon>` renders its <svg> from an expression, so Astro can't stamp the
+     scope attribute on it — the button carries the scope and the icon half of
+     each selector goes global. */
+  .page-nav__btn :global(.page-nav__icon) {
+    position: relative;
+    z-index: 1;
+    transform: scaleX(var(--sx, 1)) translateX(var(--nudge, 0px));
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+  .page-nav__btn--next :global(.page-nav__icon) {
+    --sx: var(--dir);
+  }
+  .page-nav__btn--prev :global(.page-nav__icon) {
+    --sx: calc(-1 * var(--dir));
+  }
+  .page-nav__btn--prev:hover :global(.page-nav__icon),
+  .page-nav__btn--prev:focus-visible :global(.page-nav__icon),
+  .page-nav__btn--next:hover :global(.page-nav__icon),
+  .page-nav__btn--next:focus-visible :global(.page-nav__icon) {
+    --nudge: 3px;
+  }
+
+  /* The rocket lifts instead of sliding — it is a destination, not a step. */
+  .page-nav__btn--launch:hover :global(.page-nav__icon),
+  .page-nav__btn--launch:focus-visible :global(.page-nav__icon) {
+    transform: translateY(-2px);
+  }
+
+  /* Destination name, revealed toward the middle of the screen. */
+  .page-nav__tip {
+    position: absolute;
+    top: 50%;
+    white-space: nowrap;
+    border-radius: 9999px;
+    padding: 0.3rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-700);
+    border: 1px solid color-mix(in oklab, white 55%, transparent);
+    background: color-mix(in oklab, white 55%, transparent);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    box-shadow:
+      0 8px 20px -8px rgb(0 0 0 / 0.25),
+      inset 0 1px 0 rgb(255 255 255 / 0.8);
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      transform 0.4s var(--ease-out-expo);
+    pointer-events: none;
+  }
+  .page-nav__btn--prev .page-nav__tip {
+    inset-inline-start: calc(100% + 0.5rem);
+    transform: translateY(-50%) translateX(calc(-0.5rem * var(--dir)));
+  }
+  .page-nav__btn--next .page-nav__tip,
+  .page-nav__btn--launch .page-nav__tip {
+    inset-inline-end: calc(100% + 0.5rem);
+    transform: translateY(-50%) translateX(calc(0.5rem * var(--dir)));
+  }
+  .page-nav__btn:hover .page-nav__tip,
+  .page-nav__btn:focus-visible .page-nav__tip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  :global(.dark) .page-nav__tip {
+    color: white;
+    border-color: rgb(255 255 255 / 0.16);
+    background: color-mix(in oklab, var(--color-ink-900) 72%, transparent);
+    box-shadow:
+      0 10px 24px -10px rgb(0 0 0 / 0.7),
+      inset 0 1px 0 rgb(255 255 255 / 0.2);
+  }
+
+  /* Phones have no hover and little room — the button alone is the affordance. */
+  @media (max-width: 639px) {
+    .page-nav__tip {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-nav__btn,
+    .page-nav__btn :global(.page-nav__icon),
+    .page-nav__tip {
+      transition: none;
+    }
+    .page-nav__btn:hover,
+    .page-nav__btn:focus-visible,
+    .page-nav__btn:active {
+      transform: none;
+    }
+    .page-nav__btn::after {
+      display: none;
+    }
+  }
+
+  @media print {
+    .page-nav {
+      display: none;
+    }
+  }
+</style>

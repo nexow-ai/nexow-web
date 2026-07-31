@@ -1,12 +1,23 @@
-// Regenerates src/data/connectors.ts (and copies missing venue logos into
-// public/connectors/) from the Nexow app connector catalog at ../nexow.
+// Regenerates src/data/connectors.ts (and copies missing venue logos / banners
+// into public/connectors/) from the Nexow app connector catalog at ../nexow.
 // Run from the repo root: node scratchpad/gen-connectors.mjs
-import { readFileSync, writeFileSync, readdirSync, copyFileSync, existsSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+} from 'node:fs';
 import { extname, join } from 'node:path';
 
 const APP = '../nexow';
+const LOGOS_DIR = join(APP, 'app/assets/connections/logos');
+const OUT_LOGOS = 'public/connectors';
+const OUT_BANNERS = 'public/connectors/banners';
+
 const venuesRaw = JSON.parse(
-  readFileSync(join(APP, 'app/assets/connections/connections_venues.json'), 'utf8')
+  readFileSync(join(APP, 'app/assets/connections/connections_venues.json'), 'utf8'),
 );
 const venues = Array.isArray(venuesRaw) ? venuesRaw : venuesRaw.venues;
 
@@ -38,6 +49,7 @@ const SOCIAL_KINDS = {
   video_platform: 'video',
   community: 'community',
   music_platform: 'music',
+  fitness_platform: 'fitness',
 };
 const SERVICE_KINDS = {
   browser_service: 'browser',
@@ -52,8 +64,14 @@ const SERVICE_KINDS = {
 
 // Asset-class keys the site's connectorsPage.assets i18n map knows about.
 const SITE_ASSETS = new Set([
-  'equities', 'indices', 'fixed_income', 'fx', 'commodities', 'crypto',
-  'volatility', 'prediction_markets',
+  'equities',
+  'indices',
+  'fixed_income',
+  'fx',
+  'commodities',
+  'crypto',
+  'volatility',
+  'prediction_markets',
 ]);
 
 // Analytics warehouses get their own label instead of the generic SQL one.
@@ -72,45 +90,89 @@ const urlOf = (v) => {
   return links.website?.url ?? Object.values(links)[0]?.url ?? '';
 };
 
+mkdirSync(OUT_BANNERS, { recursive: true });
+
 // Keep an existing site logo when one is already there; otherwise copy the
 // app's icon (preserving its extension) into public/connectors/<id>.<ext>.
-const existing = new Map(
-  readdirSync('public/connectors').map((f) => [f.replace(/\.[a-z]+$/, ''), f])
+const existingLogos = new Map(
+  readdirSync(OUT_LOGOS)
+    .filter((f) => !f.startsWith('.') && extname(f))
+    .map((f) => [f.replace(/\.[a-z0-9]+$/i, ''), f]),
 );
+
 const logoOf = (v) => {
-  const have = existing.get(v.id);
+  const have = existingLogos.get(v.id);
   if (have) return `/connectors/${have}`;
-  const src = join(APP, 'app/assets/connections/logos', v.logo);
+  const src = join(LOGOS_DIR, v.logo);
   if (!existsSync(src)) throw new Error(`no logo for ${v.id}: ${src}`);
   const file = `${v.id}${extname(v.logo)}`;
-  copyFileSync(src, join('public/connectors', file));
+  copyFileSync(src, join(OUT_LOGOS, file));
+  existingLogos.set(v.id, file);
   return `/connectors/${file}`;
 };
 
-const connectors = venues
-  .map((v) => ({
-    id: v.id,
-    name: v.name,
-    category: categoryOf(v),
-    kind: kindOf(v),
-    status: v.status === 'available' ? 'live' : 'soon',
-    trading: !!v.trading,
-    assets: (v.asset_classes ?? []).filter((a) => SITE_ASSETS.has(a)),
-    url: urlOf(v),
-    logo: logoOf(v),
-  }))
-  // Live connectors lead the gallery; alphabetical by display name within each group.
-  .sort((a, b) =>
-    a.status !== b.status
-      ? (a.status === 'live' ? -1 : 1)
-      : a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-  );
+const existingBanners = new Map(
+  existsSync(OUT_BANNERS)
+    ? readdirSync(OUT_BANNERS)
+        .filter((f) => !f.startsWith('.') && extname(f))
+        .map((f) => [f.replace(/\.[a-z0-9]+$/i, ''), f])
+    : [],
+);
+
+const bannerOf = (v) => {
+  if (!v.bannerLogo) return '';
+  const have = existingBanners.get(v.id);
+  if (have) return `/connectors/banners/${have}`;
+  const src = join(LOGOS_DIR, v.bannerLogo);
+  if (!existsSync(src)) return '';
+  const file = `${v.id}${extname(v.bannerLogo)}`;
+  copyFileSync(src, join(OUT_BANNERS, file));
+  existingBanners.set(v.id, file);
+  return `/connectors/banners/${file}`;
+};
+
+const connectors = venues.map((v) => ({
+  id: v.id,
+  name: v.name,
+  category: categoryOf(v),
+  kind: kindOf(v),
+  status: v.status === 'available' ? 'live' : 'soon',
+  trading: !!v.trading,
+  assets: (v.asset_classes ?? []).filter((a) => SITE_ASSETS.has(a)),
+  url: urlOf(v),
+  logo: logoOf(v),
+  banner: bannerOf(v),
+  logoFit: v.logoFit === 'contain' ? 'contain' : 'cover',
+  notes: typeof v.notes === 'string' ? v.notes : '',
+}));
+
+// Site-only Coming Soon venues (dashboards & ops) that are not yet in the app catalog.
+const EXTRA_SOON_PATH = 'src/data/coming-soon-connectors.json';
+if (existsSync(EXTRA_SOON_PATH)) {
+  const extras = JSON.parse(readFileSync(EXTRA_SOON_PATH, 'utf8'));
+  const seen = new Set(connectors.map((c) => c.id));
+  for (const extra of extras) {
+    if (seen.has(extra.id)) continue;
+    connectors.push(extra);
+    seen.add(extra.id);
+  }
+}
+
+// Live connectors lead the gallery; alphabetical by display name within each group.
+connectors.sort((a, b) =>
+  a.status !== b.status
+    ? a.status === 'live'
+      ? -1
+      : 1
+    : a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+);
 
 const header = `// AUTO-GENERATED from the Nexow app connector catalog. Do not edit by hand.
 // Regenerate with scratchpad/gen-connectors.mjs.
 
 export type ConnectorCategory = 'finance' | 'wallets' | 'services' | 'data' | 'socials';
 export type ConnectorStatus = 'live' | 'soon';
+export type ConnectorLogoFit = 'cover' | 'contain';
 
 export interface Connector {
   id: string;
@@ -125,6 +187,11 @@ export interface Connector {
   url: string;
   /** public path to the venue icon */
   logo: string;
+  /** public path to the wide brand banner (empty when none) */
+  banner: string;
+  logoFit: ConnectorLogoFit;
+  /** short venue blurb from the app catalog */
+  notes: string;
 }
 
 export const CONNECTORS: Connector[] = `;
@@ -137,4 +204,7 @@ export const CONNECTOR_LIVE_COUNT = CONNECTORS.filter((c) => c.status === 'live'
 
 writeFileSync('src/data/connectors.ts', header + JSON.stringify(connectors, null, 2) + footer);
 const live = connectors.filter((c) => c.status === 'live').length;
-console.log(`wrote ${connectors.length} connectors (${live} live) to src/data/connectors.ts`);
+const withBanner = connectors.filter((c) => c.banner).length;
+console.log(
+  `wrote ${connectors.length} connectors (${live} live, ${withBanner} with banner) to src/data/connectors.ts`,
+);

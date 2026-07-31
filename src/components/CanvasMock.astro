@@ -1,8 +1,8 @@
 ---
 /**
  * Presentational free-form canvas mock. It mirrors the real Nexow dashboard
- * mechanics: workspace rail, screen tabs, absolute widget boxes, link port,
- * grouped widgets, resize affordances, and a library drop target.
+ * mechanics: screen tabs, toolbar tray, absolute widget boxes, link port,
+ * and the bottom dock pill.
  */
 import Icon from './Icon.astro';
 ---
@@ -28,13 +28,51 @@ import Icon from './Icon.astro';
     </span>
   </div>
 
-  <div class="relative h-80 overflow-hidden bg-ink-950/60">
+  <!-- Configurable toolbar tray -->
+  <div class="flex h-8 items-center gap-1 border-b border-white/6 bg-ink-900/80 px-2.5 sm:gap-1.5 sm:px-3">
+    {[
+      { icon: 'sparkles', label: 'add' },
+      { icon: 'grid', label: 'layout' },
+      { icon: 'history', label: 'undo' },
+      { icon: 'lock', label: 'lock' },
+      { icon: 'sync', label: 'sync' },
+    ].map((a) => (
+      <span class="inline-flex items-center gap-1 rounded-md border border-white/8 bg-white/[0.03] px-1.5 py-0.5 font-mono text-[0.52rem] text-ink-300">
+        <Icon name={a.icon} class="size-2.5 text-brand-300" />
+        <span class="hidden sm:inline">{a.label}</span>
+      </span>
+    ))}
+    <span class="ml-auto hidden font-mono text-[0.5rem] uppercase tracking-wider text-ink-500 sm:inline">toolbar</span>
+  </div>
+
+  <div class="relative h-72 overflow-hidden bg-ink-950/60 sm:h-80">
     <div class="bg-grid absolute inset-0 opacity-35"></div>
-    <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/35" viewBox="0 0 520 320" preserveAspectRatio="none">
-      <path d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 5" />
+    <svg class="pointer-events-none absolute inset-0 h-full w-full text-brand-400/45" viewBox="0 0 520 320" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="canvas-link" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.15"></stop>
+          <stop offset="50%" stop-color="var(--color-brand-300)" stop-opacity="0.85"></stop>
+          <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.7"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        class="canvas-link-path"
+        pathLength="1"
+        d="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126"
+        fill="none"
+        stroke="url(#canvas-link)"
+        stroke-width="1.4"
+        stroke-linecap="round"
+      />
+      <circle class="canvas-link-packet" r="2.8" fill="var(--color-brand-300)">
+        <animateMotion dur="3.2s" repeatCount="indefinite" path="M188 122 C226 148 258 150 292 128 C326 107 358 106 396 126"></animateMotion>
+      </circle>
+      <circle class="canvas-link-packet" r="2.2" fill="var(--color-sky-400)" opacity="0.85">
+        <animateMotion dur="4.6s" begin="1.4s" repeatCount="indefinite" path="M396 126 C358 106 326 107 292 128 C258 150 226 148 188 122"></animateMotion>
+      </circle>
     </svg>
 
-    <section class="absolute left-4 top-4 h-36 w-[58%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+    <section class="absolute left-3 top-3 h-32 w-[58%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30 sm:left-4 sm:top-4 sm:h-36">
       <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
         <span class="truncate font-mono text-[0.6rem] font-semibold text-white">Moodboard · launch</span>
         <span class="ml-auto text-emerald-400">saved</span>
@@ -53,7 +91,7 @@ import Icon from './Icon.astro';
       <span class="absolute bottom-0 left-1/2 size-2 -translate-x-1/2 translate-y-1/2 rotate-45 rounded-[2px] border border-brand-300 bg-ink-850"></span>
     </section>
 
-    <section class="absolute right-4 top-7 h-28 w-[31%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+    <section class="absolute right-3 top-6 h-24 w-[31%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30 sm:right-4 sm:top-7 sm:h-28">
       <div class="flex h-8 items-center border-b border-white/6 px-2.5 font-mono text-[0.58rem] text-white">
         Habits
       </div>
@@ -65,7 +103,7 @@ import Icon from './Icon.astro';
       </div>
     </section>
 
-    <section class="absolute bottom-4 left-4 h-28 w-[36%] rounded-lg border border-brand-400/25 bg-ink-850/95 shadow-lg shadow-black/30">
+    <section class="absolute bottom-12 left-3 h-24 w-[36%] rounded-lg border border-brand-400/25 bg-ink-850/95 shadow-lg shadow-black/30 sm:bottom-14 sm:left-4 sm:h-28">
       <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
         <Icon name="sparkles" class="size-3.5 text-brand-300" />
         <span class="font-mono text-[0.58rem] font-semibold text-white">Prompt</span>
@@ -76,7 +114,7 @@ import Icon from './Icon.astro';
       </div>
     </section>
 
-    <section class="absolute bottom-4 right-4 h-28 w-[54%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30">
+    <section class="absolute right-3 bottom-12 h-24 w-[54%] rounded-lg border border-white/10 bg-ink-850/90 shadow-lg shadow-black/30 sm:right-4 sm:bottom-14 sm:h-28">
       <div class="flex h-8 items-center gap-2 border-b border-white/6 px-2.5">
         <span class="font-mono text-[0.58rem] font-semibold text-white">Social widget</span>
         <span class="ml-auto rounded bg-white/5 px-1.5 py-0.5 font-mono text-[0.5rem] text-ink-500">shared</span>
@@ -84,13 +122,42 @@ import Icon from './Icon.astro';
       <div class="space-y-1.5 p-2.5 font-mono text-[0.55rem]">
         <div class="flex items-center gap-2 rounded-md border border-white/8 bg-white/[0.03] px-2 py-1.5">
           <span class="size-5 rounded-full bg-brand-400/70"></span>
-          <span class="min-w-0 flex-1 text-ink-300">Maya saved your moodboard</span>
+          <span class="min-w-0 flex-1 truncate text-ink-300">Maya saved your moodboard</span>
         </div>
         <div class="flex items-center gap-2 rounded-md border border-white/8 bg-white/[0.03] px-2 py-1.5">
           <span class="size-5 rounded-full bg-accent-400/70"></span>
-          <span class="min-w-0 flex-1 text-ink-300">New mini-game remix</span>
+          <span class="min-w-0 flex-1 truncate text-ink-300">New mini-game remix</span>
         </div>
       </div>
     </section>
+
+    <!-- Dock pill — bottom-right, matching the app default -->
+    <div class="absolute right-3 bottom-2 flex items-center gap-1 rounded-full border border-white/12 bg-white/10 px-1.5 py-1 shadow-lg shadow-black/40 backdrop-blur">
+      {[
+        { icon: 'chat', tip: 'copilot' },
+        { icon: 'users', tip: 'community' },
+        { icon: 'bell', tip: 'notices' },
+        { icon: 'mail', tip: 'messages' },
+      ].map((d) => (
+        <span class="inline-flex size-6 items-center justify-center rounded-full bg-ink-950/50 text-ink-200" title={d.tip}>
+          <Icon name={d.icon} class="size-3" />
+        </span>
+      ))}
+    </div>
   </div>
 </div>
+
+<style>
+  .canvas-link-path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: canvas-draw 1.6s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) 0.25s forwards;
+  }
+  @keyframes canvas-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .canvas-link-path { animation: none; stroke-dashoffset: 0; }
+    .canvas-link-packet { display: none; }
+  }
+</style>

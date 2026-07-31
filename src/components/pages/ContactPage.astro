@@ -1,0 +1,237 @@
+---
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).contactPage!;
+const typeParam = Astro.url.searchParams.get('type') ?? '';
+const initialType = t.form.types.some((x) => x.value === typeParam) ? typeParam : 'support';
+
+const sections = [
+  { id: 'contact-form', label: t.form.submit },
+  { id: 'contact-aside', label: t.aside.title },
+];
+---
+
+<Layout lang={lang} route="/contact" title={t.meta.title} description={t.meta.description} sections={sections}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon('/contact')}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section class="container-page pt-10 pb-24 sm:pt-14 sm:pb-32">
+    <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+      <form
+        id="contact-form"
+        class="reveal scroll-mt-20 space-y-5"
+        data-endpoint={SITE.contactUrl}
+        data-hello={SITE.email}
+        data-support={SITE.supportEmail}
+        data-partners={SITE.partnersEmail}
+        data-invalid={t.form.invalid}
+        data-error={t.form.error}
+        data-success={t.form.success}
+        data-fallback={t.form.fallback}
+        data-submitting={t.form.submitting}
+        data-submit-label={t.form.submit}
+        novalidate
+      >
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="contact-name" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.name}</label>
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              maxlength="120"
+              required
+              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+            />
+          </div>
+          <div>
+            <label for="contact-email" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.email}</label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength="254"
+              class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="contact-type" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.type}</label>
+          <select
+            id="contact-type"
+            name="type"
+            class="mt-2 h-11 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+          >
+            {
+              t.form.types.map((opt) => (
+                <option value={opt.value} selected={opt.value === initialType}>
+                  {opt.label}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="contact-message" class="block text-sm font-medium text-ink-700 dark:text-ink-300">{t.form.message}</label>
+          <textarea
+            id="contact-message"
+            name="message"
+            rows="6"
+            required
+            maxlength="4000"
+            class="mt-2 w-full rounded-xl border border-ink-900/10 bg-white px-3.5 py-3 text-sm text-ink-900 focus:outline-none focus:ring-2 focus:ring-brand-400/40 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          id="contact-submit"
+          class="inline-flex h-11 items-center justify-center rounded-full bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-6 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+        >
+          {t.form.submit}
+        </button>
+        <p id="contact-status" class="min-h-[1.25rem] text-sm" role="status" aria-live="polite"></p>
+      </form>
+
+      <aside id="contact-aside" class="reveal scroll-mt-20 rounded-2xl border border-ink-900/10 bg-[#f7fbfb] p-6 sm:p-7 dark:border-white/10 dark:bg-white/[0.02]">
+        <h2 class="font-display text-lg font-semibold text-ink-950 dark:text-white">{t.aside.title}</h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{t.aside.body}</p>
+        <ul class="mt-6 space-y-4">
+          {
+            t.aside.channels.map((ch) => (
+              <li>
+                <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500 dark:text-ink-400">{ch.label}</p>
+                <a
+                  href={ch.href}
+                  class="mt-1 inline-flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200"
+                >
+                  <Icon name="mail" class="size-3.5" />
+                  {ch.value}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  /** Inbox for the `mailto:` fallback only — when the API answers, IT owns the
+   *  routing (server/utils/contact.ts). Kept in sync with that table. */
+  function inboxFor(type: string, form: HTMLFormElement): string {
+    if (type === 'partnership' || type === 'sales') {
+      return form.dataset.partners || 'partners@nexow.ai';
+    }
+    if (type === 'support') return form.dataset.support || 'support@nexow.ai';
+    return form.dataset.hello || 'hello@nexow.ai';
+  }
+
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const status = form.querySelector<HTMLElement>('#contact-status');
+    const submit = form.querySelector<HTMLButtonElement>('#contact-submit');
+    const endpoint = form.dataset.endpoint ?? '';
+    if (!status || !submit) return;
+
+    const labels = {
+      invalid: form.dataset.invalid ?? 'Please fill in a valid email and a short message.',
+      error: form.dataset.error ?? 'Something went wrong.',
+      success: form.dataset.success ?? 'Thanks for reaching out.',
+      fallback: form.dataset.fallback ?? 'We opened your mail client instead.',
+      submitting: form.dataset.submitting ?? 'Sending…',
+      submit: form.dataset.submitLabel ?? 'Send message',
+    };
+
+    const setStatus = (text: string, tone: 'ok' | 'err' | 'idle') => {
+      status.textContent = text;
+      status.className =
+        tone === 'err'
+          ? 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400'
+          : 'min-h-[1.25rem] text-sm text-brand-700 dark:text-brand-300';
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') || '').trim();
+      const email = String(data.get('email') || '').trim().toLowerCase();
+      const type = String(data.get('type') || 'support');
+      const message = String(data.get('message') || '').trim();
+
+      if (!name || !email || !EMAIL_RE.test(email) || message.length < 8) {
+        setStatus(labels.invalid, 'err');
+        return;
+      }
+
+      submit.disabled = true;
+      submit.textContent = labels.submitting;
+      setStatus('', 'idle');
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name, email, type, message }),
+        });
+
+        if (!res.ok) {
+          const payload = (await res.json().catch(() => null)) as {
+            statusMessage?: string;
+            message?: string;
+          } | null;
+          const msg =
+            payload?.statusMessage ||
+            payload?.message ||
+            (res.status === 400 ? labels.invalid : labels.error);
+          // Leave the fields filled so nothing typed is lost on a retry.
+          setStatus(msg, 'err');
+          return;
+        }
+
+        setStatus(labels.success, 'ok');
+        form.reset();
+      } catch {
+        // API unreachable. Hand off to the mail client so the message isn't
+        // lost — but keep the fields filled, because a browser with no mail
+        // handler does nothing here and gives us no way to detect it.
+        const to = inboxFor(type, form);
+        const subject = encodeURIComponent(`[Nexow ${type}] from ${name}`);
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`,
+        );
+        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+        setStatus(labels.fallback, 'ok');
+      } finally {
+        submit.disabled = false;
+        submit.textContent = labels.submit;
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContactForm);
+</script>

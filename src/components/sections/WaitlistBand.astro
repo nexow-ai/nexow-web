@@ -1,0 +1,169 @@
+---
+/**
+ * Email capture for plans billing waitlist.
+ * Posts to SITE.waitlistUrl (newsletter API) with `{ email, source: 'billing-waitlist' }`.
+ */
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).waitlist!;
+---
+
+<section id="waitlist" class="container-page scroll-mt-24 pb-12">
+  <div
+    class="reveal mx-auto max-w-2xl rounded-2xl border border-brand-500/20 bg-brand-50/80 px-6 py-8 sm:px-8 dark:border-brand-400/25 dark:bg-brand-400/10"
+  >
+    <div class="flex items-start gap-3">
+      <span
+        class="mt-0.5 inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-brand-700 ring-1 ring-brand-500/20 dark:bg-white/10 dark:text-brand-300"
+      >
+        <Icon name="mail" class="size-4" />
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="font-mono text-[0.65rem] uppercase tracking-widest text-brand-700 dark:text-brand-300">
+          {t.eyebrow}
+        </p>
+        <h2 class="mt-1 font-display text-xl font-semibold text-ink-950 sm:text-2xl dark:text-white">
+          {t.title}
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-ink-600 dark:text-ink-300">{t.subtitle}</p>
+
+        <form
+          id="waitlist-form"
+          class="mt-5"
+          data-endpoint={SITE.waitlistUrl}
+          data-source="billing-waitlist"
+          data-invalid={t.invalid}
+          data-error={t.error}
+          data-success={t.success}
+          data-submitting={t.submitting}
+          data-submit-label={t.submit}
+          novalidate
+        >
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label class="sr-only" for="waitlist-email">{t.placeholder}</label>
+            <input
+              id="waitlist-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              required
+              maxlength="254"
+              placeholder={t.placeholder}
+              class="h-11 w-full min-w-0 sm:flex-1 rounded-full bg-white px-4 text-sm text-ink-900 ring-1 ring-ink-900/10 placeholder:text-ink-400 transition-[box-shadow] focus:outline-none focus:ring-2 focus:ring-brand-400/50 disabled:opacity-60 dark:bg-white/[0.08] dark:text-white dark:ring-white/15 dark:placeholder:text-ink-500"
+            />
+            <button
+              type="submit"
+              id="waitlist-submit"
+              class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-ink-950 px-5 text-sm font-medium text-white transition-all duration-200 hover:bg-ink-800 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60 dark:bg-white dark:text-ink-950 dark:hover:bg-white/90"
+            >
+              {t.submit}
+            </button>
+          </div>
+          <p
+            id="waitlist-status"
+            class="mt-3 min-h-[1.25rem] text-sm"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setStatus(
+    el: HTMLElement | null,
+    message: string,
+    kind: 'idle' | 'ok' | 'err',
+  ) {
+    if (!el) return;
+    el.textContent = message;
+    el.classList.toggle('text-brand-700', kind === 'ok');
+    el.classList.toggle('dark:text-brand-300', kind === 'ok');
+    el.classList.toggle('text-red-600', kind === 'err');
+    el.classList.toggle('text-ink-500', kind === 'idle');
+  }
+
+  function initWaitlistForm() {
+    const form = document.getElementById('waitlist-form') as HTMLFormElement | null;
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const endpoint = form.dataset.endpoint ?? '';
+    const source = form.dataset.source ?? 'billing-waitlist';
+    const input = form.querySelector<HTMLInputElement>('#waitlist-email');
+    const submit = form.querySelector<HTMLButtonElement>('#waitlist-submit');
+    const status = form.querySelector<HTMLElement>('#waitlist-status');
+    if (!input || !submit || !endpoint) return;
+
+    const labels = {
+      invalid: form.dataset.invalid ?? 'Enter a valid email address.',
+      error: form.dataset.error ?? 'Something went wrong. Please try again.',
+      success: form.dataset.success ?? 'You’re on the list.',
+      submitting: form.dataset.submitting ?? 'Joining…',
+      submit: form.dataset.submitLabel ?? 'Join the waitlist',
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const email = input.value.trim().toLowerCase();
+      if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
+        setStatus(status, labels.invalid, 'err');
+        input.focus();
+        return;
+      }
+
+      submit.disabled = true;
+      input.disabled = true;
+      submit.textContent = labels.submitting;
+      setStatus(status, '', 'idle');
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ email, source }),
+        });
+
+        if (!res.ok) {
+          const payload = (await res.json().catch(() => null)) as {
+            statusMessage?: string;
+            message?: string;
+          } | null;
+          const msg =
+            payload?.statusMessage ||
+            payload?.message ||
+            (res.status === 400 ? labels.invalid : labels.error);
+          setStatus(status, msg, 'err');
+          return;
+        }
+
+        setStatus(status, labels.success, 'ok');
+        input.value = '';
+      } catch {
+        // Fallback: open mailto so intent isn’t lost if the API is unreachable.
+        const subject = encodeURIComponent('Nexow billing waitlist');
+        const body = encodeURIComponent(`Please add ${email} to the billing waitlist.`);
+        window.location.href = `mailto:hello@nexow.ai?subject=${subject}&body=${body}`;
+        setStatus(status, labels.success, 'ok');
+      } finally {
+        submit.disabled = false;
+        input.disabled = false;
+        submit.textContent = labels.submit;
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWaitlistForm);
+</script>

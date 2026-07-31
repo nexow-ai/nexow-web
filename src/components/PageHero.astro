@@ -1,23 +1,71 @@
 ---
+import Icon from './Icon.astro';
+
 interface Props {
   badge: string;
+  /** Stroke icon name from `icon-paths` — rendered before the badge label. */
+  icon?: string;
   title: string;
   subtitle?: string;
+  /** Anchor for the in-page section rail. */
+  id?: string;
+  /** Shorter padding + title so list content can sit in the first viewport. */
+  compact?: boolean;
 }
-const { badge, title, subtitle } = Astro.props;
+const { badge, icon, title, subtitle, id = 'hero', compact = false } = Astro.props;
 ---
 
-<section class="relative overflow-hidden pt-32 pb-14 sm:pt-40 sm:pb-20">
-  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(55%_60%_at_50%_0%,var(--color-brand-100),transparent_70%)] opacity-70"></div>
+<section
+  id={id}
+  class:list={[
+    'relative scroll-mt-20 overflow-hidden text-ink-950 dark:text-white',
+    compact ? 'pt-28 pb-8 sm:pt-32 sm:pb-10' : 'pt-32 pb-14 sm:pt-40 sm:pb-20',
+  ]}
+>
+  <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="aurora-mesh absolute inset-[-10%]"></div>
+    <div
+      class="aurora-a absolute -top-28 left-[6%] size-[min(70vw,520px)] rounded-full opacity-55 blur-3xl dark:opacity-45"
+      style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-b absolute -top-20 right-[4%] size-[min(65vw,480px)] rounded-full opacity-45 blur-3xl dark:opacity-35"
+      style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
+    >
+    </div>
+    <div
+      class="aurora-c absolute left-[38%] top-[28%] size-[min(50vw,400px)] rounded-full opacity-40 blur-3xl dark:opacity-30"
+      style="background:radial-gradient(circle, var(--aurora-3), transparent 65%)"
+    >
+    </div>
+  </div>
   <div class="container-page">
     <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
-      <span class="inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:border-brand-400/25 dark:bg-brand-400/12 dark:text-brand-300">
+        {icon && <Icon name={icon} class="size-3.5 shrink-0" />}
         {badge}
       </span>
-      <h1 class="mt-6 text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1
+        data-text-appear
+        data-text-appear-delay="0.12"
+        class:list={[
+          'text-center font-display font-semibold leading-[1.05] tracking-tight text-ink-950 dark:text-white',
+          compact ? 'mt-5 text-3xl sm:text-4xl md:text-5xl' : 'mt-6 text-4xl sm:text-5xl md:text-6xl',
+        ]}
+      >
         {title}
       </h1>
-      {subtitle && <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">{subtitle}</p>}
+      {subtitle && (
+        <p
+          class:list={[
+            'max-w-2xl leading-relaxed text-ink-600 dark:text-ink-300',
+            compact ? 'mt-3 text-base sm:text-lg' : 'mt-5 text-lg',
+          ]}
+        >
+          {subtitle}
+        </p>
+      )}
     </div>
   </div>
 </section>

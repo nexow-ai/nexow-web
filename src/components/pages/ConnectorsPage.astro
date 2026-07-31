@@ -4,14 +4,23 @@ import { useContent } from '../../i18n/content';
 import Layout from '../../layouts/Layout.astro';
 import CtaBand from '../sections/CtaBand.astro';
 import ConnectorCard from '../ConnectorCard.astro';
+import ConnectorModal from '../ConnectorModal.astro';
 import Icon from '../Icon.astro';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
 import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
+import {
+  ALL_SUBCATEGORIES,
+  SUBCATEGORIES_BY_CATEGORY,
+  type ConnectorSubcategory,
+} from '../../data/connector-subcategories';
+import { ALPHA_BUCKETS } from '../../lib/connectorFilter';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useContent(lang).connectorsPage;
+const badgeIcon = getPageBadgeIcon('/connectors');
 
 const categoryFilters = [
   { key: 'all', label: t.all },
@@ -26,6 +35,45 @@ const statusFilters = [
   { key: 'live', label: t.status.live },
   { key: 'soon', label: t.status.soon },
 ];
+const capabilityFilters = [
+  { key: 'all', label: t.capability.all },
+  { key: 'trading', label: t.capability.trading },
+  { key: 'readonly', label: t.capability.readonly },
+];
+const labelSub = (sc: ConnectorSubcategory) => ({
+  ...sc,
+  label:
+    sc.labelFrom === 'assets'
+      ? (t.assets[sc.key] ?? sc.key)
+      : (t.kinds[sc.key] ?? sc.key),
+});
+/** Payload for client: which subcategory chips belong to which category. */
+const subcategoryCatalog = {
+  all: ALL_SUBCATEGORIES.map(labelSub),
+  finance: SUBCATEGORIES_BY_CATEGORY.finance.map(labelSub),
+  wallets: SUBCATEGORIES_BY_CATEGORY.wallets.map(labelSub),
+  services: SUBCATEGORIES_BY_CATEGORY.services.map(labelSub),
+  data: SUBCATEGORIES_BY_CATEGORY.data.map(labelSub),
+  socials: SUBCATEGORIES_BY_CATEGORY.socials.map(labelSub),
+};
+const alphaFilters = [{ key: 'all', label: t.all, min: '', max: '' }, ...ALPHA_BUCKETS];
+const chipBtnIcon =
+  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+
+/** Catalog payload for the client modal (localized labels baked in). */
+const catalog = CONNECTORS.map((c) => ({
+  id: c.id,
+  name: c.name,
+  status: c.status,
+  kind: t.kinds[c.kind] ?? c.kind,
+  assets: c.assets.map((a) => t.assets[a] ?? a),
+  url: c.url,
+  logo: c.logo,
+  banner: c.banner,
+  logoFit: c.logoFit,
+  notes: c.notes,
+  connectUrl: `https://x.nexow.ai/c/?connector=${encodeURIComponent(c.id)}`,
+}));
 
 // ItemList structured data (SEO / GEO) — the full venue catalog.
 const itemListSchema = {
@@ -40,6 +88,16 @@ const itemListSchema = {
     url: c.url,
   })),
 };
+
+const pillBtn =
+  'rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+const chipBtn =
+  'rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+
+const sections = [
+  { id: 'connectors-app', label: t.hero.badge },
+  { id: 'cta', label: useContent(lang).home.cta.primary },
+];
 ---
 
 <Layout
@@ -48,13 +106,22 @@ const itemListSchema = {
   title={t.meta.title}
   description={t.meta.description}
   schema={[itemListSchema]}
-  theme="light"
+  sections={sections}
 >
-  <section class="relative overflow-hidden bg-[#f7fbfb] pt-32 pb-12 text-ink-950 sm:pt-40">
-    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+  <section class="relative overflow-hidden bg-[#f7fbfb]/70 pt-32 pb-12 text-ink-950 sm:pt-40 dark:bg-white/[0.015] dark:text-white">
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="aurora-mesh absolute inset-[-12%]"></div>
       <div
-        class="absolute -top-28 left-1/2 size-[720px] -translate-x-1/2 rounded-full opacity-65 blur-3xl"
-        style="background:radial-gradient(circle, var(--color-brand-100), transparent 65%)"
+        class="aurora-a absolute -top-28 left-[10%] size-[520px] rounded-full opacity-55 blur-3xl dark:opacity-45"
+        style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-b absolute -top-20 right-[6%] size-[480px] rounded-full opacity-45 blur-3xl dark:opacity-35"
+        style="background:radial-gradient(circle, var(--aurora-3), transparent 65%)"
+      ></div>
+      <div
+        class="aurora-c absolute left-1/2 top-[18%] size-[400px] -translate-x-1/2 rounded-full opacity-35 blur-3xl dark:opacity-30"
+        style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
       ></div>
       <div
         class="absolute inset-0 opacity-35 [mask-image:radial-gradient(70%_55%_at_50%_10%,black,transparent)]"
@@ -62,29 +129,38 @@ const itemListSchema = {
       ></div>
     </div>
     <div class="container-page relative text-center">
-      <span class="eyebrow inline-flex items-center gap-2 text-brand-700">
+      <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
         <span class="h-px w-6 bg-brand-500/50"></span>
+        {badgeIcon && <Icon name={badgeIcon} class="size-3.5 shrink-0" />}
         {t.hero.badge}
         <span class="h-px w-6 bg-brand-500/50"></span>
       </span>
-      <h1 class="mx-auto mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl md:text-6xl">
+      <h1
+        data-text-appear
+        data-text-appear-delay="0.12"
+        class="mx-auto mt-4 max-w-3xl text-center font-display text-4xl font-semibold tracking-tight text-ink-950 sm:text-5xl md:text-6xl dark:text-white"
+      >
         {t.hero.title}
       </h1>
-      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-ink-600">{t.hero.subtitle}</p>
-      <p class="mt-6 font-mono text-sm text-ink-500">
-        <span class="text-gradient text-lg font-bold">{CONNECTOR_LIVE_COUNT}</span> {t.countLive} · <span class="text-ink-700">{CONNECTOR_COUNT}</span> {t.countCatalog}
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.hero.subtitle}</p>
+      <p class="mt-6 font-mono text-sm text-ink-500 dark:text-ink-400">
+        <span class="text-gradient text-lg font-bold">{CONNECTOR_LIVE_COUNT}</span> {t.countLive} · <span class="text-ink-700 dark:text-ink-200">{CONNECTOR_COUNT}</span> {t.countCatalog}
       </p>
     </div>
   </section>
 
-  <section id="connectors-app" class="bg-[#f7fbfb] pb-24 text-ink-950 sm:pb-32">
+  <section id="connectors-app" class="scroll-mt-20 bg-[#f7fbfb]/70 pb-24 text-ink-950 sm:pb-32 dark:bg-white/[0.015] dark:text-white">
     <div class="container-page">
       <!-- Controls -->
-      <div class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
-          <!-- Search + mobile filter toggle -->
-          <div class="flex w-full items-center gap-2 lg:max-w-xs">
-            <div class="relative min-w-0 flex-1">
+      <div
+        id="connector-controls"
+        data-hidden="false"
+        class="sticky top-[4.5rem] z-20 -mx-5 mb-10 border-y border-ink-900/8 bg-[#f7fbfb]/85 px-5 py-4 backdrop-blur-md sm:-mx-8 sm:px-8 dark:border-white/8 dark:bg-ink-950/85"
+      >
+        <div class="flex flex-col gap-3">
+          <!-- Search + filter toggle (collapsible on all breakpoints) -->
+          <div class="flex w-full flex-wrap items-center gap-2 sm:gap-3">
+            <div class="relative min-w-0 flex-1 lg:max-w-sm">
               <Icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-500" />
               <input
                 id="connector-search"
@@ -92,13 +168,13 @@ const itemListSchema = {
                 autocomplete="off"
                 placeholder={t.searchPlaceholder}
                 aria-label={t.searchPlaceholder}
-                class="h-11 w-full rounded-full border border-ink-900/10 bg-white pl-10 pr-4 text-sm text-ink-950 placeholder:text-ink-400 focus:border-brand-400/40 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                class="h-11 w-full rounded-full border border-ink-900/10 bg-white pl-10 pr-4 text-sm text-ink-950 placeholder:text-ink-400 focus:border-brand-400/40 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-white/10 dark:bg-white/[0.06] dark:text-white dark:placeholder:text-ink-500"
               />
             </div>
             <button
               type="button"
               id="connector-filters-toggle"
-              class="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-ink-900/10 bg-white px-3.5 text-sm font-medium text-ink-500 shadow-sm transition-colors hover:border-ink-900/15 hover:text-ink-950 lg:hidden"
+              class="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-ink-900/10 bg-white px-3.5 text-sm font-medium text-ink-500 shadow-sm transition-colors hover:border-ink-900/15 hover:text-ink-950 dark:border-white/10 dark:bg-white/[0.06] dark:text-ink-300 dark:hover:border-white/20 dark:hover:text-white"
               aria-expanded="false"
               aria-controls="connector-filters"
             >
@@ -114,68 +190,258 @@ const itemListSchema = {
                 class="size-4 transition-transform duration-300 group-aria-expanded:rotate-180"
               />
             </button>
+            <p id="connector-count" data-template={t.results} class="shrink-0 font-mono text-sm text-ink-500 dark:text-ink-400">
+              {t.results.replace('{n}', String(CONNECTOR_COUNT))}
+            </p>
           </div>
 
-          <!-- Filters (collapsed on mobile, always open on lg+) -->
+          <!-- Filters (collapsed by default; openable on all breakpoints) -->
           <div
             id="connector-filters"
             data-open="false"
-            class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr] lg:grid-rows-[1fr] lg:data-[open=false]:grid-rows-[1fr]"
+            class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr]"
           >
             <div class="min-h-0 overflow-hidden">
-              <div class="flex flex-wrap items-center gap-3 pt-3 lg:gap-4 lg:pt-0">
-                <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
-                  {
-                    categoryFilters.map((f) => (
-                      <button
-                        type="button"
-                        data-filter-category={f.key}
-                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                        class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
-                      >
-                        {f.label}
-                      </button>
-                    ))
-                  }
+              <div class="flex flex-col gap-2.5 pt-1 lg:pt-0">
+                <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+                  <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+                    {
+                      categoryFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-category={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+                    {
+                      statusFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-status={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
+                    {
+                      capabilityFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-capability={f.key}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={pillBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
                 </div>
-                <div class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm">
-                  {
-                    statusFilters.map((f) => (
-                      <button
-                        type="button"
-                        data-filter-status={f.key}
-                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                        class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
-                      >
-                        {f.label}
-                      </button>
-                    ))
-                  }
+
+                <div class="flex flex-wrap items-center gap-2 lg:gap-3">
+                  <div
+                    id="connector-subcategories"
+                    class="inline-flex max-w-full flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+                    role="group"
+                    aria-label={t.filterSubcategories}
+                  >
+                    <button
+                      type="button"
+                      data-filter-subcategory="all"
+                      aria-pressed="true"
+                      class={chipBtnIcon}
+                    >
+                      {t.all}
+                    </button>
+                    {
+                      subcategoryCatalog.all.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-subcategory={f.key}
+                          data-subcategory-icon={f.icon}
+                          aria-pressed="false"
+                          class={chipBtnIcon}
+                        >
+                          <Icon name={f.icon} class="size-3 shrink-0 opacity-80" />
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+                  <div
+                    class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+                    role="group"
+                    aria-label={t.filterAlpha}
+                  >
+                    {
+                      alphaFilters.map((f) => (
+                        <button
+                          type="button"
+                          data-filter-alpha={f.key}
+                          data-alpha-min={f.min}
+                          data-alpha-max={f.max}
+                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                          class={chipBtn}
+                        >
+                          {f.label}
+                        </button>
+                      ))
+                    }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <p id="connector-count" data-template={t.results} class="mt-3 font-mono text-xs text-ink-500">
-          {t.results.replace('{n}', String(CONNECTOR_COUNT))}
-        </p>
       </div>
 
       <!-- Grid -->
+      {/* The catalog carries no visible section title; an off-screen heading
+          keeps the outline continuous between the h1 and the card h3s. */}
+      <h2 class="sr-only">{t.hero.badge}</h2>
       <div id="connector-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {CONNECTORS.map((c) => <ConnectorCard c={c} t={t} />)}
       </div>
 
       <!-- Empty state -->
-      <p id="connector-empty" class="hidden py-16 text-center text-sm text-ink-500">{t.empty}</p>
+      <p id="connector-empty" class="hidden py-16 text-center text-sm text-ink-500 dark:text-ink-400">{t.empty}</p>
     </div>
+
+    <script
+      type="application/json"
+      id="connectors-catalog"
+      set:html={JSON.stringify(catalog).replace(/</g, '\\u003c')}
+    />
+    <script
+      type="application/json"
+      id="connectors-subcategories"
+      set:html={JSON.stringify(subcategoryCatalog).replace(/</g, '\\u003c')}
+    />
   </section>
 
+  <ConnectorModal t={t} />
   <CtaBand lang={lang} />
 </Layout>
 
+<style is:global>
+  @keyframes connector-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes connector-card-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  .connector-card.is-entering {
+    animation: connector-card-in 0.34s var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)) both;
+    animation-delay: var(--conn-stagger, 0ms);
+  }
+
+  .connector-card.is-exiting {
+    animation: connector-card-out 0.18s ease-in both;
+    pointer-events: none;
+  }
+
+  /* Hide with the site header on scroll-down; reveal on scroll-up. */
+  #connector-controls {
+    transition:
+      transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 250ms ease;
+    will-change: transform;
+  }
+
+  #connector-controls[data-hidden='true'] {
+    /* Clear both the bar height and the sticky offset under the header. */
+    transform: translateY(calc(-100% - 4.5rem));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .connector-card.is-entering,
+    .connector-card.is-exiting {
+      animation: none;
+    }
+
+    #connector-controls {
+      transition: none;
+    }
+  }
+</style>
+
 <script>
+  import {
+    chipsForCategory,
+    countLabel,
+    hasActiveFilters,
+    matchesFilters,
+    normalizeQuery,
+    resolveSubcategory,
+    type SubcategoryChip,
+  } from '../../lib/connectorFilter';
+
+  type CatalogItem = {
+    id: string;
+    name: string;
+    status: 'live' | 'soon';
+    kind: string;
+    assets: string[];
+    url: string;
+    logo: string;
+    banner: string;
+    logoFit: 'cover' | 'contain';
+    notes: string;
+    connectUrl: string;
+  };
+
   let connectorsAbort: AbortController | undefined;
+  let lastFocus: HTMLElement | null = null;
+
+  type SubcategoryCatalog = Record<string, SubcategoryChip[]>;
+
+  function readCatalog(): CatalogItem[] {
+    const el = document.getElementById('connectors-catalog');
+    if (!el?.textContent) return [];
+    try {
+      return JSON.parse(el.textContent) as CatalogItem[];
+    } catch {
+      return [];
+    }
+  }
+
+  function readSubcategoryCatalog(): SubcategoryCatalog {
+    const el = document.getElementById('connectors-subcategories');
+    if (!el?.textContent) return { all: [] };
+    try {
+      return JSON.parse(el.textContent) as SubcategoryCatalog;
+    } catch {
+      return { all: [] };
+    }
+  }
 
   function initConnectorsApp() {
     connectorsAbort?.abort();
@@ -184,6 +450,36 @@ const itemListSchema = {
 
     const root = document.getElementById('connectors-app');
     if (!root) return;
+
+    const controls = root.querySelector<HTMLElement>('#connector-controls');
+    const header = document.getElementById('site-header');
+
+    const syncControlsHidden = () => {
+      if (!controls) return;
+      const headerHidden = header?.dataset.hidden === 'true';
+      const stickyTop = Number.parseFloat(getComputedStyle(controls).top) || 72;
+      const stuck = controls.getBoundingClientRect().top <= stickyTop + 1;
+      const hide = !!headerHidden && stuck;
+      if (controls.dataset.hidden !== String(hide)) {
+        controls.dataset.hidden = String(hide);
+      }
+    };
+
+    if (header) {
+      const mo = new MutationObserver(syncControlsHidden);
+      mo.observe(header, { attributes: true, attributeFilter: ['data-hidden'] });
+      signal.addEventListener('abort', () => mo.disconnect());
+    }
+    window.addEventListener('scroll', syncControlsHidden, { passive: true, signal });
+    controls?.addEventListener(
+      'focusin',
+      () => {
+        if (header) header.dataset.hidden = 'false';
+        controls.dataset.hidden = 'false';
+      },
+      { signal },
+    );
+    syncControlsHidden();
 
     const cards = Array.from(root.querySelectorAll<HTMLElement>('.connector-card'));
     const searchEl = root.querySelector<HTMLInputElement>('#connector-search');
@@ -194,59 +490,379 @@ const itemListSchema = {
     const filtersBadge = root.querySelector<HTMLElement>('#connector-filters-badge');
     const catBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-category]'));
     const statusBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-status]'));
+    const capabilityBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-capability]'));
+    const subWrap = root.querySelector<HTMLElement>('#connector-subcategories');
+    const subBtns = () =>
+      Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-subcategory]'));
+    const alphaBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter-alpha]'));
     const tmpl = countEl?.dataset.template ?? '{n}';
+    const subCatalog = readSubcategoryCatalog();
+
+    const modal = document.getElementById('connector-modal');
+    const panel = document.getElementById('connector-modal-panel');
+    const bannerWrap = document.getElementById('connector-modal-banner-wrap');
+    const bannerImg = document.getElementById('connector-modal-banner') as HTMLImageElement | null;
+    const closePlain = document.getElementById('connector-modal-close-plain');
+    const logoWrap = document.getElementById('connector-modal-logo-wrap');
+    const logoImg = document.getElementById('connector-modal-logo') as HTMLImageElement | null;
+    const titleEl = document.getElementById('connector-modal-title');
+    const kindEl = document.getElementById('connector-modal-kind');
+    const notesEl = document.getElementById('connector-modal-notes');
+    const assetsEl = document.getElementById('connector-modal-assets');
+    const connectEl = document.getElementById('connector-modal-connect') as HTMLAnchorElement | null;
+    const websiteEl = document.getElementById('connector-modal-website') as HTMLAnchorElement | null;
+    const websiteIcon = document.getElementById('connector-modal-website-icon') as HTMLAnchorElement | null;
+    const soonHint = document.getElementById('connector-modal-soon-hint');
+
+    const byId = new Map(readCatalog().map((c) => [c.id, c]));
 
     let category = 'all';
     let status = 'all';
+    let capability = 'all';
+    let subcategory = 'all';
+    let alpha = 'all';
     let query = '';
+    let open = false;
+    let searchTimer: number | undefined;
+    let exitTimers = new WeakMap<HTMLElement, number>();
+    let applyGen = 0;
 
-    const syncFiltersOpen = (open: boolean) => {
-      filtersEl?.setAttribute('data-open', String(open));
-      filtersToggle?.setAttribute('aria-expanded', String(open));
+    const prefersReducedMotion = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const syncFiltersOpen = (next: boolean) => {
+      filtersEl?.setAttribute('data-open', String(next));
+      filtersToggle?.setAttribute('aria-expanded', String(next));
     };
 
+    // Desktop previously always showed filters; keep them open by default on lg+.
+    syncFiltersOpen(window.matchMedia('(min-width: 1024px)').matches);
+
     const syncFiltersBadge = () => {
-      const active = category !== 'all' || status !== 'all';
+      const active = hasActiveFilters({ category, status, capability, subcategory, alpha, query });
       filtersBadge?.classList.toggle('hidden', !active);
     };
 
-    const apply = () => {
-      let n = 0;
-      for (const card of cards) {
-        const okCat = category === 'all' || card.dataset.category === category;
-        const okStatus = status === 'all' || card.dataset.status === status;
-        const okQuery = query === '' || (card.dataset.search ?? '').includes(query);
-        const show = okCat && okStatus && okQuery;
-        card.classList.toggle('hidden', !show);
-        if (show) n++;
+    const syncSubcategoryChips = () => {
+      const allowed = new Set(chipsForCategory(subCatalog, category).map((s) => s.key));
+      const all = subBtns();
+      for (const btn of all) {
+        const key = btn.dataset.filterSubcategory ?? '';
+        if (key === 'all') {
+          btn.hidden = false;
+          continue;
+        }
+        btn.hidden = !allowed.has(key);
       }
-      if (countEl) countEl.textContent = tmpl.replace('{n}', String(n));
+      subcategory = resolveSubcategory(subCatalog, category, subcategory);
+      const visible = all.filter((b) => !b.hidden);
+      const active =
+        visible.find((b) => b.dataset.filterSubcategory === subcategory) ??
+        visible.find((b) => b.dataset.filterSubcategory === 'all');
+      // Clear pressed on every chip (including hidden) so re-shown chips don't stay stuck.
+      all.forEach((x) => x.setAttribute('aria-pressed', String(x === active)));
+      subWrap?.classList.toggle('hidden', visible.length <= 1);
+    };
+
+    // The predicate lives in src/lib/connectorFilter.ts, next to the `toFacets`
+    // that wrote these attributes, and is unit-tested against the real catalog.
+    const matches = (card: HTMLElement) =>
+      matchesFilters(
+        {
+          category: card.dataset.category ?? '',
+          kind: card.dataset.kind ?? '',
+          status: card.dataset.status ?? '',
+          trading: card.dataset.trading === 'yes' ? 'yes' : 'no',
+          assets: card.dataset.assets ?? '',
+          letter: card.dataset.letter ?? '',
+          search: card.dataset.search ?? '',
+        },
+        { category, status, capability, subcategory, alpha, query },
+      );
+
+    const apply = () => {
+      const gen = ++applyGen;
+      const reduce = prefersReducedMotion();
+      let n = 0;
+      let enterIdx = 0;
+
+      for (const card of cards) {
+        const show = matches(card);
+        const wasHidden = card.classList.contains('hidden');
+        const pendingExit = exitTimers.get(card);
+
+        if (show) {
+          if (pendingExit !== undefined) {
+            window.clearTimeout(pendingExit);
+            exitTimers.delete(card);
+          }
+          card.classList.remove('is-exiting', 'hidden');
+          if (!wasHidden || reduce) {
+            card.classList.remove('is-entering');
+            card.style.removeProperty('--conn-stagger');
+          } else {
+            card.classList.remove('is-entering');
+            card.style.setProperty('--conn-stagger', `${Math.min(enterIdx, 24) * 22}ms`);
+            void card.offsetWidth;
+            card.classList.add('is-entering');
+          }
+          enterIdx++;
+          n++;
+        } else if (!wasHidden) {
+          if (reduce) {
+            card.classList.add('hidden');
+            card.classList.remove('is-entering', 'is-exiting');
+            card.style.removeProperty('--conn-stagger');
+          } else if (!card.classList.contains('is-exiting')) {
+            card.classList.remove('is-entering');
+            card.classList.add('is-exiting');
+            const timer = window.setTimeout(() => {
+              if (gen !== applyGen) return;
+              if (!matches(card)) {
+                card.classList.add('hidden');
+                card.classList.remove('is-exiting');
+                card.style.removeProperty('--conn-stagger');
+              }
+              exitTimers.delete(card);
+            }, 180);
+            exitTimers.set(card, timer);
+          }
+        }
+      }
+
+      if (countEl) countEl.textContent = countLabel(tmpl, n);
       emptyEl?.classList.toggle('hidden', n !== 0);
       syncFiltersBadge();
     };
 
-    filtersToggle?.addEventListener('click', () => {
-      const open = filtersToggle.getAttribute('aria-expanded') !== 'true';
-      syncFiltersOpen(open);
-    }, { signal });
+    const setPressed = (btns: HTMLButtonElement[], active: HTMLButtonElement) => {
+      btns.forEach((x) => x.setAttribute('aria-pressed', String(x === active)));
+    };
 
-    searchEl?.addEventListener('input', () => {
-      query = (searchEl.value ?? '').trim().toLowerCase();
-      apply();
-    }, { signal });
+    const populate = (item: CatalogItem) => {
+      const hasBanner = !!item.banner;
+      bannerWrap?.classList.toggle('hidden', !hasBanner);
+      closePlain?.classList.toggle('hidden', hasBanner);
+      if (bannerImg) {
+        bannerImg.src = item.banner || '';
+        bannerImg.alt = item.name;
+      }
+
+      if (logoImg) {
+        logoImg.src = item.logo;
+        logoImg.alt = `${item.name} logo`;
+        logoImg.classList.toggle('object-cover', item.logoFit === 'cover');
+        logoImg.classList.toggle('object-contain', item.logoFit === 'contain');
+        logoImg.classList.toggle('p-1', item.logoFit === 'contain');
+      }
+      logoWrap?.classList.toggle('bg-white', item.logoFit === 'contain');
+      logoWrap?.classList.toggle('p-1', item.logoFit === 'contain');
+
+      if (titleEl) titleEl.textContent = item.name;
+      if (kindEl) kindEl.textContent = item.kind;
+      if (notesEl) {
+        notesEl.textContent = item.notes;
+        notesEl.classList.toggle('hidden', !item.notes);
+      }
+
+      const isSoon = item.status === 'soon';
+      soonHint?.classList.toggle('hidden', !isSoon);
+
+      if (assetsEl) {
+        assetsEl.replaceChildren();
+        for (const a of item.assets) {
+          const chip = document.createElement('span');
+          chip.className =
+            'rounded-md border border-ink-900/10 bg-[#f7fbfb] px-1.5 py-0.5 font-mono text-[0.6rem] text-ink-600 dark:border-white/10 dark:bg-white/[0.015] dark:text-ink-300';
+          chip.textContent = a;
+          assetsEl.appendChild(chip);
+        }
+        assetsEl.classList.toggle('hidden', item.assets.length === 0);
+      }
+
+      if (websiteEl) {
+        websiteEl.href = item.url || '#';
+        websiteEl.classList.toggle('pointer-events-none', !item.url);
+        websiteEl.classList.toggle('opacity-50', !item.url);
+      }
+      if (websiteIcon) {
+        websiteIcon.href = item.url || '#';
+        websiteIcon.classList.toggle('hidden', !item.url);
+        const visitLabel = modal?.dataset.visitLabel || 'Website';
+        websiteIcon.setAttribute('aria-label', `${visitLabel}: ${item.name}`);
+      }
+
+      if (connectEl) {
+        connectEl.href = item.connectUrl;
+        connectEl.classList.toggle('hidden', isSoon);
+        connectEl.setAttribute('aria-disabled', String(isSoon));
+      }
+    };
+
+    const setOpen = (next: boolean, origin?: DOMRect | null) => {
+      if (!modal || !panel) return;
+      open = next;
+      if (next) {
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('overflow-hidden');
+        modal.setAttribute('data-open', 'true');
+
+        // Expand from the clicked card into the centered panel (FLIP-style).
+        if (origin && !prefersReducedMotion()) {
+          const dest = panel.getBoundingClientRect();
+          const sx = Math.max(0.18, Math.min(1, origin.width / Math.max(dest.width, 1)));
+          const sy = Math.max(0.18, Math.min(1, origin.height / Math.max(dest.height, 1)));
+          const dx = origin.left + origin.width / 2 - (dest.left + dest.width / 2);
+          const dy = origin.top + origin.height / 2 - (dest.top + dest.height / 2);
+          panel.style.transition = 'none';
+          panel.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+          panel.style.opacity = '0.4';
+          void panel.offsetWidth;
+          requestAnimationFrame(() => {
+            panel.style.transition = '';
+            panel.style.transform = '';
+            panel.style.opacity = '';
+          });
+        }
+
+        panel.focus?.();
+      } else {
+        modal.setAttribute('data-open', 'false');
+        modal.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('overflow-hidden');
+        window.setTimeout(() => {
+          if (!open) modal.hidden = true;
+        }, 280);
+        lastFocus?.focus?.();
+        lastFocus = null;
+      }
+    };
+
+    const openConnector = (id: string, card: HTMLElement) => {
+      const item = byId.get(id);
+      if (!item) return;
+      lastFocus = card;
+      populate(item);
+      setOpen(true, card.getBoundingClientRect());
+    };
+
+    filtersToggle?.addEventListener(
+      'click',
+      () => {
+        const next = filtersToggle.getAttribute('aria-expanded') !== 'true';
+        syncFiltersOpen(next);
+      },
+      { signal },
+    );
+
+    searchEl?.addEventListener(
+      'input',
+      () => {
+        const next = normalizeQuery(searchEl.value ?? '');
+        window.clearTimeout(searchTimer);
+        // Light debounce keeps typing snappy without reflowing on every key.
+        searchTimer = window.setTimeout(() => {
+          query = next;
+          apply();
+        }, 60);
+      },
+      { signal },
+    );
+
     catBtns.forEach((b) =>
-      b.addEventListener('click', () => {
-        category = b.dataset.filterCategory ?? 'all';
-        catBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        apply();
-      }, { signal }),
+      b.addEventListener(
+        'click',
+        () => {
+          category = b.dataset.filterCategory ?? 'all';
+          setPressed(catBtns, b);
+          syncSubcategoryChips();
+          apply();
+        },
+        { signal },
+      ),
     );
     statusBtns.forEach((b) =>
-      b.addEventListener('click', () => {
-        status = b.dataset.filterStatus ?? 'all';
-        statusBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-        apply();
-      }, { signal }),
+      b.addEventListener(
+        'click',
+        () => {
+          status = b.dataset.filterStatus ?? 'all';
+          setPressed(statusBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+    capabilityBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          capability = b.dataset.filterCapability ?? 'all';
+          setPressed(capabilityBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+    subBtns().forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          if (b.hidden) return;
+          subcategory = b.dataset.filterSubcategory ?? 'all';
+          setPressed(
+            subBtns().filter((x) => !x.hidden),
+            b,
+          );
+          apply();
+        },
+        { signal },
+      ),
+    );
+    alphaBtns.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          alpha = b.dataset.filterAlpha ?? 'all';
+          setPressed(alphaBtns, b);
+          apply();
+        },
+        { signal },
+      ),
+    );
+
+    syncSubcategoryChips();
+
+    cards.forEach((card) =>
+      card.addEventListener(
+        'click',
+        () => {
+          const id = card.dataset.connectorId;
+          if (id) openConnector(id, card);
+        },
+        { signal },
+      ),
+    );
+
+    modal?.querySelectorAll('[data-connector-modal-close], #connector-modal-backdrop').forEach((el) => {
+      el.addEventListener(
+        'click',
+        () => {
+          if (open) setOpen(false);
+        },
+        { signal },
+      );
+    });
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape' && open) {
+          e.preventDefault();
+          setOpen(false);
+        }
+      },
+      { signal },
     );
   }
 

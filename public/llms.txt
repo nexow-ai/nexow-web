@@ -21,6 +21,9 @@
 - Privacy: private by default and no account required; bring-your-own-key codegen runs client-side; widgets, versions and logs stored in the browser (IndexedDB); many services connect browser-direct.
 - Advanced layers: bots, agents, Copilot, community, marketplace and reputation are LIVE; premium widgets/signals and reward credits are on the roadmap. The home page positions all of them as secondary to the widget canvas.
 - Agents: build an agent from a harness (model, memory, skills, tools, knowledge, triggers) and deploy it to the cloud — grant-gated tools, memory between runs, scheduled cadence and a live run history. LIVE.
+- Bots vs agents: a BOT is deterministic — one of the bundled processors (threshold, change, crossover, RSI, volume spike, digest, new trade, wallet activity, wallet balance) over a connected venue, a broker account or a watch-only wallet address, on a schedule, with no model in the loop. An AGENT reasons: it runs a real tool loop on its trigger cadence (manual, 15m, 1h, 4h, 1d) using only the tools it was granted — web search, social feeds (X, YouTube, Telegram, Discord), market history, databases, vector search, widgets/screens, account snapshots and orders — and carries memory between runs.
+- Delivery: a bot signal can fan out to four targets at once — the widget bus (dashboards repaint themselves), the alert inbox, an HTTPS webhook (Slack, Discord, Telegram or your own server) and rows appended to a connected database. Agents emit signals to the alert inbox or the widget bus.
+- Use cases beyond trading: world/news watch via web search, social operations across X/YouTube/Telegram/Discord, live self-updating monitoring boards, alert routing into team channels, multi-step research with a vector store and persistent memory, execution (building and refining widgets, emitting signals, and — only with unattended trading explicitly enabled — placing or closing orders), and event pipelines that archive every signal into the user's own database. Markets and wallets remain first-class, not the whole story.
 - Copilot: workspace assistant with parallel tabbed conversations, background widget builds that survive interruptions, and canvas layout tools. LIVE.
 - Marketplace: publish and install widgets, themes, screens/workspaces and bots, with lineage that credits every remake. Free to publish and install; buying/selling and strategy signals are COMING SOON. Published bots are sanitized: author credentials, wallet addresses and webhook/database sinks never travel.
 - Reputation: points, tiered achievements (bronze/silver/gold), rare and legendary medals, and levels on public profiles. LIVE; converting reputation into reward credits is COMING SOON.
@@ -35,11 +38,12 @@
 
 ## Pages
 
-- [Home](https://nexow.ai/): clear overview, examples, how it works, core features, optional connectors, privacy, plans, FAQ.
+- [Home](https://nexow.ai/): clear overview, examples, how it works, core features, a bots & agents deep-dive (#bots-agents — bot vs agent, anatomy of a run, eight use cases), optional connectors, privacy, plans, FAQ.
 - [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
 - [Connectors](https://nexow.ai/connectors): searchable gallery of all 83 services — 45 live today.
 - [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.
+- [Community Rules](https://nexow.ai/community-rules): house rules for the feed, marketplace and automations — eight rules, bot conduct, the enforcement ladder, reports and appeals.
 - [Blog](https://nexow.ai/blog): guides and deep-dives.
 
 ## Blog

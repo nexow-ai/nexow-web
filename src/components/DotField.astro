@@ -1,0 +1,212 @@
+---
+/**
+ * The living dot field — the same backdrop the app paints during boot
+ * (`../nexow/app/spa-loading-template.html`), ported to the marketing site.
+ *
+ * Two layers, exactly as in the app:
+ *   1. a CSS radial-gradient dot grid, so the full field is there at first
+ *      paint with no JavaScript at all, and
+ *   2. a canvas that lights the dots within reach of the pointer — brighter,
+ *      larger and gently pulled toward it — drifting on its own when the
+ *      pointer is idle or absent (touch, first load).
+ *
+ * The canvas only ever touches the few hundred dots inside the light's radius,
+ * so cost is independent of screen size. It idles when the tab is hidden and
+ * never starts under reduced motion, where the static grid stands alone.
+ */
+interface Props {
+  /** Extra positioning classes; defaults to a fixed, full-viewport backdrop. */
+  class?: string;
+  /**
+   * Dot ink on light vs dark surfaces. Defaults to inheriting from an ancestor
+   * `.dark` (page chrome); pass `dark` when the field sits on a dark island
+   * like the light-page footer.
+   */
+  tone?: 'light' | 'dark';
+}
+const { class: className = 'fixed inset-0', tone } = Astro.props;
+---
+
+<div
+  class:list={['dot-field pointer-events-none', className]}
+  data-tone={tone}
+  aria-hidden="true"
+>
+  <canvas class="dot-field__canvas" data-dot-field></canvas>
+</div>
+
+<style>
+  .dot-field {
+    /* Mirrors `.canvas-grid` in the app's main.css: 1px dots on a 22px cell. */
+    background-image: radial-gradient(var(--dot-ink) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -1px -1px;
+    --dot-ink: color-mix(in oklab, var(--color-ink-900) 9%, transparent);
+    --dot-light: 16, 197, 163;
+  }
+  .dot-field[data-tone='dark'],
+  :global(.dark) .dot-field {
+    --dot-ink: color-mix(in oklab, white 7%, transparent);
+  }
+  .dot-field__canvas {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+
+<script>
+  interface FieldHandle {
+    stop: () => void;
+  }
+
+  const SPACING = 22;
+  const ORIGIN = 10;
+  /** Radius of the light, in CSS pixels. */
+  const R = 170;
+
+  let fields: FieldHandle[] = [];
+
+  function startField(canvas: HTMLCanvasElement): FieldHandle | null {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const styles = getComputedStyle(canvas.parentElement ?? canvas);
+    const light = styles.getPropertyValue('--dot-light').trim() || '16, 197, 163';
+    const rgba = (a: number) => `rgba(${light},${a})`;
+
+    let vw = 0;
+    let vh = 0;
+    // Measure the CANVAS, never the window: on a phone the two disagree often
+    // (collapsing URL bar, a rotation mid-layout) and sizing the backing store
+    // from a stale window reading is what leaves the light off-centre.
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      vw = canvas.clientWidth;
+      vh = canvas.clientHeight;
+      canvas.width = Math.max(1, Math.round(vw * dpr));
+      canvas.height = Math.max(1, Math.round(vh * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(resize);
+      ro.observe(canvas);
+    }
+    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('orientationchange', resize, { passive: true });
+
+    let pointerX = vw / 2;
+    let pointerY = vh / 2;
+    let hasPointer = false;
+    let lastMove = -Infinity;
+    const onMove = (e: PointerEvent) => {
+      const box = canvas.getBoundingClientRect();
+      pointerX = e.clientX - box.left;
+      pointerY = e.clientY - box.top;
+      hasPointer = true;
+      lastMove = performance.now();
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+
+    let raf = 0;
+    let running = true;
+
+    const draw = (now: number) => {
+      if (!running) return
+      if (document.hidden) {
+        raf = requestAnimationFrame(draw);
+        return;
+      }
+      // A frame can land before the observer catches a resize — re-check
+      // cheaply rather than draw into a stale backing store.
+      if (canvas.clientWidth !== vw || canvas.clientHeight !== vh) resize();
+      ctx.clearRect(0, 0, vw, vh);
+
+      // Auto-drift when the pointer has not moved recently, so the field feels
+      // alive on load and on touch devices.
+      let cx = pointerX;
+      let cy = pointerY;
+      if (!hasPointer || now - lastMove > 1100) {
+        const drift = now * 0.001;
+        const dx = vw * (0.5 + 0.3 * Math.sin(drift * 0.19));
+        const dy = vh * (0.5 + 0.24 * Math.sin(drift * 0.26 + 1.3));
+        if (hasPointer) {
+          // Ease from the last real pointer position into the drift path.
+          cx = pointerX + (dx - pointerX) * 0.04;
+          cy = pointerY + (dy - pointerY) * 0.04;
+          pointerX = cx;
+          pointerY = cy;
+        } else {
+          cx = dx;
+          cy = dy;
+        }
+      }
+
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.25);
+      glow.addColorStop(0, rgba(0.035));
+      glow.addColorStop(1, rgba(0));
+      ctx.fillStyle = glow;
+      ctx.fillRect(cx - R * 1.3, cy - R * 1.3, R * 2.6, R * 2.6);
+
+      const i0 = Math.floor((cx - R - ORIGIN) / SPACING);
+      const i1 = Math.ceil((cx + R - ORIGIN) / SPACING);
+      const j0 = Math.floor((cy - R - ORIGIN) / SPACING);
+      const j1 = Math.ceil((cy + R - ORIGIN) / SPACING);
+      for (let i = i0; i <= i1; i++) {
+        for (let j = j0; j <= j1; j++) {
+          const bx = ORIGIN + i * SPACING;
+          const by = ORIGIN + j * SPACING;
+          const ddx = cx - bx;
+          const ddy = cy - by;
+          const dist = Math.hypot(ddx, ddy);
+          if (dist > R) continue;
+          let t = 1 - dist / R;
+          t = t * t;
+          const twinkle = 0.85 + 0.15 * Math.sin(now * 0.004 + i * 0.7 + j * 0.7);
+          const move = t * 5;
+          const nx = dist > 0.001 ? bx + (ddx / dist) * move : bx;
+          const ny = dist > 0.001 ? by + (ddy / dist) * move : by;
+          ctx.beginPath();
+          ctx.fillStyle = rgba(Math.min(1, (0.12 + t * 0.7) * twinkle));
+          ctx.arc(nx, ny, 1 + t * 2.4, 0, 6.283185307);
+          ctx.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(draw);
+    };
+    raf = requestAnimationFrame(draw);
+
+    return {
+      stop() {
+        running = false;
+        if (raf) cancelAnimationFrame(raf);
+        ro?.disconnect();
+        window.removeEventListener('resize', resize);
+        window.removeEventListener('orientationchange', resize);
+        window.removeEventListener('pointermove', onMove);
+      },
+    };
+  }
+
+  function teardownFields() {
+    for (const f of fields) f.stop();
+    fields = [];
+  }
+
+  function initDotFields() {
+    teardownFields();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvases = document.querySelectorAll<HTMLCanvasElement>('[data-dot-field]');
+    for (const c of canvases) {
+      const handle = startField(c);
+      if (handle) fields.push(handle);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initDotFields);
+  document.addEventListener('astro:before-swap', teardownFields);
+</script>

@@ -1,0 +1,71 @@
+---
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath } from '../../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import FeatureCard from '../FeatureCard.astro';
+import CtaBand from '../sections/CtaBand.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).securityPage!;
+
+const sections = [
+  { id: 'pillars', label: t.hero.badge },
+  { id: 'principles', label: t.principlesTitle },
+  { id: 'cta', label: t.ctaPrimary },
+];
+---
+
+<Layout lang={lang} route="/security" title={t.meta.title} description={t.meta.description} sections={sections}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon('/security')}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section id="pillars" class="container-page scroll-mt-20 py-8 sm:py-12">
+    {/* The pillar cards carry no visible section title; an off-screen heading
+        keeps the outline continuous between the h1 and the card h3s. */}
+    <h2 class="sr-only">{t.hero.badge}</h2>
+    <div class="reveal-stagger mx-auto grid max-w-5xl gap-5 sm:grid-cols-2">
+      {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
+    </div>
+  </section>
+
+  <section id="principles" class="scroll-mt-20 border-y border-ink-900/5 bg-[#f7fbfb]/70 py-16 dark:border-white/8 dark:bg-white/[0.015]">
+    <div class="container-page">
+      <h2 class="reveal text-center font-display text-2xl font-semibold text-ink-950 sm:text-3xl dark:text-white">
+        {t.principlesTitle}
+      </h2>
+      <ul class="reveal-stagger mx-auto mt-10 max-w-2xl space-y-4">
+        {
+          t.principles.map((p) => (
+            <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-700 sm:text-base dark:text-ink-300">
+              <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200/80 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                <Icon name="check" class="size-3.5" />
+              </span>
+              {p}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    lang={lang}
+    title={t.ctaTitle}
+    subtitle={t.ctaBody}
+    primary={t.ctaPrimary}
+    primaryHref={localizePath('/privacy', lang)}
+    secondary={t.ctaSecondary}
+    secondaryHref={localizePath('/contact', lang)}
+  />
+</Layout>

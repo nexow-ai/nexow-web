@@ -66,10 +66,23 @@ const pick = ['coinbase', 'binance', 'oanda', 'interactive_brokers', 'kraken', '
               <img src={c.logo} alt="" width="20" height="20" loading="lazy" decoding="async" class="size-full object-contain" />
             </span>
             <span class="min-w-0 flex-1 truncate font-mono text-[0.6rem] text-ink-300">{c.name}</span>
-            <span class="size-1.5 shrink-0 rounded-full bg-brand-400"></span>
+            <span class="size-1.5 shrink-0 rounded-full bg-brand-400 connect-live-dot"></span>
           </div>
         ))
       }
     </div>
   </div>
 </div>
+
+<style>
+  .connect-live-dot {
+    animation: connect-blink 1.8s ease-in-out infinite;
+  }
+  @keyframes connect-blink {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .connect-live-dot { animation: none; }
+  }
+</style>

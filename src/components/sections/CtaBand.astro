@@ -4,6 +4,7 @@ import { useContent } from '../../i18n/content';
 import { localizePath } from '../../i18n/utils';
 import Button from '../Button.astro';
 import BrandMark from '../BrandMark.astro';
+import ClaimFireworks from '../ClaimFireworks.astro';
 
 interface Props {
   lang: Lang;
@@ -13,6 +14,13 @@ interface Props {
   primary?: string;
   secondary?: string;
   secondaryHref?: string;
+  /** Trailing glyph on each CTA — `rocket` for the ones that open the app. */
+  primaryIcon?: string;
+  secondaryIcon?: string;
+  /** Override the primary CTA target (defaults to the production app). */
+  primaryHref?: string;
+  /** Soft fireworks backdrop (used on the claim-@handle band). */
+  fireworks?: boolean;
 }
 const { lang } = Astro.props;
 const home = useContent(lang).home.cta;
@@ -21,40 +29,61 @@ const subtitle = Astro.props.subtitle ?? home.subtitle;
 const primary = Astro.props.primary ?? home.primary;
 const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
+const primaryHref = Astro.props.primaryHref ?? SITE.appUrl;
+const fireworks = Astro.props.fireworks ?? false;
+const primaryIcon = Astro.props.primaryIcon ?? 'arrow';
+const secondaryIcon = Astro.props.secondaryIcon;
+const primaryExternal = primaryHref.startsWith('http') || primaryHref.startsWith('mailto');
+const secondaryExternal = secondaryHref.startsWith('http') || secondaryHref.startsWith('mailto');
 ---
 
-<section class="relative overflow-hidden bg-white py-20 text-ink-950 sm:py-28">
-  <!-- Backdrop: soft grid + wash -->
-  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+<section id="cta" class="relative overflow-x-clip py-20 text-ink-950 sm:py-28 dark:text-white">
+  <!-- Backdrop: colored aurora mesh + grid (no white wash) -->
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div class="hairline-gold absolute inset-x-0 top-0 opacity-70"></div>
+    <div class="aurora-mesh absolute inset-[-10%]"></div>
     <div
       class="absolute inset-0 opacity-35 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]"
       style="background-image:linear-gradient(to right, color-mix(in oklab, var(--color-brand-300) 12%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--color-sky-300) 10%, transparent) 1px, transparent 1px); background-size:56px 56px"
     ></div>
     <div
-      class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-45 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-brand-100), transparent 60%)"
+      class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl dark:opacity-40"
+      style="background:radial-gradient(circle, var(--aurora-1), transparent 60%)"
     >
     </div>
     <div
-      class="aurora-b absolute left-[30%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-30 blur-3xl"
-      style="background:radial-gradient(circle, var(--color-sky-100), transparent 60%)"
+      class="aurora-b absolute left-[28%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-35 blur-3xl dark:opacity-30"
+      style="background:radial-gradient(circle, var(--aurora-3), transparent 60%)"
     >
     </div>
+    <div
+      class="aurora-c absolute right-[18%] top-[40%] size-[420px] rounded-full opacity-30 blur-3xl dark:opacity-25"
+      style="background:radial-gradient(circle, var(--aurora-2), transparent 60%)"
+    >
+    </div>
+    {fireworks && <ClaimFireworks />}
   </div>
 
   <div class="container-page relative">
     <div class="reveal mx-auto flex max-w-2xl flex-col items-center text-center">
-      <BrandMark class="h-16 w-auto" title="Nexow" />
+      <span data-motion="breathe-lg" class="inline-block">
+        <BrandMark class="h-16 w-auto" title="Nexow" tone="auto" />
+      </span>
       <h2 class="mt-8 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
         {title}
       </h2>
-      <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600">{subtitle}</p>
+      <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{subtitle}</p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <Button href={SITE.appUrl} size="lg" external iconRight="arrow">
+        <Button href={primaryHref} size="lg" external={primaryExternal} iconRight={primaryIcon}>
           {primary}
         </Button>
-        <Button href={secondaryHref} variant="secondary" size="lg">
+        <Button
+          href={secondaryHref}
+          variant="secondary"
+          size="lg"
+          external={secondaryExternal}
+          iconRight={secondaryIcon}
+        >
           {secondary}
         </Button>
       </div>

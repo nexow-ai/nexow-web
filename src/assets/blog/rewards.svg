@@ -1,0 +1,108 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reward ladder of badge tiers paying credits and governance tokens illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="140" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#rewards</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="620" cy="340" rx="340" ry="230" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- the ladder: five rungs, each an unlock that pays twice -->
+    <!-- bronze -->
+    <g>
+      <rect x="300" y="480" width="330" height="56" rx="18" fill="#f59e0b" fill-opacity="0.06" stroke="#8a7b57" stroke-opacity="0.55" stroke-width="2"/>
+      <circle cx="300" cy="508" r="24" fill="#08090d" stroke="#8a7b57" stroke-width="4"/>
+      <path d="M289 518 l8 -20 h6 l8 20" fill="none" stroke="#8a7b57" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="348" y="502" width="120" height="12" rx="6" fill="#fde68a" fill-opacity="0.28"/>
+      <circle cx="560" cy="508" r="14" fill="#f59e0b" fill-opacity="0.2" stroke="#8a7b57" stroke-width="2.5"/>
+      <path d="M592 494 l14 8 v16 l-14 8 -14 -8 v-16 z" fill="none" stroke="#8a7b57" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- silver -->
+    <g>
+      <rect x="330" y="404" width="360" height="56" rx="18" fill="#f59e0b" fill-opacity="0.07" stroke="#d9dee6" stroke-opacity="0.4" stroke-width="2"/>
+      <circle cx="330" cy="432" r="26" fill="#08090d" stroke="#d9dee6" stroke-opacity="0.75" stroke-width="4"/>
+      <path d="M318 443 l9 -22 h6 l9 22" fill="none" stroke="#d9dee6" stroke-opacity="0.75" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="380" y="426" width="150" height="12" rx="6" fill="#fde68a" fill-opacity="0.35"/>
+      <circle cx="620" cy="432" r="15" fill="#f59e0b" fill-opacity="0.24" stroke="#d9dee6" stroke-opacity="0.6" stroke-width="2.5"/>
+      <path d="M654 417 l15 8.5 v17 l-15 8.5 -15 -8.5 v-17 z" fill="none" stroke="#d9dee6" stroke-opacity="0.6" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- gold -->
+    <g>
+      <rect x="360" y="328" width="390" height="56" rx="18" fill="#f59e0b" fill-opacity="0.1" stroke="url(#edge)" stroke-width="2.5"/>
+      <circle cx="360" cy="356" r="28" fill="#08090d" stroke="url(#edge)" stroke-width="4"/>
+      <path d="M346 368 l10 -24 h6 l10 24" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="414" y="350" width="180" height="12" rx="6" fill="#fde68a" fill-opacity="0.5"/>
+      <circle cx="680" cy="356" r="16" fill="#f59e0b" fill-opacity="0.3" stroke="#fbbf24" stroke-width="2.5"/>
+      <path d="M716 340 l16 9 v18 l-16 9 -16 -9 v-18 z" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- rare -->
+    <g>
+      <rect x="390" y="252" width="420" height="56" rx="18" fill="#f59e0b" fill-opacity="0.08" stroke="#6eb6f5" stroke-opacity="0.5" stroke-width="2"/>
+      <circle cx="390" cy="280" r="28" fill="#08090d" stroke="#6eb6f5" stroke-opacity="0.8" stroke-width="4"/>
+      <path d="M390 264 l14 10 -14 18 -14 -18 z" fill="none" stroke="#6eb6f5" stroke-opacity="0.8" stroke-width="3.5" stroke-linejoin="round"/>
+      <rect x="444" y="274" width="200" height="12" rx="6" fill="#fde68a" fill-opacity="0.42"/>
+      <circle cx="740" cy="280" r="16" fill="#f59e0b" fill-opacity="0.26" stroke="#6eb6f5" stroke-opacity="0.7" stroke-width="2.5"/>
+      <path d="M776 264 l16 9 v18 l-16 9 -16 -9 v-18 z" fill="none" stroke="#6eb6f5" stroke-opacity="0.7" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <!-- legendary -->
+    <g>
+      <rect x="420" y="176" width="450" height="56" rx="18" fill="#f59e0b" fill-opacity="0.1" stroke="#c6a6f5" stroke-opacity="0.55" stroke-width="2.5"/>
+      <circle cx="420" cy="204" r="30" fill="#08090d" stroke="#c6a6f5" stroke-opacity="0.85" stroke-width="4"/>
+      <path d="M404 214 l-4 -24 10 8 10 -14 10 14 10 -8 -4 24 z" fill="none" stroke="#c6a6f5" stroke-opacity="0.85" stroke-width="3.5" stroke-linejoin="round"/>
+      <rect x="478" y="198" width="230" height="12" rx="6" fill="#fde68a" fill-opacity="0.55"/>
+      <circle cx="800" cy="204" r="17" fill="#f59e0b" fill-opacity="0.32" stroke="#c6a6f5" stroke-opacity="0.8" stroke-width="2.5"/>
+      <path d="M838 187 l17 9.5 v19 l-17 9.5 -17 -9.5 v-19 z" fill="none" stroke="#c6a6f5" stroke-opacity="0.8" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+
+    <!-- points meter feeding the ladder -->
+    <g>
+      <rect x="300" y="576" width="570" height="18" rx="9" fill="#f59e0b" fill-opacity="0.1" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="2"/>
+      <rect x="302" y="578" width="380" height="14" rx="7" fill="url(#edge)" fill-opacity="0.85"/>
+      <circle cx="682" cy="585" r="13" fill="#08090d" stroke="url(#edge)" stroke-width="3"/>
+    </g>
+
+    <!-- payout legend: credits and NXW -->
+    <g opacity="0.9">
+      <circle cx="946" cy="508" r="15" fill="#f59e0b" fill-opacity="0.2" stroke="#fbbf24" stroke-width="2.5"/>
+      <rect x="978" y="501" width="120" height="13" rx="6.5" fill="#fde68a" fill-opacity="0.4"/>
+      <path d="M946 420 l16 9 v18 l-16 9 -16 -9 v-18 z" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="978" y="422" width="90" height="13" rx="6.5" fill="#fde68a" fill-opacity="0.4"/>
+    </g>
+  </g>
+</svg>

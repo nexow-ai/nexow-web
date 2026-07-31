@@ -1,0 +1,211 @@
+---
+/**
+ * The full feature comparison.
+ *
+ * Rows and cells are data (`MATRIX` in src/data/gamification.ts); this file only
+ * decides how a cell renders: `true` → accent check, `false` → dash, `{n}` →
+ * literal, `{t}` → translated value, `{n,t}` → "115,000 / month".
+ *
+ * Desktop shows all four plan columns at once. Below `lg` the table would be
+ * unreadable, so it collapses to two columns — Free plus one plan the visitor
+ * picks — which is the comparison people actually make.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { MATRIX, PLANS, type MatrixCell } from '../../data/gamification';
+import SectionHeading from '../SectionHeading.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang).plansPage;
+const t = c.matrix;
+
+/** Resolve a cell to what it should print, or null when it is a plain check/dash. */
+function text(cell: MatrixCell): string | null {
+  if (typeof cell === 'boolean') return null;
+  const value = t.values[cell.t ?? ''] ?? cell.t ?? '';
+  // A `{n}` slot lets a locale place the number where its grammar wants it
+  // ("All 156" / "156 件すべて"); otherwise the number simply leads.
+  if (cell.n && value.includes('{n}')) return value.replace('{n}', cell.n);
+  if (cell.n && cell.t) return `${cell.n} ${value}`;
+  return cell.n ?? value;
+}
+
+const names = c.tiers.map((tier) => tier.name);
+---
+
+<section id="compare" class="border-t border-ink-900/8 dark:border-white/8 bg-ink-50/70 dark:bg-white/[0.02] py-20 sm:py-24">
+  <div class="container-page">
+    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
+
+    <!-- Mobile / tablet: Free vs one chosen plan. -->
+    <div class="reveal mt-10 flex flex-wrap items-center justify-center gap-2 lg:hidden">
+      <span class="text-xs font-medium text-ink-500 dark:text-ink-400">{t.pick}</span>
+      {
+        names.slice(1).map((name, i) => (
+          <button
+            type="button"
+            data-matrix-pick={i + 1}
+            aria-pressed={i === 1 ? 'true' : 'false'}
+            class="rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] px-3.5 py-1.5 text-sm font-medium text-ink-600 dark:text-ink-300 transition-colors aria-[pressed=true]:border-transparent aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
+            style={`--a:${PLANS[i + 1].accent}`}
+          >
+            {name}
+          </button>
+        ))
+      }
+    </div>
+
+    <div
+      id="plan-matrix"
+      data-pick="2"
+      class="reveal mt-8 overflow-x-auto rounded-3xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40"
+    >
+      <table class="w-full border-collapse text-left">
+        <caption class="sr-only">{t.title}</caption>
+        <thead class="bg-white/95 dark:bg-ink-950/85">
+          <tr class="border-b border-ink-900/10 dark:border-white/10">
+            <th scope="col" class="px-3 py-4 text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6">
+              {t.feature}
+            </th>
+            {
+              names.map((name, i) => (
+                <th
+                  scope="col"
+                  data-col={i}
+                  class:list={[
+                    'px-2 py-4 text-center text-[0.8rem] font-semibold text-ink-950 dark:text-white sm:px-4 sm:text-sm',
+                    i > 0 && 'plan-col',
+                  ]}
+                >
+                  <span class="flex flex-col items-center gap-1.5">
+                    <span
+                      class="inline-flex size-7 items-center justify-center rounded-lg"
+                      style={`color:${PLANS[i].accentInk};background:color-mix(in oklab, ${PLANS[i].accent} 16%, transparent)`}
+                      aria-hidden="true"
+                    >
+                      <Icon name={PLANS[i].icon} class="size-4" />
+                    </span>
+                    {name}
+                  </span>
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+
+        {
+          MATRIX.map((group) => (
+            <tbody>
+              <tr class="bg-ink-50/70 dark:bg-white/[0.02]">
+                <th
+                  scope="colgroup"
+                  colspan={5}
+                  class="px-3 py-2.5 text-left text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400 sm:px-6"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <Icon name={group.icon} class="size-3.5 text-brand-600 dark:text-brand-300" />
+                    {t.groups[group.key]}
+                  </span>
+                </th>
+              </tr>
+              {group.rows.map((row) => (
+                <tr class="border-t border-ink-900/[0.06] dark:border-white/8">
+                  <th scope="row" class="px-3 py-3 text-[0.8rem] font-normal text-ink-700 dark:text-ink-200 sm:px-6 sm:text-sm">
+                    {t.rows[row.key]}
+                    {row.soon && (
+                      <span class="ms-2 rounded-full bg-accent-500/10 px-1.5 py-0.5 align-middle font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
+                        {t.soon}
+                      </span>
+                    )}
+                  </th>
+                  {row.cells.map((cell, i) => {
+                    const label = text(cell);
+                    return (
+                      <td
+                        data-col={i}
+                        class:list={[
+                          'px-2 py-3 text-center text-[0.8rem] sm:px-4 sm:text-sm',
+                          i > 0 && 'plan-col',
+                        ]}
+                      >
+                        {label ? (
+                          <span class="font-medium text-ink-800 dark:text-ink-200">
+                            {label}
+                            {typeof cell === 'object' && cell.soon && (
+                              <span class="ms-1.5 rounded-full bg-accent-500/10 px-1.5 py-0.5 align-middle font-mono text-[0.6rem] font-medium uppercase tracking-wider text-accent-600">
+                                {t.soon}
+                              </span>
+                            )}
+                          </span>
+                        ) : cell === true ? (
+                          <Icon
+                            name="check"
+                            class="mx-auto size-4"
+                            style={`color:${PLANS[i].accentInk}`}
+                          />
+                        ) : (
+                          <span class="text-ink-300 dark:text-ink-600" aria-label="—">
+                            —
+                          </span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          ))
+        }
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* The script marks the plan columns it wants out of the way; the breakpoint
+   * decides whether that marking has any effect, so wide screens always show
+   * all four plans no matter what was picked on a phone. */
+  @media (max-width: 63.999rem) {
+    .plan-col[data-hidden] {
+      display: none;
+    }
+  }
+
+</style>
+
+<script>
+  // Below `lg` only two plan columns fit: Free (always) plus the one the visitor
+  // picked. The script only toggles `data-hidden`; the stylesheet above decides
+  // when that matters, so it never has to know about breakpoints.
+  let matrixAbort: AbortController | undefined;
+
+  function initPlanMatrix() {
+    matrixAbort?.abort();
+    matrixAbort = new AbortController();
+    const { signal } = matrixAbort;
+
+    const table = document.getElementById('plan-matrix');
+    if (!table) return;
+
+    const picks = document.querySelectorAll<HTMLButtonElement>('[data-matrix-pick]');
+    const apply = (col: number) => {
+      table.dataset.pick = String(col);
+      picks.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.matrixPick) === col)));
+      table.querySelectorAll<HTMLElement>('[data-col]').forEach((cell) => {
+        const i = Number(cell.dataset.col);
+        if (i === 0) return;
+        if (i === col) cell.removeAttribute('data-hidden');
+        else cell.setAttribute('data-hidden', '');
+      });
+    };
+
+    apply(Number(table.dataset.pick) || 2);
+    picks.forEach((b) => b.addEventListener('click', () => apply(Number(b.dataset.matrixPick)), { signal }));
+  }
+
+  document.addEventListener('astro:page-load', initPlanMatrix);
+</script>

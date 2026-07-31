@@ -1,0 +1,1326 @@
+---
+/**
+ * Animated artwork for the home FeatureMap detail panel — one inline SVG scene
+ * per surface id. Every scene is decorative; the explorer script toggles
+ * `.is-active` so only the selected one is displayed (and re-runs its intro).
+ */
+import { ICON_PATHS } from './icon-paths';
+import type { FeatureMapSurfaceId } from '../lib/featureMap';
+
+interface Props {
+  /** Surface rendered before hydration/selection. */
+  initial?: FeatureMapSurfaceId;
+}
+
+const { initial } = Astro.props;
+const active = (id: FeatureMapSurfaceId) => initial === id;
+
+/** Connector hub spokes — even ring around the centre plug. */
+const spokes = [0, 60, 120, 180, 240, 300].map((deg, i) => {
+  const rad = (deg * Math.PI) / 180;
+  return {
+    i,
+    x: +(160 + Math.cos(rad) * 106).toFixed(1),
+    y: +(100 + Math.sin(rad) * 62).toFixed(1),
+  };
+});
+
+/** Community graph — fixed layout so the drawing order stays deterministic. */
+const people = [
+  { x: 62, y: 52 },
+  { x: 150, y: 34 },
+  { x: 246, y: 62 },
+  { x: 38, y: 132 },
+  { x: 122, y: 108 },
+  { x: 214, y: 142 },
+  { x: 282, y: 118 },
+];
+const links: [number, number][] = [
+  [0, 1],
+  [1, 2],
+  [0, 4],
+  [1, 4],
+  [2, 4],
+  [3, 4],
+  [4, 5],
+  [5, 6],
+  [2, 6],
+];
+
+const shelf = [0, 1, 2, 3, 4, 5];
+const dockIcons = ['chat', 'users', 'bell', 'mail', 'grid'];
+const tools = ['sparkles', 'grid', 'history', 'lock', 'sync', 'search'];
+const swatches = [
+  ['var(--fma-brand)', 'var(--fma-accent)'],
+  ['var(--fma-accent)', 'var(--fma-sky)'],
+  ['var(--fma-sky)', 'var(--fma-brand)'],
+  ['var(--fma-brand)', 'var(--fma-sky)'],
+];
+---
+
+<div
+  class="fma relative w-full aspect-[8/5] overflow-hidden rounded-xl border border-ink-900/8 dark:border-white/8 bg-white dark:bg-white/[0.03] lg:grow"
+  aria-hidden="true"
+  data-fm-art-stage
+>
+  <!-- Canvas & workspaces -->
+  <svg
+    class:list={['fma-scene', active('canvas') && 'is-active']}
+    data-fm-art="canvas"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <defs>
+      <pattern id="fma-grid" width="26" height="26" patternUnits="userSpaceOnUse">
+        <path d="M26 0H0v26" stroke="var(--fma-line)" stroke-width="1" fill="none"></path>
+      </pattern>
+      <linearGradient id="fma-link" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--fma-brand)" stop-opacity="0.2"></stop>
+        <stop offset="55%" stop-color="var(--fma-brand)" stop-opacity="0.95"></stop>
+        <stop offset="100%" stop-color="var(--fma-accent)" stop-opacity="0.85"></stop>
+      </linearGradient>
+    </defs>
+
+    <rect x="10" y="10" width="300" height="180" rx="12" fill="url(#fma-grid)" opacity="0.55"></rect>
+
+    <path class="fma-draw" d="M150 62 C176 62 172 44 196 44" stroke="url(#fma-link)" stroke-width="1.6" pathLength="1"></path>
+    <path class="fma-draw" style="--d:.3s" d="M246 106 C246 134 208 130 184 140" stroke="url(#fma-link)" stroke-width="1.6" pathLength="1"></path>
+    <circle class="fma-packet" r="2.6" fill="var(--fma-brand)">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M150 62 C176 62 172 44 196 44"></animateMotion>
+    </circle>
+    <circle class="fma-packet" r="2.4" fill="var(--fma-accent)">
+      <animateMotion dur="3.8s" begin="0.9s" repeatCount="indefinite" path="M246 106 C246 134 208 130 184 140"></animateMotion>
+    </circle>
+
+    <g class="fma-rise fma-float">
+      <rect class="fma-panel" x="26" y="30" width="124" height="64" rx="10"></rect>
+      <rect class="fma-accentbar" x="38" y="42" width="38" height="7" rx="3.5"></rect>
+      <rect class="fma-bar" x="38" y="57" width="98" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="38" y="70" width="70" height="6" rx="3" opacity="0.65"></rect>
+      <rect x="146" y="90" width="8" height="8" rx="2" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.4"></rect>
+    </g>
+
+    <g class="fma-rise" style="--d:.12s">
+      <rect class="fma-panel" x="196" y="22" width="98" height="84" rx="10"></rect>
+      <rect class="fma-bar" x="208" y="34" width="46" height="6" rx="3"></rect>
+      {[0, 1, 2, 3].map((n) => (
+        <rect
+          class="fma-grow"
+          style={`--d:${0.3 + n * 0.12}s`}
+          x={208 + n * 20}
+          y={94 - (14 + n * 12)}
+          width="12"
+          height={14 + n * 12}
+          rx="3"
+          fill={n === 3 ? 'var(--fma-brand)' : 'var(--fma-soft)'}
+        />
+      ))}
+    </g>
+
+    <g class="fma-rise" style="--d:.24s">
+      <rect class="fma-panel" x="112" y="118" width="140" height="56" rx="10"></rect>
+      <circle cx="132" cy="140" r="10" fill="var(--fma-soft)"></circle>
+      <rect class="fma-bar" x="150" y="133" width="82" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="150" y="146" width="56" height="6" rx="3" opacity="0.65"></rect>
+      <rect class="fma-brandbar" x="124" y="158" width="34" height="7" rx="3.5"></rect>
+    </g>
+
+    <path class="fma-cursor" d="M0 0l11 4-4.4 1.6L4.6 10 0 0z" fill="var(--fma-ink)" transform="translate(84 96)"></path>
+  </svg>
+
+  <!-- Widgets -->
+  <svg
+    class:list={['fma-scene', active('widgets') && 'is-active']}
+    data-fm-art="widgets"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-rise">
+      <rect class="fma-panel" x="24" y="20" width="272" height="36" rx="12"></rect>
+      <g transform="translate(38 30) scale(0.66)" stroke="var(--fma-brand)" stroke-width="2" fill="none">
+        <path d={ICON_PATHS.sparkles}></path>
+      </g>
+      <rect class="fma-bar fma-typebar" x="60" y="34" width="180" height="8" rx="4"></rect>
+      <rect class="fma-caret" x="60" y="30" width="2" height="16" rx="1" fill="var(--fma-brand)"></rect>
+    </g>
+
+    <g class="fma-pop" style="--d:1.05s">
+      <rect class="fma-panel" x="60" y="74" width="200" height="106" rx="12"></rect>
+      <rect class="fma-brandbar" x="74" y="88" width="44" height="7" rx="3.5"></rect>
+      <circle cx="246" cy="91" r="4" fill="var(--fma-brand)" class="fma-blink"></circle>
+      <line x1="60" y1="106" x2="260" y2="106" stroke="var(--fma-line)" stroke-width="1"></line>
+      {[0, 1, 2, 3, 4].map((n) => (
+        <rect
+          class="fma-grow"
+          style={`--d:${1.25 + n * 0.09}s`}
+          x={78 + n * 33}
+          y={166 - (16 + ((n * 37) % 44))}
+          width="20"
+          height={16 + ((n * 37) % 44)}
+          rx="4"
+          fill={n === 2 ? 'var(--fma-brand)' : 'var(--fma-soft)'}
+        />
+      ))}
+      <rect class="fma-bar" x="78" y="170" width="122" height="5" rx="2.5" opacity="0.6"></rect>
+    </g>
+  </svg>
+
+  <!-- Widget library -->
+  <svg
+    class:list={['fma-scene', active('library') && 'is-active']}
+    data-fm-art="library"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <defs>
+      <clipPath id="fma-shelf-clip">
+        <rect x="0" y="0" width="320" height="200" rx="12"></rect>
+      </clipPath>
+    </defs>
+
+    <g clip-path="url(#fma-shelf-clip)" opacity="0.9">
+      <g class="fma-marquee">
+        {[...shelf, ...shelf].map((n, i) => (
+          <g transform={`translate(${i * 78} 0)`}>
+            <rect class="fma-panel" x="14" y="22" width="64" height="50" rx="9"></rect>
+            <rect class="fma-bar" x="24" y="34" width={22 + ((n * 11) % 26)} height="5" rx="2.5"></rect>
+            <rect class="fma-soft-fill" x="24" y="46" width="44" height="16" rx="5"></rect>
+          </g>
+        ))}
+      </g>
+      <g class="fma-marquee-rev">
+        {[...shelf, ...shelf].map((n, i) => (
+          <g transform={`translate(${i * 78} 0)`}>
+            <rect class="fma-panel" x="14" y="140" width="64" height="46" rx="9"></rect>
+            <rect class="fma-bar" x="24" y="150" width={18 + ((n * 17) % 30)} height="5" rx="2.5"></rect>
+            <rect class="fma-soft-fill" x="24" y="162" width="34" height="14" rx="5"></rect>
+          </g>
+        ))}
+      </g>
+    </g>
+
+    <g class="fma-pop" style="--d:.15s">
+      <rect
+        x="96"
+        y="66"
+        width="128"
+        height="70"
+        rx="12"
+        fill="var(--fma-panel-solid)"
+        stroke="var(--fma-brand)"
+        stroke-width="1.5"
+      ></rect>
+      <g transform="translate(108 78) scale(0.6)" stroke="var(--fma-brand)" stroke-width="2.4" fill="none">
+        <path d={ICON_PATHS.library}></path>
+      </g>
+      <rect class="fma-bar" x="132" y="82" width="62" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="132" y="94" width="40" height="5" rx="2.5" opacity="0.6"></rect>
+      <rect x="108" y="112" width="104" height="10" rx="5" fill="var(--fma-soft)"></rect>
+      <rect class="fma-progress" x="108" y="112" width="104" height="10" rx="5" fill="var(--fma-brand)"></rect>
+    </g>
+  </svg>
+
+  <!-- Bots -->
+  <svg
+    class:list={['fma-scene', active('bots') && 'is-active']}
+    data-fm-art="bots"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-rise">
+      <rect class="fma-panel" x="20" y="14" width="128" height="28" rx="10"></rect>
+      <g transform="translate(31 21) scale(0.6)" stroke="var(--fma-brand)" stroke-width="2.4" fill="none">
+        <path d={ICON_PATHS.bolt}></path>
+      </g>
+      <rect class="fma-bar" x="50" y="25" width="84" height="6" rx="3"></rect>
+    </g>
+
+    <path class="fma-flow" d="M84 42 84 62" stroke="var(--fma-brand)" stroke-width="1.5" opacity="0.8"></path>
+
+    {[0, 1, 2].map((n) => (
+      <g class="fma-rise" style={`--d:${0.15 + n * 0.12}s`}>
+        <rect class="fma-panel" x={20 + n * 100} y="62" width="84" height="56" rx="11" />
+        <circle cx={38 + n * 100} cy="80" r="9" fill="var(--fma-soft)" />
+        <circle class="fma-blink" style={`--d:${n * 0.4}s`} cx={38 + n * 100} cy="80" r="3.4" fill="var(--fma-brand)" />
+        <rect class="fma-bar" x={54 + n * 100} y="76" width="34" height="5" rx="2.5" />
+        <rect class="fma-bar" x="0" y="98" width="60" height="5" rx="2.5" opacity="0.6" transform={`translate(${32 + n * 100} 0)`} />
+      </g>
+    ))}
+
+    {[0, 1].map((n) => (
+      <g>
+        <path
+          class="fma-flow"
+          style={`--d:${n * 0.3}s`}
+          d={`M${104 + n * 100} 90 H${120 + n * 100}`}
+          stroke="var(--fma-brand)"
+          stroke-width="1.5"
+        />
+        <circle class="fma-packet" r="2.4" fill="var(--fma-brand)">
+          <animateMotion dur="1.8s" begin={`${n * 0.45}s`} repeatCount="indefinite" path={`M${104 + n * 100} 90 H${120 + n * 100}`} />
+        </circle>
+      </g>
+    ))}
+
+    <path class="fma-flow" d="M262 118 262 146" stroke="var(--fma-accent)" stroke-width="1.5" opacity="0.8"></path>
+
+    <g class="fma-rise" style="--d:.5s">
+      <rect x="20" y="146" width="280" height="38" rx="12" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
+      <circle class="fma-ripple" cx="44" cy="165" r="12" fill="none" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+      <g transform="translate(36 157) scale(0.66)" stroke="var(--fma-brand)" stroke-width="2.2" fill="none">
+        <path d={ICON_PATHS.bell}></path>
+      </g>
+      <rect class="fma-bar" x="66" y="158" width="140" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="66" y="170" width="88" height="5" rx="2.5" opacity="0.6"></rect>
+      <rect class="fma-brandbar" x="252" y="160" width="34" height="9" rx="4.5"></rect>
+    </g>
+  </svg>
+
+  <!-- Agents -->
+  <svg
+    class:list={['fma-scene', active('agents') && 'is-active']}
+    data-fm-art="agents"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-spin" style="transform-origin:100px 100px;--dur:26s">
+      <circle cx="100" cy="100" r="66" stroke="var(--fma-line)" stroke-width="1.2" stroke-dasharray="4 8"></circle>
+    </g>
+    <g class="fma-spin-rev" style="transform-origin:100px 100px;--dur:18s">
+      <circle cx="100" cy="100" r="44" stroke="var(--fma-line)" stroke-width="1.2" stroke-dasharray="3 7"></circle>
+    </g>
+
+    {[
+      { r: 66, dur: '14s', d: '0s', fill: 'var(--fma-brand)', size: 5 },
+      { r: 66, dur: '14s', d: '-4.6s', fill: 'var(--fma-accent)', size: 4 },
+      { r: 44, dur: '9s', d: '-2s', fill: 'var(--fma-sky)', size: 4 },
+    ].map((s) => (
+      <g class="fma-spin" style={`transform-origin:100px 100px;--dur:${s.dur};--d:${s.d}`}>
+        <circle cx={100 + s.r} cy="100" r={s.size} fill={s.fill} />
+      </g>
+    ))}
+
+    <circle class="fma-ripple" cx="100" cy="100" r="26" fill="none" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+    <circle cx="100" cy="100" r="26" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+    <g transform="translate(88 88) scale(1)" stroke="var(--fma-brand)" stroke-width="1.6" fill="none">
+      <path d={ICON_PATHS.cpu}></path>
+    </g>
+
+    {[0, 1, 2].map((n) => (
+      <g class="fma-rise" style={`--d:${0.25 + n * 0.18}s`}>
+        <rect class="fma-panel" x="192" y={46 + n * 38} width="106" height="30" rx="9" />
+        <circle
+          class="fma-check-dot"
+          style={`--d:${0.9 + n * 0.5}s`}
+          cx="208"
+          cy={61 + n * 38}
+          r="7"
+          fill="var(--fma-soft)"
+          stroke="var(--fma-brand)"
+          stroke-width="1.2"
+        />
+        <path
+          class="fma-check"
+          style={`--d:${1 + n * 0.5}s`}
+          d={`M204.5 ${61 + n * 38}l2.6 2.6 4.6-4.8`}
+          stroke="var(--fma-brand)"
+          stroke-width="1.8"
+          pathLength="1"
+        />
+        <rect class="fma-bar" x="224" y={57 + n * 38} width={58 - n * 12} height="6" rx="3" />
+      </g>
+    ))}
+  </svg>
+
+  <!-- Copilot -->
+  <svg
+    class:list={['fma-scene', active('copilot') && 'is-active']}
+    data-fm-art="copilot"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-slide-left">
+      <rect x="140" y="16" width="164" height="38" rx="12" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.1"></rect>
+      <rect class="fma-bar" x="154" y="27" width="120" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="154" y="39" width="76" height="5" rx="2.5" opacity="0.6"></rect>
+    </g>
+
+    <g class="fma-slide-right" style="--d:.4s">
+      <rect class="fma-panel" x="16" y="66" width="180" height="46" rx="12"></rect>
+      <g transform="translate(26 78) scale(0.55)" stroke="var(--fma-brand)" stroke-width="2.6" fill="none">
+        <path d={ICON_PATHS.chat}></path>
+      </g>
+      {[0, 1, 2].map((n) => (
+        <circle class="fma-blink" style={`--d:${n * 0.22}s`} cx={56 + n * 14} cy="89" r="4" fill="var(--fma-brand)" />
+      ))}
+      <rect class="fma-bar" x="106" y="85" width="76" height="6" rx="3" opacity="0.5"></rect>
+    </g>
+
+    <g class="fma-pop" style="--d:1.05s">
+      <rect class="fma-panel" x="16" y="124" width="196" height="60" rx="12"></rect>
+      <rect class="fma-brandbar" x="30" y="136" width="40" height="6" rx="3"></rect>
+      {[0, 1, 2, 3, 4].map((n) => (
+        <rect
+          class="fma-grow"
+          style={`--d:${1.3 + n * 0.08}s`}
+          x={30 + n * 22}
+          y={172 - (10 + ((n * 23) % 28))}
+          width="14"
+          height={10 + ((n * 23) % 28)}
+          rx="3"
+          fill={n === 4 ? 'var(--fma-brand)' : 'var(--fma-soft)'}
+        />
+      ))}
+    </g>
+
+    <g class="fma-float" style="--d:.2s">
+      <rect x="226" y="124" width="78" height="60" rx="12" fill="var(--fma-soft)"></rect>
+      <g transform="translate(252 140) scale(1.1)" stroke="var(--fma-brand)" stroke-width="1.6" fill="none">
+        <path d={ICON_PATHS.wand}></path>
+      </g>
+      <rect class="fma-brandbar" x="244" y="168" width="42" height="6" rx="3"></rect>
+    </g>
+  </svg>
+
+  <!-- Connectors -->
+  <svg
+    class:list={['fma-scene', active('connectors') && 'is-active']}
+    data-fm-art="connectors"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    {spokes.map((s) => (
+      <path
+        class="fma-flow"
+        style={`--d:${s.i * 0.18}s`}
+        d={`M160 100 L${s.x} ${s.y}`}
+        stroke="var(--fma-brand)"
+        stroke-width="1.4"
+        opacity="0.75"
+      />
+    ))}
+    {spokes.slice(0, 3).map((s) => (
+      <circle class="fma-packet" r="2.6" fill="var(--fma-accent)">
+        <animateMotion dur="2.6s" begin={`${s.i * 0.6}s`} repeatCount="indefinite" path={`M${s.x} ${s.y} L160 100`} />
+      </circle>
+    ))}
+
+    {spokes.map((s) => (
+      <g class="fma-pop" style={`--d:${0.1 + s.i * 0.09}s`}>
+        <rect class="fma-panel" x={s.x - 22} y={s.y - 13} width="44" height="26" rx="9" />
+        <circle cx={s.x - 10} cy={s.y} r="4" fill={s.i % 2 ? 'var(--fma-accent)' : 'var(--fma-brand)'} />
+        <rect class="fma-bar" x={s.x - 2} y={s.y - 3} width="16" height="5" rx="2.5" />
+      </g>
+    ))}
+
+    <circle class="fma-ripple" cx="160" cy="100" r="28" fill="none" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+    <circle class="fma-ripple" style="--d:1s" cx="160" cy="100" r="28" fill="none" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+    <circle cx="160" cy="100" r="28" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.5"></circle>
+    <g transform="translate(148 88)" stroke="var(--fma-brand)" stroke-width="1.7" fill="none">
+      <path d={ICON_PATHS.plug}></path>
+    </g>
+  </svg>
+
+  <!-- Social media apps -->
+  <svg
+    class:list={['fma-scene', active('social') && 'is-active']}
+    data-fm-art="social"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <circle cx="92" cy="100" r="60" fill="var(--fma-soft)" opacity="0.5"></circle>
+    <g class="fma-spin" style="transform-origin:92px 100px;--dur:24s">
+      <circle cx="92" cy="100" r="60" stroke="var(--fma-brand)" stroke-width="1.3"></circle>
+      <ellipse cx="92" cy="100" rx="24" ry="60" stroke="var(--fma-line)" stroke-width="1.1"></ellipse>
+      <ellipse cx="92" cy="100" rx="46" ry="60" stroke="var(--fma-line)" stroke-width="1.1"></ellipse>
+      <path d="M32 100h120M44 66h96M44 134h96" stroke="var(--fma-line)" stroke-width="1.1"></path>
+      <circle class="fma-blink" cx="70" cy="72" r="4" fill="var(--fma-brand)"></circle>
+      <circle class="fma-blink" style="--d:.5s" cx="116" cy="118" r="4" fill="var(--fma-accent)"></circle>
+      <circle class="fma-blink" style="--d:.9s" cx="82" cy="132" r="3.4" fill="var(--fma-sky)"></circle>
+    </g>
+
+    <path class="fma-draw" d="M150 84 C186 62 208 60 236 58" stroke="var(--fma-brand)" stroke-width="1.4" pathLength="1" opacity="0.8"></path>
+    <path class="fma-draw" style="--d:.25s" d="M152 108 C188 108 206 106 236 104" stroke="var(--fma-brand)" stroke-width="1.4" pathLength="1" opacity="0.8"></path>
+    <path class="fma-draw" style="--d:.5s" d="M148 128 C184 148 208 150 236 152" stroke="var(--fma-brand)" stroke-width="1.4" pathLength="1" opacity="0.8"></path>
+
+    {[0, 1, 2].map((n) => (
+      <g class="fma-slide-left" style={`--d:${0.3 + n * 0.18}s`}>
+        <rect class="fma-panel" x="236" y={40 + n * 46} width="68" height="36" rx="10" />
+        <circle cx="252" cy={58 + n * 46} r="7" fill={n === 1 ? 'var(--fma-brand)' : 'var(--fma-soft)'} />
+        <rect class="fma-bar" x="264" y={51 + n * 46} width="30" height="5" rx="2.5" />
+        <rect class="fma-bar" x="264" y={61 + n * 46} width="20" height="4" rx="2" opacity="0.6" />
+      </g>
+    ))}
+  </svg>
+
+  <!-- Community -->
+  <svg
+    class:list={['fma-scene', active('community') && 'is-active']}
+    data-fm-art="community"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    {links.map(([a, b], i) => (
+      <path
+        class="fma-draw"
+        style={`--d:${i * 0.07}s`}
+        d={`M${people[a].x} ${people[a].y} L${people[b].x} ${people[b].y}`}
+        stroke="var(--fma-brand)"
+        stroke-width="1.2"
+        opacity="0.55"
+        pathLength="1"
+      />
+    ))}
+    <circle class="fma-packet" r="2.6" fill="var(--fma-brand)">
+      <animateMotion dur="3.4s" repeatCount="indefinite" path={`M${people[0].x} ${people[0].y} L${people[4].x} ${people[4].y} L${people[5].x} ${people[5].y}`} />
+    </circle>
+    <circle class="fma-packet" r="2.4" fill="var(--fma-accent)">
+      <animateMotion dur="4.2s" begin="1.1s" repeatCount="indefinite" path={`M${people[2].x} ${people[2].y} L${people[1].x} ${people[1].y} L${people[3].x} ${people[3].y}`} />
+    </circle>
+
+    {people.map((p, i) => (
+      <g class="fma-pop" style={`--d:${0.1 + i * 0.08}s`}>
+        <circle cx={p.x} cy={p.y} r={i === 4 ? 20 : 14} fill="var(--fma-panel-solid)" stroke={i === 4 ? 'var(--fma-brand)' : 'var(--fma-line)'} stroke-width="1.4" />
+        <circle cx={p.x} cy={p.y - (i === 4 ? 5 : 3)} r={i === 4 ? 6 : 4.4} fill="var(--fma-soft)" />
+        <path
+          d={`M${p.x - (i === 4 ? 10 : 7)} ${p.y + (i === 4 ? 13 : 9)} a${i === 4 ? 10 : 7} ${i === 4 ? 9 : 6.5} 0 0 1 ${i === 4 ? 20 : 14} 0`}
+          fill="var(--fma-soft)"
+        />
+      </g>
+    ))}
+
+    <g class="fma-float" style="--d:.6s">
+      <rect x="24" y="156" width="98" height="32" rx="11" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
+      {[0, 1, 2].map((n) => (
+        <circle class="fma-blink" style={`--d:${n * 0.22}s`} cx={44 + n * 14} cy="172" r="4" fill="var(--fma-brand)" />
+      ))}
+      <rect class="fma-bar" x="86" y="168" width="26" height="6" rx="3"></rect>
+    </g>
+  </svg>
+
+  <!-- Marketplace -->
+  <svg
+    class:list={['fma-scene', active('marketplace') && 'is-active']}
+    data-fm-art="marketplace"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    {[0, 2].map((n, idx) => (
+      <g class="fma-rise" style={`--d:${0.1 + idx * 0.1}s`}>
+        <rect class="fma-panel" x={20 + n * 96} y="46" width="84" height="112" rx="12" />
+        <rect class="fma-soft-fill" x={32 + n * 96} y="58" width="60" height="42" rx="8" />
+        <rect class="fma-bar" x={32 + n * 96} y="110" width="54" height="6" rx="3" />
+        <rect class="fma-bar" x={32 + n * 96} y="122" width="34" height="5" rx="2.5" opacity="0.6" />
+        <rect x={32 + n * 96} y="136" width="60" height="12" rx="6" fill="var(--fma-soft)" />
+      </g>
+    ))}
+
+    <g class="fma-float">
+      <rect x="112" y="34" width="96" height="128" rx="13" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.5"></rect>
+      <rect x="126" y="48" width="68" height="46" rx="9" fill="var(--fma-soft)"></rect>
+      <g transform="translate(148 58) scale(1)" stroke="var(--fma-brand)" stroke-width="1.6" fill="none">
+        <path d={ICON_PATHS.store}></path>
+      </g>
+      <rect class="fma-bar" x="126" y="104" width="60" height="6" rx="3"></rect>
+      {[0, 1, 2, 3, 4].map((n) => (
+        <g transform={`translate(${131 + n * 12} 118)`}>
+          <path
+            class="fma-pop"
+            style={`--d:${0.5 + n * 0.09}s`}
+            d="M0 0l1.5 3.1 3.4.5-2.5 2.4.6 3.4L0 7.8l-3 1.6.6-3.4L-4.9 3.6l3.4-.5L0 0z"
+            fill="var(--fma-brand)"
+          />
+        </g>
+      ))}
+      <rect x="126" y="134" width="68" height="16" rx="8" fill="var(--fma-soft)"></rect>
+      <rect class="fma-progress" style="--d:.7s" x="126" y="134" width="68" height="16" rx="8" fill="var(--fma-brand)"></rect>
+    </g>
+
+  </svg>
+
+  <!-- Realtime chats -->
+  <svg
+    class:list={['fma-scene', active('chats') && 'is-active']}
+    data-fm-art="chats"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    {[0, 1, 2].map((n) => (
+      <g class="fma-rise" style={`--d:${n * 0.1}s`}>
+        <rect
+          x="16"
+          y={24 + n * 54}
+          width="104"
+          height="44"
+          rx="11"
+          fill={n === 0 ? 'var(--fma-soft)' : 'var(--fma-panel)'}
+          stroke={n === 0 ? 'var(--fma-brand)' : 'var(--fma-line)'}
+          stroke-width={n === 0 ? 1.4 : 1}
+        />
+        <circle cx="38" cy={46 + n * 54} r="11" fill="var(--fma-soft)" />
+        {n === 0 && <circle class="fma-blink" cx="47" cy={54 + n * 54} r="4" fill="var(--fma-brand)" />}
+        <rect class="fma-bar" x="56" y={39 + n * 54} width="50" height="5" rx="2.5" />
+        <rect class="fma-bar" x="56" y={50 + n * 54} width="34" height="4" rx="2" opacity="0.6" />
+      </g>
+    ))}
+
+    <g class="fma-slide-left" style="--d:.2s">
+      <rect class="fma-panel" x="136" y="24" width="128" height="36" rx="12"></rect>
+      <rect class="fma-bar" x="150" y="34" width="94" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="150" y="46" width="58" height="5" rx="2.5" opacity="0.6"></rect>
+    </g>
+
+    <g class="fma-slide-right" style="--d:.55s">
+      <rect x="164" y="72" width="140" height="36" rx="12" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
+      <rect class="fma-bar" x="178" y="82" width="104" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="178" y="94" width="66" height="5" rx="2.5" opacity="0.6"></rect>
+    </g>
+
+    <g class="fma-slide-left" style="--d:.95s">
+      <rect class="fma-panel" x="136" y="120" width="72" height="32" rx="12"></rect>
+      {[0, 1, 2].map((n) => (
+        <circle class="fma-blink" style={`--d:${n * 0.22}s`} cx={155 + n * 14} cy="136" r="4" fill="var(--fma-brand)" />
+      ))}
+    </g>
+
+    <g class="fma-rise" style="--d:1.2s">
+      <rect class="fma-panel" x="136" y="164" width="168" height="24" rx="12"></rect>
+      <rect class="fma-bar" x="150" y="173" width="70" height="6" rx="3" opacity="0.55"></rect>
+      <circle cx="292" cy="176" r="7" fill="var(--fma-brand)"></circle>
+    </g>
+  </svg>
+
+  <!-- Account -->
+  <svg
+    class:list={['fma-scene', active('account') && 'is-active']}
+    data-fm-art="account"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <rect x="20" y="34" width="132" height="132" rx="16" fill="var(--fma-panel-solid)" stroke="var(--fma-line)" stroke-width="1.2"></rect>
+    <circle cx="86" cy="100" r="46" fill="var(--fma-soft)" opacity="0.6"></circle>
+    <circle cx="86" cy="100" r="46" stroke="var(--fma-line)" stroke-width="1.2"></circle>
+    <g class="fma-dial" style="transform-origin:86px 100px">
+      <circle cx="86" cy="100" r="32" stroke="var(--fma-brand)" stroke-width="1.5" stroke-dasharray="30 12"></circle>
+      <path d="M86 68v12M86 120v12M54 100h12M106 100h12" stroke="var(--fma-brand)" stroke-width="2"></path>
+    </g>
+    <circle cx="86" cy="100" r="12" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.5"></circle>
+    <circle class="fma-blink" cx="86" cy="100" r="4" fill="var(--fma-brand)"></circle>
+
+    <g class="fma-pop" style="--d:1.1s">
+      <circle cx="132" cy="152" r="15" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+      <g transform="translate(120 140)" stroke="var(--fma-brand)" stroke-width="1.7" fill="none">
+        <path d={ICON_PATHS.shield}></path>
+      </g>
+    </g>
+
+    {[
+      { label: 62, value: 44, tone: 'var(--fma-brand)' },
+      { label: 48, value: 66, tone: 'var(--fma-accent)' },
+      { label: 70, value: 30, tone: 'var(--fma-sky)' },
+    ].map((row, n) => (
+      <g class="fma-rise" style={`--d:${0.2 + n * 0.14}s`}>
+        <rect class="fma-panel" x="168" y={40 + n * 42} width="136" height="34" rx="11" />
+        <rect class="fma-bar" x="182" y={50 + n * 42} width={row.label} height="6" rx="3" />
+        <rect x="182" y={62 + n * 42} width="108" height="6" rx="3" fill="var(--fma-soft)" />
+        <rect
+          class="fma-progress"
+          style={`--d:${0.6 + n * 0.16}s;--scale:${row.value / 108}`}
+          x="182"
+          y={62 + n * 42}
+          width="108"
+          height="6"
+          rx="3"
+          fill={row.tone}
+        />
+      </g>
+    ))}
+  </svg>
+
+  <!-- Themes -->
+  <svg
+    class:list={['fma-scene', active('themes') && 'is-active']}
+    data-fm-art="themes"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <circle cx="104" cy="100" r="62" fill="var(--fma-soft)" opacity="0.5"></circle>
+    <g class="fma-spin" style="transform-origin:104px 100px;--dur:14s">
+      <path d="M104 38a62 62 0 010 124z" fill="var(--fma-brand)" opacity="0.85"></path>
+      <path d="M104 38a62 62 0 000 124z" fill="var(--fma-accent)" opacity="0.35"></path>
+    </g>
+    <circle cx="104" cy="100" r="62" stroke="var(--fma-brand)" stroke-width="1.4"></circle>
+    <circle cx="104" cy="100" r="30" fill="var(--fma-panel-solid)" stroke="var(--fma-line)" stroke-width="1.2"></circle>
+    <g class="fma-swap" transform="translate(92 88)" stroke="var(--fma-brand)" stroke-width="1.8" fill="none">
+      <path d={ICON_PATHS.sun}></path>
+    </g>
+    <g class="fma-swap-alt" transform="translate(92 88)" stroke="var(--fma-accent)" stroke-width="1.8" fill="none">
+      <path d={ICON_PATHS.moon}></path>
+    </g>
+
+    {swatches.map((pair, n) => (
+      <g class="fma-pop" style={`--d:${0.15 + n * 0.1}s`}>
+        <rect class="fma-panel" x="196" y={28 + n * 38} width="108" height="30" rx="10" />
+        <rect class="fma-swatch" style={`--d:${n * 0.35}s`} x="206" y={36 + n * 38} width="26" height="14" rx="5" fill={pair[0]} />
+        <rect class="fma-swatch-alt" style={`--d:${n * 0.35}s`} x="206" y={36 + n * 38} width="26" height="14" rx="5" fill={pair[1]} />
+        <rect class="fma-bar" x="242" y={40 + n * 38} width="50" height="6" rx="3" />
+      </g>
+    ))}
+  </svg>
+
+  <!-- Settings -->
+  <svg
+    class:list={['fma-scene', active('settings') && 'is-active']}
+    data-fm-art="settings"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-spin" style="transform-origin:270px 44px;--dur:6s">
+      <g transform="translate(258 32) scale(1)" stroke="var(--fma-brand)" stroke-width="1.7" fill="none">
+        <path d={ICON_PATHS.sync}></path>
+      </g>
+    </g>
+
+    {[0, 1, 2].map((n) => (
+      <g class="fma-rise" style={`--d:${n * 0.12}s`}>
+        <rect class="fma-panel" x="20" y={24 + n * 48} width="212" height="36" rx="11" />
+        <rect class="fma-bar" x="34" y={38 + n * 48} width={92 - n * 18} height="7" rx="3.5" />
+        <rect
+          class="fma-track"
+          style={`--d:${n * 0.5}s`}
+          x="176"
+          y={33 + n * 48}
+          width="42"
+          height="18"
+          rx="9"
+          fill="var(--fma-soft)"
+          stroke="var(--fma-brand)"
+          stroke-width="1.1"
+        />
+        <circle class="fma-knob" style={`--d:${n * 0.5}s`} cx="186" cy={42 + n * 48} r="6.4" fill="var(--fma-brand)" />
+      </g>
+    ))}
+
+    <g class="fma-rise" style="--d:.36s">
+      <rect class="fma-panel" x="20" y="168" width="280" height="0.1" rx="0" opacity="0"></rect>
+      <line x1="34" y1="176" x2="286" y2="176" stroke="var(--fma-line)" stroke-width="4" stroke-linecap="round"></line>
+      <line class="fma-slider-fill" x1="34" y1="176" x2="286" y2="176" stroke="var(--fma-brand)" stroke-width="4" stroke-linecap="round" pathLength="1"></line>
+      <circle class="fma-slider-knob" cx="34" cy="176" r="8" fill="var(--fma-panel-solid)" stroke="var(--fma-brand)" stroke-width="1.8"></circle>
+    </g>
+  </svg>
+
+  <!-- Toolbar -->
+  <svg
+    class:list={['fma-scene', active('toolbar') && 'is-active']}
+    data-fm-art="toolbar"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <defs>
+      <clipPath id="fma-toolbar-clip">
+        <rect x="18" y="72" width="284" height="56" rx="16"></rect>
+      </clipPath>
+      <linearGradient id="fma-sweep" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--fma-brand)" stop-opacity="0"></stop>
+        <stop offset="50%" stop-color="var(--fma-brand)" stop-opacity="0.35"></stop>
+        <stop offset="100%" stop-color="var(--fma-brand)" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+
+    <g class="fma-pop" style="--d:.9s">
+      <rect x="96" y="26" width="112" height="28" rx="9" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></rect>
+      <rect class="fma-bar" x="110" y="36" width="70" height="6" rx="3"></rect>
+      <path d="M146 54l6 8 6-8z" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.2"></path>
+    </g>
+
+    <rect x="18" y="72" width="284" height="56" rx="16" fill="var(--fma-panel-solid)" stroke="var(--fma-line)" stroke-width="1.2"></rect>
+    <g clip-path="url(#fma-toolbar-clip)">
+      <rect class="fma-sweep" x="-80" y="72" width="80" height="56" fill="url(#fma-sweep)"></rect>
+    </g>
+
+    {tools.map((icon, n) => (
+      <g class:list={['fma-pop', n === 2 && 'fma-tool-active']} style={`--d:${0.1 + n * 0.08}s`}>
+        <rect
+          x={34 + n * 42}
+          y="86"
+          width="30"
+          height="28"
+          rx="9"
+          fill={n === 2 ? 'var(--fma-soft)' : 'transparent'}
+          stroke={n === 2 ? 'var(--fma-brand)' : 'var(--fma-line)'}
+          stroke-width="1.2"
+        />
+        <g transform={`translate(${41 + n * 42} 93) scale(0.66)`} stroke={n === 2 ? 'var(--fma-brand)' : 'var(--fma-ink)'} stroke-width="2.2" fill="none">
+          <path d={ICON_PATHS[icon]} />
+        </g>
+      </g>
+    ))}
+
+    <rect class="fma-bar" x="112" y="150" width="96" height="6" rx="3" opacity="0.5"></rect>
+  </svg>
+
+  <!-- Dock -->
+  <svg
+    class:list={['fma-scene', active('dock') && 'is-active']}
+    data-fm-art="dock"
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    >
+    <g class="fma-rise-up">
+      <rect class="fma-panel" x="86" y="20" width="148" height="98" rx="14"></rect>
+      <rect class="fma-brandbar" x="100" y="34" width="42" height="7" rx="3.5"></rect>
+      <rect class="fma-bar" x="100" y="52" width="118" height="6" rx="3"></rect>
+      <rect class="fma-bar" x="100" y="66" width="90" height="6" rx="3" opacity="0.65"></rect>
+      <rect x="100" y="84" width="120" height="20" rx="8" fill="var(--fma-soft)"></rect>
+      <rect class="fma-progress" style="--d:.6s;--scale:.55" x="100" y="84" width="120" height="20" rx="8" fill="var(--fma-brand)"></rect>
+    </g>
+
+    <path class="fma-flow" d="M160 118 160 138" stroke="var(--fma-brand)" stroke-width="1.5" opacity="0.7"></path>
+
+    <rect x="62" y="138" width="196" height="46" rx="23" fill="var(--fma-panel-solid)" stroke="var(--fma-line)" stroke-width="1.2"></rect>
+    {dockIcons.map((icon, n) => (
+      <g class="fma-bounce" style={`--d:${n * 0.14}s`}>
+        <circle cx={88 + n * 36} cy="161" r="15" fill={n === 0 ? 'var(--fma-soft)' : 'transparent'} />
+        <g transform={`translate(${77 + n * 36} 150) scale(0.92)`} stroke={n === 0 ? 'var(--fma-brand)' : 'var(--fma-ink)'} stroke-width="1.7" fill="none">
+          <path d={ICON_PATHS[icon]} />
+        </g>
+      </g>
+    ))}
+    <g class="fma-pop" style="--d:1.1s">
+      <circle cx="209" cy="147" r="6" fill="var(--fma-brand)" stroke="var(--fma-panel-solid)" stroke-width="2"></circle>
+      <circle class="fma-ripple" cx="209" cy="147" r="6" fill="none" stroke="var(--fma-brand)" stroke-width="1.2"></circle>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .fma {
+    --fma-panel-solid: #ffffff;
+    --fma-panel-fill: #ffffff;
+    --fma-line: color-mix(in oklab, var(--color-ink-950) 13%, transparent);
+    --fma-mute: color-mix(in oklab, var(--color-ink-950) 17%, transparent);
+    --fma-ink: color-mix(in oklab, var(--color-ink-950) 38%, transparent);
+    --fma-brand: var(--color-brand-500);
+    --fma-accent: var(--color-accent-500);
+    --fma-sky: var(--color-sky-500);
+    --fma-soft: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
+    --fma-e: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  :global(.dark) .fma {
+    --fma-panel-solid: #12151d;
+    --fma-panel-fill: rgb(255 255 255 / 0.05);
+    --fma-line: rgb(255 255 255 / 0.16);
+    --fma-mute: rgb(255 255 255 / 0.24);
+    --fma-ink: rgb(255 255 255 / 0.42);
+    --fma-brand: var(--color-brand-400);
+    --fma-accent: var(--color-accent-400);
+    --fma-sky: var(--color-sky-400);
+    --fma-soft: color-mix(in oklab, var(--color-brand-400) 20%, transparent);
+  }
+
+  /* Scenes share one stacked cell so the stage can grow to fill the detail
+     panel; each SVG scales up (and stays centred) inside whatever box it gets. */
+  .fma-scene {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .fma-scene.is-active {
+    display: block;
+  }
+
+  /* Shared fills */
+  .fma-panel {
+    fill: var(--fma-panel-fill);
+    stroke: var(--fma-line);
+    stroke-width: 1;
+  }
+  .fma-bar {
+    fill: var(--fma-mute);
+  }
+  .fma-brandbar {
+    fill: var(--fma-brand);
+  }
+  .fma-accentbar {
+    fill: var(--fma-accent);
+  }
+  .fma-soft-fill {
+    fill: var(--fma-soft);
+  }
+
+  /* Intro + idle motion */
+  .fma-rise,
+  .fma-rise-up,
+  .fma-pop,
+  .fma-grow,
+  .fma-slide-left,
+  .fma-slide-right {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .fma-rise {
+    animation: fma-rise 0.6s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-rise-up {
+    animation: fma-rise-up 0.7s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-pop {
+    animation: fma-pop 0.5s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-grow {
+    transform-origin: bottom;
+    animation: fma-grow 0.6s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-slide-left {
+    animation: fma-slide-left 0.6s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-slide-right {
+    animation: fma-slide-right 0.6s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-float {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fma-float 5.5s ease-in-out var(--d, 0s) infinite;
+  }
+  .fma-blink {
+    animation: fma-blink 1.5s ease-in-out var(--d, 0s) infinite;
+  }
+  .fma-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fma-draw 1s var(--fma-e) var(--d, 0s) forwards;
+  }
+  .fma-flow {
+    stroke-dasharray: 5 6;
+    animation: fma-flow 1.4s linear var(--d, 0s) infinite;
+  }
+  .fma-ripple {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fma-ripple 2.6s ease-out var(--d, 0s) infinite;
+  }
+  .fma-spin {
+    animation: fma-spin var(--dur, 16s) linear var(--d, 0s) infinite;
+  }
+  .fma-spin-rev {
+    animation: fma-spin var(--dur, 16s) linear var(--d, 0s) infinite reverse;
+  }
+  .fma-progress {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: fma-progress 2.4s var(--fma-e) var(--d, 0.3s) infinite;
+  }
+  .fma-typebar {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: fma-typebar 3.6s steps(18, end) infinite;
+  }
+  .fma-caret {
+    animation:
+      fma-caret 3.6s steps(18, end) infinite,
+      fma-blink 0.9s steps(2, start) infinite;
+  }
+  .fma-marquee {
+    animation: fma-marquee 14s linear infinite;
+  }
+  .fma-marquee-rev {
+    animation: fma-marquee 17s linear infinite reverse;
+  }
+  .fma-cursor {
+    animation: fma-cursor 6s ease-in-out infinite;
+  }
+  .fma-check {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fma-draw 0.4s var(--fma-e) var(--d, 0s) forwards;
+  }
+  .fma-check-dot {
+    animation: fma-check-dot 0.5s var(--fma-e) var(--d, 0s) both;
+  }
+  .fma-dial {
+    animation: fma-dial 5s ease-in-out infinite;
+  }
+  .fma-swap {
+    transform-box: fill-box;
+    animation: fma-swap 7s ease-in-out infinite;
+  }
+  .fma-swap-alt {
+    transform-box: fill-box;
+    animation: fma-swap 7s ease-in-out infinite;
+    animation-delay: -3.5s;
+  }
+  .fma-swatch {
+    animation: fma-swap 4.4s ease-in-out var(--d, 0s) infinite;
+  }
+  .fma-swatch-alt {
+    animation: fma-swap 4.4s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0s) - 2.2s);
+  }
+  .fma-knob {
+    animation: fma-knob 3.4s var(--fma-e) var(--d, 0s) infinite;
+  }
+  .fma-track {
+    animation: fma-track 3.4s var(--fma-e) var(--d, 0s) infinite;
+  }
+  .fma-slider-fill {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fma-slider-fill 4.5s ease-in-out infinite;
+  }
+  .fma-slider-knob {
+    animation: fma-slider-knob 4.5s ease-in-out infinite;
+  }
+  .fma-sweep {
+    animation: fma-sweep 3.4s ease-in-out infinite;
+  }
+  .fma-tool-active {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation:
+      fma-pop 0.5s var(--fma-e) var(--d, 0s) both,
+      fma-float 3.4s ease-in-out 0.9s infinite;
+  }
+  .fma-bounce {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fma-bounce 2.8s ease-in-out var(--d, 0s) infinite;
+  }
+
+  @keyframes fma-rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fma-rise-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fma-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.78);
+    }
+    65% {
+      transform: scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes fma-grow {
+    from {
+      opacity: 0;
+      transform: scaleY(0.05);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+  @keyframes fma-slide-left {
+    from {
+      opacity: 0;
+      transform: translateX(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fma-slide-right {
+    from {
+      opacity: 0;
+      transform: translateX(-18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fma-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  @keyframes fma-blink {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes fma-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes fma-flow {
+    to {
+      stroke-dashoffset: -22;
+    }
+  }
+  @keyframes fma-ripple {
+    0% {
+      opacity: 0.65;
+      transform: scale(0.85);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.7);
+    }
+  }
+  @keyframes fma-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes fma-progress {
+    0% {
+      transform: scaleX(0.04);
+    }
+    55%,
+    100% {
+      transform: scaleX(var(--scale, 1));
+    }
+  }
+  @keyframes fma-typebar {
+    0% {
+      transform: scaleX(0.02);
+    }
+    55%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes fma-caret {
+    0% {
+      transform: translateX(0);
+    }
+    55%,
+    100% {
+      transform: translateX(180px);
+    }
+  }
+  @keyframes fma-marquee {
+    to {
+      transform: translateX(-468px);
+    }
+  }
+  @keyframes fma-cursor {
+    0%,
+    100% {
+      transform: translate(84px, 96px);
+    }
+    35% {
+      transform: translate(126px, 128px);
+    }
+    70% {
+      transform: translate(168px, 104px);
+    }
+  }
+  @keyframes fma-check-dot {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes fma-dial {
+    0%,
+    18% {
+      transform: rotate(0deg);
+    }
+    45%,
+    62% {
+      transform: rotate(112deg);
+    }
+    88%,
+    100% {
+      transform: rotate(248deg);
+    }
+  }
+  @keyframes fma-swap {
+    0%,
+    42% {
+      opacity: 1;
+    }
+    50%,
+    92% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes fma-knob {
+    0%,
+    12% {
+      transform: translateX(0);
+    }
+    45%,
+    62% {
+      transform: translateX(22px);
+    }
+    95%,
+    100% {
+      transform: translateX(0);
+    }
+  }
+  @keyframes fma-track {
+    0%,
+    12% {
+      opacity: 0.45;
+    }
+    45%,
+    62% {
+      opacity: 1;
+    }
+    95%,
+    100% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes fma-slider-fill {
+    0%,
+    100% {
+      stroke-dashoffset: 0.82;
+    }
+    50% {
+      stroke-dashoffset: 0.24;
+    }
+  }
+  @keyframes fma-slider-knob {
+    0%,
+    100% {
+      transform: translateX(45px);
+    }
+    50% {
+      transform: translateX(191px);
+    }
+  }
+  @keyframes fma-sweep {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+  @keyframes fma-bounce {
+    0%,
+    72%,
+    100% {
+      transform: translateY(0);
+    }
+    82% {
+      transform: translateY(-7px);
+    }
+    92% {
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fma-scene *,
+    .fma-scene {
+      animation: none !important;
+    }
+    .fma-draw,
+    .fma-check,
+    .fma-slider-fill {
+      stroke-dashoffset: 0;
+    }
+    .fma-packet,
+    .fma-sweep,
+    .fma-swap-alt,
+    .fma-swatch-alt {
+      display: none;
+    }
+    .fma-progress,
+    .fma-typebar {
+      transform: scaleX(var(--scale, 1));
+    }
+  }
+</style>

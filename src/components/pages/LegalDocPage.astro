@@ -1,0 +1,72 @@
+---
+/**
+ * Shared renderer for public legal documents (privacy, terms, cookies, legal, AUP).
+ * English is the governing source of truth; locales may omit copy and fall back.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent, type LegalPageContent } from '../../i18n/content';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+
+interface Props {
+  lang: Lang;
+  /** Canonical route without locale prefix, e.g. `/privacy`. */
+  route: string;
+  /** Key on SiteContent for this document. */
+  doc:
+    | 'privacyPage'
+    | 'termsPage'
+    | 'cookiesPage'
+    | 'legalPage'
+    | 'acceptableUsePage';
+}
+
+const { lang, route, doc } = Astro.props;
+const localized = useContent(lang)[doc];
+const english = useContent('en')[doc]!;
+const copy: LegalPageContent = localized ?? english;
+const showGoverningNote = lang !== 'en' || Boolean(copy.governingNote);
+const governingNote =
+  lang !== 'en'
+    ? (english.governingNote ??
+      'This legal document is provided in English, which is the governing language.')
+    : copy.governingNote;
+
+/** Stable section anchors; labels reuse each heading. */
+const sections = copy.sections.map((s, i) => ({
+  id: `section-${i + 1}`,
+  label: s.h,
+}));
+---
+
+<Layout lang={lang} route={route} title={copy.meta.title} description={copy.meta.description} sections={sections}>
+  <PageHero badge={copy.badge} icon={getPageBadgeIcon(route)} title={copy.title} subtitle={copy.subtitle} />
+
+  <section class="container-page pb-24">
+    <div class="mx-auto max-w-2xl">
+      <p class="font-mono text-sm text-ink-500 dark:text-ink-400">{copy.updated}</p>
+      {
+        showGoverningNote && governingNote && (
+          <p class="mt-4 rounded-lg border border-ink-900/8 dark:border-white/8 bg-ink-50/80 dark:bg-white/[0.02] px-4 py-3 text-sm leading-relaxed text-ink-600 dark:text-ink-300">
+            {governingNote}
+          </p>
+        )
+      }
+      <div class="mt-8 space-y-10">
+        {
+          copy.sections.map((s, i) => (
+            <div id={`section-${i + 1}`} class="reveal scroll-mt-20">
+              <h2 class="font-display text-xl font-semibold text-ink-950 dark:text-white">{s.h}</h2>
+              <div class="mt-3 space-y-3">
+                {s.paragraphs.map((p) => (
+                  <p class="leading-relaxed text-ink-600 dark:text-ink-300">{p}</p>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Layout>

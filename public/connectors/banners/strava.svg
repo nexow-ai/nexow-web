@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" role="img" aria-label="Strava">
+  <rect width="1200" height="400" fill="#FC5200"/>
+  <g transform="translate(444 44) scale(13)" fill="#FFFFFF">
+    <path d="M10.463 8.229l2.836 5.598h4.172L10.463 0l-7 13.828h4.169z"/>
+    <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066z" fill-opacity="0.6"/>
+  </g>
+</svg>
