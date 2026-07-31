@@ -25,6 +25,7 @@ export const CANONICAL_ROUTES = [
   '/cookies',
   '/legal',
   '/acceptable-use',
+  '/community-rules',
   '/blog',
   '/for/traders',
   '/for/founders',

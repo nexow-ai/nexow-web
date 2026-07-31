@@ -42,21 +42,25 @@ export const SITE = {
   newsletterUrl: 'https://x.nexow.ai/api/newsletter',
   /** Billing / plans waitlist — same newsletter pipeline with a source tag. */
   waitlistUrl: 'https://x.nexow.ai/api/newsletter',
+  /** Contact form (Nuxt API on the app host). Routes by inquiry type server-side. */
+  contactUrl: 'https://x.nexow.ai/api/contact',
   email: 'hello@nexow.ai',
   /** Partnership / sales inbox. */
   partnersEmail: 'partners@nexow.ai',
   /** Support inbox. */
   supportEmail: 'support@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
-  x: '@nexow_ai',
+  x: '@nexowofficial',
+  /** Chain NXW mints on — linked from the DAO / tokenomics sections. */
+  solanaUrl: 'https://solana.com',
 } as const;
 
 /** Footer + schema social links (icon names match `Icon.astro`). */
 export const SOCIALS = [
-  { label: 'X', href: 'https://x.com/nexow_ai', icon: 'x-logo' },
-  { label: 'TikTok', href: 'https://tiktok.com/@nexow_ai', icon: 'tiktok' },
-  { label: 'Instagram', href: 'https://instagram.com/nexow_ai', icon: 'instagram' },
-  { label: 'YouTube', href: 'https://youtube.com/@nexow_ai', icon: 'youtube' },
+  { label: 'X', href: 'https://x.com/nexowofficial', icon: 'x-logo' },
+  { label: 'TikTok', href: 'https://tiktok.com/nexow-ai', icon: 'tiktok' },
+  { label: 'Instagram', href: 'https://instagram.com/nexow-ai', icon: 'instagram' },
+  { label: 'YouTube', href: 'https://youtube.com/nexow-ai', icon: 'youtube' },
   { label: 'LinkedIn', href: 'https://linkedin.com/company/nexow-ai', icon: 'linkedin' },
   { label: 'GitHub', href: 'https://github.com/nexow-ai', icon: 'github' },
 ] as const;

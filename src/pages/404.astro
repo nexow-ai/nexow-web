@@ -31,7 +31,7 @@ const variants = Object.fromEntries(
       <p id="nf-body" class="mx-auto mt-3 max-w-md text-ink-600 dark:text-ink-300">{t.body}</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <Button href="/" size="lg" icon="arrow" class="[&_svg]:rotate-180"><span id="nf-home">{t.cta}</span></Button>
-        <Button href={SITE.appUrl} variant="secondary" size="lg" external><span id="nf-launch">{useContent('en').nav.launch}</span></Button>
+        <Button href={SITE.appUrl} variant="secondary" size="lg" external iconRight="rocket"><span id="nf-launch">{useContent('en').nav.launch}</span></Button>
       </div>
     </div>
   </section>

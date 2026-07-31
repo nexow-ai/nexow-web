@@ -69,11 +69,11 @@ const sections = [
       <div class="aurora-mesh absolute inset-[-10%] opacity-70 dark:opacity-60"></div>
       <div
         class="aurora-a absolute -top-24 left-[8%] size-[min(70vw,480px)] rounded-full opacity-50 blur-3xl dark:opacity-40"
-        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
       ></div>
       <div
         class="aurora-b absolute -top-16 right-[6%] size-[min(60vw,420px)] rounded-full opacity-40 blur-3xl dark:opacity-30"
-        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
       ></div>
     </div>
 
@@ -81,7 +81,7 @@ const sections = [
       <div class="mx-auto max-w-3xl">
         <a
           href={localizePath('/blog', lang)}
-          class="inline-flex items-center gap-1.5 font-mono text-sm text-ink-500 transition-colors hover:text-ink-900 dark:text-ink-400 dark:hover:text-white"
+          class="-my-1 inline-flex items-center gap-1.5 py-1 font-mono text-sm text-ink-500 transition-colors hover:text-ink-900 dark:text-ink-400 dark:hover:text-white"
         >
           <Icon name="arrow" class="size-4 rotate-180" />
           {t.backToBlog}

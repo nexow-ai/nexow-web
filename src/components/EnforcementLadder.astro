@@ -1,0 +1,252 @@
+---
+/**
+ * The escalation ladder as a picture: four rising steps, a member climbing
+ * them, and a door at the top that nobody wants to reach. Each step lights in
+ * turn on a 12s loop so the art tells the same story as the copy beside it.
+ *
+ * Decorative only — the step names live in the localized markup next to it.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+/** Rungs, low to high. `tone` escalates brand → sky → accent → plasma. */
+const STEPS = [
+  { x: 24, y: 150, tone: 'var(--color-brand-400)' },
+  { x: 122, y: 118, tone: 'var(--color-sky-400)' },
+  { x: 220, y: 86, tone: 'var(--color-accent-400)' },
+  { x: 318, y: 54, tone: 'var(--color-plasma-400)' },
+];
+const W = 90;
+const BASE = 196;
+
+/** Staircase the climber walks: along each tread, then up to the next. */
+const CLIMB = STEPS.map((s) => `L${s.x + 12} ${s.y - 12} L${s.x + W - 12} ${s.y - 12}`).join(' ');
+const CLIMB_PATH = `M${STEPS[0].x + 12} ${BASE - 12} ${CLIMB}`;
+---
+
+<div class:list={['ladder relative w-full', className]} aria-hidden="true">
+  <svg class="ladder-svg block h-auto w-full" viewBox="0 0 440 220" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="ladder-edge" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%" stop-color="var(--color-brand-400)"></stop>
+        <stop offset="50%" stop-color="var(--color-sky-500)"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)"></stop>
+      </linearGradient>
+      <filter id="ladder-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Ground line -->
+    <path class="ladder-base" d={`M8 ${BASE}H432`} stroke="currentColor" stroke-width="1" stroke-dasharray="3 6" opacity="0.25"></path>
+
+    {
+      STEPS.map((step, i) => (
+        <g class="ladder-step" style={`--d:${(i * 1.4).toFixed(1)}s;--tone:${step.tone}`}>
+          <rect
+            class="ladder-block"
+            x={step.x}
+            y={step.y}
+            width={W}
+            height={BASE - step.y}
+            rx="8"
+            fill="color-mix(in oklab, var(--tone) 14%, transparent)"
+            stroke="var(--tone)"
+            stroke-width="1.2"
+            stroke-opacity="0.55"
+          />
+          <rect class="ladder-tread" x={step.x + 10} y={step.y - 3} width={W - 20} height="5" rx="2.5" fill="var(--tone)" />
+          {/* Severity pips: one more warning light per rung. */}
+          {Array.from({ length: i + 1 }).map((_, p) => (
+            <circle
+              class="ladder-pip"
+              cx={step.x + 18 + p * 13}
+              cy={step.y + 24}
+              r="3.4"
+              fill="var(--tone)"
+              style={`--p:${(p * 0.16).toFixed(2)}s`}
+            />
+          ))}
+        </g>
+      ))
+    }
+
+    <!-- The door at the top. It opens exactly as often as it has to. -->
+    <g class="ladder-door">
+      <rect x="352" y="10" width="34" height="44" rx="4" stroke="var(--color-plasma-400)" stroke-width="1.4" fill="color-mix(in oklab, var(--color-plasma-400) 12%, transparent)"></rect>
+      <rect class="ladder-door-panel" x="354" y="12" width="30" height="40" rx="3" fill="color-mix(in oklab, var(--color-plasma-400) 34%, transparent)"></rect>
+      <circle class="ladder-door-knob" cx="380" cy="32" r="2" fill="var(--color-plasma-400)"></circle>
+      <path class="ladder-exit" d="M396 24h14M404 18l6 6-6 6" stroke="var(--color-plasma-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+
+    <!-- The climber. Most people never leave the first tread. -->
+    <g class="ladder-climber" filter="url(#ladder-glow)">
+      <animateMotion dur="12s" repeatCount="indefinite" path={CLIMB_PATH} keyPoints="0;0.12;0.12;0.34;0.34;0.62;0.62;0.9;1;1" keyTimes="0;0.1;0.24;0.34;0.48;0.58;0.72;0.82;0.9;1" calcMode="linear" />
+      <circle r="9" fill="color-mix(in oklab, var(--color-brand-400) 85%, white)"></circle>
+      <circle class="ladder-climber-ring" r="13" stroke="var(--color-brand-300)" stroke-width="1.2" fill="none"></circle>
+    </g>
+
+    <!-- Nudge → pause → suspension: the arc of a bad week -->
+    <path class="ladder-arc" d="M60 138C120 96 190 74 260 62s110-16 152-22" stroke="url(#ladder-edge)" stroke-width="1.2" stroke-dasharray="4 6" opacity="0.35" pathLength="1"></path>
+  </svg>
+</div>
+
+<style>
+  .ladder {
+    color: var(--color-ink-500);
+  }
+  :global(.dark) .ladder {
+    color: var(--color-ink-300);
+  }
+
+  .ladder-arc {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: ladder-arc 2.6s var(--ease-out-expo, ease) 0.3s both;
+  }
+  .ladder-block,
+  .ladder-tread {
+    animation: ladder-lit 12s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .ladder-pip {
+    animation: ladder-pip 12s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0s) + var(--p, 0s));
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0.35;
+  }
+  .ladder-climber-ring {
+    animation: ladder-ring 2.4s ease-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .ladder-door-panel {
+    transform-box: fill-box;
+    transform-origin: 0% 50%;
+    animation: ladder-door 12s ease-in-out infinite;
+  }
+  .ladder-door-knob {
+    animation: ladder-knob 12s ease-in-out infinite;
+  }
+  .ladder-exit {
+    animation: ladder-exit 12s ease-in-out infinite;
+    opacity: 0.4;
+  }
+
+  @keyframes ladder-arc {
+    from {
+      stroke-dashoffset: 1;
+      opacity: 0;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 0.35;
+    }
+  }
+  @keyframes ladder-lit {
+    0%,
+    6% {
+      opacity: 0.4;
+    }
+    12%,
+    26% {
+      opacity: 1;
+    }
+    36%,
+    100% {
+      opacity: 0.55;
+    }
+  }
+  @keyframes ladder-pip {
+    0%,
+    8% {
+      opacity: 0.25;
+      transform: scale(0.85);
+    }
+    14%,
+    24% {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    34%,
+    100% {
+      opacity: 0.4;
+      transform: scale(1);
+    }
+  }
+  @keyframes ladder-ring {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @keyframes ladder-door {
+    0%,
+    78% {
+      transform: scaleX(1);
+    }
+    86%,
+    94% {
+      transform: scaleX(0.12);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes ladder-knob {
+    0%,
+    78%,
+    100% {
+      opacity: 1;
+    }
+    86%,
+    94% {
+      opacity: 0;
+    }
+  }
+  @keyframes ladder-exit {
+    0%,
+    76% {
+      opacity: 0.35;
+    }
+    86%,
+    94% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  :global(.is-offscreen) .ladder-svg * {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ladder-arc,
+    .ladder-block,
+    .ladder-tread,
+    .ladder-pip,
+    .ladder-door-panel,
+    .ladder-door-knob,
+    .ladder-exit {
+      animation: none;
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .ladder-climber {
+      display: none;
+    }
+  }
+</style>

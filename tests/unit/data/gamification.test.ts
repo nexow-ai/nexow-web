@@ -452,7 +452,7 @@ describe('credit packs', () => {
   });
 
   it('grants the sign-up bonus without a purchase', () => {
-    expect(SIGNUP_BONUS_CREDITS).toBe(10_000);
+    expect(SIGNUP_BONUS_CREDITS).toBe(100_000);
   });
 });
 

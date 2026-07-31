@@ -50,7 +50,7 @@ const localize = (href: string) =>
         {
           t.footer.columns.map((col) => (
             <div>
-              <h3 class="font-mono text-xs uppercase tracking-widest text-ink-500">{col.title}</h3>
+              <h3 class="font-mono text-xs uppercase tracking-widest text-ink-500 dark:text-ink-400">{col.title}</h3>
               <ul class="mt-4 space-y-3">
                 {col.links.map((l) => (
                   <li>
@@ -73,7 +73,7 @@ const localize = (href: string) =>
     {
       newsletter && (
         <div class="mt-14 max-w-xl">
-          <h3 class="font-mono text-xs uppercase tracking-widest text-ink-500">
+          <h3 class="font-mono text-xs uppercase tracking-widest text-ink-500 dark:text-ink-400">
             {newsletter.eyebrow}
           </h3>
           <p class="mt-3 font-display text-xl font-semibold tracking-tight text-white sm:text-2xl">
@@ -85,6 +85,7 @@ const localize = (href: string) =>
             id="newsletter-form"
             class="mt-6"
             data-endpoint={SITE.newsletterUrl}
+            data-source="footer"
             data-invalid={newsletter.invalid}
             data-error={newsletter.error}
             data-success={newsletter.success}
@@ -103,7 +104,7 @@ const localize = (href: string) =>
                 required
                 maxlength="254"
                 placeholder={newsletter.placeholder}
-                class="h-11 w-full min-w-0 flex-1 rounded-full bg-white/[0.04] px-4 text-sm text-white ring-1 ring-white/10 placeholder:text-ink-500 transition-[box-shadow,background-color] focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-brand-400/40 disabled:opacity-60"
+                class="h-11 w-full min-w-0 sm:flex-1 rounded-full bg-white/[0.04] px-4 text-sm text-white ring-1 ring-white/10 placeholder:text-ink-500 transition-[box-shadow,background-color] focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-brand-400/40 disabled:opacity-60"
               />
               <button
                 type="submit"
@@ -125,25 +126,99 @@ const localize = (href: string) =>
     }
 
     <div class="mt-14 border-t border-white/10 pt-8">
-      <p class="text-xs leading-relaxed text-ink-500">
+      <p class="text-xs leading-relaxed text-ink-500 dark:text-ink-400">
         <span class="font-medium text-ink-400">{SITE.legalName}</span>
         <span class="mx-2 text-ink-700" aria-hidden="true">·</span>
         <span>{SITE.address}</span>
       </p>
       <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-xs text-ink-500">
+        <p class="text-xs text-ink-500 dark:text-ink-400">
           © {year} {SITE.legalName}. {t.footer.rights}
         </p>
-        <time
-          id="footer-clock"
-          class="font-mono text-xs tabular-nums text-ink-500"
-          data-locale={lang}
-          datetime=""
-        ></time>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <time
+            id="footer-clock"
+            class="font-mono text-xs tabular-nums text-ink-500 dark:text-ink-400"
+            data-locale={lang}
+            datetime=""
+          ></time>
+          <span
+            class="status-badge inline-flex items-center gap-1.5 rounded-full bg-emerald-400/[0.08] py-1 pe-2.5 ps-1.5 font-mono text-[0.7rem] text-emerald-300 ring-1 ring-emerald-400/20"
+          >
+            <svg class="status-rack size-3.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <rect class="slab" x="1.75" y="1.5" width="10.5" height="3" rx="1.1" />
+              <rect class="slab" x="1.75" y="5.5" width="10.5" height="3" rx="1.1" />
+              <rect class="slab" x="1.75" y="9.5" width="10.5" height="3" rx="1.1" />
+              <circle class="led" cx="10.4" cy="3" r="0.85" />
+              <circle class="led" cx="10.4" cy="7" r="0.85" />
+              <circle class="led" cx="10.4" cy="11" r="0.85" />
+            </svg>
+            {t.footer.status}
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </footer>
+
+<style>
+  /* Service-health badge: a 3-slab rack whose LEDs blink in sequence, with a
+     slow breathing halo on the pill itself. */
+  .status-badge {
+    animation: status-halo 3.6s ease-in-out infinite;
+  }
+
+  .status-rack .slab {
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.45;
+  }
+
+  .status-rack .led {
+    fill: currentColor;
+    opacity: 0.35;
+    animation: status-led 1.8s ease-in-out infinite;
+  }
+
+  .status-rack .led:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+
+  .status-rack .led:nth-of-type(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes status-led {
+    0%,
+    55%,
+    100% {
+      opacity: 0.3;
+    }
+    25% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes status-halo {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgb(52 211 153 / 0.14);
+    }
+    50% {
+      box-shadow: 0 0 10px 1px rgb(52 211 153 / 0.22);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status-badge,
+    .status-rack .led {
+      animation: none;
+    }
+    .status-rack .led {
+      opacity: 0.9;
+    }
+  }
+</style>
 
 <script>
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -166,6 +241,7 @@ const localize = (href: string) =>
     form.dataset.bound = '1';
 
     const endpoint = form.dataset.endpoint ?? '';
+    const source = form.dataset.source ?? 'footer';
     const input = form.querySelector<HTMLInputElement>('#newsletter-email');
     const submit = form.querySelector<HTMLButtonElement>('#newsletter-submit');
     const status = form.querySelector<HTMLElement>('#newsletter-status');
@@ -198,7 +274,7 @@ const localize = (href: string) =>
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, source }),
         });
 
         if (!res.ok) {

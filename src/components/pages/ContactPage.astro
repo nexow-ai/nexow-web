@@ -28,17 +28,19 @@ const sections = [
     subtitle={t.hero.subtitle}
   />
 
-  <section class="container-page pb-20">
+  <section class="container-page pt-10 pb-24 sm:pt-14 sm:pb-32">
     <div class="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.2fr_0.8fr]">
       <form
         id="contact-form"
         class="reveal scroll-mt-20 space-y-5"
+        data-endpoint={SITE.contactUrl}
         data-hello={SITE.email}
         data-support={SITE.supportEmail}
         data-partners={SITE.partnersEmail}
         data-invalid={t.form.invalid}
         data-error={t.form.error}
         data-success={t.form.success}
+        data-fallback={t.form.fallback}
         data-submitting={t.form.submitting}
         data-submit-label={t.form.submit}
         novalidate
@@ -116,7 +118,7 @@ const sections = [
           {
             t.aside.channels.map((ch) => (
               <li>
-                <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-400">{ch.label}</p>
+                <p class="font-mono text-[0.65rem] uppercase tracking-widest text-ink-500 dark:text-ink-400">{ch.label}</p>
                 <a
                   href={ch.href}
                   class="mt-1 inline-flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200"
@@ -136,10 +138,9 @@ const sections = [
 <script>
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  function inboxFor(
-    type: string,
-    form: HTMLFormElement,
-  ): string {
+  /** Inbox for the `mailto:` fallback only — when the API answers, IT owns the
+   *  routing (server/utils/contact.ts). Kept in sync with that table. */
+  function inboxFor(type: string, form: HTMLFormElement): string {
     if (type === 'partnership' || type === 'sales') {
       return form.dataset.partners || 'partners@nexow.ai';
     }
@@ -154,17 +155,27 @@ const sections = [
 
     const status = form.querySelector<HTMLElement>('#contact-status');
     const submit = form.querySelector<HTMLButtonElement>('#contact-submit');
+    const endpoint = form.dataset.endpoint ?? '';
     if (!status || !submit) return;
 
     const labels = {
       invalid: form.dataset.invalid ?? 'Please fill in a valid email and a short message.',
       error: form.dataset.error ?? 'Something went wrong.',
       success: form.dataset.success ?? 'Thanks for reaching out.',
-      submitting: form.dataset.submitting ?? 'Opening mail…',
+      fallback: form.dataset.fallback ?? 'We opened your mail client instead.',
+      submitting: form.dataset.submitting ?? 'Sending…',
       submit: form.dataset.submitLabel ?? 'Send message',
     };
 
-    form.addEventListener('submit', (event) => {
+    const setStatus = (text: string, tone: 'ok' | 'err' | 'idle') => {
+      status.textContent = text;
+      status.className =
+        tone === 'err'
+          ? 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400'
+          : 'min-h-[1.25rem] text-sm text-brand-700 dark:text-brand-300';
+    };
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const data = new FormData(form);
       const name = String(data.get('name') || '').trim();
@@ -173,28 +184,48 @@ const sections = [
       const message = String(data.get('message') || '').trim();
 
       if (!name || !email || !EMAIL_RE.test(email) || message.length < 8) {
-        status.textContent = labels.invalid;
-        status.className = 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400';
+        setStatus(labels.invalid, 'err');
         return;
       }
 
       submit.disabled = true;
       submit.textContent = labels.submitting;
-
-      const to = inboxFor(type, form);
-      const subject = encodeURIComponent(`[Nexow ${type}] from ${name}`);
-      const body = encodeURIComponent(
-        `Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`,
-      );
+      setStatus('', 'idle');
 
       try {
-        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-        status.textContent = labels.success;
-        status.className = 'min-h-[1.25rem] text-sm text-brand-700 dark:text-brand-300';
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ name, email, type, message }),
+        });
+
+        if (!res.ok) {
+          const payload = (await res.json().catch(() => null)) as {
+            statusMessage?: string;
+            message?: string;
+          } | null;
+          const msg =
+            payload?.statusMessage ||
+            payload?.message ||
+            (res.status === 400 ? labels.invalid : labels.error);
+          // Leave the fields filled so nothing typed is lost on a retry.
+          setStatus(msg, 'err');
+          return;
+        }
+
+        setStatus(labels.success, 'ok');
         form.reset();
       } catch {
-        status.textContent = labels.error;
-        status.className = 'min-h-[1.25rem] text-sm text-red-600 dark:text-red-400';
+        // API unreachable. Hand off to the mail client so the message isn't
+        // lost — but keep the fields filled, because a browser with no mail
+        // handler does nothing here and gives us no way to detect it.
+        const to = inboxFor(type, form);
+        const subject = encodeURIComponent(`[Nexow ${type}] from ${name}`);
+        const body = encodeURIComponent(
+          `Name: ${name}\nEmail: ${email}\nType: ${type}\n\n${message}`,
+        );
+        window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+        setStatus(labels.fallback, 'ok');
       } finally {
         submit.disabled = false;
         submit.textContent = labels.submit;

@@ -63,7 +63,7 @@ export type PlanKey = 'free' | 'supporter' | 'sponsor' | 'partner';
 export const YEARLY_MONTHS_PAID = 10;
 
 /** One-time grant on sign-up (SIGNUP_BONUS_CREDITS). */
-export const SIGNUP_BONUS_CREDITS = 10_000;
+export const SIGNUP_BONUS_CREDITS = 100_000;
 
 export interface PlanSpec {
   key: PlanKey;

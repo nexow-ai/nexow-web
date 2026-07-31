@@ -1,0 +1,401 @@
+---
+/**
+ * Community-rules hero art: the rulebook writes itself, the seal thumps down,
+ * and the community — humans and one very well-behaved bot — orbits around it.
+ *
+ * Same construction as `DaoOrbit`: a blurred backdrop, one 440×300 SVG, motion
+ * that pauses via `.is-offscreen` and freezes flat under reduced motion.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+/** Rule rows on the page — width varies so it reads as prose, not a barcode. */
+const ROWS = [
+  { y: 108, w: 74 },
+  { y: 126, w: 60 },
+  { y: 144, w: 80 },
+  { y: 162, w: 52 },
+  { y: 180, w: 68 },
+];
+
+/** Orbiting members: outer ring runs one way, inner ring the other. */
+const OUTER = [
+  { r: 6.5, delay: '0s', fill: 'var(--color-brand-400)' },
+  { r: 5, delay: '-3.4s', fill: 'var(--color-sky-400)' },
+  { r: 5.8, delay: '-6.8s', fill: 'var(--color-accent-400)' },
+  { r: 4.4, delay: '-10.2s', fill: 'var(--color-plasma-400)' },
+];
+const INNER = [
+  { r: 4.6, delay: '-1.6s', fill: 'var(--color-sky-400)' },
+  { r: 5.2, delay: '-6.4s', fill: 'var(--color-brand-300)' },
+];
+
+const OUTER_PATH = 'M30 150a190 108 0 1 0 380 0a190 108 0 1 0-380 0';
+const INNER_PATH = 'M84 150a136 74 0 1 0 272 0a136 74 0 1 0-272 0';
+---
+
+<div class:list={['rules-scene relative mx-auto w-full max-w-2xl', className]} aria-hidden="true">
+  <div
+    class="pointer-events-none absolute inset-0 rounded-full opacity-60 blur-3xl"
+    style="background:radial-gradient(circle at 50% 48%, color-mix(in oklab, var(--color-brand-400) 34%, transparent), color-mix(in oklab, var(--color-sky-500) 16%, transparent) 55%, transparent 72%)"
+  >
+  </div>
+
+  <svg class="rules-svg relative mx-auto block h-auto w-full" viewBox="0 0 440 300" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="rules-edge" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)"></stop>
+        <stop offset="52%" stop-color="var(--color-sky-500)"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)"></stop>
+      </linearGradient>
+      <linearGradient id="rules-page" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="color-mix(in oklab, var(--color-brand-500) 16%, transparent)"></stop>
+        <stop offset="100%" stop-color="color-mix(in oklab, var(--color-sky-500) 8%, transparent)"></stop>
+      </linearGradient>
+      <linearGradient id="rules-ring" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.65"></stop>
+        <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.3"></stop>
+      </linearGradient>
+      <filter id="rules-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="5" result="b"></feGaussianBlur>
+        <feMerge>
+          <feMergeNode in="b"></feMergeNode>
+          <feMergeNode in="SourceGraphic"></feMergeNode>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Orbit guides: the community that the rules are for -->
+    <ellipse class="rules-ring-draw" cx="220" cy="150" rx="190" ry="108" stroke="url(#rules-ring)" stroke-width="1.2" pathLength="1"></ellipse>
+    <ellipse class="rules-ring-draw rules-ring-draw--2" cx="220" cy="150" rx="136" ry="74" stroke="url(#rules-ring)" stroke-width="1" pathLength="1"></ellipse>
+    <ellipse cx="220" cy="150" rx="190" ry="108" stroke="currentColor" stroke-width="1" stroke-dasharray="4 11" opacity="0.16"></ellipse>
+    <ellipse cx="220" cy="150" rx="136" ry="74" stroke="currentColor" stroke-width="1" stroke-dasharray="3 9" opacity="0.12"></ellipse>
+
+    {
+      OUTER.map((m) => (
+        <circle class="rules-member" r={m.r} fill={m.fill}>
+          <animateMotion dur="18s" begin={m.delay} repeatCount="indefinite" path={OUTER_PATH} rotate="auto" />
+        </circle>
+      ))
+    }
+    {
+      INNER.map((m) => (
+        <circle class="rules-member rules-member--soft" r={m.r} fill={m.fill}>
+          <animateMotion dur="13s" begin={m.delay} repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear" path={INNER_PATH} />
+        </circle>
+      ))
+    }
+
+    <!-- The one bot in the room, wearing its name tag as required by rule 03 -->
+    <g class="rules-bot">
+      <animateMotion dur="18s" begin="-13.6s" repeatCount="indefinite" path={OUTER_PATH} />
+      <g transform="translate(-11,-9)">
+        <rect x="0" y="3" width="22" height="15" rx="5" fill="color-mix(in oklab, var(--color-brand-500) 55%, transparent)" stroke="url(#rules-edge)" stroke-width="1.2"></rect>
+        <path class="rules-bot-antenna" d="M11 3V-1M8 -1h6" stroke="url(#rules-edge)" stroke-width="1.3" stroke-linecap="round"></path>
+        <circle class="rules-blink" cx="7" cy="10" r="1.7" fill="white"></circle>
+        <circle class="rules-blink rules-blink--late" cx="15" cy="10" r="1.7" fill="white"></circle>
+        <rect x="4" y="14.5" width="14" height="3.4" rx="1.7" fill="var(--color-accent-400)" opacity="0.9"></rect>
+      </g>
+    </g>
+
+    <!-- The rulebook -->
+    <g class="rules-book" filter="url(#rules-glow)">
+      <rect x="152" y="66" width="136" height="168" rx="14" fill="url(#rules-page)" stroke="url(#rules-edge)" stroke-width="1.5"></rect>
+      <path d="M168 66v168" stroke="url(#rules-edge)" stroke-width="1" opacity="0.4"></path>
+
+      <!-- Header: title bar + eyebrow -->
+      <rect x="180" y="82" width="72" height="7" rx="3.5" fill="url(#rules-edge)" opacity="0.9"></rect>
+      <rect x="180" y="93" width="40" height="4" rx="2" fill="currentColor" opacity="0.28"></rect>
+
+      {
+        ROWS.map((row, i) => (
+          <g class="rules-row" style={`--d:${(i * 0.55).toFixed(2)}s`}>
+            <circle cx="180" cy={row.y} r="4.4" stroke="url(#rules-edge)" stroke-width="1.3" fill="none" />
+            <path
+              class="rules-tick"
+              d={`M177.6 ${row.y} l1.8 1.9 3.4-3.8`}
+              stroke="var(--color-accent-400)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              pathLength="1"
+            />
+            <rect class="rules-line" x="192" y={row.y - 3} width={row.w} height="5" rx="2.5" fill="currentColor" opacity="0.3" />
+          </g>
+        ))
+      }
+
+      <!-- The last rule is still being written -->
+      <rect class="rules-caret" x="192" y="195" width="3" height="10" rx="1.5" fill="var(--color-brand-400)"></rect>
+      <rect class="rules-line rules-line--live" x="199" y="197" width="34" height="5" rx="2.5" fill="currentColor" opacity="0.24"></rect>
+    </g>
+
+    <!-- Approved: the seal lands on the page, over and over -->
+    <g class="rules-seal">
+      <circle cx="286" cy="216" r="24" fill="color-mix(in oklab, var(--color-accent-500) 30%, transparent)" stroke="url(#rules-edge)" stroke-width="1.6"></circle>
+      <circle cx="286" cy="216" r="18" stroke="url(#rules-edge)" stroke-width="1" stroke-dasharray="3 4" opacity="0.7"></circle>
+      <path d="M277 216.5l6 6 12-13" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+    <circle class="rules-seal-ripple" cx="286" cy="216" r="24" stroke="var(--color-accent-400)" stroke-width="1.4" fill="none"></circle>
+
+    <!-- Sparks, because a rulebook should not look like homework -->
+    <path class="rules-spark" style="--d:0s" d="M70 62l3.2 8 8 3.2-8 3.2-3.2 8-3.2-8-8-3.2 8-3.2z" fill="var(--color-brand-400)"></path>
+    <path class="rules-spark" style="--d:0.9s" d="M372 84l2.6 6.4 6.4 2.6-6.4 2.6-2.6 6.4-2.6-6.4-6.4-2.6 6.4-2.6z" fill="var(--color-accent-400)"></path>
+    <path class="rules-spark" style="--d:1.7s" d="M92 232l2.2 5.4 5.4 2.2-5.4 2.2-2.2 5.4-2.2-5.4-5.4-2.2 5.4-2.2z" fill="var(--color-sky-400)"></path>
+  </svg>
+</div>
+
+<style>
+  .rules-scene {
+    color: var(--color-ink-500);
+  }
+  :global(.dark) .rules-scene {
+    color: var(--color-ink-300);
+  }
+
+  .rules-ring-draw {
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: rules-ring-in 2.4s var(--ease-out-expo, ease) 0.15s both;
+  }
+  .rules-ring-draw--2 {
+    animation-delay: 0.45s;
+  }
+
+  .rules-member {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-brand-400) 55%, transparent));
+    opacity: 0.9;
+  }
+  .rules-member--soft {
+    opacity: 0.7;
+  }
+
+  .rules-bot-antenna {
+    animation: rules-nudge 2.6s ease-in-out infinite;
+  }
+  .rules-blink {
+    animation: rules-blink 4.6s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .rules-blink--late {
+    animation-delay: 0.12s;
+  }
+
+  .rules-book {
+    animation: rules-float 8s var(--ease-out-expo, ease-in-out) infinite;
+    transform-origin: 220px 150px;
+  }
+
+  /* Each rule ticks itself off in turn, then the page resets and does it
+     again — the loop is the joke: the rules are never quite finished. */
+  .rules-tick {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: rules-tick 9s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .rules-line {
+    animation: rules-line 9s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .rules-line--live {
+    animation: rules-line-live 9s steps(1, end) infinite;
+  }
+  .rules-caret {
+    animation: rules-caret 1.1s steps(1, end) infinite;
+  }
+
+  .rules-seal {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: rules-stamp 9s cubic-bezier(0.2, 1.4, 0.4, 1) infinite;
+  }
+  .rules-seal-ripple {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: rules-ripple 9s ease-out infinite;
+    opacity: 0;
+  }
+
+  .rules-spark {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: rules-spark 5.5s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+
+  @keyframes rules-ring-in {
+    from {
+      stroke-dashoffset: 1;
+      opacity: 0;
+    }
+    to {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+  @keyframes rules-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-7px) rotate(-0.6deg);
+    }
+  }
+  @keyframes rules-nudge {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.4px);
+    }
+  }
+  @keyframes rules-blink {
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.15);
+    }
+  }
+  @keyframes rules-tick {
+    0%,
+    4% {
+      stroke-dashoffset: 1;
+      opacity: 0;
+    }
+    14%,
+    86% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    96%,
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+  @keyframes rules-line {
+    0%,
+    4% {
+      opacity: 0.12;
+    }
+    14%,
+    86% {
+      opacity: 0.34;
+    }
+    96%,
+    100% {
+      opacity: 0.12;
+    }
+  }
+  @keyframes rules-line-live {
+    0%,
+    60% {
+      width: 12px;
+    }
+    70% {
+      width: 22px;
+    }
+    80%,
+    100% {
+      width: 34px;
+    }
+  }
+  @keyframes rules-caret {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes rules-stamp {
+    0%,
+    62% {
+      transform: scale(1.9) translateY(-10px);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    74% {
+      transform: scale(0.94) translateY(0);
+    }
+    78%,
+    96% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 0;
+    }
+  }
+  @keyframes rules-ripple {
+    0%,
+    68% {
+      transform: scale(1);
+      opacity: 0;
+    }
+    72% {
+      opacity: 0.75;
+    }
+    88%,
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+  @keyframes rules-spark {
+    0%,
+    100% {
+      transform: scale(0.7) rotate(0deg);
+      opacity: 0.25;
+    }
+    50% {
+      transform: scale(1) rotate(35deg);
+      opacity: 0.9;
+    }
+  }
+
+  :global(.is-offscreen) .rules-svg * {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rules-ring-draw,
+    .rules-book,
+    .rules-bot-antenna,
+    .rules-blink,
+    .rules-tick,
+    .rules-line,
+    .rules-line--live,
+    .rules-caret,
+    .rules-seal,
+    .rules-spark {
+      animation: none;
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    .rules-seal-ripple {
+      display: none;
+    }
+    /* SMIL ignores the media query, so the travellers are hidden instead. */
+    .rules-member,
+    .rules-bot {
+      display: none;
+    }
+  }
+</style>

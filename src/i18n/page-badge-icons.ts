@@ -5,6 +5,7 @@
 export const PAGE_BADGE_ICONS: Record<string, string> = {
   '/features': 'sparkles',
   '/community': 'users',
+  '/community-rules': 'handshake',
   '/connectors': 'plug',
   '/plans': 'coins',
   '/blog': 'library',

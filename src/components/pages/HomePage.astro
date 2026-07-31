@@ -13,6 +13,7 @@ import BotsAgents from '../sections/BotsAgents.astro';
 import Connectors from '../sections/Connectors.astro';
 import Privacy from '../sections/Privacy.astro';
 import Plans from '../sections/Plans.astro';
+import RewardsTeaser from '../sections/RewardsTeaser.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
 
@@ -76,6 +77,7 @@ const sections = [
   { id: 'connectors', label: t.connectors.eyebrow },
   { id: 'privacy', label: t.privacy.eyebrow },
   { id: 'plans', label: t.plans.eyebrow },
+  { id: 'rewards', label: c.rewards.eyebrow },
   { id: 'faq', label: t.faq.eyebrow },
   { id: 'cta', label: t.cta.primary },
 ];
@@ -99,6 +101,7 @@ const sections = [
   <Connectors lang={lang} />
   <Privacy lang={lang} />
   <Plans lang={lang} />
+  <RewardsTeaser lang={lang} />
   <Faq lang={lang} group="home-faq" />
   <CtaBand lang={lang} />
 </Layout>

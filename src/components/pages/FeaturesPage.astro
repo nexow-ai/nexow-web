@@ -45,17 +45,17 @@ const sections = [
       <div class="aurora-mesh absolute inset-[-12%]"></div>
       <div
         class="aurora-a absolute -top-20 left-[8%] size-[480px] rounded-full opacity-50 blur-3xl dark:opacity-40"
-        style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
       >
       </div>
       <div
         class="aurora-b absolute -top-16 right-[6%] size-[520px] rounded-full opacity-45 blur-3xl dark:opacity-35"
-        style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
       >
       </div>
       <div
         class="aurora-c absolute left-1/2 top-[20%] size-[420px] -translate-x-1/2 rounded-full opacity-40 blur-3xl dark:opacity-30"
-        style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+        style="background:radial-gradient(circle, var(--aurora-3), transparent 65%)"
       >
       </div>
       <div
@@ -64,7 +64,7 @@ const sections = [
       >
       </div>
       <!-- Hero SVG constellation -->
-      <svg class="features-hero-svg absolute left-1/2 top-24 h-[min(55vw,360px)] w-[min(90%,640px)] -translate-x-1/2 opacity-40" viewBox="0 0 640 280" fill="none">
+      <svg class="features-hero-svg absolute left-1/2 top-24 h-[min(55vw,360px)] w-[min(90%,640px)] -translate-x-1/2 opacity-40" viewBox="0 0 640 280" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="fhero-g" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.6"></stop>
@@ -99,7 +99,7 @@ const sections = [
       </h1>
       <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.hero.subtitle}</p>
       <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-        <Button href={featureGroupAppHref(0)} size="lg" variant="gradient" external iconRight="arrow">{home.ctaPrimary}</Button>
+        <Button href={featureGroupAppHref(0)} size="lg" variant="gradient" external iconRight="rocket">{home.ctaPrimary}</Button>
         <Button href={localizePath('/connectors', lang)} variant="secondary" size="lg" icon="plug">{explore}</Button>
       </div>
     </div>
@@ -155,7 +155,7 @@ const sections = [
                     ))}
                   </ul>
                   <div class="mt-8">
-                    <Button href={openHref} variant="gradient" external iconRight="arrow">
+                    <Button href={openHref} variant="gradient" external iconRight="rocket">
                       {home.ctaPrimary}
                     </Button>
                   </div>

@@ -1,0 +1,314 @@
+---
+/**
+ * The game layer, teased on the home page.
+ *
+ * /plans carries the full stage (a live points simulator, 34 flippable badges,
+ * the whole reward ladder). This is the trailer for it: three panels — how
+ * reputation is counted, what the badge vault looks like, what a complete set
+ * pays — on the same dark stage, then a link into the real thing.
+ *
+ * Every number is read from `src/data/gamification.ts` and every string from the
+ * already-localized `rewards` block, so the teaser can never quote a level,
+ * badge count or payout the plans page has moved on from. The payout half is
+ * PLANNED and wears the `planned` chip, exactly as it does on /plans.
+ */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { localizePath } from '../../i18n/utils';
+import {
+  ALL_BADGES,
+  LEGENDARY_BADGES,
+  LEVELS,
+  POINT_WEIGHTS,
+  RARE_BADGES,
+  RARITY_COLORS,
+  RARE_BONUS,
+  REWARD_LADDER,
+  LEGENDARY_BONUS,
+  TIER_BONUS,
+  TIERED_BADGES,
+  TOTAL_REWARD_CREDITS,
+  TOTAL_REWARD_SPONSOR_MONTHS,
+  TOTAL_REWARD_TOKENS,
+  TOTAL_REWARD_USD,
+  type StatKey,
+} from '../../data/gamification';
+import { levelInk } from '../../lib/reputation';
+import Icon from '../Icon.astro';
+import Hex from '../Hex.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useContent(lang).rewards;
+
+const nf = (n: number) => n.toLocaleString(lang);
+const usd = (n: number) =>
+  n.toLocaleString(lang, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+/** Ink that stays legible on each rarity's gradient (mirrors the badge vault). */
+const INK: Record<string, string> = { tiered: '#3d2b05', rare: '#eff6ff', legendary: '#f6efff' };
+
+/** The three heaviest actions — enough to show points are earned, not awarded. */
+const topWeights = (Object.entries(POINT_WEIGHTS) as [StatKey, number][])
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  .slice(0, 3);
+
+const bonuses = [
+  { key: 'tiered' as const, points: TIER_BONUS },
+  { key: 'rare' as const, points: RARE_BONUS },
+  { key: 'legendary' as const, points: LEGENDARY_BONUS },
+];
+
+/** The whole vault, gold → blue → purple, so the rarities read at a glance. */
+const mosaic = [...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES];
+
+const rarities = [
+  { key: 'tiered' as const, count: TIERED_BADGES.length },
+  { key: 'rare' as const, count: RARE_BADGES.length },
+  { key: 'legendary' as const, count: LEGENDARY_BADGES.length },
+];
+
+const totals = [
+  { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: t.ledger.creditsLabel, tone: 'text-brand-300' },
+  { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: t.ledger.tokensLabel, tone: 'text-accent-300' },
+];
+
+/** The badge half of the ladder — bars are a share of the biggest payout. */
+const ladder = REWARD_LADDER.map((row) => ({
+  label: t.ledger.rows[row.key as keyof typeof t.ledger.rows],
+  credits: row.credits,
+  tokens: row.tokens,
+  from: row.from,
+  to: row.to,
+}));
+const maxCredits = Math.max(...ladder.map((r) => r.credits));
+
+const plansHref = `${localizePath('/plans', lang)}#rewards`;
+---
+
+<section id="rewards" class="relative overflow-hidden bg-ink-950 py-20 text-white sm:py-24">
+  <div class="bg-grid pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true"></div>
+  <div class="bg-noise pointer-events-none absolute inset-0 opacity-[0.15]" aria-hidden="true"></div>
+  <div
+    class="glow-accent aurora-a pointer-events-none absolute -top-40 left-1/2 h-[460px] w-[760px] -translate-x-1/2 opacity-45"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="container-page relative">
+    <!-- Section identity -->
+    <div class="reveal mx-auto flex max-w-3xl flex-col items-center text-center">
+      <span class="eyebrow inline-flex items-center gap-2 text-brand-400">
+        <span class="rule-gradient h-px w-6"></span>
+        {t.eyebrow}
+      </span>
+      <h2 class="mt-4 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl">{t.title}</h2>
+      <p class="mt-4 text-lg leading-relaxed text-ink-300">{t.subtitle}</p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+        <span class="badge-status" data-status="live">
+          <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>
+          {t.live}
+        </span>
+        <span class="badge-status" data-status="soon">
+          <span class="size-1.5 rounded-full bg-accent-400"></span>
+          {t.planned}
+        </span>
+      </div>
+    </div>
+
+    <div class="reveal-stagger mt-12 grid gap-4 lg:grid-cols-3">
+      <!-- Reputation: the five levels, and what feeds them -->
+      <div class="card-dark flex flex-col p-6">
+        <h3 class="font-display text-lg font-semibold text-white">{t.levels.title}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-300">{t.levels.body}</p>
+
+        <ol class="mt-6 flex flex-wrap justify-between gap-x-2 gap-y-4">
+          {
+            LEVELS.map((level, i) => (
+              <li class="flex min-w-14 flex-1 flex-col items-center gap-2 text-center">
+                <span class="relative">
+                  <span
+                    class="aura pointer-events-none absolute -inset-2.5 rounded-full blur-lg"
+                    style={`background:radial-gradient(circle, ${level.to}, transparent 70%);--d:${i * 320}ms`}
+                    aria-hidden="true"
+                  />
+                  <Hex
+                    icon={level.icon}
+                    from={level.from}
+                    to={level.to}
+                    ink={levelInk(level.id)}
+                    delay={i * 320}
+                    class="hex-float"
+                  />
+                </span>
+                <span class="font-display text-xs font-semibold leading-tight text-white">
+                  {t.levels.names[level.id]}
+                </span>
+                <span class="font-mono text-[0.6rem] leading-tight text-ink-400">
+                  {t.levels.at.replace('{n}', nf(level.min))}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="mt-auto pt-6 text-[0.7rem] font-semibold uppercase tracking-wider text-ink-400">
+          {t.points.bonusTitle}
+        </p>
+        <div class="mt-2 grid grid-cols-3 gap-2">
+          {
+            bonuses.map((b) => (
+              <div
+                class="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2"
+                style={`border-color:color-mix(in oklab, ${RARITY_COLORS[b.key].to} 32%, transparent)`}
+              >
+                <p class="font-mono text-base font-semibold text-white">+{b.points}</p>
+                <p class="truncate text-[0.65rem] text-ink-400">{t.badges.rarity[b.key]}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="mt-5 text-[0.7rem] font-semibold uppercase tracking-wider text-ink-400">
+          {t.points.tableTitle}
+        </p>
+        <ul class="mt-2 flex flex-col gap-1.5">
+          {
+            topWeights.map(([stat, points]) => (
+              <li class="flex items-baseline justify-between gap-3 border-b border-white/[0.06] pb-1.5">
+                <span class="min-w-0 truncate text-sm text-ink-200">{t.badges.stats[stat]}</span>
+                <span class="shrink-0 font-mono text-sm font-semibold text-brand-300">+{points}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Badges: a slice of the vault -->
+      <div class="card-dark flex flex-col p-6">
+        <div class="flex items-start justify-between gap-3">
+          <h3 class="font-display text-lg font-semibold text-white">{t.badges.title}</h3>
+          <span class="shrink-0 rounded-full bg-white/[0.07] px-2 py-0.5 font-mono text-[0.65rem] text-ink-300">
+            {t.badges.count.replace('{n}', String(ALL_BADGES.length))}
+          </span>
+        </div>
+
+        <div class="mt-5 flex flex-wrap justify-center gap-2.5">
+          {
+            mosaic.map((badge, i) => (
+              <span
+                class="relative"
+                title={t.badges.names[badge.id as keyof typeof t.badges.names]}
+              >
+                <span
+                  class="aura pointer-events-none absolute -inset-2 rounded-full blur-lg"
+                  style={`background:radial-gradient(circle, ${RARITY_COLORS[badge.rarity].to}, transparent 70%);--d:${(i % 6) * 300}ms`}
+                  aria-hidden="true"
+                />
+                <Hex
+                  icon={badge.icon}
+                  from={RARITY_COLORS[badge.rarity].from}
+                  to={RARITY_COLORS[badge.rarity].to}
+                  ink={INK[badge.rarity]}
+                  delay={(i % 6) * 300}
+                  class="hex-float"
+                />
+              </span>
+            ))
+          }
+        </div>
+
+        <ul class="mt-auto flex flex-col gap-1.5 pt-6">
+          {
+            rarities.map((r) => (
+              <li class="flex items-center gap-2 border-b border-white/[0.06] pb-1.5 text-sm">
+                <span
+                  class="size-2 shrink-0 rounded-full"
+                  style={`background:linear-gradient(140deg, ${RARITY_COLORS[r.key].from}, ${RARITY_COLORS[r.key].to})`}
+                  aria-hidden="true"
+                />
+                <span class="min-w-0 truncate text-ink-200">{t.badges.rarity[r.key]}</span>
+                <span class="ms-auto shrink-0 font-mono text-sm font-semibold text-ink-300">{r.count}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Rewards: what a complete set pays -->
+      <div class="card-dark relative flex flex-col overflow-hidden p-6">
+        <span class="glow-brand pointer-events-none absolute -right-20 -top-24 size-64 opacity-40" aria-hidden="true"
+        ></span>
+
+        <div class="relative flex items-start justify-between gap-3">
+          <h3 class="font-display text-lg font-semibold text-white">{t.ledger.totalTitle}</h3>
+          <span class="badge-status shrink-0" data-status="soon">
+            <span class="size-1.5 rounded-full bg-accent-400"></span>
+            {t.planned}
+          </span>
+        </div>
+        <p class="relative mt-2 text-sm leading-relaxed text-ink-300">{t.ledger.totalBody}</p>
+
+        <!-- What one unlock pays, rung by rung -->
+        <ul class="relative mt-5 flex flex-col gap-2">
+          {
+            ladder.map((row) => (
+              <li>
+                <p class="flex items-baseline justify-between gap-2 font-mono text-[0.7rem]">
+                  <span class="min-w-0 truncate text-ink-300">{row.label}</span>
+                  <span class="shrink-0 tabular-nums">
+                    <span class="text-brand-300">{nf(row.credits)}</span>
+                    <span class="text-ink-600" aria-hidden="true"> · </span>
+                    <span class="text-accent-300">{nf(row.tokens)}</span>
+                  </span>
+                </p>
+                <span class="mt-1 block h-1 overflow-hidden rounded-full bg-white/[0.06]" aria-hidden="true">
+                  <span
+                    class="block h-full rounded-full"
+                    style={`width:${Math.max(6, Math.round((row.credits / maxCredits) * 100))}%;background:linear-gradient(90deg, ${row.from}, ${row.to})`}
+                  />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="relative mt-2 text-end font-mono text-[0.6rem] uppercase tracking-wider text-ink-500">
+          <span class="text-brand-300">{t.ledger.creditsLabel}</span>
+          <span aria-hidden="true"> / </span>
+          <span class="text-accent-300">{t.ledger.tokensLabel}</span>
+        </p>
+
+        <div class="relative mt-auto grid gap-3 pt-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          {
+            totals.map((total) => (
+              <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <Icon name={total.icon} class={`size-4 ${total.tone}`} />
+                <p class="mt-2 font-display text-2xl font-bold tabular-nums text-white">{nf(total.value)}</p>
+                <p class="text-[0.7rem] uppercase tracking-wider text-ink-400">{total.label}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="relative mt-3 flex flex-col gap-1.5 font-mono text-[0.7rem] text-ink-400">
+          <p>{t.ledger.worth.replace('{usd}', usd(TOTAL_REWARD_USD))}</p>
+          <p>{t.ledger.months.replace('{n}', String(TOTAL_REWARD_SPONSOR_MONTHS))}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* `plannedNote` points at "the schedule below" — it belongs on /plans, where
+        the schedule actually is. Here the two status chips carry the honesty. */}
+    <div class="reveal mt-10 text-center">
+      <a
+        href={plansHref}
+        class="group inline-flex items-center gap-2 rounded-full border border-white/12 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-brand-400/45 hover:bg-white/[0.06]"
+      >
+        {t.eyebrow}
+        <Icon name="arrow" class="size-4 transition-transform group-hover:translate-x-0.5" />
+      </a>
+    </div>
+  </div>
+</section>

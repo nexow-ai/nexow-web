@@ -7,7 +7,6 @@ export const fr: SiteContent = {
       { label: 'Communauté', href: '/community' },
       { label: 'Connecteurs', href: '/connectors' },
       { label: 'Plans', href: '/plans' },
-      { label: 'Aide', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'À propos', href: '/about' },
     ],
@@ -16,9 +15,12 @@ export const fr: SiteContent = {
     close: 'Fermer le menu',
     themeToDark: 'Passer en mode sombre',
     themeToLight: 'Passer en mode clair',
+    home: 'Accueil',
+    prevPage: 'Page précédente',
+    nextPage: 'Page suivante',
   },
   footer: {
-    tagline: 'Décrivez un widget. Nexow le construit, le connecte aux données de marché en direct et le place sur votre canvas.',
+    tagline: 'Décrivez ce dont vous avez besoin. Nexow le transforme en widgets sur un canvas.',
     columns: [
       {
         title: 'Produit',
@@ -52,13 +54,15 @@ export const fr: SiteContent = {
           { label: "Conditions d'utilisation", href: "/terms" },
           { label: 'Cookies', href: '/cookies' },
           { label: 'Utilisation acceptable', href: '/acceptable-use' },
+          { label: 'Règles de la communauté', href: '/community-rules' },
           { label: "Ouvrir l'app", href: "https://x.nexow.ai" },
         ],
       },
     ],
     rights: 'Tous droits réservés.',
+    status: 'Tous les serveurs en ligne',
     disclaimer:
-      'Nexow est une plateforme d’outils et de visualisation. Rien ici ne constitue un conseil financier. Les marchés comportent des risques ; tradez de manière responsable.',
+      'Nexow est une plateforme d’outils et de visualisation exploitée par Nexow, Inc. Certains exemples utilisent des données de marché, mais le canvas est conçu pour des widgets et des workflows polyvalents. Rien ici ne constitue un conseil financier, d’investissement, juridique ou fiscal.',
     newsletter: {
       eyebrow: 'Newsletter',
       title: 'Restez informé',
@@ -73,9 +77,9 @@ export const fr: SiteContent = {
   },
   home: {
     meta: {
-      title: 'Nexow — Créez des tableaux de bord de marché avec l’IA, en langage naturel',
+      title: 'Nexow — Décrivez n’importe quoi. Obtenez un workspace de widgets en direct.',
       description:
-        'Nexow transforme vos idées en widgets vivants sur un canvas. Créez moodboards, planners, mini-jeux, widgets sociaux, dashboards de marché ou outils personnalisés sans repartir de zéro.',
+        'Nexow transforme des idées en langage courant en widgets vivants sur un canvas. Créez moodboards, suivis d’habitudes, mini-jeux, widgets sociaux, dashboards de marché ou outils sur mesure sans partir de zéro.',
     },
     hero: {
       badge: 'Accès anticipé',
@@ -84,10 +88,10 @@ export const fr: SiteContent = {
       titleTail: 'Organisez.',
       titleKicker: 'En quelques secondes — pas en semaines ni en mois.',
       subtitle:
-        'Tapez ce qu’il vous faut — un desk de trading, un board projet, un dashboard de fondateur, un tracker d’habitudes. Nexow génère de vrais widgets fonctionnels, branche les données live et les dispose sur un canvas que vous contrôlez.',
+        'Décrivez ce dont vous avez besoin et Nexow le construit : de vrais widgets fonctionnels, branchés aux données live, disposés sur un canvas que vous contrôlez. Séismes, qualité de l’air, indicateurs mondiaux, flux de marché ou votre propre base de données — visualisez, surveillez et agissez.',
       ctaPrimary: 'Ouvrir l’app',
       ctaSecondary: 'Voir la démo',
-      note: 'Aucun compte pour essayer · Privé dans votre navigateur · Ou un compte gratuit avec 10K crédits réservés',
+      note: 'Privé dans votre navigateur · Compte gratuit avec 100K crédits réservés',
       promptExample: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
       promptPlaceholder: 'Décrivez un widget…',
       promptExamplesLabel: 'Ou partez d’un exemple',
@@ -252,62 +256,82 @@ export const fr: SiteContent = {
         {
           icon: 'sparkles',
           title: 'Widgets',
-          body: 'Décrivez un widget avec des mots simples. Nexow génère l’interface et la logique, l’exécute en sandbox et vous laisse l’affiner par conversation.',
+          body: 'Décrivez un widget en mots courants. Nexow génère l’interface et la logique, l’exécute en sandbox et vous laisse l’affiner par la conversation.',
         },
         {
           icon: 'layers',
-          title: 'Canvas et espaces',
-          body: 'Glissez, redimensionnez et organisez les widgets entre espaces et écrans. Regroupez-les, reliez leurs données et changez de configuration instantanément.',
+          title: 'Canvas et espaces de travail',
+          body: 'Déplacez, redimensionnez et organisez les widgets entre espaces et écrans. Groupez-les, liez leurs données et changez de configuration instantanément.',
         },
         {
           icon: 'plug',
           title: 'Connecteurs',
-          body: 'Branchez les widgets aux marchés, bases de données, wallets et apps sociales — ou gardez l’état local jusqu’à ce que vous ayez besoin de données en direct.',
+          body: 'Branchez les widgets sur des marchés, bases de données, wallets et apps sociales — ou gardez l’état en local jusqu’à ce que vous ayez besoin de données live.',
         },
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Des automatisations cloud qui surveillent vos données et envoient des signaux aux widgets — même onglet fermé.',
+          body: 'Automatisations cloud qui surveillent vos données et renvoient des signaux aux widgets, même onglet fermé.',
         },
         {
           icon: 'cpu',
           title: 'Agents',
-          body: 'Des coéquipiers IA avec modèle, mémoire, skills, outils, connaissances et déclencheurs — construisez, déployez et consultez les exécutions dans le cloud.',
+          body: 'Des coéquipiers IA avec modèle, mémoire, compétences, outils, connaissances et déclencheurs : créez, déployez et relisez les exécutions dans le cloud.',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Un assistant IA pour tout l’espace : créez des widgets, organisez le canvas et demandez quoi changer ensuite.',
+          body: 'Un assistant IA pour tout l’espace de travail : créer des widgets, organiser le canvas et demander quoi changer ensuite.',
         },
         {
           icon: 'users',
           title: 'Communauté',
-          body: 'Suivez des makers, publiez dans le fil, partagez des widgets dans la bibliothèque et réclamez un @handle public.',
+          body: 'Suivez des créateurs, publiez dans le fil, partagez des widgets dans la bibliothèque et réservez un @pseudo public.',
         },
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publiez et installez widgets, thèmes, écrans, bots et agents — avec une lignée qui crédite chaque remake.',
+          body: 'Publiez et installez widgets, thèmes, écrans, bots et agents — avec une traçabilité qui crédite chaque reprise.',
         },
         {
           icon: 'mail',
           title: 'Chats en temps réel',
-          body: 'Messagez amis et contacts en direct — DMs 1:1 et de groupe avec présence, réactions et boîte de réception sur le Dock.',
+          body: 'Échangez en direct avec vos amis et contacts : messages 1:1 et de groupe avec présence, réactions et boîte de réception sur le dock.',
         },
         {
           icon: 'vault',
           title: 'Compte',
-          body: 'Comptes gratuits avec crédits, réputation, usage, plans, avis, App Lock et bascule multi-comptes.',
+          body: 'Comptes gratuits avec crédits, réputation, usage, plans, notifications, App Lock et bascule multi-comptes.',
+        },
+        {
+          icon: 'library',
+          title: 'Bibliothèque de widgets',
+          body: 'Enregistrez n’importe quel widget dans votre bibliothèque et posez-le dans un autre dashboard en un clic — versions et journaux le suivent.',
+        },
+        {
+          icon: 'globe',
+          title: 'Apps de réseaux sociaux',
+          body: 'Faites entrer dans vos widgets les flux et signaux live de X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon et plus.',
         },
         {
           icon: 'moon',
-          title: 'Thèmes et réglages',
-          body: 'Thémisez toute l’interface — couleurs, polices, densité, motifs — plus raccourcis, sécurité et préférences d’installation.',
+          title: 'Thèmes',
+          body: 'Créez des thèmes d’apparence pour couleurs, polices, rayons, densité, verre et motifs — publiez-les ou installez-les depuis la marketplace.',
+        },
+        {
+          icon: 'sync',
+          title: 'Paramètres',
+          body: 'Préférences générales, raccourcis clavier, sécurité, sauvegarde/restauration et contrôles d’installation PWA dans le panneau Paramètres.',
+        },
+        {
+          icon: 'sliders',
+          title: 'Barre d’outils',
+          body: 'Ajouter des widgets, disposition auto, capture, annuler/rétablir, verrou, mode couleur, crédits et sync — affichez ou masquez chaque action.',
         },
         {
           icon: 'grid',
-          title: 'Barre d’outils et Dock',
-          body: 'Une barre d’outils configurable dans l’en-tête pour les actions du canvas, et un Dock vitré pour Copilot, panneaux, notifications et messages.',
+          title: 'Dock',
+          body: 'Une pastille de verre déplaçable pour Copilot, les raccourcis de panneaux, les notifications et les messages — se replie en palet au repos.',
         },
       ],
       map: {
@@ -320,97 +344,102 @@ export const fr: SiteContent = {
         {
           title: 'Construire',
           items: [
-          {
-            icon: 'sparkles',
-            title: 'Widgets',
-            body: 'Décrivez un widget avec des mots simples. Nexow génère l’interface et la logique, l’exécute en sandbox et vous laisse l’affiner par conversation.',
-          },
-          {
-            icon: 'layers',
-            title: 'Canvas et espaces',
-            body: 'Glissez, redimensionnez et organisez les widgets entre espaces et écrans. Regroupez-les, reliez leurs données et changez de configuration instantanément.',
-          },
-          {
-            icon: 'library',
-            title: 'Bibliothèque de widgets',
-            body: 'Enregistrez n’importe quel widget dans votre bibliothèque et déposez-le sur un autre tableau de bord en un clic — versions et logs restent attachés.',
-          },
-        ],
+            {
+              icon: 'sparkles',
+              title: 'Widgets',
+              body: 'Décrivez un widget en mots courants. Nexow génère l’interface et la logique, l’exécute en sandbox et vous laisse l’affiner par la conversation.',
+            },
+            {
+              icon: 'layers',
+              title: 'Canvas et espaces de travail',
+              body: 'Déplacez, redimensionnez et organisez les widgets entre espaces et écrans. Groupez-les, liez leurs données et changez de configuration instantanément.',
+            },
+            {
+              icon: 'library',
+              title: 'Bibliothèque de widgets',
+              body: 'Enregistrez n’importe quel widget dans votre bibliothèque et posez-le dans un autre dashboard en un clic — versions et journaux le suivent.',
+            },
+          ],
         },
         {
           title: 'Automatiser',
           items: [
-          {
-            icon: 'bot',
-            title: 'Bots',
-            body: 'Des automatisations cloud qui surveillent vos données et envoient des signaux aux widgets — même onglet fermé.',
-          },
-          {
-            icon: 'cpu',
-            title: 'Agents',
-            body: 'Des coéquipiers IA avec modèle, mémoire, skills, outils, connaissances et déclencheurs — construisez, déployez et consultez les exécutions dans le cloud.',
-          },
-          {
-            icon: 'chat',
-            title: 'Copilot',
-            body: 'Un assistant IA pour tout l’espace : créez des widgets, organisez le canvas et demandez quoi changer ensuite.',
-          },
-        ],
+            {
+              icon: 'bot',
+              title: 'Bots',
+              body: 'Automatisations cloud qui surveillent vos données et renvoient des signaux aux widgets, même onglet fermé.',
+            },
+            {
+              icon: 'cpu',
+              title: 'Agents',
+              body: 'Des coéquipiers IA avec modèle, mémoire, compétences, outils, connaissances et déclencheurs : créez, déployez et relisez les exécutions dans le cloud.',
+            },
+            {
+              icon: 'chat',
+              title: 'Copilot',
+              body: 'Un assistant IA pour tout l’espace de travail : créer des widgets, organiser le canvas et demander quoi changer ensuite.',
+            },
+          ],
         },
         {
           title: 'Connecter et partager',
           items: [
-          {
-            icon: 'plug',
-            title: 'Connecteurs',
-            body: 'Plus de 45 connecteurs en direct sur marchés, bases de données, wallets et apps sociales — directement depuis le navigateur lorsque CORS le permet.',
-          },
-          {
-            icon: 'globe',
-            title: 'Apps de réseaux sociaux',
-            body: 'Importez flux et signaux en direct depuis X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon et plus dans vos widgets.',
-          },
-          {
-            icon: 'users',
-            title: 'Communauté',
-            body: 'Suivez des makers, publiez dans le fil, partagez des widgets dans la bibliothèque et réclamez un @handle public.',
-          },
-          {
-            icon: 'store',
-            title: 'Marketplace',
-            body: 'Publiez et installez widgets, thèmes, écrans, bots et agents — avec une lignée qui crédite chaque remake.',
-          },
-          {
-            icon: 'mail',
-            title: 'Chats en temps réel',
-            body: 'Messagez amis et contacts en direct — DMs 1:1 et de groupe avec présence, réactions et boîte de réception sur le Dock.',
-          },
-        ],
+            {
+              icon: 'plug',
+              title: 'Connecteurs',
+              body: '90 connecteurs actifs pour marchés, bases de données, wallets et apps sociales — directement depuis le navigateur là où CORS l’autorise.',
+            },
+            {
+              icon: 'globe',
+              title: 'Apps de réseaux sociaux',
+              body: 'Faites entrer dans vos widgets les flux et signaux live de X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon et plus.',
+            },
+            {
+              icon: 'users',
+              title: 'Communauté',
+              body: 'Suivez des créateurs, publiez dans le fil, partagez des widgets dans la bibliothèque et réservez un @pseudo public.',
+            },
+            {
+              icon: 'store',
+              title: 'Marketplace',
+              body: 'Publiez et installez widgets, thèmes, écrans, bots et agents — avec une traçabilité qui crédite chaque reprise.',
+            },
+            {
+              icon: 'mail',
+              title: 'Chats en temps réel',
+              body: 'Échangez en direct avec vos amis et contacts : messages 1:1 et de groupe avec présence, réactions et boîte de réception sur le dock.',
+            },
+          ],
         },
         {
           title: 'Interface et compte',
           items: [
-          {
-            icon: 'vault',
-            title: 'Compte',
-            body: 'Comptes gratuits avec crédits, réputation, usage, plans, avis, App Lock et bascule multi-comptes.',
-          },
-          {
-            icon: 'moon',
-            title: 'Thèmes et réglages',
-            body: 'Thémisez toute l’interface — couleurs, polices, densité, motifs — plus raccourcis, sécurité et préférences d’installation.',
-          },
-          {
-            icon: 'sliders',
-            title: 'Barre d’outils',
-            body: 'Ajoutez des widgets, auto-layout, capture, annuler/rétablir, verrouillage, mode couleur, crédits et sync — affichez ou masquez chaque action.',
-          },
-          {
-            icon: 'grid',
-            title: 'Dock',
-            body: 'Une pilule de verre déplaçable pour Copilot, raccourcis de panneaux, notifications et messages — se replie en puck au repos.',
-          },
-        ],
+            {
+              icon: 'vault',
+              title: 'Compte',
+              body: 'Comptes gratuits avec crédits, réputation, usage, plans, notifications, App Lock et bascule multi-comptes.',
+            },
+            {
+              icon: 'moon',
+              title: 'Thèmes',
+              body: 'Créez des thèmes d’apparence pour couleurs, polices, rayons, densité, verre et motifs — publiez-les ou installez-les depuis la marketplace.',
+            },
+            {
+              icon: 'sync',
+              title: 'Paramètres',
+              body: 'Préférences générales, raccourcis clavier, sécurité, sauvegarde/restauration et contrôles d’installation PWA dans le panneau Paramètres.',
+            },
+            {
+              icon: 'sliders',
+              title: 'Barre d’outils',
+              body: 'Ajouter des widgets, disposition auto, capture, annuler/rétablir, verrou, mode couleur, crédits et sync — affichez ou masquez chaque action.',
+            },
+            {
+              icon: 'grid',
+              title: 'Dock',
+              body: 'Une pastille de verre déplaçable pour Copilot, les raccourcis de panneaux, les notifications et les messages — se replie en palet au repos.',
+            },
+          ],
         },
       ],
     },
@@ -519,7 +548,7 @@ export const fr: SiteContent = {
       accountTitle: 'Un compte gratuit débloque le réseau',
       accountBody: 'Sans carte bancaire. Vos widgets, crédits, sync et outils communautaires restent ensemble quand votre espace grandit.',
       accountPoints: [
-        '10 000 crédits IA de départ sur Free',
+        '100 000 crédits IA de départ sur Free',
         'Sync cloud des espaces et widgets sur tous vos appareils',
         'Communauté, marketplace et bibliothèque de widgets',
         'Points de réputation, médailles et niveaux en construisant et partageant',
@@ -554,9 +583,9 @@ export const fr: SiteContent = {
       soon: 'Bientôt',
       items: [
         { status: 'shipped', title: 'Génération de widgets par IA', body: 'Widgets en langage naturel exécutés en sandbox sur le canvas.' },
-        { status: 'shipped', title: 'Plus de 45 connecteurs', body: 'Bases de données, réseaux sociaux, brokers, exchanges, wallets, données ouvertes et services web en direct.' },
+        { status: 'shipped', title: '90 connecteurs', body: 'Bases de données, réseaux sociaux, brokers, exchanges, wallets, données ouvertes et services web en direct.' },
         { status: 'shipped', title: 'Bots et alertes cloud', body: 'Des automatisations qui surveillent vos données et envoient des signaux à vos widgets, onglet fermé.' },
-        { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits avec espaces synchronisés sur tous vos appareils — 10K crédits réservés pour le lancement de la plateforme.' },
+        { status: 'shipped', title: 'Comptes et sync cloud', body: 'Comptes gratuits avec espaces synchronisés sur tous vos appareils — 100K crédits réservés pour le lancement de la plateforme.' },
         { status: 'shipped', title: 'Communauté : fil et profils', body: 'Suivez des makers, partagez des widgets dans le fil et réclamez votre @pseudo public.' },
         { status: 'shipped', title: 'Agents et Copilot', body: 'Des agents cloud avec un harnais complet, déployés avec autorisations d’outils et historique d’exécutions — plus un Copilot qui construit et organise votre espace.' },
         { status: 'shipped', title: 'Marketplace', body: 'Publiez et installez widgets, thèmes, écrans et bots — avec une lignée qui crédite chaque remake.' },
@@ -592,7 +621,7 @@ export const fr: SiteContent = {
         },
         {
           q: "Que sont les connecteurs ?",
-          a: "Les connecteurs branchent les widgets sur des données live — plus de 45 aujourd’hui entre bases de données, wallets, apps sociales, brokers, exchanges et open data. Quand le CORS le permet, les appels partent directement du navigateur. Beaucoup de widgets n’ont besoin d’aucun connecteur et gardent l’état en local jusqu’à la sync.",
+          a: "Les connecteurs branchent les widgets sur des données live — 90 aujourd’hui entre bases de données, wallets, apps sociales, brokers, exchanges et open data. Quand le CORS le permet, les appels partent directement du navigateur. Beaucoup de widgets n’ont besoin d’aucun connecteur et gardent l’état en local jusqu’à la sync.",
         },
         {
           q: "Que sont les bots et les agents ?",
@@ -600,7 +629,7 @@ export const fr: SiteContent = {
         },
         {
           q: "Combien ça coûte ?",
-          a: "Free inclut le canvas de widgets complet, la bibliothèque, la sync cloud, 10 bots, 3 agents, l’accès communauté et 10 000 crédits IA à l’inscription. Supporter et Sponsor ajoutent des crédits mensuels, plus d’automatisation et une apparence premium — le paiement arrive bientôt. Voir Plans pour la comparaison complète.",
+          a: "Free inclut le canvas de widgets complet, la bibliothèque, la sync cloud, 10 bots, 3 agents, l’accès communauté et 100 000 crédits IA à l’inscription. Supporter et Sponsor ajoutent des crédits mensuels, plus d’automatisation et une apparence premium — le paiement arrive bientôt. Voir Plans pour la comparaison complète.",
         },
       ],
     },
@@ -1054,6 +1083,188 @@ export const fr: SiteContent = {
       secondary: 'Voir toutes les fonctionnalités',
     },
   },
+  communityRulesPage: {
+    meta: {
+      title: 'Règles de la communauté — Nexow',
+      description:
+        'Les règles de la maison dans la communauté Nexow : quoi publier, comment créditer un remix, comment les bots et les agents doivent se tenir, et ce qui se passe exactement quand quelqu’un les oublie.',
+    },
+    hero: {
+      badge: 'Règles de la communauté',
+      titleLead: 'Soyez formidables',
+      titleGradient: 'les uns avec les autres',
+      titleTail: 'bots compris',
+      subtitle:
+        'Nexow est un canevas partagé par des créateurs, des traders, des chercheurs et une foule grandissante d’automatisations. Voici les règles qui font que ça vaut le coup de passer. Les lire prend moins de temps que votre dernier widget.',
+      updated: 'Dernière mise à jour : juillet 2026 · écrites par des humains, appliquées par des humains',
+      ctaPrimary: 'Lire les règles',
+      ctaSecondary: 'Signaler quelque chose',
+    },
+    tldr: {
+      eyebrow: 'La version courte',
+      title: 'Trois règles, puis les détails',
+      subtitle:
+        'Si vous ne lisez qu’une section, lisez celle-ci. Tout le reste, ce sont ces trois phrases avec les cas particuliers en plus.',
+      items: [
+        {
+          title: 'Soyez utile',
+          body: 'Publiez des choses que les autres peuvent vraiment exécuter. Un widget brut partagé avec un avertissement honnête vaut mieux qu’un widget parfait que personne ne peut installer.',
+        },
+        {
+          title: 'Soyez honnête',
+          body: 'Créditez l’original, étiquetez l’automatisation et ne déguisez jamais un backtest en historique réel. Ici, la provenance est une fonctionnalité, pas une formalité.',
+        },
+        {
+          title: 'Soyez humain',
+          body: 'Débattez d’indicateurs, de modèles et de mises en page aussi fort que vous voulez. Le mode muet est à un clic : servez-vous-en bien avant le bouton de signalement.',
+        },
+      ],
+    },
+    rules: {
+      eyebrow: 'Les règles',
+      title: 'Huit choses qui gardent cet endroit vivable',
+      subtitle:
+        'Assez courtes pour être retenues, assez précises pour être appliquées. Chacune existe parce que quelqu’un, un jour, a essayé l’inverse.',
+      items: [
+        {
+          title: 'Publiez du réel',
+          body: 'Partagez des widgets, des écrans, des bots et des recherches que vous avez vraiment construits ou exécutés. Les travaux en cours sont les bienvenus : dites-le. La fiction présentée comme un produit fini, non.',
+          note: 'une capture d’écran n’est pas un bon de livraison',
+        },
+        {
+          title: 'Gardez la filiation',
+          body: 'Remixez tout ce que vous pouvez installer, c’est à ça que sert la publication. La provenance voyage avec le widget : laissez-la attachée et dites ce que vous avez changé.',
+          note: '« inspiré de » est un lien, pas une ambiance',
+        },
+        {
+          title: 'Étiquetez vos automatisations',
+          body: 'Les bots et les agents tournent sous un compte qui les annonce comme tels. Automatiser votre travail est encouragé ; faire passer une planification pour une personne est la seule usurpation que nous prenons personnellement.',
+          note: 'les robots portent un badge',
+        },
+        {
+          title: 'Pas de contes de fées financiers',
+          body: 'Nexow affiche des données de marché, il ne valide pas votre point d’entrée. Pas de rendements garantis, pas de groupes de signaux, pas de « écris-moi en privé pour la stratégie », pas de capture d’une journée verte en guise de preuve.',
+          note: 'les performances passées ne sont toujours pas une promesse',
+        },
+        {
+          title: 'Que ce soit sûr à exécuter',
+          body: 'Rien qui récolte des identifiants, mine des cryptos dans l’onglet de quelqu’un d’autre ou cache une charge utile derrière un graphique. Chaque widget tourne en bac à sable : voyez ça comme un plancher, pas comme un défi.',
+          note: 'le bac à sable est une limite, pas un défi',
+        },
+        {
+          title: 'Respectez la tuyauterie commune',
+          body: 'Les connecteurs sont une infrastructure partagée avec de vraies limites de débit. Si vous martelez une plateforme, elle casse pour tout le monde, y compris pour la personne que vous vouliez impressionner.',
+          note: 'votre agent n’est pas le personnage principal',
+        },
+        {
+          title: 'Décrivez ce que vous publiez',
+          body: 'Dites ce que fait une publication, quels connecteurs elle demande et ce qu’elle ne sait pas encore faire. Publier et installer est gratuit aujourd’hui : ce sont les descriptions honnêtes qui rendent ça tenable.',
+          note: '« propulsé par l’IA » n’est pas une liste de fonctions',
+        },
+        {
+          title: 'Attaquez le travail, pas la personne',
+          body: 'Démontez une hypothèse, questionnez un modèle, redessinez la mise en page de quelqu’un dans les réponses. Le harcèlement, la haine, la divulgation de données personnelles et les meutes : c’est là que la fête s’arrête, et le compte aussi.',
+          note: 'jouez le graphique, pas la personne',
+        },
+      ],
+    },
+    bots: {
+      eyebrow: 'Non-humains',
+      title: 'Règles de la maison pour les automatisations',
+      subtitle:
+        'Les bots surveillent marchés, courtiers et portefeuilles. Les agents raisonnent, appellent des outils et livrent. Aucun des deux n’a le droit d’être la raison pour laquelle quelqu’un s’en va.',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Un humain par automatisation',
+          body: 'Chaque bot et chaque agent appartient à un compte. Quoi qu’il publie, envoie ou négocie, une personne en répond : « c’est l’agent qui l’a fait » n’a jamais fonctionné.',
+        },
+        {
+          icon: 'sync',
+          title: 'Bridez vos déclencheurs',
+          body: 'Utilisez les fréquences fournies par le produit et restez dans les limites des connecteurs. Créer des comptes en plus pour contourner une limite, c’est dépasser cette limite avec des étapes en plus.',
+        },
+        {
+          icon: 'chat',
+          title: 'Livrez là où vous êtes invité',
+          body: 'Webhooks, alertes et écritures en base vont vers des salons et des tables qui vous appartiennent ou où l’on vous a accueilli. Le serveur de personne ne devrait rencontrer votre bot avant vous.',
+        },
+        {
+          icon: 'shield',
+          title: 'Consentement pour tout ce qui coûte',
+          body: 'Négocier, dépenser ou écrire au nom de quelqu’un reste accordé explicitement, par agent, à chaque fois. Ne demandez jamais à un autre membre d’activer ces autorisations pour vous.',
+        },
+      ],
+    },
+    enforcement: {
+      eyebrow: 'Application',
+      title: 'Ce qui arrive quand on oublie',
+      subtitle:
+        'Presque toutes les infractions sont des accidents, et presque toutes les réponses sont un mot. L’échelle ne monte que quand la même chose se répète.',
+      steps: [
+        {
+          n: '01',
+          title: 'Un rappel',
+          body: 'Vous recevez un message, le contenu reçoit une étiquette, et l’histoire s’arrête généralement là. Aucune réputation perdue, aucun drame.',
+        },
+        {
+          n: '02',
+          title: 'Une pause',
+          body: 'Si ça recommence, publication, partage et exécutions d’automatisations s’arrêtent un moment. Votre réputation survit ; votre élan non.',
+        },
+        {
+          n: '03',
+          title: 'Une suspension',
+          body: 'Les infractions graves ou délibérées suspendent le compte et retirent ce qu’il a publié, remixes et installations compris.',
+        },
+        {
+          n: '04',
+          title: 'La porte',
+          body: 'Fraude, logiciels malveillants, campagnes de harcèlement et usurpation ferment le compte définitivement. Ce sont les allers simples.',
+        },
+      ],
+      note: 'Aucun signalement automatique ne déclenche seul une action définitive : un humain lit le dossier d’abord. Nous préférons être lents plutôt qu’injustes.',
+    },
+    report: {
+      eyebrow: 'Signalements et recours',
+      title: 'Dites-le-nous, et dites-nous pourquoi',
+      subtitle:
+        'La modération marche mieux quand elle commence par un lien et une phrase. Les deux arrivent à la même petite équipe.',
+      cards: [
+        {
+          title: 'Signaler quelque chose',
+          body: 'Envoyez le lien du post, du widget, de l’annonce ou de l’automatisation, plus une ligne sur ce qui cloche. Nous n’agissons pas sur une impression, mais très vite sur un lien.',
+          cta: 'Écrire à l’équipe',
+        },
+        {
+          title: 'Contester une décision',
+          body: 'Vous pensez que nous avons mal lu ? Répondez à l’avis dans les 30 jours et une autre personne reprend le dossier depuis le début. Expliquer marche mieux qu’escalader.',
+          cta: 'Ouvrir un recours',
+        },
+      ],
+      legalTitle: 'Les versions écrites par des juristes',
+      legal: [
+        {
+          label: 'Conditions d’utilisation',
+          body: 'Le contrat derrière le compte : ce que vous acceptez en utilisant Nexow.',
+        },
+        {
+          label: 'Utilisation acceptable',
+          body: 'La liste opposable de ce qui ne peut jamais tourner sur la plateforme.',
+        },
+        {
+          label: 'Politique de confidentialité',
+          body: 'Ce que nous collectons quand vous publiez, partagez ou signalez, et ce que nous ne collectons pas.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Règles lues. Canevas ouvert.',
+      subtitle: 'Allez construire quelque chose qui mérite un débat : poliment, avec des sources, sous votre propre nom.',
+      primary: 'Ouvrir Nexow',
+      secondary: 'Explorer la communauté',
+    },
+  },
   features: {
     meta: {
       title: 'Fonctionnalités — Nexow',
@@ -1093,7 +1304,7 @@ export const fr: SiteContent = {
         title: 'Connecteurs',
         body: 'Données en direct depuis marchés, bases de données, wallets et apps sociales.',
         items: [
-          { icon: 'plug', title: 'Plus de 45 connecteurs en direct', body: 'Bases de données, marchés, wallets et services web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi et plus.' },
+          { icon: 'plug', title: '90 connecteurs en direct', body: 'Bases de données, marchés, wallets et services web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi et plus.' },
           { icon: 'globe', title: 'Intégrations réseaux sociaux', body: 'Connectez X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to et Hacker News pour que les widgets lisent et réagissent aux flux que vous utilisez déjà.' },
           { icon: 'signal', title: 'Direct depuis le navigateur quand c’est possible', body: 'Lorsque CORS le permet, les appels authentifiés s’exécutent directement depuis votre navigateur et contournent entièrement notre proxy.' },
           { icon: 'database', title: 'État local aussi', body: 'Beaucoup de widgets n’ont besoin d’aucune donnée externe : jeux, planners, moodboards et trackers privés peuvent vivre dans le navigateur jusqu’à ce que vous choisissiez de synchroniser.' },
@@ -1151,7 +1362,7 @@ export const fr: SiteContent = {
         {
           icon: 'coins',
           title: 'Crédits IA',
-          body: 'Alimentent la génération de widgets, les réponses Copilot et la logique des bots. Free réserve 10K pour démarrer ; les plans payants se renouvellent chaque mois.',
+          body: 'Alimentent la génération de widgets, les réponses Copilot et la logique des bots. Free réserve 100K pour démarrer ; les plans payants se renouvellent chaque mois.',
         },
         {
           icon: 'bot',
@@ -1183,16 +1394,18 @@ export const fr: SiteContent = {
         priceMonthly: '0 €',
         priceYearly: '0 €',
         cadence: 'pour toujours',
-        stats: ['10K crédits', '10 bots', '3 agents'],
+        stats: ['100K crédits à l’inscription', '10 bots', '3 agents'],
         cta: 'Démarrer gratuitement',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '10 000 crédits IA réservés à l’inscription',
-          'Écrans, espaces et widgets illimités',
+          '100 000 crédits IA réservés à l’inscription',
+          'Écrans, espaces de travail et widgets illimités',
           'Connexions navigateur illimitées',
-          'Sync cloud multi-appareils',
-          'Copilot global (bientôt)',
-          'Accès communauté et marketplace',
+          'Synchronisation illimitée entre appareils',
+          '10 bots et 3 agents',
+          'Copilot global',
+          'App Lock et sécurité de compte avancée',
+          'Accès communauté, réputation et marketplace',
         ],
       },
       {
@@ -1209,9 +1422,10 @@ export const fr: SiteContent = {
         features: [
           '115 000 crédits chaque mois',
           'Jusqu’à 30 bots et 10 agents',
-          'Un Copilot par espace de travail',
-          'Deuxième couleur d’accent (dégradé)',
-          'Options d’UI et d’apparence exclusives',
+          'Deuxième couleur d’accent (dégradés)',
+          'Huit motifs de canvas, surfaces de widget et verres de panneau en plus',
+          'Écrans de démarrage animés et votre avatar comme marque d’en-tête',
+          'Un Copilot par espace de travail (bientôt)',
         ],
       },
       {
@@ -1230,10 +1444,11 @@ export const fr: SiteContent = {
         features: [
           '800 000 crédits chaque mois',
           'Jusqu’à 300 bots et 100 agents',
-          'Connexions sur mesure (Connector Builder)',
-          'Un Copilot par écran',
-          'Importez votre propre logo',
-          'Personnalisations d’UI premium',
+          'Deux motifs de canvas et écrans de démarrage en plus, avec réglage aurora',
+          'Support prioritaire pour les configurations complexes',
+          'Un Copilot par écran (bientôt)',
+          'Connexions sur mesure avec Connector Builder (bientôt)',
+          'Importez votre propre logo (bientôt)',
         ],
       },
       {
@@ -1331,11 +1546,11 @@ export const fr: SiteContent = {
     faq: [
       {
         q: "Nexow est-il vraiment gratuit ?",
-        a: "Oui. Free est un espace complet — écrans, widgets et connecteurs illimités, bibliothèque réutilisable, sync cloud, 10 bots, 3 agents, communauté et réputation, plus 10 000 crédits IA réservés à l’inscription. Les plans payants ajoutent des crédits mensuels, des quotas plus élevés et une apparence premium — le cœur n’est pas verrouillé.",
+        a: "Oui. Free est un espace complet — écrans, widgets et connecteurs illimités, bibliothèque réutilisable, sync cloud, 10 bots, 3 agents, communauté et réputation, plus 100 000 crédits IA réservés à l’inscription. Les plans payants ajoutent des crédits mensuels, des quotas plus élevés et une apparence premium — le cœur n’est pas verrouillé.",
       },
       {
         q: "Que sont les crédits ?",
-        a: "Les crédits mesurent l’usage de l’IA : générer des widgets, les modifier par conversation, créer des liens et utiliser Copilot. Un crédit égale un token de sortie Sonnet au coût fournisseur, donc le prix ne dépend pas du modèle choisi — Haiku étire un crédit à environ 3 tokens ; Opus le consomme en environ 0,6. Free réserve 10 000 à l’inscription ; Supporter donne 115 000 par mois ; Sponsor 800 000 — et vous pouvez acheter des packs à tout moment.",
+        a: "Les crédits mesurent l’usage de l’IA : générer des widgets, les modifier par conversation, créer des liens et utiliser Copilot. Un crédit égale un token de sortie Sonnet au coût fournisseur, donc le prix ne dépend pas du modèle choisi — Haiku étire un crédit à environ 3 tokens ; Opus le consomme en environ 0,6. Free réserve 100 000 à l’inscription ; Supporter donne 115 000 par mois ; Sponsor 800 000 — et vous pouvez acheter des packs à tout moment.",
       },
       {
         q: "Quand les plans payants arrivent-ils ?",
@@ -1597,10 +1812,31 @@ export const fr: SiteContent = {
       title: 'Ce que la DAO en fait',
       body: 'NXW n’est pas une quête annexe — c’est ainsi que la feuille de route se décide. On le gagne en construisant, on le dépense en votant.',
       cards: [
-        { icon: 'lightbulb', title: 'Proposer', body: 'Proposez des fonctions, des connecteurs et des règles. Tout détenteur de NXW peut mettre une idée au vote.' },
-        { icon: 'vote', title: 'Voter', body: 'Des votes publics et transparents décident de ce qui est construit, et dans quel ordre.' },
-        { icon: 'vault', title: 'Trésorerie', body: 'Une trésorerie commune finance les primes et les bourses votées par la communauté.' },
-        { icon: 'gift', title: 'Récompenses', body: 'Les créateurs touchent une part quand la DAO publie et met en avant leur travail.' },
+        {
+          icon: 'vote',
+          title: 'Gouvernance',
+          body: 'Proposez et votez. Toute personne détenant du NXW peut mettre une idée au vote.',
+        },
+        {
+          icon: 'vault',
+          title: 'Trésorerie',
+          body: 'Une trésorerie commune finance primes et subventions votées par la communauté.',
+        },
+        {
+          icon: 'coins',
+          title: 'Dividendes',
+          body: 'Les détenteurs touchent une part quand la DAO distribue on-chain.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Acheter des crédits',
+          body: 'Dépensez du NXW pour la génération IA — le carburant du canvas.',
+        },
+        {
+          icon: 'gift',
+          title: 'Récompenses aléatoires',
+          body: 'Drops surprises et gains façon loterie versés par la DAO.',
+        },
       ],
     },
     credits: {
@@ -1804,9 +2040,10 @@ export const fr: SiteContent = {
       ],
       message: 'Comment pouvons-nous aider ?',
       submit: 'Envoyer le message',
-      submitting: 'Ouverture de la messagerie…',
-      success: 'Votre client mail devrait s’ouvrir avec le message prêt. Merci de nous avoir écrit.',
+      submitting: 'Envoi…',
+      success: 'Merci, nous avons bien reçu votre message. Nous vous répondrons par e-mail.',
       error: 'Une erreur est survenue. Écrivez-nous directement.',
+      fallback: 'Nos serveurs sont injoignables : votre client mail s’est ouvert avec le message prêt. Envoyez-le depuis là.',
       invalid: 'Renseignez un e-mail valide et un court message.',
     },
     aside: {

@@ -2,14 +2,15 @@
 /**
  * The four plan cards, on a 3D stage.
  *
- * Copy comes from `plansPage.tiers` (same array the home page teaser uses); the
- * accent, icon and featured flag come from `src/data/gamification.ts`, which
- * mirrors the app's own plan cards — so a tier wears the same colour here as it
- * does inside Nexow. The two arrays are zipped by index: Free, Supporter,
- * Sponsor, Partner.
+ * Copy comes from `plansPage.tiers`; the accent, icon and featured flag come
+ * from `src/data/gamification.ts`, which mirrors the app's own plan cards — so a
+ * tier wears the same colour here as it does inside Nexow. The two arrays are
+ * zipped by index: Free, Supporter, Sponsor, Partner.
  *
- * The billing toggle swaps the visible price span; the same `data-price` /
- * `data-billed` contract the home page uses, so one script shape covers both.
+ * The home page embeds the same component (`embedded`) rather than keeping a
+ * second, thinner set of cards: one design, one billing toggle, no drift. The
+ * embedded variant only tightens spacing and drops the standalone section
+ * wrapper — the host section supplies its own heading and padding.
  */
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -19,17 +20,26 @@ import Icon from '../Icon.astro';
 
 interface Props {
   lang: Lang;
+  /** Rendered inside another section (the home page) — no wrapper, no heading. */
+  embedded?: boolean;
 }
-const { lang } = Astro.props;
+const { lang, embedded = false } = Astro.props;
 const t = useContent(lang).plansPage;
 const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
 
 const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
+
+const Wrapper = embedded ? 'div' : 'section';
+const wrapperProps = embedded ? {} : { id: 'tiers' };
 ---
 
-<section id="tiers" class="relative">
+<Wrapper class="relative" {...wrapperProps}>
   <!-- Billing toggle -->
-  <div id="plans-billing" data-mode="monthly" class="container-page -mt-4 flex justify-center pb-10">
+  <div
+    id="plans-billing"
+    data-mode="monthly"
+    class:list={['container-page flex justify-center', embedded ? 'mt-10 pb-8' : '-mt-4 pb-10']}
+  >
     {/* `max-w-full` + wrapping: the two labels plus the savings badge are wider
         than a 320px phone in some locales (ru) and would widen the page. */}
     <div class="inline-flex max-w-full flex-wrap items-center justify-center rounded-full border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] p-1 shadow-sm">
@@ -48,15 +58,16 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
         class="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-ink-500 dark:text-ink-400 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white"
       >
         {t.billing.yearly}
-        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-600 dark:text-brand-300">{t.billing.save}</span>
+        <span class="rounded-full bg-brand-500/15 px-1.5 py-0.5 font-mono text-[0.6rem] text-brand-800 dark:text-brand-300">{t.billing.save}</span>
       </button>
     </div>
   </div>
 
-  <div class="container-page pb-14">
+  <div class:list={['container-page', embedded ? 'pb-2' : 'pb-14']}>
     {/* The cards are the section's content but carry no visible section title;
-        an off-screen heading keeps the document outline continuous. */}
-    <h2 class="sr-only">{t.hero.badge}</h2>
+        an off-screen heading keeps the document outline continuous. Embedded,
+        the host section's own heading already does that job. */}
+    {!embedded && <h2 class="sr-only">{t.hero.badge}</h2>}
     <div class="stage-3d reveal-stagger grid items-start gap-5 lg:grid-cols-4">
       {
         cards.map(({ tier, spec }) => {
@@ -65,7 +76,8 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
             <article
               data-tilt
               class:list={[
-                'tilt group relative flex flex-col rounded-3xl border p-7',
+                'tilt group relative flex flex-col rounded-3xl border',
+                embedded ? 'p-6' : 'p-7',
                 tier.featured
                   ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-white/10 lg:-mt-4 lg:mb-4'
                   : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40',
@@ -112,7 +124,13 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                 {/* A price is short, but the top tier prints a word ("Custom",
                     el "Προσαρμοσμένα") — let it wrap instead of widening the page. */}
                 <div class="mt-5 flex min-w-0 flex-wrap items-baseline gap-1.5">
-                  <span class:list={['min-w-0 [overflow-wrap:anywhere] font-display text-4xl font-bold', tier.featured ? 'text-white' : 'text-ink-950 dark:text-white']}>
+                  <span
+                    class:list={[
+                      'min-w-0 [overflow-wrap:anywhere] font-display font-bold',
+                      embedded ? 'text-3xl' : 'text-4xl',
+                      tier.featured ? 'text-white' : 'text-ink-950 dark:text-white',
+                    ]}
+                  >
                     <span data-price="monthly">{tier.priceMonthly}</span>
                     <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
                   </span>
@@ -158,7 +176,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
                 {tier.note && (
                   <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.note}</p>
                 )}
-                <ul class="mt-3 space-y-3">
+                <ul class:list={['mt-3', embedded ? 'space-y-2.5' : 'space-y-3']}>
                   {tier.features.map((f) => (
                     <li class="flex items-start gap-2.5 text-sm">
                       <Icon name="check" class="mt-0.5 size-4 shrink-0" style="color:var(--ai)" />
@@ -173,7 +191,7 @@ const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
       }
     </div>
   </div>
-</section>
+</Wrapper>
 
 <script>
   // Billing toggle + pointer tilt. Both re-arm on every client-side navigation,

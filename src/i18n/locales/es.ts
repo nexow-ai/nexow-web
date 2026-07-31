@@ -7,7 +7,6 @@ export const es: SiteContent = {
       { label: 'Comunidad', href: '/community' },
       { label: 'Conectores', href: '/connectors' },
       { label: 'Planes', href: '/plans' },
-      { label: 'Ayuda', href: '/help' },
       { label: 'Blog', href: '/blog' },
       { label: 'Nosotros', href: '/about' },
     ],
@@ -16,9 +15,12 @@ export const es: SiteContent = {
     close: 'Cerrar menú',
     themeToDark: 'Cambiar a modo oscuro',
     themeToLight: 'Cambiar a modo claro',
+    home: 'Inicio',
+    prevPage: 'Página anterior',
+    nextPage: 'Página siguiente',
   },
   footer: {
-    tagline: 'Describe un widget. Nexow lo construye, lo conecta a datos de mercado en vivo y lo coloca en tu lienzo.',
+    tagline: 'Describe lo que necesitas. Nexow lo convierte en widgets sobre un lienzo.',
     columns: [
       {
         title: 'Producto',
@@ -52,13 +54,15 @@ export const es: SiteContent = {
           { label: 'Términos de uso', href: '/terms' },
           { label: 'Cookies', href: '/cookies' },
           { label: 'Uso aceptable', href: '/acceptable-use' },
+          { label: 'Normas de la comunidad', href: '/community-rules' },
           { label: 'Abrir la app', href: 'https://x.nexow.ai' },
         ],
       },
     ],
     rights: 'Todos los derechos reservados.',
+    status: 'Todos los servidores activos',
     disclaimer:
-      'Nexow es una plataforma de herramientas y visualización. Nada aquí es asesoramiento financiero. Los mercados conllevan riesgo; opera con responsabilidad.',
+      'Nexow es una plataforma de herramientas y visualización operada por Nexow, Inc. Algunos ejemplos usan datos de mercado, pero el lienzo está pensado para widgets y flujos de trabajo de propósito general. Nada de esto es asesoramiento financiero, de inversión, legal ni fiscal.',
     newsletter: {
       eyebrow: 'Boletín',
       title: 'Mantente al día',
@@ -73,9 +77,9 @@ export const es: SiteContent = {
   },
   home: {
     meta: {
-      title: 'Nexow — Crea dashboards de mercado con IA, en lenguaje natural',
+      title: 'Nexow — Describe lo que sea. Obtén un espacio de widgets en vivo.',
       description:
-        'Nexow es un espacio de trabajo nativo de IA para mercados. Describe un widget en lenguaje natural y Nexow lo crea, lo conecta a datos en vivo de más de 45 conectores y suma bots en la nube, agentes de IA, una comunidad de makers y recompensas XP — privado por defecto, gratis para empezar.',
+        'Nexow convierte ideas en lenguaje natural en widgets en vivo sobre un lienzo. Crea moodboards, planificadores de hábitos, minijuegos, widgets sociales, dashboards de mercado o herramientas a medida sin empezar de cero.',
     },
     hero: {
       badge: 'Acceso anticipado',
@@ -84,10 +88,10 @@ export const es: SiteContent = {
       titleTail: 'Opéralo.',
       titleKicker: 'En segundos, no en semanas ni meses.',
       subtitle:
-        'Un espacio de trabajo nativo de IA para mercados. Pide cualquier widget en lenguaje natural — Nexow escribe el código, lo ejecuta de forma segura y transmite datos en vivo a un lienzo libre. Automatízalo con bots y agentes en la nube, y conéctate a una comunidad de makers.',
+        'Describe lo que necesitas y Nexow lo construye: widgets reales que funcionan, conectados a datos en vivo y colocados en un lienzo que tú controlas. Terremotos, calidad del aire, indicadores mundiales, feeds de mercado o tu propia base de datos: visualízalo, vigílalo y actúa.',
       ctaPrimary: 'Abrir la app',
       ctaSecondary: 'Ver cómo funciona',
-      note: 'Sin registro para probar · Privado en tu navegador · O cuenta gratis con 10K créditos reservados',
+      note: 'Privado en tu navegador · Cuenta gratis con 100K créditos reservados',
       promptExample: 'Muestra un gráfico de velas de BTC-USD de Coinbase con EMA 20 y 50 y RSI debajo.',
       promptPlaceholder: 'Describe un widget…',
       promptExamplesLabel: 'O empieza con un ejemplo',
@@ -221,47 +225,47 @@ export const es: SiteContent = {
         {
           icon: 'sparkles',
           title: 'Widgets',
-          body: 'Describe un widget con palabras normales. Nexow genera la interfaz y la lógica, lo ejecuta aislado y te deja refinarlo conversando.',
+          body: 'Describe un widget con palabras normales. Nexow genera la interfaz y la lógica, lo ejecuta en sandbox y te deja refinarlo conversando.',
         },
         {
           icon: 'layers',
-          title: 'Lienzo y espacios',
+          title: 'Lienzo y espacios de trabajo',
           body: 'Arrastra, redimensiona y organiza widgets entre espacios y pantallas. Agrúpalos, enlaza sus datos y cambia de configuración al instante.',
         },
         {
           icon: 'plug',
           title: 'Conectores',
-          body: 'Conecta widgets a mercados, bases de datos, wallets y apps sociales — o mantén el estado local hasta que necesites datos en vivo.',
+          body: 'Conecta widgets a mercados, bases de datos, wallets y apps sociales — o mantén el estado en local hasta que necesites datos en vivo.',
         },
         {
           icon: 'bot',
           title: 'Bots',
-          body: 'Automatizaciones en la nube que vigilan tus datos y envían señales a los widgets — incluso con la pestaña cerrada.',
+          body: 'Automatizaciones en la nube que vigilan tus datos y devuelven señales a los widgets, incluso con la pestaña cerrada.',
         },
         {
           icon: 'cpu',
-          title: 'Agents',
-          body: 'Compañeros de IA con modelo, memoria, skills, herramientas, conocimiento y disparadores — construye, despliega y revisa ejecuciones en la nube.',
+          title: 'Agentes',
+          body: 'Compañeros de IA con modelo, memoria, habilidades, herramientas, conocimiento y disparadores: créalos, despliégalos y revisa sus ejecuciones en la nube.',
         },
         {
           icon: 'chat',
           title: 'Copilot',
-          body: 'Un asistente de IA para todo el espacio: crea widgets, organiza el lienzo y pregunta qué cambiar a continuación.',
+          body: 'Un asistente de IA para todo el espacio de trabajo: crea widgets, ordena el lienzo y pregúntale qué cambiar a continuación.',
         },
         {
           icon: 'users',
           title: 'Comunidad',
-          body: 'Sigue a makers, publica en el feed, comparte widgets en la biblioteca y reclama un @handle público.',
+          body: 'Sigue a otros makers, publica en el feed, comparte widgets en la biblioteca y reserva tu @usuario público.',
         },
         {
           icon: 'store',
           title: 'Marketplace',
-          body: 'Publica e instala widgets, temas, pantallas, bots y agentes — con un linaje que da crédito a cada remake.',
+          body: 'Publica e instala widgets, temas, pantallas, bots y agentes — con un linaje que acredita cada versión.',
         },
         {
           icon: 'mail',
           title: 'Chats en tiempo real',
-          body: 'Mensajes en vivo con amigos y contactos — DMs 1:1 y en grupo con presencia, reacciones y bandeja de entrada en el Dock.',
+          body: 'Habla con amigos y contactos en directo: mensajes 1:1 y de grupo con presencia, reacciones y bandeja en el dock.',
         },
         {
           icon: 'vault',
@@ -269,14 +273,34 @@ export const es: SiteContent = {
           body: 'Cuentas gratis con créditos, reputación, uso, planes, avisos, App Lock y cambio entre varias cuentas.',
         },
         {
+          icon: 'library',
+          title: 'Biblioteca de widgets',
+          body: 'Guarda cualquier widget en tu biblioteca y colócalo en otro dashboard con un clic — versiones y logs se van con él.',
+        },
+        {
+          icon: 'globe',
+          title: 'Apps de redes sociales',
+          body: 'Trae feeds y señales en vivo de X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon y más a tus widgets.',
+        },
+        {
           icon: 'moon',
-          title: 'Temas y ajustes',
-          body: 'Personaliza toda la interfaz — colores, fuentes, densidad, patrones — además de atajos, seguridad y preferencias de instalación.',
+          title: 'Temas',
+          body: 'Crea temas de apariencia para colores, tipografías, radios, densidad, cristal y patrones — publícalos o instálalos desde el marketplace.',
+        },
+        {
+          icon: 'sync',
+          title: 'Ajustes',
+          body: 'Preferencias generales, atajos de teclado, seguridad, copia/restauración y controles de instalación PWA en el panel de Ajustes.',
+        },
+        {
+          icon: 'sliders',
+          title: 'Barra de herramientas',
+          body: 'Añadir widgets, autodisposición, captura, deshacer/rehacer, bloqueo, modo de color, créditos y sync — muestra u oculta cada acción.',
         },
         {
           icon: 'grid',
-          title: 'Barra de herramientas y Dock',
-          body: 'Una barra de herramientas configurable en la cabecera para acciones del lienzo, y un Dock translúcido para Copilot, paneles, notificaciones y mensajes.',
+          title: 'Dock',
+          body: 'Una píldora de cristal arrastrable para Copilot, accesos a paneles, notificaciones y mensajes — se repliega en un puck cuando no la usas.',
         },
       ],
       map: {
@@ -289,97 +313,102 @@ export const es: SiteContent = {
         {
           title: 'Construir',
           items: [
-          {
-            icon: 'sparkles',
-            title: 'Widgets',
-            body: 'Describe un widget con palabras normales. Nexow genera la interfaz y la lógica, lo ejecuta aislado y te deja refinarlo conversando.',
-          },
-          {
-            icon: 'layers',
-            title: 'Lienzo y espacios',
-            body: 'Arrastra, redimensiona y organiza widgets entre espacios y pantallas. Agrúpalos, enlaza sus datos y cambia de configuración al instante.',
-          },
-          {
-            icon: 'library',
-            title: 'Biblioteca de widgets',
-            body: 'Guarda cualquier widget en tu biblioteca y colócalo en otro dashboard con un clic — versiones y logs van con él.',
-          },
-        ],
+            {
+              icon: 'sparkles',
+              title: 'Widgets',
+              body: 'Describe un widget con palabras normales. Nexow genera la interfaz y la lógica, lo ejecuta en sandbox y te deja refinarlo conversando.',
+            },
+            {
+              icon: 'layers',
+              title: 'Lienzo y espacios de trabajo',
+              body: 'Arrastra, redimensiona y organiza widgets entre espacios y pantallas. Agrúpalos, enlaza sus datos y cambia de configuración al instante.',
+            },
+            {
+              icon: 'library',
+              title: 'Biblioteca de widgets',
+              body: 'Guarda cualquier widget en tu biblioteca y colócalo en otro dashboard con un clic — versiones y logs se van con él.',
+            },
+          ],
         },
         {
           title: 'Automatizar',
           items: [
-          {
-            icon: 'bot',
-            title: 'Bots',
-            body: 'Automatizaciones en la nube que vigilan tus datos y envían señales a los widgets — incluso con la pestaña cerrada.',
-          },
-          {
-            icon: 'cpu',
-            title: 'Agents',
-            body: 'Compañeros de IA con modelo, memoria, skills, herramientas, conocimiento y disparadores — construye, despliega y revisa ejecuciones en la nube.',
-          },
-          {
-            icon: 'chat',
-            title: 'Copilot',
-            body: 'Un asistente de IA para todo el espacio: crea widgets, organiza el lienzo y pregunta qué cambiar a continuación.',
-          },
-        ],
+            {
+              icon: 'bot',
+              title: 'Bots',
+              body: 'Automatizaciones en la nube que vigilan tus datos y devuelven señales a los widgets, incluso con la pestaña cerrada.',
+            },
+            {
+              icon: 'cpu',
+              title: 'Agentes',
+              body: 'Compañeros de IA con modelo, memoria, habilidades, herramientas, conocimiento y disparadores: créalos, despliégalos y revisa sus ejecuciones en la nube.',
+            },
+            {
+              icon: 'chat',
+              title: 'Copilot',
+              body: 'Un asistente de IA para todo el espacio de trabajo: crea widgets, ordena el lienzo y pregúntale qué cambiar a continuación.',
+            },
+          ],
         },
         {
           title: 'Conectar y compartir',
           items: [
-          {
-            icon: 'plug',
-            title: 'Conectores',
-            body: 'Más de 45 conectores en vivo en mercados, bases de datos, wallets y apps sociales — directo desde el navegador donde CORS lo permite.',
-          },
-          {
-            icon: 'globe',
-            title: 'Apps de redes sociales',
-            body: 'Trae feeds y señales en vivo de X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon y más a tus widgets.',
-          },
-          {
-            icon: 'users',
-            title: 'Comunidad',
-            body: 'Sigue a makers, publica en el feed, comparte widgets en la biblioteca y reclama un @handle público.',
-          },
-          {
-            icon: 'store',
-            title: 'Marketplace',
-            body: 'Publica e instala widgets, temas, pantallas, bots y agentes — con un linaje que da crédito a cada remake.',
-          },
-          {
-            icon: 'mail',
-            title: 'Chats en tiempo real',
-            body: 'Mensajes en vivo con amigos y contactos — DMs 1:1 y en grupo con presencia, reacciones y bandeja de entrada en el Dock.',
-          },
-        ],
+            {
+              icon: 'plug',
+              title: 'Conectores',
+              body: '90 conectores en vivo entre mercados, bases de datos, wallets y apps sociales — directo desde el navegador donde CORS lo permite.',
+            },
+            {
+              icon: 'globe',
+              title: 'Apps de redes sociales',
+              body: 'Trae feeds y señales en vivo de X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon y más a tus widgets.',
+            },
+            {
+              icon: 'users',
+              title: 'Comunidad',
+              body: 'Sigue a otros makers, publica en el feed, comparte widgets en la biblioteca y reserva tu @usuario público.',
+            },
+            {
+              icon: 'store',
+              title: 'Marketplace',
+              body: 'Publica e instala widgets, temas, pantallas, bots y agentes — con un linaje que acredita cada versión.',
+            },
+            {
+              icon: 'mail',
+              title: 'Chats en tiempo real',
+              body: 'Habla con amigos y contactos en directo: mensajes 1:1 y de grupo con presencia, reacciones y bandeja en el dock.',
+            },
+          ],
         },
         {
           title: 'Interfaz y cuenta',
           items: [
-          {
-            icon: 'vault',
-            title: 'Cuenta',
-            body: 'Cuentas gratis con créditos, reputación, uso, planes, avisos, App Lock y cambio entre varias cuentas.',
-          },
-          {
-            icon: 'moon',
-            title: 'Temas y ajustes',
-            body: 'Personaliza toda la interfaz — colores, fuentes, densidad, patrones — además de atajos, seguridad y preferencias de instalación.',
-          },
-          {
-            icon: 'sliders',
-            title: 'Barra de herramientas',
-            body: 'Añade widgets, auto-layout, captura, deshacer/rehacer, bloqueo, modo de color, créditos y sync — muestra u oculta cada acción.',
-          },
-          {
-            icon: 'grid',
-            title: 'Dock',
-            body: 'Una pastilla de cristal arrastrable para Copilot, atajos de paneles, notificaciones y mensajes — se oculta en un puck cuando está inactivo.',
-          },
-        ],
+            {
+              icon: 'vault',
+              title: 'Cuenta',
+              body: 'Cuentas gratis con créditos, reputación, uso, planes, avisos, App Lock y cambio entre varias cuentas.',
+            },
+            {
+              icon: 'moon',
+              title: 'Temas',
+              body: 'Crea temas de apariencia para colores, tipografías, radios, densidad, cristal y patrones — publícalos o instálalos desde el marketplace.',
+            },
+            {
+              icon: 'sync',
+              title: 'Ajustes',
+              body: 'Preferencias generales, atajos de teclado, seguridad, copia/restauración y controles de instalación PWA en el panel de Ajustes.',
+            },
+            {
+              icon: 'sliders',
+              title: 'Barra de herramientas',
+              body: 'Añadir widgets, autodisposición, captura, deshacer/rehacer, bloqueo, modo de color, créditos y sync — muestra u oculta cada acción.',
+            },
+            {
+              icon: 'grid',
+              title: 'Dock',
+              body: 'Una píldora de cristal arrastrable para Copilot, accesos a paneles, notificaciones y mensajes — se repliega en un puck cuando no la usas.',
+            },
+          ],
         },
       ],
     },
@@ -488,7 +517,7 @@ export const es: SiteContent = {
       accountTitle: 'Una cuenta gratis desbloquea la red',
       accountBody: 'Sin tarjeta. Sigue construyendo en local cuando quieras — la cuenta siempre es opcional.',
       accountPoints: [
-        '10.000 créditos de IA reservados al registrarte',
+        '100.000 créditos de IA reservados al registrarte',
         'Sincronización en la nube de espacios y widgets entre dispositivos',
         'Comunidad, marketplace y biblioteca de widgets',
         'Puntos de reputación, medallas y niveles al construir y compartir',
@@ -499,7 +528,7 @@ export const es: SiteContent = {
       eyebrow: 'Planes',
       title: 'Empieza gratis. Crece cuando quieras.',
       subtitle:
-        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos reservados en una cuenta gratis. Sube de plan para más créditos, bots y agentes.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 100.000 créditos reservados en una cuenta gratis. Sube de plan para más créditos, bots y agentes.',
       cta: 'Comparar todos los planes',
     },
     privacy: {
@@ -523,9 +552,9 @@ export const es: SiteContent = {
       soon: 'Próximamente',
       items: [
         { status: 'shipped', title: 'Generación de widgets con IA', body: 'Widgets en lenguaje natural corriendo aislados en el lienzo.' },
-        { status: 'shipped', title: 'Más de 45 conectores', body: 'Bases de datos, redes sociales, brokers, exchanges, wallets, datos abiertos y servicios web en vivo.' },
+        { status: 'shipped', title: '90 conectores', body: 'Bases de datos, redes sociales, brokers, exchanges, wallets, datos abiertos y servicios web en vivo.' },
         { status: 'shipped', title: 'Bots y alertas en la nube', body: 'Automatizaciones que vigilan tus datos y envían señales a tus widgets, con la pestaña cerrada.' },
-        { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis con espacios sincronizados en todos tus dispositivos — 10K créditos reservados para el lanzamiento de la plataforma.' },
+        { status: 'shipped', title: 'Cuentas y sync en la nube', body: 'Cuentas gratis con espacios sincronizados en todos tus dispositivos — 100K créditos reservados para el lanzamiento de la plataforma.' },
         { status: 'shipped', title: 'Comunidad: feed y perfiles', body: 'Sigue makers, comparte widgets en el feed y reclama tu @usuario público.' },
         { status: 'shipped', title: 'Agentes y Copilot', body: 'Agentes en la nube con un harness completo, desplegados con permisos de herramientas e historial de ejecuciones — más un Copilot que construye y organiza tu espacio.' },
         { status: 'shipped', title: 'Marketplace', body: 'Publica e instala widgets, temas, pantallas y bots — con un linaje que da crédito a cada remake.' },
@@ -561,7 +590,7 @@ export const es: SiteContent = {
         },
         {
           q: "¿Qué son los conectores?",
-          a: "Los conectores enlazan widgets con datos en vivo — más de 45 hoy entre bases de datos, wallets, apps sociales, brokers, exchanges y datos abiertos. Donde CORS lo permite, las llamadas pueden ir directo desde el navegador. Muchos widgets no necesitan conector y guardan el estado en local hasta que eliges sincronizar.",
+          a: "Los conectores enlazan widgets con datos en vivo — 90 hoy entre bases de datos, wallets, apps sociales, brokers, exchanges y datos abiertos. Donde CORS lo permite, las llamadas pueden ir directo desde el navegador. Muchos widgets no necesitan conector y guardan el estado en local hasta que eliges sincronizar.",
         },
         {
           q: "¿Qué son los bots y los agentes?",
@@ -569,7 +598,7 @@ export const es: SiteContent = {
         },
         {
           q: "¿Cuánto cuesta?",
-          a: "Free incluye el lienzo completo de widgets, biblioteca, sync en la nube, 10 bots, 3 agentes, acceso a la comunidad y 10.000 créditos de IA al registrarte. Supporter y Sponsor suman créditos mensuales, más automatización y apariencia premium — el pago llega pronto. Consulta Planes para la comparación completa.",
+          a: "Free incluye el lienzo completo de widgets, biblioteca, sync en la nube, 10 bots, 3 agentes, acceso a la comunidad y 100.000 créditos de IA al registrarte. Supporter y Sponsor suman créditos mensuales, más automatización y apariencia premium — el pago llega pronto. Consulta Planes para la comparación completa.",
         },
       ],
     },
@@ -1054,6 +1083,188 @@ export const es: SiteContent = {
       secondary: 'Ver todas las funciones',
     },
   },
+  communityRulesPage: {
+    meta: {
+      title: 'Normas de la comunidad — Nexow',
+      description:
+        'Las normas de la casa en la comunidad de Nexow: qué publicar, cómo acreditar un remix, cómo deben comportarse los bots y los agentes, y qué pasa exactamente cuando alguien las olvida.',
+    },
+    hero: {
+      badge: 'Normas de la comunidad',
+      titleLead: 'Sé excelente',
+      titleGradient: 'con los demás',
+      titleTail: 'bots incluidos',
+      subtitle:
+        'Nexow es un lienzo compartido por creadores, traders, investigadores y una multitud creciente de automatizaciones. Estas son las normas que hacen que merezca la pena aparecer por aquí. Leerlas cuesta menos que construir tu último widget.',
+      updated: 'Última actualización: julio de 2026 · escritas por humanos, aplicadas por humanos',
+      ctaPrimary: 'Leer las normas',
+      ctaSecondary: 'Reportar algo',
+    },
+    tldr: {
+      eyebrow: 'La versión corta',
+      title: 'Tres normas y luego la letra pequeña',
+      subtitle:
+        'Si solo lees una sección, que sea esta. Todo lo de abajo son estas tres frases con los casos límite resueltos.',
+      items: [
+        {
+          title: 'Sé útil',
+          body: 'Publica cosas que la gente pueda ejecutar de verdad. Un widget tosco compartido con una advertencia honesta vale más que uno pulido que nadie puede instalar.',
+        },
+        {
+          title: 'Sé honesto',
+          body: 'Acredita el original, etiqueta la automatización y nunca disfraces un backtest de historial real. Aquí la procedencia es una función, no un formalismo.',
+        },
+        {
+          title: 'Sé humano',
+          body: 'Discute sobre indicadores, modelos y diseños todo lo alto que quieras. Silenciar está a un clic: úsalo mucho antes que el botón de reportar.',
+        },
+      ],
+    },
+    rules: {
+      eyebrow: 'Las normas',
+      title: 'Ocho cosas que mantienen bien este sitio',
+      subtitle:
+        'Lo bastante cortas para recordarlas, lo bastante concretas para aplicarlas. Cada una existe porque alguien, en algún momento, probó lo contrario.',
+      items: [
+        {
+          title: 'Publica cosas reales',
+          body: 'Comparte widgets, pantallas, bots e investigación que hayas construido o ejecutado de verdad. Los trabajos en curso son bienvenidos: dilo y ya está. La ficción presentada como producto acabado, no.',
+          note: 'una captura de pantalla no es un albarán de entrega',
+        },
+        {
+          title: 'Conserva el linaje',
+          body: 'Remezcla todo lo que puedas instalar; para eso está publicar. La procedencia viaja con el widget: déjala adjunta y cuenta qué has cambiado.',
+          note: '“inspirado en” es un enlace, no una vibra',
+        },
+        {
+          title: 'Etiqueta tus automatizaciones',
+          body: 'Los bots y los agentes funcionan bajo una cuenta que los identifica como tales. Automatizar tu trabajo está bien; hacer pasar una programación por una persona es la única suplantación que nos tomamos como algo personal.',
+          note: 'los robots llevan el nombre a la vista',
+        },
+        {
+          title: 'Nada de cuentos financieros',
+          body: 'Nexow representa datos de mercado, no respalda tu entrada. Sin rentabilidades garantizadas, sin grupos de señales, sin “escríbeme por privado para la estrategia”, sin capturas de un día verde como prueba de un sistema.',
+          note: 'la rentabilidad pasada sigue sin ser una promesa',
+        },
+        {
+          title: 'Que se pueda ejecutar sin miedo',
+          body: 'Nada que recolecte credenciales, mine criptomonedas en la pestaña de otra persona u oculte una carga maliciosa detrás de un gráfico. Cada widget se ejecuta aislado: trátalo como un suelo, no como un reto.',
+          note: 'el sandbox es un límite, no un desafío',
+        },
+        {
+          title: 'Respeta la fontanería común',
+          body: 'Los conectores son infraestructura compartida con límites de uso reales. Si machacas un proveedor, se rompe para todo el mundo, incluida la persona a la que querías impresionar.',
+          note: 'tu agente no es el protagonista',
+        },
+        {
+          title: 'Describe lo que publicas',
+          body: 'Di qué hace una publicación, qué conectores necesita y qué todavía no sabe hacer. Publicar e instalar es gratis hoy: las descripciones honestas son lo que hace que merezca la pena mantenerlo así.',
+          note: '“con IA” no es una lista de funciones',
+        },
+        {
+          title: 'Ataca el trabajo, no a quien lo hace',
+          body: 'Destroza una hipótesis, cuestiona un modelo, rediseña el panel de otra persona en las respuestas. El acoso, el odio, la difusión de datos personales y los linchamientos son donde acaba la diversión y también la cuenta.',
+          note: 'juega contra el gráfico, no contra la persona',
+        },
+      ],
+    },
+    bots: {
+      eyebrow: 'No humanos',
+      title: 'Normas de la casa para las automatizaciones',
+      subtitle:
+        'Los bots vigilan mercados, brókeres y carteras. Los agentes razonan, llaman herramientas y entregan. Ninguno de los dos puede ser el motivo por el que alguien se va.',
+      items: [
+        {
+          icon: 'bot',
+          title: 'Un humano por automatización',
+          body: 'Cada bot y cada agente pertenece a una cuenta. Publique lo que publique, envíe lo que envíe u opere lo que opere, hay una persona que responde: “lo hizo el agente” no ha colado nunca.',
+        },
+        {
+          icon: 'sync',
+          title: 'Regula tus disparadores',
+          body: 'Usa las frecuencias que ofrece el producto y respeta los límites de los conectores. Crear cuentas extra para esquivar un límite es saltarse ese límite con pasos adicionales.',
+        },
+        {
+          icon: 'chat',
+          title: 'Entrega donde te han invitado',
+          body: 'Los webhooks, las alertas y las escrituras en base de datos van a salas y tablas que son tuyas o a las que te han invitado. El servidor de nadie debería conocer a tu bot antes que a ti.',
+        },
+        {
+          icon: 'shield',
+          title: 'Consentimiento para lo que cuesta',
+          body: 'Operar, gastar o escribir en nombre de otra persona se concede de forma explícita, por agente y cada vez. Nunca pidas a otro miembro que active esos permisos por ti.',
+        },
+      ],
+    },
+    enforcement: {
+      eyebrow: 'Aplicación',
+      title: 'Qué pasa cuando alguien se despista',
+      subtitle:
+        'Casi todas las infracciones son accidentes y casi todas las respuestas son un aviso. La escalera solo sube cuando lo mismo se repite.',
+      steps: [
+        {
+          n: '01',
+          title: 'Un aviso',
+          body: 'Recibes un mensaje, el contenido recibe una etiqueta y ahí suele acabar la historia. Sin perder reputación y sin drama.',
+        },
+        {
+          n: '02',
+          title: 'Una pausa',
+          body: 'Si se repite, publicar, compartir o ejecutar automatizaciones se detiene un tiempo. Tu reputación sobrevive; tu inercia no.',
+        },
+        {
+          n: '03',
+          title: 'Una suspensión',
+          body: 'Las infracciones graves o deliberadas suspenden la cuenta y retiran lo que haya publicado, remezclas e instalaciones incluidas.',
+        },
+        {
+          n: '04',
+          title: 'La puerta',
+          body: 'El fraude, el malware, las campañas de acoso y la suplantación cierran la cuenta para siempre. Esos son los viajes de ida.',
+        },
+      ],
+      note: 'Ninguna alerta automática provoca por sí sola una acción permanente: primero lo lee una persona. Preferimos ser lentos antes que injustos.',
+    },
+    report: {
+      eyebrow: 'Reportes y apelaciones',
+      title: 'Cuéntanoslo, y cuéntanos por qué',
+      subtitle:
+        'La moderación funciona mejor cuando empieza por un enlace y una frase. Las dos cosas llegan al mismo equipo pequeño.',
+      cards: [
+        {
+          title: 'Reportar algo',
+          body: 'Envía el enlace de la publicación, el widget, el anuncio o la automatización, más una línea sobre qué falla. No podemos actuar por intuiciones, pero actuamos rápido ante un enlace.',
+          cta: 'Escribir al equipo',
+        },
+        {
+          title: 'Apelar una decisión',
+          body: '¿Crees que lo leímos mal? Responde al aviso en un plazo de 30 días y otra persona revisa el caso desde cero. Explicar funciona mejor que escalar.',
+          cta: 'Abrir una apelación',
+        },
+      ],
+      legalTitle: 'Las versiones que escribieron los abogados',
+      legal: [
+        {
+          label: 'Términos de uso',
+          body: 'El contrato detrás de la cuenta: lo que aceptas al usar Nexow.',
+        },
+        {
+          label: 'Uso aceptable',
+          body: 'La lista exigible de lo que nunca puede ejecutarse en la plataforma.',
+        },
+        {
+          label: 'Política de privacidad',
+          body: 'Qué recogemos cuando publicas, compartes o reportas, y qué no.',
+        },
+      ],
+    },
+    cta: {
+      title: 'Normas leídas. Lienzo abierto.',
+      subtitle: 'Ahora construye algo que merezca un buen debate: con educación, con fuentes y con tu nombre.',
+      primary: 'Abrir Nexow',
+      secondary: 'Explorar la comunidad',
+    },
+  },
   features: {
     meta: {
       title: 'Funciones — Nexow',
@@ -1093,7 +1304,7 @@ export const es: SiteContent = {
         title: 'Conectores',
         body: 'Datos en vivo de mercados, bases de datos, wallets y apps sociales.',
         items: [
-          { icon: 'plug', title: 'Más de 45 conectores en vivo', body: 'Bases de datos, mercados, wallets y servicios web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi y más.' },
+          { icon: 'plug', title: '90 conectores en vivo', body: 'Bases de datos, mercados, wallets y servicios web — Postgres, ClickHouse, Qdrant, OANDA, Binance, Coinbase, MetaMask, Ledger, Polygon, Kalshi y más.' },
           { icon: 'globe', title: 'Integraciones de redes sociales', body: 'Conecta X, YouTube, Discord, Telegram, Reddit, Bluesky, Mastodon, Lemmy, Dev.to y Hacker News para que los widgets lean y reaccionen a los feeds que ya usas.' },
           { icon: 'signal', title: 'Directo desde el navegador cuando es posible', body: 'Donde CORS lo permite, las llamadas autenticadas se ejecutan directamente desde tu navegador y evitan por completo nuestro proxy.' },
           { icon: 'database', title: 'Estado local también', body: 'Muchos widgets no necesitan datos externos: juegos, planners, moodboards y trackers privados pueden vivir en el navegador hasta que elijas sincronizar.' },
@@ -1135,13 +1346,13 @@ export const es: SiteContent = {
     meta: {
       title: 'Planes — Nexow',
       description:
-        'Construye gratis para siempre — en local con tu propia clave, o con 10.000 créditos de IA reservados en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 100.000 créditos de IA reservados en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
     },
     hero: {
       badge: 'Planes',
       title: 'Gratis para empezar. Espacio para crecer.',
       subtitle:
-        'Construye gratis — en local con tu propia clave, o regístrate y reserva 10.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
+        'Construye gratis — en local con tu propia clave, o regístrate y reserva 100.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
     },
     comingSoon:
       'El pago de Supporter y Sponsor llega pronto, y los créditos de la plataforma se activan con él. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
@@ -1151,7 +1362,7 @@ export const es: SiteContent = {
         {
           icon: 'coins',
           title: 'Créditos de IA',
-          body: 'Impulsan la generación de widgets, respuestas de Copilot y lógica de bots. Free reserva 10K para empezar; los planes de pago se renuevan cada mes.',
+          body: 'Impulsan la generación de widgets, respuestas de Copilot y lógica de bots. Free reserva 100K para empezar; los planes de pago se renuevan cada mes.',
         },
         {
           icon: 'bot',
@@ -1183,16 +1394,18 @@ export const es: SiteContent = {
         priceMonthly: '0 €',
         priceYearly: '0 €',
         cadence: 'para siempre',
-        stats: ['10K créditos', '10 bots', '3 agentes'],
+        stats: ['100K créditos al registrarte', '10 bots', '3 agentes'],
         cta: 'Empezar gratis',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '10.000 créditos de IA reservados al registrarte',
-          'Pantallas, espacios y widgets ilimitados',
+          '100.000 créditos de IA reservados al registrarte',
+          'Pantallas, espacios de trabajo y widgets ilimitados',
           'Conexiones de navegador ilimitadas',
-          'Sync en la nube entre dispositivos',
-          'Copilot global (próximamente)',
-          'Acceso a comunidad y marketplace',
+          'Sincronización ilimitada entre dispositivos',
+          '10 bots y 3 agentes',
+          'Copilot global',
+          'App Lock y seguridad de cuenta avanzada',
+          'Acceso a comunidad, reputación y marketplace',
         ],
       },
       {
@@ -1209,9 +1422,10 @@ export const es: SiteContent = {
         features: [
           '115.000 créditos cada mes',
           'Hasta 30 bots y 10 agentes',
-          'Un Copilot por espacio de trabajo',
-          'Segundo color de acento (gradiente)',
-          'Opciones de UI y apariencia exclusivas',
+          'Segundo color de acento (degradados)',
+          'Ocho patrones de lienzo, superficies de widget y cristal de panel más',
+          'Cargadores de arranque animados y tu avatar como marca de la cabecera',
+          'Un Copilot por espacio de trabajo (próximamente)',
         ],
       },
       {
@@ -1230,10 +1444,11 @@ export const es: SiteContent = {
         features: [
           '800.000 créditos cada mes',
           'Hasta 300 bots y 100 agentes',
-          'Conexiones a medida (Connector Builder)',
-          'Un Copilot por pantalla',
-          'Sube tu propio logo',
-          'Personalizaciones premium de UI',
+          'Dos patrones de lienzo y cargadores más, además de ajuste de aurora',
+          'Soporte prioritario para configuraciones complejas',
+          'Un Copilot por pantalla (próximamente)',
+          'Conexiones a medida con Connector Builder (próximamente)',
+          'Sube tu propio logo (próximamente)',
         ],
       },
       {
@@ -1331,11 +1546,11 @@ export const es: SiteContent = {
     faq: [
       {
         q: "¿Nexow es de verdad gratis?",
-        a: "Sí. Free es un workspace completo — pantallas, widgets y conectores ilimitados, biblioteca reutilizable, sync en la nube, 10 bots, 3 agentes, comunidad y reputación, más 10.000 créditos de IA reservados al registrarte. Los planes de pago suman créditos mensuales, cuotas más altas y apariencia premium — el núcleo no está bloqueado.",
+        a: "Sí. Free es un workspace completo — pantallas, widgets y conectores ilimitados, biblioteca reutilizable, sync en la nube, 10 bots, 3 agentes, comunidad y reputación, más 100.000 créditos de IA reservados al registrarte. Los planes de pago suman créditos mensuales, cuotas más altas y apariencia premium — el núcleo no está bloqueado.",
       },
       {
         q: "¿Qué son los créditos?",
-        a: "Los créditos miden el uso de IA: generar widgets, editarlos por conversación, crear links y usar Copilot. Un crédito equivale a un token de salida de Sonnet en coste de proveedor, así que el precio no depende del modelo que elijas — Haiku estira un crédito a unos 3 tokens; Opus lo usa en unos 0,6. Free reserva 10.000 al registrarte; Supporter da 115.000 al mes; Sponsor 800.000 — y puedes comprar packs en cualquier momento.",
+        a: "Los créditos miden el uso de IA: generar widgets, editarlos por conversación, crear links y usar Copilot. Un crédito equivale a un token de salida de Sonnet en coste de proveedor, así que el precio no depende del modelo que elijas — Haiku estira un crédito a unos 3 tokens; Opus lo usa en unos 0,6. Free reserva 100.000 al registrarte; Supporter da 115.000 al mes; Sponsor 800.000 — y puedes comprar packs en cualquier momento.",
       },
       {
         q: "¿Cuándo salen los planes de pago?",
@@ -1597,10 +1812,31 @@ export const es: SiteContent = {
       title: 'Qué hace la DAO con ellos',
       body: 'NXW no es una misión secundaria — es cómo se decide la hoja de ruta. Se gana construyendo y se gasta votando.',
       cards: [
-        { icon: 'lightbulb', title: 'Proponer', body: 'Propón funciones, conectores y reglas. Cualquiera con NXW puede llevar una idea a la votación.' },
-        { icon: 'vote', title: 'Votar', body: 'Votaciones públicas y transparentes deciden qué se construye y en qué orden.' },
-        { icon: 'vault', title: 'Tesorería', body: 'Una tesorería común financia las recompensas y becas que vota la comunidad.' },
-        { icon: 'gift', title: 'Recompensas', body: 'Quien construye se lleva una parte cuando la DAO publica y promociona su trabajo.' },
+        {
+          icon: 'vote',
+          title: 'Gobernanza',
+          body: 'Propón y vota. Cualquiera que tenga NXW puede llevar una idea a la votación.',
+        },
+        {
+          icon: 'vault',
+          title: 'Tesorería',
+          body: 'Una tesorería común financia bounties y becas que vota la comunidad.',
+        },
+        {
+          icon: 'coins',
+          title: 'Dividendos',
+          body: 'Quien tiene NXW se lleva una parte cuando la DAO reparte on-chain.',
+        },
+        {
+          icon: 'sparkles',
+          title: 'Comprar créditos',
+          body: 'Gasta NXW en generación con IA — combustible para el lienzo.',
+        },
+        {
+          icon: 'gift',
+          title: 'Recompensas aleatorias',
+          body: 'Drops sorpresa y pagos tipo lotería desde la DAO.',
+        },
       ],
     },
     credits: {
@@ -1804,9 +2040,10 @@ export const es: SiteContent = {
       ],
       message: '¿En qué podemos ayudarte?',
       submit: 'Enviar mensaje',
-      submitting: 'Abriendo el correo…',
-      success: 'Tu cliente de correo debería abrirse con el mensaje listo. Gracias por escribirnos.',
+      submitting: 'Enviando…',
+      success: 'Gracias, hemos recibido tu mensaje. Te responderemos por email.',
       error: 'Algo salió mal. Escríbenos directamente.',
+      fallback: 'No pudimos conectar con nuestros servidores, así que hemos abierto tu cliente de correo con el mensaje listo. Envíalo desde ahí.',
       invalid: 'Introduce un email válido y un mensaje breve.',
     },
     aside: {

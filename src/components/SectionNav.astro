@@ -67,13 +67,14 @@ const { sections, label = 'On this page' } = Astro.props;
   }
 
   .section-nav__label {
-    color: color-mix(in oklab, var(--color-ink-900) 42%, transparent);
+    /* 42% measured below AA on the page background; 68% keeps it recessive. */
+    color: color-mix(in oklab, var(--color-ink-900) 68%, transparent);
   }
   :global([dir='rtl']) .section-nav__label {
     text-align: start;
   }
   :global(.dark) .section-nav__label {
-    color: color-mix(in oklab, white 42%, transparent);
+    color: color-mix(in oklab, white 68%, transparent);
   }
 
   .section-nav__link:hover .section-nav__label,

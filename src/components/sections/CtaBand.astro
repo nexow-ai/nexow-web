@@ -14,6 +14,9 @@ interface Props {
   primary?: string;
   secondary?: string;
   secondaryHref?: string;
+  /** Trailing glyph on each CTA — `rocket` for the ones that open the app. */
+  primaryIcon?: string;
+  secondaryIcon?: string;
   /** Override the primary CTA target (defaults to the production app). */
   primaryHref?: string;
   /** Soft fireworks backdrop (used on the claim-@handle band). */
@@ -28,6 +31,8 @@ const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
 const primaryHref = Astro.props.primaryHref ?? SITE.appUrl;
 const fireworks = Astro.props.fireworks ?? false;
+const primaryIcon = Astro.props.primaryIcon ?? 'arrow';
+const secondaryIcon = Astro.props.secondaryIcon;
 const primaryExternal = primaryHref.startsWith('http') || primaryHref.startsWith('mailto');
 const secondaryExternal = secondaryHref.startsWith('http') || secondaryHref.startsWith('mailto');
 ---
@@ -43,17 +48,17 @@ const secondaryExternal = secondaryHref.startsWith('http') || secondaryHref.star
     ></div>
     <div
       class="aurora-a absolute left-1/2 top-1/2 size-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-3xl dark:opacity-40"
-      style="background:radial-gradient(circle, var(--color-brand-200), transparent 60%)"
+      style="background:radial-gradient(circle, var(--aurora-1), transparent 60%)"
     >
     </div>
     <div
       class="aurora-b absolute left-[28%] top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-35 blur-3xl dark:opacity-30"
-      style="background:radial-gradient(circle, var(--color-sky-200), transparent 60%)"
+      style="background:radial-gradient(circle, var(--aurora-3), transparent 60%)"
     >
     </div>
     <div
       class="aurora-c absolute right-[18%] top-[40%] size-[420px] rounded-full opacity-30 blur-3xl dark:opacity-25"
-      style="background:radial-gradient(circle, var(--color-accent-200), transparent 60%)"
+      style="background:radial-gradient(circle, var(--aurora-2), transparent 60%)"
     >
     </div>
     {fireworks && <ClaimFireworks />}
@@ -69,10 +74,16 @@ const secondaryExternal = secondaryHref.startsWith('http') || secondaryHref.star
       </h2>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{subtitle}</p>
       <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <Button href={primaryHref} size="lg" external={primaryExternal} iconRight="arrow">
+        <Button href={primaryHref} size="lg" external={primaryExternal} iconRight={primaryIcon}>
           {primary}
         </Button>
-        <Button href={secondaryHref} variant="secondary" size="lg" external={secondaryExternal}>
+        <Button
+          href={secondaryHref}
+          variant="secondary"
+          size="lg"
+          external={secondaryExternal}
+          iconRight={secondaryIcon}
+        >
           {secondary}
         </Button>
       </div>

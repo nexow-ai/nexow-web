@@ -46,9 +46,12 @@ vi.mock('node:child_process', () => ({
 let exitSpy: ReturnType<typeof vi.spyOn>;
 let logSpy: ReturnType<typeof vi.spyOn>;
 
+const ORIGINAL_ARGV = process.argv;
+
 /** Run the script, returning the exit code it asked for (or null if it ran to completion). */
-async function run(): Promise<number | undefined | null> {
+async function run(args: string[] = []): Promise<number | undefined | null> {
   vi.resetModules();
+  process.argv = ['node', 'ensure-content-store.mjs', ...args];
   try {
     await import('../../../scripts/ensure-content-store.mjs');
     return null;
@@ -74,6 +77,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  process.argv = ORIGINAL_ARGV;
   exitSpy.mockRestore();
   logSpy.mockRestore();
 });
@@ -158,5 +162,17 @@ describe('ensure-content-store', () => {
 
     expect(await run()).toBe(0);
     expect(copyFileSync).not.toHaveBeenCalled();
+  });
+
+  it('refreshes the dev store from the build store when --force is set', async () => {
+    files.set(DEV_STORE, 10);
+    files.set(PROD_STORE, 20);
+
+    expect(await run(['--force'])).toBeNull();
+    expect(spawnSync).not.toHaveBeenCalled();
+    expect(copyFileSync).toHaveBeenCalledWith(PROD_STORE, DEV_STORE);
+    expect(logSpy).toHaveBeenCalledWith(
+      '[content] Refreshed .astro/data-store.json from sync output.',
+    );
   });
 });

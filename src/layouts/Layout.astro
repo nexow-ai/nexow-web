@@ -6,10 +6,12 @@ import ScrollMotion from '../components/ScrollMotion.astro';
 import DotField from '../components/DotField.astro';
 import TextAppear from '../components/TextAppear.astro';
 import SectionNav from '../components/SectionNav.astro';
-import { ClientRouter, fade } from 'astro:transitions';
+import PageNav from '../components/PageNav.astro';
+import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
 import { getPageAccent } from '../i18n/accent';
 import { dir } from '../i18n/utils';
+import { slidePages } from '../lib/pageTransition';
 
 interface Props {
   title: string;
@@ -33,7 +35,6 @@ interface Props {
 
 const { lang, theme, route, sections, sectionNavLabel, ...head } = Astro.props;
 const accent = getPageAccent(route);
-const mainFade = fade({ duration: '0.32s' });
 const themeLocked = theme === 'light' || theme === 'dark';
 
 ---
@@ -91,14 +92,31 @@ const themeLocked = theme === 'light' || theme === 'dark';
       )
     }
 
-    <main id="main" class="relative z-10" transition:animate={mainFade}>
+    <main id="main" class="relative z-10" transition:animate={slidePages}>
       <slot />
     </main>
 
     <Footer />
 
+    <PageNav />
+
     <ScrollMotion />
     <TextAppear />
+
+    <script>
+      // Which way the page slides. Astro would use history direction, which
+      // sends every link — the "previous page" arrow included — the same way;
+      // position in the tour is what the motion should mirror instead.
+      import { slideDirection } from '../lib/pageTransition';
+      import { getRouteFromUrl } from '../i18n/utils';
+
+      document.addEventListener('astro:before-preparation', (event) => {
+        event.direction = slideDirection(
+          getRouteFromUrl(event.from),
+          getRouteFromUrl(event.to),
+        );
+      });
+    </script>
 
     <script>
       // Scroll-reveal: re-init after client-side navigations (view transitions).
