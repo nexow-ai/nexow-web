@@ -71,7 +71,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <defs>
       <pattern id="fma-grid" width="26" height="26" patternUnits="userSpaceOnUse">
         <path d="M26 0H0v26" stroke="var(--fma-line)" stroke-width="1" fill="none"></path>
@@ -138,7 +139,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-rise">
       <rect class="fma-panel" x="24" y="20" width="272" height="36" rx="12"></rect>
       <g transform="translate(38 30) scale(0.66)" stroke="var(--fma-brand)" stroke-width="2" fill="none">
@@ -177,7 +179,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <defs>
       <clipPath id="fma-shelf-clip">
         <rect x="0" y="0" width="320" height="200" rx="12"></rect>
@@ -234,7 +237,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-rise">
       <rect class="fma-panel" x="20" y="14" width="128" height="28" rx="10"></rect>
       <g transform="translate(31 21) scale(0.6)" stroke="var(--fma-brand)" stroke-width="2.4" fill="none">
@@ -292,7 +296,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-spin" style="transform-origin:100px 100px;--dur:26s">
       <circle cx="100" cy="100" r="66" stroke="var(--fma-line)" stroke-width="1.2" stroke-dasharray="4 8"></circle>
     </g>
@@ -350,7 +355,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-slide-left">
       <rect x="140" y="16" width="164" height="38" rx="12" fill="var(--fma-soft)" stroke="var(--fma-brand)" stroke-width="1.1"></rect>
       <rect class="fma-bar" x="154" y="27" width="120" height="6" rx="3"></rect>
@@ -402,7 +408,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     {spokes.map((s) => (
       <path
         class="fma-flow"
@@ -443,7 +450,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <circle cx="92" cy="100" r="60" fill="var(--fma-soft)" opacity="0.5"></circle>
     <g class="fma-spin" style="transform-origin:92px 100px;--dur:24s">
       <circle cx="92" cy="100" r="60" stroke="var(--fma-brand)" stroke-width="1.3"></circle>
@@ -477,7 +485,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     {links.map(([a, b], i) => (
       <path
         class="fma-draw"
@@ -524,7 +533,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     {[0, 2].map((n, idx) => (
       <g class="fma-rise" style={`--d:${0.1 + idx * 0.1}s`}>
         <rect class="fma-panel" x={20 + n * 96} y="46" width="84" height="112" rx="12" />
@@ -566,7 +576,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     {[0, 1, 2].map((n) => (
       <g class="fma-rise" style={`--d:${n * 0.1}s`}>
         <rect
@@ -620,7 +631,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <rect x="20" y="34" width="132" height="132" rx="16" fill="var(--fma-panel-solid)" stroke="var(--fma-line)" stroke-width="1.2"></rect>
     <circle cx="86" cy="100" r="46" fill="var(--fma-soft)" opacity="0.6"></circle>
     <circle cx="86" cy="100" r="46" stroke="var(--fma-line)" stroke-width="1.2"></circle>
@@ -669,7 +681,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <circle cx="104" cy="100" r="62" fill="var(--fma-soft)" opacity="0.5"></circle>
     <g class="fma-spin" style="transform-origin:104px 100px;--dur:14s">
       <path d="M104 38a62 62 0 010 124z" fill="var(--fma-brand)" opacity="0.85"></path>
@@ -702,7 +715,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-spin" style="transform-origin:270px 44px;--dur:6s">
       <g transform="translate(258 32) scale(1)" stroke="var(--fma-brand)" stroke-width="1.7" fill="none">
         <path d={ICON_PATHS.sync}></path>
@@ -745,7 +759,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <defs>
       <clipPath id="fma-toolbar-clip">
         <rect x="18" y="72" width="284" height="56" rx="16"></rect>
@@ -797,7 +812,8 @@ const swatches = [
     fill="none"
     stroke-linecap="round"
     stroke-linejoin="round"
-  >
+    aria-hidden="true"
+    >
     <g class="fma-rise-up">
       <rect class="fma-panel" x="86" y="20" width="148" height="98" rx="14"></rect>
       <rect class="fma-brandbar" x="100" y="34" width="42" height="7" rx="3.5"></rect>

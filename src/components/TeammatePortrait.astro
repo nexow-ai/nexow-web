@@ -1,0 +1,1020 @@
+---
+/**
+ * The two teammates, drawn large — hero art for the Bots & Agents cards.
+ *
+ * Both portraits share one 320×200 viewBox, one stroke language and one
+ * token-derived palette, so the pair reads as a set and flips light/dark with
+ * no per-theme markup. They are drawn here rather than imported as assets
+ * because the art has to repaint with `--color-brand-*` (the per-page accent
+ * remap), which a flat file cannot do.
+ *
+ * The two characters are deliberately built on different clocks, because that
+ * is the whole distinction the section is making:
+ *
+ *   bot   — one `--cycle` clock. Radar sweeps, the watched line climbs into its
+ *           threshold, and on the crossing the whole body fires at once: visor
+ *           flash, shock rings, three delivery wires lit in sequence. Same
+ *           input, same output, every cycle.
+ *   agent — never "fires". It floats, thinks across a small node graph behind
+ *           its dome, writes to memory, and keeps six harness tools in orbit —
+ *           motion that has no beginning or end because the loop is the point.
+ *
+ * Loops park on `.is-offscreen` (ScrollMotion owns it) and freeze on a legible
+ * frame under `prefers-reduced-motion`.
+ *
+ * Every keyframe here is prefixed `tp-`: Astro scopes selectors but *not*
+ * `@keyframes` names, so a plain `float` or `meter` would collide with the one
+ * in `global.css` / `UseCaseScene` further down the same page bundle.
+ */
+import { ICON_PATHS } from './icon-paths';
+
+interface Props {
+  kind: 'bot' | 'agent';
+  class?: string;
+}
+const { kind, class: className = '' } = Astro.props;
+
+/** Gradients, patterns and clips are per-instance — two portraits share a page. */
+const uid = `tp-${kind}-${Math.random().toString(36).slice(2, 7)}`;
+
+/** `translate/scale` that centres a 24×24 icon path on a point. */
+const glyph = (x: number, y: number, scale: number) =>
+  `translate(${x} ${y}) scale(${scale}) translate(-12 -12)`;
+
+/* ── bot ─────────────────────────────────────────────────────────────────── */
+/** Where a fired signal lands: widget bus, alert inbox, webhook. */
+const DELIVERIES = [
+  { icon: 'layers', cy: 66 },
+  { icon: 'bell', cy: 100 },
+  { icon: 'link', cy: 134 },
+];
+/** Right ear → delivery chip. */
+const fireWire = (cy: number) => `M208 94 C 219 94, 223 ${cy}, 234 ${cy}`;
+
+/* ── agent ───────────────────────────────────────────────────────────────── */
+/** The harness, in orbit: model, memory, skills, tools, knowledge, triggers. */
+const TOOLS = ['cpu', 'database', 'wand', 'sliders', 'library', 'bolt'];
+/** Seconds for one turn — must match the `.tool` animation's duration. */
+const ORBIT_DUR = 26;
+/**
+ * Slot angle on the ring. The 30° offset is what a *stopped* ring parks on:
+ * on the six-fold positions the two lower tools land on the agent's arms, and
+ * reduced motion would freeze them there. The negative delay phases each disc
+ * to the same angle, so the moving and the still ring agree.
+ */
+const toolAngle = (i: number) => i * (360 / TOOLS.length) + 30;
+/** The reasoning graph behind the dome — five nodes, six edges. */
+const NODES = [
+  { x: 140, y: 92 },
+  { x: 158, y: 72 },
+  { x: 181, y: 86 },
+  { x: 146, y: 102 },
+  { x: 174, y: 102 },
+];
+const EDGES = [
+  [0, 1],
+  [1, 2],
+  [0, 3],
+  [3, 4],
+  [4, 2],
+  [1, 4],
+];
+/** Order the thought travels the graph, as a delay per node. */
+const FIRE_ORDER = [0, 1, 2, 4, 3];
+---
+
+<div class:list={['portrait', `portrait--${kind}`, className]} aria-hidden="true">
+  <svg class="portrait-svg" viewBox="0 0 320 200" fill="none" aria-hidden="true">
+    <defs>
+      <radialGradient id={`${uid}-glow`} cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.5"></stop>
+        <stop offset="55%" stop-color="var(--color-brand-400)" stop-opacity="0.16"></stop>
+        <stop offset="100%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id={`${uid}-fade`} cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="white" stop-opacity="0.9"></stop>
+        <stop offset="62%" stop-color="white" stop-opacity="0.25"></stop>
+        <stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+      </radialGradient>
+      <pattern id={`${uid}-dots`} width="13" height="13" patternUnits="userSpaceOnUse">
+        <circle class="dot" cx="1.5" cy="1.5" r="1"></circle>
+      </pattern>
+      <mask id={`${uid}-mask`}>
+        <rect x="0" y="0" width="320" height="200" fill={`url(#${uid}-fade)`}></rect>
+      </mask>
+
+      {
+        kind === 'bot' && (
+          <>
+            <radialGradient id={`${uid}-sweep`} gradientUnits="userSpaceOnUse" cx="160" cy="96" r="64">
+              <stop offset="35%" stop-color="var(--color-brand-400)" stop-opacity="0.05" />
+              <stop offset="78%" stop-color="var(--color-brand-400)" stop-opacity="0.42" />
+              <stop offset="100%" stop-color="var(--color-brand-300)" stop-opacity="0" />
+            </radialGradient>
+            <clipPath id={`${uid}-visor`}>
+              <rect x="134" y="76" width="52" height="28" rx="12" />
+            </clipPath>
+          </>
+        )
+      }
+      {
+        kind === 'agent' && (
+          <>
+            <linearGradient id={`${uid}-dome`} x1="0" y1="0" x2="0.4" y2="1">
+              <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0.28" />
+              <stop offset="60%" stop-color="var(--color-sky-300)" stop-opacity="0.1" />
+              <stop offset="100%" stop-color="var(--color-accent-400)" stop-opacity="0.16" />
+            </linearGradient>
+            <clipPath id={`${uid}-dome-clip`}>
+              <path d="M120 124V98a40 40 0 0 1 80 0v26a12 12 0 0 1-12 12h-56a12 12 0 0 1-12-12z" />
+            </clipPath>
+          </>
+        )
+      }
+    </defs>
+
+    <!-- ── shared backdrop: glow, dot field ─────────────────────────────── -->
+    <ellipse class="glow" cx="160" cy="98" rx="104" ry="80" fill={`url(#${uid}-glow)`}></ellipse>
+    <rect
+      x="0"
+      y="0"
+      width="320"
+      height="200"
+      fill={`url(#${uid}-dots)`}
+      mask={`url(#${uid}-mask)`}></rect>
+
+    {
+      kind === 'bot' && (
+        <>
+          {/* radar: two guide rings and a sweep that never stops looking */}
+          <circle class="ring" cx="160" cy="96" r="64" />
+          <circle class="ring ring--in" cx="160" cy="96" r="50" />
+          <g class="sweep-spin">
+            <path
+              class="sweep"
+              d="M160 96 213.1 60.2A64 64 0 0 1 213.1 131.8Z"
+              fill={`url(#${uid}-sweep)`}
+            />
+          </g>
+          {/* the shock rings the fire pushes out */}
+          {[0, 1].map((i) => (
+            <circle class="shock" cx="160" cy="96" r="52" style={`--delay:${(i * 0.34).toFixed(2)}s`} />
+          ))}
+
+          {/* the watched source */}
+          <g class="scope">
+            <rect class="panel" x="6" y="62" width="80" height="60" rx="12" />
+            <path class="hair" d="M6 77h80" />
+            {[16, 22.5, 29].map((x) => (
+              <circle class="dot-lit" cx={x} cy="69.5" r="1.6" />
+            ))}
+            <path class="thresh" d="M14 96h64" />
+            <path
+              class="trace"
+              d="M14 114 26 108 36 110 48 100 58 104 68 92 78 84"
+              pathLength="100"
+            />
+            <circle class="cross" cx="78" cy="84" r="3.6" />
+          </g>
+
+          {/* source → bot, always flowing: the watcher is never idle */}
+          <path class="wire" d="M86 92C98 92 100 94 112 94" />
+          <path class="feed" d="M86 92C98 92 100 94 112 94" pathLength="100" />
+
+          {/* deliveries */}
+          {DELIVERIES.map((d, i) => (
+            <>
+              <path class="wire" d={fireWire(d.cy)} />
+              <path
+                class="fire"
+                d={fireWire(d.cy)}
+                pathLength="100"
+                style={`--delay:${(i * 0.14).toFixed(2)}s`}
+              />
+              <g class="drop" style={`--delay:${(i * 0.14).toFixed(2)}s`}>
+                <rect class="chip" x="234" y={d.cy - 12} width="78" height="24" rx="9" />
+                <circle class="chip-disc" cx="248" cy={d.cy} r="8" />
+                <path class="chip-glyph" d={ICON_PATHS[d.icon]} transform={glyph(248, d.cy, 0.44)} />
+                <rect class="bar" x="262" y={d.cy - 5} width="36" height="3.5" rx="1.75" />
+                <rect class="bar bar--dim" x="262" y={d.cy + 1.5} width="22" height="3.5" rx="1.75" />
+              </g>
+            </>
+          ))}
+
+          {/* the bot itself */}
+          <g class="body">
+            <ellipse class="shade" cx="160" cy="169" rx="42" ry="6" />
+            <path class="stem" d="M160 64V49" />
+            <circle class="bulb" cx="160" cy="44" r="5" />
+            <rect class="pod" x="112" y="82" width="10" height="24" rx="5" />
+            <rect class="pod" x="198" y="82" width="10" height="24" rx="5" />
+            <rect class="shell" x="124" y="64" width="72" height="64" rx="20" />
+            <rect class="visor" x="134" y="76" width="52" height="28" rx="12" />
+            <g clip-path={`url(#${uid}-visor)`}>
+              <rect class="scan" x="130" y="76" width="9" height="28" />
+              <circle class="eye" cx="148" cy="90" r="5" />
+              <circle class="eye" cx="172" cy="90" r="5" />
+            </g>
+            <rect class="track" x="142" y="112" width="36" height="6" rx="3" />
+            <rect class="meter" x="142" y="112" width="36" height="6" rx="3" />
+            <rect class="neck" x="150" y="126" width="20" height="12" rx="4" />
+            <rect class="shell" x="130" y="136" width="60" height="26" rx="13" />
+            <path class="chest" d={ICON_PATHS.bolt} transform={glyph(160, 149, 0.62)} />
+          </g>
+        </>
+      )
+    }
+
+    {
+      kind === 'agent' && (
+        <>
+          {/* the harness ring, and the loop the thinking runs on */}
+          <circle class="ring ring--orbit" cx="160" cy="100" r="84" />
+          <circle class="ring ring--loop" cx="160" cy="100" r="52" />
+
+          <g class="float">
+            {/* frame */}
+            <rect class="pod" x="115" y="145" width="10" height="19" rx="5" />
+            <rect class="pod" x="195" y="145" width="10" height="19" rx="5" />
+            <rect class="neck" x="150" y="126" width="20" height="16" rx="4" />
+            <rect class="shell" x="128" y="142" width="64" height="26" rx="13" />
+            {/* memory: written on every run, and kept */}
+            {[0, 1, 2].map((i) => (
+              <>
+                <rect class="cell" x={142 + i * 14} y="151" width="10" height="8" rx="2" />
+                <rect
+                  class="cell cell--lit"
+                  x={142 + i * 14}
+                  y="151"
+                  width="10"
+                  height="8"
+                  rx="2"
+                  style={`--delay:${(i * 0.5).toFixed(2)}s`}
+                />
+              </>
+            ))}
+
+            {/* dome */}
+            <path
+              class="dome"
+              d="M120 124V98a40 40 0 0 1 80 0v26a12 12 0 0 1-12 12h-56a12 12 0 0 1-12-12z"
+              fill={`url(#${uid}-dome)`}
+            />
+
+            {/* what it is thinking */}
+            <g clip-path={`url(#${uid}-dome-clip)`}>
+              {EDGES.map(([a, b], i) => {
+                const d = `M${NODES[a].x} ${NODES[a].y} ${NODES[b].x} ${NODES[b].y}`;
+                return (
+                  <>
+                    <path class="edge" d={d} />
+                    <path
+                      class="think"
+                      d={d}
+                      pathLength="100"
+                      style={`--delay:${(i * 0.42).toFixed(2)}s`}
+                    />
+                  </>
+                );
+              })}
+              {NODES.map((n, i) => (
+                <circle
+                  class="node"
+                  cx={n.x}
+                  cy={n.y}
+                  r={i === 1 ? 6 : 5}
+                  style={`--delay:${(FIRE_ORDER.indexOf(i) * 0.44).toFixed(2)}s`}
+                />
+              ))}
+            </g>
+
+            {/* face */}
+            <rect class="visor" x="132" y="110" width="56" height="22" rx="11" />
+            <g class="look">
+              <circle class="eye" cx="147" cy="121" r="4.5" />
+              <circle class="eye" cx="173" cy="121" r="4.5" />
+            </g>
+          </g>
+
+          {/* the harness, in orbit — discs turn with the ring, glyphs stay upright */}
+          {TOOLS.map((t, i) => (
+            <g
+              class="tool"
+              style={`--a:${toolAngle(i)}deg;--delay:${((-toolAngle(i) / 360) * ORBIT_DUR).toFixed(2)}s`}
+            >
+              <circle class="tool-disc" cx="160" cy="100" r="13" />
+              <path class="tool-glyph" d={ICON_PATHS[t]} transform={glyph(160, 100, 0.62)} />
+            </g>
+          ))}
+
+          {[
+            { x: 62, y: 44, s: 5 },
+            { x: 258, y: 152, s: 4 },
+          ].map((sp, i) => (
+            <path
+              class="spark"
+              d={`M${sp.x} ${sp.y - sp.s}L${sp.x + sp.s * 0.34} ${sp.y - sp.s * 0.34} ${sp.x + sp.s} ${sp.y} ${sp.x + sp.s * 0.34} ${sp.y + sp.s * 0.34} ${sp.x} ${sp.y + sp.s} ${sp.x - sp.s * 0.34} ${sp.y + sp.s * 0.34} ${sp.x - sp.s} ${sp.y} ${sp.x - sp.s * 0.34} ${sp.y - sp.s * 0.34}Z`}
+              style={`--delay:${(i * 1.1).toFixed(2)}s`}
+            />
+          ))}
+        </>
+      )
+    }
+  </svg>
+</div>
+
+<style>
+  .portrait {
+    /* One clock for the bot's whole watch → fire cycle. */
+    --cycle: 6.6s;
+  }
+  .portrait-svg {
+    display: block;
+    height: auto;
+    width: 100%;
+    overflow: visible;
+  }
+
+  /* ── shared surfaces ──────────────────────────────────────────────────── */
+  .glow {
+    animation: tp-breathe 7s ease-in-out infinite;
+    transform-box: view-box;
+    transform-origin: 160px 98px;
+  }
+  @keyframes tp-breathe {
+    0%,
+    100% {
+      opacity: 0.75;
+      transform: scale(0.96);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+  .dot {
+    fill: color-mix(in oklab, var(--color-brand-600) 26%, transparent);
+  }
+  :global(.dark) .dot {
+    fill: color-mix(in oklab, var(--color-brand-300) 26%, transparent);
+  }
+
+  .ring {
+    stroke: color-mix(in oklab, var(--color-brand-500) 26%, transparent);
+    stroke-width: 1.1;
+    stroke-dasharray: 2 7;
+    transform-box: view-box;
+  }
+  :global(.dark) .ring {
+    stroke: color-mix(in oklab, var(--color-brand-300) 32%, transparent);
+  }
+
+  /* Shell = the machine's own casing: surface-filled so it is a white robot on
+   * white and a glass one lit by its own outline on ink. */
+  .shell,
+  .pod,
+  .neck,
+  .panel,
+  .chip,
+  .tool-disc {
+    fill: var(--surface);
+    stroke: color-mix(in oklab, var(--color-brand-600) 38%, transparent);
+    stroke-width: 1.4;
+  }
+  :global(.dark) .shell,
+  :global(.dark) .pod,
+  :global(.dark) .neck,
+  :global(.dark) .panel,
+  :global(.dark) .chip,
+  :global(.dark) .tool-disc {
+    fill: color-mix(in oklab, var(--color-ink-900) 72%, transparent);
+    stroke: color-mix(in oklab, var(--color-brand-300) 55%, transparent);
+    stroke-width: 1.6;
+  }
+  .neck {
+    fill: color-mix(in oklab, var(--color-brand-500) 12%, var(--surface));
+  }
+  :global(.dark) .neck {
+    fill: color-mix(in oklab, var(--color-brand-400) 18%, var(--color-ink-900));
+  }
+  .shade {
+    fill: color-mix(in oklab, var(--color-ink-950) 12%, transparent);
+    filter: blur(3px);
+  }
+  :global(.dark) .shade {
+    fill: color-mix(in oklab, black 45%, transparent);
+  }
+
+  /* Visor: a lit screen in both themes — this is where the machine "shows". */
+  .visor {
+    fill: color-mix(in oklab, var(--color-ink-950) 92%, transparent);
+    stroke: color-mix(in oklab, var(--color-brand-500) 45%, transparent);
+    stroke-width: 1.2;
+  }
+  :global(.dark) .visor {
+    fill: color-mix(in oklab, var(--color-brand-950) 88%, black);
+    stroke: color-mix(in oklab, var(--color-brand-300) 60%, transparent);
+  }
+  .eye {
+    fill: var(--color-brand-300);
+    filter: drop-shadow(0 0 4px color-mix(in oklab, var(--color-brand-400) 85%, transparent));
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .bar {
+    fill: color-mix(in oklab, var(--color-ink-900) 16%, transparent);
+  }
+  .bar--dim {
+    fill: color-mix(in oklab, var(--color-ink-900) 9%, transparent);
+  }
+  :global(.dark) .bar {
+    fill: color-mix(in oklab, white 26%, transparent);
+  }
+  :global(.dark) .bar--dim {
+    fill: color-mix(in oklab, white 14%, transparent);
+  }
+
+  .chip-disc {
+    fill: color-mix(in oklab, var(--color-brand-500) 12%, var(--surface));
+  }
+  :global(.dark) .chip-disc {
+    fill: color-mix(in oklab, var(--color-brand-400) 24%, transparent);
+  }
+  .chip-glyph,
+  .tool-glyph,
+  .chest {
+    stroke: var(--color-brand-700);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  :global(.dark) .chip-glyph,
+  :global(.dark) .tool-glyph,
+  :global(.dark) .chest {
+    stroke: var(--color-brand-300);
+  }
+  .wire {
+    stroke: color-mix(in oklab, var(--color-brand-600) 28%, transparent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  :global(.dark) .wire {
+    stroke: color-mix(in oklab, var(--color-brand-300) 34%, transparent);
+  }
+
+  /* ── bot ──────────────────────────────────────────────────────────────── */
+  .ring--in {
+    stroke-dasharray: 1 6;
+    opacity: 0.7;
+  }
+  .sweep-spin {
+    transform-box: view-box;
+    transform-origin: 160px 96px;
+    animation: tp-spin 7s linear infinite;
+  }
+  @keyframes tp-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  /* Shock rings: pushed out of the machine the moment it fires, gone before the
+   * next sweep comes round. */
+  .shock {
+    fill: none;
+    stroke: var(--color-brand-400);
+    stroke-width: 1.6;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tp-shock var(--cycle) var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tp-shock {
+    0%,
+    46% {
+      opacity: 0;
+      transform: scale(0.62);
+    }
+    50% {
+      opacity: 0.55;
+    }
+    74%,
+    100% {
+      opacity: 0;
+      transform: scale(1.24);
+    }
+  }
+
+  .hair {
+    stroke: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    stroke-width: 1;
+  }
+  :global(.dark) .hair {
+    stroke: color-mix(in oklab, white 12%, transparent);
+  }
+  .dot-lit {
+    fill: color-mix(in oklab, var(--color-brand-500) 55%, transparent);
+  }
+  .thresh {
+    stroke: var(--color-accent-500);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+    opacity: 0.65;
+  }
+  :global(.dark) .thresh {
+    /* Indigo at full strength is the only cold thing on a teal card; mixed
+     * back it still reads as "a different kind of line". */
+    stroke: color-mix(in oklab, var(--color-accent-300) 62%, transparent);
+  }
+  /* The watched line climbs, crosses, holds while the signal fans out, resets. */
+  .trace {
+    stroke: var(--color-brand-500);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    animation: tp-trace var(--cycle) linear infinite;
+  }
+  :global(.dark) .trace {
+    stroke: var(--color-brand-300);
+  }
+  /* The reset is a fade, not a jump: the line is already invisible by the time
+   * the dash offset snaps back for the next climb. */
+  @keyframes tp-trace {
+    0% {
+      stroke-dashoffset: 100;
+      opacity: 1;
+    }
+    46%,
+    84% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    94%,
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+  .cross {
+    fill: var(--color-brand-500);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tp-cross var(--cycle) var(--ease-out-expo) infinite;
+  }
+  :global(.dark) .cross {
+    fill: var(--color-brand-300);
+  }
+  @keyframes tp-cross {
+    0%,
+    44% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+    58%,
+    86% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+  }
+
+  .feed {
+    stroke: var(--color-brand-500);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 6 94;
+    animation: tp-run 2.4s linear infinite;
+  }
+  :global(.dark) .feed {
+    stroke: var(--color-brand-300);
+  }
+  @keyframes tp-run {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  /* Nothing leaves the bot until the condition is true. */
+  .fire {
+    stroke: var(--color-brand-500);
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-dasharray: 10 90;
+    filter: drop-shadow(0 0 4px color-mix(in oklab, var(--color-brand-400) 70%, transparent));
+    animation: tp-fire var(--cycle) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  :global(.dark) .fire {
+    stroke: var(--color-brand-300);
+  }
+  @keyframes tp-fire {
+    0%,
+    48% {
+      stroke-dashoffset: 100;
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    74% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    76%,
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+  .drop .chip {
+    animation: tp-drop-lit var(--cycle) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tp-drop-lit {
+    0%,
+    62%,
+    100% {
+      stroke: color-mix(in oklab, var(--color-brand-600) 26%, transparent);
+    }
+    70%,
+    88% {
+      stroke: var(--color-brand-500);
+    }
+  }
+  .drop {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: tp-drop-nudge var(--cycle) var(--ease-out-expo) infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tp-drop-nudge {
+    0%,
+    66%,
+    100% {
+      transform: translateX(0);
+    }
+    72%,
+    86% {
+      transform: translateX(4px);
+    }
+  }
+
+  .stem {
+    stroke: color-mix(in oklab, var(--color-brand-600) 42%, transparent);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+  }
+  :global(.dark) .stem {
+    stroke: color-mix(in oklab, var(--color-brand-300) 55%, transparent);
+  }
+  .bulb {
+    fill: var(--color-brand-400);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tp-bulb var(--cycle) ease-out infinite;
+  }
+  @keyframes tp-bulb {
+    0%,
+    44% {
+      opacity: 0.45;
+      transform: scale(0.86);
+      filter: none;
+    }
+    50%,
+    72% {
+      opacity: 1;
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 7px color-mix(in oklab, var(--color-brand-400) 90%, transparent));
+    }
+    88%,
+    100% {
+      opacity: 0.45;
+      transform: scale(0.86);
+      filter: none;
+    }
+  }
+  /* Visor sweep: the screen refreshing while it watches. */
+  .scan {
+    fill: color-mix(in oklab, var(--color-brand-300) 22%, transparent);
+    animation: tp-scan 3.4s ease-in-out infinite;
+  }
+  @keyframes tp-scan {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(56px);
+    }
+  }
+  .portrait--bot .eye {
+    animation:
+      tp-blink 4.2s ease-in-out infinite,
+      tp-eye-fire var(--cycle) ease-out infinite;
+  }
+  @keyframes tp-blink {
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    95% {
+      transform: scaleY(0.12);
+    }
+  }
+  @keyframes tp-eye-fire {
+    0%,
+    46% {
+      fill: var(--color-brand-300);
+    }
+    52%,
+    72% {
+      fill: white;
+    }
+    82%,
+    100% {
+      fill: var(--color-brand-300);
+    }
+  }
+  .track {
+    fill: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+  }
+  :global(.dark) .track {
+    fill: color-mix(in oklab, white 14%, transparent);
+  }
+  .meter {
+    fill: var(--color-brand-500);
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: tp-meter var(--cycle) var(--ease-out-expo) infinite;
+  }
+  @keyframes tp-meter {
+    0% {
+      transform: scaleX(0.12);
+    }
+    46%,
+    86% {
+      transform: scaleX(1);
+    }
+    92%,
+    100% {
+      transform: scaleX(0.12);
+    }
+  }
+  .chest {
+    stroke-width: 2.2;
+    animation: tp-chest var(--cycle) ease-out infinite;
+  }
+  @keyframes tp-chest {
+    0%,
+    46% {
+      opacity: 0.3;
+    }
+    52%,
+    76% {
+      opacity: 1;
+    }
+    86%,
+    100% {
+      opacity: 0.3;
+    }
+  }
+
+  /* ── agent ────────────────────────────────────────────────────────────── */
+  .ring--orbit {
+    stroke-dasharray: 3 9;
+    transform-origin: 160px 100px;
+    animation: tp-spin 60s linear infinite;
+  }
+  .ring--loop {
+    stroke: color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+    stroke-dasharray: 30 14;
+    transform-origin: 160px 100px;
+    animation: tp-spin 14s linear infinite reverse;
+  }
+  :global(.dark) .ring--loop {
+    stroke: color-mix(in oklab, var(--color-brand-300) 48%, transparent);
+  }
+  /* The agent never touches the ground — it is running somewhere else. */
+  .float {
+    transform-box: view-box;
+    transform-origin: 160px 100px;
+    animation: tp-float 6s ease-in-out infinite;
+  }
+  @keyframes tp-float {
+    0%,
+    100% {
+      transform: translateY(2.5px);
+    }
+    50% {
+      transform: translateY(-2.5px);
+    }
+  }
+  .dome {
+    stroke: color-mix(in oklab, var(--color-brand-600) 45%, transparent);
+    stroke-width: 1.5;
+  }
+  :global(.dark) .dome {
+    stroke: color-mix(in oklab, var(--color-brand-300) 60%, transparent);
+    stroke-width: 1.7;
+  }
+  .edge {
+    stroke: color-mix(in oklab, var(--color-brand-600) 30%, transparent);
+    stroke-width: 1.1;
+  }
+  :global(.dark) .edge {
+    stroke: color-mix(in oklab, var(--color-brand-300) 34%, transparent);
+  }
+  .think {
+    stroke: var(--color-brand-500);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-dasharray: 14 86;
+    animation: tp-run 2.6s linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  :global(.dark) .think {
+    stroke: var(--color-brand-300);
+  }
+  .node {
+    fill: color-mix(in oklab, var(--color-brand-500) 18%, var(--surface));
+    stroke: color-mix(in oklab, var(--color-brand-600) 50%, transparent);
+    stroke-width: 1.2;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: tp-node 2.2s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  :global(.dark) .node {
+    fill: color-mix(in oklab, var(--color-brand-400) 26%, transparent);
+    stroke: color-mix(in oklab, var(--color-brand-300) 60%, transparent);
+  }
+  @keyframes tp-node {
+    0%,
+    60%,
+    100% {
+      transform: scale(1);
+      fill: color-mix(in oklab, var(--color-brand-500) 18%, var(--surface));
+    }
+    18% {
+      transform: scale(1.22);
+      fill: var(--color-brand-400);
+    }
+  }
+  .cell {
+    fill: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+  }
+  :global(.dark) .cell {
+    fill: color-mix(in oklab, white 14%, transparent);
+  }
+  /* Memory fills run by run and holds — that is the whole point of it. */
+  .cell--lit {
+    fill: var(--color-brand-500);
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: tp-cell 7.5s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  /* Spelled out, because `.dark .cell` out-specifies a bare `.cell--lit` and
+   * the lit cell would otherwise stay the colour of the track it fills. */
+  :global(.dark) .cell--lit {
+    fill: var(--color-brand-400);
+  }
+  @keyframes tp-cell {
+    0%,
+    6% {
+      transform: scaleY(0);
+    }
+    18%,
+    88% {
+      transform: scaleY(1);
+    }
+    96%,
+    100% {
+      transform: scaleY(0);
+    }
+  }
+  .portrait--agent .eye {
+    animation: tp-blink 5.4s ease-in-out infinite;
+  }
+  /* Eyes drift the way something reading does. */
+  .look {
+    animation: tp-look 6.5s ease-in-out infinite;
+  }
+  @keyframes tp-look {
+    0%,
+    22%,
+    100% {
+      transform: translateX(-1.6px);
+    }
+    38%,
+    62% {
+      transform: translateX(1.8px);
+    }
+    78% {
+      transform: translateX(0);
+    }
+  }
+
+  /* Orbit: `rotate → translate → counter-rotate`, so the disc travels the ring
+   * while its glyph stays upright. The starting angle is a negative delay. */
+  .tool {
+    transform-box: view-box;
+    transform-origin: 160px 100px;
+    /* The still pose, for reduced motion and for the first frame: the same
+     * expression the keyframes use, parked at this disc's slot on the ring. */
+    transform: rotate(var(--a, 0deg)) translateX(84px) rotate(calc(-1 * var(--a, 0deg)));
+    animation: tp-orbit 26s linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tp-orbit {
+    from {
+      transform: rotate(0deg) translateX(84px) rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg) translateX(84px) rotate(-360deg);
+    }
+  }
+  .tool-disc {
+    stroke-width: 1.3;
+  }
+  .tool-glyph {
+    stroke-width: 2.2;
+  }
+  .spark {
+    fill: var(--color-brand-400);
+    animation: tp-twinkle 3.6s ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes tp-twinkle {
+    0%,
+    100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.95;
+    }
+  }
+
+  /* ── hover: the card leans in ─────────────────────────────────────────────
+   * Only `translate` and `scale` — retiming a running loop makes it jump,
+   * since a duration change re-reads elapsed time against the new period. */
+  .portrait-svg {
+    transition: scale 0.6s var(--ease-out-expo);
+  }
+  .body,
+  .float {
+    transition: translate 0.6s var(--ease-out-expo);
+  }
+  :global(.kind-card:hover) .portrait-svg {
+    scale: 1.03;
+  }
+  :global(.kind-card:hover) .body,
+  :global(.kind-card:hover) .float {
+    translate: 0 -4px;
+  }
+
+  /* ── budget ───────────────────────────────────────────────────────────── */
+  :global(.is-offscreen) .portrait-svg * {
+    animation-play-state: paused;
+  }
+
+  /* Reduced motion keeps the frame that explains the most: the bot mid-fire,
+   * the agent mid-thought. */
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-svg * {
+      animation: none !important;
+      transition: none !important;
+    }
+    .trace {
+      stroke-dashoffset: 0;
+    }
+    .think,
+    .feed {
+      display: none;
+    }
+    .fire {
+      stroke-dashoffset: 0;
+      opacity: 0.9;
+    }
+    .shock {
+      opacity: 0.3;
+    }
+    .cell--lit {
+      transform: scaleY(1);
+    }
+  }
+</style>

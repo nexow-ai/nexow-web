@@ -18,22 +18,22 @@
   <!-- Drifting aurora blobs — same *-200 hues in light and dark -->
   <div
     class="aurora-a caura-blob absolute -top-32 left-[2%] size-[min(70vw,640px)] rounded-full opacity-60 blur-3xl dark:opacity-50"
-    style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+    style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
   >
   </div>
   <div
     class="aurora-b caura-blob absolute -top-24 right-[-6%] size-[min(72vw,680px)] rounded-full opacity-50 blur-3xl dark:opacity-40"
-    style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+    style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
   >
   </div>
   <div
     class="aurora-c caura-blob absolute left-[28%] top-[32%] size-[min(58vw,520px)] rounded-full opacity-45 blur-3xl dark:opacity-35"
-    style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+    style="background:radial-gradient(circle, var(--aurora-4), transparent 65%)"
   >
   </div>
   <div
     class="caura-blob caura-blob--d absolute bottom-[-8%] left-[12%] size-[min(50vw,440px)] rounded-full opacity-40 blur-3xl dark:opacity-30"
-    style="background:radial-gradient(circle, var(--color-sky-200), transparent 65%)"
+    style="background:radial-gradient(circle, var(--aurora-3), transparent 65%)"
   >
   </div>
 
@@ -42,7 +42,8 @@
     class="caura-svg absolute left-1/2 top-[8%] h-[min(52vw,380px)] w-[min(110%,820px)] -translate-x-1/2 opacity-70 dark:opacity-55"
     viewBox="0 0 820 380"
     fill="none"
-  >
+    aria-hidden="true"
+    >
     <defs>
       <linearGradient id="caura-arc" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
@@ -73,36 +74,18 @@
 </div>
 
 <style>
+  /* Local copy of `.aurora-mesh` (own drift cycle so it doesn't sync with the
+   * hero). Stops come from the same `--aurora-mesh-*` tokens, so it picks up
+   * the dark palette with the rest of the backdrop. */
   .caura-mesh {
     background:
-      radial-gradient(
-        ellipse 55% 45% at 18% 22%,
-        color-mix(in oklab, var(--color-brand-300) 55%, transparent),
-        transparent 70%
-      ),
-      radial-gradient(
-        ellipse 50% 40% at 82% 18%,
-        color-mix(in oklab, var(--color-accent-300) 48%, transparent),
-        transparent 68%
-      ),
-      radial-gradient(
-        ellipse 48% 42% at 58% 75%,
-        color-mix(in oklab, var(--color-plasma-300) 38%, transparent),
-        transparent 70%
-      ),
-      radial-gradient(
-        ellipse 40% 35% at 42% 42%,
-        color-mix(in oklab, var(--color-sky-300) 32%, transparent),
-        transparent 65%
-      );
+      radial-gradient(ellipse 55% 45% at 18% 22%, var(--aurora-mesh-1), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 82% 18%, var(--aurora-mesh-2), transparent 68%),
+      radial-gradient(ellipse 48% 42% at 58% 75%, var(--aurora-mesh-3), transparent 70%),
+      radial-gradient(ellipse 40% 35% at 42% 42%, var(--aurora-mesh-4), transparent 65%);
     animation: caura-mesh-shift 28s ease-in-out infinite;
     will-change: transform, opacity;
-    opacity: 0.85;
-  }
-
-  :global(.dark) .caura-mesh {
-    /* Same *-300 hues as light; opacity only. */
-    opacity: 0.75;
+    opacity: var(--aurora-mesh-opacity);
   }
 
   .caura-blob--d {

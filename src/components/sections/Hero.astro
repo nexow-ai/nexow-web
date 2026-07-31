@@ -43,18 +43,18 @@ const D = {
     <div
       data-motion="sink-lg"
       class="aurora-a absolute -top-48 left-[2%] h-[640px] w-[640px] rounded-full opacity-60 blur-3xl dark:opacity-50"
-      style="background:radial-gradient(circle, var(--color-brand-200), transparent 65%)"
+      style="background:radial-gradient(circle, var(--aurora-1), transparent 65%)"
     >
     </div>
     <div
       data-motion="rise-lg"
       class="aurora-b absolute -top-40 right-[-4%] h-[700px] w-[700px] rounded-full opacity-45 blur-3xl dark:opacity-40"
-      style="background:radial-gradient(circle, var(--color-accent-200), transparent 65%)"
+      style="background:radial-gradient(circle, var(--aurora-2), transparent 65%)"
     >
     </div>
     <div
       class="aurora-c absolute left-[38%] top-[38%] h-[520px] w-[520px] rounded-full opacity-40 blur-3xl dark:opacity-35"
-      style="background:radial-gradient(circle, var(--color-plasma-200), transparent 65%)"
+      style="background:radial-gradient(circle, var(--aurora-4), transparent 65%)"
     >
     </div>
     <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
@@ -68,7 +68,9 @@ const D = {
           class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-brand-100 px-3 py-1.5 text-xs font-semibold text-brand-700 shadow-sm dark:border-brand-400/20 dark:bg-brand-400/15 dark:text-brand-300"
           style={`--enter-delay:${D.badge}`}
         >
-          <span class="size-1.5 animate-pulse rounded-full bg-brand-500 dark:bg-brand-400"></span>
+          <span class="badge-spark grid size-4 place-items-center text-brand-500 dark:text-brand-400">
+            <Icon name="sparkles" class="size-full" />
+          </span>
           {t.badge}
         </p>
 
@@ -130,10 +132,13 @@ const D = {
             </div>
             <button
               type="submit"
-              class="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-5 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 sm:self-end"
+              class="group inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-5 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 sm:self-end"
             >
               {t.ctaPrimary}
-              <Icon name="arrow" class="size-3.5" />
+              <Icon
+                name="rocket"
+                class="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
             </button>
           </div>
         </form>
@@ -206,6 +211,35 @@ const D = {
 </section>
 
 <style>
+  /* Badge glyph twinkles instead of the old flat dot: a slow scale/rotate beat
+     with a brightness lift at the peak, so the mark reads "live" without
+     pulling focus from the headline. */
+  @keyframes badge-twinkle {
+    0%,
+    100% {
+      transform: rotate(0deg) scale(1);
+      opacity: 0.8;
+    }
+    35% {
+      transform: rotate(12deg) scale(1.16);
+      opacity: 1;
+    }
+    70% {
+      transform: rotate(-6deg) scale(0.94);
+      opacity: 0.85;
+    }
+  }
+  .badge-spark {
+    animation: badge-twinkle 3.2s var(--ease-out-expo, ease-in-out) infinite;
+    transform-origin: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .badge-spark {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
   /* Extra starter prompts stay collapsed only where JS can reveal them. */
   :global(.js) [data-prompt-examples]:not([data-open]) [data-example-extra] {
     display: none;

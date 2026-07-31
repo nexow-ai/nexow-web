@@ -43,6 +43,9 @@ const t = useContent(lang).invitePage!;
   </section>
 
   <section id="pillars" class="container-page scroll-mt-20 py-10 sm:py-14">
+    {/* The pillar cards carry no visible section title; an off-screen heading
+        keeps the outline continuous between the h1 and the card h3s. */}
+    <h2 class="sr-only">{t.hero.badge}</h2>
     <div class="reveal-stagger mx-auto grid max-w-5xl gap-5 sm:grid-cols-3">
       {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
     </div>

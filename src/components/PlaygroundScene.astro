@@ -1,0 +1,1126 @@
+---
+/**
+ * The chart the hero mock "generates" for each example prompt — one animated
+ * scene per example.
+ *
+ * All scenes share a 240×128 viewBox and ship together in one <svg>; the mock
+ * switches by moving the `scene-off` class, so a swap is two class writes and
+ * the hidden scenes cost nothing: `display:none` parks their animations and
+ * restarts them from frame one when a scene comes back round. Ids match
+ * `playgroundExamples[].scene` in PlaygroundMock.astro.
+ *
+ * Colours come from the semantic surface tokens (see global.css), so every
+ * scene flips with the dark shell without per-scene overrides.
+ */
+interface Props {
+  /** Scene painted server-side — what a no-JS visitor keeps looking at. */
+  scene: string;
+  class?: string;
+}
+const { scene: active, class: className = '' } = Astro.props;
+const off = (id: string) => (id === active ? undefined : 'scene-off');
+/** Stagger helper: entrance delays read better as a single expression. */
+const d = (n: number) => `--d:${n.toFixed(2)}s`;
+
+/* moodboard — collage tiles, a swatch strip and two note lines. */
+const MOOD_TILES = [
+  { x: 6, y: 6, w: 106, h: 66, cls: 'f-br' },
+  { x: 118, y: 6, w: 54, h: 40, cls: 'f-ac' },
+  { x: 178, y: 6, w: 56, h: 40, cls: 'f-soft' },
+  { x: 118, y: 52, w: 116, h: 20, cls: 'f-soft' },
+];
+
+/* candles — closes drive the bodies, wicks and the EMA drawn over them. */
+const CLOSES = [40, 47, 43, 55, 61, 52, 66, 71, 64, 76, 83, 90];
+const priceY = (v: number) => 108 - v * 0.86;
+const CANDLES = CLOSES.map((c, i) => {
+  const prev = i === 0 ? c - 6 : CLOSES[i - 1];
+  const top = priceY(Math.max(c, prev));
+  const bottom = priceY(Math.min(c, prev));
+  return { x: 16 + i * 18, top, h: Math.max(7, bottom - top + 6), up: c >= prev };
+});
+const EMA_PATH = CLOSES.map((c, i) => `${i ? 'L' : 'M'}${16 + i * 18} ${priceY(c)}`).join(' ');
+
+/* watchlist — a ticker per row, sparkline in the middle, delta on the right. */
+const WATCH_ROWS = [
+  { spark: 'M0 18L18 12L36 15L54 6L72 10L90 3', up: true },
+  { spark: 'M0 5L18 11L36 8L54 14L72 12L90 18', up: false },
+  { spark: 'M0 14L18 10L36 13L54 8L72 4L90 6', up: true },
+  { spark: 'M0 9L18 6L36 12L54 10L72 15L90 13', up: false },
+];
+
+/* quakes — a coarse landmass bitmap; '#' becomes a dot. */
+const MAP_ROWS = [
+  '..####....###...',
+  '.######..#####..',
+  '..#####...####..',
+  '...###.....###..',
+  '...###......##..',
+  '....#.......#...',
+  '.....#..........',
+];
+const MAP_DOTS = MAP_ROWS.flatMap((row, r) =>
+  row.split('').flatMap((cell, c) => (cell === '#' ? [{ x: 14 + c * 14.6, y: 12 + r * 12 }] : [])),
+);
+const QUAKES = [
+  { x: 58, y: 36, r: 6 },
+  { x: 160, y: 24, r: 8 },
+  { x: 116, y: 60, r: 5 },
+];
+const MAG_BARS = [22, 14, 30, 18, 26, 12, 34, 20, 28, 16, 24, 30, 18, 26];
+
+/* weather — sun rays, a drifting cloud, rain and three city pills. */
+const SUN_RAYS = Array.from({ length: 8 }, (_, i) => (i * Math.PI) / 4);
+const RAIN = [0, 1, 2, 3, 4, 5];
+const CITIES = [8, 88, 168];
+
+/* board — three columns, one card commutes from the first to the second. */
+const BOARD_COLS = [
+  { x: 6, cards: [30, 56, 82] },
+  { x: 84, cards: [30, 56] },
+  { x: 162, cards: [30] },
+];
+
+/* rings — habit arcs plus a seven-day tick row. */
+const HABIT_RINGS = [
+  { r: 36, seg: 82, cls: 'c-br' },
+  { r: 26, seg: 64, cls: 'c-ac' },
+  { r: 16, seg: 45, cls: 'c-br-soft' },
+];
+const DAYS = [30, 46, 24, 52, 38, 56, 44];
+
+/* feed — source rail on the left, story cards sliding in on the right. */
+const STORIES = [10, 40, 70];
+
+/* funnel — stage widths narrowing toward the close. */
+const FUNNEL = [214, 168, 122, 78];
+
+/* world — grouped indicator bars next to the globe. */
+const WORLD_BARS = [
+  [58, 34],
+  [72, 46],
+  [40, 62],
+  [86, 52],
+  [50, 30],
+];
+
+/* donut — allocation split, drawn segment by segment. */
+const DONUT: { v: number; cls: string }[] = [
+  { v: 41, cls: 'c-br' },
+  { v: 22, cls: 'c-ac' },
+  { v: 19, cls: 'c-br-soft' },
+  { v: 18, cls: 'c-ink' },
+];
+/** Legend dot fill for each donut stroke class. */
+const LEGEND_FILL: Record<string, string> = {
+  'c-br': 'f-brand',
+  'c-ac': 'f-accent',
+  'c-br-soft': 'f-br',
+  'c-ink': 'f-ink',
+};
+let donutOffset = 0;
+const DONUT_SEGS = DONUT.map((s) => {
+  const seg = { ...s, off: donutOffset };
+  donutOffset += s.v;
+  return seg;
+});
+
+/* game — brick rows over a bouncing ball. */
+const BRICK_ROWS = [0, 1, 2];
+const BRICKS = [0, 1, 2, 3, 4, 5, 6];
+
+/* eq — listening bars, each on its own beat. */
+const EQ_BARS = [34, 52, 26, 60, 40, 30, 56, 44, 22, 50, 36, 58, 28, 46];
+
+/* table — five rows of four cells, filled top to bottom. */
+const TABLE_CELLS = [
+  { x: 16, w: 44 },
+  { x: 72, w: 54 },
+  { x: 138, w: 36 },
+  { x: 186, w: 40 },
+];
+const TABLE_ROWS = [0, 1, 2, 3, 4];
+
+/* route — elevation profile with three milestones on it. */
+const ROUTE_PATH = 'M10 104L38 86L66 92L94 62L122 70L150 44L178 52L206 30L232 38';
+const ROUTE_STOPS = [
+  { x: 94, y: 62 },
+  { x: 150, y: 44 },
+  { x: 206, y: 30 },
+];
+---
+
+<svg viewBox="0 0 240 128" fill="none" class:list={['pg h-auto w-full', className]} aria-hidden="true">
+  <!-- moodboard -->
+  <g class:list={['sc', off('moodboard')]} data-scene-id="moodboard">
+    {
+      MOOD_TILES.map((t, i) => (
+        <rect class:list={['pop', t.cls]} x={t.x} y={t.y} width={t.w} height={t.h} rx="8" style={d(i * 0.09)} />
+      ))
+    }
+    {
+      [0, 1, 2, 3, 4, 5].map((i) => (
+        <circle
+          class:list={['pop', i % 3 === 0 ? 'f-brand' : i % 3 === 1 ? 'f-accent' : 'f-ink']}
+          cx={16 + i * 20}
+          cy={98}
+          r="8"
+          style={d(0.4 + i * 0.06)}
+        />
+      ))
+    }
+    <rect class="bar fade" x="138" y="88" width="90" height="5" rx="2.5" style={d(0.6)}></rect>
+    <rect class="bar dim fade" x="138" y="100" width="62" height="5" rx="2.5" style={d(0.68)}></rect>
+    <rect class="bar dim fade" x="138" y="112" width="76" height="5" rx="2.5" style={d(0.76)}></rect>
+  </g>
+
+  <!-- candles -->
+  <g class:list={['sc', off('candles')]} data-scene-id="candles">
+    <path class="ln dash" d="M8 46H232"></path>
+    {
+      CANDLES.map((c, i) => (
+        <g class="grow-y" style={d(i * 0.05)}>
+          <path class="wick" d={`M${c.x} ${c.top - 6}V${c.top + c.h + 6}`} />
+          <rect
+            class:list={['body', c.up && 'up']}
+            x={c.x - 5}
+            y={c.top}
+            width="10"
+            height={c.h}
+            rx="2"
+          />
+        </g>
+      ))
+    }
+    <path class="stroke-ac draw" d={EMA_PATH} pathLength="100" style={d(0.3)}></path>
+    <circle class="f-brand ping" cx="214" cy={priceY(90)} r="4"></circle>
+    <rect class="bar dim" x="8" y="120" width="224" height="3" rx="1.5"></rect>
+  </g>
+
+  <!-- watchlist -->
+  <g class:list={['sc', off('watchlist')]} data-scene-id="watchlist">
+    {
+      WATCH_ROWS.map((row, i) => (
+        <g class="slide" style={d(i * 0.1)}>
+          <rect class="panel" x="6" y={6 + i * 30} width="228" height="26" rx="8" />
+          <rect class="f-br" x="14" y={13 + i * 30} width="28" height="12" rx="3" />
+          <path
+            class:list={['draw', row.up ? 'stroke-br' : 'stroke-ink']}
+            d={row.spark}
+            pathLength="100"
+            transform={`translate(56 ${11 + i * 30})`}
+            style={d(0.25 + i * 0.1)}
+          />
+          <rect
+            class:list={[row.up ? 'f-br' : 'f-soft']}
+            x="184"
+            y={12 + i * 30}
+            width="42"
+            height="14"
+            rx="7"
+          />
+          <rect class:list={[row.up ? 'f-brand' : 'f-ink']} x="190" y={17 + i * 30} width="20" height="4" rx="2" />
+        </g>
+      ))
+    }
+  </g>
+
+  <!-- quakes -->
+  <g class:list={['sc', off('quakes')]} data-scene-id="quakes">
+    {MAP_DOTS.map((dot, i) => <circle class="map-dot" cx={dot.x} cy={dot.y} r="2.6" style={d(i * 0.008)} />)}
+    {
+      QUAKES.map((q, i) => (
+        <g>
+          <circle class="quake-ring" cx={q.x} cy={q.y} r={q.r} style={d(i * 0.5)} />
+          <circle class="f-brand" cx={q.x} cy={q.y} r="3" />
+        </g>
+      ))
+    }
+    {
+      MAG_BARS.map((h, i) => (
+        <rect
+          class:list={['grow-y', i === 6 ? 'f-brand' : 'f-ink']}
+          x={14 + i * 16}
+          y={122 - h}
+          width="9"
+          height={h}
+          rx="2"
+          style={d(0.3 + i * 0.04)}
+        />
+      ))
+    }
+  </g>
+
+  <!-- weather -->
+  <g class:list={['sc', off('weather')]} data-scene-id="weather">
+    <g class="spin" style="transform-origin:44px 46px">
+      {
+        SUN_RAYS.map((a) => (
+          <path
+            class="ln ray"
+            d={`M${(44 + Math.cos(a) * 22).toFixed(1)} ${(46 + Math.sin(a) * 22).toFixed(1)}L${(44 + Math.cos(a) * 28).toFixed(1)} ${(46 + Math.sin(a) * 28).toFixed(1)}`}
+          />
+        ))
+      }
+    </g>
+    <circle class="f-br" cx="44" cy="46" r="17"></circle>
+    <circle class="sun-core" cx="44" cy="46" r="10"></circle>
+    <g class="drift">
+      <path class="cloud" d="M108 70h44a13 13 0 0 0 1-26 19 19 0 0 0-36-5 12 12 0 0 0-9 31z"></path>
+      {RAIN.map((i) => <path class="rain" d={`M${114 + i * 11} 76v10`} style={d(i * 0.18)} />)}
+    </g>
+    {
+      CITIES.map((x, i) => (
+        <g class="fade" style={d(0.3 + i * 0.12)}>
+          <rect class="panel" x={x} y="98" width="64" height="24" rx="8" />
+          <rect class="bar" x={x + 10} y="106" width="22" height="4" rx="2" />
+          <rect class="f-brand" x={x + 10} y="114" width="14" height="4" rx="2" />
+          <circle class="f-br" cx={x + 50} cy="110" r="7" />
+        </g>
+      ))
+    }
+  </g>
+
+  <!-- board -->
+  <g class:list={['sc', off('board')]} data-scene-id="board">
+    {
+      BOARD_COLS.map((col, ci) => (
+        <g>
+          <rect class="col" x={col.x} y="6" width="72" height="116" rx="10" />
+          <rect class="bar" x={col.x + 10} y="16" width={34 - ci * 6} height="5" rx="2.5" />
+          {col.cards.map((y, i) => (
+            <g class="pop" style={d(ci * 0.12 + i * 0.08)}>
+              <rect class="panel" x={col.x + 8} y={y} width="56" height="20" rx="6" />
+              <rect class:list={[i === 0 ? 'f-brand' : 'f-ink']} x={col.x + 14} y={y + 7} width="6" height="6" rx="3" />
+              <rect class="bar" x={col.x + 25} y={y + 8} width={30 - i * 6} height="4" rx="2" />
+            </g>
+          ))}
+        </g>
+      ))
+    }
+    <g class="commute">
+      <rect class="panel lit" x="14" y="82" width="56" height="20" rx="6"></rect>
+      <rect class="f-brand" x="20" y="89" width="6" height="6" rx="3"></rect>
+      <rect class="bar" x="31" y="90" width="26" height="4" rx="2"></rect>
+    </g>
+  </g>
+
+  <!-- rings -->
+  <g class:list={['sc', off('rings')]} data-scene-id="rings">
+    {
+      HABIT_RINGS.map((ring, i) => (
+        <g>
+          <circle class="ring-track" cx="58" cy="64" r={ring.r} />
+          <circle
+            class:list={['ring', ring.cls]}
+            cx="58"
+            cy="64"
+            r={ring.r}
+            pathLength="100"
+            style={`--seg:${ring.seg};${d(i * 0.12)}`}
+          />
+        </g>
+      ))
+    }
+    {
+      DAYS.map((h, i) => (
+        <g class="grow-y" style={d(0.3 + i * 0.07)}>
+          <rect class:list={[i === 5 ? 'f-brand' : 'f-br']} x={116 + i * 17} y={86 - h} width="11" height={h} rx="4" />
+          <rect class="f-ink" x={116 + i * 17} y="94" width="11" height="4" rx="2" />
+        </g>
+      ))
+    }
+    <rect class="bar dim fade" x="116" y="110" width="80" height="6" rx="3" style={d(0.8)}></rect>
+  </g>
+
+  <!-- feed -->
+  <g class:list={['sc', off('feed')]} data-scene-id="feed">
+    <path class="ln" d="M20 14V86"></path>
+    {
+      STORIES.map((y, i) => (
+        <g>
+          <circle class="node pop" cx="20" cy={y + 10} r="6" style={d(i * 0.16)} />
+          <g class="slide" style={d(i * 0.16)}>
+            <rect class="panel" x="40" y={y} width="194" height="24" rx="8" />
+            <rect class="f-br" x="48" y={y + 7} width="10" height="10" rx="3" />
+            <rect class="bar" x="66" y={y + 8} width={120 - i * 22} height="4" rx="2" />
+            <rect class="bar dim" x="66" y={y + 15} width={80 - i * 14} height="3" rx="1.5" />
+          </g>
+        </g>
+      ))
+    }
+    <rect class="track" x="20" y="106" width="214" height="10" rx="5"></rect>
+    <rect class="f-brand grow-x" x="20" y="106" width="118" height="10" rx="5" style={d(0.5)}></rect>
+    <rect class="f-accent grow-x" x="142" y="106" width="52" height="10" rx="5" style={d(0.6)}></rect>
+  </g>
+
+  <!-- funnel -->
+  <g class:list={['sc', off('funnel')]} data-scene-id="funnel">
+    {
+      FUNNEL.map((w, i) => (
+        <g class="grow-c" style={d(i * 0.12)}>
+          <rect
+            class:list={[i === FUNNEL.length - 1 ? 'f-br' : 'f-soft']}
+            x={120 - w / 2}
+            y={8 + i * 30}
+            width={w}
+            height={22}
+            rx="8"
+          />
+          <rect class:list={[i === FUNNEL.length - 1 ? 'f-brand' : 'f-ink']} x={126 - w / 2} y={16 + i * 30} width={26} height="6" rx="3" />
+          <rect class="bar dim" x={108 + w / 2 - 34} y={16 + i * 30} width="28" height="6" rx="3" />
+        </g>
+      ))
+    }
+  </g>
+
+  <!-- gauge -->
+  <g class:list={['sc', off('gauge')]} data-scene-id="gauge">
+    <path class="gauge-track" d="M22 96A52 52 0 0 1 126 96"></path>
+    <path class="gauge-fill draw" d="M22 96A52 52 0 0 1 126 96" pathLength="100" style={d(0.1)}></path>
+    <g class="needle">
+      <path class="needle-arm" d="M74 96V52"></path>
+    </g>
+    <circle class="f-brand" cx="74" cy="96" r="5"></circle>
+    <rect class="bar dim fade" x="52" y="112" width="44" height="6" rx="3" style={d(0.6)}></rect>
+    <rect class="panel" x="146" y="16" width="88" height="96" rx="10"></rect>
+    <path class="stroke-br draw" d="M158 88L172 78L186 82L200 60L214 66L224 44" pathLength="100" style={d(0.35)}
+    ></path>
+    <rect class="f-br grow-x" x="158" y="98" width="64" height="6" rx="3" style={d(0.7)}></rect>
+  </g>
+
+  <!-- world -->
+  <g class:list={['sc', off('world')]} data-scene-id="world">
+    <circle class="globe" cx="46" cy="60" r="32"></circle>
+    <ellipse class="ln spin-meridian" cx="46" cy="60" rx="12" ry="32"></ellipse>
+    <ellipse class="ln" cx="46" cy="60" rx="23" ry="32"></ellipse>
+    <path class="ln" d="M14 60h64M20 44h52M20 76h52"></path>
+    <circle class="f-brand ping" cx="60" cy="44" r="3.5"></circle>
+    <path class="ln" d="M96 112h136"></path>
+    {
+      WORLD_BARS.map((pair, i) =>
+        pair.map((h, j) => (
+          <rect
+            class:list={['grow-y', j === 0 ? 'f-brand' : 'f-ac']}
+            x={100 + i * 28 + j * 12}
+            y={110 - h}
+            width="10"
+            height={h}
+            rx="3"
+            style={d(i * 0.1 + j * 0.05)}
+          />
+        )),
+      )
+    }
+  </g>
+
+  <!-- odds -->
+  <g class:list={['sc', off('odds')]} data-scene-id="odds">
+    <path class="ln dash" d="M14 62H226"></path>
+    <path class="stroke-br draw" d="M14 88C50 84 70 62 100 58S170 40 226 26" pathLength="100"></path>
+    <path class="stroke-ac draw" d="M14 36C50 40 70 62 100 66S170 84 226 92" pathLength="100" style={d(0.12)}></path>
+    <circle class="f-brand pop" cx="226" cy="26" r="4.5" style={d(1.1)}></circle>
+    <circle class="f-accent pop" cx="226" cy="92" r="4.5" style={d(1.2)}></circle>
+    <rect class="track" x="14" y="108" width="212" height="10" rx="5"></rect>
+    <rect class="f-brand grow-x" x="14" y="108" width="131" height="10" rx="5" style={d(0.6)}></rect>
+    <rect class="f-accent grow-x" x="150" y="108" width="76" height="10" rx="5" style={d(0.7)}></rect>
+  </g>
+
+  <!-- donut -->
+  <g class:list={['sc', off('donut')]} data-scene-id="donut">
+    <circle class="donut-track" cx="60" cy="64" r="30"></circle>
+    <g class="donut-rot">
+      {
+        DONUT_SEGS.map((s, i) => (
+          <circle
+            class:list={['donut-seg', s.cls]}
+            cx="60"
+            cy="64"
+            r="30"
+            pathLength="100"
+            style={`--seg:${s.v - 2};--off:${s.off};${d(i * 0.14)}`}
+          />
+        ))
+      }
+    </g>
+    {
+      DONUT.map((s, i) => (
+        <g class="fade" style={d(0.3 + i * 0.09)}>
+          <circle class={LEGEND_FILL[s.cls]} cx="120" cy={22 + i * 28} r="5" />
+          <rect class="bar" x="134" y={18 + i * 28} width={70 - i * 12} height="5" rx="2.5" />
+          <rect class="bar dim" x="134" y={28 + i * 28} width={40 - i * 6} height="4" rx="2" />
+        </g>
+      ))
+    }
+  </g>
+
+  <!-- game -->
+  <g class:list={['sc', off('game')]} data-scene-id="game">
+    <rect class="field" x="6" y="6" width="228" height="116" rx="12"></rect>
+    {
+      BRICK_ROWS.map((r) =>
+        BRICKS.map((c) => (
+          <rect
+            class:list={['brick', (c + r) % 4 === 0 ? 'f-ac' : 'f-br']}
+            x={18 + c * 29}
+            y={16 + r * 13}
+            width="24"
+            height="9"
+            rx="3"
+            style={d(((c + r * 2) % 7) * 0.22)}
+          />
+        )),
+      )
+    }
+    <circle class="ball f-brand" cx="40" cy="86" r="4.5"></circle>
+    <rect class="paddle f-accent" x="30" y="104" width="44" height="7" rx="3.5"></rect>
+  </g>
+
+  <!-- eq -->
+  <g class:list={['sc', off('eq')]} data-scene-id="eq">
+    <rect class="f-br" x="8" y="8" width="30" height="30" rx="8"></rect>
+    <circle class="f-brand" cx="23" cy="23" r="5"></circle>
+    <rect class="bar" x="48" y="12" width="104" height="6" rx="3"></rect>
+    <rect class="bar dim" x="48" y="24" width="66" height="5" rx="2.5"></rect>
+    <rect class="track" x="48" y="36" width="184" height="5" rx="2.5"></rect>
+    <rect class="f-brand grow-x" x="48" y="36" width="112" height="5" rx="2.5" style={d(0.3)}></rect>
+    {
+      EQ_BARS.map((h, i) => (
+        <rect
+          class:list={['eq-bar', i % 4 === 0 ? 'f-ac' : 'f-br']}
+          x={8 + i * 17}
+          y={120 - h}
+          width="11"
+          height={h}
+          rx="4"
+          style={`--d:${(i * 0.09).toFixed(2)}s;--t:${(1.1 + (i % 5) * 0.16).toFixed(2)}s`}
+        />
+      ))
+    }
+  </g>
+
+  <!-- table -->
+  <g class:list={['sc', off('table')]} data-scene-id="table">
+    <rect class="panel" x="6" y="6" width="228" height="116" rx="10"></rect>
+    <path class="ln" d="M6 28H234"></path>
+    {TABLE_CELLS.map((cell) => <rect class="f-br" x={cell.x} y="13" width={cell.w * 0.62} height="6" rx="3" />)}
+    <rect class="scan" x="8" y="30" width="224" height="16" rx="6"></rect>
+    {
+      TABLE_ROWS.map((r) =>
+        TABLE_CELLS.map((cell, c) => (
+          <rect
+            class:list={['fade', c === 0 ? 'f-ink' : 'bar']}
+            x={cell.x}
+            y={36 + r * 17}
+            width={c === 3 ? cell.w * 0.7 : cell.w}
+            height="7"
+            rx="3.5"
+            style={d(r * 0.09 + c * 0.03)}
+          />
+        )),
+      )
+    }
+  </g>
+
+  <!-- route -->
+  <g class:list={['sc', off('route')]} data-scene-id="route">
+    <path class="area fade" d={`${ROUTE_PATH}L232 122L10 122Z`} style={d(0.5)}></path>
+    <path class="stroke-br draw" d={ROUTE_PATH} pathLength="100"></path>
+    {
+      ROUTE_STOPS.map((s, i) => (
+        <circle class="f-brand pop" cx={s.x} cy={s.y} r="4.5" style={d(0.8 + i * 0.12)} />
+      ))
+    }
+    {
+      [0, 1].map((i) => (
+        <g class="fade" style={d(0.2 + i * 0.1)}>
+          <rect class="panel" x={10 + i * 66} y="8" width="60" height="22" rx="8" />
+          <rect class="f-brand" x={18 + i * 66} y="16" width="8" height="6" rx="3" />
+          <rect class="bar" x={32 + i * 66} y="16" width={30 - i * 8} height="6" rx="3" />
+        </g>
+      ))
+    }
+  </g>
+</svg>
+
+<style>
+  .pg {
+    /* Surface tokens flip with the dark shell; the scenes never name a colour. */
+    --pg-line: var(--surface-line);
+    --pg-ink: color-mix(in oklab, var(--text-strong) 13%, transparent);
+    --pg-ink-dim: color-mix(in oklab, var(--text-strong) 8%, transparent);
+    --pg-br: var(--color-brand-500);
+    --pg-br-soft: color-mix(in oklab, var(--color-brand-500) 20%, transparent);
+    --pg-ac: var(--color-accent-500);
+    --pg-ac-soft: color-mix(in oklab, var(--color-accent-500) 22%, transparent);
+  }
+  :global(.dark) .pg {
+    --pg-br: var(--color-brand-400);
+    --pg-ac: var(--color-accent-400);
+  }
+
+  .scene-off {
+    display: none;
+  }
+
+  /* Fills */
+  .f-brand {
+    fill: var(--pg-br);
+  }
+  .f-accent {
+    fill: var(--pg-ac);
+  }
+  .f-ink {
+    fill: color-mix(in oklab, var(--text-strong) 26%, transparent);
+  }
+  .f-br {
+    fill: var(--pg-br-soft);
+  }
+  .f-ac {
+    fill: var(--pg-ac-soft);
+  }
+  .f-soft {
+    fill: var(--pg-ink-dim);
+  }
+  .bar {
+    fill: var(--pg-ink);
+  }
+  .bar.dim {
+    fill: var(--pg-ink-dim);
+  }
+  .track {
+    fill: var(--pg-ink-dim);
+  }
+  .panel {
+    fill: var(--surface);
+    stroke: var(--pg-line);
+    stroke-width: 1.1;
+  }
+  .col,
+  .field {
+    fill: var(--surface-sunk);
+    stroke: var(--pg-line);
+    stroke-width: 1.1;
+  }
+  .ln {
+    stroke: var(--pg-line);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .ln.dash {
+    stroke-dasharray: 4 5;
+  }
+  .stroke-br {
+    stroke: var(--pg-br);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .stroke-ac {
+    stroke: var(--pg-ac);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .stroke-ink {
+    stroke: color-mix(in oklab, var(--text-strong) 28%, transparent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .node {
+    fill: var(--surface);
+    stroke: var(--pg-br);
+    stroke-width: 1.4;
+  }
+
+  /* Entrances — one shot per swap, since a hidden scene restarts at frame one */
+  .fade {
+    animation: pg-fade 0.5s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-fade {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .slide {
+    animation: pg-slide 0.55s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-slide {
+    from {
+      opacity: 0;
+      transform: translateX(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-pop 0.5s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .grow-y {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: pg-grow-y 0.6s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-grow-y {
+    from {
+      opacity: 0.3;
+      transform: scaleY(0.05);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+  .grow-x {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: pg-grow-x 0.7s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-grow-x {
+    from {
+      transform: scaleX(0.02);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .grow-c {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-grow-c 0.6s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-grow-c {
+    from {
+      opacity: 0;
+      transform: scaleX(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .draw {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: pg-draw 1.4s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Loops — one small heartbeat per scene, never a whole panel */
+  .ping {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-ping 2.4s ease-out infinite;
+  }
+  @keyframes pg-ping {
+    0% {
+      opacity: 1;
+      transform: scale(0.7);
+    }
+    60% {
+      opacity: 0.25;
+      transform: scale(1.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(0.7);
+    }
+  }
+
+  /* candles */
+  .wick {
+    stroke: color-mix(in oklab, var(--text-strong) 26%, transparent);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .body {
+    fill: color-mix(in oklab, var(--text-strong) 12%, transparent);
+    stroke: color-mix(in oklab, var(--text-strong) 22%, transparent);
+    stroke-width: 1;
+  }
+  .body.up {
+    fill: var(--pg-br-soft);
+    stroke: var(--pg-br);
+  }
+
+  /* quakes */
+  .map-dot {
+    fill: color-mix(in oklab, var(--text-strong) 16%, transparent);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-pop 0.4s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  .quake-ring {
+    fill: none;
+    stroke: var(--pg-br);
+    stroke-width: 1.6;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-quake 2.6s ease-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes pg-quake {
+    0% {
+      opacity: 0.9;
+      transform: scale(0.4);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(2.6);
+    }
+  }
+
+  /* weather */
+  .sun-core {
+    fill: var(--pg-br);
+  }
+  .ray {
+    stroke: var(--pg-br);
+    stroke-width: 2;
+  }
+  .spin {
+    animation: pg-spin 22s linear infinite;
+  }
+  @keyframes pg-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .cloud {
+    fill: var(--surface);
+    stroke: var(--pg-line);
+    stroke-width: 1.4;
+  }
+  .drift {
+    animation: pg-drift 7s ease-in-out infinite alternate;
+  }
+  @keyframes pg-drift {
+    from {
+      transform: translateX(-6px);
+    }
+    to {
+      transform: translateX(8px);
+    }
+  }
+  .rain {
+    stroke: var(--pg-ac);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    animation: pg-rain 1.5s linear infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes pg-rain {
+    0% {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* board */
+  .panel.lit {
+    stroke: var(--pg-br);
+  }
+  .commute {
+    animation: pg-commute 5s var(--ease-out-expo) infinite;
+  }
+  @keyframes pg-commute {
+    0%,
+    12% {
+      opacity: 0;
+      transform: none;
+    }
+    26%,
+    54% {
+      opacity: 1;
+      transform: none;
+    }
+    72%,
+    100% {
+      opacity: 1;
+      transform: translate(78px, -26px);
+    }
+  }
+
+  /* rings */
+  .ring-track {
+    fill: none;
+    stroke: var(--pg-ink-dim);
+    stroke-width: 8;
+  }
+  .ring {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 58px 64px;
+    stroke-dasharray: var(--seg) 100;
+    animation: pg-ring 1.3s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-ring {
+    from {
+      stroke-dashoffset: var(--seg);
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .c-br {
+    stroke: var(--pg-br);
+  }
+  .c-ac {
+    stroke: var(--pg-ac);
+  }
+  .c-br-soft {
+    stroke: var(--pg-br-soft);
+  }
+  .c-ink {
+    stroke: color-mix(in oklab, var(--text-strong) 20%, transparent);
+  }
+
+  /* gauge */
+  .gauge-track {
+    fill: none;
+    stroke: var(--pg-ink-dim);
+    stroke-width: 13;
+    stroke-linecap: round;
+  }
+  .gauge-fill {
+    fill: none;
+    stroke: var(--pg-br);
+    stroke-width: 13;
+    stroke-linecap: round;
+    stroke-dasharray: 62 100;
+    stroke-dashoffset: 62;
+    animation: pg-gauge 1.5s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-gauge {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .needle {
+    transform-origin: 74px 96px;
+    animation: pg-needle 1.6s var(--ease-out-expo) both;
+  }
+  @keyframes pg-needle {
+    from {
+      transform: rotate(-86deg);
+    }
+    to {
+      transform: rotate(26deg);
+    }
+  }
+  .needle-arm {
+    stroke: color-mix(in oklab, var(--text-strong) 45%, transparent);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  /* world */
+  .globe {
+    fill: var(--surface-sunk);
+    stroke: var(--pg-line);
+    stroke-width: 1.3;
+  }
+  .spin-meridian {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-meridian 6s ease-in-out infinite;
+  }
+  @keyframes pg-meridian {
+    0%,
+    100% {
+      transform: scaleX(1);
+    }
+    50% {
+      transform: scaleX(0.12);
+    }
+  }
+
+  /* donut */
+  .donut-track {
+    fill: none;
+    stroke: var(--pg-ink-dim);
+    stroke-width: 18;
+  }
+  .donut-rot {
+    transform: rotate(-90deg);
+    transform-origin: 60px 64px;
+  }
+  .donut-seg {
+    fill: none;
+    stroke-width: 18;
+    stroke-dasharray: var(--seg) 100;
+    animation: pg-donut 1.2s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes pg-donut {
+    from {
+      stroke-dashoffset: calc(var(--seg) - var(--off));
+    }
+    to {
+      stroke-dashoffset: calc(var(--off) * -1);
+    }
+  }
+
+  /* game */
+  .brick {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pg-brick 4.4s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes pg-brick {
+    0%,
+    58% {
+      opacity: 1;
+      transform: none;
+    }
+    72%,
+    92% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .ball {
+    animation: pg-ball 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+  @keyframes pg-ball {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(44px, -28px);
+    }
+    50% {
+      transform: translate(90px, 6px);
+    }
+    75% {
+      transform: translate(134px, -26px);
+    }
+    100% {
+      transform: translate(170px, 4px);
+    }
+  }
+  .paddle {
+    animation: pg-paddle 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+  @keyframes pg-paddle {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(156px);
+    }
+  }
+
+  /* eq */
+  .eq-bar {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: pg-eq var(--t, 1.2s) ease-in-out infinite alternate;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes pg-eq {
+    from {
+      transform: scaleY(0.25);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  /* table */
+  .scan {
+    fill: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
+    animation: pg-scan 3.4s ease-in-out infinite;
+  }
+  @keyframes pg-scan {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    12% {
+      opacity: 1;
+    }
+    76% {
+      opacity: 1;
+      transform: translateY(68px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(68px);
+    }
+  }
+
+  /* route */
+  .area {
+    fill: color-mix(in oklab, var(--color-brand-500) 12%, transparent);
+  }
+
+  /* Park the loops when the mock scrolls away — ScrollMotion owns the class. */
+  :global(.is-offscreen) .pg * {
+    animation-play-state: paused;
+  }
+
+  /* Reduced motion keeps the finished frame, never the empty opening one.
+   * Only the dash-driven scenes need help: every other entrance rests at its
+   * end state once the animation is gone, and the rotations below are base
+   * styles rather than keyframes, so they must survive. */
+  @media (prefers-reduced-motion: reduce) {
+    .pg * {
+      animation: none !important;
+    }
+    .draw,
+    .gauge-fill {
+      stroke-dashoffset: 0;
+    }
+    .donut-seg {
+      stroke-dashoffset: calc(var(--off) * -1);
+    }
+    .quake-ring {
+      opacity: 0.5;
+    }
+    .needle {
+      transform: rotate(26deg);
+    }
+  }
+</style>

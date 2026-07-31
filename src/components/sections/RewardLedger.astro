@@ -28,6 +28,7 @@ import {
 } from '../../data/gamification';
 import Icon from '../Icon.astro';
 import Hex from '../Hex.astro';
+import SolanaBadge from '../SolanaBadge.astro';
 
 interface Props {
   lang: Lang;
@@ -182,6 +183,7 @@ const uses = tok?.uses ?? c.dao.cards;
                   </li>
                 ))}
               </ul>
+              <SolanaBadge class="mt-5" />
             </div>
             <p class="font-mono text-xs uppercase tracking-wider text-ink-400 lg:text-right">
               <span class="text-accent-300">{t.tokenName}</span>
