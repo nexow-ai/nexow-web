@@ -48,11 +48,11 @@ export function isReachable(status) {
   return status < 400 || status === 429 || status >= 500;
 }
 
-/** `fetch` is injected so the behaviour can be tested without the network. */
-export async function probe({ url, source }, fetchImpl = globalThis.fetch) {
+/** `fetch` and the timeout are injected so this is testable without the network. */
+export async function probe({ url, source }, fetchImpl = globalThis.fetch, timeoutMs = TIMEOUT_MS) {
   const attempt = async (method) => {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
       const response = await fetchImpl(url, {
         method,
