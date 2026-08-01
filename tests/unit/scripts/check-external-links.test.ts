@@ -7,6 +7,22 @@ import {
   probe,
 } from '../../../scripts/check-external-links.mjs';
 import { CONNECTORS } from '../../../src/data/connectors';
+
+/** The shape the checker passes around; the script is plain ESM, so declare it here. */
+interface Link {
+  url: string;
+  source: string;
+}
+interface Probe extends Link {
+  status: number;
+  ok: boolean;
+  error?: string;
+}
+
+/** The subset of `fetch` the checker uses, so stubs stay readable. */
+type FetchInit = RequestInit & { method: string; signal: AbortSignal };
+const stubFetch = (fn: (url: string, init: FetchInit) => Promise<{ status: number }>) =>
+  fn as unknown as typeof fetch;
 import { SOCIALS } from '../../../src/i18n/config';
 
 /**
@@ -145,10 +161,13 @@ describe('probe', () => {
 
   it('tries HEAD first and reports the status', async () => {
     const calls: string[] = [];
-    const result = await probe(item, async (_url, init) => {
-      calls.push(init.method);
-      return { status: 200 } as Response;
-    });
+    const result = await probe(
+      item,
+      stubFetch(async (_url, init) => {
+        calls.push(init.method);
+        return { status: 200 };
+      }),
+    );
 
     expect(calls).toEqual(['HEAD']);
     expect(result).toMatchObject({ status: 200, ok: true, source: item.source });
@@ -156,35 +175,44 @@ describe('probe', () => {
 
   it('retries with GET when HEAD is rejected', async () => {
     const calls: string[] = [];
-    const result = await probe(item, async (_url, init) => {
-      calls.push(init.method);
-      return { status: init.method === 'HEAD' ? 405 : 200 } as Response;
-    });
+    const result = await probe(
+      item,
+      stubFetch(async (_url, init) => {
+        calls.push(init.method);
+        return { status: init.method === 'HEAD' ? 405 : 200 };
+      }),
+    );
 
     expect(calls).toEqual(['HEAD', 'GET']);
     expect(result.ok).toBe(true);
   });
 
   it('reports a link that is genuinely gone', async () => {
-    const result = await probe(item, async () => ({ status: 404 }) as Response);
+    const result = await probe(item, stubFetch(async () => ({ status: 404 })));
     expect(result).toMatchObject({ status: 404, ok: false });
   });
 
   it('identifies itself and follows redirects', async () => {
-    let init: RequestInit | undefined;
-    await probe(item, async (_url, options) => {
-      init = options;
-      return { status: 200 } as Response;
-    });
+    let init: FetchInit | undefined;
+    await probe(
+      item,
+      stubFetch(async (_url, options) => {
+        init = options;
+        return { status: 200 };
+      }),
+    );
 
     expect(init?.redirect).toBe('follow');
     expect((init?.headers as Record<string, string>)['user-agent']).toContain('nexow-link-check');
   });
 
   it('turns a transport failure into a result rather than throwing', async () => {
-    const result = await probe(item, async () => {
-      throw new Error('ENOTFOUND');
-    });
+    const result = await probe(
+      item,
+      stubFetch(async () => {
+        throw new Error('ENOTFOUND');
+      }),
+    );
 
     expect(result).toMatchObject({ status: 0, ok: false });
     expect(result.error).toContain('ENOTFOUND');
@@ -192,21 +220,44 @@ describe('probe', () => {
 
   it('arms an abort signal so a hung host cannot stall the run', async () => {
     let signal: AbortSignal | undefined;
-    await probe(item, async (_url, options) => {
-      signal = options.signal;
-      return { status: 200 } as Response;
-    });
+    await probe(
+      item,
+      stubFetch(async (_url, options) => {
+        signal = options.signal;
+        return { status: 200 };
+      }),
+    );
 
     expect(signal).toBeInstanceOf(AbortSignal);
     expect(signal!.aborted, 'the signal fires on timeout, not immediately').toBe(false);
   });
 
-  it('surfaces an abort as a failed probe rather than an unhandled rejection', async () => {
-    const result = await probe(item, async () => {
-      throw new DOMException('The operation was aborted.', 'AbortError');
-    });
+  it('gives up on a host that never answers', async () => {
+    const result = await probe(
+      item,
+      stubFetch(
+        (_url, options) =>
+          new Promise<{ status: number }>((_resolve, reject) => {
+            options.signal.addEventListener('abort', () =>
+              reject(new DOMException('The operation was aborted.', 'AbortError')),
+            );
+          }),
+      ),
+      5,
+    );
+
     expect(result).toMatchObject({ status: 0, ok: false });
     expect(result.error).toContain('aborted');
+  });
+
+  it('describes a thrown non-Error too', async () => {
+    const result = await probe(
+      item,
+      stubFetch(async () => {
+        throw 'socket hang up';
+      }),
+    );
+    expect(result).toMatchObject({ status: 0, ok: false, error: 'socket hang up' });
   });
 });
 
@@ -217,7 +268,7 @@ describe('main', () => {
     const log: string[] = [];
     const ok = await main({
       urls,
-      run: async (items) => items.map((i) => ({ ...i, status: 200, ok: true })),
+      run: async (items: Link[]): Promise<Probe[]> => items.map((i) => ({ ...i, status: 200, ok: true })),
       json: false,
       log: (m: string) => log.push(m),
       error: () => {},
@@ -231,7 +282,7 @@ describe('main', () => {
     const errors: string[] = [];
     const ok = await main({
       urls,
-      run: async (items) => items.map((i) => ({ ...i, status: 404, ok: false })),
+      run: async (items: Link[]): Promise<Probe[]> => items.map((i) => ({ ...i, status: 404, ok: false })),
       json: false,
       log: () => {},
       error: (m: string) => errors.push(m),
@@ -242,11 +293,26 @@ describe('main', () => {
     expect(errors.join('\n')).toContain('404');
   });
 
+  it('defaults to the real catalog and the argv flag when not told otherwise', async () => {
+    let received: { url: string }[] = [];
+    const ok = await main({
+      run: async (items: Link[]): Promise<Probe[]> => {
+        received = items;
+        return items.map((i) => ({ ...i, status: 200, ok: true }));
+      },
+      log: () => {},
+      error: () => {},
+    });
+
+    expect(ok).toBe(true);
+    expect(received.length, 'should have collected the real catalog').toBeGreaterThan(100);
+  });
+
   it('emits machine-readable output on request', async () => {
     const log: string[] = [];
     await main({
       urls,
-      run: async (items) => items.map((i) => ({ ...i, status: 404, ok: false })),
+      run: async (items: Link[]): Promise<Probe[]> => items.map((i) => ({ ...i, status: 404, ok: false })),
       json: true,
       log: (m: string) => log.push(m),
       error: () => {},
