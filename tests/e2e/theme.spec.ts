@@ -91,6 +91,53 @@ test.describe('theme toggle', () => {
     await context.close();
   });
 
+  test('wipes without dragging the page sideways', async ({ page }) => {
+    await page.goto('/features');
+    // Astro scopes `<main>` and the chrome for the page slide. A theme change
+    // shares the view-transition machinery but is not a navigation, so those
+    // scopes must drop out and leave the wipe as the only motion.
+    const during = await page.evaluate(async () => {
+      const names = new Set<string>();
+      const sliding = new Set<string>();
+      let wiping = false;
+      let samples = 0;
+
+      document.getElementById('theme-toggle')?.click();
+
+      // Sample every frame the transition is up rather than at one guessed
+      // moment: the wipe only starts once `transition.ready` resolves, which
+      // on a loaded machine lands well after the click.
+      const deadline = performance.now() + 3000;
+      while (performance.now() < deadline) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        if (!document.documentElement.classList.contains('is-theme-transition')) {
+          if (samples) break;
+          continue;
+        }
+        samples++;
+        for (const el of document.querySelectorAll('[data-astro-transition-scope]')) {
+          names.add(getComputedStyle(el).viewTransitionName);
+        }
+        for (const animation of document.getAnimations()) {
+          // `getKeyframes` lives on KeyframeEffect, not the AnimationEffect base.
+          const effect = animation.effect as KeyframeEffect | null;
+          if (!effect?.pseudoElement) continue;
+          const name = String((animation as CSSAnimation).animationName ?? '');
+          if (name.startsWith('nexow-page')) sliding.add(name);
+          const frames: Keyframe[] = effect.getKeyframes?.() ?? [];
+          if (frames.some((frame) => 'clipPath' in frame)) wiping = true;
+        }
+      }
+
+      return { samples, names: [...names], sliding: [...sliding], wiping };
+    });
+
+    expect(during.samples, 'the transition should have been sampled').toBeGreaterThan(0);
+    expect(new Set(during.names)).toEqual(new Set(['none']));
+    expect(during.sliding).toEqual([]);
+    expect(during.wiping, 'the circular wipe should still run').toBe(true);
+  });
+
   test('still renders when storage is unavailable', async ({ browser }) => {
     const context = await browser.newContext();
     // Private-mode behaviour: reads and writes throw.
