@@ -63,7 +63,10 @@ const D = {
   <div class="container-page relative">
     <div class="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
       <!-- Copy -->
-      <div class="max-w-xl">
+      {/* min-w-0: grid items floor at min-content by default, and the mock's is
+          wider than a phone. Without this the shared track inflates to fit it and
+          drags this column past the viewport, where overflow-x-clip eats the copy. */}
+      <div class="min-w-0 max-w-xl">
         <p
           class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-brand-100 px-3 py-1.5 text-xs font-semibold text-brand-700 shadow-sm dark:border-brand-400/20 dark:bg-brand-400/15 dark:text-brand-300"
           style={`--enter-delay:${D.badge}`}
@@ -201,7 +204,7 @@ const D = {
       </div>
 
       <!-- Product mock -->
-      <div class="enter lg:pl-4" style={`--enter-delay:${D.mock}`}>
+      <div class="enter min-w-0 lg:pl-4" style={`--enter-delay:${D.mock}`}>
         <div data-motion="tilt-lg rise depth" style="--m-persp:1100px">
           <PlaygroundMock promptExample={t.promptExample} />
         </div>
