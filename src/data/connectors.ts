@@ -39,7 +39,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://alpaca.markets/",
     "logo": "/connectors/alpaca.png",
-    "banner": "/connectors/banners/alpaca.png",
+    "banner": "/connectors/banners/alpaca.webp",
     "logoFit": "cover",
     "notes": "API-first; best developer experience and paper-trading sandbox. US equities/options/crypto."
   },
@@ -58,7 +58,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.alphavantage.co/",
     "logo": "/connectors/alpha_vantage.jpg",
-    "banner": "/connectors/banners/alpha_vantage.jpg",
+    "banner": "/connectors/banners/alpha_vantage.webp",
     "logoFit": "cover",
     "notes": "Free-tier market data API covering stocks, forex, crypto, and commodities. Good for prototyping and lightweight backtesting."
   },
@@ -72,7 +72,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.anchorbrowser.io/",
     "logo": "/connectors/anchor_browser.png",
-    "banner": "/connectors/banners/anchor_browser.png",
+    "banner": "/connectors/banners/anchor_browser.webp",
     "logoFit": "cover",
     "notes": "Cloud browser infrastructure for AI agents — persistent sessions, stealth, and automation APIs. Coming soon as a remote-browser provider."
   },
@@ -86,7 +86,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://apify.com/",
     "logo": "/connectors/apify.svg",
-    "banner": "/connectors/banners/apify.png",
+    "banner": "/connectors/banners/apify.webp",
     "logoFit": "cover",
     "notes": "Actor platform for web scraping and automation — run store actors or your own crawlers via API. Coming soon for scheduled scrapes and agent tool calls."
   },
@@ -100,7 +100,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://cloud.google.com/bigquery",
     "logo": "/connectors/bigquery.png",
-    "banner": "/connectors/banners/bigquery.png",
+    "banner": "/connectors/banners/bigquery.webp",
     "logoFit": "cover",
     "notes": "Google Cloud analytics warehouse connector for reading research datasets, feature stores, and backtest outputs from BigQuery."
   },
@@ -116,7 +116,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.binance.com/",
     "logo": "/connectors/binance.png",
-    "banner": "/connectors/banners/binance.jpeg",
+    "banner": "/connectors/banners/binance.webp",
     "logoFit": "cover",
     "notes": "Deepest crypto liquidity. US users restricted; treat region carefully in the filter. Public spot market data is keyless; trading (Spot + USD-M Futures) needs an API key, with a full Testnet demo."
   },
@@ -132,7 +132,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.bitmex.com/",
     "logo": "/connectors/bitmex.png",
-    "banner": "/connectors/banners/bitmex.jpg",
+    "banner": "/connectors/banners/bitmex.webp",
     "logoFit": "cover",
     "notes": "Pioneer crypto derivatives exchange. Perpetual swaps and dated futures on BTC/ETH and altcoins (Bitcoin is XBT). Public market data is keyless; trading needs an API key, with a full Testnet demo."
   },
@@ -160,7 +160,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://brightdata.com/",
     "logo": "/connectors/bright_data.png",
-    "banner": "/connectors/banners/bright_data.jpg",
+    "banner": "/connectors/banners/bright_data.webp",
     "logoFit": "cover",
     "notes": "Web data platform (proxies, unlocker, scraping browser, datasets). Coming soon for hard-to-reach sites and large-scale collection."
   },
@@ -174,7 +174,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://browser-use.com/",
     "logo": "/connectors/browser_use.png",
-    "banner": "/connectors/banners/browser_use.png",
+    "banner": "/connectors/banners/browser_use.webp",
     "logoFit": "cover",
     "notes": "AI browser agent that can navigate sites, fill forms, and complete multi-step web tasks. Coming soon as an alternate remote-browser / agent runtime alongside Browserbase."
   },
@@ -188,7 +188,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.browserbase.com/",
     "logo": "/connectors/browserbase.svg",
-    "banner": "/connectors/banners/browserbase.png",
+    "banner": "/connectors/banners/browserbase.webp",
     "logoFit": "cover",
     "notes": "Remote browser sessions for sites that block normal embeds. Add your own Browserbase API key so Remote Browser embeds use your provider instead of a Nexow-managed key."
   },
@@ -202,7 +202,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.browserless.io/",
     "logo": "/connectors/browserless.png",
-    "banner": "/connectors/banners/browserless.jpg",
+    "banner": "/connectors/banners/browserless.webp",
     "logoFit": "cover",
     "notes": "Headless Chrome as a service (Puppeteer/Playwright compatible). Coming soon for remote browser sessions and web automation."
   },
@@ -218,7 +218,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.bybit.com/",
     "logo": "/connectors/bybit.png",
-    "banner": "/connectors/banners/bybit.jpeg",
+    "banner": "/connectors/banners/bybit.webp",
     "logoFit": "cover",
     "notes": "Crypto exchange API for spot and derivatives, including unified account trading, market streams, and private order updates."
   },
@@ -234,7 +234,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://ccxt.com/",
     "logo": "/connectors/ccxt.svg",
-    "banner": "/connectors/banners/ccxt.png",
+    "banner": "/connectors/banners/ccxt.webp",
     "logoFit": "cover",
     "notes": "Unified crypto exchange API layer. In Nexow v1 it serves keyless PUBLIC market data (candles) browser-side for CORS-open exchanges — trading and keyed calls belong to each exchange’s dedicated connector."
   },
@@ -252,7 +252,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.schwab.com/",
     "logo": "/connectors/charles_schwab.png",
-    "banner": "/connectors/banners/charles_schwab.jpg",
+    "banner": "/connectors/banners/charles_schwab.webp",
     "logoFit": "cover",
     "notes": "US brokerage API for Schwab accounts, including market data and order workflows through the Schwab developer platform."
   },
@@ -266,7 +266,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://clickhouse.com/",
     "logo": "/connectors/clickhouse.jpeg",
-    "banner": "/connectors/banners/clickhouse.png",
+    "banner": "/connectors/banners/clickhouse.webp",
     "logoFit": "cover",
     "notes": "Columnar OLAP database — store and query large tick/bar history at speed."
   },
@@ -282,7 +282,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.coinbase.com/",
     "logo": "/connectors/coinbase.jpeg",
-    "banner": "/connectors/banners/coinbase.jpg",
+    "banner": "/connectors/banners/coinbase.webp",
     "logoFit": "cover",
     "notes": "US-regulated spot crypto. CDP API key (key name + EC private key); live only — no sandbox."
   },
@@ -296,7 +296,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://wallet.coinbase.com/",
     "logo": "/connectors/coinbase_wallet.png",
-    "banner": "/connectors/banners/coinbase_wallet.png",
+    "banner": "/connectors/banners/coinbase_wallet.webp",
     "logoFit": "cover",
     "notes": "Connect the Coinbase Wallet extension (or the app’s browser on mobile) — the self-custody wallet, separate from the Coinbase exchange. It approves sharing its public address, and Nexow tracks it watch-only: native balance, ERC-20 holdings, USD value, and recent activity via Blockscout public APIs. Nexow never asks for signatures or transactions. Any address can also be pasted to watch."
   },
@@ -312,7 +312,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://curve.fi/",
     "logo": "/connectors/curve_finance.png",
-    "banner": "/connectors/banners/curve_finance.png",
+    "banner": "/connectors/banners/curve_finance.webp",
     "logoFit": "cover",
     "notes": "Decentralized exchange protocol focused on stablecoin, pegged-asset, and concentrated liquidity pools across EVM networks."
   },
@@ -326,7 +326,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://data.gov/",
     "logo": "/connectors/data_gov.png",
-    "banner": "/connectors/banners/data_gov.png",
+    "banner": "/connectors/banners/data_gov.webp",
     "logoFit": "cover",
     "notes": "US federal open-data catalog (CKAN) — search datasets across agencies. Free API key from api.data.gov."
   },
@@ -347,7 +347,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://databento.com/",
     "logo": "/connectors/databento.png",
-    "banner": "/connectors/banners/databento.png",
+    "banner": "/connectors/banners/databento.webp",
     "logoFit": "cover",
     "notes": "Developer-first market data API for historical and live tick, order book, bar, and reference data across equities, futures, options, FX, and crypto datasets."
   },
@@ -391,7 +391,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://discord.com/",
     "logo": "/connectors/discord.svg",
-    "banner": "/connectors/banners/discord.jpg",
+    "banner": "/connectors/banners/discord.webp",
     "logoFit": "cover",
     "notes": "Read messages from server channels your bot can access via the Discord API. Add a bot token and invite it to your server, then read from a widget with ctx.data.feed({ provider: 'discord', channel: '<channelId>' })."
   },
@@ -407,7 +407,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://domeapi.io/",
     "logo": "/connectors/dome.svg",
-    "banner": "/connectors/banners/dome.jpeg",
+    "banner": "/connectors/banners/dome.webp",
     "logoFit": "cover",
     "notes": "Unified prediction-market API for cross-platform prices, candlesticks, wallet analytics, and order tracking across Polymarket and Kalshi."
   },
@@ -428,7 +428,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://eodhd.com/",
     "logo": "/connectors/eodhd.png",
-    "banner": "/connectors/banners/eodhd.jpeg",
+    "banner": "/connectors/banners/eodhd.webp",
     "logoFit": "cover",
     "notes": "Broad financial data API for EOD/intraday prices, fundamentals, options, bonds, forex, crypto, news, and macro datasets."
   },
@@ -448,7 +448,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://finnhub.io/",
     "logo": "/connectors/finnhub.png",
-    "banner": "/connectors/banners/finnhub.png",
+    "banner": "/connectors/banners/finnhub.webp",
     "logoFit": "cover",
     "notes": "Market data API for equities, fundamentals, news, forex, crypto, bonds, and economic data with REST and WebSocket endpoints."
   },
@@ -462,7 +462,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.firecrawl.dev/",
     "logo": "/connectors/firecrawl.png",
-    "banner": "/connectors/banners/firecrawl.png",
+    "banner": "/connectors/banners/firecrawl.webp",
     "logoFit": "cover",
     "notes": "Web crawling API that turns sites into clean markdown/JSON for LLM agents. Coming soon for research widgets and agent data ingestion."
   },
@@ -476,7 +476,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.frankfurter.app/",
     "logo": "/connectors/frankfurter.png",
-    "banner": "/connectors/banners/frankfurter.png",
+    "banner": "/connectors/banners/frankfurter.webp",
     "logoFit": "cover",
     "notes": "Free ECB foreign-exchange rates API (powered by the European Central Bank reference rates). Keyless — latest and historical FX pairs with no signup."
   },
@@ -490,7 +490,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://fred.stlouisfed.org/",
     "logo": "/connectors/fred.png",
-    "banner": "/connectors/banners/fred.png",
+    "banner": "/connectors/banners/fred.webp",
     "logoFit": "cover",
     "notes": "Federal Reserve Economic Data (St. Louis Fed) — thousands of macro series (GDP, CPI, unemployment, rates). Free API key from the FRED site."
   },
@@ -508,7 +508,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.fxcm.com/",
     "logo": "/connectors/fxcm.jpeg",
-    "banner": "/connectors/banners/fxcm.png",
+    "banner": "/connectors/banners/fxcm.webp",
     "logoFit": "cover",
     "notes": "Retail FX/CFD broker with REST and FIX APIs. Covers major/minor/exotic FX pairs plus index and commodity CFDs. REST auth uses a persistent access token from Trading Station Web."
   },
@@ -538,7 +538,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://hyperliquid.xyz/",
     "logo": "/connectors/hyperliquid.webp",
-    "banner": "/connectors/banners/hyperliquid.png",
+    "banner": "/connectors/banners/hyperliquid.webp",
     "logoFit": "cover",
     "notes": "On-chain order book exchange for crypto spot and perpetual markets with API access for market data and trading."
   },
@@ -577,7 +577,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://intrinio.com/",
     "logo": "/connectors/intrinio.jpeg",
-    "banner": "/connectors/banners/intrinio.png",
+    "banner": "/connectors/banners/intrinio.webp",
     "logoFit": "cover",
     "notes": "Financial data API with fundamentals, real-time/delayed prices, and options data. Good for building screeners and analytics."
   },
@@ -596,7 +596,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.iqfeed.net/",
     "logo": "/connectors/iqfeed.png",
-    "banner": "/connectors/banners/iqfeed.jpg",
+    "banner": "/connectors/banners/iqfeed.webp",
     "logoFit": "cover",
     "notes": "Low-latency historical market data for US equities, futures, and options. Popular with active day traders and algo developers. Connects via the local IQConnect client (run it on your machine and log in); requests reach it through the Nexow server, so self-host alongside IQConnect."
   },
@@ -612,7 +612,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://jup.ag/",
     "logo": "/connectors/jupiter.png",
-    "banner": "/connectors/banners/jupiter.jpg",
+    "banner": "/connectors/banners/jupiter.webp",
     "logoFit": "cover",
     "notes": "Solana liquidity aggregator and trading API for token swaps, routing, and on-chain execution workflows."
   },
@@ -629,7 +629,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://kalshi.com/",
     "logo": "/connectors/kalshi.png",
-    "banner": "/connectors/banners/kalshi.jpg",
+    "banner": "/connectors/banners/kalshi.webp",
     "logoFit": "cover",
     "notes": "CFTC-regulated event-contract exchange. Binary YES/NO markets priced in cents (the implied probability). Public market data — markets and candlesticks — is keyless; account and trading need an API key id plus its RSA private key. Live updates are polled off the candlesticks endpoint. Every call routes through the Nexow server (Kalshi's REST has no CORS and signs each private call with your RSA key). Has a demo (mock-funds) environment with its own account."
   },
@@ -645,7 +645,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.kraken.com/",
     "logo": "/connectors/kraken.webp",
-    "banner": "/connectors/banners/kraken.png",
+    "banner": "/connectors/banners/kraken.webp",
     "logoFit": "cover",
     "notes": "Spot plus Kraken Futures (perpetual + dated). Public market data (candles + live stream) is keyless on both; account and trading need an API key. Spot and Futures are separate platforms with separate keys — one connection can hold both. Futures has a demo (testnet) network; spot is live only."
   },
@@ -661,7 +661,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.kucoin.com/",
     "logo": "/connectors/kucoin.png",
-    "banner": "/connectors/banners/kucoin.jpg",
+    "banner": "/connectors/banners/kucoin.webp",
     "logoFit": "cover",
     "notes": "Crypto exchange API with broad spot listings plus futures/perpetual markets and streaming market data."
   },
@@ -705,7 +705,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.lmax.com/",
     "logo": "/connectors/lmax_digital.jpg",
-    "banner": "/connectors/banners/lmax_digital.png",
+    "banner": "/connectors/banners/lmax_digital.webp",
     "logoFit": "cover",
     "notes": "LMAX Group's institutional crypto spot exchange (BTC, ETH and more vs USD/EUR/GBP/JPY). Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
   },
@@ -723,7 +723,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.lmax.com/",
     "logo": "/connectors/lmax.png",
-    "banner": "/connectors/banners/lmax.jpg",
+    "banner": "/connectors/banners/lmax.webp",
     "logoFit": "cover",
     "notes": "Institutional-grade FX ECN with a transparent order book. Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
   },
@@ -743,7 +743,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://massive.com/",
     "logo": "/connectors/massive.png",
-    "banner": "/connectors/banners/massive.jpg",
+    "banner": "/connectors/banners/massive.webp",
     "logoFit": "cover",
     "notes": "Market data only, formerly known as Polygon.io. Strong US equities/options coverage; good for backtesting feeds."
   },
@@ -771,7 +771,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://metamask.io/",
     "logo": "/connectors/metamask.svg",
-    "banner": "/connectors/banners/metamask.jpg",
+    "banner": "/connectors/banners/metamask.webp",
     "logoFit": "cover",
     "notes": "Connect the MetaMask extension (or the MetaMask app’s browser on mobile) — the wallet approves sharing its public address, and Nexow tracks it watch-only: native balance, ERC-20 holdings, USD value, and recent activity via Blockscout public APIs (Ethereum, Base, Arbitrum, OP Mainnet, Polygon, Gnosis, zkSync Era). Nexow never asks for signatures or transactions. Any address can also be pasted to watch."
   },
@@ -785,7 +785,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://milvus.io/",
     "logo": "/connectors/milvus.png",
-    "banner": "/connectors/banners/milvus.png",
+    "banner": "/connectors/banners/milvus.webp",
     "logoFit": "cover",
     "notes": "Open-source vector database connector for similarity search over embeddings, metadata, and high-scale AI retrieval collections."
   },
@@ -799,7 +799,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.mongodb.com/",
     "logo": "/connectors/mongodb.svg",
-    "banner": "/connectors/banners/mongodb.png",
+    "banner": "/connectors/banners/mongodb.webp",
     "logoFit": "cover",
     "notes": "Document database connector for reading your own collections, signals, market metadata, and research documents from MongoDB or Atlas."
   },
@@ -813,7 +813,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.mysql.com/",
     "logo": "/connectors/mysql.svg",
-    "banner": "/connectors/banners/mysql.png",
+    "banner": "/connectors/banners/mysql.webp",
     "logoFit": "cover",
     "notes": "Relational SQL database connector for reading tables, research datasets, and application data from MySQL-compatible databases."
   },
@@ -827,7 +827,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://date.nager.at/",
     "logo": "/connectors/nager_date.png",
-    "banner": "/connectors/banners/nager_date.png",
+    "banner": "/connectors/banners/nager_date.webp",
     "logoFit": "cover",
     "notes": "Public holidays API covering 100+ countries. Keyless REST endpoints for holiday calendars — useful for market-hours and calendar widgets."
   },
@@ -841,7 +841,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.nasa.gov/",
     "logo": "/connectors/nasa.png",
-    "banner": "/connectors/banners/nasa.png",
+    "banner": "/connectors/banners/nasa.webp",
     "logoFit": "cover",
     "notes": "NASA Open APIs — Astronomy Picture of the Day, NEO, Earth imagery, and more. Free key; DEMO_KEY works for light testing."
   },
@@ -855,7 +855,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://nominatim.org/",
     "logo": "/connectors/nominatim.png",
-    "banner": "/connectors/banners/nominatim.png",
+    "banner": "/connectors/banners/nominatim.webp",
     "logoFit": "cover",
     "notes": "OpenStreetMap Nominatim geocoding — forward and reverse lookup of places and addresses. Usage policy: identify with a valid User-Agent and keep to at most one request per second."
   },
@@ -874,7 +874,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.oanda.com/",
     "logo": "/connectors/oanda.png",
-    "banner": "/connectors/banners/oanda.png",
+    "banner": "/connectors/banners/oanda.webp",
     "logoFit": "cover",
     "notes": "FX spot plus CFDs on indices/commodities/bonds. High rate limits; strong for FX quants."
   },
@@ -890,7 +890,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.okx.com/",
     "logo": "/connectors/okx.png",
-    "banner": "/connectors/banners/okx.jpg",
+    "banner": "/connectors/banners/okx.webp",
     "logoFit": "cover",
     "notes": "Global crypto exchange API with spot, margin, futures, perpetual swaps, and options market data and trading."
   },
@@ -904,7 +904,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://open-meteo.com/",
     "logo": "/connectors/open_meteo.png",
-    "banner": "/connectors/banners/open_meteo.png",
+    "banner": "/connectors/banners/open_meteo.webp",
     "logoFit": "cover",
     "notes": "Free open-source weather API — forecasts, historical weather, and marine data. Fully keyless; no signup required. Ideal for dry-run widgets that need weather context."
   },
@@ -918,7 +918,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://openaq.org/",
     "logo": "/connectors/openaq.png",
-    "banner": "/connectors/banners/openaq.png",
+    "banner": "/connectors/banners/openaq.webp",
     "logoFit": "cover",
     "notes": "Open air-quality data from government and research monitors worldwide. Free API key from the OpenAQ Explorer."
   },
@@ -932,7 +932,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://opensky-network.org/",
     "logo": "/connectors/opensky.png",
-    "banner": "/connectors/banners/opensky.png",
+    "banner": "/connectors/banners/opensky.webp",
     "logoFit": "cover",
     "notes": "Live and historical ADS-B flight tracking from the OpenSky Network. Coming soon — anonymous access is rate-limited; authenticated access needs an OpenSky account."
   },
@@ -948,7 +948,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://pancakeswap.finance/",
     "logo": "/connectors/pancakeswap.png",
-    "banner": "/connectors/banners/pancakeswap.jpg",
+    "banner": "/connectors/banners/pancakeswap.webp",
     "logoFit": "cover",
     "notes": "Decentralized exchange and liquidity protocol for token swaps, pools, and derivatives across BNB Chain and supported EVM networks."
   },
@@ -962,7 +962,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://phantom.app/",
     "logo": "/connectors/phantom.svg",
-    "banner": "/connectors/banners/phantom.jpg",
+    "banner": "/connectors/banners/phantom.webp",
     "logoFit": "cover",
     "notes": "Connect the Phantom extension (or the Phantom app’s browser on mobile) — the wallet approves sharing its public key, and Nexow tracks it watch-only: SOL balance, SPL token holdings, and USD value via Jupiter public APIs. Nexow never asks for signatures or transactions. Any address can also be pasted to watch."
   },
@@ -976,7 +976,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.pinecone.io/",
     "logo": "/connectors/pinecone.png",
-    "banner": "/connectors/banners/pinecone.png",
+    "banner": "/connectors/banners/pinecone.webp",
     "logoFit": "cover",
     "notes": "Managed vector database connector for querying embeddings and metadata from Pinecone indexes."
   },
@@ -1025,7 +1025,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.postgresql.org/",
     "logo": "/connectors/postgres.png",
-    "banner": "/connectors/banners/postgres.jpg",
+    "banner": "/connectors/banners/postgres.webp",
     "logoFit": "cover",
     "notes": "Relational SQL database — read your own signals, backtest results, or tables from a widget. Read-only."
   },
@@ -1041,7 +1041,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.predictit.org/",
     "logo": "/connectors/predictit.png",
-    "banner": "/connectors/banners/predictit.png",
+    "banner": "/connectors/banners/predictit.webp",
     "logoFit": "cover",
     "notes": "Prediction market data source for US political event contracts. Market data from PredictIt (attribution required); the public API is read-only and polled at most once per 60 seconds per market, so this connector is for market data and sentiment research rather than automated trading."
   },
@@ -1069,7 +1069,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://qdrant.tech/",
     "logo": "/connectors/qdrant.png",
-    "banner": "/connectors/banners/qdrant.png",
+    "banner": "/connectors/banners/qdrant.webp",
     "logoFit": "cover",
     "notes": "Vector database — store embeddings + JSON payloads in your own collections and run similarity search from a widget with ctx.data.search({ collection, vector, provider: 'qdrant' })."
   },
@@ -1103,7 +1103,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.rithmic.com/",
     "logo": "/connectors/rithmic.jpg",
-    "banner": "/connectors/banners/rithmic.png",
+    "banner": "/connectors/banners/rithmic.webp",
     "logoFit": "cover",
     "notes": "Low-latency futures execution and market data used by prop firms (Apex, TopstepTrader) and active futures traders. Connects over the R | Protocol API — Protocol Buffers over a secure WebSocket, routed through the Nexow server (Rithmic has no REST API). Historical candles, account, positions and trading; symbols are a futures root (ES) or dated contract (ESM5.CME). Needs a Rithmic-approved app and credentials; the test gateway carries no historical data."
   },
@@ -1121,7 +1121,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://robinhood.com/",
     "logo": "/connectors/robinhood.svg",
-    "banner": "/connectors/banners/robinhood.jpg",
+    "banner": "/connectors/banners/robinhood.webp",
     "logoFit": "cover",
     "notes": "Retail brokerage connector for US stocks, ETFs, options, and crypto account workflows where API access is available."
   },
@@ -1142,7 +1142,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.home.saxo/",
     "logo": "/connectors/saxo_bank.png",
-    "banner": "/connectors/banners/saxo_bank.jpg",
+    "banner": "/connectors/banners/saxo_bank.webp",
     "logoFit": "cover",
     "notes": "Global multi-asset OpenAPI covering market data, portfolios, and order workflows across Saxo-supported regions."
   },
@@ -1156,7 +1156,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.snowflake.com/",
     "logo": "/connectors/snowflake.png",
-    "banner": "/connectors/banners/snowflake.png",
+    "banner": "/connectors/banners/snowflake.webp",
     "logoFit": "cover",
     "notes": "Cloud data warehouse connector for querying your own analytics, signals, and research tables from widgets."
   },
@@ -1170,7 +1170,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.spotify.com/",
     "logo": "/connectors/spotify.svg",
-    "banner": "/connectors/banners/spotify.jpg",
+    "banner": "/connectors/banners/spotify.webp",
     "logoFit": "cover",
     "notes": "Music streaming catalog via the Spotify Web API. Search tracks or read new releases from a widget with ctx.data.feed({ provider: 'spotify', query }). Add a Client ID + Client Secret from the Spotify developer dashboard."
   },
@@ -1184,7 +1184,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.steel.dev/",
     "logo": "/connectors/steel.png",
-    "banner": "/connectors/banners/steel.png",
+    "banner": "/connectors/banners/steel.webp",
     "logoFit": "cover",
     "notes": "Open-source browser API for hosting and controlling remote Chromium sessions. Coming soon as another remote-browser provider for embeds and agent automation."
   },
@@ -1216,7 +1216,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://tastytrade.com/",
     "logo": "/connectors/tastytrade.png",
-    "banner": "/connectors/banners/tastytrade.jpg",
+    "banner": "/connectors/banners/tastytrade.webp",
     "logoFit": "cover",
     "notes": "Options-first brokerage API with market data, account state, and order routing for active derivatives workflows."
   },
@@ -1230,7 +1230,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://tavily.com/",
     "logo": "/connectors/tavily.png",
-    "banner": "/connectors/banners/tavily.png",
+    "banner": "/connectors/banners/tavily.webp",
     "logoFit": "cover",
     "notes": "AI-native web search API built for agents — ranked results, snippets, and research answers. Coming soon for grounded research in widgets and copilots."
   },
@@ -1244,7 +1244,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://telegram.org/",
     "logo": "/connectors/telegram.svg",
-    "banner": "/connectors/banners/telegram.png",
+    "banner": "/connectors/banners/telegram.webp",
     "logoFit": "cover",
     "notes": "Read messages from chats and channels your bot can see via the Telegram Bot API. Add a bot token from @BotFather, then read a feed from a widget with ctx.data.feed({ provider: 'telegram' })."
   },
@@ -1258,7 +1258,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.theguardian.com/",
     "logo": "/connectors/guardian.png",
-    "banner": "/connectors/banners/guardian.png",
+    "banner": "/connectors/banners/guardian.webp",
     "logoFit": "cover",
     "notes": "The Guardian Open Platform — search articles and headlines across sections. Free developer key from the Open Platform site."
   },
@@ -1278,7 +1278,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.tradestation.com/",
     "logo": "/connectors/tradestation.png",
-    "banner": "/connectors/banners/tradestation.jpg",
+    "banner": "/connectors/banners/tradestation.webp",
     "logoFit": "cover",
     "notes": "US equities, options and listed futures (plus index/ETF products). OAuth2 v3 API with a full simulated (paper) environment — charts, balances, positions and order routing."
   },
@@ -1298,7 +1298,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://tradingeconomics.com/",
     "logo": "/connectors/trading_economics.png",
-    "banner": "/connectors/banners/trading_economics.png",
+    "banner": "/connectors/banners/trading_economics.webp",
     "logoFit": "cover",
     "notes": "Global macro and financial data API — economic indicators, government bonds, commodities, currencies, and stock market data for 196 countries."
   },
@@ -1317,7 +1317,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.tradovate.com/",
     "logo": "/connectors/tradovate.png",
-    "banner": "/connectors/banners/tradovate.png",
+    "banner": "/connectors/banners/tradovate.webp",
     "logoFit": "cover",
     "notes": "Cloud futures brokerage API with REST/WebSocket access for accounts, margin, market data, and futures order routing."
   },
@@ -1331,7 +1331,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://trustwallet.com/",
     "logo": "/connectors/trust_wallet.svg",
-    "banner": "/connectors/banners/trust_wallet.png",
+    "banner": "/connectors/banners/trust_wallet.webp",
     "logoFit": "cover",
     "notes": "Connect the Trust Wallet extension (or the app’s browser on mobile) — the wallet approves sharing its public address, and Nexow tracks it watch-only on EVM chains: native balance, ERC-20 holdings, USD value, and recent activity via Blockscout public APIs. For Solana holdings use the Phantom connector. Nexow never asks for signatures or transactions. Any address can also be pasted to watch."
   },
@@ -1351,7 +1351,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://twelvedata.com/",
     "logo": "/connectors/twelve_data.png",
-    "banner": "/connectors/banners/twelve_data.png",
+    "banner": "/connectors/banners/twelve_data.webp",
     "logoFit": "cover",
     "notes": "Developer-friendly market data API for real-time and historical prices across stocks, ETFs, forex, crypto, and indices."
   },
@@ -1365,7 +1365,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://earthquake.usgs.gov/",
     "logo": "/connectors/usgs_earthquake.png",
-    "banner": "/connectors/banners/usgs_earthquake.png",
+    "banner": "/connectors/banners/usgs_earthquake.webp",
     "logoFit": "cover",
     "notes": "USGS Earthquake Hazards Program GeoJSON feeds — recent and significant earthquakes worldwide. Fully keyless public data."
   },
@@ -1379,7 +1379,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://weaviate.io/",
     "logo": "/connectors/weaviate.jpeg",
-    "banner": "/connectors/banners/weaviate.jpg",
+    "banner": "/connectors/banners/weaviate.webp",
     "logoFit": "cover",
     "notes": "Vector database connector for semantic search over embeddings, metadata, and research documents stored in Weaviate collections."
   },
@@ -1393,7 +1393,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.wikipedia.org/",
     "logo": "/connectors/wikipedia.png",
-    "banner": "/connectors/banners/wikipedia.png",
+    "banner": "/connectors/banners/wikipedia.webp",
     "logoFit": "cover",
     "notes": "Wikimedia REST API for Wikipedia page summaries, related articles, and media. Keyless with polite User-Agent; great for knowledge lookups in dry-run widgets."
   },
@@ -1407,7 +1407,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://data.worldbank.org/",
     "logo": "/connectors/world_bank.png",
-    "banner": "/connectors/banners/world_bank.png",
+    "banner": "/connectors/banners/world_bank.webp",
     "logoFit": "cover",
     "notes": "World Bank Open Data indicators API — GDP, population, poverty, and thousands of development statistics by country. Keyless public REST endpoints."
   },
@@ -1421,7 +1421,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://x.com/",
     "logo": "/connectors/twitter.svg",
-    "banner": "/connectors/banners/twitter.png",
+    "banner": "/connectors/banners/twitter.webp",
     "logoFit": "cover",
     "notes": "Read posts from a handle's timeline or search recent posts via the X API v2. Add an app Bearer token, then read from a widget with ctx.data.feed({ provider: 'twitter', query }) or ({ channel: 'handle' })."
   },
@@ -1435,7 +1435,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.youtube.com/",
     "logo": "/connectors/youtube.svg",
-    "banner": "/connectors/banners/youtube.jpg",
+    "banner": "/connectors/banners/youtube.webp",
     "logoFit": "cover",
     "notes": "Read a channel's uploads or search videos via the YouTube Data API v3. Add an API key, then read from a widget with ctx.data.feed({ provider: 'youtube', query }) or ({ channel: 'UC...' })."
   },
@@ -1449,7 +1449,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.adyen.com/",
     "logo": "/connectors/adyen.svg",
-    "banner": "/connectors/banners/adyen.png",
+    "banner": "/connectors/banners/adyen.webp",
     "logoFit": "cover",
     "notes": "Enterprise payment platform — chart authorization rates, settlement, and revenue across markets and channels."
   },
@@ -1463,7 +1463,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.afp.com/",
     "logo": "/connectors/afp.svg",
-    "banner": "/connectors/banners/afp.png",
+    "banner": "/connectors/banners/afp.webp",
     "logoFit": "cover",
     "notes": "Agence France-Presse wire — bring French and international newswire headlines into agent research workflows."
   },
@@ -1477,7 +1477,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.africanews.com/",
     "logo": "/connectors/africanews.svg",
-    "banner": "/connectors/banners/africanews.png",
+    "banner": "/connectors/banners/africanews.webp",
     "logoFit": "cover",
     "notes": "Pan-African 24-hour news channel — stream continent-wide headlines and regional desks for research boards."
   },
@@ -1491,7 +1491,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.aljazeera.com/",
     "logo": "/connectors/al_jazeera.svg",
-    "banner": "/connectors/banners/al_jazeera.png",
+    "banner": "/connectors/banners/al_jazeera.webp",
     "logoFit": "cover",
     "notes": "Doha-based international broadcaster — track Middle East and global coverage for multilingual news widgets."
   },
@@ -1505,7 +1505,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://english.ahram.org.eg/",
     "logo": "/connectors/al_ahram.svg",
-    "banner": "/connectors/banners/al_ahram.png",
+    "banner": "/connectors/banners/al_ahram.webp",
     "logoFit": "cover",
     "notes": "Egypt's historic newspaper — bring Cairo politics, Middle East, and North Africa coverage into multilingual widgets."
   },
@@ -1519,7 +1519,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://aws.amazon.com/redshift/",
     "logo": "/connectors/redshift.svg",
-    "banner": "/connectors/banners/redshift.png",
+    "banner": "/connectors/banners/redshift.webp",
     "logoFit": "cover",
     "notes": "AWS cloud data warehouse — query analytics marts and operational aggregates for dashboard and reporting widgets."
   },
@@ -1533,7 +1533,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://amplitude.com/",
     "logo": "/connectors/amplitude.svg",
-    "banner": "/connectors/banners/amplitude.png",
+    "banner": "/connectors/banners/amplitude.webp",
     "logoFit": "cover",
     "notes": "Product analytics for growth teams — bring cohorts, conversion, and behavioral metrics into live dashboard widgets."
   },
@@ -1547,7 +1547,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.argent.xyz/",
     "logo": "/connectors/argent.svg",
-    "banner": "/connectors/banners/argent.png",
+    "banner": "/connectors/banners/argent.webp",
     "logoFit": "cover",
     "notes": "Smart wallet for Ethereum and Starknet — track Argent accounts for balances and activity without custodial keys."
   },
@@ -1561,7 +1561,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://apnews.com/",
     "logo": "/connectors/ap_news.svg",
-    "banner": "/connectors/banners/ap_news.png",
+    "banner": "/connectors/banners/ap_news.webp",
     "logoFit": "cover",
     "notes": "US-based wire service — pull AP headlines and worldwide desk coverage for news dashboards and agent briefings."
   },
@@ -1575,7 +1575,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://backpack.app/",
     "logo": "/connectors/backpack.svg",
-    "banner": "/connectors/banners/backpack.png",
+    "banner": "/connectors/banners/backpack.webp",
     "logoFit": "cover",
     "notes": "xNFT wallet for Solana and Ethereum — monitor Backpack addresses for balances and recent on-chain activity."
   },
@@ -1589,7 +1589,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.bbc.com/news",
     "logo": "/connectors/bbc.svg",
-    "banner": "/connectors/banners/bbc.png",
+    "banner": "/connectors/banners/bbc.webp",
     "logoFit": "cover",
     "notes": "UK public broadcaster — follow world, business, and regional BBC News sections in live research boards."
   },
@@ -1603,7 +1603,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://web3.bitget.com/",
     "logo": "/connectors/bitget_wallet.svg",
-    "banner": "/connectors/banners/bitget_wallet.png",
+    "banner": "/connectors/banners/bitget_wallet.webp",
     "logoFit": "cover",
     "notes": "Multi-chain Web3 wallet from Bitget — watch public addresses for native and token balances across supported networks."
   },
@@ -1623,7 +1623,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.bloomberg.com/professional/",
     "logo": "/connectors/bloomberg.svg",
-    "banner": "/connectors/banners/bloomberg.png",
+    "banner": "/connectors/banners/bloomberg.webp",
     "logoFit": "cover",
     "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
@@ -1637,7 +1637,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.clarin.com/",
     "logo": "/connectors/clarin.svg",
-    "banner": "/connectors/banners/clarin.png",
+    "banner": "/connectors/banners/clarin.webp",
     "logoFit": "cover",
     "notes": "Argentina's largest daily — follow Buenos Aires politics, economy, and regional coverage on news dashboards."
   },
@@ -1651,7 +1651,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.cnn.com/",
     "logo": "/connectors/cnn.svg",
-    "banner": "/connectors/banners/cnn.png",
+    "banner": "/connectors/banners/cnn.webp",
     "logoFit": "cover",
     "notes": "Global cable and digital news network — surface top stories and topic feeds on ops and research canvases."
   },
@@ -1665,7 +1665,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://nation.africa/",
     "logo": "/connectors/daily_nation.svg",
-    "banner": "/connectors/banners/daily_nation.png",
+    "banner": "/connectors/banners/daily_nation.webp",
     "logoFit": "cover",
     "notes": "Kenya's flagship Nation Media daily — track East Africa politics, business, and regional breaking news."
   },
@@ -1679,7 +1679,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.databricks.com/",
     "logo": "/connectors/databricks.svg",
-    "banner": "/connectors/banners/databricks.png",
+    "banner": "/connectors/banners/databricks.webp",
     "logoFit": "cover",
     "notes": "Lakehouse platform for analytics and AI — read curated tables and feature datasets into research and dashboard widgets."
   },
@@ -1693,7 +1693,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.datadoghq.com/",
     "logo": "/connectors/datadog.svg",
-    "banner": "/connectors/banners/datadog.png",
+    "banner": "/connectors/banners/datadog.webp",
     "logoFit": "cover",
     "notes": "Cloud monitoring and security platform — stream infrastructure metrics, APM spans, and monitors into live operations widgets."
   },
@@ -1707,7 +1707,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.dw.com/",
     "logo": "/connectors/deutsche_welle.svg",
-    "banner": "/connectors/banners/deutsche_welle.png",
+    "banner": "/connectors/banners/deutsche_welle.webp",
     "logoFit": "cover",
     "notes": "Germany's international broadcaster — follow DW world news and analysis across languages on your boards."
   },
@@ -1721,7 +1721,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://elpais.com/",
     "logo": "/connectors/el_pais.svg",
-    "banner": "/connectors/banners/el_pais.png",
+    "banner": "/connectors/banners/el_pais.webp",
     "logoFit": "cover",
     "notes": "Leading Spanish-language newspaper — track Spain, Latin America, and world coverage in news widgets."
   },
@@ -1735,7 +1735,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.eltiempo.com/",
     "logo": "/connectors/el_tiempo.svg",
-    "banner": "/connectors/banners/el_tiempo.png",
+    "banner": "/connectors/banners/el_tiempo.webp",
     "logoFit": "cover",
     "notes": "Colombia's leading daily — bring Bogotá politics, economy, and Andean regional coverage into news boards."
   },
@@ -1749,7 +1749,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.emol.com/",
     "logo": "/connectors/emol.svg",
-    "banner": "/connectors/banners/emol.png",
+    "banner": "/connectors/banners/emol.webp",
     "logoFit": "cover",
     "notes": "El Mercurio's Chilean digital portal — follow Santiago politics, markets, and Southern Cone headlines."
   },
@@ -1766,7 +1766,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.etoro.com/",
     "logo": "/connectors/etoro.svg",
-    "banner": "/connectors/banners/etoro.png",
+    "banner": "/connectors/banners/etoro.webp",
     "logoFit": "cover",
     "notes": "Social trading broker for stocks and crypto — connect account data for positions, P&L, and copy-trade context."
   },
@@ -1780,7 +1780,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.exodus.com/",
     "logo": "/connectors/exodus.svg",
-    "banner": "/connectors/banners/exodus.png",
+    "banner": "/connectors/banners/exodus.webp",
     "logoFit": "cover",
     "notes": "Multi-asset desktop and mobile wallet — surface portfolio balances and transfers on ops and research boards."
   },
@@ -1798,7 +1798,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.fidelity.com/",
     "logo": "/connectors/fidelity.svg",
-    "banner": "/connectors/banners/fidelity.png",
+    "banner": "/connectors/banners/fidelity.webp",
     "logoFit": "cover",
     "notes": "Full-service broker and wealth platform — bring brokerage balances, positions, and activity into finance dashboards."
   },
@@ -1812,7 +1812,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.ft.com/",
     "logo": "/connectors/financial_times.svg",
-    "banner": "/connectors/banners/financial_times.png",
+    "banner": "/connectors/banners/financial_times.webp",
     "logoFit": "cover",
     "notes": "Global business newspaper — stream markets, companies, and macro coverage into trading and research dashboards."
   },
@@ -1826,7 +1826,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.folha.uol.com.br/",
     "logo": "/connectors/folha.svg",
-    "banner": "/connectors/banners/folha.png",
+    "banner": "/connectors/banners/folha.webp",
     "logoFit": "cover",
     "notes": "Brazil newspaper of record — stream São Paulo and national politics, business, and culture coverage into research boards."
   },
@@ -1840,7 +1840,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.france24.com/",
     "logo": "/connectors/france24.svg",
-    "banner": "/connectors/banners/france24.png",
+    "banner": "/connectors/banners/france24.webp",
     "logoFit": "cover",
     "notes": "French international 24-hour news channel — stream global and European headlines into live briefing widgets."
   },
@@ -1854,7 +1854,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://g1.globo.com/",
     "logo": "/connectors/g1.svg",
-    "banner": "/connectors/banners/g1.png",
+    "banner": "/connectors/banners/g1.webp",
     "logoFit": "cover",
     "notes": "Globo's Brazilian news portal — pull national headlines, politics, and breaking stories for LatAm briefing widgets."
   },
@@ -1868,7 +1868,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://grafana.com/",
     "logo": "/connectors/grafana.svg",
-    "banner": "/connectors/banners/grafana.png",
+    "banner": "/connectors/banners/grafana.webp",
     "logoFit": "cover",
     "notes": "Open observability platform for metrics, logs, and traces — pull Grafana dashboards and alert state into Nexow ops boards."
   },
@@ -1882,7 +1882,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.keplr.app/",
     "logo": "/connectors/keplr.svg",
-    "banner": "/connectors/banners/keplr.png",
+    "banner": "/connectors/banners/keplr.webp",
     "logoFit": "cover",
     "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
   },
@@ -1896,7 +1896,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.lanacion.com.ar/",
     "logo": "/connectors/la_nacion.svg",
-    "banner": "/connectors/banners/la_nacion.png",
+    "banner": "/connectors/banners/la_nacion.webp",
     "logoFit": "cover",
     "notes": "Leading Argentine broadsheet — surface politics, markets, and international desks for Spanish-language research boards."
   },
@@ -1910,7 +1910,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.lemonde.fr/",
     "logo": "/connectors/le_monde.svg",
-    "banner": "/connectors/banners/le_monde.png",
+    "banner": "/connectors/banners/le_monde.webp",
     "logoFit": "cover",
     "notes": "French newspaper of record — bring politics, economy, and international reporting into multilingual briefings."
   },
@@ -1924,7 +1924,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://linear.app/",
     "logo": "/connectors/linear.svg",
-    "banner": "/connectors/banners/linear.png",
+    "banner": "/connectors/banners/linear.webp",
     "logoFit": "cover",
     "notes": "Issue tracking built for product teams — surface cycles, priorities, and shipping velocity on operations boards."
   },
@@ -1938,7 +1938,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://cloud.google.com/looker",
     "logo": "/connectors/looker.svg",
-    "banner": "/connectors/banners/looker.png",
+    "banner": "/connectors/banners/looker.webp",
     "logoFit": "cover",
     "notes": "Google Cloud BI platform — connect Looker explores and Looks so agents and widgets reuse governed business metrics."
   },
@@ -1952,7 +1952,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://mg.co.za/",
     "logo": "/connectors/mail_guardian.svg",
-    "banner": "/connectors/banners/mail_guardian.png",
+    "banner": "/connectors/banners/mail_guardian.webp",
     "logoFit": "cover",
     "notes": "South African investigative weekly — surface in-depth politics, society, and continental analysis."
   },
@@ -1966,7 +1966,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.metabase.com/",
     "logo": "/connectors/metabase.svg",
-    "banner": "/connectors/banners/metabase.png",
+    "banner": "/connectors/banners/metabase.webp",
     "logoFit": "cover",
     "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
   },
@@ -1985,7 +1985,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.morningstar.com/",
     "logo": "/connectors/morningstar.svg",
-    "banner": "/connectors/banners/morningstar.png",
+    "banner": "/connectors/banners/morningstar.webp",
     "logoFit": "cover",
     "notes": "Investment research and fund ratings — pull equity/fund analytics, star ratings, and market commentary into research widgets."
   },
@@ -1999,7 +1999,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.news24.com/",
     "logo": "/connectors/news24.svg",
-    "banner": "/connectors/banners/news24.png",
+    "banner": "/connectors/banners/news24.webp",
     "logoFit": "cover",
     "notes": "South Africa's largest digital news site — stream national politics, business, and African desk coverage."
   },
@@ -2013,7 +2013,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www3.nhk.or.jp/nhkworld/",
     "logo": "/connectors/nhk.svg",
-    "banner": "/connectors/banners/nhk.png",
+    "banner": "/connectors/banners/nhk.webp",
     "logoFit": "cover",
     "notes": "Japan's public broadcaster international service — surface Asia-Pacific headlines and Japan desk coverage."
   },
@@ -2027,7 +2027,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.notion.com/",
     "logo": "/connectors/notion.svg",
-    "banner": "/connectors/banners/notion.png",
+    "banner": "/connectors/banners/notion.webp",
     "logoFit": "cover",
     "notes": "All-in-one workspace — sync pages, databases, and runbooks into knowledge-backed agents and ops dashboards."
   },
@@ -2041,7 +2041,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.pagerduty.com/",
     "logo": "/connectors/pagerduty.svg",
-    "banner": "/connectors/banners/pagerduty.png",
+    "banner": "/connectors/banners/pagerduty.webp",
     "logoFit": "cover",
     "notes": "Incident response and on-call orchestration — show open incidents, services, and escalation status on a live ops board."
   },
@@ -2055,7 +2055,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.paypal.com/",
     "logo": "/connectors/paypal.svg",
-    "banner": "/connectors/banners/paypal.png",
+    "banner": "/connectors/banners/paypal.webp",
     "logoFit": "cover",
     "notes": "Global payments network — surface payouts, balances, and transaction volume on ops and finance boards."
   },
@@ -2069,7 +2069,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://plaid.com/",
     "logo": "/connectors/plaid.svg",
-    "banner": "/connectors/banners/plaid.png",
+    "banner": "/connectors/banners/plaid.webp",
     "logoFit": "cover",
     "notes": "Open banking connectivity — link bank and brokerage accounts so agents and widgets read balances and transactions."
   },
@@ -2083,7 +2083,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://posthog.com/",
     "logo": "/connectors/posthog.svg",
-    "banner": "/connectors/banners/posthog.png",
+    "banner": "/connectors/banners/posthog.webp",
     "logoFit": "cover",
     "notes": "Product analytics and feature flags — chart funnels, retention, and event trends alongside your market and ops boards."
   },
@@ -2097,7 +2097,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.premiumtimesng.com/",
     "logo": "/connectors/premium_times.svg",
-    "banner": "/connectors/banners/premium_times.png",
+    "banner": "/connectors/banners/premium_times.webp",
     "logoFit": "cover",
     "notes": "Nigerian investigative news outlet — follow accountability reporting and national politics for African boards."
   },
@@ -2111,7 +2111,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://prometheus.io/",
     "logo": "/connectors/prometheus.svg",
-    "banner": "/connectors/banners/prometheus.png",
+    "banner": "/connectors/banners/prometheus.webp",
     "logoFit": "cover",
     "notes": "Open-source metrics and alerting toolkit — query PromQL time series for infrastructure and app health widgets."
   },
@@ -2125,7 +2125,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://punchng.com/",
     "logo": "/connectors/punch.svg",
-    "banner": "/connectors/banners/punch.png",
+    "banner": "/connectors/banners/punch.webp",
     "logoFit": "cover",
     "notes": "Nigeria's widely read daily — pull Lagos politics, business, and West Africa headlines into research widgets."
   },
@@ -2139,7 +2139,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://rabby.io/",
     "logo": "/connectors/rabby.svg",
-    "banner": "/connectors/banners/rabby.png",
+    "banner": "/connectors/banners/rabby.webp",
     "logoFit": "cover",
     "notes": "Multi-chain browser wallet focused on clear transaction previews — watch EVM addresses and token balances in Nexow."
   },
@@ -2153,7 +2153,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://rainbow.me/",
     "logo": "/connectors/rainbow.svg",
-    "banner": "/connectors/banners/rainbow.png",
+    "banner": "/connectors/banners/rainbow.webp",
     "logoFit": "cover",
     "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
   },
@@ -2167,7 +2167,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.reforma.com/",
     "logo": "/connectors/reforma.svg",
-    "banner": "/connectors/banners/reforma.png",
+    "banner": "/connectors/banners/reforma.webp",
     "logoFit": "cover",
     "notes": "Major Mexican newspaper — track Mexico City politics, business, and national news for LatAm widgets."
   },
@@ -2181,7 +2181,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.reuters.com/",
     "logo": "/connectors/reuters.svg",
-    "banner": "/connectors/banners/reuters.png",
+    "banner": "/connectors/banners/reuters.webp",
     "logoFit": "cover",
     "notes": "Global news wire — stream international headlines, markets coverage, and breaking stories into research and briefing widgets."
   },
@@ -2199,7 +2199,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.revolut.com/",
     "logo": "/connectors/revolut.svg",
-    "banner": "/connectors/banners/revolut.png",
+    "banner": "/connectors/banners/revolut.webp",
     "logoFit": "cover",
     "notes": "Digital banking and multi-currency cards — track account balances, cards, and FX activity in live widgets."
   },
@@ -2213,7 +2213,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://safe.global/",
     "logo": "/connectors/safe.svg",
-    "banner": "/connectors/banners/safe.png",
+    "banner": "/connectors/banners/safe.webp",
     "logoFit": "cover",
     "notes": "Smart-account multisig wallet (formerly Gnosis Safe) — monitor Safe treasuries, owners, and on-chain activity."
   },
@@ -2227,7 +2227,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://sentry.io/",
     "logo": "/connectors/sentry.svg",
-    "banner": "/connectors/banners/sentry.png",
+    "banner": "/connectors/banners/sentry.webp",
     "logoFit": "cover",
     "notes": "Application error monitoring — surface crash rates, issue trends, and release health on your ops dashboards."
   },
@@ -2241,7 +2241,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://slack.com/",
     "logo": "/connectors/slack.svg",
-    "banner": "/connectors/banners/slack.png",
+    "banner": "/connectors/banners/slack.webp",
     "logoFit": "cover",
     "notes": "Team messaging for ops workflows — read channels and threads so bots and agents can monitor and brief from Slack."
   },
@@ -2255,7 +2255,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://solflare.com/",
     "logo": "/connectors/solflare.svg",
-    "banner": "/connectors/banners/solflare.png",
+    "banner": "/connectors/banners/solflare.webp",
     "logoFit": "cover",
     "notes": "Solana wallet for SOL and SPL tokens — connect or paste addresses to track holdings watch-only alongside Phantom."
   },
@@ -2269,7 +2269,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.scmp.com/",
     "logo": "/connectors/scmp.svg",
-    "banner": "/connectors/banners/scmp.png",
+    "banner": "/connectors/banners/scmp.webp",
     "logoFit": "cover",
     "notes": "Hong Kong English-language daily — follow Greater China and Asia news for regional research boards."
   },
@@ -2283,7 +2283,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://stripe.com/",
     "logo": "/connectors/stripe.svg",
-    "banner": "/connectors/banners/stripe.png",
+    "banner": "/connectors/banners/stripe.webp",
     "logoFit": "cover",
     "notes": "Payments infrastructure — chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
   },
@@ -2297,7 +2297,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://www.nytimes.com/",
     "logo": "/connectors/nytimes.svg",
-    "banner": "/connectors/banners/nytimes.png",
+    "banner": "/connectors/banners/nytimes.webp",
     "logoFit": "cover",
     "notes": "US newspaper of record — pull top stories, business, and world coverage into research and morning-brief widgets."
   },
@@ -2311,7 +2311,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://timesofindia.indiatimes.com/",
     "logo": "/connectors/times_of_india.svg",
-    "banner": "/connectors/banners/times_of_india.png",
+    "banner": "/connectors/banners/times_of_india.webp",
     "logoFit": "cover",
     "notes": "India's largest English daily — surface South Asia headlines and business coverage for regional news boards."
   },
@@ -2328,7 +2328,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.tradier.com/",
     "logo": "/connectors/tradier.svg",
-    "banner": "/connectors/banners/tradier.png",
+    "banner": "/connectors/banners/tradier.webp",
     "logoFit": "cover",
     "notes": "Brokerage API for equities and options — stream quotes, positions, and order state into trading dashboards."
   },
@@ -2347,7 +2347,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://www.tradingview.com/",
     "logo": "/connectors/tradingview.svg",
-    "banner": "/connectors/banners/tradingview.png",
+    "banner": "/connectors/banners/tradingview.webp",
     "logoFit": "cover",
     "notes": "Charts and market community data — pull symbols, watchlists, and alert context into Nexow research widgets."
   },
@@ -2361,7 +2361,7 @@ export const CONNECTORS: Connector[] = [
     "assets": [],
     "url": "https://trezor.io/",
     "logo": "/connectors/trezor.svg",
-    "banner": "/connectors/banners/trezor.png",
+    "banner": "/connectors/banners/trezor.webp",
     "logoFit": "cover",
     "notes": "Hardware wallet for self-custody — watch Trezor public addresses for balances and activity without exposing keys to Nexow."
   },
@@ -2377,7 +2377,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://uniswap.org/",
     "logo": "/connectors/uniswap.png",
-    "banner": "/connectors/banners/uniswap.png",
+    "banner": "/connectors/banners/uniswap.webp",
     "logoFit": "cover",
     "notes": "Decentralized exchange protocol for token swaps and AMM liquidity across Ethereum and supported EVM networks."
   },
@@ -2393,7 +2393,7 @@ export const CONNECTORS: Connector[] = [
     ],
     "url": "https://wise.com/",
     "logo": "/connectors/wise.svg",
-    "banner": "/connectors/banners/wise.png",
+    "banner": "/connectors/banners/wise.webp",
     "logoFit": "cover",
     "notes": "Cross-border payments and multi-currency accounts — chart transfers, balances, and FX rates on finance widgets."
   }
