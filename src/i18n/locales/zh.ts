@@ -541,6 +541,8 @@ export const zh: SiteContent = {
         '直连交易场所，凭据不经过我们的基础设施',
         '开始构建无需账户',
       ],
+      certificationsLabel: '独立审计',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: '阅读本地模式架构',
     },
     roadmap: {
@@ -2158,7 +2160,7 @@ export const zh: SiteContent = {
   securityPage: {
     meta: {
       title: '安全与信任 — Nexow',
-      description: 'Nexow 如何限定组件、凭据、版本与同步——沙箱化运行时、最小权限连接器、工作区归属。',
+      description: '已通过 SOC 2 Type II、ISO/IEC 27001、27017、27018 认证，符合 GDPR。Nexow 如何限定组件、凭据、版本与同步——沙箱化运行时、最小权限连接器、工作区归属。',
     },
     hero: {
       badge: '安全',
@@ -2187,6 +2189,46 @@ export const zh: SiteContent = {
         body: '云同步让工作区在各设备间保持可用，而不会把你的画布变成别人的产品。',
       },
     ],
+    compliance: {
+      eyebrow: '合规',
+      title: '通过企业所要求的标准审计',
+      subtitle:
+        '独立审计机构依据公认的安全与隐私标准对 Nexow 进行评估。报告与证书可在签署保密协议后向客户及潜在客户提供。',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: '已认证',
+        body: '独立审计师在一段观察期内持续测试我们的安全性、可用性与保密性控制，而非只在某一天检查。',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: '已认证',
+        body: '我们的信息安全管理体系已通过该国际标准认证，涵盖风险评估、访问控制、供应商管理与事件响应。',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: '已认证',
+        body: '27001 的云扩展标准：界定 Nexow、我们所依托的基础设施与你的工作区之间如何划分责任。',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: '已认证',
+        body: '云隐私扩展标准：规定工作区中的个人数据如何隔离、处理，以及在你离开时如何归还或删除。',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: '合规',
+        body: '数据处理协议、公开的次级处理方清单、数据主体权利，以及覆盖整个欧盟与英国的泄露通知时限。',
+      },
+      ],
+      note: 'GDPR 是我们遵守的法规，而不是任何机构颁发的证书；标记为已认证的条目均由获得认可的第三方完成审计。',
+      cta: '索取报告',
+    },
     principlesTitle: '我们的承诺',
     principles: [
       '生成的代码绝不会以不受限的权限访问你的账户。',

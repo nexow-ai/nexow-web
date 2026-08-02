@@ -6,6 +6,7 @@ import { localizePath } from '../../i18n/utils';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../PageHero.astro';
 import FeatureCard from '../FeatureCard.astro';
+import Compliance from '../sections/Compliance.astro';
 import CtaBand from '../sections/CtaBand.astro';
 import Icon from '../Icon.astro';
 
@@ -17,6 +18,7 @@ const t = useContent(lang).securityPage!;
 
 const sections = [
   { id: 'pillars', label: t.hero.badge },
+  { id: 'compliance', label: t.compliance.eyebrow },
   { id: 'principles', label: t.principlesTitle },
   { id: 'cta', label: t.ctaPrimary },
 ];
@@ -38,6 +40,8 @@ const sections = [
       {t.pillars.map((p) => <FeatureCard icon={p.icon} title={p.title} body={p.body} />)}
     </div>
   </section>
+
+  <Compliance lang={lang} />
 
   <section id="principles" class="scroll-mt-20 border-y border-ink-900/5 bg-[#f7fbfb]/70 py-16 dark:border-white/8 dark:bg-white/[0.015]">
     <div class="container-page">

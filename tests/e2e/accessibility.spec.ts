@@ -17,6 +17,7 @@ const ROUTES = [
   '/about',
   '/contact',
   '/privacy',
+  '/security',
   '/for/traders',
 ] as const;
 

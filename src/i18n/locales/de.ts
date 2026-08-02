@@ -541,6 +541,8 @@ export const de: SiteContent = {
         'Direkte Venue-Verbindungen halten Zugangsdaten von unserer Infrastruktur fern',
         'Kein Konto nötig, um mit dem Bauen zu starten',
       ],
+      certificationsLabel: 'Unabhängig auditiert',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: 'Lies die Local-Mode-Architektur',
     },
     roadmap: {
@@ -2162,7 +2164,7 @@ export const de: SiteContent = {
   securityPage: {
     meta: {
       title: 'Sicherheit & Vertrauen — Nexow',
-      description: 'Wie Nexow Widgets, Zugangsdaten, Versionen und Sync eingrenzt — Sandbox-Runtime, Konnektoren mit minimalen Rechten, Workspace-Eigentum.',
+      description: 'SOC 2 Type II, ISO/IEC 27001, 27017 und 27018 zertifiziert, DSGVO-konform. Wie Nexow Widgets, Zugangsdaten, Versionen und Sync eingrenzt — Sandbox-Runtime, Konnektoren mit minimalen Rechten, Workspace-Eigentum.',
     },
     hero: {
       badge: 'Sicherheit',
@@ -2191,6 +2193,46 @@ export const de: SiteContent = {
         body: 'Cloud-Sync hält Workspaces auf allen Geräten verfügbar, ohne deinen Canvas zum Produkt eines anderen zu machen.',
       },
     ],
+    compliance: {
+      eyebrow: 'Compliance',
+      title: 'Geprüft nach den Standards, nach denen Unternehmen fragen',
+      subtitle:
+        'Unabhängige Auditoren prüfen Nexow anhand anerkannter Sicherheits- und Datenschutzstandards. Berichte und Zertifikate stehen Kunden und Interessenten unter NDA zur Verfügung.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: 'Zertifiziert',
+        body: 'Ein unabhängiger Auditor prüft unsere Kontrollen für Sicherheit, Verfügbarkeit und Vertraulichkeit über einen Beobachtungszeitraum hinweg, nicht nur an einem einzelnen Tag.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: 'Zertifiziert',
+        body: 'Unser Informationssicherheits-Managementsystem ist nach dem internationalen Standard zertifiziert — Risikobewertung, Zugriffskontrolle, Lieferantenmanagement und Incident Response.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: 'Zertifiziert',
+        body: 'Die Cloud-Erweiterung zu 27001: die Kontrollen, die die Verantwortung zwischen Nexow, unserer Infrastruktur und deinem Workspace aufteilen.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: 'Zertifiziert',
+        body: 'Die Cloud-Datenschutzerweiterung: wie personenbezogene Daten in einem Workspace getrennt, verarbeitet und bei deinem Weggang zurückgegeben oder gelöscht werden.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: 'Konform',
+        body: 'Ein Auftragsverarbeitungsvertrag, eine veröffentlichte Liste der Unterauftragsverarbeiter, Betroffenenrechte und Fristen für die Meldung von Datenschutzverletzungen für die gesamte EU und das Vereinigte Königreich.',
+      },
+      ],
+      note: 'Die DSGVO ist eine Verordnung, die wir einhalten, kein Zertifikat, das jemand ausstellt — die als zertifiziert markierten Einträge sind Audits durch eine akkreditierte dritte Partei.',
+      cta: 'Berichte anfordern',
+    },
     principlesTitle: 'Worauf wir uns festlegen',
     principles: [
       'Generierter Code läuft nie mit uneingeschränktem Zugriff auf dein Konto.',

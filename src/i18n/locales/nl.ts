@@ -541,6 +541,8 @@ export const nl: SiteContent = {
         'Direct-to-venue-verbindingen houden referenties buiten onze infrastructuur',
         'Geen account nodig om te beginnen met bouwen',
       ],
+      certificationsLabel: 'Onafhankelijk geaudit',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: 'Lees de lokale-modus architectuur',
     },
     roadmap: {
@@ -2162,7 +2164,7 @@ export const nl: SiteContent = {
   securityPage: {
     meta: {
       title: 'Beveiliging & vertrouwen — Nexow',
-      description: 'Hoe Nexow widgets, inloggegevens, versies en sync afbakent — sandboxed runtime, connectoren met minimale rechten, eigendom van je workspace.',
+      description: 'SOC 2 Type II, ISO/IEC 27001, 27017 en 27018 gecertificeerd, AVG-conform. Hoe Nexow widgets, inloggegevens, versies en sync afbakent — sandboxed runtime, connectoren met minimale rechten, eigendom van je workspace.',
     },
     hero: {
       badge: 'Beveiliging',
@@ -2191,6 +2193,46 @@ export const nl: SiteContent = {
         body: 'Cloudsync houdt workspaces beschikbaar op al je apparaten zonder je canvas het product van iemand anders te maken.',
       },
     ],
+    compliance: {
+      eyebrow: 'Compliance',
+      title: 'Geaudit volgens de standaarden waar bedrijven om vragen',
+      subtitle:
+        'Onafhankelijke auditors toetsen Nexow aan erkende beveiligings- en privacystandaarden. Rapporten en certificaten zijn onder NDA beschikbaar voor klanten en geïnteresseerden.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: 'Gecertificeerd',
+        body: 'Een onafhankelijke auditor test onze beveiligings-, beschikbaarheids- en vertrouwelijkheidsmaatregelen over een observatieperiode, niet op één enkele dag.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: 'Gecertificeerd',
+        body: 'Ons managementsysteem voor informatiebeveiliging is gecertificeerd volgens de internationale norm — risicobeoordeling, toegangsbeheer, leveranciersbeheer en incidentrespons.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: 'Gecertificeerd',
+        body: 'De clouduitbreiding op 27001: de maatregelen die de verantwoordelijkheid verdelen tussen Nexow, de infrastructuur waarop we draaien en jouw workspace.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: 'Gecertificeerd',
+        body: 'De cloudprivacyuitbreiding: hoe persoonsgegevens in een workspace worden gescheiden, verwerkt en teruggegeven of verwijderd wanneer je vertrekt.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: 'Conform',
+        body: 'Een verwerkersovereenkomst, een gepubliceerde lijst met subverwerkers, rechten van betrokkenen en meldingstermijnen bij datalekken voor de hele EU en het VK.',
+      },
+      ],
+      note: 'De AVG is een verordening waaraan we voldoen, geen certificaat dat iemand uitgeeft — de items met het label gecertificeerd zijn audits door een geaccrediteerde derde partij.',
+      cta: 'Rapporten aanvragen',
+    },
     principlesTitle: 'Waar wij ons aan houden',
     principles: [
       'Gegenereerde code draait nooit met onbeperkte toegang tot je account.',

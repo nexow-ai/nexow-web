@@ -541,6 +541,8 @@ export const ms = {
         'Sambungan terus ke tempat penuh menjaga bukti kelayakan di luar infrastruktur kami',
         'Tiada akaun diperlukan untuk mula membina',
       ],
+      certificationsLabel: 'Diaudit secara bebas',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: 'Baca senibina mod tempatan',
     },
     roadmap: {
@@ -1880,7 +1882,7 @@ export const ms = {
   securityPage: {
     meta: {
       title: 'Keselamatan & kepercayaan — Nexow',
-      description: 'Bagaimana Nexow menghadkan widget, kelayakan, versi dan penyegerakan — runtime sandbox, penyambung keistimewaan minimum, pemilikan ruang kerja.',
+      description: 'Diperakui SOC 2 Type II, ISO/IEC 27001, 27017 dan 27018, mematuhi GDPR. Bagaimana Nexow menghadkan widget, kelayakan, versi dan penyegerakan — runtime sandbox, penyambung keistimewaan minimum, pemilikan ruang kerja.',
     },
     hero: {
       badge: 'Keselamatan',
@@ -1909,6 +1911,46 @@ export const ms = {
         body: 'Penyegerakan awan memastikan ruang kerja tersedia merentas peranti tanpa menjadikan kanvas anda produk orang lain.',
       },
     ],
+    compliance: {
+      eyebrow: 'Pematuhan',
+      title: 'Diaudit mengikut standard yang diminta perusahaan',
+      subtitle:
+        'Juruaudit bebas menilai Nexow berdasarkan standard keselamatan dan privasi yang diiktiraf. Laporan dan sijil disediakan kepada pelanggan dan bakal pelanggan di bawah NDA.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: 'Diperakui',
+        body: 'Juruaudit bebas menguji kawalan keselamatan, ketersediaan dan kerahsiaan kami sepanjang tempoh pemerhatian, bukan pada satu hari sahaja.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: 'Diperakui',
+        body: 'Sistem pengurusan keselamatan maklumat kami diperakui mengikut standard antarabangsa — penilaian risiko, kawalan akses, pengurusan pembekal dan tindak balas insiden.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: 'Diperakui',
+        body: 'Sambungan awan kepada 27001: kawalan yang membahagikan tanggungjawab antara Nexow, infrastruktur yang kami gunakan dan ruang kerja anda.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: 'Diperakui',
+        body: 'Sambungan privasi awan: cara data peribadi dalam ruang kerja diasingkan, dikendalikan, dan dikembalikan atau dipadam apabila anda pergi.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: 'Mematuhi',
+        body: 'Perjanjian Pemprosesan Data, senarai subpemproses yang diterbitkan, hak subjek data dan tempoh pemberitahuan pelanggaran untuk seluruh EU dan UK.',
+      },
+      ],
+      note: 'GDPR ialah peraturan yang kami patuhi, bukan sijil yang dikeluarkan sesiapa — entri yang ditanda diperakui ialah audit yang dijalankan oleh pihak ketiga bertauliah.',
+      cta: 'Minta laporan',
+    },
     principlesTitle: 'Apa yang kami janjikan',
     principles: [
       'Kod yang dijana tidak pernah berjalan dengan akses tanpa had ke akaun anda.',

@@ -19,7 +19,7 @@ const BASELINE_FILE = path.join(import.meta.dirname, 'contrast-baseline.json');
  * page-specific, so a sample detects regressions without paying for 20 audited
  * loads on every run.
  */
-const ROUTES = ['/', '/connectors', '/plans', '/community', '/contact'] as const;
+const ROUTES = ['/', '/connectors', '/plans', '/community', '/contact', '/security'] as const;
 
 /** A stable identity for an offending element: its tag plus its first classes. */
 function fingerprint(html: string): string {

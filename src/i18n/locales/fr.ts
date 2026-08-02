@@ -572,6 +572,8 @@ export const fr: SiteContent = {
         'Les identifiants de connecteurs sont limités aux services connectés',
         'La sync cloud rend vos espaces disponibles sur vos appareils',
       ],
+      certificationsLabel: 'Audité indépendamment',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: 'Lire l’architecture de confidentialité',
     },
     roadmap: {
@@ -2162,7 +2164,7 @@ export const fr: SiteContent = {
   securityPage: {
     meta: {
       title: 'Sécurité et confiance — Nexow',
-      description: 'Comment Nexow encadre widgets, identifiants, versions et synchronisation — runtime en sandbox, connecteurs à moindre privilège, propriété de l’espace de travail.',
+      description: 'Certifiés SOC 2 Type II, ISO/IEC 27001, 27017 et 27018, conformes au RGPD. Comment Nexow encadre widgets, identifiants, versions et synchronisation — runtime en sandbox, connecteurs à moindre privilège, propriété de l’espace de travail.',
     },
     hero: {
       badge: 'Sécurité',
@@ -2191,6 +2193,46 @@ export const fr: SiteContent = {
         body: 'La synchronisation cloud garde vos espaces disponibles sur tous vos appareils sans transformer votre canvas en produit d’un autre.',
       },
     ],
+    compliance: {
+      eyebrow: 'Conformité',
+      title: 'Audités selon les normes que les entreprises exigent',
+      subtitle:
+        'Des auditeurs indépendants évaluent Nexow au regard de normes reconnues de sécurité et de confidentialité. Les rapports et certificats sont disponibles pour les clients et prospects sous NDA.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: 'Certifié',
+        body: 'Un auditeur indépendant teste nos contrôles de sécurité, de disponibilité et de confidentialité sur une période d’observation, et non sur une seule journée.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: 'Certifié',
+        body: 'Notre système de management de la sécurité de l’information est certifié selon la norme internationale — évaluation des risques, contrôle des accès, gestion des fournisseurs et réponse aux incidents.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: 'Certifié',
+        body: 'L’extension cloud de la 27001 : les contrôles qui répartissent la responsabilité entre Nexow, l’infrastructure que nous utilisons et votre espace de travail.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: 'Certifié',
+        body: 'L’extension confidentialité dans le cloud : comment les données personnelles d’un espace de travail sont séparées, traitées, puis restituées ou supprimées à votre départ.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: 'Conforme',
+        body: 'Un accord de traitement des données, une liste publiée de sous-traitants, les droits des personnes concernées et les délais de notification des violations pour toute l’UE et le Royaume-Uni.',
+      },
+      ],
+      note: 'Le RGPD est un règlement que nous respectons, pas un certificat délivré par un organisme — les entrées marquées certifiées sont des audits menés par un tiers accrédité.',
+      cta: 'Demander les rapports',
+    },
     principlesTitle: 'Nos engagements',
     principles: [
       'Le code généré ne s’exécute jamais avec un accès illimité à votre compte.',

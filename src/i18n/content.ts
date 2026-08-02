@@ -580,6 +580,9 @@ export interface SiteContent {
       title: string;
       body: string;
       points: string[];
+      /** Standard designations — identical in every locale; only the label above them translates. */
+      certificationsLabel: string;
+      certifications: string[];
       cta: string;
     };
     roadmap: {
@@ -762,6 +765,20 @@ export interface SiteContent {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
     pillars: Feature[];
+    /**
+     * Audited standards. `standard` is the published designation of the scheme
+     * (“ISO/IEC 27001”), so it is the same string in every locale; `status`
+     * distinguishes a certification an auditor issues from a regulation we
+     * comply with, and is translated.
+     */
+    compliance: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      items: { icon: string; standard: string; status: string; body: string }[];
+      note: string;
+      cta: string;
+    };
     principlesTitle: string;
     principles: string[];
     ctaTitle: string;
