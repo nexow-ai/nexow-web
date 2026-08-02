@@ -115,7 +115,12 @@ const uses = tok?.uses ?? c.dao.cards;
 
     <!-- The ladder -->
     <div class="reveal mt-8 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
-      <div class="overflow-x-auto">
+      <!--
+        The ladder is wider than a phone, so this scrolls sideways. A scroll
+        container that only responds to a swipe strands keyboard users, hence
+        the tab stop and the name that tells them what they have landed on.
+      -->
+      <div class="overflow-x-auto" tabindex="0" role="region" aria-label={t.title}>
         <table class="w-full min-w-[36rem] border-collapse text-left">
           <caption class="sr-only">{t.title}</caption>
           <thead>

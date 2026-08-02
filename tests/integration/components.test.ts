@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import BlogCard from '../../src/components/BlogCard.astro';
 import BrandMark from '../../src/components/BrandMark.astro';
 import Button from '../../src/components/Button.astro';
+import Compliance from '../../src/components/sections/Compliance.astro';
+import Privacy from '../../src/components/sections/Privacy.astro';
 import ConnectorCard from '../../src/components/ConnectorCard.astro';
 import ConnectorMarquee from '../../src/components/ConnectorMarquee.astro';
 import FeatureCard from '../../src/components/FeatureCard.astro';
@@ -395,5 +397,58 @@ describe('FeatureMap', () => {
     }
     expect(html).toContain(SITE.appUrl);
     expect(text(html)).not.toMatch(/\bundefined\b/);
+  });
+});
+
+describe('Compliance', () => {
+  it.each(['en', 'es', 'ja', 'ar'] as const)(
+    'names every audited standard and its status in %s',
+    async (lang) => {
+      const t = useContent(lang).securityPage!.compliance;
+      const html = await render(Compliance, localizePath('/security', lang), { props: { lang } });
+
+      for (const item of t.items) {
+        expect(html, `${lang} → ${item.standard}`).toContain(item.standard);
+        expect(text(html), `${lang} → ${item.standard} status`).toContain(item.status);
+      }
+      expect(text(html)).toContain(t.note);
+      expect(text(html)).not.toMatch(/\bundefined\b/);
+    },
+  );
+
+  it('anchors the section so the page nav can reach it', async () => {
+    const html = await render(Compliance, '/security', { props: { lang: 'en' } });
+    expect(html).toContain('id="compliance"');
+  });
+
+  it('points the report request at the localized contact page', async () => {
+    const html = await render(Compliance, '/es/security', { props: { lang: 'es' } });
+    expect(html).toContain(localizePath('/contact', 'es'));
+  });
+
+  it('titles each standard as a heading rather than loose text', async () => {
+    // The section sits between h1 and the principles h2s; standards are h3s so
+    // the outline stays continuous for screen readers.
+    const html = await render(Compliance, '/security', { props: { lang: 'en' } });
+    for (const item of useContent('en').securityPage!.compliance.items) {
+      expect(html, item.standard).toMatch(new RegExp(`<h3[^>]*>\\s*${item.standard}`));
+    }
+  });
+});
+
+describe('Privacy', () => {
+  it.each(['en', 'de', 'he'] as const)('shows the trust marks for %s', async (lang) => {
+    const t = useContent(lang).home.privacy;
+    const html = await render(Privacy, localizePath('/', lang), { props: { lang } });
+
+    expect(text(html)).toContain(t.certificationsLabel);
+    for (const mark of t.certifications) {
+      expect(html, `${lang} → ${mark}`).toContain(mark);
+    }
+  });
+
+  it('links the trust marks through to the security page', async () => {
+    const html = await render(Privacy, '/', { props: { lang: 'en' } });
+    expect(html).toContain('/security');
   });
 });

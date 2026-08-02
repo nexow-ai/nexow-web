@@ -632,6 +632,22 @@
   from { transform: translate3d(calc(-100% * var(--page-slide)), 0, 0); }
 }
 
+/*
+ * A theme change is not a navigation, so nothing may travel. Astro's scoped
+ * elements (`<main>` and the chrome) would otherwise be captured as their own
+ * groups and run the slide alongside the wipe — and, sitting outside the
+ * circle doing the revealing, would flip theme ahead of it. Dropping their
+ * names for the duration returns the whole page to the root snapshot, leaving
+ * the wipe the only motion. `is-theme-transition` is set before
+ * `startViewTransition()`, which is when names are read.
+ *
+ * Unlayered on purpose: Astro's `[data-astro-transition-scope="…"]` rule is
+ * unlayered too, and any layer would lose to it however specific this gets.
+ */
+html.is-theme-transition [data-astro-transition-scope] {
+  view-transition-name: none;
+}
+
 /* ------------------------------------------------------------------ *
  * Aurora backdrop — two slow-drifting blobs behind the hero.
  * ------------------------------------------------------------------ */

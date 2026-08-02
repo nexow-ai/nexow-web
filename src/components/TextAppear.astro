@@ -35,6 +35,11 @@
 
   let handles: AppearHandle[] = [];
 
+  /** Hard ceiling on the wavefront's travel time, ms. */
+  const TRAVEL_MS_MAX = 2600;
+  /** Grace after the reveal should have finished before we force the title visible. */
+  const WATCHDOG_SLACK_MS = 1200;
+
   function prefersReducedMotion(): boolean {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
@@ -282,11 +287,14 @@
     let cancelled = false;
     let raf = 0;
     let timer = 0;
+    let watchdog = 0;
 
     const finish = () => {
       if (cancelled) return;
       cancelled = true;
       if (raf) cancelAnimationFrame(raf);
+      if (timer) clearTimeout(timer);
+      if (watchdog) clearTimeout(watchdog);
       clearClip(el);
       el.classList.remove('is-text-appearing');
       el.classList.add('is-text-appear-done');
@@ -294,99 +302,120 @@
       canvas.remove();
     };
 
-    const start = () => {
+    /* The clip above hides the real title, and the title is the LCP element on
+       every page that uses this. Nothing downstream — fonts.ready, the canvas
+       harvest, rAF itself — is guaranteed to resolve, so bound the hidden state
+       here rather than trusting the animation to end. */
+    watchdog = window.setTimeout(finish, delayMs + TRAVEL_MS_MAX + WATCHDOG_SLACK_MS);
+
+    const begin = () => {
       if (cancelled) return;
-      void document.fonts.ready.then(() => {
+      void el.offsetWidth;
+      const source = harvestParticles(el, canvas);
+      if (!source || !source.particles.length) {
+        finish();
+        return;
+      }
+      placeCanvas(el, canvas);
+
+      const { particles, dpr, width, cssW } = source;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        finish();
+        return;
+      }
+
+      const formBand = Math.max(48, Math.round(72 * dpr));
+      const tipBand = Math.max(28, Math.round(40 * dpr));
+      const step = Math.max(3, Math.round(5 * dpr));
+
+      const minX = particles.reduce((m, p) => (p.tx < m ? p.tx : m), width);
+      const maxX = particles.reduce((m, p) => (p.tx > m ? p.tx : m), 0);
+      const from = rtl ? maxX + tipBand : minX - tipBand;
+      const end = rtl ? minX - formBand : maxX + formBand;
+
+      /* Pace the wavefront on the clock, not on frames delivered. The walk used
+         to advance a fixed `step` per rAF, so its real duration was hostage to
+         frame rate — with a few hundred concurrent animations on the page the
+         2.3s reveal stretched past 20s and the headline simply stayed blank.
+         Same distance, same feel at 60fps; now it also holds at 15fps. */
+      const durationMs = Math.min(TRAVEL_MS_MAX, (Math.abs(end - from) / step) * (1000 / 60));
+      let t0 = 0;
+
+      const frame = () => {
         if (cancelled) return;
-        void el.offsetWidth;
-        const source = harvestParticles(el, canvas);
-        if (!source || !source.particles.length) {
-          finish();
-          return;
-        }
-        placeCanvas(el, canvas);
-
-        const { particles, dpr, width, cssW } = source;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          finish();
-          return;
-        }
-
-        const formBand = Math.max(48, Math.round(72 * dpr));
-        const tipBand = Math.max(28, Math.round(40 * dpr));
-        const step = Math.max(3, Math.round(5 * dpr));
-
-        const minX = particles.reduce((m, p) => (p.tx < m ? p.tx : m), width);
-        const maxX = particles.reduce((m, p) => (p.tx > m ? p.tx : m), 0);
-        let pos = rtl ? maxX + tipBand : minX - tipBand;
-        const end = rtl ? minX - formBand : maxX + formBand;
-        const advancing = rtl ? -step : step;
-
-        const frame = () => {
+        raf = requestAnimationFrame((now) => {
           if (cancelled) return;
-          raf = requestAnimationFrame(() => {
-            if (cancelled) return;
+          if (!t0) t0 = now;
 
-            const settleEdge = rtl ? pos + formBand : pos - formBand;
-            // Real title reveals behind the form band — same box, forever.
-            setClip(el, cssW, settleEdge / dpr, rtl);
+          const progress = durationMs > 0 ? Math.min(1, (now - t0) / durationMs) : 1;
+          const pos = from + (end - from) * progress;
+          const settleEdge = rtl ? pos + formBand : pos - formBand;
+          // Real title reveals behind the form band — same box, forever.
+          setClip(el, cssW, settleEdge / dpr, rtl);
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            for (const p of particles) {
-              let phase: 'ahead' | 'form' | 'done' | 'wait';
-              if (rtl) {
-                if (p.tx > settleEdge) phase = 'done';
-                else if (p.tx > pos) phase = 'form';
-                else if (p.tx > pos - tipBand) phase = 'ahead';
-                else phase = 'wait';
-              } else {
-                if (p.tx < settleEdge) phase = 'done';
-                else if (p.tx < pos) phase = 'form';
-                else if (p.tx < pos + tipBand) phase = 'ahead';
-                else phase = 'wait';
-              }
+          for (const p of particles) {
+            let phase: 'ahead' | 'form' | 'done' | 'wait';
+            if (rtl) {
+              if (p.tx > settleEdge) phase = 'done';
+              else if (p.tx > pos) phase = 'form';
+              else if (p.tx > pos - tipBand) phase = 'ahead';
+              else phase = 'wait';
+            } else {
+              if (p.tx < settleEdge) phase = 'done';
+              else if (p.tx < pos) phase = 'form';
+              else if (p.tx < pos + tipBand) phase = 'ahead';
+              else phase = 'wait';
+            }
 
-              if (phase === 'wait' || phase === 'done') continue;
+            if (phase === 'wait' || phase === 'done') continue;
 
-              if (phase === 'ahead') {
-                p.x += Math.random() > 0.5 ? 1 : -1;
-                p.y += Math.random() > 0.5 ? 1 : -1;
-                p.r = Math.max(0.7 * dpr, p.targetR * 0.5);
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, p.r, p.r);
-                continue;
-              }
-
-              const t = rtl
-                ? Math.min(1, Math.max(0, (p.tx - pos) / formBand))
-                : Math.min(1, Math.max(0, (pos - p.tx) / formBand));
-              const ease = t * t * (3 - 2 * t);
-              p.x += (p.tx - p.x) * (0.22 + 0.55 * ease);
-              p.y += (p.ty - p.y) * (0.22 + 0.55 * ease);
-              if (ease < 0.85) {
-                p.x += (Math.random() - 0.5) * (1 - ease) * 1.6;
-                p.y += (Math.random() - 0.5) * (1 - ease) * 1.6;
-              }
-              p.r = p.targetR * (0.45 + 0.55 * ease);
+            if (phase === 'ahead') {
+              p.x += Math.random() > 0.5 ? 1 : -1;
+              p.y += Math.random() > 0.5 ? 1 : -1;
+              p.r = Math.max(0.7 * dpr, p.targetR * 0.5);
               ctx.fillStyle = p.color;
               ctx.fillRect(p.x, p.y, p.r, p.r);
+              continue;
             }
 
-            const done = rtl ? pos <= end : pos >= end;
-            if (done) {
-              finish();
-              return;
+            const t = rtl
+              ? Math.min(1, Math.max(0, (p.tx - pos) / formBand))
+              : Math.min(1, Math.max(0, (pos - p.tx) / formBand));
+            const ease = t * t * (3 - 2 * t);
+            p.x += (p.tx - p.x) * (0.22 + 0.55 * ease);
+            p.y += (p.ty - p.y) * (0.22 + 0.55 * ease);
+            if (ease < 0.85) {
+              p.x += (Math.random() - 0.5) * (1 - ease) * 1.6;
+              p.y += (Math.random() - 0.5) * (1 - ease) * 1.6;
             }
+            p.r = p.targetR * (0.45 + 0.55 * ease);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x, p.y, p.r, p.r);
+          }
 
-            pos += advancing;
-            frame();
-          });
-        };
+          if (progress >= 1) {
+            finish();
+            return;
+          }
 
-        frame();
-      });
+          frame();
+        });
+      };
+
+      frame();
+    };
+
+    const start = () => {
+      if (cancelled) return;
+      /* Never leave the harvest unguarded: getImageData throws SecurityError
+         under Firefox resistFingerprinting and Safari Lockdown Mode, and
+         fonts.ready is absent on older engines. Both land on finish(), which
+         drops the clip and shows the real title unanimated. */
+      const ready: Promise<unknown> = document.fonts ? document.fonts.ready : Promise.resolve();
+      void ready.then(begin).catch(finish);
     };
 
     if (delayMs) timer = window.setTimeout(start, delayMs);
@@ -396,6 +425,7 @@
       stop() {
         cancelled = true;
         if (timer) clearTimeout(timer);
+        if (watchdog) clearTimeout(watchdog);
         if (raf) cancelAnimationFrame(raf);
         if (el.dataset.textAppearDone !== '1') {
           clearClip(el);

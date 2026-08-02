@@ -19,6 +19,9 @@
     "test:integration": "bun run content:sync && vitest run tests/integration",
     "test:build": "vitest run tests/build",
     "test:coverage": "bun run content:sync && vitest run --coverage",
+    "test:e2e": "astro build && playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "links:check": "node scripts/check-external-links.mjs",
     "deploy": "astro build && wrangler deploy",
     "cf:serve": "astro build && wrangler dev"
   },

@@ -1,8 +1,12 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { languages } from '../../src/i18n/config';
 
 /** Header, mobile menu, language switcher and the skip link — all client-driven. */
 test.describe('header navigation', () => {
+  // The nav list is `hidden lg:flex`, so these exercise the desktop header
+  // regardless of which project runs them; the mobile path is the menu below.
+  test.use({ viewport: { width: 1280, height: 900 } });
+
   test('follows a nav link to its page', async ({ page }) => {
     await page.goto('/');
     await page.locator('#site-nav a[href="/features"]').first().click();
@@ -114,8 +118,40 @@ test.describe('mobile menu', () => {
  * the router settles on rather than trying to sample a 450ms animation.
  */
 test.describe('page-to-page slide', () => {
+  /**
+   * These are the only tests that wait on a view transition to run to
+   * completion. The routes involved animate continuously, so on a machine with
+   * several browsers competing the swap lands well past the 10s default —
+   * `data-astro-transition` is already on <html> while the URL is still the old
+   * one. Waiting longer costs nothing when it passes and keeps the assertions
+   * exact rather than trading them for a looser check.
+   */
+  test.describe.configure({ timeout: 120_000 });
+  const SWAP = { timeout: 45_000 };
+
+  type Flagged = Window & { __routerReady?: boolean };
+
+  /**
+   * Navigate, then wait for the ClientRouter to be live. A click that lands
+   * before `astro:page-load` does a full page load instead of a swap, so no
+   * `astro:before-swap` ever fires and the recording comes back empty.
+   */
+  async function gotoReady(page: Page, url: string) {
+    await page.addInitScript(() => {
+      document.addEventListener(
+        'astro:page-load',
+        () => {
+          (window as Flagged).__routerReady = true;
+        },
+        { once: true },
+      );
+    });
+    await page.goto(url);
+    await page.waitForFunction(() => (window as Flagged).__routerReady === true);
+  }
+
   /** Collects the direction of every client-side navigation from here on. */
-  async function recordDirections(page: import('@playwright/test').Page) {
+  async function recordDirections(page: Page) {
     await page.evaluate(() => {
       const seen: string[] = ((window as any).__slides = []);
       document.addEventListener('astro:before-swap', (event) => {
@@ -126,29 +162,34 @@ test.describe('page-to-page slide', () => {
   }
 
   test('runs backwards to the previous page and forwards to the next', async ({ page }) => {
-    await page.goto('/features');
+    await gotoReady(page, '/features');
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
-    await expect(page).toHaveURL(/localhost:\d+\/$/);
+    await expect(page).toHaveURL(/localhost:\d+\/$/, SWAP);
 
     await page.locator('.page-nav__btn--next').click();
-    await expect(page).toHaveURL(/\/features\/?$/);
+    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
 
     // Each navigation reports twice: the event's direction, then the attribute
     // the router put on <html> for the animation to key off.
     expect(await directions()).toEqual(['back', 'back', 'forward', 'forward']);
   });
 
-  test('follows tour order even when the header jumps across it', async ({ page }) => {
-    await page.goto('/plans');
-    const directions = await recordDirections(page);
+  test.describe('from the header', () => {
+    // Jumping across the tour needs the desktop nav list, not the mobile menu.
+    test.use({ viewport: { width: 1280, height: 900 } });
 
-    // /features sits well before /plans, so the header link must slide back.
-    await page.locator('#site-nav a[href="/features"]').first().click();
-    await expect(page).toHaveURL(/\/features\/?$/);
+    test('follows tour order even when the header jumps across it', async ({ page }) => {
+      await gotoReady(page, '/plans');
+      const directions = await recordDirections(page);
 
-    expect(await directions()).toEqual(['back', 'back']);
+      // /features sits well before /plans, so the header link must slide back.
+      await page.locator('#site-nav a[href="/features"]').first().click();
+      await expect(page).toHaveURL(/\/features\/?$/, SWAP);
+
+      expect(await directions()).toEqual(['back', 'back']);
+    });
   });
 });
 

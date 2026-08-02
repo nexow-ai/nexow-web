@@ -541,6 +541,8 @@ export const tr = {
         'Doğrudan mekan bağlantıları kimlik bilgilerini altyapımız dışında tutarlar',
         'Yapım yapmaya başlamak için hesap gerekmez',
       ],
+      certificationsLabel: 'Bağımsız denetimden geçti',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: 'Yerel mod mimarisini oku',
     },
     roadmap: {
@@ -1880,7 +1882,7 @@ export const tr = {
   securityPage: {
     meta: {
       title: 'Güvenlik ve güven — Nexow',
-      description: 'Nexow widget’ları, kimlik bilgilerini, sürümleri ve senkronizasyonu nasıl sınırlar — sandbox çalışma zamanı, en az ayrıcalıklı bağlantılar, çalışma alanı sahipliği.',
+      description: 'SOC 2 Type II, ISO/IEC 27001, 27017 ve 27018 sertifikalı, GDPR uyumlu. Nexow widget’ları, kimlik bilgilerini, sürümleri ve senkronizasyonu nasıl sınırlar — sandbox çalışma zamanı, en az ayrıcalıklı bağlantılar, çalışma alanı sahipliği.',
     },
     hero: {
       badge: 'Güvenlik',
@@ -1909,6 +1911,46 @@ export const tr = {
         body: 'Bulut senkronizasyonu, kanvasınızı başkasının ürününe dönüştürmeden çalışma alanlarını tüm cihazlarda erişilebilir tutar.',
       },
     ],
+    compliance: {
+      eyebrow: 'Uyumluluk',
+      title: 'Kurumların istediği standartlara göre denetlendi',
+      subtitle:
+        'Bağımsız denetçiler Nexow’u tanınmış güvenlik ve gizlilik standartlarına göre değerlendirir. Raporlar ve sertifikalar müşterilere ve potansiyel müşterilere NDA kapsamında sunulur.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: 'Sertifikalı',
+        body: 'Bağımsız bir denetçi güvenlik, erişilebilirlik ve gizlilik kontrollerimizi tek bir gün yerine bir gözlem dönemi boyunca test eder.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: 'Sertifikalı',
+        body: 'Bilgi güvenliği yönetim sistemimiz uluslararası standarda göre sertifikalıdır — risk değerlendirmesi, erişim kontrolü, tedarikçi yönetimi ve olay müdahalesi.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: 'Sertifikalı',
+        body: '27001’in bulut uzantısı: sorumluluğu Nexow, üzerinde çalıştığımız altyapı ve senin çalışma alanın arasında paylaştıran kontroller.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: 'Sertifikalı',
+        body: 'Bulut gizlilik uzantısı: bir çalışma alanındaki kişisel verilerin nasıl ayrıldığı, işlendiği ve ayrıldığında nasıl iade edildiği veya silindiği.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: 'Uyumlu',
+        body: 'Bir Veri İşleme Sözleşmesi, yayımlanmış alt işleyici listesi, veri sahibi hakları ve AB ile Birleşik Krallık genelinde ihlal bildirim süreleri.',
+      },
+      ],
+      note: 'GDPR uyduğumuz bir düzenlemedir, kimsenin verdiği bir sertifika değil — sertifikalı olarak işaretlenen maddeler akredite bir üçüncü tarafça yapılan denetimlerdir.',
+      cta: 'Rapor talep et',
+    },
     principlesTitle: 'Taahhütlerimiz',
     principles: [
       'Üretilen kod, hesabınıza sınırsız erişimle asla çalışmaz.',

@@ -541,6 +541,8 @@ export const ko: SiteContent = {
         '직접 베뉴 연결은 자격 증명을 인프라에서 제외',
         '구축 시작에 계정 필요 없음',
       ],
+      certificationsLabel: '독립 감사 완료',
+      certifications: ['SOC 2 Type II', 'ISO/IEC 27001', 'ISO/IEC 27017', 'ISO/IEC 27018', 'GDPR'],
       cta: '로컬 모드 아키텍처 읽기',
     },
     roadmap: {
@@ -2160,7 +2162,7 @@ export const ko: SiteContent = {
   securityPage: {
     meta: {
       title: '보안 및 신뢰 — Nexow',
-      description: 'Nexow가 위젯, 자격 증명, 버전, 동기화를 어떻게 제한하는지 — 샌드박스 런타임, 최소 권한 커넥터, 워크스페이스 소유권.',
+      description: 'SOC 2 Type II, ISO/IEC 27001·27017·27018 인증, GDPR 준수. Nexow가 위젯, 자격 증명, 버전, 동기화를 어떻게 제한하는지 — 샌드박스 런타임, 최소 권한 커넥터, 워크스페이스 소유권.',
     },
     hero: {
       badge: '보안',
@@ -2189,6 +2191,46 @@ export const ko: SiteContent = {
         body: '클라우드 동기화는 여러 기기에서 워크스페이스를 사용할 수 있게 하면서도, 캔버스를 다른 누군가의 제품으로 만들지 않습니다.',
       },
     ],
+    compliance: {
+      eyebrow: '컴플라이언스',
+      title: '기업이 요구하는 표준에 따라 감사받았습니다',
+      subtitle:
+        '독립 감사인이 국제적으로 인정된 보안 및 개인정보 보호 표준에 따라 Nexow를 평가합니다. 보고서와 인증서는 NDA에 따라 고객과 도입을 검토 중인 분들께 제공됩니다.',
+      items: [
+      {
+        icon: 'scanSearch',
+        standard: 'SOC 2 Type II',
+        status: '인증 완료',
+        body: '독립 감사인이 특정 하루가 아니라 일정한 관찰 기간에 걸쳐 보안, 가용성, 기밀성 통제를 검증합니다.',
+      },
+      {
+        icon: 'award',
+        standard: 'ISO/IEC 27001',
+        status: '인증 완료',
+        body: '당사의 정보보안 경영시스템은 국제 표준 인증을 받았습니다. 위험 평가, 접근 통제, 공급업체 관리, 사고 대응을 포함합니다.',
+      },
+      {
+        icon: 'server',
+        standard: 'ISO/IEC 27017',
+        status: '인증 완료',
+        body: '27001의 클라우드 확장 표준입니다. Nexow와 당사가 사용하는 인프라, 그리고 사용자의 워크스페이스 사이에서 책임을 나누는 통제를 정의합니다.',
+      },
+      {
+        icon: 'vault',
+        standard: 'ISO/IEC 27018',
+        status: '인증 완료',
+        body: '클라우드 개인정보 보호 확장 표준입니다. 워크스페이스의 개인정보를 어떻게 분리하고 처리하며, 떠날 때 반환하거나 삭제하는지를 정의합니다.',
+      },
+      {
+        icon: 'landmark',
+        standard: 'GDPR',
+        status: '준수',
+        body: '데이터 처리 계약, 공개된 하위 처리자 목록, 정보주체의 권리, 그리고 EU와 영국 전역의 침해 통지 기한을 다룹니다.',
+      },
+      ],
+      note: 'GDPR은 누군가 발급하는 인증이 아니라 당사가 준수하는 규정입니다. 인증 완료로 표시된 항목은 인정받은 제3자가 수행한 감사입니다.',
+      cta: '보고서 요청',
+    },
     principlesTitle: '우리의 약속',
     principles: [
       '생성된 코드가 계정에 무제한으로 접근한 채 실행되는 일은 없습니다.',

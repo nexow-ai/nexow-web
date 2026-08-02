@@ -9,7 +9,7 @@
     "assets": [],
     "url": "https://grafana.com/",
     "logo": "/connectors/grafana.svg",
-    "banner": "/connectors/banners/grafana.png",
+    "banner": "/connectors/banners/grafana.webp",
     "logoFit": "cover",
     "notes": "Open observability platform for metrics, logs, and traces — pull Grafana dashboards and alert state into Nexow ops boards."
   },
@@ -23,7 +23,7 @@
     "assets": [],
     "url": "https://www.datadoghq.com/",
     "logo": "/connectors/datadog.svg",
-    "banner": "/connectors/banners/datadog.png",
+    "banner": "/connectors/banners/datadog.webp",
     "logoFit": "cover",
     "notes": "Cloud monitoring and security platform — stream infrastructure metrics, APM spans, and monitors into live operations widgets."
   },
@@ -37,7 +37,7 @@
     "assets": [],
     "url": "https://sentry.io/",
     "logo": "/connectors/sentry.svg",
-    "banner": "/connectors/banners/sentry.png",
+    "banner": "/connectors/banners/sentry.webp",
     "logoFit": "cover",
     "notes": "Application error monitoring — surface crash rates, issue trends, and release health on your ops dashboards."
   },
@@ -51,7 +51,7 @@
     "assets": [],
     "url": "https://www.pagerduty.com/",
     "logo": "/connectors/pagerduty.svg",
-    "banner": "/connectors/banners/pagerduty.png",
+    "banner": "/connectors/banners/pagerduty.webp",
     "logoFit": "cover",
     "notes": "Incident response and on-call orchestration — show open incidents, services, and escalation status on a live ops board."
   },
@@ -65,7 +65,7 @@
     "assets": [],
     "url": "https://prometheus.io/",
     "logo": "/connectors/prometheus.svg",
-    "banner": "/connectors/banners/prometheus.png",
+    "banner": "/connectors/banners/prometheus.webp",
     "logoFit": "cover",
     "notes": "Open-source metrics and alerting toolkit — query PromQL time series for infrastructure and app health widgets."
   },
@@ -79,7 +79,7 @@
     "assets": [],
     "url": "https://www.databricks.com/",
     "logo": "/connectors/databricks.svg",
-    "banner": "/connectors/banners/databricks.png",
+    "banner": "/connectors/banners/databricks.webp",
     "logoFit": "cover",
     "notes": "Lakehouse platform for analytics and AI — read curated tables and feature datasets into research and dashboard widgets."
   },
@@ -93,7 +93,7 @@
     "assets": [],
     "url": "https://aws.amazon.com/redshift/",
     "logo": "/connectors/redshift.svg",
-    "banner": "/connectors/banners/redshift.png",
+    "banner": "/connectors/banners/redshift.webp",
     "logoFit": "cover",
     "notes": "AWS cloud data warehouse — query analytics marts and operational aggregates for dashboard and reporting widgets."
   },
@@ -107,7 +107,7 @@
     "assets": [],
     "url": "https://cloud.google.com/looker",
     "logo": "/connectors/looker.svg",
-    "banner": "/connectors/banners/looker.png",
+    "banner": "/connectors/banners/looker.webp",
     "logoFit": "cover",
     "notes": "Google Cloud BI platform — connect Looker explores and Looks so agents and widgets reuse governed business metrics."
   },
@@ -121,7 +121,7 @@
     "assets": [],
     "url": "https://www.metabase.com/",
     "logo": "/connectors/metabase.svg",
-    "banner": "/connectors/banners/metabase.png",
+    "banner": "/connectors/banners/metabase.webp",
     "logoFit": "cover",
     "notes": "Open-source business intelligence — pull saved questions and dashboards into Nexow for ops and product reporting."
   },
@@ -135,7 +135,7 @@
     "assets": [],
     "url": "https://posthog.com/",
     "logo": "/connectors/posthog.svg",
-    "banner": "/connectors/banners/posthog.png",
+    "banner": "/connectors/banners/posthog.webp",
     "logoFit": "cover",
     "notes": "Product analytics and feature flags — chart funnels, retention, and event trends alongside your market and ops boards."
   },
@@ -149,7 +149,7 @@
     "assets": [],
     "url": "https://amplitude.com/",
     "logo": "/connectors/amplitude.svg",
-    "banner": "/connectors/banners/amplitude.png",
+    "banner": "/connectors/banners/amplitude.webp",
     "logoFit": "cover",
     "notes": "Product analytics for growth teams — bring cohorts, conversion, and behavioral metrics into live dashboard widgets."
   },
@@ -163,7 +163,7 @@
     "assets": [],
     "url": "https://www.notion.com/",
     "logo": "/connectors/notion.svg",
-    "banner": "/connectors/banners/notion.png",
+    "banner": "/connectors/banners/notion.webp",
     "logoFit": "cover",
     "notes": "All-in-one workspace — sync pages, databases, and runbooks into knowledge-backed agents and ops dashboards."
   },
@@ -177,7 +177,7 @@
     "assets": [],
     "url": "https://linear.app/",
     "logo": "/connectors/linear.svg",
-    "banner": "/connectors/banners/linear.png",
+    "banner": "/connectors/banners/linear.webp",
     "logoFit": "cover",
     "notes": "Issue tracking built for product teams — surface cycles, priorities, and shipping velocity on operations boards."
   },
@@ -191,7 +191,7 @@
     "assets": [],
     "url": "https://slack.com/",
     "logo": "/connectors/slack.svg",
-    "banner": "/connectors/banners/slack.png",
+    "banner": "/connectors/banners/slack.webp",
     "logoFit": "cover",
     "notes": "Team messaging for ops workflows — read channels and threads so bots and agents can monitor and brief from Slack."
   },
@@ -205,7 +205,7 @@
     "assets": [],
     "url": "https://stripe.com/",
     "logo": "/connectors/stripe.svg",
-    "banner": "/connectors/banners/stripe.png",
+    "banner": "/connectors/banners/stripe.webp",
     "logoFit": "cover",
     "notes": "Payments infrastructure — chart revenue, charges, refunds, and subscription health on finance and ops dashboards."
   },
@@ -219,7 +219,7 @@
     "assets": [],
     "url": "https://trezor.io/",
     "logo": "/connectors/trezor.svg",
-    "banner": "/connectors/banners/trezor.png",
+    "banner": "/connectors/banners/trezor.webp",
     "logoFit": "cover",
     "notes": "Hardware wallet for self-custody — watch Trezor public addresses for balances and activity without exposing keys to Nexow."
   },
@@ -233,7 +233,7 @@
     "assets": [],
     "url": "https://rainbow.me/",
     "logo": "/connectors/rainbow.svg",
-    "banner": "/connectors/banners/rainbow.png",
+    "banner": "/connectors/banners/rainbow.webp",
     "logoFit": "cover",
     "notes": "Ethereum wallet built for everyday DeFi — connect or paste addresses to track holdings and recent activity watch-only."
   },
@@ -247,7 +247,7 @@
     "assets": [],
     "url": "https://www.exodus.com/",
     "logo": "/connectors/exodus.svg",
-    "banner": "/connectors/banners/exodus.png",
+    "banner": "/connectors/banners/exodus.webp",
     "logoFit": "cover",
     "notes": "Multi-asset desktop and mobile wallet — surface portfolio balances and transfers on ops and research boards."
   },
@@ -261,7 +261,7 @@
     "assets": [],
     "url": "https://rabby.io/",
     "logo": "/connectors/rabby.svg",
-    "banner": "/connectors/banners/rabby.png",
+    "banner": "/connectors/banners/rabby.webp",
     "logoFit": "cover",
     "notes": "Multi-chain browser wallet focused on clear transaction previews — watch EVM addresses and token balances in Nexow."
   },
@@ -275,7 +275,7 @@
     "assets": [],
     "url": "https://safe.global/",
     "logo": "/connectors/safe.svg",
-    "banner": "/connectors/banners/safe.png",
+    "banner": "/connectors/banners/safe.webp",
     "logoFit": "cover",
     "notes": "Smart-account multisig wallet (formerly Gnosis Safe) — monitor Safe treasuries, owners, and on-chain activity."
   },
@@ -289,7 +289,7 @@
     "assets": [],
     "url": "https://www.argent.xyz/",
     "logo": "/connectors/argent.svg",
-    "banner": "/connectors/banners/argent.png",
+    "banner": "/connectors/banners/argent.webp",
     "logoFit": "cover",
     "notes": "Smart wallet for Ethereum and Starknet — track Argent accounts for balances and activity without custodial keys."
   },
@@ -303,7 +303,7 @@
     "assets": [],
     "url": "https://www.keplr.app/",
     "logo": "/connectors/keplr.svg",
-    "banner": "/connectors/banners/keplr.png",
+    "banner": "/connectors/banners/keplr.webp",
     "logoFit": "cover",
     "notes": "Cosmos ecosystem wallet — watch Keplr addresses across Cosmos chains for balances and staking-related activity."
   },
@@ -317,7 +317,7 @@
     "assets": [],
     "url": "https://solflare.com/",
     "logo": "/connectors/solflare.svg",
-    "banner": "/connectors/banners/solflare.png",
+    "banner": "/connectors/banners/solflare.webp",
     "logoFit": "cover",
     "notes": "Solana wallet for SOL and SPL tokens — connect or paste addresses to track holdings watch-only alongside Phantom."
   },
@@ -331,7 +331,7 @@
     "assets": [],
     "url": "https://backpack.app/",
     "logo": "/connectors/backpack.svg",
-    "banner": "/connectors/banners/backpack.png",
+    "banner": "/connectors/banners/backpack.webp",
     "logoFit": "cover",
     "notes": "xNFT wallet for Solana and Ethereum — monitor Backpack addresses for balances and recent on-chain activity."
   },
@@ -345,7 +345,7 @@
     "assets": [],
     "url": "https://web3.bitget.com/",
     "logo": "/connectors/bitget_wallet.svg",
-    "banner": "/connectors/banners/bitget_wallet.png",
+    "banner": "/connectors/banners/bitget_wallet.webp",
     "logoFit": "cover",
     "notes": "Multi-chain Web3 wallet from Bitget — watch public addresses for native and token balances across supported networks."
   },
@@ -363,7 +363,7 @@
     ],
     "url": "https://www.fidelity.com/",
     "logo": "/connectors/fidelity.svg",
-    "banner": "/connectors/banners/fidelity.png",
+    "banner": "/connectors/banners/fidelity.webp",
     "logoFit": "cover",
     "notes": "Full-service broker and wealth platform — bring brokerage balances, positions, and activity into finance dashboards."
   },
@@ -379,7 +379,7 @@
     ],
     "url": "https://wise.com/",
     "logo": "/connectors/wise.svg",
-    "banner": "/connectors/banners/wise.png",
+    "banner": "/connectors/banners/wise.webp",
     "logoFit": "cover",
     "notes": "Cross-border payments and multi-currency accounts — chart transfers, balances, and FX rates on finance widgets."
   },
@@ -393,7 +393,7 @@
     "assets": [],
     "url": "https://www.paypal.com/",
     "logo": "/connectors/paypal.svg",
-    "banner": "/connectors/banners/paypal.png",
+    "banner": "/connectors/banners/paypal.webp",
     "logoFit": "cover",
     "notes": "Global payments network — surface payouts, balances, and transaction volume on ops and finance boards."
   },
@@ -411,7 +411,7 @@
     ],
     "url": "https://www.revolut.com/",
     "logo": "/connectors/revolut.svg",
-    "banner": "/connectors/banners/revolut.png",
+    "banner": "/connectors/banners/revolut.webp",
     "logoFit": "cover",
     "notes": "Digital banking and multi-currency cards — track account balances, cards, and FX activity in live widgets."
   },
@@ -425,7 +425,7 @@
     "assets": [],
     "url": "https://plaid.com/",
     "logo": "/connectors/plaid.svg",
-    "banner": "/connectors/banners/plaid.png",
+    "banner": "/connectors/banners/plaid.webp",
     "logoFit": "cover",
     "notes": "Open banking connectivity — link bank and brokerage accounts so agents and widgets read balances and transactions."
   },
@@ -445,7 +445,7 @@
     ],
     "url": "https://www.bloomberg.com/professional/",
     "logo": "/connectors/bloomberg.svg",
-    "banner": "/connectors/banners/bloomberg.png",
+    "banner": "/connectors/banners/bloomberg.webp",
     "logoFit": "cover",
     "notes": "Terminal-grade market data and news — stream prices, curves, and headlines into research and trading dashboards."
   },
@@ -464,7 +464,7 @@
     ],
     "url": "https://www.tradingview.com/",
     "logo": "/connectors/tradingview.svg",
-    "banner": "/connectors/banners/tradingview.png",
+    "banner": "/connectors/banners/tradingview.webp",
     "logoFit": "cover",
     "notes": "Charts and market community data — pull symbols, watchlists, and alert context into Nexow research widgets."
   },
@@ -481,7 +481,7 @@
     ],
     "url": "https://www.etoro.com/",
     "logo": "/connectors/etoro.svg",
-    "banner": "/connectors/banners/etoro.png",
+    "banner": "/connectors/banners/etoro.webp",
     "logoFit": "cover",
     "notes": "Social trading broker for stocks and crypto — connect account data for positions, P&L, and copy-trade context."
   },
@@ -498,7 +498,7 @@
     ],
     "url": "https://www.tradier.com/",
     "logo": "/connectors/tradier.svg",
-    "banner": "/connectors/banners/tradier.png",
+    "banner": "/connectors/banners/tradier.webp",
     "logoFit": "cover",
     "notes": "Brokerage API for equities and options — stream quotes, positions, and order state into trading dashboards."
   },
@@ -512,7 +512,7 @@
     "assets": [],
     "url": "https://www.adyen.com/",
     "logo": "/connectors/adyen.svg",
-    "banner": "/connectors/banners/adyen.png",
+    "banner": "/connectors/banners/adyen.webp",
     "logoFit": "cover",
     "notes": "Enterprise payment platform — chart authorization rates, settlement, and revenue across markets and channels."
   },
@@ -526,7 +526,7 @@
     "assets": [],
     "url": "https://www.reuters.com/",
     "logo": "/connectors/reuters.svg",
-    "banner": "/connectors/banners/reuters.png",
+    "banner": "/connectors/banners/reuters.webp",
     "logoFit": "cover",
     "notes": "Global news wire — stream international headlines, markets coverage, and breaking stories into research and briefing widgets."
   },
@@ -540,7 +540,7 @@
     "assets": [],
     "url": "https://apnews.com/",
     "logo": "/connectors/ap_news.svg",
-    "banner": "/connectors/banners/ap_news.png",
+    "banner": "/connectors/banners/ap_news.webp",
     "logoFit": "cover",
     "notes": "US-based wire service — pull AP headlines and worldwide desk coverage for news dashboards and agent briefings."
   },
@@ -554,7 +554,7 @@
     "assets": [],
     "url": "https://www.bbc.com/news",
     "logo": "/connectors/bbc.svg",
-    "banner": "/connectors/banners/bbc.png",
+    "banner": "/connectors/banners/bbc.webp",
     "logoFit": "cover",
     "notes": "UK public broadcaster — follow world, business, and regional BBC News sections in live research boards."
   },
@@ -568,7 +568,7 @@
     "assets": [],
     "url": "https://www.cnn.com/",
     "logo": "/connectors/cnn.svg",
-    "banner": "/connectors/banners/cnn.png",
+    "banner": "/connectors/banners/cnn.webp",
     "logoFit": "cover",
     "notes": "Global cable and digital news network — surface top stories and topic feeds on ops and research canvases."
   },
@@ -582,7 +582,7 @@
     "assets": [],
     "url": "https://www.aljazeera.com/",
     "logo": "/connectors/al_jazeera.svg",
-    "banner": "/connectors/banners/al_jazeera.png",
+    "banner": "/connectors/banners/al_jazeera.webp",
     "logoFit": "cover",
     "notes": "Doha-based international broadcaster — track Middle East and global coverage for multilingual news widgets."
   },
@@ -596,7 +596,7 @@
     "assets": [],
     "url": "https://www.afp.com/",
     "logo": "/connectors/afp.svg",
-    "banner": "/connectors/banners/afp.png",
+    "banner": "/connectors/banners/afp.webp",
     "logoFit": "cover",
     "notes": "Agence France-Presse wire — bring French and international newswire headlines into agent research workflows."
   },
@@ -610,7 +610,7 @@
     "assets": [],
     "url": "https://www.dw.com/",
     "logo": "/connectors/deutsche_welle.svg",
-    "banner": "/connectors/banners/deutsche_welle.png",
+    "banner": "/connectors/banners/deutsche_welle.webp",
     "logoFit": "cover",
     "notes": "Germany's international broadcaster — follow DW world news and analysis across languages on your boards."
   },
@@ -624,7 +624,7 @@
     "assets": [],
     "url": "https://www.france24.com/",
     "logo": "/connectors/france24.svg",
-    "banner": "/connectors/banners/france24.png",
+    "banner": "/connectors/banners/france24.webp",
     "logoFit": "cover",
     "notes": "French international 24-hour news channel — stream global and European headlines into live briefing widgets."
   },
@@ -638,7 +638,7 @@
     "assets": [],
     "url": "https://www3.nhk.or.jp/nhkworld/",
     "logo": "/connectors/nhk.svg",
-    "banner": "/connectors/banners/nhk.png",
+    "banner": "/connectors/banners/nhk.webp",
     "logoFit": "cover",
     "notes": "Japan's public broadcaster international service — surface Asia-Pacific headlines and Japan desk coverage."
   },
@@ -652,7 +652,7 @@
     "assets": [],
     "url": "https://www.nytimes.com/",
     "logo": "/connectors/nytimes.svg",
-    "banner": "/connectors/banners/nytimes.png",
+    "banner": "/connectors/banners/nytimes.webp",
     "logoFit": "cover",
     "notes": "US newspaper of record — pull top stories, business, and world coverage into research and morning-brief widgets."
   },
@@ -666,7 +666,7 @@
     "assets": [],
     "url": "https://www.ft.com/",
     "logo": "/connectors/financial_times.svg",
-    "banner": "/connectors/banners/financial_times.png",
+    "banner": "/connectors/banners/financial_times.webp",
     "logoFit": "cover",
     "notes": "Global business newspaper — stream markets, companies, and macro coverage into trading and research dashboards."
   },
@@ -680,7 +680,7 @@
     "assets": [],
     "url": "https://www.scmp.com/",
     "logo": "/connectors/scmp.svg",
-    "banner": "/connectors/banners/scmp.png",
+    "banner": "/connectors/banners/scmp.webp",
     "logoFit": "cover",
     "notes": "Hong Kong English-language daily — follow Greater China and Asia news for regional research boards."
   },
@@ -694,7 +694,7 @@
     "assets": [],
     "url": "https://elpais.com/",
     "logo": "/connectors/el_pais.svg",
-    "banner": "/connectors/banners/el_pais.png",
+    "banner": "/connectors/banners/el_pais.webp",
     "logoFit": "cover",
     "notes": "Leading Spanish-language newspaper — track Spain, Latin America, and world coverage in news widgets."
   },
@@ -708,7 +708,7 @@
     "assets": [],
     "url": "https://www.lemonde.fr/",
     "logo": "/connectors/le_monde.svg",
-    "banner": "/connectors/banners/le_monde.png",
+    "banner": "/connectors/banners/le_monde.webp",
     "logoFit": "cover",
     "notes": "French newspaper of record — bring politics, economy, and international reporting into multilingual briefings."
   },
@@ -722,7 +722,7 @@
     "assets": [],
     "url": "https://timesofindia.indiatimes.com/",
     "logo": "/connectors/times_of_india.svg",
-    "banner": "/connectors/banners/times_of_india.png",
+    "banner": "/connectors/banners/times_of_india.webp",
     "logoFit": "cover",
     "notes": "India's largest English daily — surface South Asia headlines and business coverage for regional news boards."
   },
@@ -736,7 +736,7 @@
     "assets": [],
     "url": "https://www.folha.uol.com.br/",
     "logo": "/connectors/folha.svg",
-    "banner": "/connectors/banners/folha.png",
+    "banner": "/connectors/banners/folha.webp",
     "logoFit": "cover",
     "notes": "Brazil newspaper of record — stream São Paulo and national politics, business, and culture coverage into research boards."
   },
@@ -750,7 +750,7 @@
     "assets": [],
     "url": "https://g1.globo.com/",
     "logo": "/connectors/g1.svg",
-    "banner": "/connectors/banners/g1.png",
+    "banner": "/connectors/banners/g1.webp",
     "logoFit": "cover",
     "notes": "Globo's Brazilian news portal — pull national headlines, politics, and breaking stories for LatAm briefing widgets."
   },
@@ -764,7 +764,7 @@
     "assets": [],
     "url": "https://www.clarin.com/",
     "logo": "/connectors/clarin.svg",
-    "banner": "/connectors/banners/clarin.png",
+    "banner": "/connectors/banners/clarin.webp",
     "logoFit": "cover",
     "notes": "Argentina's largest daily — follow Buenos Aires politics, economy, and regional coverage on news dashboards."
   },
@@ -778,7 +778,7 @@
     "assets": [],
     "url": "https://www.lanacion.com.ar/",
     "logo": "/connectors/la_nacion.svg",
-    "banner": "/connectors/banners/la_nacion.png",
+    "banner": "/connectors/banners/la_nacion.webp",
     "logoFit": "cover",
     "notes": "Leading Argentine broadsheet — surface politics, markets, and international desks for Spanish-language research boards."
   },
@@ -792,7 +792,7 @@
     "assets": [],
     "url": "https://www.reforma.com/",
     "logo": "/connectors/reforma.svg",
-    "banner": "/connectors/banners/reforma.png",
+    "banner": "/connectors/banners/reforma.webp",
     "logoFit": "cover",
     "notes": "Major Mexican newspaper — track Mexico City politics, business, and national news for LatAm widgets."
   },
@@ -806,7 +806,7 @@
     "assets": [],
     "url": "https://www.eltiempo.com/",
     "logo": "/connectors/el_tiempo.svg",
-    "banner": "/connectors/banners/el_tiempo.png",
+    "banner": "/connectors/banners/el_tiempo.webp",
     "logoFit": "cover",
     "notes": "Colombia's leading daily — bring Bogotá politics, economy, and Andean regional coverage into news boards."
   },
@@ -820,7 +820,7 @@
     "assets": [],
     "url": "https://www.emol.com/",
     "logo": "/connectors/emol.svg",
-    "banner": "/connectors/banners/emol.png",
+    "banner": "/connectors/banners/emol.webp",
     "logoFit": "cover",
     "notes": "El Mercurio's Chilean digital portal — follow Santiago politics, markets, and Southern Cone headlines."
   },
@@ -834,7 +834,7 @@
     "assets": [],
     "url": "https://www.news24.com/",
     "logo": "/connectors/news24.svg",
-    "banner": "/connectors/banners/news24.png",
+    "banner": "/connectors/banners/news24.webp",
     "logoFit": "cover",
     "notes": "South Africa's largest digital news site — stream national politics, business, and African desk coverage."
   },
@@ -848,7 +848,7 @@
     "assets": [],
     "url": "https://mg.co.za/",
     "logo": "/connectors/mail_guardian.svg",
-    "banner": "/connectors/banners/mail_guardian.png",
+    "banner": "/connectors/banners/mail_guardian.webp",
     "logoFit": "cover",
     "notes": "South African investigative weekly — surface in-depth politics, society, and continental analysis."
   },
@@ -862,7 +862,7 @@
     "assets": [],
     "url": "https://punchng.com/",
     "logo": "/connectors/punch.svg",
-    "banner": "/connectors/banners/punch.png",
+    "banner": "/connectors/banners/punch.webp",
     "logoFit": "cover",
     "notes": "Nigeria's widely read daily — pull Lagos politics, business, and West Africa headlines into research widgets."
   },
@@ -876,7 +876,7 @@
     "assets": [],
     "url": "https://www.premiumtimesng.com/",
     "logo": "/connectors/premium_times.svg",
-    "banner": "/connectors/banners/premium_times.png",
+    "banner": "/connectors/banners/premium_times.webp",
     "logoFit": "cover",
     "notes": "Nigerian investigative news outlet — follow accountability reporting and national politics for African boards."
   },
@@ -890,7 +890,7 @@
     "assets": [],
     "url": "https://nation.africa/",
     "logo": "/connectors/daily_nation.svg",
-    "banner": "/connectors/banners/daily_nation.png",
+    "banner": "/connectors/banners/daily_nation.webp",
     "logoFit": "cover",
     "notes": "Kenya's flagship Nation Media daily — track East Africa politics, business, and regional breaking news."
   },
@@ -904,7 +904,7 @@
     "assets": [],
     "url": "https://english.ahram.org.eg/",
     "logo": "/connectors/al_ahram.svg",
-    "banner": "/connectors/banners/al_ahram.png",
+    "banner": "/connectors/banners/al_ahram.webp",
     "logoFit": "cover",
     "notes": "Egypt's historic newspaper — bring Cairo politics, Middle East, and North Africa coverage into multilingual widgets."
   },
@@ -918,7 +918,7 @@
     "assets": [],
     "url": "https://www.africanews.com/",
     "logo": "/connectors/africanews.svg",
-    "banner": "/connectors/banners/africanews.png",
+    "banner": "/connectors/banners/africanews.webp",
     "logoFit": "cover",
     "notes": "Pan-African 24-hour news channel — stream continent-wide headlines and regional desks for research boards."
   },
@@ -937,7 +937,7 @@
     ],
     "url": "https://www.morningstar.com/",
     "logo": "/connectors/morningstar.svg",
-    "banner": "/connectors/banners/morningstar.png",
+    "banner": "/connectors/banners/morningstar.webp",
     "logoFit": "cover",
     "notes": "Investment research and fund ratings — pull equity/fund analytics, star ratings, and market commentary into research widgets."
   }

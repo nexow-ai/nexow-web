@@ -1,0 +1,24 @@
+name: External links
+
+# Link rot is someone else's outage, not our regression — so this runs on a
+# schedule rather than gating pull requests.
+on:
+  schedule:
+    - cron: '0 7 * * 1' # Mondays, 07:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: connector and social URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check outbound links
+        run: node scripts/check-external-links.mjs

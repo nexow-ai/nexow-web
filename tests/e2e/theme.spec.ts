@@ -36,9 +36,10 @@ test.describe('theme toggle', () => {
     await page.goto('/');
     const toggle = page.locator('#theme-toggle').first();
 
+    // Name the destination up front; reading it back straight after the click
+    // would race the view-transition callback that actually applies it.
+    const theme = (await isDark(page)) ? 'light' : 'dark';
     await toggle.click();
-    const dark = await isDark(page);
-    const theme = dark ? 'dark' : 'light';
 
     await expect.poll(() => themeColor(page)).toBe(THEME_COLORS[theme]);
     await expect.poll(() => faviconHref(page)).toBe(THEME_FAVICONS[theme]);
@@ -46,9 +47,14 @@ test.describe('theme toggle', () => {
 
   test('remembers the choice across a reload, with no flash of the other theme', async ({ page }) => {
     await page.goto('/');
+    const chosen = !(await isDark(page));
     await page.locator('#theme-toggle').first().click();
-    const chosen = await isDark(page);
-    expect(await stored(page, THEME_STORAGE_KEY)).toBe(chosen ? 'dark' : 'light');
+
+    // The theme is applied inside the view-transition callback, so the write
+    // lands after the click returns — poll for it instead of racing it.
+    await expect
+      .poll(() => stored(page, THEME_STORAGE_KEY))
+      .toBe(chosen ? 'dark' : 'light');
 
     await page.reload();
     // Read before any paint-time class churn: the blocking script must have
@@ -58,8 +64,9 @@ test.describe('theme toggle', () => {
 
   test('carries the choice to another page', async ({ page }) => {
     await page.goto('/');
+    const chosen = !(await isDark(page));
     await page.locator('#theme-toggle').first().click();
-    const chosen = await isDark(page);
+    await expect.poll(() => isDark(page)).toBe(chosen);
 
     await page.goto('/plans');
     expect(await isDark(page)).toBe(chosen);
@@ -89,6 +96,53 @@ test.describe('theme toggle', () => {
 
     expect(await isDark(page)).toBe(false);
     await context.close();
+  });
+
+  test('wipes without dragging the page sideways', async ({ page }) => {
+    await page.goto('/features');
+    // Astro scopes `<main>` and the chrome for the page slide. A theme change
+    // shares the view-transition machinery but is not a navigation, so those
+    // scopes must drop out and leave the wipe as the only motion.
+    const during = await page.evaluate(async () => {
+      const names = new Set<string>();
+      const sliding = new Set<string>();
+      let wiping = false;
+      let samples = 0;
+
+      document.getElementById('theme-toggle')?.click();
+
+      // Sample every frame the transition is up rather than at one guessed
+      // moment: the wipe only starts once `transition.ready` resolves, which
+      // on a loaded machine lands well after the click.
+      const deadline = performance.now() + 3000;
+      while (performance.now() < deadline) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        if (!document.documentElement.classList.contains('is-theme-transition')) {
+          if (samples) break;
+          continue;
+        }
+        samples++;
+        for (const el of document.querySelectorAll('[data-astro-transition-scope]')) {
+          names.add(getComputedStyle(el).viewTransitionName);
+        }
+        for (const animation of document.getAnimations()) {
+          // `getKeyframes` lives on KeyframeEffect, not the AnimationEffect base.
+          const effect = animation.effect as KeyframeEffect | null;
+          if (!effect?.pseudoElement) continue;
+          const name = String((animation as CSSAnimation).animationName ?? '');
+          if (name.startsWith('nexow-page')) sliding.add(name);
+          const frames: Keyframe[] = effect.getKeyframes?.() ?? [];
+          if (frames.some((frame) => 'clipPath' in frame)) wiping = true;
+        }
+      }
+
+      return { samples, names: [...names], sliding: [...sliding], wiping };
+    });
+
+    expect(during.samples, 'the transition should have been sampled').toBeGreaterThan(0);
+    expect(new Set(during.names)).toEqual(new Set(['none']));
+    expect(during.sliding).toEqual([]);
+    expect(during.wiping, 'the circular wipe should still run').toBe(true);
   });
 
   test('still renders when storage is unavailable', async ({ browser }) => {

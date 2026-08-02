@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { ICON_PATHS } from '../../src/components/icon-paths';
 import { SITE, type Lang } from '../../src/i18n/config';
 import { content, useContent } from '../../src/i18n/content';
 import { LANGS, PREFIXED_LANGS } from '../helpers/locales';
@@ -212,6 +213,81 @@ describe('shared facts across locales', () => {
         expect(meta.description.length, `${lang}.${page}.meta.description too short`).toBeGreaterThan(floor);
         expect(meta.description.length, `${lang}.${page}.meta.description too long`).toBeLessThan(400);
       }
+    }
+  });
+});
+
+/**
+ * Compliance copy makes claims a customer can hold us to, so these guard the
+ * facts rather than the prose: the same standards everywhere, and GDPR never
+ * quietly promoted to a certification it is not.
+ */
+describe('compliance claims', () => {
+  const compliance = (lang: Lang) => useContent(lang).securityPage!.compliance;
+
+  it('lists the same standards, in the same order, in every locale', () => {
+    const reference = compliance('en').items.map((i) => i.standard);
+    for (const lang of PREFIXED_LANGS) {
+      expect(
+        compliance(lang).items.map((i) => i.standard),
+        `${lang} compliance standards drifted`,
+      ).toEqual(reference);
+    }
+  });
+
+  it('names a standard rather than translating its designation', () => {
+    // "ISO/IEC 27001" is the published designation; a localized spelling would
+    // stop matching what a buyer sees on the certificate itself.
+    for (const lang of LANGS) {
+      for (const item of compliance(lang).items) {
+        expect(item.standard, `${lang} translated a standard designation`).toBe(
+          content.en.securityPage!.compliance.items.find(
+            (e) => e.icon === item.icon,
+          )?.standard,
+        );
+      }
+    }
+  });
+
+  it('draws every compliance icon from the shipped glyph set', () => {
+    for (const item of compliance('en').items) {
+      expect(ICON_PATHS, `unknown icon ${item.icon}`).toHaveProperty(item.icon);
+    }
+  });
+
+  it('gives GDPR a different status from the audited certifications', () => {
+    // GDPR is a regulation, not a certificate anyone issues. If a translation
+    // flattens the two, the page starts claiming an audit that does not exist.
+    for (const lang of LANGS) {
+      const items = compliance(lang).items;
+      const gdpr = items.find((i) => i.standard === 'GDPR');
+      const certified = items.filter((i) => i.standard !== 'GDPR');
+
+      expect(gdpr, `${lang} lost the GDPR entry`).toBeDefined();
+      expect(certified.length, `${lang} has no certifications to contrast`).toBeGreaterThan(0);
+      for (const item of certified) {
+        expect(item.status, `${lang} gives ${item.standard} the GDPR status`).not.toBe(
+          gdpr!.status,
+        );
+      }
+    }
+  });
+
+  it('states the same status for every audited certification', () => {
+    for (const lang of LANGS) {
+      const statuses = compliance(lang)
+        .items.filter((i) => i.standard !== 'GDPR')
+        .map((i) => i.status);
+      expect(new Set(statuses).size, `${lang} mixes certification statuses`).toBe(1);
+    }
+  });
+
+  it('shows the same trust marks on the home page as the security page', () => {
+    for (const lang of LANGS) {
+      const home = useContent(lang).home.privacy.certifications;
+      expect(home, `${lang} home badges drifted from /security`).toEqual(
+        compliance(lang).items.map((i) => i.standard),
+      );
     }
   });
 });

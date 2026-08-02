@@ -318,9 +318,11 @@ const uid = `rg-${kind}-${Math.random().toString(36).slice(2, 8)}`;
   }
 
   /* Every loop waits for the reveal — a grid of eight glyphs should not
-     animate behind the fold, and the draw-ins land as the card arrives. */
-  .rule-glyph-draw,
-  .rule-glyph-strike {
+     animate behind the fold, and the draw-ins land as the card arrives.
+     Only `.js` parks the strokes undrawn: without it nothing ever adds
+     `.is-visible`, so the finished frame has to be the default. */
+  :global(.js) .rule-glyph-draw,
+  :global(.js) .rule-glyph-strike {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
   }
@@ -496,9 +498,9 @@ const uid = `rg-${kind}-${Math.random().toString(36).slice(2, 8)}`;
     animation-play-state: paused;
   }
 
+  /* Reduced motion holds the finished frame, not the undrawn one the loops
+     open on — hence the `.js` selectors, which the parked state also uses. */
   @media (prefers-reduced-motion: reduce) {
-    .rule-glyph-draw,
-    .rule-glyph-strike,
     .rule-glyph-pulse,
     .rule-glyph-lift,
     .rule-glyph-antenna,
@@ -506,6 +508,8 @@ const uid = `rg-${kind}-${Math.random().toString(36).slice(2, 8)}`;
     .rule-glyph-fence,
     .rule-glyph-valve,
     .rule-glyph-beat,
+    :global(.js) .rule-glyph-draw,
+    :global(.js) .rule-glyph-strike,
     :global(.is-visible) .rule-glyph-draw,
     :global(.is-visible) .rule-glyph-strike {
       animation: none;
