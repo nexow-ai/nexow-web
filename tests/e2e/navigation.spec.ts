@@ -3,6 +3,10 @@ import { languages } from '../../src/i18n/config';
 
 /** Header, mobile menu, language switcher and the skip link — all client-driven. */
 test.describe('header navigation', () => {
+  // The nav list is `hidden lg:flex`, so these exercise the desktop header
+  // regardless of which project runs them; the mobile path is the menu below.
+  test.use({ viewport: { width: 1280, height: 900 } });
+
   test('follows a nav link to its page', async ({ page }) => {
     await page.goto('/');
     await page.locator('#site-nav a[href="/features"]').first().click();
@@ -140,15 +144,20 @@ test.describe('page-to-page slide', () => {
     expect(await directions()).toEqual(['back', 'back', 'forward', 'forward']);
   });
 
-  test('follows tour order even when the header jumps across it', async ({ page }) => {
-    await page.goto('/plans');
-    const directions = await recordDirections(page);
+  test.describe('from the header', () => {
+    // Jumping across the tour needs the desktop nav list, not the mobile menu.
+    test.use({ viewport: { width: 1280, height: 900 } });
 
-    // /features sits well before /plans, so the header link must slide back.
-    await page.locator('#site-nav a[href="/features"]').first().click();
-    await expect(page).toHaveURL(/\/features\/?$/);
+    test('follows tour order even when the header jumps across it', async ({ page }) => {
+      await page.goto('/plans');
+      const directions = await recordDirections(page);
 
-    expect(await directions()).toEqual(['back', 'back']);
+      // /features sits well before /plans, so the header link must slide back.
+      await page.locator('#site-nav a[href="/features"]').first().click();
+      await expect(page).toHaveURL(/\/features\/?$/);
+
+      expect(await directions()).toEqual(['back', 'back']);
+    });
   });
 });
 
