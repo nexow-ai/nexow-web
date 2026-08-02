@@ -70,6 +70,42 @@ const { sections, label = 'On this page' } = Astro.props;
     /* 42% measured below AA on the page background; 68% keeps it recessive. */
     color: color-mix(in oklab, var(--color-ink-900) 68%, transparent);
   }
+
+  /* The rail is pinned to the viewport edge, but `container-page` caps at 80rem
+     and centres — so the gutter only clears a 9.5rem label past ~1612px. Below
+     that the labels used to print straight over the content column (on the home
+     hero they landed on top of the app mock). Park them out of flow and reveal
+     on hover/focus, so the rail stays scannable without colliding. */
+  @media (max-width: 1619.98px) {
+    .section-nav__label {
+      position: absolute;
+      inset-inline-end: 1.625rem;
+      opacity: 0;
+      transform: translateX(0.5rem);
+      pointer-events: none;
+      border-radius: 0.375rem;
+      padding: 0.125rem 0.375rem;
+      background: color-mix(in oklab, white 88%, transparent);
+      backdrop-filter: blur(4px);
+    }
+    :global([dir='rtl']) .section-nav__label {
+      transform: translateX(-0.5rem);
+    }
+    :global(.dark) .section-nav__label {
+      background: color-mix(in oklab, var(--color-ink-950) 88%, transparent);
+    }
+    .section-nav__list:hover .section-nav__label,
+    .section-nav__list:focus-within .section-nav__label {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-nav__label {
+      transition: none;
+    }
+  }
   :global([dir='rtl']) .section-nav__label {
     text-align: start;
   }
