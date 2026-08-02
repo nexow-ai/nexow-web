@@ -118,6 +118,17 @@ test.describe('mobile menu', () => {
  * the router settles on rather than trying to sample a 450ms animation.
  */
 test.describe('page-to-page slide', () => {
+  /**
+   * These are the only tests that wait on a view transition to run to
+   * completion. The routes involved animate continuously, so on a machine with
+   * several browsers competing the swap lands well past the 10s default —
+   * `data-astro-transition` is already on <html> while the URL is still the old
+   * one. Waiting longer costs nothing when it passes and keeps the assertions
+   * exact rather than trading them for a looser check.
+   */
+  test.describe.configure({ timeout: 120_000 });
+  const SWAP = { timeout: 45_000 };
+
   type Flagged = Window & { __routerReady?: boolean };
 
   /**
@@ -155,10 +166,10 @@ test.describe('page-to-page slide', () => {
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
-    await expect(page).toHaveURL(/localhost:\d+\/$/);
+    await expect(page).toHaveURL(/localhost:\d+\/$/, SWAP);
 
     await page.locator('.page-nav__btn--next').click();
-    await expect(page).toHaveURL(/\/features\/?$/);
+    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
 
     // Each navigation reports twice: the event's direction, then the attribute
     // the router put on <html> for the animation to key off.
@@ -175,7 +186,7 @@ test.describe('page-to-page slide', () => {
 
       // /features sits well before /plans, so the header link must slide back.
       await page.locator('#site-nav a[href="/features"]').first().click();
-      await expect(page).toHaveURL(/\/features\/?$/);
+      await expect(page).toHaveURL(/\/features\/?$/, SWAP);
 
       expect(await directions()).toEqual(['back', 'back']);
     });
