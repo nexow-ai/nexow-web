@@ -36,9 +36,10 @@ test.describe('theme toggle', () => {
     await page.goto('/');
     const toggle = page.locator('#theme-toggle').first();
 
+    // Name the destination up front; reading it back straight after the click
+    // would race the view-transition callback that actually applies it.
+    const theme = (await isDark(page)) ? 'light' : 'dark';
     await toggle.click();
-    const dark = await isDark(page);
-    const theme = dark ? 'dark' : 'light';
 
     await expect.poll(() => themeColor(page)).toBe(THEME_COLORS[theme]);
     await expect.poll(() => faviconHref(page)).toBe(THEME_FAVICONS[theme]);
@@ -46,9 +47,14 @@ test.describe('theme toggle', () => {
 
   test('remembers the choice across a reload, with no flash of the other theme', async ({ page }) => {
     await page.goto('/');
+    const chosen = !(await isDark(page));
     await page.locator('#theme-toggle').first().click();
-    const chosen = await isDark(page);
-    expect(await stored(page, THEME_STORAGE_KEY)).toBe(chosen ? 'dark' : 'light');
+
+    // The theme is applied inside the view-transition callback, so the write
+    // lands after the click returns — poll for it instead of racing it.
+    await expect
+      .poll(() => stored(page, THEME_STORAGE_KEY))
+      .toBe(chosen ? 'dark' : 'light');
 
     await page.reload();
     // Read before any paint-time class churn: the blocking script must have
@@ -58,8 +64,9 @@ test.describe('theme toggle', () => {
 
   test('carries the choice to another page', async ({ page }) => {
     await page.goto('/');
+    const chosen = !(await isDark(page));
     await page.locator('#theme-toggle').first().click();
-    const chosen = await isDark(page);
+    await expect.poll(() => isDark(page)).toBe(chosen);
 
     await page.goto('/plans');
     expect(await isDark(page)).toBe(chosen);
