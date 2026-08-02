@@ -1,5 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import { CONNECTORS, CONNECTOR_COUNT, CONNECTOR_LIVE_COUNT } from '../../src/data/connectors';
+import { toFacets } from '../../src/lib/connectorFilter';
+import { useContent } from '../../src/i18n/content';
+
+const labels = useContent('en').connectorsPage as unknown as Parameters<typeof toFacets>[1];
 
 /**
  * The /connectors controls. The filter *predicate* is unit-tested in
@@ -50,10 +54,14 @@ test.describe('search', () => {
   });
 
   test('matches on notes and asset class, not just the name', async ({ page }) => {
+    // Reuse the very function that writes the card's search attribute, rather
+    // than reimplementing it — the haystack includes localized labels too.
+    const expected = CONNECTORS.filter((c) => toFacets(c, labels).search.includes('crypto')).length;
+
     await page.fill('#connector-search', 'crypto');
-    const count = await visibleCards(page).count();
-    expect(count).toBeGreaterThan(1);
-    expect(count).toBeLessThan(CONNECTOR_COUNT);
+    await expect(visibleCards(page)).toHaveCount(expected);
+    expect(expected, 'crypto should match some venues but not all').toBeGreaterThan(1);
+    expect(expected).toBeLessThan(CONNECTOR_COUNT);
   });
 
   test('updates the result counter', async ({ page }) => {
@@ -199,9 +207,12 @@ test.describe('detail modal', () => {
 
   test('marks a coming-soon venue as unavailable', async ({ page }) => {
     const soon = CONNECTORS.find((c) => c.status === 'soon')!;
-    await page.fill('#connector-search', soon.name.toLowerCase());
+    // Search by id: names can carry punctuation the haystack normalises away.
+    await page.fill('#connector-search', soon.id);
+    await expect(visibleCards(page)).toHaveCount(1);
     await visibleCards(page).first().click();
 
     await expect(page.locator('#connector-modal-soon-hint')).toBeVisible();
+    await expect(page.locator('#connector-modal-title')).toHaveText(soon.name);
   });
 });
