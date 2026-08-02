@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { languages } from '../../src/i18n/config';
 
 /** Header, mobile menu, language switcher and the skip link — all client-driven. */
@@ -118,8 +118,29 @@ test.describe('mobile menu', () => {
  * the router settles on rather than trying to sample a 450ms animation.
  */
 test.describe('page-to-page slide', () => {
+  type Flagged = Window & { __routerReady?: boolean };
+
+  /**
+   * Navigate, then wait for the ClientRouter to be live. A click that lands
+   * before `astro:page-load` does a full page load instead of a swap, so no
+   * `astro:before-swap` ever fires and the recording comes back empty.
+   */
+  async function gotoReady(page: Page, url: string) {
+    await page.addInitScript(() => {
+      document.addEventListener(
+        'astro:page-load',
+        () => {
+          (window as Flagged).__routerReady = true;
+        },
+        { once: true },
+      );
+    });
+    await page.goto(url);
+    await page.waitForFunction(() => (window as Flagged).__routerReady === true);
+  }
+
   /** Collects the direction of every client-side navigation from here on. */
-  async function recordDirections(page: import('@playwright/test').Page) {
+  async function recordDirections(page: Page) {
     await page.evaluate(() => {
       const seen: string[] = ((window as any).__slides = []);
       document.addEventListener('astro:before-swap', (event) => {
@@ -130,7 +151,7 @@ test.describe('page-to-page slide', () => {
   }
 
   test('runs backwards to the previous page and forwards to the next', async ({ page }) => {
-    await page.goto('/features');
+    await gotoReady(page, '/features');
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
@@ -149,7 +170,7 @@ test.describe('page-to-page slide', () => {
     test.use({ viewport: { width: 1280, height: 900 } });
 
     test('follows tour order even when the header jumps across it', async ({ page }) => {
-      await page.goto('/plans');
+      await gotoReady(page, '/plans');
       const directions = await recordDirections(page);
 
       // /features sits well before /plans, so the header link must slide back.
