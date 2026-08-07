@@ -42,6 +42,7 @@ const MARKET_KINDS = {
   dex: 'dex',
   aggregator: 'aggregator',
   data_provider: 'data',
+  payments: 'payments',
 };
 const SOCIAL_KINDS = {
   messaging: 'messaging',
@@ -60,6 +61,7 @@ const SERVICE_KINDS = {
   knowledge_service: 'knowledge',
   news_service: 'news',
   geo_service: 'geo',
+  observability: 'observability',
 };
 
 // Asset-class keys the site's connectorsPage.assets i18n map knows about.
@@ -74,11 +76,17 @@ const SITE_ASSETS = new Set([
   'prediction_markets',
 ]);
 
-// Analytics warehouses get their own label instead of the generic SQL one.
-const WAREHOUSES = new Set(['bigquery', 'snowflake']);
+// Analytics warehouses get their own label instead of the generic SQL one. The
+// app catalog buckets them all as dbType 'sql', so the distinction lives here.
+const WAREHOUSES = new Set(['bigquery', 'snowflake', 'databricks', 'redshift']);
 
 const kindOf = (v) => {
-  if (v.kind === 'db') return WAREHOUSES.has(v.id) ? 'warehouse' : (v.dbType ?? 'sql');
+  if (v.kind === 'db') {
+    // BI / product-analytics platforms are queried like a warehouse but are not
+    // one — the app catalog separates them by venue_type, so honour that first.
+    if (v.venue_type === 'analytics') return 'analytics';
+    return WAREHOUSES.has(v.id) ? 'warehouse' : (v.dbType ?? 'sql');
+  }
   if (v.kind === 'social') return SOCIAL_KINDS[v.venue_type] ?? 'social';
   if (v.kind === 'wallet') return 'wallet';
   if (v.kind === 'service') return SERVICE_KINDS[v.venue_type] ?? 'open_data';
@@ -131,7 +139,14 @@ const bannerOf = (v) => {
   return `/connectors/banners/${file}`;
 };
 
-const connectors = venues.map((v) => ({
+// A venue with no brand mark in the app catalog (logo: null — e.g. custom_api,
+// the bring-your-own-API placeholder) has nothing to show in a logo gallery, and
+// logoOf would crash on the null path. Drop it, but say so: a silently missing
+// venue reads as "the catalog shrank".
+const skipped = venues.filter((v) => !v.logo && !existingLogos.has(v.id)).map((v) => v.id);
+const listable = venues.filter((v) => v.logo || existingLogos.has(v.id));
+
+const connectors = listable.map((v) => ({
   id: v.id,
   name: v.name,
   category: categoryOf(v),
@@ -208,3 +223,6 @@ const withBanner = connectors.filter((c) => c.banner).length;
 console.log(
   `wrote ${connectors.length} connectors (${live} live, ${withBanner} with banner) to src/data/connectors.ts`,
 );
+if (skipped.length) {
+  console.log(`skipped ${skipped.length} venue(s) with no logo: ${skipped.join(', ')}`);
+}
