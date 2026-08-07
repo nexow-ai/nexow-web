@@ -3,6 +3,8 @@ import {
   ALL_SUBCATEGORIES,
   SUBCATEGORIES_BY_CATEGORY,
   subcategoriesFor,
+  unionSubcategories,
+  type ConnectorSubcategory,
 } from '../../../src/data/connector-subcategories';
 import type { ConnectorCategory } from '../../../src/data/connectors';
 import { ICON_PATHS } from '../../../src/components/icon-paths';
@@ -10,6 +12,14 @@ import { useContent } from '../../../src/i18n/content';
 import { LANGS } from '../../helpers/locales';
 
 const CATEGORIES: ConnectorCategory[] = ['finance', 'wallets', 'services', 'data', 'socials'];
+
+const emptyByCategory = (): Record<ConnectorCategory, ConnectorSubcategory[]> => ({
+  finance: [],
+  wallets: [],
+  services: [],
+  data: [],
+  socials: [],
+});
 
 describe('SUBCATEGORIES_BY_CATEGORY', () => {
   it('covers every connector category', () => {
@@ -76,16 +86,20 @@ describe('ALL_SUBCATEGORIES', () => {
     expect(new Set(keys)).toEqual(union);
   });
 
-  it('follows category-tab order, first occurrence winning the icon', () => {
+  it('follows category-tab order', () => {
     expect(ALL_SUBCATEGORIES[0]).toEqual(SUBCATEGORIES_BY_CATEGORY.finance[0]);
-    // `payments` appears in both finance and services; finance defines it first.
-    const payments = ALL_SUBCATEGORIES.find((s) => s.key === 'payments');
-    expect(payments).toBe(SUBCATEGORIES_BY_CATEGORY.finance.find((s) => s.key === 'payments'));
-    // `observability` appears in services before data.
-    const observability = ALL_SUBCATEGORIES.find((s) => s.key === 'observability');
-    expect(observability).toBe(
-      SUBCATEGORIES_BY_CATEGORY.services.find((s) => s.key === 'observability'),
-    );
+    expect(ALL_SUBCATEGORIES).toEqual(unionSubcategories(SUBCATEGORIES_BY_CATEGORY));
+  });
+});
+
+describe('unionSubcategories', () => {
+  it('keeps the first occurrence when a key repeats across categories', () => {
+    const first: ConnectorSubcategory = { key: 'dup', icon: 'wallet', labelFrom: 'kinds' };
+    const second: ConnectorSubcategory = { key: 'dup', icon: 'bitcoin', labelFrom: 'kinds' };
+    const byCategory = emptyByCategory();
+    byCategory.finance = [first];
+    byCategory.wallets = [second];
+    expect(unionSubcategories(byCategory)).toEqual([first]);
   });
 });
 
