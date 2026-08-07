@@ -48,7 +48,6 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     { key: 'knowledge', icon: 'bookOpen', labelFrom: 'kinds' },
     { key: 'news', icon: 'newspaper', labelFrom: 'kinds' },
     { key: 'observability', icon: 'monitor', labelFrom: 'kinds' },
-    { key: 'payments', icon: 'creditCard', labelFrom: 'kinds' },
   ],
   data: [
     { key: 'data', icon: 'lineChart', labelFrom: 'kinds' },
@@ -57,7 +56,6 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     { key: 'warehouse', icon: 'database', labelFrom: 'kinds' },
     { key: 'vector', icon: 'sparkles', labelFrom: 'kinds' },
     { key: 'analytics', icon: 'chartPie', labelFrom: 'kinds' },
-    { key: 'observability', icon: 'monitor', labelFrom: 'kinds' },
   ],
   socials: [
     { key: 'messaging', icon: 'send', labelFrom: 'kinds' },
@@ -78,18 +76,25 @@ const CATEGORY_ORDER: ConnectorCategory[] = [
 ];
 
 /** Union of every category’s subcategories (first occurrence wins for icons). */
-export const ALL_SUBCATEGORIES: ConnectorSubcategory[] = (() => {
+export function unionSubcategories(
+  byCategory: Record<ConnectorCategory, ConnectorSubcategory[]>,
+  order: readonly ConnectorCategory[] = CATEGORY_ORDER,
+): ConnectorSubcategory[] {
   const seen = new Set<string>();
   const out: ConnectorSubcategory[] = [];
-  for (const cat of CATEGORY_ORDER) {
-    for (const sc of SUBCATEGORIES_BY_CATEGORY[cat]) {
+  for (const cat of order) {
+    for (const sc of byCategory[cat]) {
       if (seen.has(sc.key)) continue;
       seen.add(sc.key);
       out.push(sc);
     }
   }
   return out;
-})();
+}
+
+export const ALL_SUBCATEGORIES: ConnectorSubcategory[] = unionSubcategories(
+  SUBCATEGORIES_BY_CATEGORY,
+);
 
 export function subcategoriesFor(category: ConnectorCategory | 'all'): ConnectorSubcategory[] {
   if (category === 'all') return ALL_SUBCATEGORIES;
