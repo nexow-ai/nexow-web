@@ -22,7 +22,7 @@
     "test:e2e": "astro build && playwright test",
     "test:e2e:ui": "playwright test --ui",
     "links:check": "node scripts/check-external-links.mjs",
-    "deploy": "astro build && wrangler deploy",
+    "deploy": "astro build && wrangler pages deploy dist --project-name=nexow-web --branch=main",
     "cf:serve": "astro build && wrangler dev"
   },
   "dependencies": {

@@ -25,6 +25,8 @@ export default getViteConfig({
         // Type-only declarations and generated Astro types.
         'src/**/*.d.ts',
         'src/env.d.ts',
+        // Staging JSON merged by scratchpad/gen-connectors.mjs — not app code.
+        'src/data/**/*.json',
         // Stray artifacts from an `astro dev` run inside src/i18n/locales.
         'src/i18n/locales/dist/**',
         'src/i18n/locales/node_modules/**',

@@ -328,7 +328,7 @@ export const CONNECTORS: Connector[] = [
     "logo": "/connectors/data_gov.png",
     "banner": "/connectors/banners/data_gov.webp",
     "logoFit": "cover",
-    "notes": "US federal open-data catalog (CKAN) — search datasets across agencies. Free API key from api.data.gov."
+    "notes": "The api.data.gov gateway — one free key authenticates dozens of federal APIs behind it (College Scorecard, NREL, FEC, Regulations.gov and more)."
   },
   {
     "id": "databento",
@@ -707,7 +707,7 @@ export const CONNECTORS: Connector[] = [
     "logo": "/connectors/lmax_digital.jpg",
     "banner": "/connectors/banners/lmax_digital.webp",
     "logoFit": "cover",
-    "notes": "LMAX Group's institutional crypto spot exchange (BTC, ETH and more vs USD/EUR/GBP/JPY). Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
+    "notes": "LMAX Group's institutional crypto spot exchange (BTC, ETH and more vs USD/EUR/GBP/JPY). Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser, across ~35 crypto instruments that quote 24/7 — unlike the sister LMAX Exchange venue, whose session-bound FX feed goes quiet at weekends. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
   },
   {
     "id": "lmax",
@@ -725,7 +725,7 @@ export const CONNECTORS: Connector[] = [
     "logo": "/connectors/lmax.png",
     "banner": "/connectors/banners/lmax.webp",
     "logoFit": "cover",
-    "notes": "Institutional-grade FX ECN with a transparent order book. Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
+    "notes": "Institutional-grade FX ECN with a transparent order book. Public market data (instruments, ticker, order book, live trade stream) is keyless and called straight from the browser — but read the limits before you build on it: the public data host carries only FIVE instruments (eur-usd, usd-jpy, xau-usd, xti-usd, uk100), and all five are session-bound, so outside trading hours (weekends included) the ticker returns no content and the trade stream is silent. For a keyless feed that quotes around the clock, use LMAX Digital instead. Add an LMAX Account API key (client key id + secret) to trade and read your account — keyed calls go through the Nexow server, which signs the auth challenge so your secret stays off the wire (the browser-direct toggle is locked off, like Binance/Coinbase). No OHLC history over HTTP: live candles are synthesized from the trade stream, so charts build forward from connect time (true history is FIX-only)."
   },
   {
     "id": "massive",
@@ -934,7 +934,7 @@ export const CONNECTORS: Connector[] = [
     "logo": "/connectors/opensky.png",
     "banner": "/connectors/banners/opensky.webp",
     "logoFit": "cover",
-    "notes": "Live and historical ADS-B flight tracking from the OpenSky Network. Coming soon — anonymous access is rate-limited; authenticated access needs an OpenSky account."
+    "notes": "Live ADS-B flight tracking from the OpenSky Network. Keyless: current state vectors come from https://opensky-network.org/api/states/all, read through the open-HTTP proxy — pass a lamin/lomin/lamax/lomax bounding box, since the unbounded world query is huge. Anonymous access is capped at roughly 400 requests/day at 10s resolution, so poll gently and cache. The venue serves no CORS headers for our origin, so it cannot be called browser-direct."
   },
   {
     "id": "pancakeswap",
@@ -1610,7 +1610,7 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "bloomberg",
     "name": "Bloomberg",
-    "category": "finance",
+    "category": "data",
     "kind": "data",
     "status": "soon",
     "trading": false,
@@ -1619,7 +1619,9 @@ export const CONNECTORS: Connector[] = [
       "indices",
       "fixed_income",
       "fx",
-      "commodities"
+      "commodities",
+      "crypto",
+      "volatility"
     ],
     "url": "https://www.bloomberg.com/professional/",
     "logo": "/connectors/bloomberg.svg",
@@ -1759,9 +1761,12 @@ export const CONNECTORS: Connector[] = [
     "category": "finance",
     "kind": "broker",
     "status": "soon",
-    "trading": false,
+    "trading": true,
     "assets": [
       "equities",
+      "indices",
+      "fx",
+      "commodities",
       "crypto"
     ],
     "url": "https://www.etoro.com/",
@@ -1790,7 +1795,7 @@ export const CONNECTORS: Connector[] = [
     "category": "finance",
     "kind": "broker",
     "status": "soon",
-    "trading": false,
+    "trading": true,
     "assets": [
       "equities",
       "indices",
@@ -1861,7 +1866,7 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "grafana",
     "name": "Grafana",
-    "category": "data",
+    "category": "services",
     "kind": "observability",
     "status": "soon",
     "trading": false,
@@ -1973,15 +1978,14 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "morningstar",
     "name": "Morningstar",
-    "category": "finance",
+    "category": "data",
     "kind": "data",
     "status": "soon",
     "trading": false,
     "assets": [
       "equities",
       "indices",
-      "fixed_income",
-      "fx"
+      "fixed_income"
     ],
     "url": "https://www.morningstar.com/",
     "logo": "/connectors/morningstar.svg",
@@ -2104,7 +2108,7 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "prometheus",
     "name": "Prometheus",
-    "category": "data",
+    "category": "services",
     "kind": "observability",
     "status": "soon",
     "trading": false,
@@ -2192,11 +2196,7 @@ export const CONNECTORS: Connector[] = [
     "kind": "payments",
     "status": "soon",
     "trading": false,
-    "assets": [
-      "fx",
-      "equities",
-      "crypto"
-    ],
+    "assets": [],
     "url": "https://www.revolut.com/",
     "logo": "/connectors/revolut.svg",
     "banner": "/connectors/banners/revolut.webp",
@@ -2276,7 +2276,7 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "stripe",
     "name": "Stripe",
-    "category": "services",
+    "category": "finance",
     "kind": "payments",
     "status": "soon",
     "trading": false,
@@ -2321,7 +2321,7 @@ export const CONNECTORS: Connector[] = [
     "category": "finance",
     "kind": "broker",
     "status": "soon",
-    "trading": false,
+    "trading": true,
     "assets": [
       "equities",
       "indices"
@@ -2335,7 +2335,7 @@ export const CONNECTORS: Connector[] = [
   {
     "id": "tradingview",
     "name": "TradingView",
-    "category": "finance",
+    "category": "data",
     "kind": "data",
     "status": "soon",
     "trading": false,
@@ -2343,6 +2343,7 @@ export const CONNECTORS: Connector[] = [
       "equities",
       "indices",
       "fx",
+      "commodities",
       "crypto"
     ],
     "url": "https://www.tradingview.com/",
@@ -2388,9 +2389,7 @@ export const CONNECTORS: Connector[] = [
     "kind": "payments",
     "status": "soon",
     "trading": false,
-    "assets": [
-      "fx"
-    ],
+    "assets": [],
     "url": "https://wise.com/",
     "logo": "/connectors/wise.svg",
     "banner": "/connectors/banners/wise.webp",
