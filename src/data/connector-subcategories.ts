@@ -48,7 +48,6 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     { key: 'knowledge', icon: 'bookOpen', labelFrom: 'kinds' },
     { key: 'news', icon: 'newspaper', labelFrom: 'kinds' },
     { key: 'observability', icon: 'monitor', labelFrom: 'kinds' },
-    { key: 'payments', icon: 'creditCard', labelFrom: 'kinds' },
   ],
   data: [
     { key: 'data', icon: 'lineChart', labelFrom: 'kinds' },
@@ -57,7 +56,6 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     { key: 'warehouse', icon: 'database', labelFrom: 'kinds' },
     { key: 'vector', icon: 'sparkles', labelFrom: 'kinds' },
     { key: 'analytics', icon: 'chartPie', labelFrom: 'kinds' },
-    { key: 'observability', icon: 'monitor', labelFrom: 'kinds' },
   ],
   socials: [
     { key: 'messaging', icon: 'send', labelFrom: 'kinds' },
