@@ -13,6 +13,11 @@ const blog = defineCollection({
       updatedDate: z.coerce.date().optional(),
       author: z.string().default('The Nexow Team'),
       tags: z.array(z.string()).default([]),
+      // Tags are translated per locale, so they cannot identify an article kind
+      // across languages. `category` is the language-neutral discriminator —
+      // it drives the changelog filter and the card label. Defaulting to
+      // `release` keeps every existing post exactly where it was.
+      category: z.enum(['release', 'guide', 'deep-dive', 'teardown', 'opinion']).default('release'),
       // Cover art lives in src/assets/blog/*.svg, referenced relative to each post.
       heroImage: image().optional(),
       draft: z.boolean().default(false),
