@@ -4,6 +4,7 @@ description: 'Nexow läuft standardmäßig vollständig lokal — Bring-your-own
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privatsphäre', 'architektur', 'sicherheit']
+category: deep-dive
 ---
 
 Die meisten KI-Tools senden Ihre Daten standardmäßig an einen Server. Für eine

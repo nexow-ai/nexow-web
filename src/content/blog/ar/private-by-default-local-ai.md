@@ -4,6 +4,7 @@ description: 'يعمل Nexow محلياً بالكامل افتراضياً — 
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['خصوصية', 'بنية', 'أمان']
+category: deep-dive
 ---
 
 معظم أدوات الذكاء الاصطناعي ترسل بياناتك إلى خادم افتراضياً. لمحطة

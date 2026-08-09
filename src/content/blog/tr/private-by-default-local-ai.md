@@ -4,6 +4,7 @@ description: 'Nexow tamamen yerel çalışır — tarayıcıda kendi anahtarın�
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['gizlilik', 'mimari', 'güvenlik']
+category: deep-dive
 ---
 
 Çoğu yapay zeka aracı varsayılan olarak verilerinizi bir sunucuya gönderir. Pazar istasyonu için — anahtarlarınız, pozisyonlarınız ve stratejileriniz oyunun tamamı olduğu — bu varsayılan geriye doğrudur. Nexow onu tersine çevirir: **varsayılan olarak özel, tasarım gereği yerel.**

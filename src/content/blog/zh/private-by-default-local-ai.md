@@ -4,6 +4,7 @@ description: 'Nexow 默认完全本地运行 — 浏览器内自带密钥的代�
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['隐私', '架构', '安全']
+category: deep-dive
 ---
 
 大多数 AI 工具默认将数据发送到服务器。对于行情工作站 — 你的密钥、持仓和策略就是一切 — 这种默认是颠倒的。Nexow 将其反转：**private by default, local by design.**

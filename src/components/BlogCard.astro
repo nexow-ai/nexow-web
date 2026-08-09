@@ -1,6 +1,7 @@
 ---
 import { type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
+import type { BlogCategory } from '../i18n/blog';
 import { localizePath, dateLocale } from '../i18n/utils';
 import Icon from './Icon.astro';
 import type { ImageMetadata } from 'astro';
@@ -11,14 +12,17 @@ interface Props {
   title: string;
   description: string;
   pubDate: Date;
-  tags: string[];
+  category: BlogCategory;
   heroImage?: ImageMetadata;
   featured?: boolean;
   /** Anchor for the blog index section rail. */
   id?: string;
 }
-const { lang, slug, title, description, pubDate, tags, heroImage, featured = false, id } = Astro.props;
+const { lang, slug, title, description, pubDate, category, heroImage, featured = false, id } =
+  Astro.props;
 const t = useContent(lang).blog;
+// English labels are merged underneath by `useContent`, so this is always set.
+const categoryLabel = t.categories![category];
 const href = localizePath(`/blog/${slug}`, lang);
 const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
   year: 'numeric',
@@ -67,12 +71,8 @@ const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
   <div class:list={['flex flex-1 flex-col p-7', featured && 'md:justify-center md:p-10']}>
     <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-ink-500">
       <time datetime={pubDate.toISOString()}>{dtFmt.format(pubDate)}</time>
-      {tags[0] && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span class="text-brand-600">#{tags[0]}</span>
-        </>
-      )}
+      <span aria-hidden="true">·</span>
+      <span class="text-brand-600 dark:text-brand-300">{categoryLabel}</span>
     </div>
     <h2
       class:list={[

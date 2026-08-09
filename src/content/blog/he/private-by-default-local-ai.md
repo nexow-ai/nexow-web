@@ -4,6 +4,7 @@ description: 'Nexow רץ מקומית לגמרי כברירת מחדל — codeg
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['פרטיות', 'ארכיטקטורה', 'אבטחה']
+category: deep-dive
 ---
 
 רוב כלי ה-AI שולחים את הנתונים שלך לשרת כברירת מחדל. לתחנת עבודה

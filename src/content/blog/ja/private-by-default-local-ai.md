@@ -4,6 +4,7 @@ description: 'Nexowはデフォルトで完全ローカル — ブラウザ内�
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['プライバシー', 'アーキテクチャ', 'セキュリティ']
+category: deep-dive
 ---
 
 ほとんどのAIツールはデフォルトでデータをサーバーに送ります。マーケットワークステーション — キー、ポジション、戦略がすべて — にとって、そのデフォルトは逆です。Nexowはそれを反転します：**private by default, local by design.**

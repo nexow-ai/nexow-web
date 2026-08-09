@@ -4,6 +4,7 @@ description: 'Un guide pas à pas pour construire un tableau de bord crypto en d
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['guide', 'crypto', 'tutorial']
+category: guide
 ---
 
 Vous n’avez plus besoin d’être développeur pour construire un tableau de bord crypto de qualité professionnelle. Avec un créateur natif IA comme Nexow, vous décrivez les widgets que vous voulez en langage naturel et obtenez des graphiques en direct sur un canvas libre. Voici comment construire un poste de travail crypto complet en quelques minutes.

@@ -4,6 +4,7 @@ description: 'Comment Nexow utilise widgets sandboxés, connecteurs limités et 
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacy', 'architecture', 'security']
+category: deep-dive
 ---
 
 Les postes de travail de marché manipulent un contexte sensible : clés, positions, stratégies, alertes et workflows personnalisés. Le logiciel généré ne fonctionne ici que si les limites sont faciles à comprendre.

@@ -15,12 +15,21 @@ interface Props {
    * locale home rather than a URL that does not exist.
    */
   switchRoute?: string;
+  /**
+   * Locales where `switchRoute` exists. Locales outside this list are sent to
+   * the section index instead — a blog post with no Japanese translation links
+   * at `/ja/blog`, not at a Japanese URL that 404s.
+   */
+  availableLangs?: Lang[];
 }
 
 const lang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
-const switchRoute = Astro.props.switchRoute ?? route;
+const { switchRoute = route, availableLangs } = Astro.props;
 const t = useContent(lang);
+
+/** `/blog/a-post` → `/blog`; the nearest page every locale is known to have. */
+const sectionRoute = `/${switchRoute.split('/').filter(Boolean)[0] ?? ''}`;
 
 const links = t.nav.links.map((l) => ({
   ...l,
@@ -29,7 +38,13 @@ const links = t.nav.links.map((l) => ({
   active: route === l.href || (l.href !== '/' && route.startsWith(l.href)),
 }));
 
-const otherLangs = (Object.keys(languages) as Lang[]).filter((l) => l !== lang);
+const otherLangs = (Object.keys(languages) as Lang[])
+  .filter((l) => l !== lang)
+  .map((l) => ({
+    code: l,
+    label: languages[l],
+    url: localizePath(!availableLangs || availableLangs.includes(l) ? switchRoute : sectionRoute, l),
+  }));
 const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
 const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 ---
@@ -87,10 +102,10 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
               otherLangs.map((l) => (
                 <li>
                   <a
-                    href={localizePath(switchRoute, l)}
+                    href={l.url}
                     class="block px-4 py-2 font-mono text-xs uppercase tracking-wider text-ink-600 transition-colors hover:bg-ink-900/5 hover:text-ink-950 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white"
                   >
-                    {languages[l]}
+                    {l.label}
                   </a>
                 </li>
               ))
@@ -165,11 +180,11 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
           {
             otherLangs.map((l) => (
               <a
-                href={localizePath(switchRoute, l)}
+                href={l.url}
                 class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider text-ink-600 dark:text-ink-300"
               >
                 <Icon name="globe" class="size-4" />
-                {languages[l]}
+                {l.label}
               </a>
             ))
           }

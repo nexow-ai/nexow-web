@@ -4,6 +4,7 @@ description: 'O Nexow roda totalmente local por padrão — geração de código
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacidade', 'arquitetura', 'segurança']
+category: deep-dive
 ---
 
 A maioria das ferramentas de IA envia seus dados para um servidor por padrão. Para

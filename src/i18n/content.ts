@@ -720,6 +720,12 @@ export interface SiteContent {
     published: string;
     updated: string;
     minRead: string;
+    /**
+     * Label per `category` in the blog collection schema. Optional so locales
+     * can adopt it gradually — `useContent` merges English underneath, so a
+     * missing block resolves to the English labels rather than nothing.
+     */
+    categories?: Record<'release' | 'guide' | 'deep-dive' | 'teardown' | 'opinion', string>;
   };
   notFound: {
     title: string;

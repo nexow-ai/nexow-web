@@ -4,6 +4,7 @@ description: 'Een stap-voor-stap handleiding voor het bouwen van een live crypto
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['gids', 'crypto', 'tutorial']
+category: guide
 ---
 
 Je hoeft niet langer developer te zijn om een professioneel cryptodashboard te bouwen. Met een AI-native builder zoals Nexow beschrijf je de widgets die je wilt in gewone taal en krijg je live, draaiende grafieken op een vrij canvas. Hier is hoe je in een paar minuten een complete cryptoworkstation bouwt.

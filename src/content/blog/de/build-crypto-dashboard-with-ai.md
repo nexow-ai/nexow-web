@@ -4,6 +4,7 @@ description: 'Eine Schritt-für-Schritt-Anleitung zum Erstellen eines Live-Krypt
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['leitfaden', 'krypto', 'tutorial']
+category: guide
 ---
 
 Sie müssen kein Entwickler mehr sein, um ein professionelles Krypto-Dashboard zu

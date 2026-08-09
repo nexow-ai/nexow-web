@@ -4,6 +4,7 @@ description: 'Panduan langkah demi langkah untuk membina papan pemantau kripto l
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['panduan', 'kripto', 'tutorial']
+category: guide
 ---
 
 Anda tidak lagi memerlukan menjadi pembangun untuk membina papan pemantau kripto berkualiti profesional. Dengan pembina asli AI seperti Nexow, anda menerangkan widget yang anda mahu dalam bahasa biasa dan mendapatkan carta langsung yang berjalan pada kanvas tanpa bentuk. Inilah cara membina stesen kerja kripto yang lengkap dalam beberapa minit.

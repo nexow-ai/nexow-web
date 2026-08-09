@@ -4,6 +4,7 @@ description: 'Nexow gira completamente in locale per impostazione predefinita â€
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacy', 'architettura', 'sicurezza']
+category: deep-dive
 ---
 
 La maggior parte degli strumenti IA invia i tuoi dati a un server per impostazione

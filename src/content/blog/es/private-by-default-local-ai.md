@@ -4,6 +4,7 @@ description: 'Nexow corre totalmente local por defecto — generación de códig
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacidad', 'arquitectura', 'seguridad']
+category: deep-dive
 ---
 
 La mayoría de las herramientas de IA envían tus datos a un servidor por defecto.

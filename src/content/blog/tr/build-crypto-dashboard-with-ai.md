@@ -4,6 +4,7 @@ description: 'AI kullanarak canlı kripto panosu oluşturmak için adım adım b
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['rehber', 'kripto', 'öğretici']
+category: guide
 ---
 
 Artık profesyonel kalitede bir kripto ticaret panosu oluşturmak için geliştirici olmanız gerekmez. Nexow gibi yapay zeka yerel bir oluşturucu ile, istediğiniz widget'ları düz dilde tanımlarsınız ve canlı, çalışan grafikler serbest bir tuvalde alırsınız. İşte birkaç dakikada tam bir kripto iş istasyonunun nasıl oluşturulacağını gösterir.
