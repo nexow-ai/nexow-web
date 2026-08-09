@@ -24,6 +24,7 @@ type Frontmatter = {
   updatedDate?: Date;
   author: string;
   tags: string[];
+  category: 'release' | 'guide' | 'deep-dive' | 'teardown' | 'opinion';
   draft: boolean;
 };
 
@@ -53,9 +54,18 @@ describe('blog collection config', () => {
       description: 'A post',
       author: 'The Nexow Team',
       tags: [],
+      category: 'release',
       draft: false,
     });
     expect(parsed.pubDate).toBeInstanceOf(Date);
+  });
+
+  it('rejects a category outside the enum, which would silently skip the changelog', () => {
+    const schema = blogSchema();
+    const post = { title: 'Hello', description: 'A post', pubDate: '2026-01-02' };
+
+    expect(schema.parse({ ...post, category: 'teardown' }).category).toBe('teardown');
+    expect(() => schema.parse({ ...post, category: 'announcement' })).toThrow();
   });
 
   it('accepts the optional fields posts actually use', () => {
@@ -171,6 +181,34 @@ describe('published posts', () => {
       const resolved = path.resolve(path.dirname(path.join(BLOG_CONTENT, post)), hero);
       expect(fs.existsSync(resolved), `${post} → ${hero}`).toBe(true);
       expect(path.dirname(resolved), `${post} → ${hero}`).toBe(BLOG_ASSETS);
+    }
+  });
+
+  it('assigns one category per slug, the same in every locale it is published in', () => {
+    // `category` decides whether a post is a changelog entry. If translations
+    // disagreed, the same article would be an entry in one language and not
+    // another.
+    const bySlug = new Map<string, Map<string, string[]>>();
+    for (const entry of all) {
+      const slug = slugOf(entry);
+      const categories = bySlug.get(slug) ?? bySlug.set(slug, new Map()).get(slug)!;
+      const ids = categories.get(entry.data.category) ?? [];
+      categories.set(entry.data.category, [...ids, entry.id]);
+    }
+    const disagreements = [...bySlug]
+      .filter(([, categories]) => categories.size > 1)
+      .map(([slug, categories]) => `${slug}: ${JSON.stringify(Object.fromEntries(categories))}`);
+    expect(disagreements).toEqual([]);
+  });
+
+  it('leaves every locale with release posts, so no /changelog renders empty', () => {
+    // Regression guard: the changelog used to filter on English tag spellings,
+    // which emptied the page in every locale that translates its tags.
+    for (const lang of LANGS) {
+      const posts = all.filter((e) => localeOf(e) === lang);
+      if (posts.length === 0) continue;
+      const releases = posts.filter((e) => e.data.category === 'release');
+      expect(releases.length, `${lang} has no release posts`).toBeGreaterThan(0);
     }
   });
 

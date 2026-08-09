@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SITE, type Lang } from '../../src/i18n/config';
-import { getPosts, slugOf } from '../../src/i18n/blog';
+import { getPosts, localesForSlug, slugOf } from '../../src/i18n/blog';
 import { localizePath, withTrailingSlash } from '../../src/i18n/utils';
 import { linkHrefs, metaContent, render, text } from '../helpers/render';
 
@@ -107,6 +107,42 @@ describe.each(englishPaths.map((p): [string, PostRoute] => [p.params.slug, p]))(
     });
   },
 );
+
+describe('article kind and body figures', () => {
+  const pathFor = (slug: string) => englishPaths.find((p) => p.params.slug === slug)!;
+  const renderSlug = (slug: string) =>
+    render(moduleFor('en').default as never, `/blog/${slug}`, { props: pathFor(slug).props });
+
+  it('names the article kind in the header, not just the tags', async () => {
+    const teardown = englishPaths.find((p) => p.props.post.data.category === 'teardown');
+    expect(teardown, 'no teardown post to check').toBeDefined();
+    expect(text(await renderSlug(teardown!.params.slug))).toContain('Teardown');
+  });
+
+  it('advertises hreflang only for locales that publish the post', async () => {
+    // Translations land after the English original, so enumerating all 17
+    // locales would point crawlers at pages that 404.
+    for (const path of englishPaths) {
+      const slug = path.params.slug;
+      const langs = await localesForSlug(slug);
+      const hreflangs = [...(await renderSlug(slug)).matchAll(/<link\b[^>]*\bhreflang="([^"]*)"/g)]
+        .map(([, lang]) => lang)
+        .filter((lang) => lang !== 'x-default');
+      expect(hreflangs.sort(), slug).toEqual([...langs].sort());
+    }
+  });
+
+  it('promotes a titled body image to a captioned figure', async () => {
+    const withFigure = englishPaths.find((p) => /^!\[.+\]\(.+ "/m.test(p.props.post.body ?? ''));
+    expect(withFigure, 'no post uses a captioned body image').toBeDefined();
+
+    const html = await renderSlug(withFigure!.params.slug);
+    expect(html).toContain('<figure>');
+    expect(html).toContain('<figcaption>');
+    // The caption moves out of the title attribute so it is not also a tooltip.
+    expect(html).not.toMatch(/<img[^>]*\stitle=/);
+  });
+});
 
 describe('localized post pages', () => {
   it.each(['es', 'ja', 'ar'] as const)('renders %s posts at their localized route', async (lang) => {

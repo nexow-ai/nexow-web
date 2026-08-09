@@ -310,7 +310,7 @@ describe('BlogCard', () => {
     title: 'A post title',
     description: 'A description',
     pubDate: new Date('2026-03-04T00:00:00Z'),
-    tags: ['product', 'ai'],
+    category: 'release' as const,
   };
 
   it('links at the localized post route and shows the metadata', async () => {
@@ -318,13 +318,25 @@ describe('BlogCard', () => {
     expect(html).toContain('href="/blog/a-post"');
     expect(html).toContain('A post title');
     expect(html).toContain('A description');
-    expect(html).toContain('product');
+    expect(html).toContain('Release');
   });
 
   it('formats the date in the post’s own locale', async () => {
     const html = await render(BlogCard, '/ja/blog', { props: { ...props, lang: 'ja' } });
     expect(html).toContain('href="/ja/blog/a-post"');
     expect(html).toContain('2026');
+  });
+
+  it('labels a non-release article by its category', async () => {
+    const html = await render(BlogCard, '/blog', { props: { ...props, category: 'teardown' } });
+    expect(html).toContain('Teardown');
+  });
+
+  it('falls back to the English label in a locale that has not translated them', async () => {
+    const html = await render(BlogCard, '/ja/blog', {
+      props: { ...props, lang: 'ja', category: 'deep-dive' },
+    });
+    expect(html).toContain('Deep dive');
   });
 
   it('renders a featured card and an anchor id', async () => {
