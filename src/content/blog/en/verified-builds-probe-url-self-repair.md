@@ -101,11 +101,13 @@ the same widget is already live, instead of racing it into a duplicate version.
 ## Same loop, every mode
 
 All of this lives in one shared module, so platform builds, bring-your-own-key
-builds in the browser, and the batch sweep that built [the ten example
-widgets](/blog/starter-widgets-examples-workspace) get **identical** behaviour —
-same tools, same probe formatting, same verifier, same repair budget. The two
-modes cannot drift on which tools exist or how strictly a widget is checked,
-because there is only one implementation of the answer.
+builds in the browser, and the server-side build sweep get **identical**
+behaviour — same tools, same probe formatting, same verifier, same repair
+budget. The modes cannot drift on which tools exist or how strictly a widget is
+checked, because there is only one implementation of the answer. It is also the
+loop that produced [the ten example widgets](/blog/starter-widgets-examples-workspace)
+shipping with the next release: they were built by exactly this, with exactly
+these checks.
 
 None of it makes a model correct. It makes being wrong survivable, and usually
 invisible: the endpoint gets checked before the code depends on it, the check
