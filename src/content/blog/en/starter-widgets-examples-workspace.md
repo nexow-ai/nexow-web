@@ -10,10 +10,10 @@ The hardest screen in Nexow was always the first one: a blank canvas, a prompt
 box, and no evidence that any of it works. You could read the docs, or you could
 type something and hope.
 
-Now a new account boots with an **Examples workspace** — ten finished widgets
-across three screens, all running on their first load, with **nothing
-connected**. Not screenshots, not a guided tour. Working widgets you can open,
-edit, take apart and publish over.
+With the next release, a new account boots into an **Examples workspace** — ten
+finished widgets across three screens, all running on their first load, with
+**nothing connected**. Not screenshots, not a guided tour. Working widgets you
+can open, edit, take apart and publish over.
 
 ## What's in the pack
 
@@ -99,6 +99,9 @@ smoke verdict, a real message rather than a blank tile when its data source has
 a bad day, and nothing personal anywhere in the conversation — because the
 conversation ships too.
 
-[Launch Nexow](https://x.nexow.ai) and the Examples workspace will be waiting.
-Open one, read the chat that built it, then change something — that is the
-fastest way to learn what the canvas can do.
+The pack ships with the next release, and existing accounts can pull it in from
+**Settings → General** whenever they want it. Open one, read the chat that built
+it, then change something — that is still the fastest way to learn what the
+canvas can do.
+
+[Launch Nexow](https://x.nexow.ai) and start building in the meantime.
