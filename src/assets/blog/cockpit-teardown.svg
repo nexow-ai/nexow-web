@@ -1,0 +1,162 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A screen of six widget tiles with one tile lifted out of its slot and separated into three stacked layers, illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(880 130) rotate(140) scale(660 580)">
+      <stop stop-color="#10c5a3" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#10c5a3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 620) rotate(-45) scale(640 560)">
+      <stop stop-color="#0ea5e9" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#0ea5e9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5cf0d0"/>
+      <stop offset="1" stop-color="#10c5a3"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#2adfba"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#d8fdf3">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="172" height="44" rx="22" fill="#10c5a3" fill-opacity="0.12" stroke="#10c5a3" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#9dfae2">#teardown</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <ellipse cx="600" cy="340" rx="380" ry="200" fill="#10c5a3" fill-opacity="0.06" filter="url(#soft)"/>
+
+  <!-- the screen: one free-form canvas holding six widgets -->
+  <g>
+    <rect x="96" y="168" width="1008" height="344" rx="26" fill="#10c5a3" fill-opacity="0.05" stroke="#558b81" stroke-opacity="0.45" stroke-width="2"/>
+
+    <!-- 1 · candlesticks -->
+    <g>
+      <rect x="124" y="196" width="300" height="131" rx="18" fill="#08090d" stroke="#558b81" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="146" y="216" width="86" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.4"/>
+      <g>
+        <line x1="166" y1="252" x2="166" y2="306" stroke="#2adfba" stroke-width="2"/>
+        <rect x="160" y="264" width="12" height="30" rx="2.5" fill="#2adfba" fill-opacity="0.85"/>
+        <line x1="196" y1="244" x2="196" y2="306" stroke="#10c5a3" stroke-width="2"/>
+        <rect x="190" y="256" width="12" height="38" rx="2.5" fill="#10c5a3" fill-opacity="0.85"/>
+        <line x1="226" y1="258" x2="226" y2="306" stroke="#2adfba" stroke-width="2"/>
+        <rect x="220" y="270" width="12" height="24" rx="2.5" fill="#2adfba" fill-opacity="0.85"/>
+        <line x1="256" y1="236" x2="256" y2="306" stroke="#2adfba" stroke-width="2"/>
+        <rect x="250" y="248" width="12" height="44" rx="2.5" fill="#2adfba" fill-opacity="0.85"/>
+        <line x1="286" y1="250" x2="286" y2="306" stroke="#10c5a3" stroke-width="2"/>
+        <rect x="280" y="262" width="12" height="32" rx="2.5" fill="#10c5a3" fill-opacity="0.85"/>
+        <line x1="316" y1="230" x2="316" y2="306" stroke="#2adfba" stroke-width="2"/>
+        <rect x="310" y="242" width="12" height="50" rx="2.5" fill="#2adfba" fill-opacity="0.85"/>
+        <line x1="346" y1="246" x2="346" y2="306" stroke="#2adfba" stroke-width="2"/>
+        <rect x="340" y="258" width="12" height="36" rx="2.5" fill="#2adfba" fill-opacity="0.85"/>
+        <line x1="376" y1="238" x2="376" y2="306" stroke="#10c5a3" stroke-width="2"/>
+        <rect x="370" y="250" width="12" height="42" rx="2.5" fill="#10c5a3" fill-opacity="0.85"/>
+      </g>
+      <circle cx="146" cy="318" r="0"/>
+    </g>
+
+    <!-- 2 · order book -->
+    <g>
+      <rect x="450" y="196" width="300" height="131" rx="18" fill="#08090d" stroke="#558b81" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="472" y="216" width="72" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.4"/>
+      <g>
+        <rect x="472" y="242" width="120" height="12" rx="4" fill="#10c5a3" fill-opacity="0.5"/>
+        <rect x="472" y="262" width="86" height="12" rx="4" fill="#10c5a3" fill-opacity="0.35"/>
+        <rect x="472" y="282" width="146" height="12" rx="4" fill="#10c5a3" fill-opacity="0.22"/>
+        <rect x="608" y="242" width="120" height="12" rx="4" fill="#0ea5e9" fill-opacity="0.45"/>
+        <rect x="636" y="262" width="92" height="12" rx="4" fill="#0ea5e9" fill-opacity="0.32"/>
+        <rect x="590" y="282" width="138" height="12" rx="4" fill="#0ea5e9" fill-opacity="0.2"/>
+      </g>
+      <rect x="472" y="306" width="256" height="2" rx="1" fill="#558b81" fill-opacity="0.4"/>
+    </g>
+
+    <!-- 3 · ghost slot the lifted widget came out of -->
+    <g>
+      <rect x="776" y="196" width="300" height="131" rx="18" fill="#10c5a3" fill-opacity="0.03" stroke="#558b81" stroke-opacity="0.55" stroke-width="2" stroke-dasharray="9 10"/>
+      <path d="M901 261 h 50 M926 236 v 50" stroke="#558b81" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- 4 · watchlist -->
+    <g>
+      <rect x="124" y="353" width="300" height="131" rx="18" fill="#08090d" stroke="#558b81" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="146" y="373" width="66" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.4"/>
+      <rect x="146" y="398" width="256" height="24" rx="8" fill="#10c5a3" fill-opacity="0.14" stroke="#2adfba" stroke-opacity="0.65" stroke-width="1.5"/>
+      <rect x="162" y="406" width="74" height="8" rx="4" fill="#9dfae2" fill-opacity="0.75"/>
+      <rect x="146" y="430" width="256" height="24" rx="8" fill="#10c5a3" fill-opacity="0.05"/>
+      <rect x="162" y="438" width="98" height="8" rx="4" fill="#558b81"/>
+      <rect x="146" y="462" width="256" height="14" rx="7" fill="#10c5a3" fill-opacity="0.05"/>
+    </g>
+
+    <!-- 5 · heatmap -->
+    <g>
+      <rect x="450" y="353" width="300" height="131" rx="18" fill="#08090d" stroke="#558b81" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="472" y="373" width="58" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.4"/>
+      <g>
+        <rect x="472" y="396" width="80" height="34" rx="6" fill="#10c5a3" fill-opacity="0.55"/>
+        <rect x="558" y="396" width="52" height="34" rx="6" fill="#10c5a3" fill-opacity="0.3"/>
+        <rect x="616" y="396" width="112" height="34" rx="6" fill="#0ea5e9" fill-opacity="0.4"/>
+        <rect x="472" y="436" width="60" height="30" rx="6" fill="#0ea5e9" fill-opacity="0.25"/>
+        <rect x="538" y="436" width="96" height="30" rx="6" fill="#10c5a3" fill-opacity="0.42"/>
+        <rect x="640" y="436" width="88" height="30" rx="6" fill="#10c5a3" fill-opacity="0.18"/>
+      </g>
+    </g>
+
+    <!-- 6 · alert inbox -->
+    <g>
+      <rect x="776" y="353" width="300" height="131" rx="18" fill="#08090d" stroke="#558b81" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="798" y="373" width="70" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.4"/>
+      <g>
+        <circle cx="810" cy="410" r="6" fill="#2adfba"/>
+        <rect x="828" y="404" width="182" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.5"/>
+        <circle cx="810" cy="440" r="6" fill="#558b81"/>
+        <rect x="828" y="434" width="140" height="9" rx="4.5" fill="#558b81"/>
+        <circle cx="810" cy="468" r="6" fill="#558b81"/>
+        <rect x="828" y="462" width="166" height="9" rx="4.5" fill="#558b81"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- the lifted widget, separated into its three layers -->
+  <g>
+    <path d="M926 196 L 966 162" stroke="#2adfba" stroke-opacity="0.5" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8 9"/>
+    <path d="M1046 214 L 1086 180" stroke="#2adfba" stroke-opacity="0.5" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8 9"/>
+
+    <!-- layer 3: the connection underneath -->
+    <rect x="828" y="180" width="300" height="118" rx="18" fill="#08090d" fill-opacity="0.92" stroke="#558b81" stroke-opacity="0.7" stroke-width="2"/>
+    <g fill="none" stroke="#558b81" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="854" y="216" width="22" height="26" rx="7"/>
+      <path d="M844 224 h10 M844 234 h10 M876 229 h10"/>
+    </g>
+    <rect x="900" y="218" width="120" height="9" rx="4.5" fill="#558b81"/>
+    <rect x="900" y="236" width="76" height="8" rx="4" fill="#558b81" fill-opacity="0.7"/>
+
+    <!-- layer 2: the generated code -->
+    <rect x="812" y="150" width="300" height="118" rx="18" fill="#08090d" fill-opacity="0.96" stroke="#10c5a3" stroke-opacity="0.75" stroke-width="2"/>
+    <text x="838" y="204" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="24" fill="#9dfae2">{ }</text>
+    <rect x="884" y="180" width="146" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.45"/>
+    <rect x="884" y="198" width="104" height="8" rx="4" fill="#558b81"/>
+    <rect x="884" y="214" width="128" height="8" rx="4" fill="#558b81" fill-opacity="0.7"/>
+
+    <!-- layer 1: what you actually see -->
+    <rect x="796" y="120" width="300" height="118" rx="18" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+    <rect x="818" y="140" width="78" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.55"/>
+    <path d="M818 210 L 856 186 L 894 198 L 932 160 L 970 176 L 1008 144 L 1046 156 L 1074 138" fill="none" stroke="url(#edge)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="1074" cy="138" r="5.5" fill="#5cf0d0"/>
+  </g>
+</svg>
