@@ -4,6 +4,7 @@ description: 'How Nexow uses sandboxed widgets, scoped connectors and workspace 
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacy', 'architecture', 'security']
+category: deep-dive
 ---
 
 Market workstations deal with sensitive context: keys, positions, strategies,

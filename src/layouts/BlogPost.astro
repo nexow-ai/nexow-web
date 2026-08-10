@@ -1,6 +1,7 @@
 ---
 import { SITE, type Lang } from '../i18n/config';
 import { useContent } from '../i18n/content';
+import { localesForSlug, type BlogCategory } from '../i18n/blog';
 import { localizePath, dateLocale } from '../i18n/utils';
 import Layout from './Layout.astro';
 import Icon from '../components/Icon.astro';
@@ -16,13 +17,22 @@ interface Props {
   updatedDate?: Date;
   author: string;
   tags: string[];
+  category: BlogCategory;
   heroImage?: ImageMetadata;
   minutes: number;
 }
-const { lang, slug, title, description, pubDate, updatedDate, author, tags, heroImage, minutes } =
+const { lang, slug, title, description, pubDate, updatedDate, author, tags, category, heroImage, minutes } =
   Astro.props;
 const t = useContent(lang).blog;
 const route = `/blog/${slug}`;
+// English labels are merged underneath by `useContent`, so this is always set.
+const categoryLabel = t.categories![category];
+
+/**
+ * Only the locales that actually publish this slug get an hreflang alternate.
+ * Computed here rather than in the 17 route modules, which are thin wrappers.
+ */
+const availableLangs = await localesForSlug(slug);
 
 const dtFmt = new Intl.DateTimeFormat(dateLocale(lang), {
   year: 'numeric',
@@ -63,6 +73,7 @@ const sections = [
   type="article"
   schema={[articleSchema]}
   sections={sections}
+  availableLangs={availableLangs}
 >
   <article id="article" class="relative scroll-mt-20 overflow-hidden pt-28 sm:pt-36">
     <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
@@ -87,7 +98,10 @@ const sections = [
           {t.backToBlog}
         </a>
 
-        <div class="mt-6 flex flex-wrap gap-2">
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          <span class="rounded-full bg-brand-600 px-2.5 py-1 font-mono text-xs font-medium text-white dark:bg-brand-400 dark:text-ink-950">
+            {categoryLabel}
+          </span>
           {tags.map((tag) => (
             <span class="rounded-full bg-brand-50 px-2.5 py-1 font-mono text-xs text-brand-700 ring-1 ring-brand-500/10 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
               #{tag}
@@ -136,7 +150,7 @@ const sections = [
 
     <div class="container-page mt-10">
       <div
-        class="prose prose-lg mx-auto max-w-3xl dark:prose-invert prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-12 prose-h2:text-2xl prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-ink-900 prose-blockquote:border-l-brand-500 prose-blockquote:bg-brand-50/40 prose-blockquote:py-1 prose-blockquote:not-italic prose-code:font-mono prose-code:text-brand-700 prose-code:before:content-none prose-code:after:content-none dark:prose-a:text-brand-300 dark:prose-strong:text-white dark:prose-blockquote:bg-brand-400/10 dark:prose-code:text-brand-300"
+        class="prose prose-lg mx-auto max-w-3xl dark:prose-invert prose-headings:font-display prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-12 prose-h2:text-2xl prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-ink-900 prose-blockquote:border-l-brand-500 prose-blockquote:bg-brand-50/40 prose-blockquote:py-1 prose-blockquote:not-italic prose-code:font-mono prose-code:text-brand-700 prose-code:before:content-none prose-code:after:content-none prose-figure:my-10 prose-img:my-0 prose-img:w-full prose-img:overflow-hidden prose-img:rounded-2xl prose-img:border prose-img:border-ink-900/8 prose-img:bg-ink-950 prose-figcaption:mt-3 prose-figcaption:text-center prose-figcaption:font-mono prose-figcaption:text-sm prose-figcaption:not-italic prose-figcaption:text-ink-500 dark:prose-a:text-brand-300 dark:prose-strong:text-white dark:prose-blockquote:bg-brand-400/10 dark:prose-code:text-brand-300 dark:prose-img:border-white/10 dark:prose-figcaption:text-ink-400"
       >
         <slot />
       </div>

@@ -1,0 +1,123 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A widget build probing its data endpoints for a real HTTP response while a verifier lints the module and buys one repair round, illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="150" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#codegen</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="330" rx="360" ry="220" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- the module being written -->
+    <g>
+      <rect x="96" y="164" width="392" height="330" rx="24" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <text x="126" y="208" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a" fill-opacity="0.75">write_widget</text>
+      <g fill="#8a7b57">
+        <rect x="126" y="238" width="212" height="10" rx="5"/>
+        <rect x="126" y="262" width="164" height="10" rx="5" fill-opacity="0.7"/>
+        <rect x="150" y="286" width="196" height="10" rx="5" fill-opacity="0.7"/>
+      </g>
+      <!-- the http call the verifier cares about -->
+      <rect x="126" y="312" width="330" height="40" rx="12" fill="#f59e0b" fill-opacity="0.14" stroke="#fbbf24" stroke-opacity="0.7" stroke-width="2"/>
+      <text x="146" y="339" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">ctx.data.http({ url })</text>
+      <g fill="#8a7b57">
+        <rect x="150" y="368" width="180" height="10" rx="5" fill-opacity="0.7"/>
+        <rect x="150" y="392" width="140" height="10" rx="5" fill-opacity="0.55"/>
+        <rect x="126" y="416" width="120" height="10" rx="5" fill-opacity="0.7"/>
+      </g>
+      <!-- render export, present -->
+      <g>
+        <circle cx="140" cy="456" r="13" fill="#08090d" stroke="url(#edge)" stroke-width="3"/>
+        <path d="M133 456 l5 6 10 -12" fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="166" y="463" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">export render()</text>
+      </g>
+    </g>
+
+    <!-- the probe: same proxy the widget uses at runtime -->
+    <g>
+      <path d="M500 332 H 636" stroke="url(#edge)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M616 316 l20 16 -20 16" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="512" y="312" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="20" fill="#fde68a" fill-opacity="0.8">probe_url</text>
+
+      <!-- a passing endpoint -->
+      <g>
+        <rect x="652" y="196" width="436" height="98" rx="20" fill="#08090d" stroke="#fbbf24" stroke-opacity="0.7" stroke-width="2.5"/>
+        <circle cx="694" cy="245" r="17" fill="#f59e0b" fill-opacity="0.2" stroke="#fbbf24" stroke-width="3"/>
+        <path d="M686 245 l6 7 12 -14" fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="730" y="238" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="21" fill="#fde68a">HTTP 200 · JSON</text>
+        <rect x="730" y="254" width="240" height="9" rx="4.5" fill="#8a7b57"/>
+        <rect x="730" y="270" width="168" height="9" rx="4.5" fill="#8a7b57" fill-opacity="0.65"/>
+      </g>
+
+      <!-- a failing endpoint, caught before it ships -->
+      <g>
+        <rect x="652" y="312" width="436" height="98" rx="20" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.75" stroke-width="2.5" stroke-dasharray="9 8"/>
+        <circle cx="694" cy="361" r="17" fill="#f59e0b" fill-opacity="0.06" stroke="#8a7b57" stroke-width="3"/>
+        <path d="M687 354 l14 14 M701 354 l-14 14" stroke="#8a7b57" stroke-width="3.5" stroke-linecap="round"/>
+        <text x="730" y="354" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="21" fill="#8a7b57">HTTP 404 · wrong URL</text>
+        <rect x="730" y="370" width="200" height="9" rx="4.5" fill="#8a7b57" fill-opacity="0.5"/>
+        <rect x="730" y="386" width="128" height="9" rx="4.5" fill="#8a7b57" fill-opacity="0.35"/>
+      </g>
+    </g>
+
+    <!-- the verifier, running concurrently, buying one repair round -->
+    <g>
+      <rect x="96" y="498" width="992" height="72" rx="24" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.32" stroke-width="2"/>
+      <g>
+        <circle cx="152" cy="534" r="20" fill="#08090d" stroke="url(#edge)" stroke-width="3.5"/>
+        <path d="M144 534 l6 7 13 -15" fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <text x="190" y="542" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="21" fill="#fde68a" fill-opacity="0.85">verifier</text>
+      <path d="M306 534 h 48" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 9"/>
+      <g>
+        <rect x="368" y="512" width="160" height="44" rx="22" fill="#f59e0b" fill-opacity="0.1" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="2"/>
+        <text x="392" y="541" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">lint</text>
+      </g>
+      <path d="M540 534 h 30" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 9"/>
+      <g>
+        <rect x="582" y="512" width="180" height="44" rx="22" fill="#f59e0b" fill-opacity="0.1" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="2"/>
+        <text x="606" y="541" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">re-probe</text>
+      </g>
+      <path d="M774 534 h 30" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 9"/>
+      <g>
+        <rect x="816" y="510" width="238" height="48" rx="24" fill="#f59e0b" fill-opacity="0.16" stroke="url(#edge)" stroke-width="2.5"/>
+        <text x="842" y="541" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">1 repair round</text>
+      </g>
+    </g>
+  </g>
+</svg>

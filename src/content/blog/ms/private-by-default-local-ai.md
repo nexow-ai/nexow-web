@@ -4,6 +4,7 @@ description: 'Nexow berjalan sepenuhnya tempatan secara lalai — bawa codegen k
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privasi', 'seni bina', 'keamanan']
+category: deep-dive
 ---
 
 Kebanyakan alat AI menghantar data anda ke pelayan secara lalai. Untuk stesen kerja pasaran — di mana kunci, kedudukan dan strategi anda adalah keseluruhan permainan — lalai itu terbalik. Nexow membalikkannya: **peribadi secara lalai, tempatan mengikut reka bentuk.**

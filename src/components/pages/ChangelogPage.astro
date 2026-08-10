@@ -14,9 +14,12 @@ interface Props {
 const { lang } = Astro.props;
 const t = useContent(lang).changelogPage!;
 const all = await getPosts(lang);
-/** Product-tagged posts double as the marketing changelog. */
-const PRODUCT_TAGS = new Set(['product', 'roadmap', 'agents', 'automation', 'marketplace', 'community']);
-const posts = all.filter((p) => p.data.tags.some((tag) => PRODUCT_TAGS.has(tag))).slice(0, 24);
+/**
+ * Release posts double as the marketing changelog. This used to match English
+ * tag spellings, which silently emptied the page in every locale that
+ * translates its tags — `producto`, `プロダクト`. `category` is language-neutral.
+ */
+const posts = all.filter((p) => p.data.category === 'release').slice(0, 24);
 
 const sections = [
   { id: 'hero', label: t.hero.badge },

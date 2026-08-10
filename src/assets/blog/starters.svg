@@ -1,0 +1,142 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An Examples workspace of ready-made widgets beside the build conversation and version history that produced them, illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="176" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#onboarding</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="440" cy="340" rx="330" ry="220" fill="#f59e0b" fill-opacity="0.06" filter="url(#soft)"/>
+
+    <!-- the Examples workspace: three screens, one of them open -->
+    <g>
+      <rect x="96" y="152" width="640" height="386" rx="26" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <!-- screen tabs -->
+      <g transform="translate(120 172)">
+        <rect x="0" y="0" width="132" height="34" rx="17" fill="#f59e0b" fill-opacity="0.18" stroke="#fbbf24" stroke-opacity="0.8" stroke-width="2"/>
+        <rect x="18" y="14" width="80" height="8" rx="4" fill="#fde68a" fill-opacity="0.75"/>
+        <rect x="148" y="0" width="120" height="34" rx="17" fill="#f59e0b" fill-opacity="0.05" stroke="#8a7b57" stroke-opacity="0.55" stroke-width="2"/>
+        <rect x="166" y="14" width="70" height="8" rx="4" fill="#8a7b57"/>
+        <rect x="288" y="0" width="140" height="34" rx="17" fill="#f59e0b" fill-opacity="0.05" stroke="#8a7b57" stroke-opacity="0.55" stroke-width="2"/>
+        <rect x="306" y="14" width="86" height="8" rx="4" fill="#8a7b57"/>
+        <text x="572" y="24" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a" fill-opacity="0.55">✨</text>
+      </g>
+
+      <!-- four example widgets, running -->
+      <!-- world clock -->
+      <g>
+        <rect x="120" y="230" width="292" height="140" rx="18" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+        <circle cx="176" cy="300" r="38" fill="none" stroke="#fbbf24" stroke-opacity="0.85" stroke-width="3"/>
+        <path d="M176 300 V 276" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M176 300 L 195 310" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M176 262 a 38 38 0 0 1 0 76" fill="#f59e0b" fill-opacity="0.16"/>
+        <rect x="238" y="272" width="140" height="10" rx="5" fill="#fde68a" fill-opacity="0.5"/>
+        <rect x="238" y="294" width="112" height="10" rx="5" fill="#8a7b57"/>
+        <rect x="238" y="316" width="126" height="10" rx="5" fill="#8a7b57" fill-opacity="0.7"/>
+      </g>
+      <!-- weather curve -->
+      <g>
+        <rect x="428" y="230" width="288" height="140" rx="18" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+        <path d="M452 336 C 492 300, 520 348, 556 312 S 632 258, 692 276" fill="none" stroke="url(#edge)" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="556" cy="312" r="7" fill="#08090d" stroke="#fbbf24" stroke-width="3"/>
+        <rect x="452" y="256" width="86" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+        <g fill="#8a7b57">
+          <rect x="452" y="352" width="30" height="8" rx="4"/>
+          <rect x="494" y="352" width="30" height="8" rx="4"/>
+          <rect x="536" y="352" width="30" height="8" rx="4"/>
+          <rect x="578" y="352" width="30" height="8" rx="4"/>
+          <rect x="620" y="352" width="30" height="8" rx="4"/>
+        </g>
+      </g>
+      <!-- earthquakes map -->
+      <g>
+        <rect x="120" y="386" width="292" height="132" rx="18" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+        <path d="M144 470 C 186 434, 214 486, 258 452 S 348 420, 388 442" fill="none" stroke="#8a7b57" stroke-opacity="0.7" stroke-width="2.5"/>
+        <path d="M144 428 C 190 412, 236 440, 292 418 S 360 400, 388 408" fill="none" stroke="#8a7b57" stroke-opacity="0.45" stroke-width="2.5"/>
+        <circle cx="200" cy="446" r="16" fill="#f59e0b" fill-opacity="0.25" stroke="#fbbf24" stroke-width="2.5"/>
+        <circle cx="284" cy="470" r="9" fill="#f59e0b" fill-opacity="0.3" stroke="#fbbf24" stroke-width="2.5"/>
+        <circle cx="342" cy="428" r="12" fill="#f59e0b" fill-opacity="0.22" stroke="#fbbf24" stroke-width="2.5"/>
+      </g>
+      <!-- air quality -->
+      <g>
+        <rect x="428" y="386" width="288" height="132" rx="18" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+        <circle cx="496" cy="452" r="34" fill="none" stroke="#8a7b57" stroke-opacity="0.5" stroke-width="7"/>
+        <path d="M496 418 a 34 34 0 0 1 26 55" fill="none" stroke="url(#edge)" stroke-width="7" stroke-linecap="round"/>
+        <rect x="556" y="424" width="120" height="12" rx="6" fill="#fde68a" fill-opacity="0.5"/>
+        <g fill="#8a7b57">
+          <rect x="556" y="452" width="34" height="22" rx="7"/>
+          <rect x="600" y="452" width="34" height="22" rx="7"/>
+          <rect x="644" y="452" width="34" height="22" rx="7"/>
+          <rect x="556" y="482" width="34" height="22" rx="7" fill-opacity="0.6"/>
+          <rect x="600" y="482" width="34" height="22" rx="7" fill-opacity="0.6"/>
+          <rect x="644" y="482" width="34" height="22" rx="7" fill-opacity="0.6"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- the conversation that built them, and the versions it produced -->
+    <g>
+      <!-- user turn -->
+      <rect x="800" y="176" width="300" height="72" rx="20" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.45" stroke-width="2"/>
+      <rect x="824" y="200" width="230" height="10" rx="5" fill="#fde68a" fill-opacity="0.6"/>
+      <rect x="824" y="220" width="168" height="10" rx="5" fill="#fde68a" fill-opacity="0.35"/>
+      <!-- assistant turn -->
+      <rect x="828" y="264" width="272" height="60" rx="20" fill="#08090d" stroke="#8a7b57" stroke-opacity="0.6" stroke-width="2"/>
+      <rect x="852" y="286" width="196" height="9" rx="4.5" fill="#8a7b57"/>
+      <rect x="852" y="303" width="130" height="9" rx="4.5" fill="#8a7b57" fill-opacity="0.65"/>
+
+      <!-- version rail -->
+      <path d="M846 372 V 508" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+      <g>
+        <circle cx="846" cy="372" r="12" fill="#08090d" stroke="#8a7b57" stroke-width="3"/>
+        <rect x="878" y="366" width="120" height="11" rx="5.5" fill="#8a7b57"/>
+        <text x="1012" y="378" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">v1</text>
+      </g>
+      <g>
+        <circle cx="846" cy="440" r="12" fill="#08090d" stroke="#8a7b57" stroke-width="3"/>
+        <rect x="878" y="434" width="150" height="11" rx="5.5" fill="#8a7b57" fill-opacity="0.8"/>
+        <text x="1042" y="446" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">v2</text>
+      </g>
+      <g>
+        <circle cx="846" cy="508" r="14" fill="#08090d" stroke="url(#edge)" stroke-width="4"/>
+        <rect x="878" y="501" width="134" height="12" rx="6" fill="#fde68a" fill-opacity="0.55"/>
+        <text x="1026" y="514" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">v3</text>
+      </g>
+    </g>
+  </g>
+</svg>

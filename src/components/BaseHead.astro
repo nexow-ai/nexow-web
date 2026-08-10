@@ -22,7 +22,11 @@ interface Props {
   schema?: Record<string, unknown>[];
   /** Prevent indexing (e.g. 404). */
   noindex?: boolean;
+  /** Locales where this route exists. Defaults to every locale the site ships. */
+  availableLangs?: Lang[];
 }
+
+const allLangs = Object.keys(languages) as Lang[];
 
 const {
   title,
@@ -33,15 +37,14 @@ const {
   type = 'website',
   schema = [],
   noindex = false,
+  availableLangs = allLangs,
 } = Astro.props;
 
 const canonical = withTrailingSlash(new URL(localizePath(route, lang), SITE.url).href);
 const alternates = getAlternates(route, SITE.url);
 const ogImage = new URL(image, SITE.url).href;
 const primaryOgLocale = ogLocale(lang);
-const altOgLocales = (Object.keys(languages) as Lang[])
-  .filter((l) => l !== lang)
-  .map((l) => ogLocale(l));
+const altOgLocales = availableLangs.filter((l) => l !== lang).map((l) => ogLocale(l));
 
 // Baseline Organization schema on every page for GEO / knowledge-graph.
 const orgSchema = {
@@ -67,14 +70,17 @@ const allSchema = [orgSchema, ...schema];
 <!-- Canonical + language alternates -->
 <link rel="canonical" href={canonical} />
 {/* A noindex page (404) has no localized twins to point at — Cloudflare serves
-    the one 404.html for every missing path, so the alternates would dangle. */}
+    the one 404.html for every missing path, so the alternates would dangle.
+    `availableLangs` narrows this further for content translated gradually. */}
 {
   !noindex &&
-    (Object.keys(languages) as Lang[]).map((l) => (
-      <link rel="alternate" hreflang={l} href={alternates[l]} />
-    ))
+    availableLangs.map((l) => <link rel="alternate" hreflang={l} href={alternates[l]} />)
 }
-{!noindex && <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />}
+{
+  !noindex && availableLangs.includes('en') && (
+    <link rel="alternate" hreflang="x-default" href={alternates['x-default']} />
+  )
+}
 
 <!-- Feed for this locale, so readers and crawlers can discover /rss.xml -->
 <link

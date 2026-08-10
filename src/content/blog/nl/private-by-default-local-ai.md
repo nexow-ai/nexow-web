@@ -4,6 +4,7 @@ description: 'Nexow werkt standaard volledig lokaal — breng je eigen sleutelco
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['privacy', 'architectuur', 'security']
+category: deep-dive
 ---
 
 De meeste AI-tools verzenden je gegevens standaard naar een server. Voor een marktworkstation — waar je sleutels, posities en strategieën het hele spel zijn — is die standaard achterwaarts. Nexow keert dit om: **privé standaard, lokaal ontworpen.**

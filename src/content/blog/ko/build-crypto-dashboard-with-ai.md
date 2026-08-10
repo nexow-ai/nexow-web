@@ -4,6 +4,7 @@ description: 'AI를 사용해 실시간 암호화폐 대시보드를 만드는 �
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['가이드', '크립토', '튜토리얼']
+category: guide
 ---
 
 이제 전문가 수준의 암호화폐 대시보드를 만들려면 개발자일 필요가 없습니다.

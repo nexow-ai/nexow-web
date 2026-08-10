@@ -1,0 +1,93 @@
+<svg width="1200" height="300" viewBox="0 110 1200 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A left-to-right path: a connection feeds generated code, the code renders a widget inside a dashed sandbox boundary, and a wire carries a value out to a chart, diagram">
+  <defs>
+    <radialGradient id="f2glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(900 40) rotate(140) scale(700 500)">
+      <stop stop-color="#10c5a3" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#10c5a3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="f2edge" x1="60" y1="140" x2="1140" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5cf0d0"/>
+      <stop offset="1" stop-color="#10c5a3"/>
+    </linearGradient>
+    <pattern id="f2grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="520" fill="#08090d"/>
+  <rect width="1200" height="520" fill="url(#f2grid)"/>
+  <rect width="1200" height="520" fill="url(#f2glow)"/>
+
+  <!-- the sandbox every generated widget runs inside -->
+  <rect x="306" y="140" width="520" height="240" rx="26" fill="#10c5a3" fill-opacity="0.045" stroke="#558b81" stroke-opacity="0.6" stroke-width="2.5" stroke-dasharray="12 11"/>
+
+  <!-- 1 · the connection -->
+  <g>
+    <rect x="48" y="196" width="200" height="128" rx="20" fill="#08090d" stroke="#558b81" stroke-opacity="0.75" stroke-width="2"/>
+    <g fill="none" stroke="#0ea5e9" stroke-opacity="0.9" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="86" y="242" width="26" height="32" rx="8"/>
+      <path d="M74 252 h12 M74 264 h12 M112 258 h14"/>
+    </g>
+    <rect x="140" y="246" width="82" height="10" rx="5" fill="#9dfae2" fill-opacity="0.45"/>
+    <rect x="140" y="264" width="56" height="9" rx="4.5" fill="#558b81"/>
+    <circle cx="66" cy="214" r="14" fill="#08090d" stroke="#558b81" stroke-width="2.5"/>
+    <text x="66" y="220" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="16" font-weight="700" fill="#9dfae2">1</text>
+  </g>
+
+  <path d="M256 260 H 318" stroke="#558b81" stroke-width="3" stroke-linecap="round"/>
+  <path d="M306 250 l 12 10 -12 10" fill="none" stroke="#558b81" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 2 · the generated code -->
+  <g>
+    <rect x="336" y="196" width="200" height="128" rx="20" fill="#08090d" stroke="#10c5a3" stroke-opacity="0.8" stroke-width="2"/>
+    <text x="362" y="272" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="26" fill="#9dfae2">{ }</text>
+    <rect x="410" y="240" width="102" height="10" rx="5" fill="#9dfae2" fill-opacity="0.45"/>
+    <rect x="410" y="258" width="76" height="9" rx="4.5" fill="#558b81"/>
+    <rect x="410" y="274" width="90" height="9" rx="4.5" fill="#558b81" fill-opacity="0.7"/>
+    <circle cx="354" cy="214" r="14" fill="#08090d" stroke="#10c5a3" stroke-width="2.5"/>
+    <text x="354" y="220" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="16" font-weight="700" fill="#9dfae2">2</text>
+  </g>
+
+  <path d="M544 260 H 578" stroke="#558b81" stroke-width="3" stroke-linecap="round"/>
+  <path d="M566 250 l 12 10 -12 10" fill="none" stroke="#558b81" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 3 · the widget you actually see -->
+  <g>
+    <rect x="596" y="196" width="200" height="128" rx="20" fill="#08090d" stroke="url(#f2edge)" stroke-width="2.5"/>
+    <rect x="620" y="218" width="72" height="9" rx="4.5" fill="#9dfae2" fill-opacity="0.5"/>
+    <rect x="620" y="248" width="152" height="22" rx="8" fill="#10c5a3" fill-opacity="0.14" stroke="#2adfba" stroke-opacity="0.6" stroke-width="1.5"/>
+    <rect x="634" y="255" width="58" height="8" rx="4" fill="#9dfae2" fill-opacity="0.8"/>
+    <rect x="620" y="280" width="152" height="20" rx="8" fill="#10c5a3" fill-opacity="0.05"/>
+    <rect x="634" y="286" width="80" height="8" rx="4" fill="#558b81"/>
+    <circle cx="614" cy="214" r="14" fill="#08090d" stroke="url(#f2edge)" stroke-width="2.5"/>
+    <text x="614" y="220" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="16" font-weight="700" fill="#9dfae2">3</text>
+    <!-- the port a wire leaves from -->
+    <circle cx="796" cy="260" r="12" fill="#08090d" stroke="url(#f2edge)" stroke-width="4"/>
+  </g>
+
+  <!-- the wire out to the chart, carrying one value -->
+  <path d="M808 260 H 902" stroke="url(#f2edge)" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M888 249 l 13 11 -13 11" fill="none" stroke="#5cf0d0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <g>
+    <rect x="758" y="184" width="130" height="38" rx="19" fill="#10c5a3" fill-opacity="0.14" stroke="#2adfba" stroke-opacity="0.75" stroke-width="2"/>
+    <text x="780" y="209" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#9dfae2">symbol</text>
+  </g>
+  <path d="M823 226 V 250" stroke="#2adfba" stroke-opacity="0.55" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 7"/>
+
+  <!-- 4 · the chart the wire drives -->
+  <g>
+    <rect x="916" y="176" width="236" height="168" rx="20" fill="#08090d" stroke="#558b81" stroke-opacity="0.75" stroke-width="2"/>
+    <rect x="964" y="200" width="88" height="10" rx="5" fill="#9dfae2" fill-opacity="0.45"/>
+    <g>
+      <line x1="964" y1="252" x2="964" y2="308" stroke="#2adfba" stroke-width="2.5"/>
+      <rect x="957" y="266" width="14" height="30" rx="3" fill="#2adfba" fill-opacity="0.85"/>
+      <line x1="1008" y1="240" x2="1008" y2="304" stroke="#10c5a3" stroke-width="2.5"/>
+      <rect x="1001" y="256" width="14" height="38" rx="3" fill="#10c5a3" fill-opacity="0.85"/>
+      <line x1="1052" y1="258" x2="1052" y2="310" stroke="#2adfba" stroke-width="2.5"/>
+      <rect x="1045" y="270" width="14" height="26" rx="3" fill="#2adfba" fill-opacity="0.85"/>
+      <line x1="1096" y1="230" x2="1096" y2="300" stroke="#2adfba" stroke-width="2.5"/>
+      <rect x="1089" y="246" width="14" height="44" rx="3" fill="#2adfba" fill-opacity="0.85"/>
+    </g>
+    <circle cx="934" cy="194" r="14" fill="#08090d" stroke="#558b81" stroke-width="2.5"/>
+    <text x="934" y="200" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="16" font-weight="700" fill="#9dfae2">4</text>
+  </g>
+</svg>

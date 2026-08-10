@@ -4,6 +4,9 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import { satteri } from '@astrojs/markdown-satteri';
+
+import { markdownFigure } from './src/lib/markdown-figure.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,6 +39,12 @@ export default defineConfig({
       prefixDefaultLocale: false,
       redirectToDefaultLocale: false,
     },
+  },
+
+  // Astro's own Sätteri pipeline, plus one plugin. `mdx()` extends this config,
+  // so MDX posts would get the same figures.
+  markdown: {
+    processor: satteri({ mdastPlugins: [markdownFigure] }),
   },
 
   vite: {

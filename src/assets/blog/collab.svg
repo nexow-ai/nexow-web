@@ -1,0 +1,105 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One shared screen with two remote cursors and a stack of collaborator avatars, illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="132" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#livescreen</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="600" cy="352" rx="430" ry="250" fill="#f59e0b" fill-opacity="0.05" filter="url(#soft)"/>
+
+    <!-- the one shared screen -->
+    <rect x="200" y="176" width="800" height="368" rx="28" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+    <rect x="200" y="176" width="800" height="368" rx="28" fill="#f59e0b" fill-opacity="0.05"/>
+
+    <!-- screen tab bar with a LIVE pill and the avatar stack -->
+    <line x1="200" y1="238" x2="1000" y2="238" stroke="#f59e0b" stroke-opacity="0.28" stroke-width="2"/>
+    <g>
+      <rect x="228" y="192" width="126" height="34" rx="17" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-opacity="0.45" stroke-width="2"/>
+      <circle cx="250" cy="209" r="6" fill="#fbbf24"/>
+      <text x="266" y="216" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="17" fill="#fde68a">LIVE</text>
+    </g>
+    <!-- avatars: owner, editor, viewer, one dimmed and away -->
+    <g>
+      <circle cx="884" cy="209" r="17" fill="#08090d" stroke="#fbbf24" stroke-width="3"/>
+      <circle cx="884" cy="203" r="6" fill="#fde68a"/>
+      <path d="M873 219 a11 11 0 0 1 22 0 z" fill="#fde68a"/>
+    </g>
+    <g>
+      <circle cx="916" cy="209" r="17" fill="#08090d" stroke="#f59e0b" stroke-width="3"/>
+      <circle cx="916" cy="203" r="6" fill="#f59e0b"/>
+      <path d="M905 219 a11 11 0 0 1 22 0 z" fill="#f59e0b"/>
+    </g>
+    <g opacity="0.45">
+      <circle cx="948" cy="209" r="17" fill="#08090d" stroke="#8a7b57" stroke-width="3"/>
+      <circle cx="948" cy="203" r="6" fill="#8a7b57"/>
+      <path d="M937 219 a11 11 0 0 1 22 0 z" fill="#8a7b57"/>
+    </g>
+
+    <!-- widgets on the shared canvas -->
+    <rect x="240" y="278" width="300" height="150" rx="18" fill="#f59e0b" fill-opacity="0.09" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+    <polyline points="266,398 312,362 352,382 396,326 440,350 502,304" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="580" y="278" width="230" height="150" rx="18" fill="#f59e0b" fill-opacity="0.07" stroke="#f59e0b" stroke-opacity="0.32" stroke-width="2"/>
+    <rect x="606" y="306" width="140" height="10" rx="5" fill="#fde68a" fill-opacity="0.75"/>
+    <rect x="606" y="332" width="178" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+    <rect x="606" y="358" width="104" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+    <rect x="240" y="458" width="570" height="56" rx="18" fill="#f59e0b" fill-opacity="0.05" stroke="#8a7b57" stroke-opacity="0.45" stroke-width="2"/>
+    <rect x="266" y="480" width="220" height="12" rx="6" fill="#8a7b57" fill-opacity="0.8"/>
+
+    <!-- a collaborator's build turn, claimed on one widget -->
+    <g>
+      <rect x="836" y="278" width="140" height="150" rx="18" fill="#f59e0b" fill-opacity="0.13" stroke="#fbbf24" stroke-opacity="0.6" stroke-width="2.5" stroke-dasharray="8 7"/>
+      <circle cx="906" cy="340" r="26" fill="none" stroke="#fbbf24" stroke-width="4" stroke-dasharray="3 10" stroke-linecap="round"/>
+      <circle cx="878" cy="392" r="5" fill="#fde68a"/>
+      <circle cx="906" cy="392" r="5" fill="#fde68a" fill-opacity="0.7"/>
+      <circle cx="934" cy="392" r="5" fill="#fde68a" fill-opacity="0.4"/>
+    </g>
+
+    <!-- two remote cursors, each with a name flag -->
+    <g>
+      <path d="M470 344 l0 46 l12 -13 l9 19 l11 -6 l-9 -18 l17 -1 z" fill="#fbbf24" stroke="#08090d" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="498" y="392" width="104" height="34" rx="17" fill="#fbbf24"/>
+      <text x="516" y="415" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="17" font-weight="700" fill="#08090d">editing</text>
+    </g>
+    <g>
+      <path d="M690 236 l0 46 l12 -13 l9 19 l11 -6 l-9 -18 l17 -1 z" fill="#d97706" stroke="#08090d" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="718" y="284" width="116" height="34" rx="17" fill="#d97706"/>
+      <text x="736" y="307" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="17" font-weight="700" fill="#08090d">watching</text>
+    </g>
+  </g>
+</svg>

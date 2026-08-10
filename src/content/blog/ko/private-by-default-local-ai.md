@@ -4,6 +4,7 @@ description: 'Nexow는 기본적으로 완전히 로컬에서 실행됩니다 �
 pubDate: 2026-07-01
 heroImage: ../../../assets/blog/private.svg
 tags: ['프라이버시', '아키텍처', '보안']
+category: deep-dive
 ---
 
 대부분의 AI 도구는 기본적으로 데이터를 서버로 보냅니다. 시장 워크스테이션 —

@@ -1898,6 +1898,13 @@ export const en: SiteContent = {
     published: 'Published',
     updated: 'Updated',
     minRead: 'min read',
+    categories: {
+      release: 'Release',
+      guide: 'Guide',
+      'deep-dive': 'Deep dive',
+      teardown: 'Teardown',
+      opinion: 'Opinion',
+    },
   },
   notFound: {
     title: 'This page drifted off the canvas',

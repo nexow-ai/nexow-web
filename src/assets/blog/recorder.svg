@@ -1,0 +1,118 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A dashboard being recorded, with a camera bubble and a floating recording control bar, illustration">
+  <defs>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 150) rotate(40) scale(620 560)">
+      <stop stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 600) rotate(-140) scale(640 560)">
+      <stop stop-color="#d97706" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="80" y1="140" x2="1120" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="912" y1="392" x2="1024" y2="504" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbbf24" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0.15"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0H0V46" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="#08090d"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#glowA)"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <g opacity="0.85">
+    <circle cx="1058" cy="59" r="6" fill="#fbbf24"/>
+    <text x="1078" y="66" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="23" font-weight="700" letter-spacing="7" fill="#fdf3d8">NEXOW</text>
+  </g>
+
+  <!-- tag chip -->
+  <g transform="translate(64 588)">
+    <rect x="0" y="0" width="122" height="44" rx="22" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.35"/>
+    <text x="22" y="29" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="22" fill="#fde68a">#capture</text>
+  </g>
+
+  <!-- top hairline accent -->
+  <rect x="64" y="106" width="150" height="3" rx="1.5" fill="url(#edge)"/>
+
+  <g>
+    <ellipse cx="580" cy="340" rx="430" ry="240" fill="#f59e0b" fill-opacity="0.05" filter="url(#soft)"/>
+
+    <!-- the dashboard being recorded -->
+    <rect x="160" y="166" width="800" height="356" rx="28" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+    <rect x="160" y="166" width="800" height="356" rx="28" fill="#f59e0b" fill-opacity="0.05"/>
+
+    <!-- crop marks: the frame the take is cropped to -->
+    <path d="M196 216 v-24 a10 10 0 0 1 10 -10 h26" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+    <path d="M924 216 v-24 a10 10 0 0 0 -10 -10 h-26" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+    <path d="M196 472 v24 a10 10 0 0 0 10 10 h26" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+    <path d="M924 472 v24 a10 10 0 0 1 -10 10 h-26" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- REC pill with elapsed time -->
+    <g>
+      <rect x="196" y="196" width="184" height="40" rx="20" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-opacity="0.5" stroke-width="2"/>
+      <circle cx="220" cy="216" r="9" fill="#fbbf24"/>
+      <text x="240" y="224" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" font-weight="700" fill="#fde68a">REC 02:14</text>
+    </g>
+
+    <!-- widgets in shot -->
+    <rect x="196" y="260" width="330" height="180" rx="18" fill="#f59e0b" fill-opacity="0.09" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+    <polyline points="224,414 272,368 314,392 360,326 404,354 490,290" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="556" y="260" width="180" height="180" rx="18" fill="#f59e0b" fill-opacity="0.07" stroke="#f59e0b" stroke-opacity="0.32" stroke-width="2"/>
+    <rect x="582" y="290" width="112" height="10" rx="5" fill="#fde68a" fill-opacity="0.75"/>
+    <rect x="582" y="316" width="128" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+    <rect x="582" y="342" width="82" height="10" rx="5" fill="#fde68a" fill-opacity="0.45"/>
+    <rect x="582" y="368" width="118" height="10" rx="5" fill="#fde68a" fill-opacity="0.3"/>
+    <rect x="196" y="464" width="330" height="42" rx="16" fill="#f59e0b" fill-opacity="0.05" stroke="#8a7b57" stroke-opacity="0.45" stroke-width="2"/>
+    <rect x="222" y="480" width="164" height="10" rx="5" fill="#8a7b57" fill-opacity="0.8"/>
+
+    <!-- draggable camera bubble, snapped to a corner -->
+    <g>
+      <circle cx="856" cy="418" r="72" fill="#08090d" stroke="#fbbf24" stroke-width="4"/>
+      <circle cx="856" cy="418" r="72" fill="url(#lens)"/>
+      <circle cx="856" cy="398" r="24" fill="#fde68a" fill-opacity="0.85"/>
+      <path d="M812 474 a44 44 0 0 1 88 0 z" fill="#fde68a" fill-opacity="0.85"/>
+      <circle cx="856" cy="418" r="86" fill="none" stroke="#f59e0b" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="3 10"/>
+    </g>
+
+    <!-- the floating HUD: pause, stop, mic, camera -->
+    <g>
+      <rect x="326" y="548" width="470" height="76" rx="38" fill="#08090d" stroke="url(#edge)" stroke-width="2.5"/>
+      <rect x="326" y="548" width="470" height="76" rx="38" fill="#f59e0b" fill-opacity="0.10"/>
+      <!-- pause -->
+      <rect x="382" y="571" width="9" height="30" rx="4.5" fill="#fde68a"/>
+      <rect x="399" y="571" width="9" height="30" rx="4.5" fill="#fde68a"/>
+      <!-- stop -->
+      <circle cx="480" cy="586" r="21" fill="#fbbf24"/>
+      <rect x="471" y="577" width="18" height="18" rx="4" fill="#08090d"/>
+      <!-- microphone -->
+      <rect x="566" y="565" width="18" height="30" rx="9" fill="#fde68a"/>
+      <path d="M556 588 a19 19 0 0 0 38 0" fill="none" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+      <line x1="575" y1="601" x2="575" y2="609" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+      <!-- camera toggle -->
+      <rect x="644" y="570" width="44" height="32" rx="10" fill="none" stroke="#fde68a" stroke-width="4"/>
+      <path d="M694 578 l18 -10 v36 l-18 -10 z" fill="#fde68a"/>
+      <!-- elapsed -->
+      <text x="738" y="594" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#8a7b57">10:00</text>
+    </g>
+
+    <!-- save / share / publish, the decision after the take -->
+    <g opacity="0.9">
+      <rect x="1000" y="196" width="140" height="46" rx="23" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="2"/>
+      <text x="1030" y="226" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">Save</text>
+      <rect x="1000" y="260" width="140" height="46" rx="23" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-opacity="0.34" stroke-width="2"/>
+      <text x="1024" y="290" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">Share</text>
+      <rect x="1000" y="324" width="140" height="46" rx="23" fill="#fbbf24" fill-opacity="0.2" stroke="#fbbf24" stroke-opacity="0.55" stroke-width="2"/>
+      <text x="1014" y="354" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, monospace" font-size="19" fill="#fde68a">Publish</text>
+    </g>
+  </g>
+</svg>

@@ -4,6 +4,7 @@ description: 'Una guía paso a paso para crear un dashboard de cripto en vivo co
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['guía', 'cripto', 'tutorial']
+category: guide
 ---
 
 Ya no hace falta ser desarrollador para crear un dashboard de cripto de nivel

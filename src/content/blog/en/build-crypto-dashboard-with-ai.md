@@ -4,6 +4,7 @@ description: 'A step-by-step guide to building a live crypto dashboard using AI:
 pubDate: 2026-06-28
 heroImage: ../../../assets/blog/crypto.svg
 tags: ['guide', 'crypto', 'tutorial']
+category: guide
 ---
 
 You don't need to be a developer to build a professional-grade crypto dashboard
