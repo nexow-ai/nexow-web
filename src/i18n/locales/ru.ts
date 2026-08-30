@@ -84,7 +84,8 @@ export const ru: SiteContent = {
     hero: {
       badge: 'Ранний доступ',
       titleLead: 'Данные — новая нефть.',
-      titleGradient: 'Строй что угодно и следи за всем.',
+      titleGradient: 'Строй что угодно и',
+      titleWatch: 'следи за всем.',
       titleTail: 'Действуй быстро, делись - расти - зарабатывай',
       titleKicker: 'Живые дашборды в реальном времени за секунды — не за недели или кварталы.',
       subtitle:

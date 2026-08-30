@@ -84,7 +84,8 @@ export const uk: SiteContent = {
     hero: {
       badge: 'Ранній доступ',
       titleLead: 'Дані — нова нафта.',
-      titleGradient: 'Будуй що завгодно і стеж за всім.',
+      titleGradient: 'Будуй що завгодно і',
+      titleWatch: 'стеж за всім.',
       titleTail: 'Дій швидко, ділись - зростай - заробляй',
       titleKicker: 'Живі дашборди в реальному часі за секунди — не за тижні чи квартали.',
       subtitle:

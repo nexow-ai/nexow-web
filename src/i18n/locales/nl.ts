@@ -84,7 +84,8 @@ export const nl: SiteContent = {
     hero: {
       badge: 'Vroege toegang',
       titleLead: 'Data is de nieuwe olie.',
-      titleGradient: 'Bouw alles en bekijk alles.',
+      titleGradient: 'Bouw alles en',
+      titleWatch: 'bekijk alles.',
       titleTail: 'Handel snel, deel - groei - verdien',
       titleKicker: 'Live realtime dashboards in seconden — niet in weken of kwartalen.',
       subtitle:

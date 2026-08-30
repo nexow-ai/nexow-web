@@ -84,7 +84,8 @@ export const ja: SiteContent = {
     hero: {
       badge: '早期アクセス',
       titleLead: 'データは新しい石油だ。',
-      titleGradient: '何でも作り、すべてを見よ。',
+      titleGradient: '何でも作り、',
+      titleWatch: 'すべてを見よ。',
       titleTail: '速く動け、共有せよ - 伸びろ - 稼げ',
       titleKicker: 'リアルタイムのダッシュボードを数秒で — 数週間や四半期ではありません。',
       subtitle:

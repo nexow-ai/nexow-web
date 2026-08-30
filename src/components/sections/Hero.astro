@@ -39,13 +39,14 @@ const examples = (t.promptExamples ?? []).slice(0, 4);
 const D = {
   line1: '0.10s',
   line2: '0.20s',
-  line3: '0.30s',
-  kicker: '0.52s',
-  forge: '0.64s',
-  examples: '0.74s',
-  note: '0.84s',
-  socials: '0.90s',
-  cue: '0.96s',
+  lineWatch: '0.28s',
+  line3: '0.40s',
+  kicker: '0.58s',
+  forge: '0.70s',
+  examples: '0.80s',
+  note: '0.90s',
+  socials: '0.96s',
+  cue: '1.02s',
 };
 ---
 
@@ -61,9 +62,21 @@ const D = {
           opposite the violet, teal is harmonic with the left forest, magenta
           is opposite the teal and harmonic with the right purple. Each line
           drifts on its own clock so they never lock into one wash. */}
-      <span class="hero__line hero__grad hero__grad--oil" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>
-      <span class="hero__line hero__grad hero__grad--use" data-text-appear data-text-appear-delay="0.20">{t.titleGradient}</span>
-      <span class="hero__line hero__grad hero__grad--act" data-text-appear data-text-appear-delay="0.30">{t.titleTail}</span>
+      <span class="hero__line hero__grad hero__grad--oil" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>{' '}
+      <span class="hero__line hero__grad hero__grad--use" data-text-appear data-text-appear-delay="0.20">{t.titleGradient}</span>{' '}
+      {
+        t.titleWatch && (
+          <span
+            class="hero__line hero__grad hero__grad--watch"
+            data-text={t.titleWatch}
+            data-text-appear
+            data-text-appear-delay="0.28"
+          >
+            {t.titleWatch}
+          </span>
+        )
+      }{' '}
+      <span class="hero__line hero__grad hero__grad--act" data-text-appear data-text-appear-delay={t.titleWatch ? '0.40' : '0.30'}>{t.titleTail}</span>
     </h1>
 
     {
@@ -192,13 +205,13 @@ const D = {
 
   .hero__title {
     display: grid;
-    max-width: 36ch;
+    max-width: 34ch;
     font-family: var(--font-display);
-    /* Fluid down for the long middle line ("BUILD ANYTHING & WATCH EVERYTHING.")
-     * and locales whose first line runs longer than the English slogan. */
-    font-size: clamp(1.55rem, 0.55rem + 5.2vw, 3.85rem);
+    /* Supporting lines sit under the lit hero title. Locales whose lead-in
+     * runs long still wrap; the watch line sizes itself. */
+    font-size: clamp(1.2rem, 0.5rem + 3.4vw, 2.35rem);
     font-weight: 600;
-    line-height: 1.05;
+    line-height: 1.08;
     letter-spacing: -0.025em;
     text-wrap: balance;
     /* Carries the readability the veil used to buy with opacity, but only
@@ -243,31 +256,87 @@ const D = {
     --ga: var(--color-brand-700);
     --gb: var(--color-sky-600);
     --gc: var(--color-accent-600);
-    /* Specular blade over the teal. The white-hot core is the shine; the
-       colour field underneath is the metal. One idea — light crossing chrome. */
+  }
+
+  /* One idea: a searchlight crossing the hero title. The specular lives in
+     the glyphs; a soft flare rides with it so the line reads as lit, not
+     just recolored. */
+  .hero__grad--watch {
+    --ga: var(--color-brand-700);
+    --gb: var(--color-sky-600);
+    --gc: var(--color-accent-600);
+    position: relative;
+    isolation: isolate;
+    margin-block: 0.02em 0.04em;
+    font-size: clamp(2.05rem, 0.5rem + 6.4vw, 4.75rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.96;
     background-image:
       linear-gradient(
-        112deg,
-        transparent 34%,
-        color-mix(in oklab, white 55%, var(--gb)) 46%,
+        108deg,
+        transparent 28%,
+        color-mix(in oklab, white 70%, var(--gb)) 44%,
         #fff 50%,
-        color-mix(in oklab, white 45%, var(--ga)) 54%,
-        transparent 66%
+        color-mix(in oklab, white 62%, var(--ga)) 56%,
+        transparent 72%
       ),
       linear-gradient(
         100deg,
         var(--ga),
         var(--gb) 28%,
-        color-mix(in oklab, white 35%, var(--gb)) 50%,
+        color-mix(in oklab, white 42%, var(--gb)) 50%,
         var(--gc) 72%,
         var(--ga)
       );
-    background-size: 220% 100%, 250% 100%;
-    animation: hero-chrome 4.8s var(--ease-out-expo) infinite;
+    background-size: 280% 160%, 240% 100%;
+    animation: hero-watch-light 3.8s var(--ease-out-expo) infinite;
     text-shadow:
-      0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent),
-      0 0 28px color-mix(in oklab, var(--gb) 50%, transparent),
-      0 0 52px color-mix(in oklab, white 28%, var(--gb));
+      0 2px 28px color-mix(in oklab, var(--w-surface) 82%, transparent),
+      0 0 22px color-mix(in oklab, var(--gb) 60%, transparent),
+      0 0 58px color-mix(in oklab, white 36%, var(--gb));
+  }
+
+  .hero__grad--watch::before {
+    content: '';
+    position: absolute;
+    top: -8%;
+    left: -22%;
+    z-index: 1;
+    width: 1.15em;
+    height: 116%;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in oklab, white 92%, var(--gb)) 0%,
+      color-mix(in oklab, white 55%, var(--gb)) 22%,
+      color-mix(in oklab, var(--gb) 48%, transparent) 48%,
+      transparent 74%
+    );
+    filter: blur(14px);
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+    animation: hero-watch-flare 3.8s var(--ease-out-expo) infinite;
+  }
+
+  .hero__grad--watch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      108deg,
+      transparent 32%,
+      color-mix(in oklab, white 82%, var(--gb)) 46%,
+      #fff 50%,
+      color-mix(in oklab, white 70%, var(--ga)) 54%,
+      transparent 68%
+    );
+    background-size: 280% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    pointer-events: none;
+    animation: hero-watch-sheen 3.8s var(--ease-out-expo) infinite;
   }
 
   .hero__grad--act {
@@ -284,7 +353,8 @@ const D = {
     --gc: var(--color-amber-400);
   }
 
-  :global(.dark) .hero__grad--use {
+  :global(.dark) .hero__grad--use,
+  :global(.dark) .hero__grad--watch {
     --ga: var(--color-brand-200);
     --gb: var(--color-sky-300);
     --gc: var(--color-sky-400);
@@ -296,16 +366,61 @@ const D = {
     --gc: var(--color-violet-400);
   }
 
-  @keyframes hero-chrome {
-    0%,
-    58% {
-      background-position: 140% 50%, 0% 50%;
+  @keyframes hero-watch-light {
+    0% {
+      background-position: 145% 50%, 0% 50%;
+      filter: brightness(1);
     }
-    82% {
-      background-position: -30% 50%, 55% 50%;
+    32% {
+      background-position: 42% 50%, 30% 50%;
+      filter: brightness(1.42);
     }
+    52% {
+      background-position: -18% 50%, 58% 50%;
+      filter: brightness(1.18);
+    }
+    72%,
     100% {
-      background-position: -30% 50%, 100% 50%;
+      background-position: -48% 50%, 100% 50%;
+      filter: brightness(1);
+    }
+  }
+
+  @keyframes hero-watch-sheen {
+    0% {
+      background-position: 145% 50%;
+      opacity: 0;
+    }
+    18% {
+      opacity: 1;
+    }
+    52% {
+      background-position: -18% 50%;
+      opacity: 0.85;
+    }
+    72%,
+    100% {
+      background-position: -48% 50%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes hero-watch-flare {
+    0% {
+      left: -22%;
+      opacity: 0;
+    }
+    16% {
+      opacity: 1;
+    }
+    52% {
+      left: 78%;
+      opacity: 0.75;
+    }
+    72%,
+    100% {
+      left: 112%;
+      opacity: 0;
     }
   }
 
@@ -313,8 +428,14 @@ const D = {
     .hero__grad {
       animation: none;
     }
-    .hero__grad--use {
+    .hero__grad--watch {
       background-position: 42% 50%, 30% 50%;
+      filter: none;
+    }
+    .hero__grad--watch::before,
+    .hero__grad--watch::after {
+      animation: none;
+      opacity: 0;
     }
   }
 

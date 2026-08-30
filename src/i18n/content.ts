@@ -435,6 +435,12 @@ export interface SiteContent {
       badge: string;
       titleLead: string;
       titleGradient: string;
+      /**
+       * The actual hero title — the large lit line ("WATCH EVERYTHING.").
+       * When set, `titleGradient` is the quieter lead-in above it
+       * ("BUILD ANYTHING &"). Locales without it keep the combined middle line.
+       */
+      titleWatch?: string;
       titleTail: string;
       /**
        * Optional fourth beat under the three-line headline ("Live real-time
@@ -641,6 +647,27 @@ export interface SiteContent {
       subtitle: string;
       primary: string;
       secondary: string;
+    };
+    /**
+     * Right-rail stops on the home page. Short chrome names (Hero, Dao,
+     * Footer…), not the act headlines — those already live in the scene.
+     * Optional so locales fall back to English through `useContent`.
+     */
+    rail?: {
+      hero: string;
+      widget: string;
+      canvas: string;
+      connectors: string;
+      bots: string;
+      agents: string;
+      dao: string;
+      useCases: string;
+      features: string;
+      privacy: string;
+      plans: string;
+      rewards: string;
+      faq: string;
+      footer: string;
     };
   };
   features: {

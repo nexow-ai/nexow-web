@@ -91,7 +91,8 @@ export const en: SiteContent = {
     hero: {
       badge: 'Early access',
       titleLead: 'DATA IS THE NEW OIL.',
-      titleGradient: 'BUILD ANYTHING & WATCH EVERYTHING.',
+      titleGradient: 'BUILD ANYTHING &',
+      titleWatch: 'WATCH EVERYTHING.',
       titleTail: 'ACT FAST, SHARE - GROW - EARN',
       titleKicker: 'Live real-time dashboards in seconds — not weeks, or quarters.',
       subtitle:
@@ -872,6 +873,22 @@ export const en: SiteContent = {
       subtitle: 'Open the preview, describe one useful thing, and place it on your canvas.',
       primary: 'Launch Nexow',
       secondary: 'Explore features',
+    },
+    rail: {
+      hero: 'Hero',
+      widget: 'Widget',
+      canvas: 'Canvas',
+      connectors: 'Connectors',
+      bots: 'Bots',
+      agents: 'Agents',
+      dao: 'DAO',
+      useCases: 'Use cases',
+      features: 'Features',
+      privacy: 'Privacy',
+      plans: 'Plans',
+      rewards: 'Rewards',
+      faq: 'FAQ',
+      footer: 'Footer',
     },
   },
   communityPage: {

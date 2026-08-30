@@ -84,7 +84,8 @@ export const fr: SiteContent = {
     hero: {
       badge: 'Accès anticipé',
       titleLead: 'La data est le nouvel or.',
-      titleGradient: 'Construisez tout et surveillez tout.',
+      titleGradient: 'Construisez tout et',
+      titleWatch: 'surveillez tout.',
       titleTail: 'Agis vite, partage - grandis - gagne',
       titleKicker: 'Tableaux de bord en temps réel en quelques secondes — pas en semaines, ni en trimestres.',
       subtitle:

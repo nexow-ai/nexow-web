@@ -84,7 +84,8 @@ export const ms = {
     hero: {
       badge: 'Akses awal',
       titleLead: 'Data ialah minyak baharu.',
-      titleGradient: 'Bina apa sahaja dan pantau semuanya.',
+      titleGradient: 'Bina apa sahaja dan',
+      titleWatch: 'pantau semuanya.',
       titleTail: 'Bertindak pantas, kongsi - tumbuh - jana',
       titleKicker: 'Papan pemuka masa nyata langsung dalam beberapa saat — bukan minggu, atau suku tahun.',
       subtitle:

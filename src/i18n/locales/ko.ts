@@ -84,7 +84,8 @@ export const ko: SiteContent = {
     hero: {
       badge: '얼리 액세스',
       titleLead: '데이터는 새로운 석유다.',
-      titleGradient: '무엇이든 만들고 모든 것을 봐라.',
+      titleGradient: '무엇이든 만들고',
+      titleWatch: '모든 것을 봐라.',
       titleTail: '빨리 행동하고, 공유하라 - 성장하라 - 벌어라',
       titleKicker: '실시간 대시보드를 몇 초 만에 — 몇 주나 분기가 아니라.',
       subtitle:

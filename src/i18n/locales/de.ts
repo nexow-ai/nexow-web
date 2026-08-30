@@ -84,7 +84,8 @@ export const de: SiteContent = {
     hero: {
       badge: 'Früher Zugang',
       titleLead: 'Daten sind das neue Öl.',
-      titleGradient: 'Bau alles und beobachte alles.',
+      titleGradient: 'Bau alles und',
+      titleWatch: 'beobachte alles.',
       titleTail: 'Handle schnell, teile - wachse - verdiene',
       titleKicker: 'Live-Dashboards in Echtzeit in Sekunden — nicht in Wochen oder Quartalen.',
       subtitle:

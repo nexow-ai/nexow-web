@@ -84,7 +84,8 @@ export const he: SiteContent = {
     hero: {
       badge: 'גישה מוקדמת',
       titleLead: 'דאטה הוא הנפט החדש.',
-      titleGradient: 'תבנו הכל ותעקבו אחרי הכל.',
+      titleGradient: 'תבנו הכל ו',
+      titleWatch: 'תעקבו אחרי הכל.',
       titleTail: 'פעלו מהר, שתפו - גדלו - הרוויחו',
       titleKicker: 'דשבורדים חיים בזמן אמת תוך שניות — לא שבועות, ולא רבעונים.',
       subtitle:

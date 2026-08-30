@@ -84,7 +84,8 @@ export const zh: SiteContent = {
     hero: {
       badge: '抢先体验',
       titleLead: '数据就是新石油。',
-      titleGradient: '什么都能建，什么都能看。',
+      titleGradient: '什么都能建，',
+      titleWatch: '什么都能看。',
       titleTail: '快速行动、分享 - 成长 - 赚钱',
       titleKicker: '实时仪表盘，几秒完成 — 不是几周，更不是一个季度。',
       subtitle:
