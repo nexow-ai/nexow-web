@@ -1,54 +1,146 @@
 ---
 /**
- * The world's sound. No markup: this listens for the scroll tour and plays the
- * ambient piece in `lib/ambient` under it, from the moment the tour starts to
- * the moment it stops — for any reason: the button, a scroll, a keypress, the
- * end of the page, a hidden tab.
+ * The world's sound. No markup: this listens for the scroll tour and plays a
+ * record under it, from the moment the tour starts to the moment it stops —
+ * for any reason: the button, a scroll, a keypress, the end of the page, a
+ * hidden tab.
+ *
+ * Which record is chance. Every press of play pulls one from the crate in
+ * `lib/soundtrack` — never the one just played — so the tour has a different
+ * soundtrack each time. Most are files under `public/audio/tour`, streamed
+ * through one <audio> element that is created on the first play and never
+ * before; one is the piece `lib/ambient` synthesises, which ships no bytes at
+ * all and is also what plays when a file will not (offline, a missing file, a
+ * codec the browser lacks). A file that ends before the tour does hands over
+ * to the next pick, so a long page never runs out of music.
  *
  * Why here and not in the header, where the tour lives: the header ships on
- * every route, and only the world has a soundtrack. The engine itself is a
- * dynamic import, fetched the first time somebody presses play; a visitor who
- * scrolls the story by hand never loads it.
+ * every route, and only the world has a soundtrack.
  *
- * The context is created in the click, synchronously, before the import
- * resolves. Browsers unmute audio only for contexts born from a user gesture,
- * and the gesture is over by the time an `await` returns.
+ * The context and the element are both born in the click, synchronously,
+ * before anything is awaited. Browsers unmute a context only when it was made
+ * inside a user gesture, and the gesture is over by the time an `await`
+ * returns; an element that has once played from a gesture may go on to play
+ * the next record by itself, which is how the hand-over works on Safari.
  */
 ---
 
 <script>
   import type { Ambient } from '../../lib/ambient';
+  import { pickTrack, type Track } from '../../lib/soundtrack';
+
+  /** The files are matched to −18 LUFS by `scripts/fetch-tour-music.mjs`; this sits them under the page. */
+  const LEVEL = 0.9;
+  const FADE_IN = 2.2;
+  const FADE_OUT = 1.6;
+
+  interface Deck {
+    el: HTMLAudioElement;
+    gain: GainNode;
+  }
 
   let ctx: AudioContext | undefined;
   let ambient: Ambient | undefined;
-  /** Play was pressed and the engine is still loading — unless stop came first. */
+  let deck: Deck | undefined;
+  /** What played last, so the next pick is something else. */
+  let last: Track | undefined;
+  /** Play was pressed and nothing has stopped it since. */
   let wanted = false;
+  /** Bumped by every play and stop, so a late callback can tell it is stale. */
+  let turn = 0;
+  /** The turn that last put a file on the deck; a stop's clean-up checks it is still the one. */
+  let deckTurn = 0;
 
-  async function play() {
+  function makeDeck(ctx: AudioContext): Deck {
+    const el = new Audio();
+    el.preload = 'auto';
+    const gain = ctx.createGain();
+    gain.gain.value = 0;
+    ctx.createMediaElementSource(el).connect(gain).connect(ctx.destination);
+    return { el, gain };
+  }
+
+  function ramp(param: AudioParam, to: number, seconds: number) {
+    const at = ctx!.currentTime;
+    param.cancelScheduledValues(at);
+    param.setValueAtTime(param.value, at);
+    param.linearRampToValueAtTime(to, at + seconds);
+  }
+
+  /** The synthesised piece. Its engine is a dynamic import, fetched the first time it comes up. */
+  async function hum(mine: number) {
+    if (!ambient) {
+      const { createAmbient } = await import('../../lib/ambient');
+      ambient ??= createAmbient(ctx!);
+    }
+    if (turn === mine) ambient.start();
+  }
+
+  /** Put a record on: a file through the deck, or the synthesised piece. */
+  function spin(track: Track) {
+    last = track;
+    const mine = ++turn;
+    if (!track.src) {
+      void hum(mine);
+      return;
+    }
+    const { el, gain } = deck!;
+    deckTurn = mine;
+    // Silent until sound actually flows, then a fade; `playing` also follows a
+    // stall, and ramping to where it already is does nothing.
+    gain.gain.cancelScheduledValues(ctx!.currentTime);
+    gain.gain.setValueAtTime(0, ctx!.currentTime);
+    el.onplaying = () => {
+      if (turn === mine) ramp(gain.gain, LEVEL, FADE_IN);
+    };
+    el.onended = () => {
+      if (turn === mine && wanted) spin(pickTrack(Math.random, last));
+    };
+    // Cannot be fetched or decoded: the piece that needs neither.
+    el.onerror = () => {
+      if (turn === mine && wanted) void hum(mine);
+    };
+    el.src = track.src;
+    // A rejected play — a policy, or a new record interrupting this one's
+    // load — is nothing to act on: the tour goes on, quietly.
+    el.play().catch(() => {});
+  }
+
+  function play() {
     wanted = true;
     if (!ctx) {
       if (!('AudioContext' in window)) return;
-      // The piece is not interactive; a playback hint lets the browser buffer
+      // Nothing here is interactive; a playback hint lets the browser buffer
       // generously and spend less power on it.
       ctx = new AudioContext({ latencyHint: 'playback' });
     }
     // Hidden tabs, and Safari, leave a context suspended. Harmless otherwise.
     if (ctx.state !== 'running') void ctx.resume();
-    if (!ambient) {
-      const { createAmbient } = await import('../../lib/ambient');
-      ambient ??= createAmbient(ctx);
-    }
-    if (wanted) ambient.start();
+    deck ??= makeDeck(ctx);
+    spin(pickTrack(Math.random, last));
   }
 
-  function stop(seconds?: number) {
+  function stop(seconds = FADE_OUT) {
     wanted = false;
+    turn += 1;
     ambient?.stop(seconds);
+    const d = deck;
+    if (!d || d.el.paused) return;
+    ramp(d.gain.gain, 0, seconds);
+    const mine = deckTurn;
+    setTimeout(() => {
+      // Unless a new record has gone on since, take this one off and let go
+      // of its bytes.
+      if (deckTurn !== mine) return;
+      d.el.pause();
+      d.el.removeAttribute('src');
+      d.el.load();
+    }, seconds * 1000 + 80);
   }
 
   document.addEventListener('nexow:tour', (event) => {
     const { playing } = (event as CustomEvent<{ playing: boolean }>).detail;
-    if (playing) void play();
+    if (playing) play();
     else stop();
   });
   // Leaving the page: out quickly, before the next one paints.

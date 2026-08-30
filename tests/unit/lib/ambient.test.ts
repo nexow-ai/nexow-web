@@ -267,7 +267,7 @@ describe('createAmbient', () => {
     // The master comes up from nothing rather than clicking on.
     const [master] = ctx.made.filter((n): n is Gain => n instanceof Gain);
     expect(master.gain.log[0]).toBe('set 0 @0.05');
-    expect(master.gain.log[1]).toMatch(/^lin 0\.85 @/);
+    expect(master.gain.log[1]).toMatch(/^lin 0\.7 @/);
   });
 
   it('routes to a given destination instead of the speakers', () => {

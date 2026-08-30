@@ -73,14 +73,14 @@ export interface Ambient {
 }
 
 /* ---- the mix, in linear gain ---- */
-const MASTER = 0.85;
+const MASTER = 0.7;
 const DRY = 0.75;
 const WET = 0.5;
 const PAD_VOICE = 0.045;
 const SUB = 0.16;
 const AIR = 0.09;
-const NOTE_FLOOR = 0.26;
-const NOTE_SPAN = 0.34;
+const NOTE_FLOOR = 0.22;
+const NOTE_SPAN = 0.28;
 const GRACE_CHANCE = 0.22;
 
 /* ---- time, in seconds ---- */
