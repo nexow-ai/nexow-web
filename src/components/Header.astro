@@ -103,10 +103,9 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       </ul>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
-        {/* Hands-free scroll. Only rendered as visible on pages that carry a
-            world (`html[data-world]`) — a play button on the blog would scroll
-            a page that has no story to tell. CSS does the hiding, so the
-            header stays one component for every route. */}
+        {/* Hands-free scroll, on every route. It stays hidden until the script
+            has measured a page long enough to be worth watching, which is what
+            `data-ready` says; see `global.css`. */}
         <button
           type="button"
           id="tour-toggle"
@@ -326,12 +325,17 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 
 <script>
   /**
-   * Hands-free scroll tour.
+   * Hands-free scroll tour, on every page of the site.
    *
-   * The home page is a scroll-driven story with holds built into it, so it is
-   * worth being able to watch rather than drive. This advances the scroll at a
+   * The home page is a scroll-driven story with holds built into it, but the
+   * rest of the site is worth reading through the same way — so the play
+   * button ships with the header everywhere. This advances the scroll at a
    * real-world speed and gets out of the way the moment the visitor touches
    * anything.
+   *
+   * The one page it is not offered on is a page with barely anything below the
+   * fold: `worthTouring` measures the route on load and whenever it grows or
+   * the viewport changes, and only then does the button appear.
    *
    * The pace lives in `lib/tour`: one speed in CSS pixels per second, not per
    * frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
@@ -339,13 +343,16 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * changes, the time left is distance over speed, which the foot-of-screen
    * transport (`TourHud.astro`) counts down.
    */
-  import { secondsLeft, TOUR_SPEED } from '../lib/tour';
+  import { secondsLeft, TOUR_SPEED, worthTouring } from '../lib/tour';
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
+  let tourRo: ResizeObserver | undefined;
 
   function initTour() {
     tourAbort?.abort();
+    tourRo?.disconnect();
+    tourRo = undefined;
     tourAbort = new AbortController();
     const { signal } = tourAbort;
 
@@ -377,7 +384,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       /* `scroll-behavior: smooth` is on the document for anchor jumps; left on,
        * it would fight a per-frame scrollBy into a stutter. */
       document.documentElement.style.scrollBehavior = on ? 'auto' : '';
-      // The world listens: its soundtrack follows the tour (`world/WorldSound.astro`).
+      // The deck listens: the soundtrack follows the tour (`TourSound.astro`).
       document.dispatchEvent(new CustomEvent('nexow:tour', { detail: { playing: on } }));
     };
 
@@ -387,6 +394,20 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       tourRaf = 0;
       last = 0;
       setPlaying(false);
+    };
+
+    /* Whether this page is long enough to tour. Re-read rather than assumed:
+     * a lazy image, a font, a phone rotating or an accordion opening all move
+     * the end of the page, and a route that grows past the bar mid-visit
+     * should offer the tour rather than wait for a reload. */
+    const measure = () => {
+      const ready = worthTouring(maxScroll());
+      if (ready) btn.setAttribute('data-ready', '');
+      else {
+        btn.removeAttribute('data-ready');
+        // The button just left the header; the tour cannot outlive it.
+        stop();
+      }
     };
 
     /** The tour's own controls: this button and the transport at the foot. */
@@ -458,6 +479,16 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     );
     // Nothing to watch in a hidden tab.
     document.addEventListener('visibilitychange', () => document.hidden && stop(), { signal });
+
+    measure();
+    /* The document box covers the page growing; `resize` covers the viewport
+     * getting taller without it, which is the phone-browser chrome sliding
+     * away and is not a box change the observer sees. */
+    if ('ResizeObserver' in window) {
+      tourRo = new ResizeObserver(measure);
+      tourRo.observe(document.documentElement);
+    }
+    window.addEventListener('resize', measure, { passive: true, signal });
   }
 
   document.addEventListener('astro:page-load', initTour);
@@ -465,6 +496,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     if (tourRaf) cancelAnimationFrame(tourRaf);
     tourRaf = 0;
     tourAbort?.abort();
+    tourRo?.disconnect();
+    tourRo = undefined;
     document.documentElement.style.scrollBehavior = '';
   });
 </script>

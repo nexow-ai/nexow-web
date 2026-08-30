@@ -15,6 +15,19 @@
 /** The tour's pace, in CSS pixels per second. */
 export const TOUR_SPEED = 380;
 
+/**
+ * How far a page has to scroll before the tour is offered on it, in CSS
+ * pixels — a little over two seconds of travel. Short pages (a 404, a stub
+ * locale, a one-screen post) would hand the visitor a play button that ends
+ * before they have looked away from it.
+ */
+export const TOUR_MIN_TRAVEL = TOUR_SPEED * 2.2;
+
+/** Whether a page with `max` pixels of scroll has enough in it for a tour. */
+export function worthTouring(max: number, least = TOUR_MIN_TRAVEL): boolean {
+  return max >= least;
+}
+
 /** How much of the tour is still ahead, in seconds, from position `y` of `max`. */
 export function secondsLeft(y: number, max: number, speed = TOUR_SPEED): number {
   const ahead = Math.min(Math.max(0, max), Math.max(0, max - y));

@@ -1051,15 +1051,16 @@ html.is-theme-transition [data-astro-transition-scope] {
 /* ------------------------------------------------------------------ *
  * The scroll tour's play button.
  *
- * Hidden everywhere except pages that carry a world, because everywhere else
- * it would just scroll a page with no story in it. Display is the only thing
- * gated — the markup ships on every route so the header stays one component.
+ * Offered on every route, and shown once the script has measured a page with
+ * enough scroll in it to be worth watching — that is what `data-ready` says
+ * (`Header.astro`). Hidden until then, so a page that barely moves, or one
+ * with no JavaScript to move it, never shows a button that does nothing.
  * ------------------------------------------------------------------ */
 .tour-toggle {
   display: none;
 }
 
-html[data-world] .tour-toggle {
+.tour-toggle[data-ready] {
   display: inline-flex;
 }
 
@@ -1086,7 +1087,7 @@ html[data-world] .tour-toggle {
 /* A tour is motion the visitor did not ask for by scrolling, so it is not
  * offered at all to someone who asked for less of it. */
 @media (prefers-reduced-motion: reduce) {
-  html[data-world] .tour-toggle {
+  .tour-toggle[data-ready] {
     display: none;
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clock, secondsLeft, TOUR_SPEED } from '../../../src/lib/tour';
+import { clock, secondsLeft, TOUR_MIN_TRAVEL, TOUR_SPEED, worthTouring } from '../../../src/lib/tour';
 
 describe('secondsLeft', () => {
   const max = 4800;
@@ -34,6 +34,27 @@ describe('secondsLeft', () => {
   it('has nothing to time on a page that does not scroll', () => {
     expect(secondsLeft(0, 0)).toBe(0);
     expect(secondsLeft(0, -10)).toBe(0);
+  });
+});
+
+describe('worthTouring', () => {
+  it('turns down a page with nothing below the fold', () => {
+    expect(worthTouring(0)).toBe(false);
+    expect(worthTouring(-40)).toBe(false);
+  });
+
+  it('turns down a page that scrolls for barely a second', () => {
+    expect(worthTouring(TOUR_SPEED)).toBe(false);
+  });
+
+  it('takes a page long enough to be worth watching', () => {
+    expect(worthTouring(TOUR_MIN_TRAVEL)).toBe(true);
+    expect(worthTouring(TOUR_SPEED * 30)).toBe(true);
+  });
+
+  it('takes its bar from the caller', () => {
+    expect(worthTouring(500, 400)).toBe(true);
+    expect(worthTouring(500, 900)).toBe(false);
   });
 });
 

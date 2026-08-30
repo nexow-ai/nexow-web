@@ -1,6 +1,6 @@
 ---
 /**
- * The world's sound. No markup: this listens for the scroll tour and plays a
+ * The scroll tour's sound. No markup: this listens for the tour and plays a
  * record under it, from the moment the tour starts to the moment it stops —
  * for any reason: the button, a scroll, a keypress, the end of the page, a
  * hidden tab.
@@ -14,8 +14,10 @@
  * codec the browser lacks). A file that ends before the tour does hands over
  * to the next pick, so a long page never runs out of music.
  *
- * Why here and not in the header, where the tour lives: the header ships on
- * every route, and only the world has a soundtrack.
+ * Ships from the layout, beside the transport (`TourHud.astro`), because the
+ * tour itself now runs on every route: a record that only played on the home
+ * page would leave the transport's "another song" button dead everywhere else.
+ * Nothing is fetched, and no audio context exists, until play is pressed.
  *
  * The context and the element are both born in the click, synchronously,
  * before anything is awaited. Browsers unmute a context only when it was made
@@ -26,8 +28,8 @@
 ---
 
 <script>
-  import type { Ambient } from '../../lib/ambient';
-  import { pickTrack, type Track } from '../../lib/soundtrack';
+  import type { Ambient } from '../lib/ambient';
+  import { pickTrack, type Track } from '../lib/soundtrack';
 
   /**
    * The files are matched to −18 LUFS with 1.5 dB of headroom by
@@ -76,7 +78,7 @@
   /** The synthesised piece. Its engine is a dynamic import, fetched the first time it comes up. */
   async function hum(mine: number) {
     if (!ambient) {
-      const { createAmbient } = await import('../../lib/ambient');
+      const { createAmbient } = await import('../lib/ambient');
       ambient ??= createAmbient(ctx!);
     }
     if (turn === mine) ambient.start();
