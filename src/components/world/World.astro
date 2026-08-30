@@ -66,7 +66,10 @@ import WorldField from './WorldField.astro';
    * Never on coarse pointers (there is no cursor to follow) and never under
    * reduced motion.
    */
-  let root: HTMLElement | null = null;
+  /* The act scenes, written to directly. These used to be written to `.world`
+   * and inherited — one write, but a style invalidation of every element in
+   * the world on every mouse move. Five scene subtrees are a fraction of it. */
+  let targets: HTMLElement[] = [];
   let raf = 0;
   let aimX = 0;
   let aimY = 0;
@@ -75,11 +78,15 @@ import WorldField from './WorldField.astro';
 
   function tick() {
     raf = 0;
-    if (!root) return;
+    if (!targets.length) return;
     curX += (aimX - curX) * 0.08;
     curY += (aimY - curY) * 0.08;
-    root.style.setProperty('--mx', curX.toFixed(4));
-    root.style.setProperty('--my', curY.toFixed(4));
+    const mx = curX.toFixed(4);
+    const my = curY.toFixed(4);
+    for (const el of targets) {
+      el.style.setProperty('--mx', mx);
+      el.style.setProperty('--my', my);
+    }
     if (Math.abs(aimX - curX) > 0.002 || Math.abs(aimY - curY) > 0.002) {
       raf = requestAnimationFrame(tick);
     }
@@ -95,15 +102,15 @@ import WorldField from './WorldField.astro';
     window.removeEventListener('pointermove', onPointer);
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
-    root = null;
+    targets = [];
   }
 
   function initWorld() {
     teardownWorld();
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (window.matchMedia('(pointer: coarse)').matches) return;
-    root = document.querySelector<HTMLElement>('.world');
-    if (!root) return;
+    targets = Array.from(document.querySelectorAll<HTMLElement>('.world .act-scene'));
+    if (!targets.length) return;
     window.addEventListener('pointermove', onPointer, { passive: true });
   }
 
