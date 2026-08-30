@@ -121,15 +121,12 @@ const themeLocked = theme === 'light' || theme === 'dark';
     <script>
       // Which way the page slides. Astro would use history direction, which
       // sends every link — the "previous page" arrow included — the same way;
-      // position in the tour is what the motion should mirror instead.
-      import { slideDirection } from '../lib/pageTransition';
-      import { getRouteFromUrl } from '../i18n/utils';
+      // position in the tour (or, for a language switch, in the picker) is
+      // what the motion should mirror instead.
+      import { navigationDirection } from '../lib/pageTransition';
 
       document.addEventListener('astro:before-preparation', (event) => {
-        event.direction = slideDirection(
-          getRouteFromUrl(event.from),
-          getRouteFromUrl(event.to),
-        );
+        event.direction = navigationDirection(event.from, event.to);
       });
     </script>
 
