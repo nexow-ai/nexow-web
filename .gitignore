@@ -37,7 +37,9 @@ scratchpad/verify.mjs
 scratchpad/panels.mjs
 scratchpad/diag.mjs
 scratchpad/shot-*.mjs
+scratchpad/*-shot.mjs
 scratchpad/centre.mjs
+scratchpad/*.png
 
 # local Claude / Cursor agent state
 .claude/
