@@ -4,9 +4,10 @@
  *
  * The scene is the same playground chrome as the features page: type a prompt,
  * get a live set of widgets. The SVG runs that loop on its own clock — type,
- * generate, land, hold, reset — independent of the act's scroll ramps. The
- * copy beside it still lights beat by beat. Decorative, so it stays out of
- * the a11y tree. Reduced motion parks on the finished playground.
+ * generate, land, live, reset — independent of the act's scroll ramps. After
+ * the cards land they keep working: the moodboard breathes, the heatmap fills,
+ * the memory game matches pairs. Decorative, so it stays out of the a11y tree.
+ * Reduced motion parks on the finished playground.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -22,10 +23,10 @@ const c = useContent(lang);
 const copy = c.home.acts!.widget;
 const prompt = c.home.hero.promptExample;
 
-/** Fixed 7×5 fortnight of streak intensities — identical every render. */
+/** Four weeks of streak intensities — a monthly heatmap, not a fortnight. */
 const CELLS = [
   2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 3, 1, 2, 0, 3, 2, 0, 1, 3, 2, 3, 1, 2, 2, 0, 3,
-  1, 3, 2, 1, 0, 2, 3, 1, 2,
+  1, 3, 2, 1,
 ];
 
 const TABS = [
@@ -42,13 +43,40 @@ const WORKSPACES = [
 ];
 
 const MOOD = [
-  { x: 144, y: 184, w: 148, h: 88, fill: 'var(--w-mood-1)' },
-  { x: 300, y: 184, w: 68, h: 52, fill: 'var(--w-mood-2)' },
-  { x: 376, y: 184, w: 56, h: 52, fill: 'var(--w-mood-3)' },
-  { x: 300, y: 244, w: 132, h: 28, fill: 'var(--w-mood-4)' },
+  { x: 144, y: 176, w: 148, h: 72, fill: 'var(--w-mood-1)' },
+  { x: 300, y: 176, w: 68, h: 40, fill: 'var(--w-mood-2)' },
+  { x: 376, y: 176, w: 56, h: 40, fill: 'var(--w-mood-3)' },
+  { x: 300, y: 224, w: 132, h: 24, fill: 'var(--w-mood-4)' },
 ];
 
-const GAME = [1, 8, 12, 4, 6, 13];
+const SWATCHES = [
+  { x: 144, fill: 'var(--color-brand-400)' },
+  { x: 166, fill: 'var(--color-accent-400)' },
+  { x: 188, fill: 'var(--color-sky-400)' },
+  { x: 210, fill: 'var(--color-brand-300)' },
+];
+
+/** Eight memory cards in 4×2. `pair` is which two flip together. */
+const MEMORY = [
+  { col: 0, row: 0, pair: 0 },
+  { col: 1, row: 0, pair: 1 },
+  { col: 2, row: 0, pair: 0 },
+  { col: 3, row: 0, pair: 2 },
+  { col: 0, row: 1, pair: 1 },
+  { col: 1, row: 1, pair: 3 },
+  { col: 2, row: 1, pair: 2 },
+  { col: 3, row: 1, pair: 3 },
+];
+
+const PAIR_FILL = [
+  'var(--color-brand-400)',
+  'var(--color-accent-400)',
+  'var(--color-sky-400)',
+  'var(--color-brand-300)',
+];
+
+const SPARK = [28, 36, 32, 44, 50, 41, 56, 62, 54, 68, 74, 70];
+const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v * 0.7}`).join(' ');
 ---
 
 <Act id="widget" labelledBy="act-widget-title" height="205vh">
@@ -206,46 +234,118 @@ const GAME = [1, 8, 12, 4, 6, 13];
           </g>
 
           <g class="w-widget" style="--i:0">
-            <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
-            <text x="144" y="172" class="w-card-title" fill="var(--w-text)">Moodboard</text>
-            <rect x="400" y="158" width="32" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
-            {MOOD.map((tile) => (
-              <rect x={tile.x} y={tile.y} width={tile.w} height={tile.h} rx="8" fill={tile.fill}></rect>
-            ))}
-            <text x="144" y="348" class="w-note" fill="var(--w-text-4)">calm · clear</text>
+            <rect x="128" y="148" width="320" height="124" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+            <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Moodboard</text>
+            <rect x="392" y="158" width="40" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
+            {
+              MOOD.map((tile, i) => (
+                <rect
+                  class="w-mood-tile"
+                  style={`--i:${i}`}
+                  x={tile.x}
+                  y={tile.y}
+                  width={tile.w}
+                  height={tile.h}
+                  rx="8"
+                  fill={tile.fill}
+                />
+              ))
+            }
+            <rect class="w-mood-pick" x="144" y="176" width="148" height="72" rx="10"></rect>
+            {
+              SWATCHES.map((s, i) => (
+                <rect
+                  class="w-swatch"
+                  style={`--i:${i}`}
+                  x={s.x}
+                  y="254"
+                  width="16"
+                  height="8"
+                  rx="2"
+                  fill={s.fill}
+                />
+              ))
+            }
+            <text x="240" y="261" class="w-note" fill="var(--w-text-4)">calm · clear</text>
           </g>
 
           <g class="w-widget" style="--i:1">
-            <rect x="460" y="148" width="144" height="100" rx="14" class="w-card"></rect>
-            <text x="472" y="168" class="w-card-title" fill="var(--w-text)">Habits</text>
-            <text x="560" y="168" class="w-tiny" fill="var(--w-accent)">6/8</text>
-            {CELLS.slice(0, 21).map((v, i) => (
-              <rect
-                x={472 + (i % 7) * 16}
-                y={178 + Math.floor(i / 7) * 16}
-                width="13"
-                height="13"
-                rx="2.5"
-                fill="var(--color-brand-400)"
-                opacity={0.12 + v * 0.26}
-              />
-            ))}
+            <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+            <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Habits</text>
+            <g class="w-streak">
+              <text class="w-streak-n" style="--i:0" x="572" y="170" fill="var(--w-accent)">3/8</text>
+              <text class="w-streak-n" style="--i:1" x="572" y="170" fill="var(--w-accent)">5/8</text>
+              <text class="w-streak-n" style="--i:2" x="572" y="170" fill="var(--w-accent)">6/8</text>
+            </g>
+            {
+              CELLS.slice(0, 28).map((v, i) => (
+                <rect
+                  class="w-heat"
+                  style={`--i:${i};--heat:${0.12 + v * 0.26}`}
+                  x={472 + (i % 7) * 16}
+                  y={180 + Math.floor(i / 7) * 16}
+                  width="13"
+                  height="13"
+                  rx="2.5"
+                  fill="var(--color-brand-400)"
+                />
+              ))
+            }
+            <rect class="w-heat-today" x={472 + 6 * 16} y={180 + 3 * 16} width="13" height="13" rx="2.5"></rect>
           </g>
 
           <g class="w-widget" style="--i:2">
-            <rect x="460" y="260" width="144" height="104" rx="14" class="w-card"></rect>
-            <text x="472" y="280" class="w-card-title" fill="var(--w-text)">Mini game</text>
-            {Array.from({ length: 15 }).map((_, i) => (
-              <rect
-                x={472 + (i % 5) * 22}
-                y={292 + Math.floor(i / 5) * 20}
-                width="18"
-                height="16"
-                rx="3"
-                fill={GAME.includes(i) ? 'var(--color-sky-400)' : 'var(--w-cell)'}
-                opacity={GAME.includes(i) ? 0.7 : 0.45}
-              />
-            ))}
+            <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+            <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Memory</text>
+            <text class="w-pairs" x="568" y="300" fill="var(--w-accent)">2 pairs</text>
+            {
+              MEMORY.map((card, i) => {
+                const x = 472 + card.col * 30;
+                const y = 310 + card.row * 22;
+                return (
+                  <g class="w-mem" style={`--i:${i};--p:${card.pair}`} transform={`translate(${x} ${y})`}>
+                    <rect class="w-mem-back" x="0" y="0" width="26" height="18" rx="4" fill="var(--w-cell)"></rect>
+                    <rect
+                      class="w-mem-face"
+                      x="0"
+                      y="0"
+                      width="26"
+                      height="18"
+                      rx="4"
+                      fill={PAIR_FILL[card.pair]}
+                    ></rect>
+                  </g>
+                );
+              })
+            }
+          </g>
+
+          <g class="w-widget" style="--i:3">
+            <rect x="128" y="280" width="320" height="84" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="144" cy="296" r="3" fill="var(--color-accent-400)"></circle>
+            <text x="154" y="300" class="w-card-title" fill="var(--w-text)">Air quality</text>
+            <text class="w-kpi" x="400" y="300" fill="var(--w-accent)">AQI 42</text>
+            <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+            {
+              SPARK.map((v, i) => (
+                <circle
+                  class="w-spark-dot"
+                  style={`--i:${i}`}
+                  cx={152 + i * 22}
+                  cy={318 - v * 0.7}
+                  r="2.2"
+                  fill="var(--color-brand-300)"
+                />
+              ))
+            }
+          </g>
+
+          <g class="w-pointer">
+            <path d="M0 0l11 9-4.4 1.2 2.2 6.4-3.2 1.2-2.2-6.4L0 14Z" fill="var(--w-text)" stroke="var(--w-panel)" stroke-width="1"></path>
+            <circle class="w-click" cx="2" cy="2" r="10"></circle>
           </g>
         </g>
 
@@ -291,7 +391,7 @@ const GAME = [1, 8, 12, 4, 6, 13];
     height: auto;
     border-radius: 1.25rem;
     filter: drop-shadow(0 28px 60px var(--w-shadow));
-    --w-cycle: 12s;
+    --w-cycle: 16s;
     --w-step: 1.6s;
     --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
     /* Dark product glass in both themes. The cool look is mint chrome on
@@ -343,7 +443,10 @@ const GAME = [1, 8, 12, 4, 6, 13];
   .w-card-title,
   .w-tiny,
   .w-note,
-  .w-avatar {
+  .w-avatar,
+  .w-streak-n,
+  .w-pairs,
+  .w-kpi {
     font-family: var(--font-mono, ui-monospace, monospace);
   }
 
@@ -368,7 +471,10 @@ const GAME = [1, 8, 12, 4, 6, 13];
     font-weight: 600;
   }
 
-  .w-tiny {
+  .w-tiny,
+  .w-streak-n,
+  .w-pairs,
+  .w-kpi {
     font-size: 8px;
     letter-spacing: 0.12em;
   }
@@ -393,7 +499,20 @@ const GAME = [1, 8, 12, 4, 6, 13];
   .w-tab-loop,
   .w-ws-loop,
   .w-glow,
-  .w-spark {
+  .w-spark,
+  .w-mood-tile,
+  .w-mood-pick,
+  .w-swatch,
+  .w-heat,
+  .w-heat-today,
+  .w-mem,
+  .w-mem-back,
+  .w-mem-face,
+  .w-sparkline,
+  .w-spark-dot,
+  .w-pointer,
+  .w-live,
+  .w-streak-n {
     transform-box: fill-box;
     transform-origin: center;
   }
@@ -406,14 +525,48 @@ const GAME = [1, 8, 12, 4, 6, 13];
     transform-origin: left center;
   }
 
+  .w-sparkline {
+    transform-origin: left center;
+    fill: none;
+  }
+
+  .w-mood-pick {
+    fill: none;
+    stroke: var(--color-brand-300);
+    stroke-width: 1.4;
+    opacity: 0;
+  }
+
+  .w-heat-today {
+    fill: none;
+    stroke: var(--color-brand-200, var(--color-brand-300));
+    stroke-width: 1.3;
+  }
+
+  .w-mem-face {
+    opacity: 0;
+  }
+
+  .w-pointer {
+    offset-path: none;
+    pointer-events: none;
+  }
+
+  .w-click {
+    fill: none;
+    stroke: var(--color-brand-300);
+    stroke-width: 1.2;
+    opacity: 0;
+  }
+
   /* At rest — finished playground. The loop below only runs when motion is allowed. */
   @media (prefers-reduced-motion: no-preference) {
     .w-type-mask {
-      animation: w-type var(--w-cycle) steps(22, end) infinite;
+      animation: w-type var(--w-cycle) steps(26, end) infinite;
     }
 
     .w-caret {
-      animation: w-caret-move var(--w-cycle) steps(22, end) infinite;
+      animation: w-caret-move var(--w-cycle) steps(26, end) infinite;
     }
 
     .w-caret-bar {
@@ -433,7 +586,7 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
     .w-widget {
       animation: w-widget var(--w-cycle) var(--w-e) infinite;
-      animation-delay: calc(var(--i) * 0.18s);
+      animation-delay: calc(var(--i) * 0.14s);
     }
 
     .w-tab-loop {
@@ -457,15 +610,79 @@ const GAME = [1, 8, 12, 4, 6, 13];
     .w-spark {
       animation: w-spark 2.4s ease-in-out infinite;
     }
+
+    .w-live {
+      animation: w-live 1.6s ease-in-out infinite;
+    }
+
+    .w-mood-tile {
+      animation: w-mood-breathe 3.2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.35s);
+    }
+
+    .w-mood-pick {
+      animation: w-mood-pick var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-swatch {
+      animation: w-swatch var(--w-cycle) ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.7s);
+    }
+
+    .w-heat {
+      animation: w-heat var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.035s);
+    }
+
+    .w-heat-today {
+      animation: w-today var(--w-cycle) ease-in-out infinite;
+    }
+
+    .w-streak-n {
+      animation: w-streak var(--w-cycle) steps(1, end) infinite;
+      animation-delay: calc(var(--i) * 1.8s);
+    }
+
+    .w-mem-back {
+      animation: w-mem-back var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--p) * 0.7s);
+    }
+
+    .w-mem-face {
+      animation: w-mem-face var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--p) * 0.7s);
+    }
+
+    .w-sparkline {
+      stroke-dasharray: 280;
+      animation: w-draw var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-spark-dot {
+      animation: w-spark-dot var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .w-kpi {
+      animation: w-kpi var(--w-cycle) steps(1, end) infinite;
+    }
+
+    .w-pointer {
+      animation: w-pointer var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-click {
+      animation: w-click var(--w-cycle) ease-out infinite;
+    }
   }
 
-  /* Type 0–22%, hold through the widgets, wipe 90–100%. */
+  /* Type 0–18%, generate 20–30%, land 32–40%, live through 88%, wipe 92–100%. */
   @keyframes w-type {
     0% {
       transform: scaleX(0.02);
     }
-    22%,
-    88% {
+    18%,
+    90% {
       transform: scaleX(1);
     }
     100% {
@@ -478,13 +695,13 @@ const GAME = [1, 8, 12, 4, 6, 13];
       transform: translateX(0);
       opacity: 1;
     }
-    22% {
-      transform: translateX(360px);
+    18% {
+      transform: translateX(380px);
       opacity: 1;
     }
-    24%,
-    88% {
-      transform: translateX(360px);
+    20%,
+    90% {
+      transform: translateX(380px);
       opacity: 0;
     }
     100% {
@@ -499,17 +716,16 @@ const GAME = [1, 8, 12, 4, 6, 13];
     }
   }
 
-  /* Generating sits between the typed prompt and the widgets. */
   @keyframes w-source {
     0%,
-    20% {
+    16% {
       opacity: 0;
     }
-    24%,
-    34% {
+    20%,
+    28% {
       opacity: 1;
     }
-    40%,
+    34%,
     100% {
       opacity: 0;
     }
@@ -517,14 +733,14 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
   @keyframes w-src-bar {
     0%,
-    22% {
+    18% {
       transform: scaleX(0.08);
     }
-    28%,
-    36% {
+    24%,
+    30% {
       transform: scaleX(1);
     }
-    42%,
+    36%,
     100% {
       transform: scaleX(0.08);
     }
@@ -532,11 +748,11 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
   @keyframes w-widget {
     0%,
-    34% {
+    30% {
       opacity: 0;
-      transform: translateY(14px) scale(0.96);
+      transform: translateY(16px) scale(0.95);
     }
-    42%,
+    38%,
     88% {
       opacity: 1;
       transform: none;
@@ -594,11 +810,11 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
   @keyframes w-glow {
     0%,
-    18% {
+    14% {
       opacity: 0.35;
     }
-    28%,
-    70% {
+    22%,
+    72% {
       opacity: 1;
     }
     90%,
@@ -617,6 +833,253 @@ const GAME = [1, 8, 12, 4, 6, 13];
     }
   }
 
+  @keyframes w-live {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-mood-breathe {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+  }
+
+  @keyframes w-mood-pick {
+    0%,
+    40% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    46%,
+    54% {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+    60%,
+    68% {
+      opacity: 1;
+      transform: translate(156px, 0) scaleX(0.46);
+    }
+    74%,
+    84% {
+      opacity: 1;
+      transform: translate(156px, 48px) scale(0.9, 0.34);
+    }
+    90%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-swatch {
+    0%,
+    40%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.25);
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-heat {
+    0%,
+    36% {
+      opacity: 0.08;
+    }
+    48%,
+    88% {
+      opacity: var(--heat, 0.6);
+    }
+    96%,
+    100% {
+      opacity: 0.08;
+    }
+  }
+
+  @keyframes w-today {
+    0%,
+    50% {
+      opacity: 0;
+    }
+    58%,
+    86% {
+      opacity: 1;
+    }
+    94%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-streak {
+    0%,
+    44% {
+      opacity: 0;
+    }
+    46%,
+    58% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-mem-back {
+    0%,
+    42% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    48%,
+    86% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    94%,
+    100% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes w-mem-face {
+    0%,
+    42% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    50%,
+    86% {
+      opacity: 0.85;
+      transform: scaleX(1);
+    }
+    94%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes w-draw {
+    0%,
+    36% {
+      stroke-dashoffset: 280;
+    }
+    48%,
+    88% {
+      stroke-dashoffset: 0;
+    }
+    96%,
+    100% {
+      stroke-dashoffset: 280;
+    }
+  }
+
+  @keyframes w-spark-dot {
+    0%,
+    40% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    50%,
+    88% {
+      opacity: 1;
+      transform: none;
+    }
+    96%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-kpi {
+    0%,
+    48% {
+      opacity: 0.4;
+    }
+    50%,
+    88% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes w-pointer {
+    0%,
+    40% {
+      opacity: 0;
+      transform: translate(220px, 190px);
+    }
+    46% {
+      opacity: 1;
+      transform: translate(200px, 204px);
+    }
+    54% {
+      opacity: 1;
+      transform: translate(330px, 196px);
+    }
+    64% {
+      opacity: 1;
+      transform: translate(500px, 210px);
+    }
+    74% {
+      opacity: 1;
+      transform: translate(508px, 322px);
+    }
+    84% {
+      opacity: 1;
+      transform: translate(220px, 318px);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      transform: translate(220px, 318px);
+    }
+  }
+
+  @keyframes w-click {
+    0%,
+    48%,
+    56%,
+    66%,
+    76%,
+    86%,
+    100% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    50%,
+    68%,
+    78% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    53%,
+    71%,
+    81% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .w-type-mask,
     .w-caret,
@@ -628,12 +1091,49 @@ const GAME = [1, 8, 12, 4, 6, 13];
     .w-ws-loop,
     .w-add,
     .w-glow,
-    .w-spark {
+    .w-spark,
+    .w-live,
+    .w-mood-tile,
+    .w-mood-pick,
+    .w-swatch,
+    .w-heat,
+    .w-heat-today,
+    .w-streak-n,
+    .w-mem-back,
+    .w-mem-face,
+    .w-sparkline,
+    .w-spark-dot,
+    .w-kpi,
+    .w-pointer,
+    .w-click {
       animation: none !important;
     }
 
-    .w-source {
+    .w-source,
+    .w-pointer,
+    .w-mood-pick,
+    .w-heat-today {
       opacity: 0;
+    }
+
+    .w-mem-face {
+      opacity: 0.85;
+    }
+
+    .w-mem-back {
+      opacity: 0;
+    }
+
+    .w-heat {
+      opacity: var(--heat, 0.6);
+    }
+
+    .w-streak-n {
+      opacity: 0;
+    }
+
+    .w-streak-n:last-child {
+      opacity: 1;
     }
   }
 </style>
