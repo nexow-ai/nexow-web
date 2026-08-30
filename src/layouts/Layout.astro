@@ -112,7 +112,8 @@ const themeLocked = theme === 'light' || theme === 'dark';
       <slot />
     </main>
 
-    <Footer />
+    {/* Home stages the footer as the world's last beat so the 3D never cuts. */}
+    {!world && <Footer />}
 
     <PageNav />
 

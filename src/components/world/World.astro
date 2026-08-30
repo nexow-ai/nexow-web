@@ -1,26 +1,25 @@
 ---
 /**
- * The dark theatre the home story plays inside — hero and all six acts.
+ * The theatre the home story plays inside — hero, acts, and the rest of the
+ * page through the footer. The camera never cuts; the white band after the
+ * use cases was a false floor and is gone.
  *
  * The hero used to sit outside this stage, on the page's own light surface,
  * with the WebGL world only fading in once the acts began. That put the whole
- * point of the page one screen below the fold: you arrived at a landing page
- * and had to scroll to reach the experience. The hero is now scene 0 of the
- * same world, so the camera opens on the matter and never cuts until the story
- * is over.
+ * point of the page one screen below the fold. The hero is now scene 0 of the
+ * same world, and the later sections (surfaces, privacy, plans, rewards, FAQ,
+ * CTA, footer) are later beats of the same room.
  *
- * It is dark in both themes on purpose. This is a lit stage in a dark room; an
- * additive point cloud has nothing to add to a white page, and the six act
- * scenes are built as glass on ink. The theme toggle still works — everything
- * below the closing seam (features, privacy, plans, rewards, FAQ, CTA) follows
- * it as usual. `global.css` repaints the header for the one case this creates:
- * light-theme chrome floating over ink before the first scroll.
+ * Theme tokens still flip. The field is the same volume in both themes; only
+ * the ink behind it changes. `global.css` repaints the header for the one
+ * case this creates: light-theme chrome floating over the world before the
+ * first scroll.
  *
  * Three layers, and the order matters:
  *   1. this element    opaque ink. Text contrast is computed against it, which
  *                      is what keeps `tests/e2e/contrast.spec.ts` deterministic.
  *   2. .world-field    the WebGL matter, additive, fixed to the viewport.
- *   3. .world__content the hero and the acts, always above the matter.
+ *   3. .world__content the story, always above the matter.
  *
  * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
  * field paints under the content and over the ink instead of over the header.
@@ -46,7 +45,6 @@ import WorldSound from './WorldSound.astro';
   <div class="world__crown" aria-hidden="true"></div>
   <div class="world__content">
     <slot />
-    <div class="world__seam" aria-hidden="true"></div>
   </div>
 </div>
 
@@ -165,6 +163,20 @@ import WorldSound from './WorldSound.astro';
     --w-wash: 1;
   }
 
+  /* Studio beats (features onward). A lifted dusk, not a white slab: the
+   * same room, more light in it, so the later copy still reads and the
+   * screens read as product surfaces rather than theatre glass. */
+  :global(.dark) .world.world--day {
+    --w-surface: #141822;
+    --w-wash: 0.72;
+    --w-panel: rgba(16, 20, 30, 0.78);
+  }
+
+  :global(html:not(.dark)) .world.world--day {
+    --w-surface: #eef2f7;
+    --w-wash: 0.38;
+  }
+
   /* A wash that sits between the ink and the matter: enough colour that the
    * world is not a black rectangle before WebGL has painted a frame, and it is
    * also exactly what a no-WebGL visitor keeps. */
@@ -211,15 +223,53 @@ import WorldSound from './WorldSound.astro';
     z-index: 2;
   }
 
-  /* Fade out of the theatre and back onto the page instead of cutting to a
-   * hard edge. There is no matching seam at the top: the world starts at the
-   * top of the document, so there is nothing above it to fade from. */
-  .world__seam {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 9rem;
-    pointer-events: none;
-    background: linear-gradient(to top, var(--w-surface), transparent);
+  /* Later beats used to be marketing slabs (mint wash, white FAQ plate,
+   * opaque rewards ink, footer night). Inside the world they are glass
+   * holds — the field shows through, type uses the world's tokens. */
+  .world :global(#features),
+  .world :global(#privacy),
+  .world :global(#plans),
+  .world :global(#rewards),
+  .world :global(#faq),
+  .world :global(#cta) {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--w-text);
+  }
+
+  .world :global(#privacy) > .pointer-events-none,
+  .world :global(#plans) > .pointer-events-none,
+  .world :global(#rewards) > .pointer-events-none,
+  .world :global(#cta) > .pointer-events-none,
+  .world :global(#rewards) > .bg-grid,
+  .world :global(#rewards) > .bg-noise,
+  .world :global(#rewards) > .glow-accent {
+    opacity: 0.28;
+  }
+
+  .world :global(footer) {
+    background-color: transparent;
+    border-top-color: var(--w-line-soft);
+    color: var(--w-text-2);
+  }
+
+  .world :global(footer) > .absolute {
+    display: none;
+  }
+
+  .world :global(footer a),
+  .world :global(footer p),
+  .world :global(footer h3) {
+    color: inherit;
+  }
+
+  .world :global(footer a:hover),
+  .world :global(footer .font-display) {
+    color: var(--w-text);
+  }
+
+  .world :global(#faq .reveal) {
+    background: var(--w-panel);
+    border-color: var(--w-line);
   }
 </style>

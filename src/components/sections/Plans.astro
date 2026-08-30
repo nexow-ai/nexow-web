@@ -23,7 +23,7 @@ const c = useContent(lang);
 const t = c.home.plans;
 ---
 
-<section id="plans" class="relative overflow-x-clip py-20 text-ink-950 sm:py-24 dark:text-white">
+<section id="plans" class="relative overflow-x-clip py-20 sm:py-24" data-world-scene>
   <div class="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
     <div
       data-motion="sink-lg"
@@ -40,7 +40,9 @@ const t = c.home.plans;
   </div>
 
   <div class="container-page">
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
+    <div class="world-copy mx-auto max-w-2xl">
+      <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
+    </div>
   </div>
 
   <PlanTiers lang={lang} embedded />
@@ -57,3 +59,24 @@ const t = c.home.plans;
     </div>
   </div>
 </section>
+
+<style>
+  .world-copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .world-copy::before {
+    content: '';
+    position: absolute;
+    inset: -3rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 70% 62% at 50% 42%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 78%, transparent) 48%,
+      transparent 78%
+    );
+  }
+</style>

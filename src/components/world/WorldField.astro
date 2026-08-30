@@ -3,14 +3,17 @@
  * The world the home page is staged inside.
  *
  * ONE IDEA: a single body of matter travels the whole page under one camera
- * that never cuts. In the hero it is unformed dust that the words you type
- * charge and tighten; at each act it condenses into the thing that act
- * explains — a widget, a canvas of widgets, a ring of connectors, a signal
- * fanning out, an agent's harness — and at the end it opens back out.
+ * that never cuts. The white band after the acts was a false floor — the
+ * camera dollies deeper into the same room, and the remaining copy floats as
+ * glass in that volume. In the hero the matter is a carousel; at each act it
+ * condenses into the thing that act explains; past the gallery it becomes a
+ * receding atelier of surfaces, a vault, three plan terraces, a rewards
+ * constellation, a reading stack, an aperture, then a last quiet horizon.
+ * Each view switch restyles the screen chrome through the full Tailwind
+ * spectrum — the product is infinitely themed, and the wall proves it.
  *
- * Sacrificed for it: every other effect. No bloom, no depth of field, no
- * chromatic aberration, no second particle system. The morph is the whole show,
- * and the budget goes to holding 60fps while it happens.
+ * Sacrificed for it: the inverted marketing slab, a mint-only wall of
+ * screens, and every stacked post-effect. The morph is still the whole show.
  *
  * BUDGET (set before building, enforced by tests/build/payload.test.ts)
  *   · total shipped JS  < 150 KB   · any single script < 60 KB
@@ -31,7 +34,7 @@
  *       .world__content z-index: 2             ← hero + acts, always on top
  *
  * The canvas is `position: fixed`: one viewport-sized surface for the whole
- * world rather than one per section, faded out at the world's two edges.
+ * page. It fades in at the top of the document and holds through the footer.
  */
 ---
 
@@ -40,6 +43,11 @@
 </div>
 
 <script>
+  import { WAY_RGB400, WAY_COUNT } from '../../lib/widgetPalette';
+
+  /** Last formation index — must match the shader's form() tail. */
+  const FORM_LAST = 14;
+
   /** Panels. Each is one lit rectangle; the formations below place them. */
   /* Shader sources are tagged so `src/lib/vite-glsl-strip.mjs` can drop their
    * comments and indentation at build time — the minifier never looks inside a
@@ -132,9 +140,9 @@
       return fract(sin(vec3(i * 12.9898, i * 78.233, i * 37.719)) * 43758.5453);
     }
 
-    /* Eight formations — one per scene, hero included. Every one is a
-       closed-form function of the instance index, which is what makes the morph
-       a mix() and keeps the buffers static for the life of the page. */
+    /* Fifteen formations — one per scene, hero through the footer. Every one
+       is a closed-form function of the instance index, which is what makes the
+       morph a mix() and keeps the buffers static for the life of the page. */
     vec3 form(float f, float i, float n, float seed, float t) {
       float a = i / n;
       vec3 h = hash3(i);
@@ -310,15 +318,95 @@
         float R = 5.2 + (h.x - 0.5) * 0.8;
         return vec3(cos(th) * R, (u - 0.5) * 11.5, sin(th) * R);
       }
-      /* 7 — RELEASE: the matter opens back out into a wide, slow horizon. This
-         is the exhale after six pinned scenes; nothing is being explained any
-         more, so nothing is being held. */
-      float th = a * 6.2831 * 4.0 + t * 0.05;
-      float r = 7.0 + 13.0 * h.x;
+      if (f < 7.5) {
+        /* 7 — RELEASE: the matter opens back out into a wide, slow horizon.
+           The exhale after six pinned scenes. */
+        float th = a * 6.2831 * 4.0 + t * 0.05;
+        float r = 7.0 + 13.0 * h.x;
+        return vec3(
+          cos(th) * r,
+          (h.y - 0.5) * 5.5 + sin(th * 0.5) * 1.3,
+          sin(th) * r * 0.55 - 2.0
+        );
+      }
+      if (f < 8.5) {
+        /* 8 — ATELIER: a receding hall of product glass. The camera walks
+           deeper into the same room; rows march back in Z so screens pass
+           the lens instead of sliding in Y. */
+        float rows = 6.0;
+        float cols = max(4.0, floor(n / rows));
+        float idx = mod(i, cols);
+        float rw = floor(i / cols);
+        return vec3(
+          (idx - cols * 0.5) * 2.35,
+          (h.y - 0.5) * 2.6 + sin(rw * 0.65 + t * 0.14) * 0.22,
+          10.0 - rw * 4.15
+        );
+      }
+      if (f < 9.5) {
+        /* 9 — VAULT: nested rings you are inside of — privacy as a volume. */
+        float rings = 3.0;
+        float ring = mod(i, rings);
+        float idx = floor(i / rings);
+        float per = ceil(n / rings);
+        float u = (idx / per) * 6.2831 + t * 0.07 + ring * 0.35;
+        float R = 4.2 + ring * 2.6;
+        return vec3(
+          R * cos(u),
+          R * sin(u) * 0.38,
+          (ring - 1.0) * 2.8 + sin(u * 2.0 + t * 0.2) * 0.35
+        );
+      }
+      if (f < 10.5) {
+        /* 10 — STEPS: three terraces receding — the plans as architecture. */
+        float g = floor(a * 3.0);
+        float k = fract(a * 3.0);
+        float third = n / 3.0;
+        float cols = max(3.0, floor(sqrt(third * 1.5)));
+        float gap = 5.4 / cols;
+        float idx = k * third;
+        float x = mod(idx, cols);
+        float y = floor(idx / cols);
+        float rows = ceil(third / cols);
+        vec3 base = vec3((g - 1.0) * 6.4, (1.0 - g) * 1.6, g * 3.1);
+        return base + vec3((x - cols * 0.5) * gap, -(y - rows * 0.5) * gap * 0.7, 0.0);
+      }
+      if (f < 11.5) {
+        /* 11 — CONSTELLATION: a vault of badges. Rewards as a field of
+           themed surfaces, not a dark slab. */
+        float u = a * 6.2831 * 3.2 + t * 0.16;
+        float r = 3.2 + 8.4 * h.x;
+        return vec3(
+          cos(u) * r,
+          (h.y - 0.5) * 7.2 + sin(u * 0.7) * 0.8,
+          sin(u) * r * 0.7
+        );
+      }
+      if (f < 12.5) {
+        /* 12 — READING: FAQ as a column of cards settling into a stack. */
+        float cols = 3.0;
+        float x = mod(i, cols);
+        float y = floor(i / cols);
+        float rows = ceil(n / cols);
+        return vec3(
+          (x - 1.0) * 4.8,
+          -(y - rows * 0.5) * 1.12,
+          (h.z - 0.5) * 2.4 + sin(y * 0.28 + t * 0.12) * 0.18
+        );
+      }
+      if (f < 13.5) {
+        /* 13 — APERTURE: a doorway of screens opening toward the lens. */
+        float th = a * 6.2831 + t * 0.08;
+        float r = 6.4 + 3.2 * h.x;
+        return vec3(cos(th) * r, sin(th) * r * 0.7, -3.6 + h.y * 6.2);
+      }
+      /* 14 — FOOT: the last quiet horizon. The room does not cut; it thins. */
+      float th = a * 6.2831 * 3.0 + t * 0.04;
+      float r = 8.0 + 11.0 * h.x;
       return vec3(
         cos(th) * r,
-        (h.y - 0.5) * 5.5 + sin(th * 0.5) * 1.3,
-        sin(th) * r * 0.55 - 2.0
+        (h.y - 0.5) * 4.2,
+        sin(th) * r * 0.48 - 3.0
       );
     }
 
@@ -555,6 +643,12 @@
     /* 1 on the light theme, 0 on the dark. The glass, the type and the frame
        invert with it; the accents darken so they still hold on a pale surface. */
     uniform float uLight;
+    /* View-switch colourway. uWay rotates the 22-family Tailwind table so
+       every beat restyles the chrome; uStudio tints glass toward that family
+       once the story leaves the dark theatre. */
+    uniform float uWay;
+    uniform float uStudio;
+    uniform vec3 uPal[22];
     /* Backing-store size, the copy column's hold-back, and 1 for RTL. This
        used to be a CSS mask on the canvas, which cost a full-screen offscreen
        layer on every frame and a re-rasterisation on every change; here it
@@ -576,6 +670,34 @@
 
     float rnd(float i) {
       return fract(sin(i * 78.233) * 43758.5453);
+    }
+
+    /* Tailwind 400s, uploaded once. WebGL 1 only allows a const or a loop
+       index into a uniform array, so the pick is a 22-step scan. */
+    vec3 tw(float i) {
+      int k = int(mod(floor(i), 22.0));
+      if (k == 0) return uPal[0];
+      if (k == 1) return uPal[1];
+      if (k == 2) return uPal[2];
+      if (k == 3) return uPal[3];
+      if (k == 4) return uPal[4];
+      if (k == 5) return uPal[5];
+      if (k == 6) return uPal[6];
+      if (k == 7) return uPal[7];
+      if (k == 8) return uPal[8];
+      if (k == 9) return uPal[9];
+      if (k == 10) return uPal[10];
+      if (k == 11) return uPal[11];
+      if (k == 12) return uPal[12];
+      if (k == 13) return uPal[13];
+      if (k == 14) return uPal[14];
+      if (k == 15) return uPal[15];
+      if (k == 16) return uPal[16];
+      if (k == 17) return uPal[17];
+      if (k == 18) return uPal[18];
+      if (k == 19) return uPal[19];
+      if (k == 20) return uPal[20];
+      return uPal[21];
     }
 
     /* step(), widened to the width of a pixel. Every edge below goes through
@@ -671,16 +793,15 @@
       float s = vSeed;
 
       /* ---- palette ----
-         One accent per screen and soft white for type; nothing else. The old
-         shader tinted every screen somewhere along brand→sky→violet, so a
-         wall of them was a rainbow. Now roughly three in four take the brand
-         mint and the rest take sky, and the second series on a chart takes
-         whichever one the screen did not. */
-      float pick = step(0.72, vTone);
-      vec3 accent = mix(uC1, uC2, pick);
-      vec3 accent2 = mix(uC2, uC1, pick);
-      /* On the light theme the brand mint is too pale to carry a line on
-         near-white glass, so both accents are pulled down toward their 600s. */
+         Each screen owns one Tailwind family. uWay rotates the table on every
+         view switch, so a full scroll walks slate→rose rather than sitting
+         on mint. The complement is +11 around the wheel — designed pairs,
+         not muddy RGB. Shade varies per seed (300–700 territory). */
+      float fam = mod(floor(vTone * 22.0) + uWay, 22.0);
+      float shade = mix(0.78, 1.16, fract(s * 5.13));
+      vec3 accent = tw(fam) * shade;
+      vec3 accent2 = tw(fam + 11.0) * mix(0.86, 1.08, fract(s * 3.71));
+      /* On the light theme the pale 400s are too thin on near-white glass. */
       accent = mix(accent, accent * 0.62, uLight);
       accent2 = mix(accent2, accent2 * 0.62, uLight);
       /* paper is what type and rules are drawn in: soft white on the dark
@@ -696,6 +817,10 @@
                            mix(uFog, vec3(1.0), 0.94), uLight);
       vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
                            mix(glassDark, vec3(1.0), 0.45), uLight);
+      /* Studio beats: the glass itself wears the family, so a wall of
+         widgets reads as a customised product rather than theatre mint. */
+      glassDark = mix(glassDark, mix(glassDark, accent, 0.22), uStudio);
+      glassLite = mix(glassLite, mix(glassLite, accent, 0.16), uStudio);
 
       /* Display: lit from above, shadowed under the bezel. The shadow is much
          lighter on the light theme, where a dark ring inside the edge reads as
@@ -1900,17 +2025,24 @@
        side of the flip is still the token and not a blank. */
     { mesh: 5, scale: 1.95, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
     /* 07 point it anywhere — smaller, sharper, calmer. Lifted clear of the
-       closing gallery: this section fills the middle of the viewport with
-       cards, and a solid at the origin projects straight behind them, which is
-       where the old staging left it — present in the scene and visible in none
-       of it. Only height is worth staging with, since the camera orbits: world
-       +Y is the one direction that keeps pointing up the screen. */
+       gallery cards. */
     { mesh: 1, scale: 1.45, spin: 0.16, sy: 1, pulse: 0, pos: [0, 4.6, 0] },
-    /* The exit. There is no eighth scene — this is the keyframe the last one
-       interpolates towards, so the closing act reads as the object rising out
-       of the frame rather than sitting at the bottom of the page waiting for a
-       section that never comes. */
-    { mesh: 1, scale: 0, spin: 0.05, sy: 1, pulse: 0, pos: [0, 9.5, 0] },
+    /* 08 the app — a thin board, the surfaces laid out as a floor you walk. */
+    { mesh: 0, scale: 2.35, spin: 0.11, sy: 0.12, pulse: 0, pos: [0, 3.6, 0] },
+    /* 09 privacy — the hub, a volume you are inside. */
+    { mesh: 2, scale: 1.7, spin: 0.2, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 10 plans — the token, the thing the tiers are built around. */
+    { mesh: 5, scale: 1.75, spin: 0.28, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 11 rewards — the token again, a prize in the constellation. */
+    { mesh: 5, scale: 1.55, spin: 0.3, sy: 1, pulse: 0, pos: [0, 0.4, 0] },
+    /* 12 faq — a quieter board, the stack of answers. */
+    { mesh: 0, scale: 1.8, spin: 0.1, sy: 0.18, pulse: 0, pos: [0, 3.2, 0] },
+    /* 13 cta — the diamond, an opening. */
+    { mesh: 1, scale: 1.5, spin: 0.18, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 14 foot — rising out. */
+    { mesh: 1, scale: 0.85, spin: 0.08, sy: 1, pulse: 0, pos: [0, 5.2, 0] },
+    /* Exit keyframe: the last solid leaves the frame. */
+    { mesh: 1, scale: 0, spin: 0.04, sy: 1, pulse: 0, pos: [0, 10.2, 0] },
   ];
 
   /** Y-rotation, X-rotation and a non-uniform scale, composed. */
@@ -2110,10 +2242,17 @@
     const uC3 = u('uC3');
     const uFog = u('uFog');
     const uLight = u('uLight');
+    const uWay = u('uWay');
+    const uStudio = u('uStudio');
     const uRes = u('uRes');
     const uDim = u('uDim');
     const uDir = u('uDir');
     ctx.uniform1f(uN, count);
+    for (let i = 0; i < WAY_COUNT; i++) {
+      ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), WAY_RGB400[i]);
+    }
+    ctx.uniform1f(uWay, 0);
+    ctx.uniform1f(uStudio, 0);
 
     const proj = new Float32Array(16);
     const view = new Float32Array(16);
@@ -2326,6 +2465,7 @@
     ctx.enable(ctx.DEPTH_TEST);
     ctx.depthFunc(ctx.LEQUAL);
     paintTheme();
+    let dayOn = false;
 
     let dpr = 1;
     // How far the world slides toward the scene column once there is one.
@@ -2449,10 +2589,13 @@
       const rect = world!.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Fade the matter in and out at the world's edges so it never bleeds onto
-      // the header above or the conversion sections below.
+      // Fade in at the top of the document. The world now runs through the
+      // footer, so there is no exit fade onto a white slab — only a hold
+      // if this instance of the world actually ends before the page does.
       const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
-      const exit = Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      const pageEnd = document.documentElement.scrollHeight;
+      const worldOwnsEnd = rect.bottom >= pageEnd - 12;
+      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
       const presence = Math.min(enter, exit);
       root.style.opacity = String(presence);
 
@@ -2516,11 +2659,29 @@
       ctx.uniform1f(uShift, hx * hero + shiftFull * (a === 0 ? morph : 1));
       ctx.uniform1f(uLift, hy * hero);
 
-      ctx.uniform1f(uFormA, Math.min(a, 7));
-      ctx.uniform1f(uFormB, Math.min(a + 1, 7));
+      ctx.uniform1f(uFormA, Math.min(a, FORM_LAST));
+      ctx.uniform1f(uFormB, Math.min(a + 1, FORM_LAST));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
       ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+
+      /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
+         view switches too — that is how a single section shows every family. */
+      const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');
+      const stage = Number(stageEl?.dataset.stage) || 0;
+      ctx.uniform1f(uWay, a + stage);
+      const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
+      ctx.uniform1f(uStudio, studio);
+      const nextDay = studio > 0.45;
+      if (nextDay !== dayOn) {
+        dayOn = nextDay;
+        world!.classList.toggle('world--day', dayOn);
+        paintTheme();
+      }
+      if (dayOn) world!.style.setProperty('--w-way', String(a + stage));
+      /* Later copy sits in the middle; hold the screens back a little more
+         than the acts, so a FeatureMap title is not struck through. */
+      if (a >= 8) ctx.uniform1f(uDim, 0.16);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2538,7 +2699,7 @@
        * advances, rising and falling so the matter is never seen from the same
        * height twice. Pointer parallax is added to the *aim*, not to the
        * camera, so it inherits the same inertia as everything else. */
-      const ang = -1.05 + p * 2.35 + ptrX * 0.22;
+      const ang = -1.05 + p * 3.05 + ptrX * 0.22;
       /* Closer in the hero, so the lens sits just outside the outer shell
        * instead of well back from it. This is what makes the carousel a
        * carousel: at 24 the whole ring was ahead of the camera and the near
@@ -2551,7 +2712,7 @@
        * side simply sat there, but at 20 it comes within a few units of the
        * lens, flares on the approach and fades out on the near plane — screens
        * genuinely sweep past you rather than drifting in a box. */
-      const dist = 24 - p * 7.5 - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
+      const dist = 24 - p * 10.2 - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
       const aimX = Math.sin(ang) * dist;
       /* Lifted a little in the hero so the lens looks slightly down into the
        * carousel: dead level, a ring projects to a flat horizontal band and
@@ -2626,7 +2787,9 @@
       const rect = world!.getBoundingClientRect();
       const vh = window.innerHeight;
       const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
-      const exit = Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      const pageEnd = document.documentElement.scrollHeight;
+      const worldOwnsEnd = rect.bottom >= pageEnd - 12;
+      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
       root.style.opacity = String(Math.min(enter, exit));
     }
 
@@ -2664,8 +2827,8 @@
       else play();
     }
 
-    // Stop entirely once the world is well off-screen: a 3D hero that keeps
-    // rendering while the reader is in the FAQ is a battery bill for nothing.
+    // Stop entirely once the world is well off-screen. On home it now owns
+    // the whole page, so this only fires after a route change leaves it.
     const io = new IntersectionObserver(
       ([entry]) => {
         onScreen = entry.isIntersecting;

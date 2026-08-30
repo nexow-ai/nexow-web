@@ -27,7 +27,7 @@ const subtitle = Astro.props.subtitle ?? home.subtitle;
 const dark = tone === 'dark';
 ---
 
-<section id="faq" class:list={['py-20 sm:py-24', dark && 'text-white']}>
+<section id="faq" class:list={['py-20 sm:py-24', dark && 'text-white']} data-world-scene>
   <div class="container-page">
     <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} tone={tone} appear={appear} />
 

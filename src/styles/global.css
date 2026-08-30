@@ -410,6 +410,16 @@ html:not(.dark) .tone-invert {
     color: var(--color-ink-200);
   }
 
+  /* Home world owns the page through the footer — don't flash the marketing
+   * white under a transparent canvas at the bottom of the document. */
+  html[data-world] body {
+    background-color: #f6f8fb;
+  }
+
+  html[data-world].dark body {
+    background-color: var(--color-ink-950);
+  }
+
   /*
    * Telegram-style theme wipe — only while `.is-theme-transition` is set so
    * Astro ClientRouter page fades keep their default root crossfade.

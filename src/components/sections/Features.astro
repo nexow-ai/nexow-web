@@ -20,10 +20,11 @@ const groups = resolveFeatureMapGroups(t, en);
 const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
 ---
 
-<section id="features" class="relative overflow-x-clip bg-[#f7fbfb]/70 py-20 text-ink-950 sm:py-24 dark:bg-white/[0.015] dark:text-white">
+<section id="features" class="relative overflow-x-clip py-20 sm:py-24" data-world-scene>
   <div class="container-page relative">
-    <!-- Plain ink title + solid eyebrow (no gradient text / chip fill) -->
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
+    <div class="world-copy mx-auto max-w-2xl">
+      <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
+    </div>
 
     {/* The map holds the page while it introduces itself.
         A list of sixteen surfaces that you scroll straight past is a list
@@ -60,6 +61,42 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
 </section>
 
 <style>
+  /* Soft well so the headline holds still and readable over the field. */
+  .world-copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .world-copy::before {
+    content: '';
+    position: absolute;
+    inset: -3rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 70% 62% at 50% 42%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 78%, transparent) 48%,
+      transparent 78%
+    );
+  }
+
+  /* The map is a glass plate in the same room, not a white marketing card. */
+  #features :global(.feature-map > [class*='rounded-2xl']) {
+    background: var(--w-panel);
+    border-color: var(--w-line);
+    box-shadow: 0 18px 48px var(--w-shadow);
+    backdrop-filter: blur(16px);
+  }
+
+  #features :global([data-fm-detail]) {
+    background: var(--w-panel-2);
+  }
+
+  #features :global(.feature-map > p) {
+    color: var(--w-text-4);
+  }
+
   /* The at-rest plate: an ordinary block, which is what ships without
      JavaScript, under reduced motion and on a phone. */
   .fm-stage__pin {

@@ -88,7 +88,7 @@ const maxCredits = Math.max(...ladder.map((r) => r.credits));
 const plansHref = `${localizePath('/plans', lang)}#rewards`;
 ---
 
-<section id="rewards" class="relative overflow-hidden bg-ink-950 py-20 text-white sm:py-24">
+<section id="rewards" class="relative overflow-hidden py-20 sm:py-24" data-world-scene>
   <div class="bg-grid pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true"></div>
   <div class="bg-noise pointer-events-none absolute inset-0 opacity-[0.15]" aria-hidden="true"></div>
   <div
@@ -100,17 +100,17 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
   <div class="container-page relative">
     <!-- Section identity -->
     <div class="reveal mx-auto flex max-w-3xl flex-col items-center text-center">
-      <span class="eyebrow inline-flex items-center gap-2 text-brand-400">
+      <span class="eyebrow inline-flex items-center gap-2 text-brand-600 dark:text-brand-400">
         <span class="rule-gradient h-px w-6"></span>
         {t.eyebrow}
       </span>
       <h2
-        class="mt-4 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+        class="mt-4 text-balance font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl dark:text-white"
         data-text-appear="scroll"
       >
         {t.title}
       </h2>
-      <p class="mt-4 text-lg leading-relaxed text-ink-300">{t.subtitle}</p>
+      <p class="mt-4 text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.subtitle}</p>
       <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
         <span class="badge-status" data-status="live">
           <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>

@@ -18,6 +18,7 @@ import Plans from '../sections/Plans.astro';
 import RewardsTeaser from '../sections/RewardsTeaser.astro';
 import Faq from '../sections/Faq.astro';
 import CtaBand from '../sections/CtaBand.astro';
+import Footer from '../Footer.astro';
 
 interface Props {
   lang: Lang;
@@ -96,9 +97,8 @@ const sections = [
   world
 >
   {/*
-    One continuous dark interior, opening on the hero rather than below it. The
-    scenes run without a heading cadence or a band between them on purpose —
-    that repetition is what made this page read as a longer version of /about.
+    One continuous interior, opening on the hero and never leaving the room.
+    The scenes run without a heading cadence or a band between them on purpose.
     Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
   */}
   <World>
@@ -110,18 +110,17 @@ const sections = [
     <ActAgents lang={lang} />
     <ActDao lang={lang} />
     <ActUseCases lang={lang} />
-  </World>
-
-  {/* Inverted: the opposite theme to the page, so the first section after the
-      world is a hard band — dark on light, light on dark. See `.tone-invert` in
-      global.css. `RewardsTeaser` further down is a permanent dark band, which
-      gives the light theme its second one without two dark blocks touching. */}
-  <div class="tone-invert">
+    {/* The white band was a false floor. These scenes stay in the same room:
+        the camera dollies deeper and the copy floats as glass holds. Order is
+        still load-bearing — `WorldField` maps scene *i* to formation *i*. */}
     <Features lang={lang} />
-  </div>
-  <Privacy lang={lang} />
-  <Plans lang={lang} />
-  <RewardsTeaser lang={lang} />
-  <Faq lang={lang} group="home-faq" appear />
-  <CtaBand lang={lang} appear />
+    <Privacy lang={lang} />
+    <Plans lang={lang} />
+    <RewardsTeaser lang={lang} />
+    <Faq lang={lang} group="home-faq" appear />
+    <CtaBand lang={lang} appear />
+    <div data-world-scene class="world-close">
+      <Footer />
+    </div>
+  </World>
 </Layout>
