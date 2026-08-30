@@ -64,12 +64,17 @@
   }
 
   /**
-   * Has the section arrived? Either it covers the parked line — its top at the
-   * header, or already past it — or the whole of it sits inside the window.
-   * A section taller than the viewport can only do the first; a short one at
-   * the end of the page may only ever manage the second. The title itself has
-   * to be on screen as well, so a page restored deep inside a section keeps
-   * its reveal for when the reader scrolls back up to the title.
+   * Has the title arrived? Three ways in:
+   *
+   *  1. The title itself is in the reading band — below the header, not still
+   *     peeking at the fold. A tall previous section (the feature-map walk)
+   *     can put the next title mid-screen long before that section's top
+   *     parks under the header; waiting for the park left the title clipped
+   *     and the tag sitting on a plate that looked untitled.
+   *  2. The section covers the parked line — its top at the header, or
+   *     already past it. What a deep link or a rail stop does.
+   *  3. The whole section fits inside the window. A short one at the end of
+   *     the page may only ever manage this.
    *
    * The parked line carries a little slack — a wheel notch at most. A cold
    * load on `#plans` jumps before the layout above has settled and comes to
@@ -77,12 +82,15 @@
    * title would sit hidden until the reader happened to nudge the page.
    */
   function hasArrived({ section, stage }: Pending, vh: number, top: number): boolean {
+    const t = stage.getBoundingClientRect();
+    const inBand = t.bottom > top + 8 && t.top < vh * 0.62 && t.top >= top - 24;
+    if (inBand) return true;
+
     const s = section.getBoundingClientRect();
     const slack = Math.min(96, vh * 0.12);
     const covers = s.top <= top + slack && s.bottom >= top;
     const fits = s.top >= -1 && s.bottom <= vh + 1;
     if (!covers && !fits) return false;
-    const t = stage.getBoundingClientRect();
     return t.bottom > 0 && t.top < vh;
   }
 
