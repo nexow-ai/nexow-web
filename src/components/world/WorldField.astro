@@ -356,6 +356,14 @@
          sweeping the lens still reads as an object going past rather than one
          quietly winking out. */
       vGlow *= 1.0 + 0.55 * smoothstep(12.0, 5.5, dist);
+      /* Nothing to see, nothing to draw. A screen fading out on the near
+         plane is the size of the viewport, and until now every one of its
+         pixels ran the fragment shader just to be discarded. Pushing the
+         vertex outside clip space here means it is never rasterised at all —
+         the single largest saving in the whole loop. */
+      if (vGlow < 0.03) {
+        gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+      }
       /* Which of the two accents this screen owns. Stable for its whole life:
          a screen that changed colour mid-morph read as a glitch. */
       vTone = fract(aSeed * 7.31);
@@ -373,6 +381,13 @@
     /* 1 on the light theme, 0 on the dark. The glass, the type and the frame
        invert with it; the accents darken so they still hold on a pale surface. */
     uniform float uLight;
+    /* Backing-store size, the copy column's hold-back, and 1 for RTL. This
+       used to be a CSS mask on the canvas, which cost a full-screen offscreen
+       layer on every frame and a re-rasterisation on every change; here it
+       is one smoothstep. */
+    uniform vec2 uRes;
+    uniform float uDim;
+    uniform float uDir;
     varying float vTone;
     varying float vGlow;
     varying float vLight;
@@ -444,9 +459,16 @@
       vec2 cd = abs(vUv) - (0.5 - rr);
       float sd = length(max(cd, 0.0)) + min(max(cd.x, cd.y), 0.0) - rr;
       if (sd > 0.0) discard;
+
+      /* Hold the screens back where the copy sits: the inline-start column
+         under the acts, near-even under the hero. Screens fog toward the page
+         surface as they cross into it. */
+      float sx = gl_FragCoord.x / uRes.x;
+      sx = mix(sx, 1.0 - sx, uDir);
+      float glow = vGlow * mix(uDim, 1.0, smoothstep(0.36, 0.76, sx));
       /* A screen fogged to nothing must not be drawn at all: opaque, it would
-         paint an ink rectangle and occlude everything behind it. */
-      if (vGlow < 0.025) discard;
+         paint a surface-coloured rectangle over whatever is behind it. */
+      if (glow < 0.04) discard;
 
       float bezel = aastep(-0.060, sd);
       float inner = 1.0 - bezel;
@@ -1019,7 +1041,7 @@
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. */
-      gl_FragColor = vec4(mix(uFog, col, vGlow * uAlpha), 1.0);
+      gl_FragColor = vec4(mix(uFog, col, glow * uAlpha), 1.0);
     }
   `;
 
@@ -1386,6 +1408,9 @@
     const uC3 = u('uC3');
     const uFog = u('uFog');
     const uLight = u('uLight');
+    const uRes = u('uRes');
+    const uDim = u('uDim');
+    const uDir = u('uDir');
     ctx.uniform1f(uN, count);
 
     const proj = new Float32Array(16);
@@ -1549,12 +1574,18 @@
     // Set by `resize`, applied per frame — the hero has no scene column.
     let shiftFull = 0;
 
+    /* Adaptive resolution. The backing store starts at full scale and drops
+     * (to a floor of 0.6) while the loop runs under ~42fps, climbing back once
+     * it is comfortable again. The cadence measured is requestAnimationFrame
+     * itself, which is what the visitor feels; a GPU-bound page recovers from
+     * a smaller store, and a CPU-bound one is not hurt by it. */
+    let renderScale = 1;
+    let frameEma = 1 / 60;
+    let lastGovern = 0;
+    let lastUpscale = 0;
+
     function resize() {
-      /* Render below display resolution and let the compositor scale it up.
-       * Additive glow has no hard edges to lose, and this is a ~3x cut in
-       * fill rate — the difference between 15fps and a smooth scroll on
-       * integrated graphics. */
-      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5) * RENDER_SCALE;
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5) * RENDER_SCALE * renderScale;
       const w = window.innerWidth;
       const h = window.innerHeight;
       canvas!.width = Math.floor(w * dpr);
@@ -1564,11 +1595,16 @@
       ctx.uniformMatrix4fv(uProj, false, proj);
       // Half the backing-store height; the shader turns it into a pixel width.
       ctx.uniform1f(uPix, canvas!.height * 0.5);
-      // Frame the copy column on wide screens; centred where the layout stacks.
-      // Applied per frame in `draw`, because the hero has no copy column.
-      shiftFull = w >= 1024 ? 3.0 : 0;
+      ctx.uniform2f(uRes, canvas!.width, canvas!.height);
+      /* Centred. This used to slide the world 3 units into the scene column
+       * on wide screens so the formations sat behind the act's own scene, but
+       * it left every ring and fan visibly off-centre against a centred
+       * headline. The copy column stays legible through the hold-back in the
+       * fragment shader, so the world can sit where the eye expects it. */
+      shiftFull = 0;
     }
     resize();
+    ctx.uniform1f(uDir, document.documentElement.dir === 'rtl' ? 1 : 0);
 
     /* ---- state the render loop integrates ---- */
 
@@ -1586,8 +1622,6 @@
     let chargeAim = 0;
     let burst = 0;
 
-    // Last written mask strength, so the style write is skipped most frames.
-    let lastDim = -1;
 
     let frame = 0;
     let running = true;
@@ -1601,8 +1635,24 @@
       if (!t0) t0 = now;
       const seconds = (now - t0) / 1000;
       // Clamped: a backgrounded tab or a long task must not teleport the camera.
-      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+      const rawDt = last ? (now - last) / 1000 : 0;
+      const dt = Math.min(0.05, rawDt || 0.016);
       last = now;
+
+      if (rawDt > 0 && rawDt < 0.25) {
+        frameEma += (rawDt - frameEma) * 0.1;
+        if (now - lastGovern > 1000) {
+          lastGovern = now;
+          if (frameEma > 1 / 42 && renderScale > 0.6) {
+            renderScale = Math.max(0.6, renderScale - 0.15);
+            resize();
+          } else if (frameEma < 1 / 57 && renderScale < 1 && now - lastUpscale > 4000) {
+            renderScale = Math.min(1, renderScale + 0.1);
+            lastUpscale = now;
+            resize();
+          }
+        }
+      }
 
       const rect = world!.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -1656,23 +1706,13 @@
       const beat = morph * morph * (3 - 2 * morph);
       const p = Math.min(1, Math.max(0, (a + beat) / Math.max(last_i, 1)));
 
-      /* Retune how hard the matter is held back where the copy sits. The
-       * hero's headline is centred, so the field stays near-even behind it;
-       * the acts put their copy in the inline-start column, so it is pushed
-       * away from there. Interpolated across the first scene boundary so the
-       * change is never a visible step. */
-      /* Panels need a harder hold-back than the motes did. A soft dot behind
-       * a sentence is texture; a lit rectangle edge crossing a line of type is
-       * a strikethrough. 0.09 in the acts, where the copy owns the inline
-       * start; near-even under the hero, whose headline is centred. */
-      /* Opaque screens are far more intrusive over type than the additive
-       * glass was — a dimmed glow disappears, a dimmed solid is still a solid.
-       * 0.05 in the acts, where the copy owns the inline start. */
-      const dim = a === 0 ? 0.62 - 0.57 * morph : 0.05;
-      if (Math.abs(dim - lastDim) > 0.004) {
-        root.style.setProperty('--field-dim', dim.toFixed(3));
-        lastDim = dim;
-      }
+      /* How hard the screens are held back where the copy sits, applied in
+       * the fragment shader against gl_FragCoord. Near-even under the hero,
+       * whose headline is centred; hard under the acts, where the copy owns
+       * the inline-start column — an opaque screen edge crossing a line of
+       * type is a strikethrough. Ramped across the hero's exit so the change
+       * is never a visible step. */
+      ctx.uniform1f(uDim, a === 0 ? 0.62 - 0.57 * morph : 0.05);
 
       /* The hero centres its headline, so the world stays centred under it and
        * slides into the scene column on the same beat the matter takes its
@@ -1769,7 +1809,7 @@
       // A composed frame and a normal page scroll. The canvas is `fixed`, so it
       // still has to fade out at the world's edges — but that is one style
       // write on scroll, not a render loop.
-      root.style.setProperty('--field-dim', '0.72');
+      ctx.uniform1f(uDim, 0.72);
       drawStill();
       fadeStill();
       window.addEventListener('scroll', fadeStill, { passive: true });
@@ -1913,40 +1953,8 @@
     z-index: 1;
     pointer-events: none;
     opacity: 0;
-    /* How hard the matter is held back where the copy sits. `World.astro`
-     * retunes this per scene: near-even under the hero, whose headline is
-     * centred, and weighted away from the inline-start column under the acts,
-     * whose copy is not. */
-    --field-dim: 0.16;
-    -webkit-mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
-      #000 76%
-    );
-    mask-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
-      #000 76%
-    );
     /* No transition on opacity: it is written every frame from the world's
      * position, and a transition would fight the scroll. */
-  }
-
-  :global([dir='rtl']) .world-field {
-    -webkit-mask-image: linear-gradient(
-      to left,
-      rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
-      #000 76%
-    );
-    mask-image: linear-gradient(
-      to left,
-      rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
-      #000 76%
-    );
   }
 
   .world-field__canvas {
