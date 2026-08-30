@@ -1,0 +1,236 @@
+---
+/**
+ * The scroll tour's transport, centred at the foot of the screen.
+ *
+ * It exists only while the tour is running: once the page is scrolling itself,
+ * the header's play button is somewhere above the fold and out of reach, and
+ * the two questions a hands-free visitor has — how long is left, and can I have
+ * a different record — have nowhere else to be answered.
+ *
+ * Three controls, in the order they are wanted: stop, the countdown to the end
+ * of the story, and a new song. None of them speaks to the tour directly. The
+ * pill dispatches `nexow:tourtoggle` and `nexow:tracknext`, which the tour
+ * (`Header.astro`) and the world's deck (`world/WorldSound.astro`) answer, and
+ * it listens for `nexow:tour` and `nexow:tourtime` coming back. That keeps the
+ * transport a piece of chrome that can ship on every route while the machinery
+ * stays where it belongs.
+ *
+ * `data-tour-control` is the other half of the contract: any intent to move the
+ * page yourself ends the tour, and these buttons are the exception.
+ */
+import { useContent } from '../i18n/content';
+import { getLangFromUrl } from '../i18n/utils';
+import Icon from './Icon.astro';
+
+const t = useContent(getLangFromUrl(Astro.url));
+/* Optional, English fallback: no locale bundle has to change for this to ship. */
+const tourStop = t.nav.tourStop ?? 'Stop the tour';
+const tourTrack = t.nav.tourTrack ?? 'Play a different song';
+const tourLeft = t.nav.tourLeft ?? 'Time left';
+---
+
+<div id="tour-hud" class="tour-hud" data-playing="false" transition:animate="none">
+  <div class="tour-hud__pill">
+    <button
+      type="button"
+      class="tour-hud__btn"
+      data-tour-control
+      data-tour-action="toggle"
+      aria-label={tourStop}
+    >
+      <Icon name="pause" class="tour-hud__icon size-4" />
+    </button>
+
+    <p class="tour-hud__time" role="timer" aria-live="off">
+      <span class="sr-only">{tourLeft}</span>
+      <span class="tour-hud__clock">0:00</span>
+    </p>
+
+    <button
+      type="button"
+      class="tour-hud__btn"
+      data-tour-control
+      data-tour-action="track"
+      aria-label={tourTrack}
+    >
+      <Icon name="music" class="tour-hud__icon size-4" />
+    </button>
+  </div>
+</div>
+
+<style>
+  .tour-hud {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 1rem;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s var(--ease-out-expo),
+      visibility 0.35s;
+  }
+
+  @media (min-width: 640px) {
+    .tour-hud {
+      bottom: 1.5rem;
+    }
+  }
+
+  /* Gone entirely while the tour is not running: no stray tab stop, nothing
+     for a screen reader to read out, nothing sitting over the page. */
+  .tour-hud[data-playing='false'] {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  .tour-hud[data-playing='true'] .tour-hud__pill {
+    pointer-events: auto;
+  }
+
+  /* The same crystal glass as the corner arrows (`PageNav.astro`), drawn long. */
+  .tour-hud__pill {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border-radius: 9999px;
+    color: var(--color-ink-800);
+    border: 1px solid color-mix(in oklab, white 62%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, white 62%, transparent),
+      color-mix(in oklab, white 24%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 10px 26px -8px rgb(0 0 0 / 0.28),
+      0 2px 6px -2px rgb(0 0 0 / 0.12),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+
+  .tour-hud__btn {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    color: inherit;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      transform 0.3s var(--ease-out-expo);
+  }
+
+  .tour-hud__btn:hover {
+    background: color-mix(in oklab, white 55%, transparent);
+    transform: scale(1.06);
+  }
+
+  .tour-hud__btn:active {
+    transform: scale(0.96);
+  }
+
+  .tour-hud__btn:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  /* Tabular figures, so the seconds ticking down never shift the pill's width. */
+  .tour-hud__time {
+    min-width: 3.25rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-700);
+  }
+
+  :global(.dark) .tour-hud__pill {
+    color: white;
+    border-color: rgb(255 255 255 / 0.2);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
+    box-shadow:
+      0 14px 34px -10px rgb(0 0 0 / 0.7),
+      inset 0 1px 0 rgb(255 255 255 / 0.3);
+  }
+
+  :global(.dark) .tour-hud__btn:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  :global(.dark) .tour-hud__time {
+    color: var(--color-ink-200);
+  }
+
+  /* `<Icon>` renders its <svg> from an expression, so Astro cannot stamp the
+     scope attribute on it — the button carries the scope, the icon goes global. */
+  .tour-hud__btn :global(.tour-hud__icon) {
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tour-hud,
+    .tour-hud__btn {
+      transition: none;
+    }
+    .tour-hud__btn:hover,
+    .tour-hud__btn:active {
+      transform: none;
+    }
+  }
+
+  @media print {
+    .tour-hud {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { clock } from '../lib/tour';
+
+  let hudAbort: AbortController | undefined;
+
+  function initTourHud() {
+    hudAbort?.abort();
+    hudAbort = new AbortController();
+    const { signal } = hudAbort;
+
+    const hud = document.getElementById('tour-hud');
+    if (!hud) return;
+    const face = hud.querySelector('.tour-hud__clock');
+
+    document.addEventListener(
+      'nexow:tour',
+      (event) => {
+        const { playing } = (event as CustomEvent<{ playing: boolean }>).detail;
+        hud.dataset.playing = String(playing);
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      'nexow:tourtime',
+      (event) => {
+        const { remaining } = (event as CustomEvent<{ remaining: number }>).detail;
+        if (face) face.textContent = clock(remaining);
+      },
+      { signal },
+    );
+
+    for (const btn of hud.querySelectorAll<HTMLButtonElement>('[data-tour-action]')) {
+      const name = btn.dataset.tourAction === 'track' ? 'nexow:tracknext' : 'nexow:tourtoggle';
+      btn.addEventListener('click', () => document.dispatchEvent(new Event(name)), { signal });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initTourHud);
+  document.addEventListener('astro:before-swap', () => hudAbort?.abort());
+</script>

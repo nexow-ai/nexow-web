@@ -37,6 +37,8 @@
   const LEVEL = 1;
   const FADE_IN = 2.2;
   const FADE_OUT = 1.6;
+  /** A record changed by hand: out quickly, because it was asked for, but not cut. */
+  const FADE_SKIP = 0.5;
 
   interface Deck {
     el: HTMLAudioElement;
@@ -124,6 +126,20 @@
     spin(pickTrack(Math.random, last));
   }
 
+  /**
+   * Another record, on request. Bumping the turn is what takes the current one
+   * off: its `onended` and `onplaying` are stale from here, so the fade out and
+   * the fade in of its replacement cannot fight each other.
+   */
+  function skip() {
+    if (!wanted || !ctx) return;
+    const next = pickTrack(Math.random, last);
+    turn += 1;
+    ambient?.stop(FADE_SKIP);
+    if (deck && !deck.el.paused) ramp(deck.gain.gain, 0, FADE_SKIP);
+    setTimeout(() => wanted && spin(next), FADE_SKIP * 1000 + 40);
+  }
+
   function stop(seconds = FADE_OUT) {
     wanted = false;
     turn += 1;
@@ -147,6 +163,8 @@
     if (playing) play();
     else stop();
   });
+  // The transport at the foot of the screen (`TourHud.astro`) asking for another record.
+  document.addEventListener('nexow:tracknext', () => skip());
   // Leaving the page: out quickly, before the next one paints.
   document.addEventListener('astro:before-swap', () => stop(0.3));
 </script>

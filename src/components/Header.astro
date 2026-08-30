@@ -108,6 +108,7 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
           type="button"
           id="tour-toggle"
           class="tour-toggle size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
+          data-tour-control
           aria-pressed="false"
           aria-label={tourPlay}
           data-play-label={tourPlay}
@@ -329,64 +330,46 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
    * real-world speed and gets out of the way the moment the visitor touches
    * anything.
    *
-   * Speed is in CSS pixels per second, not per frame, so a 120Hz laptop and a
-   * 60Hz monitor travel the page at the same rate. It is not one number: the
-   * right-hand scene is the part that was crawling, so that half of a pinned
-   * act runs fast; the left-hand copy then gets a few seconds to be read.
+   * The pace itself lives in `lib/tour`: speed is in CSS pixels per second, not
+   * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
+   * rate, and it is a function of the scroll position alone. That is what lets
+   * the same model be integrated ahead of the tour into a countdown to the end
+   * of the story, which the foot-of-screen transport (`TourHud.astro`) shows.
    */
-  const TOUR_SCENE = 380;
-  const TOUR_CRUISE = 260;
-  const TOUR_READ = 64;
-  /** How long the copy hold at the end of a pinned act should last. */
-  const TOUR_READ_HOLD = 4.2;
-  /** Time constant for easing from one pace into the next. */
-  const TOUR_EASE = 0.18;
+  import {
+    secondsLeft,
+    speedAt,
+    timeTable,
+    TOUR_CRUISE,
+    TOUR_EASE,
+    type Box,
+    type TourMap,
+  } from '../lib/tour';
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
 
-  function inReadingBand(el: Element, top = 0.22, bot = 0.72): boolean {
+  /** An element in document space: measured once, true at every scroll offset. */
+  function box(el: Element): Box {
     const r = el.getBoundingClientRect();
-    const t = window.innerHeight * top;
-    const b = window.innerHeight * bot;
-    return r.bottom > t && r.top < b;
+    return { top: r.top + window.scrollY, height: r.height };
   }
 
-  function tourTargetSpeed(acts: HTMLElement[]): number {
-    const vh = window.innerHeight;
-    let best: HTMLElement | null = null;
-    let bestCover = 0;
-    for (const act of acts) {
-      const r = act.getBoundingClientRect();
-      const cover = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
-      if (cover > bestCover) {
-        bestCover = cover;
-        best = act;
-      }
-    }
-
-    if (best && bestCover > vh * 0.15) {
-      const r = best.getBoundingClientRect();
-      const travel = r.height - vh;
-      if (travel > 80) {
-        /* Pinned: zip the right-hand scene together, then linger on the copy
-         * once every beat is lit. */
-        const scrolled = Math.max(0, -r.top);
-        const holdPx = Math.min(travel * 0.42, TOUR_READ * TOUR_READ_HOLD);
-        return scrolled >= travel - holdPx ? TOUR_READ : TOUR_SCENE;
-      }
-
-      /* Stacked (phone): pace off whichever half is in the reading band. */
-      const copy = best.querySelector('.act-copy');
-      const scene = best.querySelector('.act-scene');
-      if (scene && inReadingBand(scene) && !(copy && inReadingBand(copy))) return TOUR_SCENE;
-      if (copy && inReadingBand(copy)) return TOUR_READ;
-    }
-
-    for (const el of document.querySelectorAll('.act-copy')) {
-      if (inReadingBand(el)) return TOUR_READ;
-    }
-    return TOUR_CRUISE;
+  function readMap(): TourMap {
+    const acts = Array.from(document.querySelectorAll<HTMLElement>('.act')).map((act) => {
+      const copy = act.querySelector('.act-copy');
+      const scene = act.querySelector('.act-scene');
+      return {
+        ...box(act),
+        copy: copy ? box(copy) : undefined,
+        scene: scene ? box(scene) : undefined,
+      };
+    });
+    return {
+      acts,
+      copies: Array.from(document.querySelectorAll('.act-copy'), box),
+      vh: window.innerHeight,
+    };
   }
 
   function initTour() {
@@ -397,10 +380,41 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
     const btn = document.getElementById('tour-toggle');
     if (!btn) return;
 
-    const acts = Array.from(document.querySelectorAll<HTMLElement>('.act'));
     let playing = false;
     let last = 0;
     let speed = TOUR_CRUISE;
+    let map: TourMap = { acts: [], copies: [], vh: window.innerHeight };
+    let table = new Float64Array(1);
+    /** The page height `map` was taken against; anything else means remeasure. */
+    let mapped = -1;
+    /** The whole second the countdown last announced. */
+    let shown = -1;
+
+    const maxScroll = () =>
+      Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+    /* One pass over the page: where every act is, and how long the rest of the
+     * story takes from every point of it. It holds for the length of the tour,
+     * so a frame of the tour reads no layout at all. */
+    const measure = () => {
+      mapped = maxScroll();
+      map = readMap();
+      table = timeTable(map, mapped);
+      shown = -1;
+    };
+
+    /** The countdown, sent on only when the second it shows has changed. */
+    const tell = (y: number) => {
+      const remaining = secondsLeft(y, table);
+      const whole = Math.ceil(remaining);
+      if (whole === shown) return;
+      shown = whole;
+      document.dispatchEvent(
+        new CustomEvent('nexow:tourtime', {
+          detail: { remaining, total: table[table.length - 1] },
+        }),
+      );
+    };
 
     const setPlaying = (on: boolean) => {
       playing = on;
@@ -422,8 +436,9 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       setPlaying(false);
     };
 
-    const fromTourButton = (e: Event) =>
-      e.target === btn || (e.target instanceof Node && btn.contains(e.target));
+    /** The tour's own controls: this button and the transport at the foot. */
+    const fromTourControl = (e: Event) =>
+      e.target instanceof Element && !!e.target.closest('[data-tour-control]');
 
     const step = (now: number) => {
       tourRaf = 0;
@@ -432,47 +447,60 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
 
-      const target = tourTargetSpeed(acts);
+      // A page that grew or shrank under the tour — a lazy image, a font — is
+      // a page the map and the countdown no longer describe.
+      const max = maxScroll();
+      if (max !== mapped) measure();
+
+      const target = speedAt(window.scrollY, map);
       const ease = 1 - Math.exp(-dt / TOUR_EASE);
       speed += (target - speed) * ease;
 
-      const max = document.documentElement.scrollHeight - window.innerHeight;
       const next = window.scrollY + speed * dt;
       if (next >= max) {
         window.scrollTo(0, max);
+        tell(max);
         stop();
         return;
       }
       window.scrollTo(0, next);
+      tell(next);
       tourRaf = requestAnimationFrame(step);
     };
 
-    btn.addEventListener(
-      'click',
-      () => {
-        if (playing) {
-          stop();
-          return;
-        }
-        // Reached the end already? Start the tour over rather than do nothing.
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        if (window.scrollY >= max - 2) window.scrollTo(0, 0);
-        setPlaying(true);
-        last = 0;
-        speed = tourTargetSpeed(acts);
-        tourRaf = requestAnimationFrame(step);
-      },
-      { signal },
-    );
+    const toggle = () => {
+      if (playing) {
+        stop();
+        return;
+      }
+      // Reached the end already? Start the tour over rather than do nothing.
+      if (window.scrollY >= maxScroll() - 2) window.scrollTo(0, 0);
+      measure();
+      setPlaying(true);
+      tell(window.scrollY);
+      last = 0;
+      speed = speedAt(window.scrollY, map);
+      tourRaf = requestAnimationFrame(step);
+    };
 
-    /* Any intent to move the page yourself ends the tour. The button is
-     * excluded so its own pointerdown does not cancel the click that toggles
-     * it. `wheel` and `touchstart` stay passive, so this never delays a scroll. */
+    btn.addEventListener('click', toggle, { signal });
+    // The transport at the foot of the screen drives the same tour.
+    document.addEventListener('nexow:tourtoggle', toggle, { signal });
+    // A new viewport is a new pace and a new countdown.
+    window.addEventListener('resize', () => playing && measure(), {
+      passive: true,
+      signal,
+    });
+
+    /* Any intent to move the page yourself ends the tour. The tour's own
+     * controls are excluded so their pointerdown does not cancel the click
+     * they are about to make. `wheel` and `touchstart` stay passive, so this
+     * never delays a scroll. */
     for (const evt of ['wheel', 'touchstart', 'pointerdown'] as const) {
       window.addEventListener(
         evt,
         (e) => {
-          if (fromTourButton(e)) return;
+          if (fromTourControl(e)) return;
           stop();
         },
         { passive: true, signal },
@@ -481,8 +509,8 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
     window.addEventListener(
       'keydown',
       (e) => {
-        // The button's own Enter/Space is a toggle, not an escape.
-        if (e.target === btn) return;
+        // A control's own Enter/Space is a toggle, not an escape.
+        if (fromTourControl(e)) return;
         stop();
       },
       { signal },

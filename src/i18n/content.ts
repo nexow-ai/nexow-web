@@ -401,6 +401,9 @@ export interface SiteContent {
     /** Aria labels for the hands-free scroll tour (see `Header.astro`). */
     tourPlay?: string;
     tourStop?: string;
+    /** Labels for the tour's transport (see `TourHud.astro`). */
+    tourTrack?: string;
+    tourLeft?: string;
   };
   footer: {
     tagline: string;
