@@ -48,6 +48,7 @@
     uniform float uFormB;
     uniform float uMorph;
     uniform float uTime;
+    uniform float uShift;
 
     varying float vTone;
     varying float vGlow;
@@ -134,6 +135,10 @@
       vec4 mv = uView * vec4(p, 1.0);
       float size = 0.10 + aSeed * 0.17;
       mv.xy += aCorner * size;
+      /* Slide the world into the scene column so it frames the copy rather
+       * than sitting on top of it. Zero on narrow screens, where the layout
+       * stacks and there is no column to sit beside. */
+      mv.x += uShift;
 
       gl_Position = uProj * mv;
 
@@ -317,6 +322,7 @@
     const uMorph = u('uMorph');
     const uTime = u('uTime');
     const uAlpha = u('uAlpha');
+    const uShift = u('uShift');
     const uC1 = u('uC1');
     const uC2 = u('uC2');
     const uC3 = u('uC3');
@@ -349,6 +355,7 @@
       ctx.viewport(0, 0, canvas!.width, canvas!.height);
       perspective(proj, 0.85, w / h, 0.1, 120);
       ctx.uniformMatrix4fv(uProj, false, proj);
+      ctx.uniform1f(uShift, w >= 1024 ? 3.0 : 0);
     }
     resize();
 
@@ -405,7 +412,7 @@
       ctx.uniform1f(uFormB, Math.min(a + 2, 5));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
-      ctx.uniform1f(uAlpha, 1.0);
+      ctx.uniform1f(uAlpha, 0.72);
 
       // A camera that orbits as it dollies — this is what makes it read as a
       // world you are moving through rather than a picture that fades.
@@ -498,15 +505,15 @@
      * wraps behind it. Mirrored for RTL below. */
     -webkit-mask-image: linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.13),
-      rgba(0, 0, 0, 0.16) 34%,
-      #000 68%
+      rgba(0, 0, 0, 0.32),
+      rgba(0, 0, 0, 0.40) 26%,
+      #000 52%
     );
     mask-image: linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.13),
-      rgba(0, 0, 0, 0.16) 34%,
-      #000 68%
+      rgba(0, 0, 0, 0.32),
+      rgba(0, 0, 0, 0.40) 26%,
+      #000 52%
     );
     /* No transition: opacity is written every frame from the stage's position,
      * and a transition would fight the scroll. */
@@ -515,15 +522,15 @@
   :global([dir='rtl']) .acts-field {
     -webkit-mask-image: linear-gradient(
       to left,
-      rgba(0, 0, 0, 0.13),
-      rgba(0, 0, 0, 0.16) 34%,
-      #000 68%
+      rgba(0, 0, 0, 0.32),
+      rgba(0, 0, 0, 0.40) 26%,
+      #000 52%
     );
     mask-image: linear-gradient(
       to left,
-      rgba(0, 0, 0, 0.13),
-      rgba(0, 0, 0, 0.16) 34%,
-      #000 68%
+      rgba(0, 0, 0, 0.32),
+      rgba(0, 0, 0, 0.40) 26%,
+      #000 52%
     );
   }
 
