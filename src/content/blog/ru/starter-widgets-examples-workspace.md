@@ -64,44 +64,49 @@ Briefs запускаются **без providers** — как у нового
 ## Не второй catalog
 
 Каждый пример — обычный marketplace asset, опубликован
-official account через тот же RPC: те же sanitizers,
-lineage graph, install path, royalty chain. Starter widget
-не special-cased на server — fork продолжает real lineage,
-а не private dialect примеров app.
+official account через тот же RPC, что работа всех
+остальных: те же sanitizers, lineage graph, install path,
+royalty chain. Starter widget намеренно не special-cased
+на server — fork одного продолжает real lineage вместо
+private dialect примеров app.
 
 Curation registry сверху хранит только curation: какие
-published assets, порядок, экран. Writes service-role only;
-reads public — signed-out visitor может смотреть listing.
+published assets составляют pack, порядок, экран. Writes
+service-role only; reads public — signed-out visitor
+может смотреть listing page одного из них.
 
-## Куда попадает пакет и чего не делает
+## Куда попадает pack и чего не делает
 
 Seeding gated тремя способами. **Раз на account, не на
-device** — flag replicated setting, re-read при switch.
-Никогда не seed canvas, который уже использовали. Force
-из **Settings → General → Add example widgets** — для
-accounts до пакета или удаливших workspace.
+device** — flag replicated setting, re-read при account
+switch. Никогда не seed canvas, который уже использовали.
+Force из **Settings → General → Add example widgets** —
+для accounts до pack или удаливших workspace.
 
 Примеры land *рядом* с пустым workspace, не заменяя —
-onboarding даёт чистый экран. Весь пакет — один undo step.
+onboarding даёт чистый экран для ввода. Весь pack —
+один undo step.
 
 Seeded widget stamped как marketplace install — improve
-и publish продолжают official lineage. **Already-seeded
-users keep theirs** — их widget, возможно edited. Нет
-push-update path и не должно быть.
+и publish продолжают official lineage, не rival copy.
+**Already-seeded users keep theirs** — их widget, возможно
+edited. Нет push-update path и не должно быть.
 
 ## Verified как pack, не на глаз
 
 Перед account весь pack в real Chrome, grade per widget:
-boot errors, runaway animation, slow frames, blank renders
-— плюс screenshot each. Live check derive public endpoints
-из committed code — test не stale, widgets evolve.
+boot errors, runaway animation loops, slow frames, blank
+renders — плюс screenshot each. Live check derive public
+endpoints из committed code — test не stale, widgets evolve.
 
 Bar для одиннадцатого как для десяти: zero connections,
-clean smoke, real message при bad day source, nothing
-personal в conversation — conversation ships too.
+clean smoke verdict, real message вместо blank tile при
+bad day source, nothing personal в conversation — conversation
+ships too.
 
 Pack с next release; existing accounts из **Settings →
-General**. Open one, read chat, change something — fastest
-learn canvas.
+General** когда захотят. Open one, read chat, change
+something — fastest learn canvas.
 
-[Запустите Nexow](https://x.nexow.ai) и начните строить.
+[Запустите Nexow](https://x.nexow.ai) и начните строить
+тем временем.
