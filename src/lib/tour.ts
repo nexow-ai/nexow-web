@@ -16,14 +16,14 @@
 export const TOUR_SPEED = 380;
 
 /**
- * How far a page has to scroll before the tour is offered on it, in CSS
- * pixels — a little over two seconds of travel. Short pages (a 404, a stub
- * locale, a one-screen post) would hand the visitor a play button that ends
- * before they have looked away from it.
+ * How far a page has to scroll before the tour is worth offering, in CSS
+ * pixels — half a second of travel. The bar is deliberately this low: the
+ * button belongs on every page of the site, and the only page it cannot serve
+ * is one that has nowhere to go, where pressing play would end where it began.
  */
-export const TOUR_MIN_TRAVEL = TOUR_SPEED * 2.2;
+export const TOUR_MIN_TRAVEL = TOUR_SPEED * 0.5;
 
-/** Whether a page with `max` pixels of scroll has enough in it for a tour. */
+/** Whether a page with `max` pixels of scroll has anywhere for a tour to go. */
 export function worthTouring(max: number, least = TOUR_MIN_TRAVEL): boolean {
   return max >= least;
 }

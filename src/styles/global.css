@@ -1051,17 +1051,18 @@ html.is-theme-transition [data-astro-transition-scope] {
 /* ------------------------------------------------------------------ *
  * The scroll tour's play button.
  *
- * Offered on every route, and shown once the script has measured a page with
- * enough scroll in it to be worth watching — that is what `data-ready` says
- * (`Header.astro`). Hidden until then, so a page that barely moves, or one
- * with no JavaScript to move it, never shows a button that does nothing.
+ * On every route, and on by default: the button is part of the header, not
+ * something a script grants. The one thing the script may do is take it away
+ * — `data-short`, set by `Header.astro` on a page with nowhere to scroll —
+ * so a script that never runs leaves the button where it is rather than
+ * emptying it out of every header on the site.
  * ------------------------------------------------------------------ */
 .tour-toggle {
-  display: none;
+  display: inline-flex;
 }
 
-.tour-toggle[data-ready] {
-  display: inline-flex;
+.tour-toggle[data-short] {
+  display: none;
 }
 
 /* One glyph at a time: play while idle, pause while the tour is running. */
@@ -1087,7 +1088,7 @@ html.is-theme-transition [data-astro-transition-scope] {
 /* A tour is motion the visitor did not ask for by scrolling, so it is not
  * offered at all to someone who asked for less of it. */
 @media (prefers-reduced-motion: reduce) {
-  .tour-toggle[data-ready] {
+  .tour-toggle {
     display: none;
   }
 }

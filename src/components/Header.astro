@@ -103,9 +103,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       </ul>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
-        {/* Hands-free scroll, on every route. It stays hidden until the script
-            has measured a page long enough to be worth watching, which is what
-            `data-ready` says; see `global.css`. */}
+        {/* Hands-free scroll, on every route. It only leaves the header on a
+            page with nowhere to scroll — `data-short`; see `global.css`. */}
         <button
           type="button"
           id="tour-toggle"
@@ -333,9 +332,10 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * real-world speed and gets out of the way the moment the visitor touches
    * anything.
    *
-   * The one page it is not offered on is a page with barely anything below the
-   * fold: `worthTouring` measures the route on load and whenever it grows or
-   * the viewport changes, and only then does the button appear.
+   * The button is in the header from the server, not granted by this script:
+   * the only thing measuring does is take it back off a page with nowhere to
+   * scroll, so a script that fails to run leaves a working button rather than
+   * an empty header on every route.
    *
    * The pace lives in `lib/tour`: one speed in CSS pixels per second, not per
    * frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
@@ -396,18 +396,15 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       setPlaying(false);
     };
 
-    /* Whether this page is long enough to tour. Re-read rather than assumed:
+    /* Whether this page has anywhere to travel. Re-read rather than assumed:
      * a lazy image, a font, a phone rotating or an accordion opening all move
-     * the end of the page, and a route that grows past the bar mid-visit
-     * should offer the tour rather than wait for a reload. */
+     * the end of the page, so a route that was too short a moment ago can
+     * become worth touring without a reload. */
     const measure = () => {
-      const ready = worthTouring(maxScroll());
-      if (ready) btn.setAttribute('data-ready', '');
-      else {
-        btn.removeAttribute('data-ready');
-        // The button just left the header; the tour cannot outlive it.
-        stop();
-      }
+      const short = !worthTouring(maxScroll());
+      btn.toggleAttribute('data-short', short);
+      // The button just left the header; the tour cannot outlive it.
+      if (short) stop();
     };
 
     /** The tour's own controls: this button and the transport at the foot. */
@@ -492,6 +489,10 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
   }
 
   document.addEventListener('astro:page-load', initTour);
+  /* A module that finishes evaluating after `astro:page-load` has already gone
+   * by would otherwise never wire the button up. Re-running is free: the first
+   * thing `initTour` does is abandon whatever it set up last time. */
+  if (document.readyState !== 'loading') initTour();
   document.addEventListener('astro:before-swap', () => {
     if (tourRaf) cancelAnimationFrame(tourRaf);
     tourRaf = 0;

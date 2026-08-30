@@ -38,18 +38,19 @@ describe('secondsLeft', () => {
 });
 
 describe('worthTouring', () => {
-  it('turns down a page with nothing below the fold', () => {
+  it('turns down a page with nowhere to scroll', () => {
     expect(worthTouring(0)).toBe(false);
     expect(worthTouring(-40)).toBe(false);
   });
 
-  it('turns down a page that scrolls for barely a second', () => {
-    expect(worthTouring(TOUR_SPEED)).toBe(false);
+  it('takes any page with somewhere to go, however short', () => {
+    expect(worthTouring(TOUR_MIN_TRAVEL)).toBe(true);
+    expect(worthTouring(TOUR_SPEED)).toBe(true);
+    expect(worthTouring(TOUR_SPEED * 30)).toBe(true);
   });
 
-  it('takes a page long enough to be worth watching', () => {
-    expect(worthTouring(TOUR_MIN_TRAVEL)).toBe(true);
-    expect(worthTouring(TOUR_SPEED * 30)).toBe(true);
+  it('keeps the bar under a second of travel', () => {
+    expect(TOUR_MIN_TRAVEL).toBeLessThan(TOUR_SPEED);
   });
 
   it('takes its bar from the caller', () => {
