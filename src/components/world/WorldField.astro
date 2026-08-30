@@ -2203,7 +2203,20 @@
     ctx.deleteShader(fs);
 
     const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const compactMq = window.matchMedia('(max-width: 767.98px)');
+    let compact = compactMq.matches;
     const count = coarse || window.innerWidth < 900 ? COUNT_NARROW : COUNT_WIDE;
+
+    /** Visible box. `innerHeight` on iOS is the layout viewport, which stays
+     *  taller than the screen while the chrome is up; the canvas is `fixed`
+     *  to the dynamic viewport, so the backing store has to match that. */
+    function viewBox() {
+      const vv = window.visualViewport;
+      return {
+        w: Math.max(1, Math.round(vv?.width ?? window.innerWidth)),
+        h: Math.max(1, Math.round(vv?.height ?? window.innerHeight)),
+      };
+    }
 
     // One quad, reused by every instance.
     const quad = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
@@ -2518,13 +2531,17 @@
        * is only fill rate — but never below it on the 2× screens most of this
        * is read on, where the old 1.5 cap drew every border a quarter soft and
        * then upscaled it. */
+      compact = compactMq.matches;
       dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2) * RENDER_SCALE * renderScale;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const { w, h } = viewBox();
       canvas!.width = Math.floor(w * dpr);
       canvas!.height = Math.floor(h * dpr);
       ctx.viewport(0, 0, canvas!.width, canvas!.height);
-      perspective(proj, 0.85, w / h, 0.1, 140);
+      /* Portrait phones see a tall frustum at the desktop fov, which pushes
+       * the carousel into a thin band. A tighter vertical fov keeps the ring
+       * a ring. */
+      const fov = h > w * 1.15 ? 0.7 : 0.85;
+      perspective(proj, fov, w / h, 0.1, 140);
       ctx.uniformMatrix4fv(uProj, false, proj);
       // Half the backing-store height; the shader turns it into a pixel width.
       ctx.uniform1f(uPix, canvas!.height * 0.5);
@@ -2552,8 +2569,7 @@
     function headlineOffset(D: number): [number, number] {
       if (!headline) return [0, 0];
       const r = headline.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+      const { w: vw, h: vh } = viewBox();
       const half = Math.tan(0.425) * D;
       const x = ((r.left + r.width * 0.5 - vw * 0.5) / (vw * 0.5)) * half * (vw / vh);
       const y = ((vh * 0.5 - (r.top + r.height * 0.5)) / (vh * 0.5)) * half;
@@ -2609,7 +2625,12 @@
       }
 
       const rect = world!.getBoundingClientRect();
-      const vh = window.innerHeight;
+      const { h: vh } = viewBox();
+      const vv = window.visualViewport;
+      // Middle of what the reader actually sees — visualViewport.offsetTop
+      // is the layout-space origin of that box, so it stays aligned with
+      // getBoundingClientRect on iOS when the chrome is up.
+      const mid = (vv ? vv.offsetTop : 0) + vh * 0.5;
 
       // Fade in at the top of the document. The world now runs through the
       // footer, so there is no exit fade onto a white slab — only a hold
@@ -2628,7 +2649,6 @@
 
       // Which scene owns the middle of the viewport, and how far through it we
       // are. Hold the formation while it is being read, then flow into the next.
-      const mid = vh * 0.5;
       let a = 0;
       let local = 0;
       for (let i = 0; i < scenes.length; i++) {
@@ -2669,7 +2689,14 @@
        * the inline-start column — an opaque screen edge crossing a line of
        * type is a strikethrough. Ramped across the hero's exit so the change
        * is never a visible step. */
-      ctx.uniform1f(uDim, a === 0 ? 0.88 - 0.83 * morph : 0.05);
+      /* Desktop holds the screens back in the inline-start column, where the
+       * copy sits. On a phone the copy is full-width, so that same hold-back
+       * just deletes the left half of the world. Keep a quieter even field
+       * instead — the copy block's own scrim does the rest. */
+      ctx.uniform1f(
+        uDim,
+        compact ? (a === 0 ? 0.86 : 0.7) : a === 0 ? 0.88 - 0.83 * morph : 0.05,
+      );
 
       /* The hero centres its headline, so the world stays centred under it and
        * slides into the scene column on the same beat the matter takes its
@@ -2703,7 +2730,7 @@
       if (dayOn) world!.style.setProperty('--w-way', String(a + stage));
       /* Later copy sits in the middle; hold the screens back a little more
          than the acts, so a FeatureMap title is not struck through. */
-      if (a >= 8) ctx.uniform1f(uDim, 0.16);
+      if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : 0.16);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2734,15 +2761,18 @@
        * side simply sat there, but at 20 it comes within a few units of the
        * lens, flares on the approach and fades out on the near plane — screens
        * genuinely sweep past you rather than drifting in a box. */
-      const dist = 24 - p * 10.2 - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
+      const dist =
+        (compact ? 20.4 : 24) - p * (compact ? 8.2 : 10.2) - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
       const aimX = Math.sin(ang) * dist;
       /* Lifted a little in the hero so the lens looks slightly down into the
        * carousel: dead level, a ring projects to a flat horizontal band and
        * nothing in the picture says the screens are on a circle. Only a little,
        * though — at 7 units up the ring filled the frame edge to edge and the
        * headline lost its hole. Decays with the morph, so act 01 still gets the
-       * camera height it was staged for. */
-      const aimY = 1.6 + 5.4 * Math.sin(p * 3.1) + ptrY * 2.4 + 3.0 * hero;
+       * camera height it was staged for. Compact keeps the excursion smaller
+       * so a tall phone does not lose the ring off the top and bottom. */
+      const aimY =
+        1.6 + (compact ? 3.6 : 5.4) * Math.sin(p * 3.1) + ptrY * 2.4 + (compact ? 1.7 : 3.0) * hero;
       const aimZ = Math.cos(ang) * dist;
 
       if (!camPrimed) {
@@ -2807,7 +2837,7 @@
     /** Fade at the world's edges without redrawing. Reduced-motion only. */
     function fadeStill() {
       const rect = world!.getBoundingClientRect();
-      const vh = window.innerHeight;
+      const { h: vh } = viewBox();
       const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
       const pageEnd = document.documentElement.scrollHeight;
       const worldOwnsEnd = rect.bottom >= pageEnd - 12;
@@ -2895,6 +2925,8 @@
     }
 
     window.addEventListener('resize', onResize);
+    window.visualViewport?.addEventListener('resize', onResize);
+    compactMq.addEventListener('change', onResize);
     document.addEventListener('visibilitychange', onVisibility);
     /* The toggle announces itself before the class lands; the observer sees
        the class land. Either way the re-read happens on the next frame, when
@@ -2920,6 +2952,8 @@
         pause();
         io.disconnect();
         window.removeEventListener('resize', onResize);
+        window.visualViewport?.removeEventListener('resize', onResize);
+        compactMq.removeEventListener('change', onResize);
         window.removeEventListener('scroll', fadeStill);
         document.removeEventListener('visibilitychange', onVisibility);
         document.removeEventListener('nexow:themechange', onTheme);
@@ -2962,6 +2996,8 @@
     position: fixed;
     inset: 0;
     z-index: 1;
+    width: 100dvw;
+    height: 100dvh;
     pointer-events: none;
     opacity: 0;
     /* No transition on opacity: it is written every frame from the world's
