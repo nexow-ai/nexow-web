@@ -1705,33 +1705,12 @@
     uniform float uLight;
     uniform float uStamp;
     uniform float uTime;
+    uniform sampler2D uMark;
     varying vec3 vN;
     varying vec3 vP;
     varying vec3 vE;
     varying vec3 vObj;
     varying vec3 vON;
-    float sdSeg(vec2 p, vec2 a, vec2 b, float w) {
-      vec2 pa = p - a;
-      vec2 ba = b - a;
-      float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-      return length(pa - ba * h) - w;
-    }
-    /* NXW, constructed from the same kind of stroke the coin is cut from.
-       Both faces share the mark; the back flips X so the letters still read
-       when the yaw turns the token around. */
-    float stampNXW(vec2 p) {
-      float t = 0.04;
-      float n = min(sdSeg(p, vec2(-0.62, -0.24), vec2(-0.62, 0.24), t),
-                min(sdSeg(p, vec2(-0.62, 0.24), vec2(-0.28, -0.24), t),
-                    sdSeg(p, vec2(-0.28, -0.24), vec2(-0.28, 0.24), t)));
-      float x = min(sdSeg(p, vec2(-0.16, -0.24), vec2(0.12, 0.24), t),
-                    sdSeg(p, vec2(-0.16, 0.24), vec2(0.12, -0.24), t));
-      float w = min(sdSeg(p, vec2(0.24, 0.24), vec2(0.34, -0.24), t),
-                min(sdSeg(p, vec2(0.34, -0.24), vec2(0.44, 0.08), t),
-                min(sdSeg(p, vec2(0.44, 0.08), vec2(0.54, -0.24), t),
-                    sdSeg(p, vec2(0.54, -0.24), vec2(0.64, 0.24), t))));
-      return min(n, min(x, w));
-    }
     void main() {
       vec3 n = normalize(vN);
       vec3 toEye = normalize(uCam - vP);
@@ -1772,28 +1751,31 @@
       body = mix(body, mix(uC1 * 1.35, uC1 * 0.30, uLight), line * 0.85);
 
       /* The token's mark. Only the two flat faces (object normal along Z);
-         the rim stays blank. Back face mirrors X so NXW reads the right way
-         around after a half turn. Accent, not ink: a hot core, a corona, and
-         a gleam that rides the same key as the rim, so the letters light up
-         as the face turns into the lamp rather than pulsing on a clock. */
+         the rim stays blank. The stamp is the favicon itself, sampled from
+         a square atlas; the back flips X so the spike reads the right way
+         after a half turn. Ink, not accent: white on a dark body, black on
+         a light one — the two cuts of the tab icon — with a gleam that
+         rides the same key as the rim. */
       vec2 lp = vObj.xy;
       lp.x = mix(-lp.x, lp.x, step(0.0, vObj.z));
       float on = step(0.88, abs(vON.z)) * uStamp;
-      float sd = stampNXW(lp);
-      float mark = (1.0 - smoothstep(-0.003, 0.007, sd)) * on;
-      float core = (1.0 - smoothstep(-0.020, -0.002, sd)) * on;
-      float halo = (1.0 - smoothstep(0.010, 0.14, sd)) * on;
-      float well = (1.0 - smoothstep(0.008, 0.030, sd)) * on - mark;
-      body *= 1.0 - 0.20 * max(well, 0.0);
+      vec2 uv = vec2(lp.x * 0.5 + 0.5, 0.5 - lp.y * 0.5);
+      float cover = step(0.0, uv.x) * step(uv.x, 1.0) * step(0.0, uv.y) * step(uv.y, 1.0);
+      float inkA = texture2D(uMark, uv).a * on * cover;
+      float mark = smoothstep(0.18, 0.72, inkA);
+      float core = smoothstep(0.40, 0.92, inkA);
+      float halo = smoothstep(0.02, 0.22, inkA) - mark;
+      float well = max(halo, 0.0);
+      body *= 1.0 - 0.18 * well;
       float sweep = 0.5 + 0.5 * sin(lp.x * 4.2 + lp.y * 1.4 + toEye.x * 5.0);
       float gleam = pow(max(sin(lp.x * 5.5 + lp.y * 2.0 - uTime * 1.35), 0.0), 10.0);
       float glint = (pow(spec, 0.42) * (0.45 + 0.55 * sweep) + gleam * 0.85) * on;
-      vec3 accent = mix(uC3 * 1.45, uC3 * 0.72, uLight);
-      vec3 hot = mix(mix(uC3, vec3(1.0), 0.78), mix(uC3, vec3(1.0), 0.22), uLight);
-      body = mix(body, mix(accent, hot, 0.35 + 0.65 * glint), mark);
-      body = mix(body, hot, core * (0.40 + 0.55 * glint));
-      body += uC3 * halo * (0.18 + 0.42 * glint) * (1.0 - uLight * 0.55);
-      body += hot * mark * glint * 0.70;
+      vec3 ink = mix(vec3(0.97, 0.98, 1.0), vec3(0.05, 0.055, 0.06), uLight);
+      vec3 hot = mix(vec3(1.0), vec3(0.12, 0.13, 0.14), uLight);
+      body = mix(body, mix(ink, hot, 0.22 + 0.55 * glint), mark);
+      body = mix(body, hot, core * (0.28 + 0.50 * glint));
+      body += ink * well * (0.10 + 0.22 * glint) * (1.0 - uLight * 0.75);
+      body += hot * mark * glint * 0.45;
 
       /* Distance still dissolves the solid, but far more slowly than it did:
          it is drawn in front of the screens now, and a half-fogged object over
@@ -1973,9 +1955,10 @@
        scroll drives turns it face, edge, face — the way a coin turns and a
        plate does not. Thin enough to be unmistakably a token rather than a
        drum; thick enough that the edge still catches the machined line.
-       NXW is stamped on both faces in the fragment shader, not cut into the
-       mesh: the mark has to survive a flip without becoming geometry that
-       the bevel would outline as a second object sitting on the token. */
+       The favicon X is stamped on both faces in the fragment shader, not
+       cut into the mesh: the mark has to survive a flip without becoming
+       geometry that the bevel would outline as a second object sitting on
+       the token. */
     mark(() => {
       const sides = 12;
       const half = 0.16;
@@ -2035,8 +2018,8 @@
        on its edge in the middle of the ledger. Face-on it is the one solid
        here with a flat front, which is what a coin is; the yaw the scroll
        drives then flips it edge-on and back, so it reads as a coin turning
-       rather than a disc sitting there. Both faces carry NXW, so the far
-       side of the flip is still the token and not a blank. */
+       rather than a disc sitting there. Both faces carry the favicon X, so
+       the far side of the flip is still the token and not a blank. */
     { mesh: 5, scale: 1.95, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
     /* 07 point it anywhere — smaller, sharper, calmer. Lifted clear of the
        gallery cards. */
@@ -2314,6 +2297,41 @@
     let cuAlpha: WebGLUniformLocation | null = null;
     let cuStamp: WebGLUniformLocation | null = null;
     let cuTime: WebGLUniformLocation | null = null;
+    let cuMark: WebGLUniformLocation | null = null;
+    let stampTex: WebGLTexture | null = null;
+
+    /** Favicon atlas for the coin. White-on-transparent, tinted in the shader. */
+    function loadStamp(gl: WebGLRenderingContext) {
+      const tex = gl.createTexture();
+      if (!tex) return;
+      stampTex = tex;
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      const img = new Image();
+      img.decoding = 'async';
+      img.onload = () => {
+        const size = 256;
+        const pad = size * 0.12;
+        const box = size - pad * 2;
+        const scale = Math.min(box / img.width, box / img.height);
+        const w = img.width * scale;
+        const h = img.height * scale;
+        const cnv = document.createElement('canvas');
+        cnv.width = cnv.height = size;
+        const g = cnv.getContext('2d');
+        if (!g) return;
+        g.drawImage(img, (size - w) * 0.5, (size - h) * 0.5, w, h);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cnv);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      };
+      img.src = '/favicon.png';
+    }
 
     if (cvs && cfs && coreProg) {
       ctx.attachShader(coreProg, cvs);
@@ -2344,6 +2362,10 @@
         cuAlpha = ctx.getUniformLocation(coreProg, 'uAlpha');
         cuStamp = ctx.getUniformLocation(coreProg, 'uStamp');
         cuTime = ctx.getUniformLocation(coreProg, 'uTime');
+        cuMark = ctx.getUniformLocation(coreProg, 'uMark');
+        ctx.useProgram(coreProg);
+        ctx.uniform1i(cuMark, 0);
+        loadStamp(ctx);
         coreReady = true;
       }
     }
@@ -2385,7 +2407,7 @@
      * during a hold — where by design nothing else moves — it was the only
      * thing that could answer them.
      */
-    function drawCore(seconds: number, scene: number, morph: number, flow: number) {
+    function drawCore(seconds: number, scene: number, morph: number, flow = scene + morph) {
       if (!coreReady) return;
 
       const m = Math.min(1, Math.max(0, morph));
@@ -2428,15 +2450,17 @@
       instanced!.vertexAttribDivisorANGLE(cANrm, 0);
       instanced!.vertexAttribDivisorANGLE(cAEdge, 0);
 
-      /* Scroll drives the yaw on top of the clock: half a turn per section,
-       * plus one whole turn taken during each handover so the object is visibly
-       * turning through the change rather than only shrinking. Both terms are
-       * built from quantities that are continuous across a section boundary —
-       * `flow` is, and a whole turn is congruent to none — so neither can put a
-       * seam in the rotation. */
+      /* Scroll drives the yaw on top of the clock: half a turn per section
+       * for most solids, a full turn for the coin so the token itself flips
+       * face-edge-face as the reader moves. Plus one whole turn during each
+       * handover. Both terms are continuous across a section boundary —
+       * `flow` is, and a whole turn is congruent to none — so neither can
+       * put a seam in the rotation. The extra coin turn is interpolated
+       * with the morph, or handing a dodecahedron to a token would snap. */
+      const coin = lerp(from.mesh === 5 ? 1 : 0, to.mesh === 5 ? 1 : 0);
       modelMatrix(
         coreModel,
-        coreYaw + flow * Math.PI + e * 6.2831,
+        coreYaw + flow * Math.PI * (1 + coin) + e * 6.2831,
         /* Tilt, likewise part clock and part reader. */
         Math.sin(seconds * 0.11) * 0.22 + Math.sin(flow * 1.3) * 0.26,
         sx,
@@ -2455,6 +2479,8 @@
       ctx.uniform1f(cuAlpha, 1);
       ctx.uniform1f(cuStamp, obj.mesh === 5 ? 1 : 0);
       ctx.uniform1f(cuTime, seconds);
+      ctx.activeTexture(ctx.TEXTURE0);
+      ctx.bindTexture(ctx.TEXTURE_2D, stampTex);
       ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
 
       // Hand the screens' attribute state back exactly as they expect it.
