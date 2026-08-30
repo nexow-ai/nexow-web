@@ -22,10 +22,6 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
 
 <section id="features" class="relative overflow-x-clip py-20 sm:py-24" data-world-scene>
   <div class="container-page relative">
-    <div class="world-copy mx-auto max-w-2xl">
-      <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
-    </div>
-
     {/* The map holds the page while it introduces itself.
         A list of sixteen surfaces that you scroll straight past is a list
         nobody reads: the plate drifted by with whichever node happened to be
@@ -34,13 +30,23 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
         turns the travel into `data-stage`, and `FeatureMap` selects the node
         of that number. Scrolling through is the demo.
 
+        The title and eyebrow travel with the plate. The lede sits above the
+        pin, so it is gone once the walk starts — title and table only.
+
         Desktop only, and only with motion allowed (the styles below): a phone
         has no room to hold a plate still beside its own scroll, and a visitor
         who asked for less motion gets the plain plate with its first surface
         on it, exactly as before. It also drifts no more — `rise tilt` on a
         pinned element freezes mid-lean, and the pin is the motion now. */}
-    <div class="fm-stage mt-10 sm:mt-12" style={`--fm-beats:${surfaces}`} data-stages={surfaces}>
+    <div class="world-copy fm-lede mx-auto max-w-2xl">
+      <p class="text-center text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.subtitle}</p>
+    </div>
+
+    <div class="fm-stage" style={`--fm-beats:${surfaces}`} data-stages={surfaces}>
       <div class="fm-stage__pin">
+        <div class="world-copy mx-auto max-w-2xl">
+          <SectionHeading eyebrow={t.eyebrow} title={t.title} appear />
+        </div>
         <FeatureMap
           lang={lang}
           groups={groups}
@@ -97,30 +103,60 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
     color: var(--w-text-4);
   }
 
+  .fm-lede {
+    margin-bottom: 2.5rem;
+  }
+
   /* The at-rest plate: an ordinary block, which is what ships without
      JavaScript, under reduced motion and on a phone. */
   .fm-stage__pin {
     position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     @media (min-width: 768px) {
-      /* One viewport to hold the plate, plus a beat of travel per surface.
-         0.62 of a screen each is about a second and a quarter at the scroll
-         tour's pace — long enough to read a title and its line, short enough
-         that sixteen of them is not a chapter. */
+      /* One viewport to hold the heading and the plate, plus a beat of travel
+         per surface. 0.62 of a screen each is about a second and a quarter at
+         the scroll tour's pace — long enough to read a title and its line,
+         short enough that sixteen of them is not a chapter. */
       :global(html.js) .fm-stage {
         height: calc(100vh + var(--fm-beats, 1) * 0.62 * 100vh);
       }
 
       /* Clears the fixed header, matching `scroll-padding-top`, then centres
-         the plate in what is left so the walkthrough happens mid-screen. */
+         the heading and the plate together so neither can peel off onto the
+         next surface. */
       :global(html.js) .fm-stage__pin {
         position: sticky;
         top: 5rem;
-        display: flex;
         height: calc(100vh - 5rem);
-        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        overflow: hidden;
+      }
+
+      :global(html.js) .fm-stage__pin .world-copy {
+        flex-shrink: 0;
+      }
+
+      /* The plate yields before the heading does. On a short window the art
+         is what shrinks — the surface title and its line stay readable. */
+      :global(html.js) .fm-stage__pin :global(.feature-map) {
+        min-height: 0;
+        flex: 0 1 auto;
+      }
+
+      :global(html.js) .fm-stage__pin :global([data-fm-art-stage]) {
+        max-height: min(16rem, 28vh);
+      }
+
+      /* Hint is the table talking. Once the plate is the screen, the title
+         is enough — the chips and the detail carry the rest. */
+      :global(html.js) .fm-stage__pin :global(.feature-map > p) {
+        display: none;
       }
     }
   }
