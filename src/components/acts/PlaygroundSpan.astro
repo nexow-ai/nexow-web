@@ -4,11 +4,11 @@
  *
  * The pin is sticky for the combined height of the two acts, so the art never
  * swaps. Copy still lives in each act (two world scenes, two rail stops).
- * Below 768px the pin sits between the two copy blocks and sticks under the
- * header, so the mock stays on screen while the second act is read.
+ * Below 768px the pin sits in flow between the two copy blocks and scales to
+ * the screen. A phone has no room to hold the mock beside the copy.
  *
  * `.tone-invert` is the first opposite band. Later even bands keep the same
- * flip through the footer; the wash is 50% so the field stays visible.
+ * flip through the footer. The solid ground sits behind the field.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -51,22 +51,11 @@ const prompt = useContent(lang).home.hero.promptExample;
       flex-direction: column;
     }
 
-    /* Copy, then the mock, then the next copy. The pin sticks under the
-     * header so the playground stays on screen while 02 is read — the
-     * same hold the desktop two-column layout buys, without a pin height
-     * a phone cannot afford. */
+    /* Copy, then the mock, then the next copy. Sized to the screen so the
+     * playground is a beat of the story, not a cropped strip. */
     .pg-pin {
       order: 2;
-      position: sticky;
-      top: 4.5rem;
-      z-index: 3;
-      padding-block: 0.4rem 0.85rem;
-      background: linear-gradient(
-        to bottom,
-        var(--w-surface) 72%,
-        color-mix(in oklab, var(--w-surface) 55%, transparent)
-      );
-      pointer-events: none;
+      padding-block: 0.25rem 1.75rem;
     }
 
     .pg-pin :global(.w-scene) {
