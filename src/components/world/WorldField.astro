@@ -296,7 +296,7 @@
       /* Widget proportions: wider than tall. */
       /* Bigger than a blank panel needed to be. Each one now draws a widget
          inside itself, and a chart rendered two pixels tall is just noise. */
-      float sz = 0.62 + aSeed * 0.52 + k * 0.10 + burst * 0.16;
+      float sz = 0.74 + aSeed * 0.56 + k * 0.10 + burst * 0.16;
       vec3 world = p + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
@@ -316,7 +316,7 @@
       /* A hard specular lobe. This is the term that actually reads as glass:
          a highlight that sweeps across a panel as it turns, rather than a face
          that merely gets brighter. Tight exponent so it stays a glint. */
-      vSpec = pow(max(dot(reflect(-key, nrm), toEye), 0.0), 26.0);
+      vSpec = pow(max(dot(reflect(-key, nrm), toEye), 0.0), 14.0);
 
       /* Antialiasing width, in panel-UV units, for every edge the fragment
          shader draws. WebGL 1 has no fwidth() without an extension, but the
@@ -350,7 +350,9 @@
          sweeping the lens still reads as an object going past rather than one
          quietly winking out. */
       vGlow *= 1.0 + 0.55 * smoothstep(12.0, 5.5, dist);
-      vTone = fract(aSeed + m * 0.4 + uFormA * 0.06);
+      /* Which of the two accents this screen owns. Stable for its whole life:
+         a screen that changed colour mid-morph read as a glitch. */
+      vTone = fract(aSeed * 7.31);
       vUv = aCorner;
     }
   `;
@@ -378,8 +380,8 @@
     }
 
     /* step(), widened to the width of a pixel. Every edge below goes through
-       this: a hard step() on content this small stairsteps badly, and jagged
-       chart lines are most of what makes procedural UI look cheap. */
+       this; a hard step() on content this small stairsteps, and jagged chart
+       lines are most of what makes procedural UI look cheap. */
     float aastep(float e, float x) {
       return smoothstep(e - vAA, e + vAA, x);
     }
@@ -388,167 +390,301 @@
       return aastep(lo, x) * (1.0 - aastep(hi, x));
     }
 
+    /* Anything that used to snap goes through this instead. */
+    float ease(float x) {
+      return smoothstep(0.0, 1.0, x);
+    }
+
+    /* Rounded rectangle, in panel space. The screen is 0.62 as tall as it is
+       wide, so distances are corrected to physical units before the radius is
+       applied; otherwise every pill is rounder on its sides than its ends.
+       The radius is clamped so a thin bar can never invert. */
+    float rect(vec2 p, vec2 c, vec2 hs, float r) {
+      vec2 hp = hs * vec2(1.0, 0.62);
+      r = min(r, min(hp.x, hp.y));
+      vec2 d = abs((p - c) * vec2(1.0, 0.62)) - (hp - r);
+      float sd = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0) - r;
+      return 1.0 - aastep(0.0, sd);
+    }
+
+    float disc(vec2 p, vec2 c, float r) {
+      return 1.0 - aastep(r, length((p - c) * vec2(1.0, 0.62)));
+    }
+
     void main() {
-      /* Rounded rectangle, as a signed distance. A hard 90-degree corner on a
-         floating card reads as a polygon; the radius is what makes it read as
-         a screen. Negative inside, zero on the boundary. */
       float rr = 0.11;
       vec2 cd = abs(vUv) - (0.5 - rr);
       float sd = length(max(cd, 0.0)) + min(max(cd.x, cd.y), 0.0) - rr;
       if (sd > 0.0) discard;
-
-      /* A screen that has fogged to nothing must not be drawn at all. When
-         these were additive an invisible one contributed zero light and could
-         be left alone; opaque, it would paint an ink-coloured rectangle and
-         occlude everything behind it — a hole in the world at both the near
-         fade and the far horizon. Discarding keeps it out of the depth buffer
-         as well as out of the colour buffer. */
+      /* A screen fogged to nothing must not be drawn at all: opaque, it would
+         paint an ink rectangle and occlude everything behind it. */
       if (vGlow < 0.025) discard;
 
-      /* Bezel, then the display inside it. Two offsets of the same distance
-         field, so the screen has an actual edge thickness rather than being a
-         lit outline drawn on nothing. */
-      float bezel = aastep(-0.052, sd);
+      float bezel = aastep(-0.060, sd);
       float inner = 1.0 - bezel;
+      /* The bezel throws a soft shadow onto the glass just inside it. */
+      float inset = 1.0 - smoothstep(-0.060, -0.135, sd);
 
       vec2 uv = vUv + 0.5;
+      float t = vT;
+      float s = vSeed;
 
-      /* ---- what is on the screen ----
-         Empty rectangles floating in space are an abstraction; the moment one
-         has a chart on it, it is a widget, which is the thing this product
-         actually makes. Four layouts, selected per instance from the same seed
-         that placed the screen, so it costs a branch and some arithmetic
-         rather than a texture fetch. The branch is instance-coherent — every
-         fragment of a screen takes the same path — which is the case GPUs
-         handle well. */
-      float head = aaband(0.82, 0.995, uv.y) * aaband(0.06, 0.94, uv.x);
-      float dot0 = 1.0 - aastep(0.020, length((uv - vec2(0.88, 0.885)) * vec2(1.0, 0.62)));
+      /* ---- palette ----
+         One accent per screen and soft white for type; nothing else. The old
+         shader tinted every screen somewhere along brand→sky→violet, so a
+         wall of them was a rainbow. Now roughly three in four take the brand
+         mint and the rest take sky, and the second series on a chart takes
+         whichever one the screen did not. */
+      float pick = step(0.72, vTone);
+      vec3 accent = mix(uC1, uC2, pick);
+      vec3 accent2 = mix(uC2, uC1, pick);
+      vec3 paper = vec3(0.86, 0.90, 0.97);
+      vec3 glassDark = mix(uFog, vec3(0.050, 0.072, 0.110), 0.85);
+      vec3 glassLite = mix(glassDark, accent * 0.22, 0.34);
+
+      /* Display: lit from above, shadowed under the bezel. */
+      vec3 col = mix(glassDark, glassLite, uv.y * 0.9);
+      col *= 1.0 - inset * 0.38;
+
+      /* ---- chrome: title, subtitle, live dot, hairline ---- */
+      float pulse = 0.65 + 0.35 * sin(t * 2.2);
+      col = mix(col, paper, rect(uv, vec2(0.20, 0.905), vec2(0.12, 0.024), 0.014) * 0.55);
+      col = mix(col, paper, rect(uv, vec2(0.41, 0.905), vec2(0.055, 0.018), 0.011) * 0.26);
+      col = mix(col, paper, (1.0 - aastep(0.005, abs(uv.y - 0.815))) * 0.10);
+      float dEnd0 = length((uv - vec2(0.905, 0.905)) * vec2(1.0, 0.62));
+      col = mix(col, accent, (1.0 - aastep(0.06, dEnd0)) * 0.32 * pulse);
+      col = mix(col, mix(accent, paper, 0.4), disc(uv, vec2(0.905, 0.905), 0.019) * pulse);
+
+      float kind = floor(vKind * 12.0);
+
+      /* ---- chart frame: gridlines and axis ticks, on the chart kinds ---- */
+      bool chart = kind < 1.5 || (kind > 3.5 && kind < 4.5) || (kind > 5.5 && kind < 6.5) || kind > 10.5;
+      if (chart) {
+        float gy = (1.0 - aastep(0.004, abs(uv.y - 0.28)))
+                 + (1.0 - aastep(0.004, abs(uv.y - 0.44)))
+                 + (1.0 - aastep(0.004, abs(uv.y - 0.60)));
+        gy *= aaband(0.08, 0.94, uv.x);
+        float tk = aaband(0.045, 0.070, uv.y)
+                 * (1.0 - aastep(0.5, fract((uv.x - 0.08) / 0.86 * 5.0 + 0.25)))
+                 * aaband(0.10, 0.92, uv.x);
+        col = mix(col, paper, gy * 0.07);
+        col = mix(col, paper, tk * 0.22);
+      }
 
       /* ---- twelve screens ----
-         Dashboards and interactive apps both, because that is the range of
-         what people actually build here. Each one animates off vT, which is
-         the shared clock plus this screen's own offset, so a wall of them
-         reads as many live things rather than one thing repeated.
-
-         The branch is instance-coherent — every fragment of a screen takes
-         the same path — which is the case GPUs are fast at. */
-      float kind = floor(vKind * 12.0);
-      float ink = 0.0;
-      float t = vT;
-
+         Dashboards and interactive apps, each animating off vT — the shared
+         clock plus this screen's own offset, so a wall of them reads as many
+         live things rather than one thing repeated. Every branch is
+         instance-coherent, which is the case GPUs are fast at. */
       if (kind < 1.0) {
-        /* Sparkline, scrolling. */
-        float y = 0.42 + 0.18 * sin(uv.x * 8.0 - t * 1.1 + vSeed * 24.0) * cos(uv.x * 2.7);
-        ink = (1.0 - aastep(0.022, abs(uv.y - y))) * aaband(0.08, 0.92, uv.x);
+        /* Line chart with area fill, glow and a live endpoint. */
+        float x = (uv.x - 0.08) / 0.86;
+        float ph = s * 24.0;
+        float y = 0.40 + 0.15 * sin(x * 6.5 - t * 0.9 + ph) + 0.06 * sin(x * 15.0 - t * 1.6 + ph * 0.5);
+        float inX = aaband(0.08, 0.94, uv.x);
+        float core = (1.0 - aastep(0.026, abs(uv.y - y))) * inX;
+        float halo = (1.0 - aastep(0.085, abs(uv.y - y))) * inX * 0.30;
+        float under = aaband(0.10, y, uv.y) * inX;
+        float fade = clamp((uv.y - 0.10) / max(y - 0.10, 0.02), 0.0, 1.0);
+        col = mix(col, accent, under * (0.05 + 0.22 * fade * fade));
+        col = mix(col, accent, halo);
+        col = mix(col, mix(accent, paper, 0.35), core);
+        float ye = 0.40 + 0.15 * sin(6.5 - t * 0.9 + ph) + 0.06 * sin(15.0 - t * 1.6 + ph * 0.5);
+        vec2 pe = vec2(0.94, ye);
+        float ring = fract(t * 0.6);
+        float dEnd = length((uv - pe) * vec2(1.0, 0.62));
+        col = mix(col, accent, (1.0 - aastep(0.012, abs(dEnd - 0.02 - ring * 0.07))) * (1.0 - ring) * 0.6);
+        col = mix(col, paper, disc(uv, pe, 0.021));
       } else if (kind < 2.0) {
-        /* Bars, breathing. */
-        float b = floor(uv.x * 8.0);
-        float h = 0.16 + 0.44 * rnd(b + vSeed * 40.0) * (0.72 + 0.28 * sin(t * 1.4 + b));
-        ink = aaband(0.14, 0.14 + h, uv.y) * (1.0 - aastep(0.62, fract(uv.x * 8.0)))
-            * aaband(0.06, 0.94, uv.x);
+        /* Bars with a hover that glides along them. */
+        float nb = 8.0;
+        float b = floor((uv.x - 0.08) / 0.86 * nb);
+        float bx = 0.08 + (b + 0.5) * 0.86 / nb;
+        float hv = 0.14 + 0.44 * rnd(b + s * 40.0) * (0.78 + 0.22 * sin(t * 1.1 + b * 0.9));
+        float hq = (b - (3.5 + 3.5 * sin(t * 0.45 + s * 3.0))) * 1.1;
+        float hover = exp(-hq * hq);
+        float inX = aaband(0.07, 0.95, uv.x);
+        float bar = rect(uv, vec2(bx, 0.12 + hv * 0.5), vec2(0.036, hv * 0.5), 0.014) * inX;
+        float cap = bar * aaband(0.12 + hv - 0.035, 0.12 + hv, uv.y);
+        col = mix(col, paper, (1.0 - aastep(0.005, abs(uv.y - 0.12))) * aaband(0.08, 0.94, uv.x) * 0.22);
+        col = mix(col, accent * (0.55 + 0.45 * hover), bar * (0.70 + 0.30 * hover));
+        col = mix(col, mix(accent, paper, 0.5), cap * (0.5 + 0.5 * hover));
+        col = mix(col, paper, rect(uv, vec2(bx, 0.12 + hv + 0.07), vec2(0.04, 0.018), 0.011) * hover * 0.7);
       } else if (kind < 3.0) {
-        /* Heatmap, cells lighting. */
-        vec2 cell = vec2(uv.x * 7.0, (uv.y - 0.10) * 4.0);
-        float c = rnd(floor(cell.x) * 3.7 + floor(cell.y) * 11.3 + vSeed * 30.0);
-        c = c * (0.6 + 0.4 * sin(t * 0.9 + floor(cell.x) + floor(cell.y) * 2.0));
-        ink = step(0.30, c) * aaband(0.10, 0.72, uv.y)
-            * (1.0 - aastep(0.74, fract(cell.x))) * (1.0 - aastep(0.72, fract(cell.y)));
+        /* Heatmap, cells warming and cooling. */
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * 8.0, (uv.y - 0.11) / 0.64 * 4.0);
+        vec2 gi = floor(g);
+        float v = rnd(gi.x * 3.7 + gi.y * 11.3 + s * 30.0);
+        v = 0.5 + 0.5 * sin(v * 6.2831 + t * 0.7 + gi.x * 0.6 + gi.y * 1.1);
+        vec2 cc = vec2(0.08 + (gi.x + 0.5) * 0.86 / 8.0, 0.11 + (gi.y + 0.5) * 0.64 / 4.0);
+        float cell = rect(uv, cc, vec2(0.86 / 8.0 * 0.40, 0.64 / 4.0 * 0.38), 0.012)
+                   * aaband(0.08, 0.94, uv.x) * aaband(0.11, 0.75, uv.y);
+        col = mix(col, mix(accent * 0.18, accent, v), cell * (0.30 + 0.70 * v));
+        col = mix(col, paper, cell * smoothstep(0.85, 1.0, v) * 0.5);
       } else if (kind < 4.0) {
-        /* List rows, with the selection scanning down. */
-        float r = floor((uv.y - 0.12) * 5.0);
-        float w = 0.30 + 0.52 * rnd(r * 7.7 + vSeed * 15.0);
-        float sel = step(abs(r - mod(floor(t * 0.8), 5.0)), 0.5);
-        ink = aaband(0.12, 0.72, uv.y) * aaband(0.08, 0.08 + w + sel * 0.3, uv.x)
-            * (1.0 - aastep(0.46, fract((uv.y - 0.12) * 5.0)));
+        /* List: avatar, label, value, with a highlight drifting down the rows. */
+        float nr = 5.0;
+        float r = floor((uv.y - 0.10) / 0.68 * nr);
+        float cy = 0.10 + (r + 0.5) * 0.68 / nr;
+        float hq = (r - (2.0 + 2.0 * sin(t * 0.55 + s * 5.0))) * 1.6;
+        float hi = exp(-hq * hq);
+        float inR = step(-0.5, r) * step(r, nr - 0.5);
+        float w = 0.22 + 0.30 * rnd(r * 7.7 + s * 15.0);
+        float vw = 0.06 + 0.10 * rnd(r * 2.3 + s * 9.0);
+        col = mix(col, paper, rect(uv, vec2(0.51, cy), vec2(0.45, 0.68 / nr * 0.42), 0.02) * inR * (0.04 + 0.08 * hi));
+        col = mix(col, accent, disc(uv, vec2(0.12, cy), 0.024) * inR * (0.5 + 0.5 * hi));
+        col = mix(col, paper, rect(uv, vec2(0.19 + w * 0.5, cy), vec2(w * 0.5, 0.012), 0.007) * inR * (0.45 + 0.4 * hi));
+        col = mix(col, accent, rect(uv, vec2(0.92 - vw * 0.5, cy), vec2(vw * 0.5, 0.012), 0.007) * inR * 0.9);
       } else if (kind < 5.0) {
-        /* Candlesticks — the trading desk. */
-        float c = floor(uv.x * 9.0);
-        float fx = fract(uv.x * 9.0);
-        float mid = 0.40 + 0.16 * sin(c * 1.3 + vSeed * 9.0 + t * 0.5);
-        float hh = 0.06 + 0.10 * rnd(c + vSeed * 12.0);
-        float body = (1.0 - aastep(0.62, abs(fx - 0.5) * 2.0)) * aaband(mid - hh, mid + hh, uv.y);
-        float wick = (1.0 - aastep(0.14, abs(fx - 0.5) * 2.0)) * aaband(mid - hh * 1.9, mid + hh * 1.9, uv.y);
-        ink = max(body, wick) * aaband(0.06, 0.94, uv.x);
+        /* Candlesticks with a moving average; the last candle forms live. */
+        float nc = 10.0;
+        float c = floor((uv.x - 0.08) / 0.86 * nc);
+        float cx = 0.08 + (c + 0.5) * 0.86 / nc;
+        float o = 0.40 + 0.14 * sin(c * 1.1 + s * 9.0);
+        float cl = 0.40 + 0.14 * sin((c + 1.0) * 1.1 + s * 9.0);
+        cl = mix(cl, o + (cl - o) * (0.5 + 0.5 * sin(t * 1.3)), step(nc - 1.5, c));
+        float up = step(o, cl);
+        float lo = min(o, cl);
+        float hy = max(o, cl);
+        float wl = 0.05 + 0.05 * rnd(c + s * 12.0);
+        float inC = aaband(0.07, 0.95, uv.x) * step(-0.5, c);
+        vec3 cc = mix(paper * 0.55, accent, up);
+        col = mix(col, cc, (1.0 - aastep(0.006, abs(uv.x - cx))) * aaband(lo - wl, hy + wl, uv.y) * inC * 0.8);
+        col = mix(col, cc, rect(uv, vec2(cx, (lo + hy) * 0.5), vec2(0.024, max((hy - lo) * 0.5, 0.008)), 0.005) * inC);
+        float x = (uv.x - 0.08) / 0.86;
+        float ma = 0.40 + 0.12 * sin(x * nc * 1.1 + s * 9.0);
+        col = mix(col, accent2, (1.0 - aastep(0.013, abs(uv.y - ma))) * aaband(0.08, 0.94, uv.x) * 0.75);
       } else if (kind < 6.0) {
-        /* Radial gauge, needle sweeping. */
-        vec2 c = (uv - vec2(0.5, 0.40)) * vec2(1.0, 0.62);
-        float rad = length(c) * 2.2;
-        float ang = atan(c.y, c.x);
-        float arc = aaband(0.62, 0.80, rad) * step(0.0, ang);
-        float sweep = 0.5 + 0.5 * sin(t * 0.7 + vSeed * 6.0);
-        arc *= step(ang, 3.14159 * sweep);
-        float needle = (1.0 - aastep(0.045, abs(ang - 3.14159 * sweep))) * aaband(0.10, 0.66, rad);
-        ink = max(arc, needle);
+        /* Gauge: track, lit arc, ticks, needle, hub, readout. */
+        vec2 gc = vec2(0.5, 0.30);
+        vec2 d = (uv - gc) * vec2(1.0, 0.62);
+        float rad = length(d);
+        float ang = atan(d.y, d.x);
+        float upper = step(0.0, ang);
+        float pa = clamp((3.14159 - ang) / 3.14159, 0.0, 1.0);
+        float sweep = 0.5 + 0.5 * sin(t * 0.55 + s * 6.0);
+        float track = aaband(0.215, 0.27, rad) * upper;
+        float lit = 1.0 - aastep(sweep, pa);
+        float tt = abs(fract(pa * 8.0 + 0.5) - 0.5);
+        float tick = (1.0 - aastep(0.006, tt * 0.3927 * rad)) * aaband(0.285, 0.305, rad) * upper;
+        float na = 3.14159 * (1.0 - sweep);
+        vec2 nd = vec2(cos(na), sin(na));
+        float needle = (1.0 - aastep(0.008, abs(d.x * nd.y - d.y * nd.x))) * aaband(0.0, 0.20, dot(d, nd));
+        col = mix(col, paper, track * 0.14);
+        col = mix(col, accent, aaband(0.19, 0.30, rad) * upper * lit * 0.22);
+        col = mix(col, accent, track * lit);
+        col = mix(col, paper, tick * 0.5);
+        col = mix(col, paper, needle * 0.95);
+        col = mix(col, paper, disc(uv, gc, 0.026));
+        col = mix(col, accent, disc(uv, gc, 0.014));
+        col = mix(col, paper, rect(uv, vec2(0.5, 0.15), vec2(0.075, 0.02), 0.012) * 0.5);
       } else if (kind < 7.0) {
-        /* Scatter / map plot, points blinking. */
-        vec2 g = floor(vec2(uv.x * 9.0, (uv.y - 0.08) * 6.0));
-        float on = rnd(g.x * 5.1 + g.y * 17.3 + vSeed * 21.0);
-        float blink = step(0.62, on) * (0.5 + 0.5 * sin(t * 1.6 + g.x + g.y * 3.0));
-        vec2 f = fract(vec2(uv.x * 9.0, (uv.y - 0.08) * 6.0)) - 0.5;
-        ink = (1.0 - aastep(0.22, length(f))) * step(0.35, blink) * aaband(0.08, 0.74, uv.y);
+        /* Scatter with a trend line; points breathe. */
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * 8.0, (uv.y - 0.10) / 0.64 * 5.0);
+        vec2 gi = floor(g);
+        float rA = rnd(gi.x * 5.1 + gi.y * 17.3 + s * 21.0);
+        float rB = rnd(gi.x * 2.7 + gi.y * 9.1 + s * 13.0);
+        vec2 pc = vec2(0.08 + (gi.x + 0.5 + (rA - 0.5) * 0.7) * 0.86 / 8.0,
+                       0.10 + (gi.y + 0.5 + (rB - 0.5) * 0.7) * 0.64 / 5.0);
+        float on = step(0.45, rA);
+        float pr = 0.010 + 0.012 * rB;
+        float bright = 0.55 + 0.45 * sin(t * 1.3 + rA * 20.0);
+        float dpt = length((uv - pc) * vec2(1.0, 0.62));
+        float inA = aaband(0.08, 0.94, uv.x) * aaband(0.10, 0.74, uv.y);
+        col = mix(col, accent, (1.0 - aastep(pr * 2.6, dpt)) * on * 0.22 * bright * inA);
+        col = mix(col, mix(accent, paper, 0.3 * bright), (1.0 - aastep(pr, dpt)) * on * inA * (0.6 + 0.4 * bright));
+        float x = (uv.x - 0.08) / 0.86;
+        col = mix(col, accent2, (1.0 - aastep(0.010, abs(uv.y - (0.22 + 0.42 * x)))) * inA * 0.5);
       } else if (kind < 8.0) {
-        /* Kanban columns — a project board. */
-        float colx = floor(uv.x * 3.0);
-        float row = floor((uv.y - 0.10) * 4.0);
-        float has = step(0.34, rnd(colx * 9.3 + row * 4.1 + vSeed * 8.0));
-        float lift = step(abs(colx - mod(floor(t * 0.5), 3.0)), 0.5) * 0.04;
-        ink = has * aaband(0.10 + lift, 0.74 + lift, uv.y)
-            * (1.0 - aastep(0.78, fract(uv.x * 3.0))) * (1.0 - aastep(0.62, fract((uv.y - 0.10) * 4.0)))
-            * aaband(0.05, 0.95, uv.x);
+        /* Kanban: three columns of cards, floating in a slow wave. */
+        float colx = floor((uv.x - 0.06) / 0.88 * 3.0);
+        float cxk = 0.06 + (colx + 0.5) * 0.88 / 3.0;
+        float inK = step(-0.5, colx) * step(colx, 2.5);
+        float row = floor((0.70 - uv.y) / 0.155);
+        float cyk = 0.70 - (row + 0.5) * 0.155;
+        float has = step(0.30, rnd(colx * 9.3 + row * 4.1 + s * 8.0)) * step(-0.5, row) * step(row, 3.5) * inK;
+        float lift = 0.012 * (0.5 + 0.5 * cos(t * 0.8 + colx * 2.094 + row * 0.9));
+        col = mix(col, paper, rect(uv, vec2(cxk - 0.04, 0.745), vec2(0.07, 0.015), 0.009) * inK * 0.45);
+        col = mix(col, paper, rect(uv, vec2(cxk, cyk + lift), vec2(0.125, 0.06), 0.018) * has * 0.10);
+        col = mix(col, accent, rect(uv, vec2(cxk - 0.108, cyk + lift), vec2(0.008, 0.045), 0.005) * has);
+        col = mix(col, paper, rect(uv, vec2(cxk - 0.02, cyk + lift + 0.02), vec2(0.06, 0.008), 0.004) * has * 0.5);
+        col = mix(col, paper, rect(uv, vec2(cxk - 0.045, cyk + lift - 0.018), vec2(0.035, 0.008), 0.004) * has * 0.3);
       } else if (kind < 9.0) {
-        /* Terminal, lines typing in under a blinking cursor. */
-        float r = floor((uv.y - 0.10) * 6.0);
-        float prog = clamp(mod(t * 0.9, 8.0) - (5.0 - r), 0.0, 1.0);
-        float w = (0.22 + 0.5 * rnd(r * 3.3 + vSeed * 6.0)) * prog;
-        float line = aaband(0.10, 0.76, uv.y) * aaband(0.08, 0.08 + w, uv.x)
-                   * (1.0 - aastep(0.42, fract((uv.y - 0.10) * 6.0)));
-        float cur = step(abs(r - mod(floor(t * 0.9), 6.0)), 0.5)
-                  * aaband(0.09 + w, 0.115 + w, uv.x) * step(0.5, fract(t * 1.6))
-                  * (1.0 - aastep(0.62, fract((uv.y - 0.10) * 6.0)));
-        ink = max(line, cur);
+        /* Terminal: prompts, lines typing in, a soft-blinking cursor. */
+        float nr = 6.0;
+        float r = floor((0.76 - uv.y) / 0.11);
+        float cy = 0.76 - (r + 0.5) * 0.11;
+        float inR = step(-0.5, r) * step(r, nr - 0.5);
+        float cycle = mod(t * 0.75, nr + 2.0);
+        float prog = ease(clamp(cycle - r, 0.0, 1.0));
+        float w = (0.20 + 0.50 * rnd(r * 3.3 + s * 6.0)) * prog;
+        float active = 1.0 - aastep(0.5, abs(r - floor(cycle)));
+        float blink = ease(0.5 + 0.5 * sin(t * 4.0));
+        col = mix(col, accent, rect(uv, vec2(0.10, cy), vec2(0.012, 0.011), 0.004) * inR * step(0.001, prog) * 0.9);
+        col = mix(col, paper, rect(uv, vec2(0.14 + w * 0.5, cy), vec2(w * 0.5, 0.010), 0.006) * inR * step(0.001, w) * 0.55);
+        col = mix(col, accent, rect(uv, vec2(0.15 + w, cy), vec2(0.010, 0.013), 0.003) * inR * active * blink);
       } else if (kind < 10.0) {
-        /* Donut, arc filling. */
-        vec2 c = (uv - vec2(0.5, 0.42)) * vec2(1.0, 0.62);
-        float rad = length(c) * 2.4;
-        float ang = atan(c.y, c.x) + 3.14159;
-        float fillv = 6.2831 * (0.35 + 0.3 * sin(t * 0.5 + vSeed * 4.0));
-        ink = aaband(0.46, 0.74, rad) * step(ang, fillv);
+        /* Donut with a legend; the split breathes. */
+        vec2 dc = vec2(0.40, 0.42);
+        vec2 d = (uv - dc) * vec2(1.0, 0.62);
+        float rad = length(d);
+        float p = fract((atan(d.y, d.x) - 1.5708) / -6.2831);
+        float f1 = 0.36 + 0.22 * sin(t * 0.45 + s * 4.0);
+        float f2 = f1 + 0.22;
+        float ring = aaband(0.135, 0.20, rad);
+        float in1 = 1.0 - aastep(f1, p);
+        col = mix(col, paper, ring * 0.12);
+        col = mix(col, accent, aaband(0.12, 0.215, rad) * in1 * 0.2);
+        col = mix(col, accent, ring * in1);
+        col = mix(col, accent2, ring * aastep(f1, p) * (1.0 - aastep(f2, p)) * 0.85);
+        col = mix(col, paper, rect(uv, dc, vec2(0.05, 0.018), 0.011) * 0.8);
+        col = mix(col, accent, disc(uv, vec2(0.70, 0.56), 0.013));
+        col = mix(col, paper, rect(uv, vec2(0.80, 0.56), vec2(0.07, 0.010), 0.006) * 0.45);
+        col = mix(col, accent2, disc(uv, vec2(0.70, 0.44), 0.013));
+        col = mix(col, paper, rect(uv, vec2(0.78, 0.44), vec2(0.05, 0.010), 0.006) * 0.35);
+        col = mix(col, paper, disc(uv, vec2(0.70, 0.32), 0.013) * 0.3);
+        col = mix(col, paper, rect(uv, vec2(0.79, 0.32), vec2(0.06, 0.010), 0.006) * 0.3);
       } else if (kind < 11.0) {
-        /* App controls — rows of toggles, one flipping. */
-        float r = floor((uv.y - 0.14) * 4.0);
-        float on = step(0.5, fract(rnd(r * 6.7 + vSeed * 3.0) + t * 0.22));
-        float label = aaband(0.08, 0.42, uv.x);
-        float track = aaband(0.62, 0.86, uv.x);
-        float knob = 1.0 - aastep(0.055, length((uv - vec2(0.68 + on * 0.14, 0.14 + (r + 0.5) * 0.25 - 0.02)) * vec2(1.0, 0.62)));
-        ink = (max(label * 0.55, track * 0.5) * aaband(0.14, 0.86, uv.y)
-              * (1.0 - aastep(0.40, fract((uv.y - 0.14) * 4.0)))) + knob;
+        /* Settings: labels and toggles, knobs sliding rather than jumping. */
+        float nr = 4.0;
+        float r = floor((0.76 - uv.y) / 0.16);
+        float cy = 0.76 - (r + 0.5) * 0.16;
+        float inR = step(-0.5, r) * step(r, nr - 0.5);
+        float on = ease(0.5 + 0.5 * sin(t * 0.7 + rnd(r * 6.7 + s * 3.0) * 6.2831));
+        float lw = 0.16 + 0.14 * rnd(r * 1.9 + s * 2.0);
+        col = mix(col, paper, (1.0 - aastep(0.004, abs(uv.y - (cy - 0.08)))) * aaband(0.08, 0.94, uv.x) * inR * 0.08);
+        col = mix(col, paper, rect(uv, vec2(0.09 + lw * 0.5, cy), vec2(lw * 0.5, 0.011), 0.006) * inR * 0.5);
+        col = mix(col, mix(paper * 0.3, accent, on), rect(uv, vec2(0.80, cy), vec2(0.065, 0.024), 0.015) * inR);
+        col = mix(col, paper, disc(uv, vec2(0.762 + 0.076 * on, cy), 0.0165) * inR);
       } else {
-        /* Stacked area, drifting. */
-        float y1 = 0.26 + 0.10 * sin(uv.x * 6.0 + t * 0.8);
-        float y2 = y1 + 0.12 + 0.06 * cos(uv.x * 4.5 - t * 0.6);
-        float band1 = aaband(0.10, y1, uv.y) * 0.75;
-        float band2 = aaband(y1 + 0.012, y2, uv.y) * 0.45;
-        ink = max(band1, band2) * aaband(0.07, 0.93, uv.x);
+        /* Stacked area, two series drifting against each other. */
+        float x = (uv.x - 0.08) / 0.86;
+        float inX = aaband(0.08, 0.94, uv.x);
+        float y1 = 0.24 + 0.09 * sin(x * 5.0 + t * 0.7 + s * 5.0) + 0.03 * sin(x * 13.0 - t * 1.1);
+        float y2 = y1 + 0.14 + 0.06 * cos(x * 4.0 - t * 0.55 + s * 3.0) + 0.02 * sin(x * 11.0 + t * 0.9);
+        col = mix(col, accent, aaband(0.10, y1, uv.y) * inX * 0.45);
+        col = mix(col, accent2, aaband(y1, y2, uv.y) * inX * 0.30);
+        col = mix(col, mix(accent, paper, 0.3), (1.0 - aastep(0.016, abs(uv.y - y1))) * inX * 0.9);
+        col = mix(col, mix(accent2, paper, 0.3), (1.0 - aastep(0.016, abs(uv.y - y2))) * inX * 0.9);
       }
-      ink *= inner;
 
-      vec3 tint = mix(uC1, uC2, smoothstep(0.0, 0.55, vTone));
-      tint = mix(tint, uC3, smoothstep(0.6, 1.0, vTone));
+      /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ---- */
+      float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
+      col += paper * sheen * sheen * 0.035;
 
-      /* Build the surface. The display is a dark panel that is *lit* by what
-         it shows, the bezel is a solid frame catching the key light, and the
-         glint rides over both. Opaque throughout — depth does the separating
-         now, so nothing has to be see-through to sit in front of something. */
-      vec3 glass = mix(uFog, tint * 0.55, 0.30 + 0.30 * vLight);
-      vec3 lit = mix(glass, mix(tint, vec3(1.0), 0.55), clamp(ink * 0.95 + head * 0.30 + dot0, 0.0, 1.0));
-      vec3 frame = mix(tint * 0.55, mix(tint, vec3(1.0), 0.35), vLight);
-      vec3 col = mix(lit, frame, bezel);
+      /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ---- */
+      float topLight = smoothstep(-0.5, 0.5, vUv.y);
+      vec3 frameDark = mix(uFog, vec3(0.10, 0.13, 0.18), 0.9) + accent * 0.05;
+      vec3 frameLite = mix(frameDark, paper, 0.16 + 0.22 * vLight);
+      vec3 frame = mix(frameDark, frameLite, topLight * (0.5 + 0.5 * vLight));
+      frame = mix(frame, paper, (1.0 - aastep(0.010, abs(sd + 0.004))) * topLight * 0.35);
+      col = mix(col, frame, bezel);
 
-      col += tint * vFres * 0.28;
-      col += vec3(1.0) * vSpec * 0.55;
+      col += accent * vFres * 0.18;
+      col += paper * vSpec * 0.40;
 
       /* Distance dissolves the screen into the backdrop rather than fading it
-         out — it stays a solid object all the way to the horizon. */
+         out, so it stays a solid object all the way to the horizon. */
       gl_FragColor = vec4(mix(uFog, col, vGlow * uAlpha), 1.0);
     }
   `;
