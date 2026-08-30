@@ -100,13 +100,8 @@ import WorldField from './WorldField.astro';
   let bandRo: ResizeObserver | null = null;
 
   /**
-   * The alternating ground, painted *under* the field so the matter keeps
-   * showing on both tones.
-   *
-   * Only the opposite-tone sections get a band; the rest is the world's own
-   * surface. Each band fades in and out over `--w-band-fade` rather than
-   * butting against its neighbour, so the page changes light instead of
-   * hitting a wall — the seam was the ugly part, not the contrast.
+   * One solid box per section, painted *under* the field so the matter keeps
+   * showing on both tones. Page-tone boxes and invert boxes abut — no fade.
    */
   function syncBands() {
     const world = document.querySelector('.world');
@@ -114,20 +109,20 @@ import WorldField from './WorldField.astro';
     const bands = world?.querySelector('.world__bands');
     if (!(world instanceof HTMLElement)) return;
     if (!(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
-    const inverts = Array.from(content.children).filter(
-      (el): el is HTMLElement =>
-        el instanceof HTMLElement && el.classList.contains('tone-invert') && el.offsetHeight > 0,
+    const kids = Array.from(content.children).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement && el.offsetHeight > 0,
     );
-    while (bands.children.length < inverts.length) {
-      const band = document.createElement('div');
-      band.className = 'world__band';
-      bands.appendChild(band);
+    while (bands.children.length < kids.length) {
+      bands.appendChild(document.createElement('div'));
     }
-    while (bands.children.length > inverts.length) bands.lastElementChild?.remove();
+    while (bands.children.length > kids.length) bands.lastElementChild?.remove();
     const worldTop = world.getBoundingClientRect().top + window.scrollY;
-    inverts.forEach((section, i) => {
-      const rect = section.getBoundingClientRect();
+    kids.forEach((kid, i) => {
+      const rect = kid.getBoundingClientRect();
       const band = bands.children[i] as HTMLElement;
+      band.className = kid.classList.contains('tone-invert')
+        ? 'world__band world__band--invert'
+        : 'world__band';
       band.style.top = `${Math.round(rect.top + window.scrollY - worldTop)}px`;
       band.style.height = `${Math.round(rect.height)}px`;
     });
@@ -174,7 +169,7 @@ import WorldField from './WorldField.astro';
   .world {
     position: relative;
     z-index: 0;
-    --w-surface: #f6f8fb;
+    --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
@@ -189,16 +184,14 @@ import WorldField from './WorldField.astro';
     --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
     /* Wash strength: the colour behind the matter. Quieter on a light page. */
     --w-wash: 0.45;
-    /* The opposite tone, and how far it takes to arrive. */
-    --w-band: var(--color-ink-950);
-    --w-band-fade: 180px;
+    --w-band: #000000;
     background: var(--w-surface);
     color: var(--w-text);
   }
 
   :global(.dark) .world {
-    --w-surface: var(--color-ink-950);
-    --w-band: #f6f8fb;
+    --w-surface: #000000;
+    --w-band: #ffffff;
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -218,13 +211,11 @@ import WorldField from './WorldField.astro';
    * same room, more light in it, so the later copy still reads and the
    * screens read as product surfaces rather than theatre glass. */
   :global(.dark) .world.world--day {
-    --w-surface: #141822;
     --w-wash: 0.72;
     --w-panel: rgba(16, 20, 30, 0.78);
   }
 
   :global(html:not(.dark)) .world.world--day {
-    --w-surface: #eef2f7;
     --w-wash: 0.38;
   }
 
@@ -232,7 +223,7 @@ import WorldField from './WorldField.astro';
    * the field) so the screens stay visible; this wrapper only flips type.
    * Transparent here beats the opaque `html.dark .tone-invert` in global.css. */
   :global(html.dark) .world :global(.tone-invert) {
-    --w-surface: #f6f8fb;
+    --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
@@ -246,7 +237,7 @@ import WorldField from './WorldField.astro';
     --w-shadow: rgba(15, 23, 42, 0.22);
     --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
     --w-wash: 0.45;
-    background-color: #f6f8fb;
+    background-color: #ffffff;
   }
 
   :global(html.js.dark) .world :global(.tone-invert) {
@@ -254,7 +245,7 @@ import WorldField from './WorldField.astro';
   }
 
   :global(html:not(.dark)) .world :global(.tone-invert) {
-    --w-surface: var(--color-ink-950);
+    --w-surface: #000000;
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -268,7 +259,7 @@ import WorldField from './WorldField.astro';
     --w-shadow: rgba(0, 0, 0, 0.85);
     --w-rail: rgba(255, 255, 255, 0.22);
     --w-wash: 1;
-    background-color: var(--color-ink-950);
+    background-color: #000000;
   }
 
   :global(html.js:not(.dark)) .world :global(.tone-invert) {
@@ -283,18 +274,23 @@ import WorldField from './WorldField.astro';
   }
 
   /* Bands are created in JS, so they never get this file's scope hash.
-   * `--w-band-fade` is read back by `WorldField` so the fog on the screens
-   * crossfades on exactly the same ramp as the ground under them. */
+   * Solid boxes: page tone, then invert, then page tone. */
   .world :global(.world__band) {
     position: absolute;
     inset-inline: 0;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      var(--w-band) var(--w-band-fade),
-      var(--w-band) calc(100% - var(--w-band-fade)),
-      transparent
-    );
+    background: #ffffff;
+  }
+
+  :global(.dark) .world :global(.world__band) {
+    background: #000000;
+  }
+
+  .world :global(.world__band--invert) {
+    background: #000000;
+  }
+
+  :global(.dark) .world :global(.world__band--invert) {
+    background: #ffffff;
   }
 
   /* A wash that sits between the ink and the matter: enough colour that the
@@ -304,6 +300,7 @@ import WorldField from './WorldField.astro';
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     background:
       radial-gradient(

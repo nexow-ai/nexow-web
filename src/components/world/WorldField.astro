@@ -2482,13 +2482,11 @@
     probeInvert.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
     root.appendChild(probeInvert);
 
-    /** The two grounds the story alternates between, and the ramp between them. */
+    /** The two grounds the story alternates between. Snap, no fade. */
     let pageFog: [number, number, number] = [0, 0, 0];
-    let invertFog: [number, number, number] = [0, 0, 0];
+    let invertFog: [number, number, number] = [1, 1, 1];
     let pageLight = 0;
     let invertLight = 1;
-    let bandFade = 180;
-    const groundFog: [number, number, number] = [0, 0, 0];
 
     /** Accent family follows the ground, not the page: 600s on light, 400s on ink. */
     let palDark: boolean | null = null;
@@ -2501,24 +2499,15 @@
       }
     }
 
-    /** `t` is 0 on the page's own tone, 1 deep inside an opposite-tone band. */
+    /** `t` is 0 on the page's own tone, 1 on an opposite-tone box. */
     function applyGround(t: number) {
-      for (let i = 0; i < 3; i++) {
-        groundFog[i] = pageFog[i] + (invertFog[i] - pageFog[i]) * t;
-      }
-      coreLight = pageLight + (invertLight - pageLight) * t;
-      coreFog = groundFog;
+      const fog = t ? invertFog : pageFog;
+      coreLight = t ? invertLight : pageLight;
+      coreFog = fog;
       ctx.useProgram(prog);
-      ctx.uniform3fv(uFog, groundFog);
+      ctx.uniform3fv(uFog, fog);
       ctx.uniform1f(uLight, coreLight);
       usePalette(coreLight < 0.5);
-    }
-
-    /** How far into an opposite-tone band `y` (viewport space) sits. */
-    function groundAt(band: HTMLElement | null | undefined, y: number) {
-      if (!band) return 0;
-      const rect = band.getBoundingClientRect();
-      return Math.max(0, Math.min(1, (y - rect.top) / bandFade, (rect.bottom - y) / bandFade));
     }
 
     function paintTheme() {
@@ -2528,8 +2517,6 @@
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
       pageFog = readColor(probe, '--w-surface');
       invertFog = readColor(probeInvert, '--w-surface');
-      bandFade =
-        parseFloat(getComputedStyle(world).getPropertyValue('--w-band-fade')) || 180;
       ctx.uniform3fv(uFog, pageFog);
       /* Which theme is on. Read from the class, but only ever from inside a
          frame after it changed (see onTheme / the observer below): read at the
@@ -2787,15 +2774,10 @@
          than the acts, so a FeatureMap title is not struck through. */
       if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : 0.16);
 
-      /* The ground under the lens.
-       *
-       * The page alternates tone every section, and the bands crossfade over
-       * `--w-band-fade` instead of cutting. So the fog a far screen dissolves
-       * into, the light its glass is lit by, and the accent family its chrome
-       * uses all ride that same ramp — otherwise the matter is a grey ghost
-       * for half a screen on either side of every seam. Last, so a `world--day`
+      /* Fog and glass snap to the box under the lens: pale screens on a
+       * white box, dark screens on a black one. Last, so a `world--day`
        * repaint earlier in the frame cannot leave the page tone behind. */
-      applyGround(groundAt(scenes[a]?.closest<HTMLElement>('.tone-invert'), mid));
+      applyGround(scenes[a]?.closest('.tone-invert') ? 1 : 0);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2919,10 +2901,10 @@
       for (const band of bands) {
         const br = band.getBoundingClientRect();
         if (br.top > mid || br.bottom < mid) continue;
-        ground = groundAt(band, mid);
+        ground = 1;
         break;
       }
-      if (Math.abs(ground - stillGround) < 0.02) return;
+      if (ground === stillGround) return;
       stillGround = ground;
       applyGround(ground);
       drawStill();
