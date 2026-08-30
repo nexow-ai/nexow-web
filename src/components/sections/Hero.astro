@@ -157,12 +157,23 @@ const D = {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(
-      64% 52% at 50% 46%,
-      color-mix(in oklab, var(--color-ink-950) 88%, transparent),
-      color-mix(in oklab, var(--color-ink-950) 55%, transparent) 46%,
-      transparent 76%
-    );
+    /* Two layers. The ellipse holds the headline; the vertical wash carries
+     * that protection down over the composer, the chips and the note, which
+     * the ellipse alone left sitting on bare screens. */
+    background:
+      radial-gradient(
+        78% 62% at 50% 44%,
+        color-mix(in oklab, var(--color-ink-950) 97%, transparent),
+        color-mix(in oklab, var(--color-ink-950) 78%, transparent) 52%,
+        transparent 84%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent,
+        color-mix(in oklab, var(--color-ink-950) 62%, transparent) 22%,
+        color-mix(in oklab, var(--color-ink-950) 70%, transparent) 78%,
+        transparent
+      );
   }
 
   .hero__inner {

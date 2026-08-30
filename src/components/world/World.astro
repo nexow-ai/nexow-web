@@ -37,6 +37,11 @@ import WorldField from './WorldField.astro';
 
 <div class="world">
   <WorldField />
+  {/* Header band. The header is transparent until 8px of scroll and the world
+      runs to the top of the document, so without this the panels cross the nav
+      labels. Sits on the field's layer and after it, so it darkens the world
+      without touching the content above. */}
+  <div class="world__crown" aria-hidden="true"></div>
   <div class="world__content">
     <slot />
     <div class="world__seam" aria-hidden="true"></div>
@@ -138,6 +143,21 @@ import WorldField from './WorldField.astro';
         color-mix(in oklab, var(--color-plasma-500) 12%, transparent),
         transparent 76%
       );
+  }
+
+  .world__crown {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 1;
+    height: 8rem;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--color-ink-950) 14%,
+      color-mix(in oklab, var(--color-ink-950) 62%, transparent) 52%,
+      transparent
+    );
   }
 
   .world__content {
