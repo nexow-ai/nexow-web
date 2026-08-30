@@ -817,10 +817,11 @@
                            mix(uFog, vec3(1.0), 0.94), uLight);
       vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
                            mix(glassDark, vec3(1.0), 0.45), uLight);
-      /* Studio beats: the glass itself wears the family, so a wall of
-         widgets reads as a customised product rather than theatre mint. */
-      glassDark = mix(glassDark, mix(glassDark, accent, 0.22), uStudio);
-      glassLite = mix(glassLite, mix(glassLite, accent, 0.16), uStudio);
+      /* Every screen wears its family a little; studio beats wear it as
+         product chrome so the wall reads as customised widgets, not mint. */
+      float wear = mix(0.28, 0.52, uStudio);
+      glassDark = mix(glassDark, mix(glassDark, accent, 0.42), wear);
+      glassLite = mix(glassLite, mix(glassLite, accent, 0.28), wear);
 
       /* Display: lit from above, shadowed under the bezel. The shadow is much
          lighter on the light theme, where a dark ring inside the edge reads as
@@ -1636,7 +1637,7 @@
          there the bezel is the white of the glass and the only edge is a
          hairline of ink at the very rim — a card, not a border. */
       float topLight = smoothstep(-0.5, 0.5, vUv.y);
-      vec3 frameBase = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9) + accent * 0.05,
+      vec3 frameBase = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9) + accent * 0.22,
                            mix(vec3(1.0), accent, 0.03), uLight);
       vec3 frameLite = mix(frameBase, lightest, 0.12 + 0.18 * vLight);
       vec3 frame = mix(frameBase, frameLite, topLight * (0.5 + 0.5 * vLight));
