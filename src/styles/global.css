@@ -1202,6 +1202,8 @@ html[data-world]:not(.js).dark #site-nav {
       /* Fifth beat is optional — acts with four ignore it. Starts late so
          the existing quarter ramps keep their timing. */
       --k4: clamp(0, calc((var(--ps, 0) - 0.82) * 6), 1);
+      /* Sixth beat is optional — acts with fewer ignore it. */
+      --k5: clamp(0, calc((var(--ps, 0) - 0.90) * 8), 1);
       /* Centred scrub, for parallax that reads in both directions. */
       --psc: calc(var(--ps, 0) * 2 - 1);
     }

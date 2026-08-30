@@ -6,8 +6,10 @@
  * so the act cannot drift out of sync with `src/data/connectors.ts`. The live
  * count is read from the same place for the same reason — copy never hardcodes it.
  *
- * Five groups match the five copy beats: Finance, Wallets, Services, Socials, APIs.
- * APIs is the catalogue `data` category (market-data APIs, databases, warehouses).
+ * Six groups match the six copy beats: Finance, Wallets, Services, Socials,
+ * APIs, Databases. APIs and Databases both come from the catalogue `data`
+ * category, split by kind so market-data/analytics stay with APIs and
+ * SQL / NoSQL / warehouse / vector venues get their own row.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -23,12 +25,19 @@ const { lang } = Astro.props;
 const c = useContent(lang);
 const copy = c.home.acts!.connectors;
 
-const pick = (category: ConnectorCategory, soon = false) =>
+const API_KINDS = new Set(['data', 'analytics']);
+const DATABASE_KINDS = new Set(['sql', 'nosql', 'warehouse', 'vector']);
+
+const pick = (
+  category: ConnectorCategory,
+  opts: { soon?: boolean; kinds?: Set<string> } = {},
+) =>
   CONNECTORS.filter(
     (x) =>
       x.category === category &&
       x.logo &&
-      (x.status === 'live' || (soon && x.status === 'soon')),
+      (x.status === 'live' || (opts.soon && x.status === 'soon')) &&
+      (!opts.kinds || opts.kinds.has(x.kind)),
   );
 
 const GROUPS: {
@@ -39,14 +48,15 @@ const GROUPS: {
   { category: 'finance', k: '--k0', items: pick('finance') },
   /* Wallets only has five live venues — include the rest of the catalogue so
      the group reads as a category, not a leftover row. */
-  { category: 'wallets', k: '--k1', items: pick('wallets', true) },
+  { category: 'wallets', k: '--k1', items: pick('wallets', { soon: true }) },
   { category: 'services', k: '--k2', items: pick('services') },
   { category: 'socials', k: '--k3', items: pick('socials') },
-  { category: 'data', k: '--k4', items: pick('data') },
+  { category: 'data', k: '--k4', items: pick('data', { kinds: API_KINDS }) },
+  { category: 'data', k: '--k5', items: pick('data', { kinds: DATABASE_KINDS }) },
 ];
 ---
 
-<Act id="connectors" labelledBy="act-connectors-title" stages={5} height="250vh">
+<Act id="connectors" labelledBy="act-connectors-title" stages={6} height="280vh">
   <div class="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-center lg:gap-14">
     <ActCopyBlock copy={copy} headingId="act-connectors-title" />
 
@@ -78,14 +88,15 @@ const GROUPS: {
 </Act>
 
 <style>
-  /* Five even beats on this act only — other acts keep the global quarters. */
+  /* Six even beats on this act only — other acts keep the global quarters. */
   @media (min-width: 768px) {
     :global(html.js #connectors.act) {
       --k0: clamp(0, calc(var(--ps, 0) * 6), 1);
-      --k1: clamp(0, calc((var(--ps, 0) - 0.14) * 6), 1);
-      --k2: clamp(0, calc((var(--ps, 0) - 0.28) * 6), 1);
-      --k3: clamp(0, calc((var(--ps, 0) - 0.40) * 6), 1);
-      --k4: clamp(0, calc((var(--ps, 0) - 0.50) * 7), 1);
+      --k1: clamp(0, calc((var(--ps, 0) - 0.12) * 6), 1);
+      --k2: clamp(0, calc((var(--ps, 0) - 0.24) * 6), 1);
+      --k3: clamp(0, calc((var(--ps, 0) - 0.36) * 6), 1);
+      --k4: clamp(0, calc((var(--ps, 0) - 0.48) * 6), 1);
+      --k5: clamp(0, calc((var(--ps, 0) - 0.60) * 6), 1);
     }
   }
 
@@ -140,7 +151,8 @@ const GROUPS: {
       grid-template-areas:
         'finance finance'
         'wallets socials'
-        'services apis';
+        'services apis'
+        'databases databases';
       gap: 0.55rem 0.75rem;
     }
 
@@ -149,6 +161,7 @@ const GROUPS: {
     .k-group:nth-child(3) { grid-area: services; }
     .k-group:nth-child(4) { grid-area: socials; }
     .k-group:nth-child(5) { grid-area: apis; }
+    .k-group:nth-child(6) { grid-area: databases; }
   }
 
   .k-group {
@@ -170,9 +183,12 @@ const GROUPS: {
     display: flex;
     flex-wrap: wrap;
     gap: 0.28rem;
+    overflow: visible;
   }
 
   .k-pill {
+    position: relative;
+    z-index: 0;
     display: inline-flex;
     align-items: center;
     gap: 0.28rem;
@@ -183,6 +199,20 @@ const GROUPS: {
     font-size: 0.625rem;
     line-height: 1.2;
     color: var(--w-text-3);
+    transform: scale(1);
+    transform-origin: center center;
+    transition:
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.28s ease,
+      box-shadow 0.28s ease,
+      color 0.28s ease;
+  }
+
+  .k-pill:hover {
+    z-index: 2;
+    color: var(--w-text);
+    border-color: color-mix(in oklab, var(--color-brand-400) 50%, var(--w-line));
+    box-shadow: 0 0 18px color-mix(in oklab, var(--color-brand-400) 28%, transparent);
   }
 
   .k-pill--soon {
@@ -198,6 +228,10 @@ const GROUPS: {
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .k-pill:hover {
+      transform: scale(1.16);
+    }
+
     @media (min-width: 768px) {
       /* Each category docks on its own beat, arriving from depth. */
       :global(html.js) .k-group {

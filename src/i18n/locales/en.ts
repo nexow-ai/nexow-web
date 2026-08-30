@@ -487,13 +487,14 @@ export const en: SiteContent = {
         step: '03',
         eyebrow: 'Wire it',
         title: 'Wired to live data, not screenshots',
-        body: 'Finance, wallets, services, socials and APIs. Where the venue allows it your browser talks to them directly, so there is nothing to configure by hand.',
+        body: 'Finance, wallets, services, socials, APIs and databases. Where the venue allows it your browser talks to them directly, so there is nothing to configure by hand.',
         beats: [
           { label: 'Finance', detail: 'Exchanges, brokers and derivatives venues' },
           { label: 'Wallets', detail: 'Watch-only addresses across chains' },
           { label: 'Services', detail: 'Search, weather, news and public open data' },
           { label: 'Socials', detail: 'Networks, messaging, communities and feeds' },
-          { label: 'APIs', detail: 'Market data, databases and warehouses you already run' },
+          { label: 'APIs', detail: 'Market data and analytics you already subscribe to' },
+          { label: 'Databases', detail: 'SQL, NoSQL, warehouses and vector stores you already run' },
         ],
       },
       bots: {
