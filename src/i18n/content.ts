@@ -404,6 +404,7 @@ export interface SiteContent {
     /** Labels for the tour's transport (see `TourHud.astro`). */
     tourTrack?: string;
     tourLeft?: string;
+    tourControls?: string;
   };
   footer: {
     tagline: string;

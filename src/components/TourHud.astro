@@ -27,9 +27,19 @@ const t = useContent(getLangFromUrl(Astro.url));
 const tourStop = t.nav.tourStop ?? 'Stop the tour';
 const tourTrack = t.nav.tourTrack ?? 'Play a different song';
 const tourLeft = t.nav.tourLeft ?? 'Time left';
+const tourControls = t.nav.tourControls ?? 'Tour controls';
 ---
 
-<div id="tour-hud" class="tour-hud" data-playing="false" transition:animate="none">
+{/* A landmark, not a bare div: the countdown is page content, and content
+    outside every landmark is content a screen reader can only reach by
+    walking the whole page (axe's `region` rule, `accessibility-axe.test.ts`). */}
+<section
+  id="tour-hud"
+  class="tour-hud"
+  aria-label={tourControls}
+  data-playing="false"
+  transition:animate="none"
+>
   <div class="tour-hud__pill">
     <button
       type="button"
@@ -56,7 +66,7 @@ const tourLeft = t.nav.tourLeft ?? 'Time left';
       <Icon name="music" class="tour-hud__icon size-4" />
     </button>
   </div>
-</div>
+</section>
 
 <style>
   .tour-hud {
