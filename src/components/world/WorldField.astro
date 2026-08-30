@@ -2714,6 +2714,17 @@
       ctx.uniform1f(uTime, seconds);
       ctx.uniform1f(uAlpha, SCREEN_ALPHA);
 
+      /* Fog and glass follow the band under the lens, not only the page
+       * theme: a white invert on a dark page needs pale screens, a black
+       * invert on a light page needs dark ones. */
+      const invert = !!scenes[a]?.closest('.tone-invert');
+      const darkPage = document.documentElement.classList.contains('dark');
+      const lightGround = invert ? darkPage : !darkPage;
+      ctx.uniform1f(uLight, lightGround ? 1 : 0);
+      ctx.uniform3fv(uFog, lightGround ? [1, 1, 1] : [0, 0, 0]);
+      coreLight = lightGround ? 1 : 0;
+      coreFog = lightGround ? [1, 1, 1] : [0, 0, 0];
+
       /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
          view switches too — that is how a single section shows every family. */
       const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');

@@ -424,11 +424,11 @@ html:not(.dark) .tone-invert {
   /* Home world owns the page through the footer — don't flash the marketing
    * white under a transparent canvas at the bottom of the document. */
   html[data-world] body {
-    background-color: #f6f8fb !important;
+    background-color: #ffffff !important;
   }
 
   html[data-world].dark body {
-    background-color: var(--color-ink-950);
+    background-color: #000000;
   }
 
   /*
@@ -1103,10 +1103,6 @@ html[data-world] .tour-toggle {
  * the header pill was a full-width blur pass per frame for the length of the
  * story. The pill is 92–95% opaque; the blur was never visible through it.
  * Unlayered, so it beats the `backdrop-blur-md` utility the header toggles. */
-html[data-world] {
-  overflow-x: clip;
-}
-
 html[data-world] #site-nav {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

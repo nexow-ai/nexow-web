@@ -15,11 +15,11 @@
  * case this creates: light-theme chrome floating over the world before the
  * first scroll.
  *
- * Three layers, and the order matters:
- *   1. this element    opaque ink. Text contrast is computed against it, which
- *                      is what keeps `tests/e2e/contrast.spec.ts` deterministic.
- *   2. .world-field    the WebGL matter, additive, fixed to the viewport.
- *   3. .world__content the story, always above the matter.
+ * Four layers, and the order matters:
+ *   1. .world__bands   solid black / white stripes (behind the matter).
+ *   2. .world-field    the WebGL screens, clear-alpha, fixed to the viewport.
+ *   3. .world__crown   header fade.
+ *   4. .world__content the story, no opaque ground, always above the matter.
  *
  * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
  * field paints under the content and over the ink instead of over the header.
@@ -36,6 +36,7 @@ import WorldSound from './WorldSound.astro';
 ---
 
 <div class="world">
+  <div class="world__bands" aria-hidden="true"></div>
   <WorldField />
   <WorldSound />
   {/* Header band. The header is transparent until 8px of scroll and the world
@@ -98,15 +99,49 @@ import WorldSound from './WorldSound.astro';
     if (!raf) raf = requestAnimationFrame(tick);
   }
 
+  let bandRo: ResizeObserver | null = null;
+
+  function syncBands() {
+    const world = document.querySelector('.world');
+    const content = world?.querySelector('.world__content');
+    const bands = world?.querySelector('.world__bands');
+    if (!(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
+    const kids = Array.from(content.children).filter(
+      (el): el is HTMLElement => el instanceof HTMLElement && el.offsetHeight > 0,
+    );
+    while (bands.children.length < kids.length) {
+      bands.appendChild(document.createElement('div'));
+    }
+    while (bands.children.length > kids.length) bands.lastElementChild?.remove();
+    kids.forEach((kid, i) => {
+      const band = bands.children[i] as HTMLElement;
+      band.className = kid.classList.contains('tone-invert')
+        ? 'world__band world__band--invert'
+        : 'world__band';
+      band.style.height = `${kid.offsetHeight}px`;
+    });
+  }
+
   function teardownWorld() {
     window.removeEventListener('pointermove', onPointer);
+    window.removeEventListener('resize', syncBands);
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
     targets = [];
+    bandRo?.disconnect();
+    bandRo = null;
   }
 
   function initWorld() {
     teardownWorld();
+    syncBands();
+    const content = document.querySelector('.world__content');
+    if (content) {
+      bandRo = new ResizeObserver(syncBands);
+      bandRo.observe(content);
+      for (const kid of content.children) bandRo.observe(kid);
+    }
+    window.addEventListener('resize', syncBands, { passive: true });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (window.matchMedia('(pointer: coarse)').matches) return;
     targets = Array.from(document.querySelectorAll<HTMLElement>('.world .act-scene'));
@@ -116,6 +151,7 @@ import WorldSound from './WorldSound.astro';
 
   document.addEventListener('astro:page-load', initWorld);
   document.addEventListener('astro:before-swap', teardownWorld);
+  if (document.readyState !== 'loading') initWorld();
 </script>
 
 <style>
@@ -127,7 +163,7 @@ import WorldSound from './WorldSound.astro';
   .world {
     position: relative;
     z-index: 0;
-    --w-surface: #f6f8fb;
+    --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
@@ -147,7 +183,7 @@ import WorldSound from './WorldSound.astro';
   }
 
   :global(.dark) .world {
-    --w-surface: var(--color-ink-950);
+    --w-surface: #000000;
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -177,11 +213,11 @@ import WorldSound from './WorldSound.astro';
     --w-wash: 0.38;
   }
 
-  /* Opposite of the page theme, every other band through the footer.
-   * Ground is 50% so the field keeps showing; type tokens flip so copy
-   * still reads. Beats `html.dark .tone-invert` in global.css (opaque). */
+  /* Opposite of the page theme. Ground is painted on `.world__bands` (under
+   * the field) so the screens stay visible; this wrapper only flips type.
+   * Transparent here beats the opaque `html.dark .tone-invert` in global.css. */
   :global(html.dark) .world :global(.tone-invert) {
-    --w-surface: color-mix(in oklab, #ffffff 50%, transparent);
+    --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
@@ -190,16 +226,20 @@ import WorldSound from './WorldSound.astro';
     --w-accent-2: var(--color-brand-600);
     --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
     --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
-    --w-panel: rgba(255, 255, 255, 0.55);
+    --w-panel: rgba(255, 255, 255, 0.84);
     --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
     --w-shadow: rgba(15, 23, 42, 0.22);
     --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
     --w-wash: 0.45;
-    background-color: color-mix(in oklab, #ffffff 50%, transparent);
+    background-color: #ffffff;
+  }
+
+  :global(html.js.dark) .world :global(.tone-invert) {
+    background-color: transparent;
   }
 
   :global(html:not(.dark)) .world :global(.tone-invert) {
-    --w-surface: color-mix(in oklab, var(--color-ink-950) 50%, transparent);
+    --w-surface: #000000;
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -208,12 +248,41 @@ import WorldSound from './WorldSound.astro';
     --w-accent-2: var(--color-brand-400);
     --w-line: rgba(255, 255, 255, 0.12);
     --w-line-soft: rgba(255, 255, 255, 0.08);
-    --w-panel: rgba(9, 12, 20, 0.55);
+    --w-panel: rgba(9, 12, 20, 0.9);
     --w-panel-2: rgba(255, 255, 255, 0.04);
     --w-shadow: rgba(0, 0, 0, 0.85);
     --w-rail: rgba(255, 255, 255, 0.22);
     --w-wash: 1;
-    background-color: color-mix(in oklab, var(--color-ink-950) 50%, transparent);
+    background-color: #000000;
+  }
+
+  :global(html.js:not(.dark)) .world :global(.tone-invert) {
+    background-color: transparent;
+  }
+
+  .world__bands {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Bands are created in JS, so they never get this file's scope hash. */
+  .world :global(.world__band) {
+    background: #ffffff;
+  }
+
+  :global(.dark) .world :global(.world__band) {
+    background: #000000;
+  }
+
+  .world :global(.world__band--invert) {
+    background: #000000;
+  }
+
+  :global(.dark) .world :global(.world__band--invert) {
+    background: #ffffff;
   }
 
   /* A wash that sits between the ink and the matter: enough colour that the
@@ -304,6 +373,17 @@ import WorldSound from './WorldSound.astro';
 
   .world :global(footer a:hover),
   .world :global(footer .font-display) {
+    color: var(--w-text);
+  }
+
+  .world :global(.tone-invert) :global(footer),
+  .world :global(.tone-invert) :global(footer a),
+  .world :global(.tone-invert) :global(footer p),
+  .world :global(.tone-invert) :global(footer h3) {
+    color: var(--w-text-2);
+  }
+
+  .world :global(.tone-invert) :global(footer) :global(.font-display) {
     color: var(--w-text);
   }
 
