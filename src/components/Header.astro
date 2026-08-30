@@ -330,47 +330,16 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
    * real-world speed and gets out of the way the moment the visitor touches
    * anything.
    *
-   * The pace itself lives in `lib/tour`: speed is in CSS pixels per second, not
-   * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
-   * rate, and it is a function of the scroll position alone. That is what lets
-   * the same model be integrated ahead of the tour into a countdown to the end
-   * of the story, which the foot-of-screen transport (`TourHud.astro`) shows.
+   * The pace lives in `lib/tour`: one speed in CSS pixels per second, not per
+   * frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
+   * rate — and the same tempo from the first act to the last. Because it never
+   * changes, the time left is distance over speed, which the foot-of-screen
+   * transport (`TourHud.astro`) counts down.
    */
-  import {
-    secondsLeft,
-    speedAt,
-    timeTable,
-    TOUR_CRUISE,
-    TOUR_EASE,
-    type Box,
-    type TourMap,
-  } from '../lib/tour';
+  import { secondsLeft, TOUR_SPEED } from '../lib/tour';
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
-
-  /** An element in document space: measured once, true at every scroll offset. */
-  function box(el: Element): Box {
-    const r = el.getBoundingClientRect();
-    return { top: r.top + window.scrollY, height: r.height };
-  }
-
-  function readMap(): TourMap {
-    const acts = Array.from(document.querySelectorAll<HTMLElement>('.act')).map((act) => {
-      const copy = act.querySelector('.act-copy');
-      const scene = act.querySelector('.act-scene');
-      return {
-        ...box(act),
-        copy: copy ? box(copy) : undefined,
-        scene: scene ? box(scene) : undefined,
-      };
-    });
-    return {
-      acts,
-      copies: Array.from(document.querySelectorAll('.act-copy'), box),
-      vh: window.innerHeight,
-    };
-  }
 
   function initTour() {
     tourAbort?.abort();
@@ -382,38 +351,19 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
 
     let playing = false;
     let last = 0;
-    let speed = TOUR_CRUISE;
-    let map: TourMap = { acts: [], copies: [], vh: window.innerHeight };
-    let table = new Float64Array(1);
-    /** The page height `map` was taken against; anything else means remeasure. */
-    let mapped = -1;
     /** The whole second the countdown last announced. */
     let shown = -1;
 
     const maxScroll = () =>
       Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
-    /* One pass over the page: where every act is, and how long the rest of the
-     * story takes from every point of it. It holds for the length of the tour,
-     * so a frame of the tour reads no layout at all. */
-    const measure = () => {
-      mapped = maxScroll();
-      map = readMap();
-      table = timeTable(map, mapped);
-      shown = -1;
-    };
-
     /** The countdown, sent on only when the second it shows has changed. */
-    const tell = (y: number) => {
-      const remaining = secondsLeft(y, table);
+    const tell = (y: number, max: number) => {
+      const remaining = secondsLeft(y, max);
       const whole = Math.ceil(remaining);
       if (whole === shown) return;
       shown = whole;
-      document.dispatchEvent(
-        new CustomEvent('nexow:tourtime', {
-          detail: { remaining, total: table[table.length - 1] },
-        }),
-      );
+      document.dispatchEvent(new CustomEvent('nexow:tourtime', { detail: { remaining } }));
     };
 
     const setPlaying = (on: boolean) => {
@@ -447,24 +397,18 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
 
-      // A page that grew or shrank under the tour — a lazy image, a font — is
-      // a page the map and the countdown no longer describe.
+      // Read every frame: a page that grows under the tour — a lazy image, a
+      // font — moves the end of the story, and the countdown with it.
       const max = maxScroll();
-      if (max !== mapped) measure();
-
-      const target = speedAt(window.scrollY, map);
-      const ease = 1 - Math.exp(-dt / TOUR_EASE);
-      speed += (target - speed) * ease;
-
-      const next = window.scrollY + speed * dt;
+      const next = window.scrollY + TOUR_SPEED * dt;
       if (next >= max) {
         window.scrollTo(0, max);
-        tell(max);
+        tell(max, max);
         stop();
         return;
       }
       window.scrollTo(0, next);
-      tell(next);
+      tell(next, max);
       tourRaf = requestAnimationFrame(step);
     };
 
@@ -475,22 +419,16 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       }
       // Reached the end already? Start the tour over rather than do nothing.
       if (window.scrollY >= maxScroll() - 2) window.scrollTo(0, 0);
-      measure();
+      shown = -1;
       setPlaying(true);
-      tell(window.scrollY);
+      tell(window.scrollY, maxScroll());
       last = 0;
-      speed = speedAt(window.scrollY, map);
       tourRaf = requestAnimationFrame(step);
     };
 
     btn.addEventListener('click', toggle, { signal });
     // The transport at the foot of the screen drives the same tour.
     document.addEventListener('nexow:tourtoggle', toggle, { signal });
-    // A new viewport is a new pace and a new countdown.
-    window.addEventListener('resize', () => playing && measure(), {
-      passive: true,
-      signal,
-    });
 
     /* Any intent to move the page yourself ends the tour. The tour's own
      * controls are excluded so their pointerdown does not cancel the click
