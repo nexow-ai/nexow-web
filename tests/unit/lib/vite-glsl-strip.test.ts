@@ -19,7 +19,21 @@ describe('strip', () => {
     expect(out).not.toMatch(/^[ \t]+/m);
     expect(out).toContain('precision mediump float;');
     expect(out).toContain('uniform float uT;');
-    expect(out).toContain('gl_FragColor = vec4(1.0);');
+    expect(out).toContain('gl_FragColor=vec4(1.0);');
+  });
+
+  it('tightens operators but never the space between two words', () => {
+    expect(strip('col = mix(col, paper, x * 0.5) ;')).toBe('col=mix(col,paper,x*0.5);');
+    expect(strip('for (int k = 0; k < 6; k++) { x += 1.0; }')).toBe('for(int k=0;k<6;k++){x+=1.0;}');
+    expect(strip('vec3 c = k == 0 ? a : b;')).toBe('vec3 c=k==0?a:b;');
+    expect(strip('} else if (a <= b) {')).toBe('}else if(a<=b){');
+    expect(strip('length(max(cd, 0.0)) + min(cd.x, 0.0) - rr;')).toBe('length(max(cd,0.0))+min(cd.x,0.0)-rr;');
+  });
+
+  it('leaves a sign alone where tightening would change its meaning', () => {
+    expect(strip('a = b - -c;')).toBe('a=b - -c;');
+    expect(strip('return -x;')).toBe('return -x;');
+    expect(strip('x = a + +b;')).toBe('x=a + +b;');
   });
 
   it('preserves the line count, so compile errors still point at the source line', () => {

@@ -29,12 +29,27 @@ export function glslStrip() {
   };
 }
 
-/** @param {string} src */
+/**
+ * Comments out, each line trimmed, and the whitespace around operators and
+ * punctuation dropped — `col = mix(col, paper, x * 0.5);` ships as
+ * `col=mix(col,paper,x*0.5);`. GLSL needs a space only between two words,
+ * and those are never touched. `+` and `-` are tightened only as binary
+ * operators — an operand on both sides — so `a - -b` and `return -x` keep
+ * their spaces and nothing can collapse into `++`/`--`.
+ *
+ * @param {string} src
+ */
 export function strip(src) {
   return src
     .replace(/\/\*[\s\S]*?\*\//g, (m) => '\n'.repeat((m.match(/\n/g) ?? []).length))
     .replace(/\/\/[^\n]*/g, '')
     .split('\n')
-    .map((line) => line.trim())
+    .map((line) =>
+      line
+        .trim()
+        .replace(/\s*([+-]=)\s*/g, '$1')
+        .replace(/\s*([,;=*/(){}<>?:])\s*/g, '$1')
+        .replace(/([)\w.])\s*([+-])\s+(?=[\w(.])/g, '$1$2'),
+    )
     .join('\n');
 }
