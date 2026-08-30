@@ -159,19 +159,23 @@ const D = {
     pointer-events: none;
     /* Two layers. The ellipse holds the headline; the vertical wash carries
      * that protection down over the composer, the chips and the note, which
-     * the ellipse alone left sitting on bare screens. */
+     * the ellipse alone left sitting on bare screens.
+     *
+     * Both are deliberately weak. At full strength they hid the matter they
+     * were meant to sit in front of, and the opening screen lost the one thing
+     * it is there to show. The type keeps its own protection below. */
     background:
       radial-gradient(
-        78% 62% at 50% 44%,
-        color-mix(in oklab, var(--w-surface) 97%, transparent),
-        color-mix(in oklab, var(--w-surface) 78%, transparent) 52%,
-        transparent 84%
+        62% 46% at 50% 40%,
+        color-mix(in oklab, var(--w-surface) 52%, transparent),
+        color-mix(in oklab, var(--w-surface) 26%, transparent) 50%,
+        transparent 80%
       ),
       linear-gradient(
         to bottom,
         transparent,
-        color-mix(in oklab, var(--w-surface) 62%, transparent) 22%,
-        color-mix(in oklab, var(--w-surface) 70%, transparent) 78%,
+        color-mix(in oklab, var(--w-surface) 20%, transparent) 24%,
+        color-mix(in oklab, var(--w-surface) 24%, transparent) 76%,
         transparent
       );
   }
@@ -195,6 +199,9 @@ const D = {
     line-height: 1.02;
     letter-spacing: -0.035em;
     text-wrap: balance;
+    /* Carries the readability the veil used to buy with opacity, but only
+       where there are glyphs, so the matter stays visible around them. */
+    text-shadow: 0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent);
   }
 
   .hero__line {
@@ -208,6 +215,7 @@ const D = {
     font-weight: 400;
     /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
     color: var(--w-text-2);
+    text-shadow: 0 1px 18px color-mix(in oklab, var(--w-surface) 80%, transparent);
   }
 
   /* ---- composer ---- */
@@ -372,6 +380,7 @@ const D = {
     font-size: 0.72rem;
     letter-spacing: 0.04em;
     color: var(--w-text-4);
+    text-shadow: 0 1px 14px color-mix(in oklab, var(--w-surface) 80%, transparent);
   }
 
   .hero__socials {
