@@ -126,10 +126,10 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
     font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
-    color: var(--color-ink-100);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--w-text-3);
+    border: 1px solid var(--w-line);
     border-radius: 999px;
-    background: rgba(9, 12, 20, 0.9);
+    background: var(--w-panel);
     padding: 0.3rem 0.7rem;
     white-space: nowrap;
   }
@@ -147,16 +147,16 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
     gap: 0.4rem;
     padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--w-line);
+    background: var(--w-panel-2);
     font-size: 0.8125rem;
-    color: var(--color-ink-100);
+    color: var(--w-text-3);
   }
 
   .a-step-n {
     font-family: var(--font-mono);
     font-size: 0.625rem;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   @media (prefers-reduced-motion: no-preference) {

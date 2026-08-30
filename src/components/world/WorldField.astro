@@ -364,6 +364,9 @@
     uniform vec3 uC3;
     uniform vec3 uFog;
     uniform float uAlpha;
+    /* 1 on the light theme, 0 on the dark. The glass, the type and the frame
+       invert with it; the accents darken so they still hold on a pale surface. */
+    uniform float uLight;
     varying float vTone;
     varying float vGlow;
     varying float vLight;
@@ -438,13 +441,23 @@
       float pick = step(0.72, vTone);
       vec3 accent = mix(uC1, uC2, pick);
       vec3 accent2 = mix(uC2, uC1, pick);
-      vec3 paper = vec3(0.86, 0.90, 0.97);
-      vec3 glassDark = mix(uFog, vec3(0.050, 0.072, 0.110), 0.85);
-      vec3 glassLite = mix(glassDark, accent * 0.22, 0.34);
+      /* On the light theme the brand mint is too pale to carry a line on
+         near-white glass, so both accents are pulled down toward their 600s. */
+      accent = mix(accent, accent * 0.70, uLight);
+      accent2 = mix(accent2, accent2 * 0.70, uLight);
+      /* paper is what type and rules are drawn in: soft white on the dark
+         theme, ink on the light. lightest is the highlight colour, white on
+         both, which is what the sheen and the glint are made of. */
+      vec3 paper = mix(vec3(0.86, 0.90, 0.97), vec3(0.11, 0.14, 0.20), uLight);
+      vec3 lightest = mix(paper, vec3(1.0), uLight);
+      vec3 glassDark = mix(mix(uFog, vec3(0.050, 0.072, 0.110), 0.85),
+                           mix(uFog, vec3(0.90, 0.93, 0.97), 0.85), uLight);
+      vec3 glassLite = mix(mix(glassDark, accent * 0.22, 0.34),
+                           mix(glassDark, vec3(1.0), 0.45), uLight);
 
       /* Display: lit from above, shadowed under the bezel. */
       vec3 col = mix(glassDark, glassLite, uv.y * 0.9);
-      col *= 1.0 - inset * 0.38;
+      col *= 1.0 - inset * (0.38 - 0.20 * uLight);
 
       /* ---- chrome: title, subtitle, live dot, hairline ---- */
       float pulse = 0.65 + 0.35 * sin(t * 2.2);
@@ -519,7 +532,7 @@
         vec2 cc = vec2(0.08 + (gi.x + 0.5) * 0.86 / 8.0, 0.11 + (gi.y + 0.5) * 0.64 / 4.0);
         float cell = rect(uv, cc, vec2(0.86 / 8.0 * 0.40, 0.64 / 4.0 * 0.38), 0.012)
                    * aaband(0.08, 0.94, uv.x) * aaband(0.11, 0.75, uv.y);
-        col = mix(col, mix(accent * 0.18, accent, v), cell * (0.30 + 0.70 * v));
+        col = mix(col, mix(mix(accent * 0.18, mix(accent, lightest, 0.72), uLight), accent, v), cell * (0.30 + 0.70 * v));
         col = mix(col, paper, cell * smoothstep(0.85, 1.0, v) * 0.5);
       } else if (kind < 4.0) {
         /* List: avatar, label, value, with a highlight drifting down the rows. */
@@ -548,7 +561,7 @@
         float hy = max(o, cl);
         float wl = 0.05 + 0.05 * rnd(c + s * 12.0);
         float inC = aaband(0.07, 0.95, uv.x) * step(-0.5, c);
-        vec3 cc = mix(paper * 0.55, accent, up);
+        vec3 cc = mix(mix(paper * 0.55, mix(paper, lightest, 0.45), uLight), accent, up);
         col = mix(col, cc, (1.0 - aastep(0.006, abs(uv.x - cx))) * aaband(lo - wl, hy + wl, uv.y) * inC * 0.8);
         col = mix(col, cc, rect(uv, vec2(cx, (lo + hy) * 0.5), vec2(0.024, max((hy - lo) * 0.5, 0.008)), 0.005) * inC);
         float x = (uv.x - 0.08) / 0.86;
@@ -654,8 +667,8 @@
         float lw = 0.16 + 0.14 * rnd(r * 1.9 + s * 2.0);
         col = mix(col, paper, (1.0 - aastep(0.004, abs(uv.y - (cy - 0.08)))) * aaband(0.08, 0.94, uv.x) * inR * 0.08);
         col = mix(col, paper, rect(uv, vec2(0.09 + lw * 0.5, cy), vec2(lw * 0.5, 0.011), 0.006) * inR * 0.5);
-        col = mix(col, mix(paper * 0.3, accent, on), rect(uv, vec2(0.80, cy), vec2(0.065, 0.024), 0.015) * inR);
-        col = mix(col, paper, disc(uv, vec2(0.762 + 0.076 * on, cy), 0.0165) * inR);
+        col = mix(col, mix(mix(paper * 0.3, mix(paper, lightest, 0.75), uLight), accent, on), rect(uv, vec2(0.80, cy), vec2(0.065, 0.024), 0.015) * inR);
+        col = mix(col, lightest, disc(uv, vec2(0.762 + 0.076 * on, cy), 0.0165) * inR);
       } else {
         /* Stacked area, two series drifting against each other. */
         float x = (uv.x - 0.08) / 0.86;
@@ -670,18 +683,20 @@
 
       /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ---- */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
-      col += paper * sheen * sheen * 0.035;
+      col += lightest * sheen * sheen * 0.035;
 
       /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ---- */
       float topLight = smoothstep(-0.5, 0.5, vUv.y);
-      vec3 frameDark = mix(uFog, vec3(0.10, 0.13, 0.18), 0.9) + accent * 0.05;
-      vec3 frameLite = mix(frameDark, paper, 0.16 + 0.22 * vLight);
+      vec3 frameDark = mix(mix(uFog, vec3(0.10, 0.13, 0.18), 0.9),
+                           vec3(0.80, 0.84, 0.90), uLight) + accent * 0.05;
+      vec3 frameLite = mix(frameDark, lightest, 0.16 + 0.22 * vLight);
       vec3 frame = mix(frameDark, frameLite, topLight * (0.5 + 0.5 * vLight));
-      frame = mix(frame, paper, (1.0 - aastep(0.010, abs(sd + 0.004))) * topLight * 0.35);
+      frame = mix(frame, lightest, (1.0 - aastep(0.010, abs(sd + 0.004))) * topLight * 0.35);
       col = mix(col, frame, bezel);
 
       col += accent * vFres * 0.18;
-      col += paper * vSpec * 0.40;
+      /* Toned down on the light theme: white added to near-white just clips. */
+      col += lightest * vSpec * (0.40 - 0.25 * uLight);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. */
@@ -727,6 +742,7 @@
     uniform vec3 uFog;
     uniform vec3 uCam;
     uniform float uAlpha;
+    uniform float uLight;
     varying vec3 vN;
     varying vec3 vP;
     void main() {
@@ -742,8 +758,13 @@
       /* Wide lambert range on purpose. Flat shading only reads as a cut solid
          if neighbouring faces are clearly different values; a narrow range
          turned twenty facets into one dark blob. */
-      vec3 body = mix(uFog, uC1 * 0.95, 0.06 + 0.94 * lam * lam);
-      body = mix(body, uC3, rim * 0.65);
+      /* Dark theme: unlit faces sink into the backdrop, lit ones come up in
+         mint. Light theme: the solid is a teal object shading dark to pale, so
+         it keeps its volume on a surface that is already bright. */
+      vec3 dark = mix(uFog, uC1 * 0.95, 0.06 + 0.94 * lam * lam);
+      vec3 light = mix(uC1 * 0.55, mix(uC1, vec3(1.0), 0.55), 0.15 + 0.85 * lam);
+      vec3 body = mix(dark, light, uLight);
+      body = mix(body, uC3, rim * (0.65 - 0.25 * uLight));
       body += vec3(1.0) * spec * 0.9;
 
       float fog = smoothstep(48.0, 2.0, length(uCam - vP));
@@ -1045,6 +1066,7 @@
     const uC2 = u('uC2');
     const uC3 = u('uC3');
     const uFog = u('uFog');
+    const uLight = u('uLight');
     ctx.uniform1f(uN, count);
 
     const proj = new Float32Array(16);
@@ -1068,6 +1090,7 @@
     let cuC1: WebGLUniformLocation | null = null;
     let cuC3: WebGLUniformLocation | null = null;
     let cuFog: WebGLUniformLocation | null = null;
+    let cuLight: WebGLUniformLocation | null = null;
     let cuAlpha: WebGLUniformLocation | null = null;
 
     if (cvs && cfs && coreProg) {
@@ -1094,6 +1117,7 @@
         cuC1 = ctx.getUniformLocation(coreProg, 'uC1');
         cuC3 = ctx.getUniformLocation(coreProg, 'uC3');
         cuFog = ctx.getUniformLocation(coreProg, 'uFog');
+        cuLight = ctx.getUniformLocation(coreProg, 'uLight');
         cuAlpha = ctx.getUniformLocation(coreProg, 'uAlpha');
         coreReady = true;
       }
@@ -1103,6 +1127,7 @@
     let coreC1: [number, number, number] = [0, 0, 0];
     let coreC3: [number, number, number] = [0, 0, 0];
     let coreFog: [number, number, number] = [0, 0, 0];
+    let coreLight = 0;
 
     /**
      * Draw the core. It grows out of nothing through the hero and settles at
@@ -1152,6 +1177,7 @@
       ctx.uniform3fv(cuC1, coreC1);
       ctx.uniform3fv(cuC3, coreC3);
       ctx.uniform3fv(cuFog, coreFog);
+      ctx.uniform1f(cuLight, coreLight);
       ctx.uniform1f(cuAlpha, 1);
       ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
 
@@ -1178,10 +1204,13 @@
       ctx.uniform3fv(uC1, readColor(probe, '--color-brand-400'));
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
-      ctx.uniform3fv(uFog, readColor(probe, '--color-ink-950'));
+      ctx.uniform3fv(uFog, readColor(probe, '--w-surface'));
+      /* Re-read on every theme change, so the toggle repaints the world live. */
+      coreLight = document.documentElement.classList.contains('dark') ? 0 : 1;
+      ctx.uniform1f(uLight, coreLight);
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
-      coreFog = readColor(probe, '--color-ink-950');
+      coreFog = readColor(probe, '--w-surface');
     }
     /* Opaque and depth-tested rather than additive. Screens occlude; they do
      * not glow through one another. Distance is carried by fogging toward the

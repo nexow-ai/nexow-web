@@ -82,14 +82,14 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
     gap: 0.15rem;
     padding: 0.7rem 1rem;
     border-radius: 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--w-line);
+    background: var(--w-panel-2);
     min-width: 14rem;
   }
 
   .b-node--fire {
     border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
-    background: color-mix(in oklab, var(--color-brand-500) 12%, rgba(255, 255, 255, 0.04));
+    background: color-mix(in oklab, var(--color-brand-500) 12%, var(--w-panel-2));
   }
 
   .b-kind {
@@ -97,13 +97,13 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
     font-size: 0.625rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .b-name {
     font-family: var(--font-mono);
     font-size: 0.875rem;
-    color: var(--color-ink-100);
+    color: var(--w-text-3);
   }
 
   .b-wire {
@@ -125,11 +125,11 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
     gap: 0.5rem;
     padding: 0.6rem 0.85rem;
     border-radius: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--w-line);
+    background: var(--w-panel-2);
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--color-ink-100);
+    color: var(--w-text-3);
   }
 
   .b-dot {
@@ -146,7 +146,7 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
     font-size: 0.6875rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   @media (prefers-reduced-motion: no-preference) {

@@ -109,7 +109,13 @@ const sections = [
     <ActUseCases lang={lang} />
   </World>
 
-  <Features lang={lang} />
+  {/* Inverted: the opposite theme to the page, so the first section after the
+      world is a hard band — dark on light, light on dark. See `.invert` in
+      global.css. `RewardsTeaser` further down is a permanent dark band, which
+      gives the light theme its second one without two dark blocks touching. */}
+  <div class="invert">
+    <Features lang={lang} />
+  </div>
   <Privacy lang={lang} />
   <Plans lang={lang} />
   <RewardsTeaser lang={lang} />

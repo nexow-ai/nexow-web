@@ -83,9 +83,9 @@ const CELLS = [
   .w-plane {
     position: relative;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(12, 16, 26, 0.72);
-    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--w-line);
+    background: var(--w-panel);
+    box-shadow: 0 30px 70px -30px var(--w-shadow);
   }
 
   @media (min-width: 768px) {
@@ -127,7 +127,7 @@ const CELLS = [
     padding: 0.9rem 1rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--color-ink-100);
+    color: var(--w-text-3);
   }
 
   .w-dot {
@@ -162,7 +162,7 @@ const CELLS = [
     font-size: 0.6875rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .w-src-bar {
@@ -176,7 +176,7 @@ const CELLS = [
   /* ---- beats 3 & 4: the widget itself ---- */
   .w-plane--widget {
     padding: 1rem;
-    background: rgba(9, 12, 20, 0.92);
+    background: var(--w-panel);
   }
 
   .w-card-head {
@@ -191,7 +191,7 @@ const CELLS = [
     font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-ink-200);
+    color: var(--w-text-2);
   }
 
   .w-card-badge {
@@ -199,7 +199,7 @@ const CELLS = [
     font-size: 0.625rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
     border: 1px solid color-mix(in oklab, var(--color-brand-400) 45%, transparent);
     border-radius: 999px;
     padding: 0.1rem 0.45rem;
@@ -217,7 +217,7 @@ const CELLS = [
     background: color-mix(
       in oklab,
       var(--color-brand-400) calc(var(--v) * 26%),
-      rgba(255, 255, 255, 0.06)
+      var(--w-panel-2)
     );
   }
 
@@ -233,8 +233,8 @@ const CELLS = [
     font-size: 0.625rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-ink-200);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--w-text-2);
+    border: 1px solid var(--w-line);
     border-radius: 999px;
     padding: 0.15rem 0.5rem;
   }

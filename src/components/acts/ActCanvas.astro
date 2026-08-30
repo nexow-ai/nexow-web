@@ -79,9 +79,9 @@ const TILES = [
   .c-screen {
     position: relative;
     border-radius: 1.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(9, 12, 20, 0.9);
-    box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--w-line);
+    background: var(--w-panel);
+    box-shadow: 0 40px 90px -40px var(--w-shadow);
     padding: 0.9rem;
   }
 
@@ -96,14 +96,14 @@ const TILES = [
     font-size: 0.625rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-ink-300);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--w-text-4);
+    border: 1px solid var(--w-line);
     border-radius: 999px;
     padding: 0.15rem 0.55rem;
   }
 
   .c-tab--on {
-    color: var(--color-brand-300);
+    color: var(--w-accent);
     border-color: color-mix(in oklab, var(--color-brand-400) 50%, transparent);
   }
 
@@ -118,11 +118,11 @@ const TILES = [
     display: flex;
     align-items: flex-end;
     border-radius: 0.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--w-line);
     background: linear-gradient(
       145deg,
       color-mix(in oklab, var(--color-brand-500) 14%, transparent),
-      rgba(255, 255, 255, 0.03)
+      var(--w-panel-2)
     );
     padding: 0.35rem 0.45rem;
   }
@@ -132,7 +132,7 @@ const TILES = [
     font-size: 0.5625rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-ink-300);
+    color: var(--w-text-4);
   }
 
   .c-links {

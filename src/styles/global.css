@@ -13,7 +13,20 @@
 @plugin '@tailwindcss/typography';
 
 /* Class-based dark mode: sections opt in with `.dark`, the whole doc can too. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* `dark:` is an exclusive-or, not a class check. It applies inside `.dark`
+ * *unless* the element sits in an `.invert` wrapper, and it applies inside an
+ * `.invert` wrapper on a page that is not dark. That is what lets one wrapper
+ * mean "the opposite of the page": a dark band on the light theme, a light
+ * band on the dark one, with every `dark:` utility inside it flipping for
+ * free and no JavaScript needing to know which theme is on. */
+@custom-variant dark {
+  &:where(.dark, .dark *):not(:where(.invert, .invert *)) {
+    @slot;
+  }
+  &:where(html:not(.dark) .invert, html:not(.dark) .invert *) {
+    @slot;
+  }
+}
 
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
@@ -287,7 +300,8 @@
   --aurora-mesh-opacity: 0.85;
 }
 
-.dark {
+.dark,
+html:not(.dark) .invert {
   --surface: color-mix(in oklab, white 4%, transparent);
   --surface-sunk: color-mix(in oklab, white 2%, transparent);
   --surface-line: color-mix(in oklab, white 11%, transparent);
@@ -315,6 +329,34 @@
   --aurora-mesh-3: color-mix(in oklab, var(--color-sky-600) 34%, transparent);
   --aurora-mesh-4: color-mix(in oklab, var(--color-brand-700) 34%, transparent);
   --aurora-mesh-opacity: 0.9;
+}
+
+/* ------------------------------------------------------------------ *
+ * Inverted sections.
+ *
+ * Wrap a section in `.invert` and it paints in the opposite theme to the
+ * page, tokens and `dark:` utilities both (see the variant at the top). The
+ * wrapper carries the opaque ground, because the sections themselves only
+ * tint what is behind them.
+ * ------------------------------------------------------------------ */
+html.dark .invert {
+  --surface: #ffffff;
+  --surface-sunk: #f7fbfb;
+  --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  --surface-line-soft: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+  --text-strong: var(--color-ink-950);
+  --text-body: var(--color-ink-600);
+  --text-muted: var(--color-ink-500);
+  --glyph: var(--color-brand-700);
+  background-color: #ffffff;
+  color: var(--color-ink-950);
+  color-scheme: light;
+}
+
+html:not(.dark) .invert {
+  background-color: var(--color-ink-950);
+  color: #ffffff;
+  color-scheme: dark;
 }
 
 /* ------------------------------------------------------------------ *
@@ -675,6 +717,27 @@
 }
 
 /*
+ * Vertical legs, for a language switch: the picker lists locales top to
+ * bottom, so the page travels the same axis. A viewport height rather than
+ * `100%`: `<main>` is as tall as the whole page, and a page-height jump would
+ * be over before it read as motion. The arriving snapshot paints over the
+ * leaving one where the two overlap, so the seam between them is the edge
+ * of the new page.
+ */
+@keyframes nexow-page-out-top {
+  to { transform: translate3d(0, -100vh, 0); }
+}
+@keyframes nexow-page-in-bottom {
+  from { transform: translate3d(0, 100vh, 0); }
+}
+@keyframes nexow-page-out-bottom {
+  to { transform: translate3d(0, 100vh, 0); }
+}
+@keyframes nexow-page-in-top {
+  from { transform: translate3d(0, -100vh, 0); }
+}
+
+/*
  * A theme change is not a navigation, so nothing may travel. Astro's scoped
  * elements (`<main>` and the chrome) would otherwise be captured as their own
  * groups and run the slide alongside the wipe — and, sitting outside the
@@ -930,8 +993,9 @@ html[data-world] .tour-toggle {
   color: var(--color-brand-500);
 }
 
-:global(.dark) .tour-toggle[aria-pressed='true'],
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) .tour-toggle[aria-pressed='true'] {
+/* Plain CSS, so no `:global()` — that is Astro's scoping syntax, and inside
+ * this file it made the selector invalid and the browser dropped the rule. */
+.dark .tour-toggle[aria-pressed='true'] {
   color: var(--color-brand-300);
 }
 
@@ -946,47 +1010,10 @@ html[data-world]:not(.dark) #site-header:not(.is-scrolled) .tour-toggle[aria-pre
 /* ------------------------------------------------------------------ *
  * Header over the world.
  *
- * `/` opens straight into `components/world/World.astro`, which is dark in both
- * themes. Before the first scroll the header floats over that ink instead of
- * over the page surface, so light-theme chrome would be dark-on-dark — and the
- * wordmark, which is two images swapped by the `dark:` variant, would be the
- * black one. From 8px in the header paints its own solid background
- * (`.is-scrolled`, written by Header.astro) and every rule here stops applying.
- *
- * Specificity note: `#site-nav a` is an id plus a type, which already outranks
- * the single-class Tailwind utilities on those links, so nothing here needs
- * `!important`. The language dropdown keeps its own white panel — it is not a
- * direct child of the nav, which is what the `>` in the selectors excludes.
+ * `/` opens straight into `components/world/World.astro`. The world follows
+ * the page theme, so the header's own light and dark chrome are already right
+ * over it; the only case left is a page with no JavaScript, below.
  * ------------------------------------------------------------------ */
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) :is(
-    #site-nav > ul a,
-    #site-nav summary,
-    #site-nav #theme-toggle,
-    #site-nav #menu-toggle
-  ) {
-  color: var(--color-ink-300);
-}
-
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) :is(
-    #site-nav > ul a,
-    #site-nav summary,
-    #site-nav #menu-toggle
-  ):hover {
-  color: #fff;
-}
-
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav > ul a[aria-current='page'] {
-  color: var(--color-brand-300);
-}
-
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav img[src$='logo-black.png'] {
-  display: none;
-}
-
-html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav img[src$='logo-white.png'] {
-  display: block;
-}
-
 /* Without JavaScript there is no `.is-scrolled` to switch on, so the header can
  * never know which surface it is over. Give it its solid pill from the start
  * instead: legible over the world at the top and over the page at the bottom,

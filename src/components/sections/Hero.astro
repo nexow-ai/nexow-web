@@ -150,7 +150,7 @@ const D = {
      * where it has a job to do. */
     min-height: 100svh;
     padding-block: 9rem 7rem;
-    color: #fff;
+    color: var(--w-text);
   }
 
   .hero__veil {
@@ -163,15 +163,15 @@ const D = {
     background:
       radial-gradient(
         78% 62% at 50% 44%,
-        color-mix(in oklab, var(--color-ink-950) 97%, transparent),
-        color-mix(in oklab, var(--color-ink-950) 78%, transparent) 52%,
+        color-mix(in oklab, var(--w-surface) 97%, transparent),
+        color-mix(in oklab, var(--w-surface) 78%, transparent) 52%,
         transparent 84%
       ),
       linear-gradient(
         to bottom,
         transparent,
-        color-mix(in oklab, var(--color-ink-950) 62%, transparent) 22%,
-        color-mix(in oklab, var(--color-ink-950) 70%, transparent) 78%,
+        color-mix(in oklab, var(--w-surface) 62%, transparent) 22%,
+        color-mix(in oklab, var(--w-surface) 70%, transparent) 78%,
         transparent
       );
   }
@@ -207,7 +207,7 @@ const D = {
     font-size: clamp(1rem, 0.86rem + 0.6vw, 1.3rem);
     font-weight: 400;
     /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
-    color: var(--color-ink-200);
+    color: var(--w-text-2);
   }
 
   /* ---- composer ---- */
@@ -222,10 +222,10 @@ const D = {
     align-items: center;
     gap: 0.75rem;
     padding: 0.5rem 0.5rem 0.5rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--w-line);
     border-radius: 1.15rem;
-    background: rgba(10, 13, 21, 0.68);
-    box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
+    background: var(--w-panel);
+    box-shadow: 0 24px 60px -30px var(--w-shadow);
     backdrop-filter: blur(10px);
     transition:
       border-color 0.3s var(--ease-out-expo),
@@ -235,7 +235,7 @@ const D = {
   .hero__composer:focus-within {
     border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
     box-shadow:
-      0 24px 60px -30px rgba(0, 0, 0, 0.9),
+      0 24px 60px -30px var(--w-shadow),
       0 0 0 1px color-mix(in oklab, var(--color-brand-400) 35%, transparent);
   }
 
@@ -246,7 +246,7 @@ const D = {
     flex: none;
     width: 1.05rem;
     height: 1.05rem;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .hero__input {
@@ -257,7 +257,7 @@ const D = {
     padding-block: 0.55rem;
     border: 0;
     background: transparent;
-    color: var(--color-ink-100);
+    color: var(--w-text-3);
     font-size: 0.95rem;
     line-height: 1.5;
     text-align: start;
@@ -266,7 +266,7 @@ const D = {
   }
 
   .hero__input::placeholder {
-    color: var(--color-ink-400);
+    color: var(--w-text-4);
   }
 
   .hero__input:focus {
@@ -336,10 +336,10 @@ const D = {
     align-items: center;
     gap: 0.4rem;
     padding: 0.4rem 0.8rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--w-line);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--color-ink-200);
+    background: var(--w-panel-2);
+    color: var(--w-text-2);
     font-size: 0.78rem;
     font-weight: 500;
     transition:
@@ -351,20 +351,20 @@ const D = {
   .hero__chip:hover {
     transform: translateY(-2px);
     border-color: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
-    color: #fff;
+    color: var(--w-text);
   }
 
   .hero__chip[aria-pressed='true'] {
     border-color: color-mix(in oklab, var(--color-brand-400) 60%, transparent);
     background: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
-    color: #fff;
+    color: var(--w-text);
   }
 
   .hero__chip > :global(svg) {
     width: 0.85rem;
     height: 0.85rem;
     flex: none;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .hero__note {
@@ -372,7 +372,7 @@ const D = {
     font-family: var(--font-mono);
     font-size: 0.72rem;
     letter-spacing: 0.04em;
-    color: var(--color-ink-400);
+    color: var(--w-text-4);
   }
 
   .hero__socials {
@@ -389,12 +389,12 @@ const D = {
     flex-direction: column;
     align-items: center;
     gap: 0.7rem;
-    color: var(--color-ink-300);
+    color: var(--w-text-4);
     transition: color 0.25s var(--ease-out-expo);
   }
 
   .hero__cue:hover {
-    color: #fff;
+    color: var(--w-text);
   }
 
   .hero__cue-label {
@@ -409,7 +409,7 @@ const D = {
     width: 1px;
     height: 2.75rem;
     overflow: hidden;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), transparent);
+    background: linear-gradient(to bottom, var(--w-rail), transparent);
   }
 
   .hero__cue-dot {

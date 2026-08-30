@@ -57,11 +57,11 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     font-size: 0.75rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .act-copy__step {
-    color: var(--color-brand-400);
+    color: var(--w-accent-2);
   }
 
   .act-copy__rule {
@@ -77,7 +77,7 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     line-height: 1.08;
     letter-spacing: -0.02em;
     text-wrap: balance;
-    color: #fff;
+    color: var(--w-text);
   }
 
   .act-copy__body {
@@ -85,7 +85,7 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     font-size: 1.0625rem;
     line-height: 1.65;
     /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
-    color: var(--color-ink-200);
+    color: var(--w-text-2);
   }
 
   .act-copy__beats {
@@ -99,7 +99,7 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     gap: 0.15rem;
     padding-inline-start: 0.9rem;
     border-inline-start: 2px solid
-      color-mix(in oklab, var(--color-brand-400) calc(var(--lit, 1) * 100%), rgba(255, 255, 255, 0.12));
+      color-mix(in oklab, var(--color-brand-400) calc(var(--lit, 1) * 100%), var(--w-line));
     /* Never fades below 0.55: an unlit beat is dimmer, never unreadable. */
     opacity: calc(0.55 + 0.45 * var(--lit, 1));
     transition: opacity 0.35s var(--ease-out-expo);
@@ -110,12 +110,12 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     font-size: 0.75rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-brand-300);
+    color: var(--w-accent);
   }
 
   .act-copy__beat-detail {
     font-size: 0.9375rem;
     line-height: 1.5;
-    color: var(--color-ink-200);
+    color: var(--w-text-2);
   }
 </style>

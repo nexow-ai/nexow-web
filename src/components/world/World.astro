@@ -112,11 +112,48 @@ import WorldField from './WorldField.astro';
 </script>
 
 <style>
+  /* The world's own palette, flipping with the page theme. Every act and the
+   * hero paint from these rather than from literal whites and inks, which is
+   * what lets one dark-native design read as a light stage without a second
+   * copy of every rule. Light values are picked for AA on the light surface;
+   * dark values are the ones the stage was built with. */
   .world {
     position: relative;
     z-index: 0;
-    background: var(--color-ink-950);
-    color: #fff;
+    --w-surface: #f6f8fb;
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-accent-2: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
+    --w-panel: rgba(255, 255, 255, 0.84);
+    --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    --w-shadow: rgba(15, 23, 42, 0.22);
+    --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    /* Wash strength: the colour behind the matter. Quieter on a light page. */
+    --w-wash: 0.45;
+    background: var(--w-surface);
+    color: var(--w-text);
+  }
+
+  :global(.dark) .world {
+    --w-surface: var(--color-ink-950);
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-accent-2: var(--color-brand-400);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-line-soft: rgba(255, 255, 255, 0.08);
+    --w-panel: rgba(9, 12, 20, 0.9);
+    --w-panel-2: rgba(255, 255, 255, 0.04);
+    --w-shadow: rgba(0, 0, 0, 0.85);
+    --w-rail: rgba(255, 255, 255, 0.22);
+    --w-wash: 1;
   }
 
   /* A wash that sits between the ink and the matter: enough colour that the
@@ -130,17 +167,17 @@ import WorldField from './WorldField.astro';
     background:
       radial-gradient(
         58% 40% at 18% 6%,
-        color-mix(in oklab, var(--color-brand-500) 22%, transparent),
+        color-mix(in oklab, var(--color-brand-500) calc(22% * var(--w-wash)), transparent),
         transparent 70%
       ),
       radial-gradient(
         50% 34% at 86% 2%,
-        color-mix(in oklab, var(--color-accent-600, var(--color-accent-500)) 24%, transparent),
+        color-mix(in oklab, var(--color-accent-600, var(--color-accent-500)) calc(24% * var(--w-wash)), transparent),
         transparent 72%
       ),
       radial-gradient(
         70% 44% at 60% 98%,
-        color-mix(in oklab, var(--color-plasma-500) 12%, transparent),
+        color-mix(in oklab, var(--color-plasma-500) calc(12% * var(--w-wash)), transparent),
         transparent 76%
       );
   }
@@ -154,8 +191,8 @@ import WorldField from './WorldField.astro';
     pointer-events: none;
     background: linear-gradient(
       to bottom,
-      var(--color-ink-950) 14%,
-      color-mix(in oklab, var(--color-ink-950) 62%, transparent) 52%,
+      var(--w-surface) 14%,
+      color-mix(in oklab, var(--w-surface) 62%, transparent) 52%,
       transparent
     );
   }
@@ -174,6 +211,6 @@ import WorldField from './WorldField.astro';
     bottom: 0;
     height: 9rem;
     pointer-events: none;
-    background: linear-gradient(to top, var(--color-ink-950), transparent);
+    background: linear-gradient(to top, var(--w-surface), transparent);
   }
 </style>

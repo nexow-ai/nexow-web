@@ -78,27 +78,11 @@ const items = cases?.items ?? [];
     gap: 0.5rem;
     padding: 1rem;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.03);
-    /* Let the world through. The closing act is the exhale, and the screens
-     * behind it are the point — a fully opaque card here would seal them off. */
-    opacity: 0.8;
+    border: 1px solid var(--w-line);
+    /* Dark plate over the world field so title, body, and recipe stay readable. */
+    background: var(--w-panel);
     /* Stagger the drift so the gallery breathes instead of moving as one slab. */
     --m-shift: calc(-14px - (var(--i) % 4) * 6px);
-  }
-
-  /* `.reveal-stagger.is-visible > *` sets `opacity: 1` at two classes, which
-   * outranks the single class above — so once the gallery revealed, the card
-   * snapped back to fully opaque. Re-stating it through the same combinator
-   * keeps the reveal's fade-in and lands it at 0.8 instead of 1. */
-  /* `!important` deliberately. `.reveal-stagger` owns `opacity` on these cards
-   * — it animates 0 → 1 on reveal — and it is a global rule in another
-   * stylesheet, so the two are competing for the same property from different
-   * files. Rather than keep escalating specificity against a system that is
-   * entitled to that property, this states the intent once and lets the
-   * reveal's transition still animate, just to 0.8 instead of 1. */
-  :global(.reveal-stagger.is-visible) > .u-card {
-    opacity: 0.8 !important;
   }
 
   .u-kind {
@@ -109,12 +93,12 @@ const items = cases?.items ?? [];
     text-transform: uppercase;
     border-radius: 999px;
     padding: 0.1rem 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: var(--color-ink-200);
+    border: 1px solid var(--w-line);
+    color: var(--w-text-2);
   }
 
   .u-kind[data-kind='bot'] {
-    color: var(--color-brand-300);
+    color: var(--w-accent);
     border-color: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
   }
 
@@ -131,20 +115,20 @@ const items = cases?.items ?? [];
   .u-title {
     font-family: var(--font-display);
     font-size: 1.0625rem;
-    color: #fff;
+    color: var(--w-text);
   }
 
   .u-body {
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--color-ink-200);
+    color: var(--w-text-2);
   }
 
   .u-recipe {
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    color: var(--color-brand-300);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--w-accent);
+    border-top: 1px solid var(--w-line-soft);
     padding-top: 0.5rem;
   }
 </style>
