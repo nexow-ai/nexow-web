@@ -41,6 +41,12 @@
 
 <script>
   /** Panels. Each is one lit rectangle; the formations below place them. */
+  /* Shader sources are tagged so `src/lib/vite-glsl-strip.mjs` can drop their
+   * comments and indentation at build time — the minifier never looks inside a
+   * template literal, and the commentary in these four is a third of the
+   * script. At runtime the tag is `String.raw`, an identity for a literal
+   * with no escapes, so an unstripped dev build is the same program. */
+  const glsl = String.raw;
   /* Backing-store scale. The canvas is stretched to full size by CSS.
    *
    * Back to full resolution. It was 0.58 because 1900 soft round sprites could
@@ -59,7 +65,7 @@
   /** Damping for the pointer parallax. Slower than the camera, so it trails. */
   const PTR_DAMP = 2.1;
 
-  const VERT = `
+  const VERT = glsl`
     precision highp float;
     attribute vec2 aCorner;
     attribute float aId;
@@ -357,7 +363,7 @@
     }
   `;
 
-  const FRAG = `
+  const FRAG = glsl`
     precision mediump float;
     uniform vec3 uC1;
     uniform vec3 uC2;
@@ -414,6 +420,25 @@
       return 1.0 - aastep(r, length((p - c) * vec2(1.0, 0.62)));
     }
 
+    /* Distance from p to the segment ab, in physical units. Routes, spokes
+       and every other line that is not axis-aligned go through this. */
+    float seg(vec2 p, vec2 a, vec2 b) {
+      vec2 pa = (p - a) * vec2(1.0, 0.62);
+      vec2 ba = (b - a) * vec2(1.0, 0.62);
+      float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-5), 0.0, 1.0);
+      return length(pa - ba * h);
+    }
+
+    /* Value noise: the hash above on a lattice, smoothed between the corners.
+       Two octaves of it is a coastline, which is all the map screen wants. */
+    float vnoise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      float k = i.x * 1.7 + i.y * 9.1;
+      return mix(mix(rnd(k), rnd(k + 1.7), f.x), mix(rnd(k + 9.1), rnd(k + 10.8), f.x), f.y);
+    }
+
     void main() {
       float rr = 0.11;
       vec2 cd = abs(vUv) - (0.5 - rr);
@@ -448,11 +473,11 @@
       /* paper is what type and rules are drawn in: soft white on the dark
          theme, ink on the light. lightest is the highlight colour, white on
          both, which is what the sheen and the glint are made of. */
-      vec3 paper = mix(vec3(0.86, 0.90, 0.97), vec3(0.11, 0.14, 0.20), uLight);
+      vec3 paper = mix(vec3(0.74, 0.79, 0.88), vec3(0.11, 0.14, 0.20), uLight);
       vec3 lightest = mix(paper, vec3(1.0), uLight);
-      vec3 glassDark = mix(mix(uFog, vec3(0.050, 0.072, 0.110), 0.85),
+      vec3 glassDark = mix(mix(uFog, vec3(0.040, 0.058, 0.090), 0.75),
                            mix(uFog, vec3(0.90, 0.93, 0.97), 0.85), uLight);
-      vec3 glassLite = mix(mix(glassDark, accent * 0.22, 0.34),
+      vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
                            mix(glassDark, vec3(1.0), 0.45), uLight);
 
       /* Display: lit from above, shadowed under the bezel. */
@@ -468,10 +493,10 @@
       col = mix(col, accent, (1.0 - aastep(0.06, dEnd0)) * 0.32 * pulse);
       col = mix(col, mix(accent, paper, 0.4), disc(uv, vec2(0.905, 0.905), 0.019) * pulse);
 
-      float kind = floor(vKind * 12.0);
+      float kind = floor(vKind * 24.0);
 
       /* ---- chart frame: gridlines and axis ticks, on the chart kinds ---- */
-      bool chart = kind < 1.5 || (kind > 3.5 && kind < 4.5) || (kind > 5.5 && kind < 6.5) || kind > 10.5;
+      bool chart = kind < 1.5 || (kind > 3.5 && kind < 4.5) || (kind > 5.5 && kind < 6.5) || (kind > 10.5 && kind < 11.5);
       if (chart) {
         float gy = (1.0 - aastep(0.004, abs(uv.y - 0.28)))
                  + (1.0 - aastep(0.004, abs(uv.y - 0.44)))
@@ -484,11 +509,15 @@
         col = mix(col, paper, tk * 0.22);
       }
 
-      /* ---- twelve screens ----
-         Dashboards and interactive apps, each animating off vT — the shared
-         clock plus this screen's own offset, so a wall of them reads as many
-         live things rather than one thing repeated. Every branch is
-         instance-coherent, which is the case GPUs are fast at. */
+      /* ---- twenty-four screens ----
+         Charts, dashboards, maps, apps and games, each animating off vT — the
+         shared clock plus this screen's own offset, so a wall of them reads as
+         many live things rather than one thing repeated. Every branch is
+         instance-coherent (kind is constant across a panel), which is the case
+         GPUs are fast at: a fragment pays for the one screen it draws, not for
+         the twenty-three it does not. The first twelve are the original set;
+         the rest were added to make the wall read as *any* software, not only
+         analytics. */
       if (kind < 1.0) {
         /* Line chart with area fill, glow and a live endpoint. */
         float x = (uv.x - 0.08) / 0.86;
@@ -669,7 +698,7 @@
         col = mix(col, paper, rect(uv, vec2(0.09 + lw * 0.5, cy), vec2(lw * 0.5, 0.011), 0.006) * inR * 0.5);
         col = mix(col, mix(mix(paper * 0.3, mix(paper, lightest, 0.75), uLight), accent, on), rect(uv, vec2(0.80, cy), vec2(0.065, 0.024), 0.015) * inR);
         col = mix(col, lightest, disc(uv, vec2(0.762 + 0.076 * on, cy), 0.0165) * inR);
-      } else {
+      } else if (kind < 12.0) {
         /* Stacked area, two series drifting against each other. */
         float x = (uv.x - 0.08) / 0.86;
         float inX = aaband(0.08, 0.94, uv.x);
@@ -679,24 +708,314 @@
         col = mix(col, accent2, aaband(y1, y2, uv.y) * inX * 0.30);
         col = mix(col, mix(accent, paper, 0.3), (1.0 - aastep(0.016, abs(uv.y - y1))) * inX * 0.9);
         col = mix(col, mix(accent2, paper, 0.3), (1.0 - aastep(0.016, abs(uv.y - y2))) * inX * 0.9);
+      } else if (kind < 13.0) {
+        /* Radar: six axes on hex rings, a polygon that breathes on every one. */
+        vec2 rc = vec2(0.5, 0.42);
+        vec2 d = (uv - rc) * vec2(1.0, 0.62);
+        float rad = length(d);
+        float sec = 1.0472;
+        float ang = atan(d.x, d.y);
+        float k = floor(ang / sec);
+        float f = ang - k * sec;
+        float k0 = mod(k, 6.0);
+        float k1 = mod(k + 1.0, 6.0);
+        float r0 = 0.09 + 0.12 * (0.5 + 0.5 * sin(t * 0.6 + k0 * 1.9 + s * 7.0));
+        float r1 = 0.09 + 0.12 * (0.5 + 0.5 * sin(t * 0.6 + k1 * 1.9 + s * 7.0));
+        /* Radius of the polygon's edge between vertex k0 and k1 at this angle. */
+        float pr = r0 * r1 * sin(sec) / max(r1 * sin(sec - f) + r0 * sin(f), 1e-4);
+        float hex = max(abs(d.x), abs(d.x) * 0.5 + abs(d.y) * 0.866) / 0.866;
+        float inH = 1.0 - aastep(0.245, hex);
+        float rg = abs(fract(hex / 0.08 + 0.5) - 0.5) * 0.08;
+        float spoke = 1.0 - aastep(0.004, rad * sin(min(f, sec - f)));
+        col = mix(col, paper, (1.0 - aastep(0.004, rg)) * inH * 0.14);
+        col = mix(col, paper, spoke * inH * 0.12);
+        col = mix(col, accent, (1.0 - aastep(pr, rad)) * 0.30);
+        col = mix(col, mix(accent, paper, 0.25), 1.0 - aastep(0.012, abs(rad - pr)));
+        for (int v = 0; v < 6; v++) {
+          float vv = float(v);
+          float rk = 0.09 + 0.12 * (0.5 + 0.5 * sin(t * 0.6 + vv * 1.9 + s * 7.0));
+          col = mix(col, paper, disc(uv, rc + vec2(sin(vv * sec), cos(vv * sec) / 0.62) * rk, 0.012));
+        }
+      } else if (kind < 14.0) {
+        /* KPI board: four stat tiles — label, figure, delta pill, sparkline. */
+        vec2 g = vec2((uv.x - 0.08) / 0.43, (uv.y - 0.10) / 0.33);
+        vec2 gi = floor(g);
+        float inG = step(0.0, g.x) * step(g.x, 2.0) * step(0.0, g.y) * step(g.y, 2.0);
+        vec2 tc = vec2(0.08 + (gi.x + 0.5) * 0.43, 0.10 + (gi.y + 0.5) * 0.33);
+        float tid = gi.x + gi.y * 2.0 + s * 4.0;
+        col = mix(col, paper, rect(uv, tc, vec2(0.20, 0.15), 0.02) * inG * 0.06);
+        col = mix(col, paper, rect(uv, tc + vec2(-0.09, 0.10), vec2(0.07, 0.010), 0.006) * inG * 0.35);
+        float fw = 0.05 + 0.04 * rnd(tid);
+        col = mix(col, paper, rect(uv, tc + vec2(-0.16 + fw, 0.035), vec2(fw, 0.022), 0.010) * inG * 0.75);
+        float up = step(0.5, rnd(tid + 3.0));
+        col = mix(col, mix(accent2, accent, up), rect(uv, tc + vec2(0.11, 0.035), vec2(0.045, 0.018), 0.012) * inG * 0.55);
+        float sx = (uv.x - (tc.x - 0.16)) / 0.32;
+        float sy = tc.y - 0.09 + 0.035 * sin(sx * 7.0 + t * 0.8 + tid * 5.0) + 0.02 * sin(sx * 17.0 - t * 1.3 + tid);
+        float inS = aaband(0.0, 1.0, sx) * inG;
+        col = mix(col, accent, aaband(tc.y - 0.135, sy, uv.y) * inS * 0.14);
+        col = mix(col, mix(accent, paper, 0.3), (1.0 - aastep(0.012, abs(uv.y - sy))) * inS * 0.9);
+      } else if (kind < 15.0) {
+        /* Map: a dot-matrix landmass, a route arcing between two pins, and a
+           marker in flight along it. */
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * 24.0, (uv.y - 0.10) / 0.66 * 11.0);
+        vec2 gi = floor(g);
+        vec2 cc = vec2(0.08 + (gi.x + 0.5) * 0.86 / 24.0, 0.10 + (gi.y + 0.5) * 0.66 / 11.0);
+        vec2 np = gi * vec2(0.28, 0.40) + s * 13.0;
+        float land = smoothstep(0.46, 0.54, vnoise(np) * 0.65 + vnoise(np * 2.1 + 4.0) * 0.35);
+        float dot = disc(uv, cc, 0.011) * aaband(0.08, 0.94, uv.x) * aaband(0.10, 0.76, uv.y);
+        col = mix(col, paper, dot * (0.10 + 0.40 * land));
+        vec2 A = vec2(0.20, 0.30 + 0.10 * rnd(s * 3.0));
+        vec2 B = vec2(0.78, 0.50 + 0.15 * rnd(s * 5.0));
+        float u = clamp((uv.x - A.x) / (B.x - A.x), 0.0, 1.0);
+        float ry = mix(A.y, B.y, u) + 0.16 * sin(u * 3.14159);
+        float dash = step(0.5, fract(u * 14.0 - t * 0.6));
+        float route = (1.0 - aastep(0.008, abs(uv.y - ry) * 0.62)) * aaband(A.x, B.x, uv.x);
+        col = mix(col, accent, route * (0.25 + 0.55 * dash));
+        float mu = fract(t * 0.18);
+        col = mix(col, paper, disc(uv, vec2(mix(A.x, B.x, mu), mix(A.y, B.y, mu) + 0.16 * sin(mu * 3.14159)), 0.014));
+        col = mix(col, accent, disc(uv, A, 0.018));
+        col = mix(col, accent2, disc(uv, B, 0.018));
+        float ring = fract(t * 0.5);
+        float dB = length((uv - B) * vec2(1.0, 0.62));
+        col = mix(col, accent2, (1.0 - aastep(0.010, abs(dB - 0.02 - ring * 0.08))) * (1.0 - ring) * 0.6);
+      } else if (kind < 16.0) {
+        /* Streets: a block grid with one avenue, a turn-by-turn route and a
+           car driving it to a pin that pulses until it arrives. */
+        float inM = aaband(0.08, 0.94, uv.x) * aaband(0.10, 0.76, uv.y);
+        float sx = abs(fract((uv.x - 0.08) / 0.172) - 0.5);
+        float sy = abs(fract((uv.y - 0.10) / 0.132) - 0.5);
+        float street = max(aastep(0.44, sx), aastep(0.42, sy)) * inM;
+        col = mix(col, paper, inM * 0.05);
+        col = mix(col, paper, street * 0.14);
+        col = mix(col, paper, (1.0 - aastep(0.014, abs(uv.x - 0.596))) * inM * 0.12);
+        float j = 1.0 + step(0.5, rnd(s * 4.0));
+        vec2 P0 = vec2(0.252, 0.10 + j * 0.132);
+        vec2 P1 = vec2(0.596, P0.y);
+        vec2 P2 = vec2(0.596, 0.628);
+        vec2 P3 = vec2(0.768, 0.628);
+        float rt = 1.0 - aastep(0.012, min(min(seg(uv, P0, P1), seg(uv, P1, P2)), seg(uv, P2, P3)));
+        col = mix(col, accent, rt * 0.85);
+        float p = fract(t * 0.12) * 3.0;
+        vec2 cp = p < 1.0 ? mix(P0, P1, p) : (p < 2.0 ? mix(P1, P2, p - 1.0) : mix(P2, P3, p - 2.0));
+        col = mix(col, accent, disc(uv, cp, 0.030) * 0.35);
+        col = mix(col, mix(lightest, paper, uLight), disc(uv, cp, 0.014));
+        col = mix(col, paper, disc(uv, P0, 0.012) * 0.7);
+        float ring = fract(t * 0.5);
+        float dP = length((uv - P3) * vec2(1.0, 0.62));
+        col = mix(col, accent2, (1.0 - aastep(0.010, abs(dP - 0.02 - ring * 0.07))) * (1.0 - ring) * 0.6);
+        col = mix(col, accent2, disc(uv, P3, 0.018));
+      } else if (kind < 17.0) {
+        /* Chat: bubbles arriving in turn, and someone always typing. */
+        float nr = 5.0;
+        float r = floor((0.76 - uv.y) / 0.118);
+        float cy = 0.76 - (r + 0.5) * 0.118;
+        float inR = step(-0.5, r) * step(r, nr - 0.5);
+        float side = mod(r + floor(s * 2.0), 2.0);
+        float cycle = mod(t * 0.55, nr + 3.0);
+        float prog = ease(clamp(cycle - r, 0.0, 1.0));
+        float w = 0.18 + 0.30 * rnd(r * 4.1 + s * 5.0);
+        float bx = mix(0.15 + w * 0.5, 0.92 - w * 0.5, side);
+        float bub = rect(uv, vec2(bx, cy), vec2(w * 0.5 * prog, 0.040 * prog), 0.03) * inR;
+        col = mix(col, mix(paper, accent, side), bub * mix(0.14, 0.60, side));
+        col = mix(col, paper, rect(uv, vec2(bx, cy + 0.012), vec2(w * 0.5 - 0.03, 0.007), 0.004) * inR * prog * 0.35);
+        col = mix(col, paper, rect(uv, vec2(bx - 0.04, cy - 0.014), vec2(w * 0.5 - 0.07, 0.007), 0.004) * inR * prog * 0.25);
+        col = mix(col, accent2, disc(uv, vec2(0.10, cy), 0.02) * inR * (1.0 - side) * prog);
+        col = mix(col, paper, rect(uv, vec2(0.19, 0.125), vec2(0.06, 0.03), 0.03) * 0.14);
+        for (int k = 0; k < 3; k++) {
+          float kk = float(k);
+          float bob = 0.012 * max(sin(t * 5.0 - kk * 1.1), 0.0);
+          col = mix(col, paper, disc(uv, vec2(0.16 + kk * 0.03, 0.125 + bob), 0.008) * 0.6);
+        }
+      } else if (kind < 18.0) {
+        /* Calendar: a month, today ringed, events as pills, a cursor walking
+           the days. */
+        float nc = 7.0;
+        float nr = 5.0;
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * nc, (0.70 - uv.y) / 0.60 * nr);
+        vec2 gi = floor(g);
+        float inG = step(0.0, g.x) * step(g.x, nc) * step(0.0, g.y) * step(g.y, nr);
+        vec2 cc = vec2(0.08 + (gi.x + 0.5) * 0.86 / nc, 0.70 - (gi.y + 0.5) * 0.60 / nr);
+        float day = gi.y * nc + gi.x;
+        float hcx = 0.08 + (floor((uv.x - 0.08) / 0.86 * nc) + 0.5) * 0.86 / nc;
+        col = mix(col, paper, rect(uv, vec2(hcx, 0.755), vec2(0.025, 0.008), 0.004) * aaband(0.08, 0.94, uv.x) * 0.35);
+        float cell = rect(uv, cc, vec2(0.86 / nc * 0.46, 0.60 / nr * 0.46), 0.010) * inG;
+        col = mix(col, paper, cell * (0.05 + 0.03 * step(4.5, gi.x)));
+        col = mix(col, paper, rect(uv, cc + vec2(-0.035, 0.035), vec2(0.012, 0.007), 0.003) * inG * 0.45);
+        float today = floor(rnd(s * 2.0) * 20.0 + 5.0);
+        col = mix(col, accent, disc(uv, cc + vec2(-0.035, 0.035), 0.016) * inG * (1.0 - aastep(0.5, abs(day - today))) * 0.9);
+        float ev = rnd(day * 3.3 + s * 7.0);
+        col = mix(col, mix(accent, accent2, step(0.8, ev)), rect(uv, cc + vec2(0.0, -0.02), vec2(0.045, 0.010), 0.006) * step(0.55, ev) * inG * 0.7);
+        col = mix(col, paper, rect(uv, cc + vec2(0.0, -0.045), vec2(0.045, 0.008), 0.005) * step(0.85, ev) * inG * 0.3);
+        float cur = mod(floor(t * 1.5 + s * 10.0), nc * nr);
+        col = mix(col, paper, cell * (1.0 - aastep(0.5, abs(day - cur))) * 0.12);
+      } else if (kind < 19.0) {
+        /* Activity rings: three arcs closing from twelve o'clock, with a
+           legend that fills as they do. */
+        vec2 rc = vec2(0.30, 0.42);
+        vec2 d = (uv - rc) * vec2(1.0, 0.62);
+        float rad = length(d);
+        float p = fract(atan(d.x, d.y) / 6.2831);
+        float w = 0.024;
+        for (int k = 0; k < 3; k++) {
+          float kk = float(k);
+          float R = 0.20 - kk * 0.058;
+          float f = 0.25 + 0.65 * (0.5 + 0.5 * sin(t * 0.4 + kk * 2.1 + s * 6.0));
+          vec3 c = k == 0 ? accent : (k == 1 ? accent2 : mix(paper, accent, 0.4));
+          float band = aaband(R - w, R + w, rad);
+          col = mix(col, c, band * 0.14);
+          float ea = f * 6.2831;
+          float arc = band * (1.0 - aastep(f, p));
+          arc = max(arc, disc(uv, rc + vec2(sin(ea), cos(ea) / 0.62) * R, w));
+          arc = max(arc, disc(uv, rc + vec2(0.0, R / 0.62), w));
+          col = mix(col, c, arc);
+          float ly = 0.60 - kk * 0.14;
+          col = mix(col, c, disc(uv, vec2(0.60, ly), 0.014));
+          col = mix(col, paper, rect(uv, vec2(0.70, ly), vec2(0.06, 0.010), 0.006) * 0.4);
+          col = mix(col, paper, rect(uv, vec2(0.66 + 0.10 * f, ly - 0.035), vec2(0.10 * f, 0.008), 0.005) * 0.6);
+        }
+      } else if (kind < 20.0) {
+        /* Table: a header, zebra rows, figures right-aligned and coloured by
+           sign, a selection walking the cells. */
+        float nr = 5.0;
+        float nc = 4.0;
+        float r = floor((0.68 - uv.y) / 0.115);
+        float cy = 0.68 - (r + 0.5) * 0.115;
+        float inR = step(-0.5, r) * step(r, nr - 0.5);
+        float c = floor((uv.x - 0.08) / 0.86 * nc);
+        float cx = 0.08 + (c + 0.5) * 0.86 / nc;
+        float inC = step(-0.5, c) * step(c, nc - 0.5);
+        col = mix(col, paper, rect(uv, vec2(0.51, 0.735), vec2(0.43, 0.035), 0.012) * 0.10);
+        col = mix(col, paper, rect(uv, vec2(cx - 0.045, 0.735), vec2(0.04, 0.009), 0.005) * inC * 0.5);
+        col = mix(col, paper, rect(uv, vec2(0.51, cy), vec2(0.43, 0.0575), 0.0) * inR * mod(r, 2.0) * 0.04);
+        col = mix(col, paper, (1.0 - aastep(0.003, abs(uv.y - (cy - 0.0575)))) * aaband(0.08, 0.94, uv.x) * inR * 0.10);
+        float num = step(1.5, c);
+        float w = 0.03 + 0.10 * rnd(r * 5.3 + c * 2.9 + s * 11.0);
+        float tx = mix(cx - 0.10 + w * 0.5, cx + 0.09 - w * 0.5, num);
+        float neg = step(0.6, rnd(r * 1.7 + c * 4.3 + s * 5.0)) * num;
+        col = mix(col, mix(paper, mix(accent, accent2, neg), num * 0.85), rect(uv, vec2(tx, cy), vec2(w * 0.5, 0.010), 0.005) * inR * inC * 0.7);
+        float sel = mod(floor(t * 0.9 + s * 10.0), nr * nc);
+        vec2 sc = vec2(0.08 + (mod(sel, nc) + 0.5) * 0.86 / nc, 0.68 - (floor(sel / nc) + 0.5) * 0.115);
+        float selo = rect(uv, sc, vec2(0.100, 0.052), 0.008);
+        float seli = rect(uv, sc, vec2(0.092, 0.044), 0.006);
+        col = mix(col, accent, (selo - seli) * 0.9 + seli * 0.10);
+      } else if (kind < 21.0) {
+        /* Graph: a hub, six nodes on a ring, packets on every edge, a node
+           flaring as each one lands. */
+        vec2 hub = vec2(0.5, 0.43);
+        float edge = 0.0;
+        float pkt = 0.0;
+        float node = 0.0;
+        float flare = 0.0;
+        for (int k = 0; k < 6; k++) {
+          float kk = float(k);
+          float a0 = kk * 1.0472 + s * 6.2831 + sin(t * 0.3 + kk) * 0.08;
+          float a1 = a0 + 1.0472 + sin(t * 0.3 + kk + 1.0) * 0.08 - sin(t * 0.3 + kk) * 0.08;
+          float R0 = 0.24 + 0.05 * rnd(kk + s * 9.0);
+          float R1 = 0.24 + 0.05 * rnd(mod(kk + 1.0, 6.0) + s * 9.0);
+          vec2 n0 = hub + vec2(cos(a0), sin(a0) * 0.9) * R0;
+          vec2 n1 = hub + vec2(cos(a1), sin(a1) * 0.9) * R1;
+          edge = max(edge, 1.0 - aastep(0.006, seg(uv, hub, n0)));
+          edge = max(edge, (1.0 - aastep(0.005, seg(uv, n0, n1))) * 0.5);
+          float u = fract(t * 0.35 + kk * 0.17);
+          float dir = step(0.5, rnd(kk * 2.0 + s * 4.0));
+          pkt = max(pkt, disc(uv, mix(hub, n0, mix(u, 1.0 - u, dir)), 0.010));
+          float land = exp(-(1.0 - u) * (1.0 - u) * 36.0) * (1.0 - dir);
+          node = max(node, disc(uv, n0, 0.022 + 0.006 * land));
+          flare = max(flare, (1.0 - aastep(0.06, length((uv - n0) * vec2(1.0, 0.62)))) * land);
+        }
+        col = mix(col, paper, edge * 0.22);
+        col = mix(col, accent, flare * 0.35);
+        col = mix(col, mix(paper, accent, 0.5), node);
+        col = mix(col, accent2, pkt);
+        col = mix(col, accent, disc(uv, hub, 0.036));
+        col = mix(col, lightest, disc(uv, hub, 0.014));
+      } else if (kind < 22.0) {
+        /* Player: album art, a track scrubbing, transport, an equaliser. */
+        vec2 ac = vec2(0.20, 0.50);
+        vec2 ad = (uv - ac) * vec2(1.0, 0.62);
+        vec3 artc = mix(accent, accent2, 0.5 + 0.5 * sin(ad.x * 9.0 + ad.y * 7.0 + t * 0.5 + s * 5.0));
+        col = mix(col, artc, rect(uv, ac, vec2(0.11, 0.18), 0.02) * 0.8);
+        col = mix(col, lightest, disc(uv, ac, 0.05) * 0.25);
+        col = mix(col, glassDark, disc(uv, ac, 0.012));
+        col = mix(col, paper, rect(uv, vec2(0.50, 0.63), vec2(0.14, 0.014), 0.008) * 0.7);
+        col = mix(col, paper, rect(uv, vec2(0.45, 0.57), vec2(0.09, 0.010), 0.006) * 0.35);
+        float pr = fract(t * 0.07 + s);
+        col = mix(col, paper, rect(uv, vec2(0.64, 0.46), vec2(0.28, 0.006), 0.004) * 0.2);
+        col = mix(col, accent, rect(uv, vec2(0.36 + 0.28 * pr, 0.46), vec2(0.28 * pr, 0.006), 0.004));
+        col = mix(col, mix(lightest, paper, uLight), disc(uv, vec2(0.36 + 0.56 * pr, 0.46), 0.014));
+        col = mix(col, paper, rect(uv, vec2(0.52, 0.34), vec2(0.020, 0.018), 0.005) * 0.5);
+        col = mix(col, paper, rect(uv, vec2(0.76, 0.34), vec2(0.020, 0.018), 0.005) * 0.5);
+        col = mix(col, accent, disc(uv, vec2(0.64, 0.34), 0.045));
+        vec2 q = (uv - vec2(0.645, 0.34)) * vec2(1.0, 0.62);
+        col = mix(col, lightest, 1.0 - aastep(0.0, max(-q.x - 0.012, abs(q.y) - (0.016 - q.x) * 0.9)));
+        float nb = 10.0;
+        float b = floor((uv.x - 0.40) / 0.52 * nb);
+        float bx = 0.40 + (b + 0.5) * 0.52 / nb;
+        float h = 0.03 + 0.08 * abs(sin(t * 3.0 + b * 1.7 + s * 8.0)) * (0.6 + 0.4 * sin(t * 1.1 + b * 0.5));
+        float inB = step(-0.5, b) * step(b, nb - 0.5);
+        col = mix(col, accent2, rect(uv, vec2(bx, 0.13 + h * 0.5), vec2(0.016, h * 0.5), 0.008) * inB * 0.85);
+      } else if (kind < 23.0) {
+        /* Breakout: a wall of bricks going out one by one, a paddle chasing
+           a ball that bounces on triangle waves. */
+        float bx = 0.11 + 0.80 * abs(fract(t * 0.21 + s) * 2.0 - 1.0);
+        float by = 0.15 + 0.38 * abs(fract(t * 0.31 + s * 2.0) * 2.0 - 1.0);
+        float nc = 8.0;
+        float nr = 4.0;
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * nc, (0.74 - uv.y) / 0.24 * nr);
+        vec2 gi = floor(g);
+        float inG = step(0.0, g.x) * step(g.x, nc) * step(0.0, g.y) * step(g.y, nr);
+        vec2 bc = vec2(0.08 + (gi.x + 0.5) * 0.86 / nc, 0.74 - (gi.y + 0.5) * 0.24 / nr);
+        /* The wall never empties: at most seven bricks in ten are gone before
+           it resets, so it always still reads as a wall. */
+        float alive = step(fract(t * 0.05 + s) * 0.7, rnd(gi.x * 3.1 + gi.y * 7.7 + s * 9.0)) * inG;
+        vec3 bcol = gi.y < 0.5 ? accent2 : (gi.y < 1.5 ? accent : mix(paper, accent, 0.35));
+        col = mix(col, bcol, rect(uv, bc, vec2(0.86 / nc * 0.42, 0.24 / nr * 0.36), 0.006) * alive * 0.85);
+        float px = clamp(bx + 0.06 * sin(t * 2.0), 0.16, 0.86);
+        col = mix(col, paper, rect(uv, vec2(px, 0.115), vec2(0.075, 0.012), 0.008) * 0.9);
+        col = mix(col, accent, disc(uv, vec2(bx, by), 0.026) * 0.3);
+        col = mix(col, mix(lightest, paper, uLight), disc(uv, vec2(bx, by), 0.013));
+      } else {
+        /* Snake: a serpentine run over the board, the apple always a few
+           cells ahead and re-placed the moment it is eaten. */
+        float nc = 12.0;
+        float nr = 7.0;
+        vec2 g = vec2((uv.x - 0.08) / 0.86 * nc, (uv.y - 0.10) / 0.66 * nr);
+        vec2 gi = floor(g);
+        float inG = step(0.0, g.x) * step(g.x, nc) * step(0.0, g.y) * step(g.y, nr);
+        vec2 cc = vec2(0.08 + (gi.x + 0.5) * 0.86 / nc, 0.10 + (gi.y + 0.5) * 0.66 / nr);
+        float N = nc * nr;
+        float even = 1.0 - mod(gi.y, 2.0);
+        float idx = gi.y * nc + mix(nc - 1.0 - gi.x, gi.x, even);
+        float head = mod(floor(t * 7.0 + s * 50.0), N);
+        float back = mod(head - idx, N);
+        float len = 9.0;
+        float body = step(back, len - 0.5) * inG;
+        float cell = rect(uv, cc, vec2(0.86 / nc * 0.40, 0.66 / nr * 0.40), 0.006) * inG;
+        float fade = 1.0 - back / len;
+        col = mix(col, paper, cell * 0.05);
+        col = mix(col, mix(accent, paper, 0.25 * fade), cell * body * (0.55 + 0.45 * fade));
+        float ai = mod(floor(head / 19.0) * 19.0 + 19.0, N);
+        float apple = (1.0 - aastep(0.5, abs(idx - ai))) * inG;
+        col = mix(col, accent2, disc(uv, cc, 0.032) * apple * (0.25 + 0.15 * sin(t * 6.0)));
+        col = mix(col, accent2, disc(uv, cc, 0.019) * apple);
       }
 
       /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ---- */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
-      col += lightest * sheen * sheen * 0.035;
+      col += lightest * sheen * sheen * 0.026;
 
       /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ---- */
       float topLight = smoothstep(-0.5, 0.5, vUv.y);
-      vec3 frameDark = mix(mix(uFog, vec3(0.10, 0.13, 0.18), 0.9),
+      vec3 frameDark = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9),
                            vec3(0.80, 0.84, 0.90), uLight) + accent * 0.05;
-      vec3 frameLite = mix(frameDark, lightest, 0.16 + 0.22 * vLight);
+      vec3 frameLite = mix(frameDark, lightest, 0.12 + 0.18 * vLight);
       vec3 frame = mix(frameDark, frameLite, topLight * (0.5 + 0.5 * vLight));
       frame = mix(frame, lightest, (1.0 - aastep(0.010, abs(sd + 0.004))) * topLight * 0.35);
       col = mix(col, frame, bezel);
 
-      col += accent * vFres * 0.18;
+      col += accent * vFres * 0.13;
       /* Toned down on the light theme: white added to near-white just clips. */
-      col += lightest * vSpec * (0.40 - 0.25 * uLight);
+      col += lightest * vSpec * (0.30 - 0.15 * uLight);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. */
@@ -715,7 +1034,7 @@
    * the mesh costs less than the code to subdivide one.
    * ------------------------------------------------------------------ */
 
-  const CORE_VERT = `
+  const CORE_VERT = glsl`
     precision highp float;
     attribute vec3 aPos;
     attribute vec3 aNrm;
@@ -735,7 +1054,7 @@
     }
   `;
 
-  const CORE_FRAG = `
+  const CORE_FRAG = glsl`
     precision mediump float;
     uniform vec3 uC1;
     uniform vec3 uC3;
@@ -1205,7 +1524,11 @@
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
       ctx.uniform3fv(uFog, readColor(probe, '--w-surface'));
-      /* Re-read on every theme change, so the toggle repaints the world live. */
+      /* Which theme is on. Read from the class, but only ever from inside a
+         frame after it changed (see onTheme / the observer below): read at the
+         moment the toggle's event fires, the class had not flipped yet, and the
+         world painted the *previous* theme's glass — pale screens on a dark
+         page, one toggle behind. */
       coreLight = document.documentElement.classList.contains('dark') ? 0 : 1;
       ctx.uniform1f(uLight, coreLight);
       coreC1 = readColor(probe, '--color-brand-400');
@@ -1522,7 +1845,20 @@
 
     window.addEventListener('resize', onResize);
     document.addEventListener('visibilitychange', onVisibility);
-    document.addEventListener('nexow:themechange', paintTheme);
+    /* The toggle announces itself before the class lands; the observer sees
+       the class land. Either way the re-read happens on the next frame, when
+       the DOM and the computed tokens agree. */
+    let themeRaf = 0;
+    const onTheme = () => {
+      if (themeRaf) return;
+      themeRaf = requestAnimationFrame(() => {
+        themeRaf = 0;
+        paintTheme();
+      });
+    };
+    const themeObserver = new MutationObserver(onTheme);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    document.addEventListener('nexow:themechange', onTheme);
     document.addEventListener('input', onCompose);
     document.addEventListener('nexow:world-send', onSend);
     if (!coarse) window.addEventListener('pointermove', onPointer, { passive: true });
@@ -1535,7 +1871,9 @@
         window.removeEventListener('resize', onResize);
         window.removeEventListener('scroll', fadeStill);
         document.removeEventListener('visibilitychange', onVisibility);
-        document.removeEventListener('nexow:themechange', paintTheme);
+        document.removeEventListener('nexow:themechange', onTheme);
+        themeObserver.disconnect();
+        if (themeRaf) cancelAnimationFrame(themeRaf);
         document.removeEventListener('input', onCompose);
         document.removeEventListener('nexow:world-send', onSend);
         window.removeEventListener('pointermove', onPointer);
