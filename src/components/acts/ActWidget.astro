@@ -2,14 +2,15 @@
 /**
  * Act I — a sentence becomes a running widget.
  *
- * The scene is a small depth stack: the prompt recedes, generated source slides
- * under it, and a real widget (a habit heatmap, the example the copy names)
- * assembles cell by cell in front. Everything is DOM and CSS 3D rather than
- * canvas, so the labels stay selectable, translatable and reachable by a screen
- * reader, and the whole thing renders at rest with no JavaScript.
+ * The scene is the same playground chrome as the features page: type a prompt,
+ * get a live set of widgets. Scroll beats assemble it — the prompt types, then
+ * the generated cards land — so the copy's four steps have a matching picture.
+ * Decorative SVG, so labels stay out of the a11y tree; the copy beside it is
+ * the reading. At rest (no JS, reduced motion) the finished playground shows.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { ICON_PATHS } from '../icon-paths';
 import Act from './Act.astro';
 import ActCopyBlock from './ActCopyBlock.astro';
 
@@ -19,49 +20,232 @@ interface Props {
 const { lang } = Astro.props;
 const c = useContent(lang);
 const copy = c.home.acts!.widget;
+const prompt = c.home.hero.promptExample;
 
-// A fixed 7×5 fortnight of "streak" intensities. Deterministic on purpose: the
-// scene must look identical on every render and in every locale.
+/** Fixed 7×5 fortnight of streak intensities — identical every render. */
 const CELLS = [
   2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 3, 1, 2, 0, 3, 2, 0, 1, 3, 2, 3, 1, 2, 2, 0, 3,
   1, 3, 2, 1, 0, 2, 3, 1, 2,
 ];
+
+const TABS = [
+  { label: 'Playground', on: true },
+  { label: 'Markets', on: false },
+  { label: 'Habits', on: false },
+  { label: 'Research', on: false },
+];
+
+const WORKSPACES = [
+  { label: 'Personal', tint: 'var(--color-brand-400)', on: true },
+  { label: 'Trading', tint: 'var(--color-accent-400)', on: false },
+  { label: 'Markets', tint: 'var(--color-sky-400)', on: false },
+];
+
+const MOOD = [
+  { x: 144, y: 184, w: 148, h: 88, fill: 'var(--w-mood-1)' },
+  { x: 300, y: 184, w: 68, h: 52, fill: 'var(--w-mood-2)' },
+  { x: 376, y: 184, w: 56, h: 52, fill: 'var(--w-mood-3)' },
+  { x: 300, y: 244, w: 132, h: 28, fill: 'var(--w-mood-4)' },
+];
+
+const GAME = [1, 8, 12, 4, 6, 13];
 ---
 
 <Act id="widget" labelledBy="act-widget-title" height="205vh">
-  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-widget-title" />
 
     <div class="act-scene w-scene" aria-hidden="true">
-      <div class="w-depth">
-        <div class="w-plane w-plane--prompt">
-          <span class="w-dot"></span>
-          <span class="w-prompt-text">{copy.beats[0]?.detail}</span><span class="w-caret"></span>
-        </div>
+      <div class="w-slab"></div>
+      <svg
+        class="w-art"
+        viewBox="0 0 640 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        role="presentation"
+      >
+        <defs>
+          <pattern id="w-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.7" fill="var(--w-dot)"></circle>
+          </pattern>
+          <clipPath id="w-frame-clip">
+            <rect x="16" y="16" width="608" height="368" rx="18"></rect>
+          </clipPath>
+          <clipPath id="w-type-clip">
+            <rect class="w-type-mask" x="180" y="80" width="400" height="36"></rect>
+          </clipPath>
+          <linearGradient id="w-glow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.22"></stop>
+            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.08"></stop>
+          </linearGradient>
+          <filter id="w-soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+          </filter>
+        </defs>
 
-        <div class="w-plane w-plane--source">
-          <span class="w-src-label">generating</span>
-          <span class="w-src-bar" style="--i:0"></span>
-          <span class="w-src-bar" style="--i:1"></span>
-          <span class="w-src-bar" style="--i:2"></span>
-          <span class="w-src-bar" style="--i:3"></span>
-        </div>
+        <g clip-path="url(#w-frame-clip)">
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="var(--w-panel)"></rect>
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="url(#w-dots)" opacity="0.55"></rect>
 
-        <div class="w-plane w-plane--widget">
-          <div class="w-card-head">
-            <span class="w-card-title">habit streaks</span>
-            <span class="w-card-badge">live</span>
-          </div>
-          <div class="w-grid">
-            {CELLS.map((v, i) => <span class="w-cell" style={`--v:${v};--i:${i}`} />)}
-          </div>
-          <div class="w-card-foot">
-            <span class="w-chip">sandboxed</span>
-            <span class="w-chip">v3</span>
-            <span class="w-chip">editable</span>
-          </div>
-        </div>
-      </div>
+          <!-- Header -->
+          <rect x="16" y="16" width="608" height="40" fill="var(--w-panel-2)"></rect>
+          <line x1="16" y1="56" x2="624" y2="56" stroke="var(--w-line)" stroke-width="1"></line>
+
+          <image href="/favicon.png" x="28" y="26" width="16" height="16"></image>
+
+          {
+            TABS.map((tab, i) => (
+              <g transform={`translate(${56 + i * 76} 32)`}>
+                <rect
+                  x="0"
+                  y="0"
+                  width="70"
+                  height="24"
+                  rx="6"
+                  fill={tab.on ? 'var(--w-tab-on)' : 'var(--w-tab)'}
+                />
+                <text
+                  x="35"
+                  y="16"
+                  text-anchor="middle"
+                  class="w-label"
+                  fill={tab.on ? 'var(--w-text)' : 'var(--w-text-4)'}
+                >
+                  {tab.label}
+                </text>
+              </g>
+            ))
+          }
+
+          <rect x="360" y="34" width="20" height="20" rx="5" stroke="var(--w-line)" stroke-dasharray="2 2"></rect>
+          <path d="M370 39v10M365 44h10" stroke="var(--w-text-4)" stroke-width="1.4" stroke-linecap="round"></path>
+
+          <g transform="translate(490 28)">
+            <circle cx="11" cy="11" r="11" fill="var(--color-accent-500)"></circle>
+            <text x="11" y="15" text-anchor="middle" class="w-avatar">N</text>
+            <text x="28" y="15" class="w-handle">@nova.eth</text>
+            <path d="M98 8l4 4 4-4" stroke="var(--w-accent)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
+
+          <!-- Workspace rail -->
+          <rect x="16" y="56" width="96" height="328" fill="var(--w-rail-bg)"></rect>
+          <line x1="112" y1="56" x2="112" y2="384" stroke="var(--w-line)" stroke-width="1"></line>
+          <text x="28" y="76" class="w-tiny" fill="var(--w-text-4)">WORKSPACES</text>
+
+          {
+            WORKSPACES.map((ws, i) => (
+              <g transform={`translate(24 ${88 + i * 28})`}>
+                <rect
+                  x="0"
+                  y="0"
+                  width="72"
+                  height="22"
+                  rx="6"
+                  fill={ws.on ? 'var(--w-tab-on)' : 'transparent'}
+                />
+                <circle cx="12" cy="11" r="3" fill={ws.tint}></circle>
+                <text
+                  x="22"
+                  y="15"
+                  class="w-label"
+                  fill={ws.on ? 'var(--w-accent)' : 'var(--w-text-4)'}
+                >
+                  {ws.label}
+                </text>
+              </g>
+            ))
+          }
+
+          <rect x="24" y="176" width="22" height="22" rx="5" stroke="var(--color-brand-400)" stroke-opacity="0.55"></rect>
+          <path d="M35 182v10M30 187h10" stroke="var(--color-brand-400)" stroke-width="1.4" stroke-linecap="round"></path>
+
+          <!-- Prompt -->
+          <g class="w-plane" style="--k:var(--k0, 1)">
+            <ellipse cx="360" cy="100" rx="180" ry="46" fill="url(#w-glow)" filter="url(#w-soft)"></ellipse>
+            <rect x="128" y="70" width="476" height="56" rx="14" class="w-card"></rect>
+            <rect x="140" y="82" width="32" height="32" rx="8" fill="var(--w-icon-bg)"></rect>
+            <g transform="translate(146 88) scale(0.85)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
+              <path d={ICON_PATHS.sparkles}></path>
+            </g>
+            <g clip-path="url(#w-type-clip)">
+              <foreignObject x="180" y="82" width="400" height="36">
+                <p xmlns="http://www.w3.org/1999/xhtml" class="w-prompt">{prompt}</p>
+              </foreignObject>
+            </g>
+            <rect class="w-caret" x="180" y="86" width="2" height="18" rx="1" fill="var(--color-brand-400)"></rect>
+          </g>
+
+          <!-- Generating source — beat 2 -->
+          <g class="w-plane w-source" style="--k:var(--k1, 1)">
+            <text x="136" y="148" class="w-tiny" fill="var(--w-accent)">GENERATING</text>
+            {[0, 1, 2, 3].map((i) => (
+              <rect
+                class="w-src-bar"
+                x="128"
+                y={156 + i * 10}
+                width={80 + i * 52}
+                height="5"
+                rx="2.5"
+                fill="var(--w-src)"
+              />
+            ))}
+          </g>
+
+          <!-- Generated widgets — beats 3 & 4 -->
+          <g class="w-plane" style="--k:var(--k2, 1)">
+            <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+            <text x="144" y="172" class="w-card-title" fill="var(--w-text)">Moodboard</text>
+            <rect x="400" y="158" width="32" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
+            {MOOD.map((tile) => (
+              <rect x={tile.x} y={tile.y} width={tile.w} height={tile.h} rx="8" fill={tile.fill}></rect>
+            ))}
+            <text x="144" y="348" class="w-note" fill="var(--w-text-4)">calm · clear</text>
+          </g>
+
+          <g class="w-plane" style="--k:var(--k2, 1)">
+            <rect x="460" y="148" width="144" height="100" rx="14" class="w-card"></rect>
+            <text x="472" y="168" class="w-card-title" fill="var(--w-text)">Habits</text>
+            <text x="560" y="168" class="w-tiny" fill="var(--w-accent)">6/8</text>
+            {CELLS.slice(0, 21).map((v, i) => (
+              <rect
+                x={472 + (i % 7) * 16}
+                y={178 + Math.floor(i / 7) * 16}
+                width="13"
+                height="13"
+                rx="2.5"
+                fill="var(--color-brand-400)"
+                opacity={0.12 + v * 0.26}
+              />
+            ))}
+          </g>
+
+          <g class="w-plane" style="--k:var(--k3, 1)">
+            <rect x="460" y="260" width="144" height="104" rx="14" class="w-card"></rect>
+            <text x="472" y="280" class="w-card-title" fill="var(--w-text)">Mini game</text>
+            {Array.from({ length: 15 }).map((_, i) => (
+              <rect
+                x={472 + (i % 5) * 22}
+                y={292 + Math.floor(i / 5) * 20}
+                width="18"
+                height="16"
+                rx="3"
+                fill={GAME.includes(i) ? 'var(--color-sky-400)' : 'var(--w-cell)'}
+                opacity={GAME.includes(i) ? 0.7 : 0.45}
+              />
+            ))}
+          </g>
+        </g>
+
+        <rect
+          x="16"
+          y="16"
+          width="608"
+          height="368"
+          rx="18"
+          stroke="var(--w-chrome)"
+          stroke-width="1.4"
+        ></rect>
+      </svg>
     </div>
   </div>
 </Act>
@@ -69,215 +253,158 @@ const CELLS = [
 <style>
   .w-scene {
     position: relative;
-    perspective: 800px;
-    perspective-origin: 50% 45%;
+    perspective: 880px;
+    perspective-origin: 50% 42%;
   }
 
-  .w-depth {
+  .w-slab {
+    position: absolute;
+    inset: auto 8% -8% 8%;
+    height: 42%;
+    border-radius: 1.25rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-brand-400) 28%, transparent),
+      transparent 70%
+    );
+    filter: blur(18px);
+    pointer-events: none;
+  }
+
+  .w-art {
     position: relative;
-    display: grid;
-    gap: 1rem;
-    transform-style: preserve-3d;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+    filter: drop-shadow(0 28px 60px var(--w-shadow));
+    --w-dot: color-mix(in oklab, var(--w-text) 14%, transparent);
+    --w-tab: color-mix(in oklab, var(--w-text) 6%, transparent);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-400) 28%, transparent);
+    --w-rail-bg: color-mix(in oklab, var(--w-text) 3%, transparent);
+    --w-icon-bg: color-mix(in oklab, var(--color-brand-400) 18%, transparent);
+    --w-src: color-mix(in oklab, var(--color-brand-400) 45%, var(--color-accent-500));
+    --w-cell: color-mix(in oklab, var(--w-text) 8%, transparent);
+    --w-chrome: color-mix(in oklab, var(--color-brand-400) 55%, var(--w-line));
+    --w-mood-1: color-mix(in oklab, var(--color-brand-400) 38%, transparent);
+    --w-mood-2: color-mix(in oklab, var(--color-accent-400) 42%, transparent);
+    --w-mood-3: color-mix(in oklab, var(--color-sky-400) 36%, transparent);
+    --w-mood-4: color-mix(in oklab, var(--color-brand-300) 22%, transparent);
   }
 
-  .w-plane {
-    position: relative;
-    border-radius: 1rem;
-    border: 1px solid var(--w-line);
-    background: var(--w-panel);
-    box-shadow: 0 30px 70px -30px var(--w-shadow);
+  .w-card {
+    fill: var(--w-panel-2);
+    stroke: var(--w-line);
+    stroke-width: 1;
   }
 
-  @media (min-width: 768px) {
-    .w-scene {
-      min-height: 30rem;
-    }
-
-    .w-depth {
-      display: block;
-      height: 100%;
-      min-height: 30rem;
-    }
-
-    .w-plane {
-      position: absolute;
-      inset-inline-start: 0;
-    }
-
-    .w-plane--prompt {
-      top: 0;
-      inset-inline-end: 2.5rem;
-    }
-    .w-plane--source {
-      top: 6rem;
-      inset-inline-end: 5.5rem;
-    }
-    .w-plane--widget {
-      top: 12rem;
-      inset-inline-end: 0;
-      width: min(100%, 21rem);
-    }
+  .w-label,
+  .w-handle,
+  .w-card-title,
+  .w-tiny,
+  .w-note,
+  .w-avatar {
+    font-family: var(--font-mono, ui-monospace, monospace);
   }
 
-  /* ---- beat 1: the sentence ---- */
-  .w-plane--prompt {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.9rem 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    color: var(--w-text-3);
+  .w-label {
+    font-size: 9px;
   }
 
-  .w-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    flex: none;
-    border-radius: 50%;
-    background: var(--color-brand-400);
-    box-shadow: 0 0 12px var(--color-brand-500);
+  .w-handle {
+    font-size: 10px;
+    fill: var(--w-accent);
   }
 
-  .w-prompt-text {
-    opacity: 0.92;
-  }
-
-  .w-caret {
-    display: inline-block;
-    width: 2px;
-    height: 1em;
-    background: var(--color-brand-400);
-  }
-
-  /* ---- beat 2: generated source ---- */
-  .w-plane--source {
-    display: grid;
-    gap: 0.45rem;
-    padding: 1rem;
-  }
-
-  .w-src-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--w-accent);
-  }
-
-  .w-src-bar {
-    height: 0.4rem;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--color-brand-500), var(--color-accent-500));
-    opacity: 0.55;
-    width: calc(4rem + var(--i) * 2.6rem);
-  }
-
-  /* ---- beats 3 & 4: the widget itself ---- */
-  .w-plane--widget {
-    padding: 1rem;
-    background: var(--w-panel);
-  }
-
-  .w-card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.85rem;
+  .w-avatar {
+    font-size: 9px;
+    font-weight: 700;
+    fill: #fff;
+    font-family: var(--font-display, ui-sans-serif);
   }
 
   .w-card-title {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--w-text-2);
+    font-size: 11px;
+    font-weight: 600;
   }
 
-  .w-card-badge {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
+  .w-tiny {
+    font-size: 8px;
     letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--w-accent);
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 45%, transparent);
-    border-radius: 999px;
-    padding: 0.1rem 0.45rem;
   }
 
-  .w-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.3rem;
+  .w-note {
+    font-size: 9px;
   }
 
-  .w-cell {
-    aspect-ratio: 1;
-    border-radius: 0.25rem;
-    background: color-mix(
-      in oklab,
-      var(--color-brand-400) calc(var(--v) * 26%),
-      var(--w-panel-2)
-    );
+  .w-prompt {
+    margin: 0;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 11px;
+    line-height: 32px;
+    white-space: nowrap;
+    color: var(--w-text-3);
   }
 
-  .w-card-foot {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-top: 0.9rem;
+  .w-type-mask {
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(var(--k0, 1));
   }
 
-  .w-chip {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--w-text-2);
-    border: 1px solid var(--w-line);
-    border-radius: 999px;
-    padding: 0.15rem 0.5rem;
+  .w-caret {
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: translateX(calc(var(--k0, 1) * 360px));
+  }
+
+  /* Writing bars only exist during the second beat — the finished playground
+     does not keep a "generating" strip under the widgets. */
+  .w-source {
+    opacity: 0;
   }
 
   /* ------------------------------------------------------------------ *
-   * Motion. Everything above is the at-rest scene: all three planes are
-   * present and legible before a single variable is written, which is what a
-   * reduced-motion visitor, a crawler, and a no-JS browser get.
+   * Motion. The at-rest SVG above is the finished playground — that is
+   * what a reduced-motion visitor, a crawler, and a no-JS browser get.
    * ------------------------------------------------------------------ */
   @media (prefers-reduced-motion: no-preference) {
-    :global(html.js) .w-depth {
-      transform: rotateY(calc(var(--psc, 0) * 7deg * var(--dir, 1))) rotateX(calc(var(--psc, 0) * -4deg)) translate3d(0, calc(var(--psc, 0) * -2rem), 0);
+    :global(html.js) .w-art {
+      transform: rotateY(calc(var(--psc, 0) * 8deg * var(--dir, 1))) rotateX(calc(var(--psc, 0) * -5deg))
+        translate3d(0, calc(var(--psc, 0) * -1.4rem), 0);
+      transform-origin: 50% 55%;
     }
 
     :global(html.js) .w-plane {
-      /* Each plane arrives on its own beat: fade, lift and settle out of depth. */
-      opacity: calc(0.12 + 0.88 * var(--k, 1));
-      transform: translate3d(0, calc((1 - var(--k, 1)) * 2.5rem), calc((1 - var(--k, 1)) * -700px))
-        rotateX(calc((1 - var(--k, 1)) * 22deg)) rotateY(calc((1 - var(--k, 1)) * -14deg * var(--dir, 1)));
-      transition: none;
+      opacity: var(--k, 1);
+      transform: translate3d(0, calc((1 - var(--k, 1)) * 18px), calc((1 - var(--k, 1)) * -420px));
     }
 
-    :global(html.js) .w-plane--prompt {
-      --k: var(--k0, 1);
-    }
-    :global(html.js) .w-plane--source {
-      --k: var(--k1, 1);
-    }
-    :global(html.js) .w-plane--widget {
-      --k: var(--k2, 1);
+    :global(html.js) .w-source {
+      opacity: 0;
     }
 
-    /* The heatmap fills in as beat three completes, then the chips land. */
-    :global(html.js) .w-cell {
-      opacity: clamp(0, calc(var(--k2, 1) * 35 - var(--i) * 0.8), 1);
-    }
-
-    :global(html.js) .w-card-foot {
-      opacity: var(--k3, 1);
+    @media (min-width: 768px) {
+      :global(html.js) .w-source {
+        opacity: calc(var(--k1, 1) * (1 - var(--k2, 0)));
+      }
     }
 
     :global(html.js) .w-caret {
       opacity: calc(1 - var(--k1, 0));
+      animation: w-blink 0.9s steps(2, start) infinite;
+    }
+  }
+
+  @keyframes w-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w-caret {
+      animation: none;
     }
   }
 </style>
