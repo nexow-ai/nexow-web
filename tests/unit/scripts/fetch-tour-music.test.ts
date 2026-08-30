@@ -196,7 +196,13 @@ describe('fetchTrack', () => {
 describe('main', () => {
   const log = vi.fn();
   const error = vi.fn();
-  const another: Track = { ...record, id: 'another', title: 'Another', src: `${TRACK_DIR}/another.mp3` };
+  const another: Track = {
+    ...record,
+    id: 'another',
+    title: 'Another',
+    src: `${TRACK_DIR}/another.mp3`,
+    source: 'https://example.test/another.mp3',
+  };
   const generative: Track = { id: 'made-up', title: 'Made Up', artist: 'Nexow', style: 'generative', seconds: 1 };
   const crate = [generative, record, another];
 
