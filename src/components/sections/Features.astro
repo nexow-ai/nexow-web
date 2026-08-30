@@ -23,7 +23,10 @@ const groups = resolveFeatureMapGroups(t, en);
     <!-- Plain ink title + solid eyebrow (no gradient text / chip fill) -->
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
 
-    <div class="mt-10 sm:mt-12">
+    {/* The map is one wide box, so it drifts as one: `rise` against the scroll
+        and a lean into it, which is what keeps a flat plate from reading as a
+        screenshot pasted onto the page. */}
+    <div class="mt-10 sm:mt-12" data-motion="rise tilt">
       <FeatureMap
         lang={lang}
         groups={groups}

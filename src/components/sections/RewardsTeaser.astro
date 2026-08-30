@@ -125,7 +125,7 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
 
     <div class="reveal-stagger mt-12 grid gap-4 lg:grid-cols-3">
       <!-- Reputation: the five levels, and what feeds them -->
-      <div class="card-dark flex flex-col p-6">
+      <div class="card-dark flex flex-col p-6" data-motion="fan" style="--i:0">
         <h3 class="font-display text-lg font-semibold text-white">{t.levels.title}</h3>
         <p class="mt-2 text-sm leading-relaxed text-ink-300">{t.levels.body}</p>
 
@@ -192,7 +192,7 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
       </div>
 
       <!-- Badges: a slice of the vault -->
-      <div class="card-dark flex flex-col p-6">
+      <div class="card-dark flex flex-col p-6" data-motion="fan" style="--i:1">
         <div class="flex items-start justify-between gap-3">
           <h3 class="font-display text-lg font-semibold text-white">{t.badges.title}</h3>
           <span class="shrink-0 rounded-full bg-white/[0.07] px-2 py-0.5 font-mono text-[0.65rem] text-ink-300">
@@ -243,7 +243,7 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
       </div>
 
       <!-- Rewards: what a complete set pays -->
-      <div class="card-dark relative flex flex-col overflow-hidden p-6">
+      <div class="card-dark relative flex flex-col overflow-hidden p-6" data-motion="fan" style="--i:2">
         <span class="glow-brand pointer-events-none absolute -right-20 -top-24 size-64 opacity-40" aria-hidden="true"
         ></span>
 

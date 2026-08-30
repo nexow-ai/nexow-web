@@ -27,7 +27,7 @@ const { lang, embedded = false } = Astro.props;
 const t = useContent(lang).plansPage;
 const localize = (href: string) => (href.startsWith('/') ? localizePath(href, lang) : href);
 
-const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i] }));
+const cards = t.tiers.map((tier, i) => ({ tier, spec: PLANS[i], i }));
 
 const Wrapper = embedded ? 'div' : 'section';
 const wrapperProps = embedded ? {} : { id: 'tiers' };
@@ -70,122 +70,126 @@ const wrapperProps = embedded ? {} : { id: 'tiers' };
     {!embedded && <h2 class="sr-only">{t.hero.badge}</h2>}
     <div class="stage-3d reveal-stagger grid items-start gap-5 lg:grid-cols-4">
       {
-        cards.map(({ tier, spec }) => {
+        cards.map(({ tier, spec, i }) => {
           const isExternal = tier.ctaHref.startsWith('http') || tier.ctaHref.startsWith('mailto');
           return (
-            <article
-              data-tilt
-              class:list={[
-                'tilt group relative flex flex-col rounded-3xl border',
-                embedded ? 'p-6' : 'p-7',
-                tier.featured
-                  ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-white/10 lg:-mt-4 lg:mb-4'
-                  : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40',
-              ]}
-              style={`--a:${spec.accent};--ai:${tier.featured ? spec.accent : spec.accentInk}`}
-            >
-              {/* Accent wash + pointer sheen, both decorative. The wash gets its
-                  own clipping wrapper so the card itself never needs
-                  `overflow:hidden`, which would flatten the 3D layer below. */}
-              <span class="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl" aria-hidden="true">
-                <span
-                  class="absolute inset-x-0 -top-24 h-48 opacity-70 blur-2xl"
-                  style={`background:radial-gradient(50% 60% at 50% 100%, color-mix(in oklab, var(--a) ${tier.featured ? 42 : 22}%, transparent), transparent 70%)`}
-                />
-              </span>
-              <span class="tilt-sheen" aria-hidden="true" />
-
-              <div class="tilt-layer relative flex h-full flex-col" style="--z:26px">
-                {tier.badge && (
+            /* The scroll drift rides a wrapper, not the card: the card's own
+               transform is the pointer lean, and one element cannot serve both. */
+            <div class="card-drift" data-motion="fan" style={`--i:${i}`}>
+              <article
+                data-tilt
+                class:list={[
+                  'tilt group relative flex flex-col rounded-3xl border',
+                  embedded ? 'p-6' : 'p-7',
+                  tier.featured
+                    ? 'border-transparent bg-ink-950 text-white shadow-2xl shadow-ink-950/30 ring-1 ring-white/10 lg:-mt-4 lg:mb-4'
+                    : 'border-ink-900/10 bg-white shadow-sm shadow-ink-950/[0.03] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40',
+                ]}
+                style={`--a:${spec.accent};--ai:${tier.featured ? spec.accent : spec.accentInk}`}
+              >
+                {/* Accent wash + pointer sheen, both decorative. The wash gets its
+                    own clipping wrapper so the card itself never needs
+                    `overflow:hidden`, which would flatten the 3D layer below. */}
+                <span class="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl" aria-hidden="true">
                   <span
-                    class:list={[
-                      'absolute -top-1 right-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold',
-                      tier.featured ? 'text-ink-950' : 'text-white',
-                    ]}
-                    style="background:linear-gradient(120deg, color-mix(in oklab, var(--a) 82%, white), var(--a))"
-                  >
-                    <Icon name="sparkles" class="size-3.5" /> {tier.badge}
-                  </span>
-                )}
-
-                <span
-                  class="inline-flex size-11 items-center justify-center rounded-2xl"
-                  style="color:var(--ai);background:color-mix(in oklab, var(--a) 14%, transparent);box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--a) 32%, transparent)"
-                  aria-hidden="true"
-                >
-                  <Icon name={spec.icon} class="size-5.5" />
+                    class="absolute inset-x-0 -top-24 h-48 opacity-70 blur-2xl"
+                    style={`background:radial-gradient(50% 60% at 50% 100%, color-mix(in oklab, var(--a) ${tier.featured ? 42 : 22}%, transparent), transparent 70%)`}
+                  />
                 </span>
+                <span class="tilt-sheen" aria-hidden="true" />
 
-                <h3 class:list={['mt-4 font-display text-xl font-semibold', tier.featured ? 'text-white' : 'text-ink-950 dark:text-white']}>
-                  {tier.name}
-                </h3>
-                <p class:list={['mt-1 text-sm', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.tagline}</p>
-
-                {/* A price is short, but the top tier prints a word ("Custom",
-                    el "Προσαρμοσμένα") — let it wrap instead of widening the page. */}
-                <div class="mt-5 flex min-w-0 flex-wrap items-baseline gap-1.5">
-                  <span
-                    class:list={[
-                      'min-w-0 [overflow-wrap:anywhere] font-display font-bold',
-                      embedded ? 'text-3xl' : 'text-4xl',
-                      tier.featured ? 'text-white' : 'text-ink-950 dark:text-white',
-                    ]}
-                  >
-                    <span data-price="monthly">{tier.priceMonthly}</span>
-                    <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
-                  </span>
-                  {tier.cadence && (
-                    <span class:list={['text-sm', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}>{tier.cadence}</span>
+                <div class="tilt-layer relative flex h-full flex-col" style="--z:26px">
+                  {tier.badge && (
+                    <span
+                      class:list={[
+                        'absolute -top-1 right-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold',
+                        tier.featured ? 'text-ink-950' : 'text-white',
+                      ]}
+                      style="background:linear-gradient(120deg, color-mix(in oklab, var(--a) 82%, white), var(--a))"
+                    >
+                      <Icon name="sparkles" class="size-3.5" /> {tier.badge}
+                    </span>
                   )}
-                </div>
-                <p
-                  data-billed
-                  class:list={['mt-1 hidden font-mono text-[0.7rem]', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}
-                >
-                  {tier.billedYearly ?? ' '}
-                </p>
 
-                {tier.stats && (
-                  <div class="mt-4 flex flex-wrap gap-1.5">
-                    {tier.stats.map((s) => (
-                      <span
-                        class:list={[
-                          'rounded-md border px-2 py-0.5 font-mono text-[0.65rem]',
-                          tier.featured ? 'border-white/10 bg-white/[0.04] text-ink-200' : 'border-ink-900/10 bg-ink-50 text-ink-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-ink-300',
-                        ]}
-                      >
-                        {s}
-                      </span>
-                    ))}
+                  <span
+                    class="inline-flex size-11 items-center justify-center rounded-2xl"
+                    style="color:var(--ai);background:color-mix(in oklab, var(--a) 14%, transparent);box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--a) 32%, transparent)"
+                    aria-hidden="true"
+                  >
+                    <Icon name={spec.icon} class="size-5.5" />
+                  </span>
+
+                  <h3 class:list={['mt-4 font-display text-xl font-semibold', tier.featured ? 'text-white' : 'text-ink-950 dark:text-white']}>
+                    {tier.name}
+                  </h3>
+                  <p class:list={['mt-1 text-sm', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.tagline}</p>
+
+                  {/* A price is short, but the top tier prints a word ("Custom",
+                      el "Προσαρμοσμένα") — let it wrap instead of widening the page. */}
+                  <div class="mt-5 flex min-w-0 flex-wrap items-baseline gap-1.5">
+                    <span
+                      class:list={[
+                        'min-w-0 [overflow-wrap:anywhere] font-display font-bold',
+                        embedded ? 'text-3xl' : 'text-4xl',
+                        tier.featured ? 'text-white' : 'text-ink-950 dark:text-white',
+                      ]}
+                    >
+                      <span data-price="monthly">{tier.priceMonthly}</span>
+                      <span data-price="yearly" class="hidden">{tier.priceYearly}</span>
+                    </span>
+                    {tier.cadence && (
+                      <span class:list={['text-sm', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}>{tier.cadence}</span>
+                    )}
                   </div>
-                )}
+                  <p
+                    data-billed
+                    class:list={['mt-1 hidden font-mono text-[0.7rem]', tier.featured ? 'text-ink-400' : 'text-ink-500 dark:text-ink-400']}
+                  >
+                    {tier.billedYearly ?? ' '}
+                  </p>
 
-                <a
-                  href={localize(tier.ctaHref)}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  class:list={[
-                    'mt-6 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-all hover:-translate-y-0.5',
-                    tier.featured ? 'bg-white text-ink-950 hover:bg-white/90' : 'text-white',
-                  ]}
-                  style={tier.featured ? undefined : 'background:var(--ai)'}
-                >
-                  {tier.cta}
-                </a>
+                  {tier.stats && (
+                    <div class="mt-4 flex flex-wrap gap-1.5">
+                      {tier.stats.map((s) => (
+                        <span
+                          class:list={[
+                            'rounded-md border px-2 py-0.5 font-mono text-[0.65rem]',
+                            tier.featured ? 'border-white/10 bg-white/[0.04] text-ink-200' : 'border-ink-900/10 bg-ink-50 text-ink-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-ink-300',
+                          ]}
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-                {tier.note && (
-                  <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.note}</p>
-                )}
-                <ul class:list={['mt-3', embedded ? 'space-y-2.5' : 'space-y-3']}>
-                  {tier.features.map((f) => (
-                    <li class="flex items-start gap-2.5 text-sm">
-                      <Icon name="check" class="mt-0.5 size-4 shrink-0" style="color:var(--ai)" />
-                      <span class={tier.featured ? 'text-ink-200' : 'text-ink-700 dark:text-ink-300'}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
+                  <a
+                    href={localize(tier.ctaHref)}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    class:list={[
+                      'mt-6 inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-medium transition-all hover:-translate-y-0.5',
+                      tier.featured ? 'bg-white text-ink-950 hover:bg-white/90' : 'text-white',
+                    ]}
+                    style={tier.featured ? undefined : 'background:var(--ai)'}
+                  >
+                    {tier.cta}
+                  </a>
+
+                  {tier.note && (
+                    <p class:list={['mt-6 text-xs font-medium', tier.featured ? 'text-ink-300' : 'text-ink-500 dark:text-ink-400']}>{tier.note}</p>
+                  )}
+                  <ul class:list={['mt-3', embedded ? 'space-y-2.5' : 'space-y-3']}>
+                    {tier.features.map((f) => (
+                      <li class="flex items-start gap-2.5 text-sm">
+                        <Icon name="check" class="mt-0.5 size-4 shrink-0" style="color:var(--ai)" />
+                        <span class={tier.featured ? 'text-ink-200' : 'text-ink-700 dark:text-ink-300'}>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            </div>
           );
         })
       }

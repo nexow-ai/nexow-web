@@ -955,28 +955,31 @@ html.is-theme-transition [data-astro-transition-scope] {
   .js [data-motion~='slide-l'] { --m-slide: -24px; }
   .js [data-motion~='slide-r'] { --m-slide: 24px; }
 
-  /* Column parallax for a two-up band: the copy runs ahead of the scroll while
+  /* Neighbour parallax — drifts that only make sense once things sit side by
+   * side. Every one of these moves an element relative to the element *next to*
+   * it, so stacked into one column they stop describing depth and start eating
+   * the gap between rows. Above `lg` is where all of these layouts split.
+   *
+   * `lead`/`lag`: a two-up band, where the copy runs ahead of the scroll and
    * the art beside it trails, so the pair drifts apart and back together as the
    * section passes. Bigger than `rise`/`sink` because the effect has to read
-   * across a gap rather than within one card, and only above `lg`, where the
-   * columns actually sit side by side — stacked, the two drifts point at each
-   * other and close the gap between the copy and the art. Kept under the
-   * section's own vertical padding so neither column bleeds into its
-   * neighbours. */
+   * across a gap rather than within one card.
+   *
+   * `fan`: a row of cards, each one travelling further than the card before it,
+   * so the row rakes as it passes instead of arriving as one flat plate. The
+   * call site sets `--i` to the card's index and `mod` wraps it every fourth
+   * card, so a gallery keeps raking row after row rather than building one
+   * runaway offset. (`%` is not a calc operator. Written that way it silently
+   * invalidates the whole composed transform, which is how the use-case grid
+   * lost its drift entirely.)
+   *
+   * Both stay inside a section's own vertical padding, so no card bleeds into
+   * the band above or below. */
   @media (min-width: 64rem) {
     .js [data-motion~='lead'] { --m-shift: -56px; }
     .js [data-motion~='lag'] { --m-shift: 56px; }
+    .js [data-motion~='fan'] { --m-shift: calc(-16px - mod(var(--i, 0), 4) * 16px); }
   }
-
-  /* A grid of cards: each one travels further than the card before it, so the
-   * row rakes as it passes instead of arriving as one plate. The call site sets
-   * `--i` to the card's index; `mod` wraps it every fourth card so a long
-   * gallery keeps raking row after row rather than building one runaway offset.
-   * (`%` is not a calc operator — written that way it silently invalidates the
-   * whole composed transform, which is exactly how the use-case grid lost its
-   * drift.) Top of the range matches `rise-lg`, still inside a section's own
-   * vertical padding. */
-  .js [data-motion~='fan'] { --m-shift: calc(-16px - mod(var(--i, 0), 4) * 16px); }
 
   /* Cards on a 3D stage own their transform already (the pointer lean below),
    * so they cannot also be the element the scroll writes to. This is the
