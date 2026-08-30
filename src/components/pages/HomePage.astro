@@ -5,8 +5,7 @@ import { CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../sections/Hero.astro';
 import World from '../world/World.astro';
-import ActWidget from '../acts/ActWidget.astro';
-import ActCanvas from '../acts/ActCanvas.astro';
+import PlaygroundSpan from '../acts/PlaygroundSpan.astro';
 import ActConnectors from '../acts/ActConnectors.astro';
 import ActBots from '../acts/ActBots.astro';
 import ActAgents from '../acts/ActAgents.astro';
@@ -109,8 +108,7 @@ const sections = [
   */}
   <World>
     <Hero lang={lang} />
-    <ActWidget lang={lang} />
-    <ActCanvas lang={lang} />
+    <PlaygroundSpan lang={lang} />
     <ActConnectors lang={lang} />
     <ActBots lang={lang} />
     <ActAgents lang={lang} />

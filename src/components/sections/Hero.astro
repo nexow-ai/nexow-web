@@ -17,7 +17,8 @@
  * shockwave through it (`nexow:world-send`), so the one interaction in the hero
  * is also the page's thesis: your words give the material a shape.
  *
- * Dark in both themes — see `World.astro` for why.
+ * Follows the page theme. The next band (`PlaygroundSpan`) is `.tone-invert`,
+ * so dark mode opens black and flips to white, and light mode does the reverse.
  */
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -188,12 +189,15 @@ const D = {
   }
 
   .hero__title {
+    width: 100%;
     max-width: 18ch;
+    margin-inline: auto;
     font-family: var(--font-display);
     font-size: clamp(2.05rem, 0.5rem + 6.4vw, 4.5rem);
     font-weight: 700;
     line-height: 0.96;
     letter-spacing: -0.035em;
+    text-align: center;
     text-wrap: balance;
     color: var(--w-text);
     /* Carries the readability the veil used to buy with opacity, but only
@@ -202,10 +206,13 @@ const D = {
   }
 
   .hero__kicker {
+    width: 100%;
+    max-width: 36rem;
     margin-top: 1.6rem;
     font-family: var(--font-display);
     font-size: clamp(1rem, 0.86rem + 0.6vw, 1.3rem);
     font-weight: 400;
+    text-align: center;
     /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
     color: var(--w-text-2);
     text-shadow: 0 1px 18px color-mix(in oklab, var(--w-surface) 80%, transparent);

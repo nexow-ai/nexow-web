@@ -177,6 +177,43 @@ import WorldSound from './WorldSound.astro';
     --w-wash: 0.38;
   }
 
+  /* Opposite of the page theme. The hero keeps `.world`'s tokens; the first
+   * act band (`.tone-invert`) flips them so dark mode reads black → white and
+   * light mode reads white → black. Opaque ground is on `.tone-invert` itself. */
+  :global(html.dark) .world :global(.tone-invert) {
+    --w-surface: #ffffff;
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-accent-2: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
+    --w-panel: rgba(255, 255, 255, 0.92);
+    --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    --w-shadow: rgba(15, 23, 42, 0.22);
+    --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    --w-wash: 0.45;
+  }
+
+  :global(html:not(.dark)) .world :global(.tone-invert) {
+    --w-surface: var(--color-ink-950);
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-accent-2: var(--color-brand-400);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-line-soft: rgba(255, 255, 255, 0.08);
+    --w-panel: rgba(9, 12, 20, 0.9);
+    --w-panel-2: rgba(255, 255, 255, 0.04);
+    --w-shadow: rgba(0, 0, 0, 0.85);
+    --w-rail: rgba(255, 255, 255, 0.22);
+    --w-wash: 1;
+  }
+
   /* A wash that sits between the ink and the matter: enough colour that the
    * world is not a black rectangle before WebGL has painted a frame, and it is
    * also exactly what a no-WebGL visitor keeps. */
