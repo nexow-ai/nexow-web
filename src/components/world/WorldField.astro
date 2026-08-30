@@ -2467,13 +2467,15 @@
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
       ctx.uniform3fv(uFog, readColor(probe, '--w-surface'));
-      /* Which theme is on. Read from the class, but only ever from inside a
-         frame after it changed (see onTheme / the observer below): read at the
-         moment the toggle's event fires, the class had not flipped yet, and the
-         world painted the *previous* theme's glass — pale screens on a dark
-         page, one toggle behind. */
-      coreLight = document.documentElement.classList.contains('dark') ? 0 : 1;
-      ctx.uniform1f(uLight, coreLight);
+      /* Screens stay dark-theatre in both themes. Inverting glass and
+         accents onto a pale page washed the wall into pastel cards; the
+         cool look is mint chrome on ink, sitting on whatever the page is.
+         Fog still tracks `--w-surface`, so distance dissolves into the
+         light field instead of a black hole. The core follows.
+         Read from the class only inside a frame after it changed (see
+         onTheme): the toggle event used to fire before the class flipped. */
+      coreLight = 0;
+      ctx.uniform1f(uLight, 0);
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
       coreFog = readColor(probe, '--w-surface');
