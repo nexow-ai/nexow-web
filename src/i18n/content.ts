@@ -515,6 +515,7 @@ export interface SiteContent {
       connectors: ActCopy;
       bots: ActCopy;
       agents: ActCopy;
+      dao: ActCopy;
       useCases: ActCopy;
     };
     automate: {

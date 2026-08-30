@@ -115,7 +115,7 @@
       return fract(sin(vec3(i * 12.9898, i * 78.233, i * 37.719)) * 43758.5453);
     }
 
-    /* Seven formations — one per scene, hero included. Every one is a
+    /* Eight formations — one per scene, hero included. Every one is a
        closed-form function of the instance index, which is what makes the morph
        a mix() and keeps the buffers static for the life of the page. */
     vec3 form(float f, float i, float n, float seed, float t) {
@@ -240,8 +240,25 @@
         float core = step(h.x, 0.16);
         return mix(c + (h - 0.5) * 2.1, (h - 0.5) * 1.6, core);
       }
-      /* 6 — RELEASE: the matter opens back out into a wide, slow horizon. This
-         is the exhale after five pinned scenes; nothing is being explained any
+      if (f < 6.5) {
+        /* 6 — OWN IT: the ledger. Two strands of screens climbing a helix
+           around the token, and turning — a turning helix is a rising one, so
+           the column reads as value on its way up and out to the holders,
+           which is what a weekly distribution looks like from inside it. Two
+           strands so the column has a front and a back and reads as a body
+           rather than a wire, and it is the one formation whose long axis is
+           vertical: nothing else on the page can be mistaken for it. */
+        float strands = 2.0;
+        float s = mod(i, strands);
+        float idx = floor(i / strands);
+        float per = ceil(n / strands);
+        float u = idx / per;
+        float th = u * 6.2831 * 2.6 + s * 3.1416 + t * 0.32;
+        float R = 5.2 + (h.x - 0.5) * 0.8;
+        return vec3(cos(th) * R, (u - 0.5) * 11.5, sin(th) * R);
+      }
+      /* 7 — RELEASE: the matter opens back out into a wide, slow horizon. This
+         is the exhale after six pinned scenes; nothing is being explained any
          more, so nothing is being held. */
       float th = a * 6.2831 * 4.0 + t * 0.05;
       float r = 7.0 + 13.0 * h.x;
@@ -371,8 +388,14 @@
          screens is a set of like objects, and the circle only traces if the
          things on it are comparable. Still a little spread, so the ring is a
          wall of screens and not a stamped pattern. */
-      float sz = mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16;
-      vec3 world = p + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
+      /* One screen in ten is a feature screen, four times the size of
+         whatever tier it landed in. Picked by id, not seed, so they fall
+         evenly through every formation — every tenth seat on the ring, every
+         tenth cell of the slab — and floated a little toward the eye so each
+         sits in front of its neighbours instead of slicing through them. */
+      float big = 1.0 - step(0.5, mod(aId, 10.0));
+      float sz = (mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16) * mix(1.0, 4.0, big);
+      vec3 world = p + toEye * big * 1.4 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
       /* Slide the world into the scene column so it frames the copy rather
@@ -1527,8 +1550,8 @@
   `;
 
   /**
-   * Five flat-shaded solids in one buffer: cube, octahedron, icosahedron,
-   * dodecahedron and a stella octangula.
+   * Six flat-shaded solids in one buffer: cube, octahedron, icosahedron,
+   * dodecahedron, a stella octangula and a coin.
    * Flat shading means one normal per face, so every face gets its own value
    * and the silhouette reads as cut rather than smooth — which is the whole
    * reason to use a low-poly solid instead of a sphere.
@@ -1692,6 +1715,28 @@
       }
     });
 
+    /* 5 — coin: a twelve-sided prism with its axis along Z, so the yaw the
+       scroll drives turns it face, edge, face — the way a coin turns and a
+       plate does not. Thin enough to be unmistakably a token rather than a
+       drum; thick enough that the edge still catches the machined line. */
+    mark(() => {
+      const sides = 12;
+      const half = 0.16;
+      const rim = (z: number) =>
+        Array.from({ length: sides }, (_, k) => {
+          const a = (k / sides) * Math.PI * 2;
+          return [Math.cos(a), Math.sin(a), z];
+        });
+      const front = rim(half);
+      const back = rim(-half);
+      poly(front);
+      poly(back);
+      for (let k = 0; k < sides; k++) {
+        const j = (k + 1) % sides;
+        poly([front[k], front[j], back[j], back[k]]);
+      }
+    });
+
     return { data: new Float32Array(tri), ranges };
   }
 
@@ -1729,8 +1774,24 @@
     /* 05 reason about it — twelve pentagons, the most considered shape in the
        set, turning fastest: it is working. */
     { mesh: 3, scale: 1.95, spin: 0.5, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    // 06 point it anywhere — smaller, sharper, calmer; the story is handing off.
-    { mesh: 1, scale: 1.3, spin: 0.16, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 06 own it — the token itself: a coin, thin and twelve-sided, standing
+       on its edge in the middle of the ledger. Face-on it is the one solid
+       here with a flat front, which is what a coin is; the yaw the scroll
+       drives then flips it edge-on and back, so it reads as a coin turning
+       rather than a disc sitting there. */
+    { mesh: 5, scale: 2.1, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 07 point it anywhere — smaller, sharper, calmer. Lifted clear of the
+       closing gallery: this section fills the middle of the viewport with
+       cards, and a solid at the origin projects straight behind them, which is
+       where the old staging left it — present in the scene and visible in none
+       of it. Only height is worth staging with, since the camera orbits: world
+       +Y is the one direction that keeps pointing up the screen. */
+    { mesh: 1, scale: 1.45, spin: 0.16, sy: 1, pulse: 0, pos: [0, 4.6, 0] },
+    /* The exit. There is no eighth scene — this is the keyframe the last one
+       interpolates towards, so the closing act reads as the object rising out
+       of the frame rather than sitting at the bottom of the page waiting for a
+       section that never comes. */
+    { mesh: 1, scale: 0, spin: 0.05, sy: 1, pulse: 0, pos: [0, 9.5, 0] },
   ];
 
   /** Y-rotation, X-rotation and a non-uniform scale, composed. */
@@ -2320,8 +2381,8 @@
       ctx.uniform1f(uShift, hx * hero + shiftFull * (a === 0 ? morph : 1));
       ctx.uniform1f(uLift, hy * hero);
 
-      ctx.uniform1f(uFormA, Math.min(a, 6));
-      ctx.uniform1f(uFormB, Math.min(a + 1, 6));
+      ctx.uniform1f(uFormA, Math.min(a, 7));
+      ctx.uniform1f(uFormB, Math.min(a + 1, 7));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
       ctx.uniform1f(uAlpha, 1.0);
@@ -2343,6 +2404,12 @@
        * height twice. Pointer parallax is added to the *aim*, not to the
        * camera, so it inherits the same inertia as everything else. */
       const ang = -1.05 + p * 2.35 + ptrX * 0.22;
+      /* Closer in the hero, so the lens sits just outside the outer shell
+       * instead of well back from it. This is what makes the carousel a
+       * carousel: at 24 the whole ring was ahead of the camera and the near
+       * side simply sat there, but at 20 it comes within a few units of the
+       * lens, flares on the approach and fades out on the near plane — screens
+       * genuinely sweep past you rather than drifting in a box. */
       /* Closer in the hero, so the lens sits just outside the outer shell
        * instead of well back from it. This is what makes the carousel a
        * carousel: at 24 the whole ring was ahead of the camera and the near

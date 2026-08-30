@@ -511,8 +511,20 @@ export const en: SiteContent = {
           { label: 'Act', detail: 'Widgets repaint, alerts land, and every step shows up in the run timeline' },
         ],
       },
-      useCases: {
+      dao: {
         step: '06',
+        eyebrow: 'Own it',
+        title: 'A DAO on Solana, and a token that pays every week',
+        body: 'NXW is the Solana token behind Nexow. Hold it and you own a piece of the platform: you vote on the roadmap, you steer the treasury, and every week the DAO pays holders their cut — on-chain, in proportion to what they hold. The DAO opens with the NXW mint.',
+        beats: [
+          { label: 'Hold', detail: 'NXW on Solana — 20M hard cap, transferable, in a wallet you control' },
+          { label: 'Vote', detail: 'Propose features, connectors and rules, then decide them in public ballots' },
+          { label: 'Fund', detail: 'A shared treasury for bounties, grants and whatever the ballots fund next' },
+          { label: 'Earn', detail: 'Weekly dividends: every holder gets their share, paid on-chain every week' },
+        ],
+      },
+      useCases: {
+        step: '07',
         eyebrow: 'Point it anywhere',
         title: 'Markets were the first hard problem, not the only one',
         body: 'The loop is the same everywhere: something changes, something reasons about it, something happens. Here is what people point it at.',
