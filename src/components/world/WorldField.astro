@@ -823,11 +823,12 @@
       glassDark = mix(glassDark, mix(glassDark, accent, 0.42), wear);
       glassLite = mix(glassLite, mix(glassLite, accent, 0.28), wear);
 
-      /* Display: lit from above, shadowed under the bezel. The shadow is much
+      /* Display: lit from above, shadowed under the bezel. The shadow is
          lighter on the light theme, where a dark ring inside the edge reads as
-         a second border rather than as depth. */
+         a second border rather than as depth — but not so light that white
+         glass meets white bezel with nothing between them. */
       vec3 col = mix(glassDark, glassLite, uv.y * 0.9);
-      col *= 1.0 - inset * (0.38 - 0.29 * uLight);
+      col *= 1.0 - inset * (0.38 - 0.20 * uLight);
 
       /* ---- chrome: title, subtitle, live dot, hairline ---- */
       float pulse = 0.65 + 0.35 * sin(t * 2.2);
@@ -1634,15 +1635,16 @@
          Dark theme: near-black plastic, which is what gives a bright display
          its housing. Light theme: the same frame in mid-grey drew a hard rule
          around all 160 panels and the field read as a sheet of empty boxes, so
-         there the bezel is the white of the glass and the only edge is a
-         hairline of ink at the very rim — a card, not a border. */
+         there the bezel is a shade under the glass and the edge is a hairline
+         of ink at the very rim — a card, not a border. White on white was the
+         other extreme: on a near-white page the panel had no outline at all. */
       float topLight = smoothstep(-0.5, 0.5, vUv.y);
       vec3 frameBase = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9) + accent * 0.22,
-                           mix(vec3(1.0), accent, 0.03), uLight);
+                           mix(vec3(0.955), accent, 0.10), uLight);
       vec3 frameLite = mix(frameBase, lightest, 0.12 + 0.18 * vLight);
       vec3 frame = mix(frameBase, frameLite, topLight * (0.5 + 0.5 * vLight));
       float rim = 1.0 - aastep(0.010, abs(sd + 0.004));
-      frame = mix(frame, mix(lightest, mix(frameBase, paper, 0.14), uLight),
+      frame = mix(frame, mix(lightest, mix(frameBase, paper, 0.38), uLight),
                   rim * mix(topLight * 0.35, 0.85, uLight));
       col = mix(col, frame, bezel);
 
@@ -1651,8 +1653,11 @@
       col += lightest * vSpec * (0.30 - 0.24 * uLight);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
-         out, so it stays a solid object all the way to the horizon. */
-      gl_FragColor = vec4(mix(uFog, col, glow * uAlpha), 1.0);
+         out, so it stays a solid object all the way to the horizon. The light
+         theme dissolves far less: there the backdrop is near-white and the
+         glass is white, so a fifth of the page mixed into every panel took
+         away the little separation the panel had. */
+      gl_FragColor = vec4(mix(uFog, col, glow * mix(uAlpha, 1.0, 0.7 * uLight)), 1.0);
     }
   `;
 
