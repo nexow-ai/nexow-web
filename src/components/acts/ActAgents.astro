@@ -194,6 +194,10 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     --dur: 34s;
     --loop-dur: 7s;
     --run-dur: 5.6s;
+    /* Every stroke in the rig is this one colour at different strengths, and it
+     * has to come from the world's accent rather than a fixed brand step: in
+     * daylight `--w-line` is 12% ink, so anything mixed into it dissolves. */
+    --ink: var(--w-accent);
 
     perspective: 1150px;
     perspective-origin: 50% 45%;
@@ -266,7 +270,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
   .a-mer {
     width: calc(var(--gr) * 2);
     height: calc(var(--gr) * 2);
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 26%, var(--w-line));
+    border: 1px solid color-mix(in oklab, var(--ink) 32%, transparent);
     border-radius: 50%;
     transform: rotateY(var(--m));
     opacity: calc(var(--k0, 1) * 0.85);
@@ -275,7 +279,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
   .a-par {
     width: calc(var(--gr) * var(--pd));
     height: calc(var(--gr) * var(--pd));
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 38%, var(--w-line));
+    border: 1px solid color-mix(in oklab, var(--ink) 44%, transparent);
     border-radius: 50%;
     transform: translateY(calc(var(--gr) * var(--ty))) rotateX(90deg);
     opacity: calc(var(--k0, 1) * 0.9);
@@ -285,8 +289,8 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     width: 0.3rem;
     height: 0.3rem;
     border-radius: 50%;
-    background: var(--color-brand-300);
-    box-shadow: 0 0 8px color-mix(in oklab, var(--color-brand-400) 70%, transparent);
+    background: var(--ink);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--ink) 70%, transparent);
     transform: rotateY(var(--lon)) rotateX(var(--lat)) translateZ(var(--gr));
     opacity: var(--k0, 1);
   }
@@ -304,7 +308,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
    * circle into its parent plane's XZ. */
   .a-path {
     border-radius: 50%;
-    border: 1px dashed color-mix(in oklab, var(--color-brand-400) 24%, transparent);
+    border: 1px dashed color-mix(in oklab, var(--ink) 28%, transparent);
     transform: rotateX(90deg);
   }
 
@@ -318,7 +322,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     width: calc(var(--ri) * 2);
     height: calc(var(--ri) * 2);
     border-style: solid;
-    border-color: color-mix(in oklab, var(--color-brand-300) 30%, transparent);
+    border-color: color-mix(in oklab, var(--ink) 36%, transparent);
     opacity: calc(var(--k2, 1) * 0.7);
   }
 
@@ -337,17 +341,19 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     animation-delay: 0s, calc(var(--loop-dur) * var(--i) / -4);
   }
 
-  /* One hue per move of the loop, in the order the copy lists them. */
-  .a-tick:nth-child(1) { --tick: var(--color-brand-300); }
-  .a-tick:nth-child(2) { --tick: var(--color-sky-300); }
-  .a-tick:nth-child(3) { --tick: var(--color-accent-300); }
-  .a-tick:nth-child(4) { --tick: var(--color-brand-200); }
+  /* One hue per move of the loop, in the order the copy lists them. Mid steps,
+   * not the pale ones: these are the only marks in the rig that carry their own
+   * colour, and a 200 vanishes against the daylight scrim. */
+  .a-tick:nth-child(1) { --tick: var(--color-brand-400); }
+  .a-tick:nth-child(2) { --tick: var(--color-sky-400); }
+  .a-tick:nth-child(3) { --tick: var(--color-accent-400); }
+  .a-tick:nth-child(4) { --tick: var(--color-brand-500); }
 
   .a-rim {
     width: calc(var(--gr) * 2);
     height: calc(var(--gr) * 2);
     border-radius: 50%;
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 40%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ink) 48%, transparent);
     opacity: var(--k0, 1);
   }
 
@@ -381,11 +387,11 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     width: calc(var(--orb) * 0.19);
     height: calc(var(--orb) * 0.19);
     border-radius: 50%;
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 80%, transparent);
+    border: 1px solid color-mix(in oklab, var(--ink) 75%, transparent);
     background:
       radial-gradient(
         76% 76% at 50% 28%,
-        color-mix(in oklab, var(--color-brand-500) 70%, transparent),
+        color-mix(in oklab, var(--ink) 58%, transparent),
         transparent 80%
       ),
       color-mix(in oklab, var(--w-surface) 78%, var(--w-panel));
@@ -399,7 +405,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     width: calc(var(--orb) * 0.25);
     height: calc(var(--orb) * 0.25);
     border-radius: 50%;
-    border: 1px dashed color-mix(in oklab, var(--color-brand-300) 50%, transparent);
+    border: 1px dashed color-mix(in oklab, var(--ink) 55%, transparent);
     animation: a-spin 18s linear infinite;
   }
 
@@ -453,7 +459,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     gap: 0.4rem;
     padding: 0.35rem 0.7rem;
     border-radius: 999px;
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 30%, var(--w-line));
+    border: 1px solid color-mix(in oklab, var(--ink) 32%, var(--w-line));
     /* Near-opaque on purpose: a translucent chip loses to the world field the
      * moment the matter behind it lights up. */
     background: color-mix(in oklab, var(--w-surface) 88%, var(--w-panel));
@@ -477,8 +483,8 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     width: 0.3rem;
     height: 0.3rem;
     border-radius: 50%;
-    background: var(--color-brand-400);
-    box-shadow: 0 0 8px var(--color-brand-500);
+    background: var(--ink);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--ink) 60%, transparent);
   }
 
   .a-run {
