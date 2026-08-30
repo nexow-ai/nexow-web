@@ -185,7 +185,7 @@ export const zh: SiteContent = {
     stats: [
       { n: 90, label: '个覆盖数据、钱包、社交与市场的实时连接器' },
       { n: 6, label: '类资产同处一块画布' },
-      { n: 10, suffix: 'K', label: '注册即预留的免费 AI 积分' },
+      { n: 100, suffix: 'K', label: '注册即预留的免费 AI 积分' },
       { n: 30, prefix: '<', suffix: 's', label: '从一句话到运行中的组件' },
     ],
     showcase: {
@@ -563,7 +563,7 @@ export const zh: SiteContent = {
         { status: 'shipped', title: '市场', body: '发布并安装组件、主题、界面和机器人——溯源机制为每一次重制致谢原作者。' },
         { status: 'shipped', title: '声望与勋章', body: '为你构建和分享的一切提供点数、分级成就、稀有勋章和等级。' },
         { status: 'soon', title: '高级组件与信号', body: '发布高级组件和策略信号，让他人订阅，并从你运行的内容中获得收益。' },
-        { status: 'soon', title: '付费方案与奖励积分', body: 'Supporter 与 Sponsor 结账、平台积分，以及把声望兑换成奖励积分。' },
+        { status: 'soon', title: '付费方案与奖励积分', body: 'Lite 与 Elite 结账、平台积分，以及把声望兑换成奖励积分。' },
       ],
     },
     faq: {
@@ -601,7 +601,7 @@ export const zh: SiteContent = {
         },
         {
           q: "费用如何？",
-          a: "Free 包含完整小组件画布、资料库、云同步、10 个机器人、3 个智能体、社区访问，以及注册时的 100,000 AI 积分。Supporter 与 Sponsor 增加每月积分、更高自动化配额与高级外观——付费结算即将上线。完整对比见方案页。",
+          a: "Free 包含完整小组件画布、资料库、云同步、10 个机器人、3 个智能体、社区访问，以及注册时的 100,000 AI 积分。Lite 与 Elite 增加每月积分、更高自动化配额与高级外观——付费结算即将上线。完整对比见方案页。",
         },
       ],
     },
@@ -1345,7 +1345,7 @@ export const zh: SiteContent = {
     meta: {
       title: '方案 — Nexow',
       description:
-        '永久免费构建——用你自己的密钥在本地运行，或用免费账户预留的 100,000 AI 积分。对比 Free、Supporter、Sponsor 和 Partner 在积分、机器人、智能体和定制方面的差异。',
+        '永久免费构建——用你自己的密钥在本地运行，或用免费账户预留的 100,000 AI 积分。对比 Free、Lite、Elite 和 Partner 在积分、机器人、智能体和定制方面的差异。',
     },
     hero: {
       badge: '方案',
@@ -1354,7 +1354,7 @@ export const zh: SiteContent = {
         '免费构建——用你自己的密钥在本地运行，或注册以预留 100,000 AI 积分。当你需要更多容量、自动化和精致体验时再升级。',
     },
     comingSoon:
-      'Supporter 与 Sponsor 结账即将推出，平台积分也将随之上线。今天所有人都在 Free 方案——创建账户，在计费开启时抢先一步。',
+      'Lite 与 Elite 结账即将推出，平台积分也将随之上线。今天所有人都在 Free 方案——创建账户，在计费开启时抢先一步。',
     highlights: {
       title: '随方案而扩展的内容',
       items: [
@@ -1408,7 +1408,7 @@ export const zh: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: '给想要更多空间的创作者。',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
@@ -1416,7 +1416,7 @@ export const zh: SiteContent = {
         cadence: '/月',
         stats: ['115K 积分/月', '30 个机器人', '10 个智能体'],
         note: '包含 Free 的一切，另加：',
-        cta: '成为 Supporter',
+        cta: '成为 Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
           '每月 115,000 积分',
@@ -1428,7 +1428,7 @@ export const zh: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: '给走向专业的高阶用户。',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
@@ -1436,8 +1436,8 @@ export const zh: SiteContent = {
         cadence: '/月',
         badge: '最佳回报',
         stats: ['800K 积分/月', '300 个机器人', '100 个智能体'],
-        note: '包含 Supporter 的一切，另加：',
-        cta: '成为 Sponsor',
+        note: '包含 Lite 的一切，另加：',
+        cta: '成为 Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
@@ -1457,7 +1457,7 @@ export const zh: SiteContent = {
         priceYearly: '定制',
         cadence: '',
         stats: ['私有基础设施', '专属服务', 'SLA'],
-        note: '包含 Sponsor 的一切，另加：',
+        note: '包含 Elite 的一切，另加：',
         cta: '联系我们',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1549,15 +1549,15 @@ export const zh: SiteContent = {
       },
       {
         q: "积分是什么？",
-        a: "积分计量 AI 用量：生成小组件、用对话编辑、创建链接以及使用 Copilot。1 积分等于 1 个 Sonnet 输出 token 的供应商成本，因此价格不取决于你选哪个模型——Haiku 大约把 1 积分拉长到 3 个 token；Opus 大约用掉 0.6。Free 在注册时预留 100,000；Supporter 每月 115,000；Sponsor 800,000——也可随时购买加油包。",
+        a: "积分计量 AI 用量：生成小组件、用对话编辑、创建链接以及使用 Copilot。1 积分等于 1 个 Sonnet 输出 token 的供应商成本，因此价格不取决于你选哪个模型——Haiku 大约把 1 积分拉长到 3 个 token；Opus 大约用掉 0.6。Free 在注册时预留 100,000；Lite 每月 115,000；Elite 800,000——也可随时购买加油包。",
       },
       {
         q: "付费方案何时上线？",
-        a: "Supporter 与 Sponsor 已在应用中定义并展示，但付费结算即将上线。今天大家都在 Free——先注册账号，开账时就能排在前面。",
+        a: "Lite 与 Elite 已在应用中定义并展示，但付费结算即将上线。今天大家都在 Free——先注册账号，开账时就能排在前面。",
       },
       {
         q: "可以按年付费吗？",
-        a: "可以。年付相当于比月付少付两个月——Supporter 每年 $99.90，Sponsor 每年 $699.90。可随时在月付与年付之间切换。",
+        a: "可以。年付相当于比月付少付两个月——Lite 每年 $99.90，Elite 每年 $699.90。可随时在月付与年付之间切换。",
       },
       {
         q: "声誉如何计算？",
@@ -1579,7 +1579,7 @@ export const zh: SiteContent = {
     subtitle: '每一条帖子、每个小组件、每个机器人和每次发布，都会汇入同一个分数。分数解锁徽章，徽章解锁等级——DAO 开放后，两者都会以积分和治理代币结算。',
     live: '已在应用中上线',
     planned: '规划中',
-    plannedNote: '积分、徽章和等级今天已经在应用里运行。积分与 NXW 的发放将随 Nexow DAO 一起上线——下方的表格是提交首次投票的提案。',
+    plannedNote: '积分、徽章、等级和免费积分奖励今天已经在应用里运行。NXW 发放与升级奖励将随 Nexow DAO 一起上线——NXW 于 2026 年 8 月 14 日 dry mint。',
     teaser: {
       badges: '为你构建与发布的成果颁发勋章',
       levels: '凭声誉积分解锁的等级',
@@ -1653,7 +1653,7 @@ export const zh: SiteContent = {
         commentsReceived: '收到的评论',
         followers: '粉丝',
         following: '你关注的人',
-        contacts: '互相关注的联系人',
+        friends: '互相关注的联系人',
         widgetsBuilt: '构建的小组件',
         assetsPublished: '发布的资源',
         installsReceived: '你的作品被安装次数',
@@ -1663,6 +1663,18 @@ export const zh: SiteContent = {
         likesGiven: '送出的点赞',
         reactionsGiven: '送出的表情回应',
         nightPosts: '00:00 至 05:00 之间的帖子',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: '开启的私信会话',
       },
       names: {
@@ -1684,6 +1696,15 @@ export const zh: SiteContent = {
         emojiSommelier: '表情品鉴师',
         nightOwl: '夜猫子',
         penPal: '笔友',
+        greenLight: '绿灯',
+        buildFlagger: '构建举报',
+        tagClose: '朋友',
+        tagFamily: '家人',
+        tagWork: '同事',
+        tagTeam: '队友',
+        tagSchool: '同学',
+        tagMentor: '导师',
+        tagFavorite: '收藏',
         oracle: '神谕',
         agora: '广场',
         catalyst: '催化剂',
@@ -1694,6 +1715,9 @@ export const zh: SiteContent = {
         benefactor: '施惠者',
         midnightSun: '午夜太阳',
         nexus: '枢纽',
+        tagPartner: '另一半',
+        tagLove: '恋爱',
+        rolodex: '名片盒',
         immortal: '不朽',
         folkHero: '民间英雄',
         luminary: '明灯',
@@ -1709,7 +1733,7 @@ export const zh: SiteContent = {
         commentsReceived: '让你的帖子收到评论。',
         followers: '在个人主页上获得关注者。',
         following: '在 Nexow 上关注其他人。',
-        contacts: '积累互关联系人——你关注且对方也关注你的人。',
+        friends: '积累互关联系人——你关注且对方也关注你的人。',
         widgetsBuilt: '在画布上构建组件。',
         assetsPublished: '把资源发布到市场。',
         installsReceived: '让你发布的组件、机器人或主题被安装。',
@@ -1736,7 +1760,11 @@ export const zh: SiteContent = {
         bronze: '青铜档',
         silver: '白银档',
         gold: '黄金档',
+        tagBronze: '朋友 · bronze',
+        tagSilver: '朋友 · silver',
+        tagGold: '朋友 · gold',
         rare: '稀有勋章',
+        tagRare: '朋友 · rare',
         legendary: '传奇勋章',
       },
       levelRow: '达到{level}',
@@ -1745,7 +1773,7 @@ export const zh: SiteContent = {
       creditsLabel: '积分',
       tokensLabel: 'NXW',
       worth: '≈ 按标价折合 {usd} 的 AI 生成额度',
-      months: '= 相当于赚到 {n} 个月 Sponsor 级别的生成量',
+      months: '= 相当于赚到 {n} 个月 Elite 级别的生成量',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: '一个代币。五种用途。上限两千万。',
@@ -1983,7 +2011,7 @@ export const zh: SiteContent = {
   waitlist: {
     eyebrow: '计费候补名单',
     title: '结账功能即将上线',
-    subtitle: 'Supporter 和 Sponsor 计费即将上线。留下邮箱，结账开放当天我们会通知你——绝不发垃圾邮件。',
+    subtitle: 'Lite 和 Elite 计费即将上线。留下邮箱，结账开放当天我们会通知你——绝不发垃圾邮件。',
     placeholder: 'you@email.com',
     submit: '加入候补名单',
     submitting: '加入中…',

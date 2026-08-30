@@ -9,8 +9,8 @@
  *
  * Every number is read from `src/data/gamification.ts` and every string from the
  * already-localized `rewards` block, so the teaser can never quote a level,
- * badge count or payout the plans page has moved on from. The payout half is
- * PLANNED and wears the `planned` chip, exactly as it does on /plans.
+ * badge count or payout the plans page has moved on from. Badge credits are
+ * live; NXW wears the `planned` chip, exactly as it does on /plans.
  */
 import { type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -71,13 +71,13 @@ const rarities = [
 ];
 
 const totals = [
-  { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: t.ledger.creditsLabel, tone: 'text-brand-300' },
-  { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: t.ledger.tokensLabel, tone: 'text-accent-300' },
+  { icon: 'coins', value: TOTAL_REWARD_CREDITS, label: t.ledger.creditsLabel, tone: 'text-brand-300', soon: false },
+  { icon: 'vault', value: TOTAL_REWARD_TOKENS, label: t.ledger.tokensLabel, tone: 'text-accent-300', soon: true },
 ];
 
-/** The badge half of the ladder — bars are a share of the biggest payout. */
-const ladder = REWARD_LADDER.map((row) => ({
-  label: t.ledger.rows[row.key as keyof typeof t.ledger.rows],
+/** Headline rungs only — friend-tag rows live on /plans. */
+const ladder = REWARD_LADDER.filter((row) => !row.key.startsWith('tag')).map((row) => ({
+  label: t.ledger.rows[row.key] ?? row.key,
   credits: row.credits,
   tokens: row.tokens,
   from: row.from,
@@ -249,9 +249,9 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
 
         <div class="relative flex items-start justify-between gap-3">
           <h3 class="font-display text-lg font-semibold text-white">{t.ledger.totalTitle}</h3>
-          <span class="badge-status shrink-0" data-status="soon">
-            <span class="size-1.5 rounded-full bg-accent-400"></span>
-            {t.planned}
+          <span class="badge-status shrink-0" data-status="live">
+            <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>
+            {t.live}
           </span>
         </div>
         <p class="relative mt-2 text-sm leading-relaxed text-ink-300">{t.ledger.totalBody}</p>
@@ -291,7 +291,14 @@ const plansHref = `${localizePath('/plans', lang)}#rewards`;
               <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                 <Icon name={total.icon} class={`size-4 ${total.tone}`} />
                 <p class="mt-2 font-display text-2xl font-bold tabular-nums text-white">{nf(total.value)}</p>
-                <p class="text-[0.7rem] uppercase tracking-wider text-ink-400">{total.label}</p>
+                <p class="flex items-center gap-1.5 text-[0.7rem] uppercase tracking-wider text-ink-400">
+                  {total.label}
+                  {total.soon && (
+                    <span class="rounded-full bg-accent-500/15 px-1.5 font-mono text-[0.55rem] font-medium text-accent-300">
+                      {t.planned}
+                    </span>
+                  )}
+                </p>
               </div>
             ))
           }

@@ -17,9 +17,15 @@ import {
   LEGENDARY_BADGES,
   RARITY_COLORS,
   RARITY_POINTS,
-  REWARD_LADDER,
+  TIER_REWARD_CREDITS,
+  RARE_REWARD_CREDITS,
+  LEGENDARY_REWARD_CREDITS,
+  TIER_REWARD_TOKENS,
+  RARE_REWARD_TOKENS,
+  LEGENDARY_REWARD_TOKENS,
+  badgeCreditRewards,
+  badgeTokenRewards,
   type BadgeSpec,
-  type RewardRow,
 } from '../../data/gamification';
 import Icon from '../Icon.astro';
 import Hex from '../Hex.astro';
@@ -53,12 +59,17 @@ const tierLabels = [t.tiers.bronze, t.tiers.silver, t.tiers.gold];
 
 const TIER_KEYS = ['bronze', 'silver', 'gold'] as const;
 
-/** Ladder rows that apply to a badge — three tiers, or one medal payout. */
-function rewardRowsFor(badge: BadgeSpec): RewardRow[] {
-  if (badge.rarity === 'tiered') {
-    return REWARD_LADDER.filter((r) => (TIER_KEYS as readonly string[]).includes(r.key));
-  }
-  return REWARD_LADDER.filter((r) => r.key === badge.rarity);
+/** Per-tier payouts for a badge — live credits, planned NXW. */
+function rewardRowsFor(badge: BadgeSpec) {
+  const credits = badgeCreditRewards(badge);
+  const tokens = badgeTokenRewards(badge);
+  const keys = badge.rarity === 'tiered' ? TIER_KEYS : [badge.rarity];
+  return keys.map((key, i) => ({
+    key,
+    credits: credits[i] ?? credits[0],
+    tokens: tokens[i] ?? tokens[0] ?? 0,
+    points: RARITY_POINTS[badge.rarity],
+  }));
 }
 
 const nf = (n: number) => n.toLocaleString(lang);
@@ -87,9 +98,12 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
     <div class="reveal-stagger mt-8 grid gap-3 sm:grid-cols-3">
       {
         RARITIES.map((r, i) => {
-          const bronze = REWARD_LADDER.find((row) => row.key === 'bronze')!;
-          const gold = REWARD_LADDER.find((row) => row.key === 'gold')!;
-          const medal = REWARD_LADDER.find((row) => row.key === r.key);
+          const bronzeCredits = TIER_REWARD_CREDITS[0];
+          const goldCredits = TIER_REWARD_CREDITS[2];
+          const bronzeTokens = TIER_REWARD_TOKENS[0];
+          const goldTokens = TIER_REWARD_TOKENS[2];
+          const medalCredits = r.key === 'rare' ? RARE_REWARD_CREDITS : LEGENDARY_REWARD_CREDITS;
+          const medalTokens = r.key === 'rare' ? RARE_REWARD_TOKENS : LEGENDARY_REWARD_TOKENS;
           return (
             <div
               class="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
@@ -116,18 +130,18 @@ const tierShort: Record<(typeof TIER_KEYS)[number], string> = {
                   {r.key === 'tiered' ? (
                     <>
                       <span class="text-brand-300">
-                        {nf(bronze.credits)}–{nf(gold.credits)} {ledger.creditsLabel}
+                        {nf(bronzeCredits)}–{nf(goldCredits)} {ledger.creditsLabel}
                       </span>
                       <span class="text-ink-600" aria-hidden="true">·</span>
                       <span class="text-accent-300">
-                        {nf(bronze.tokens)}–{nf(gold.tokens)} {ledger.tokensLabel}
+                        {nf(bronzeTokens)}–{nf(goldTokens)} {ledger.tokensLabel}
                       </span>
                     </>
                   ) : (
                     <>
-                      <span class="text-brand-300">{nf(medal!.credits)} {ledger.creditsLabel}</span>
+                      <span class="text-brand-300">{nf(medalCredits)} {ledger.creditsLabel}</span>
                       <span class="text-ink-600" aria-hidden="true">·</span>
-                      <span class="text-accent-300">{nf(medal!.tokens)} {ledger.tokensLabel}</span>
+                      <span class="text-accent-300">{nf(medalTokens)} {ledger.tokensLabel}</span>
                     </>
                   )}
                 </p>

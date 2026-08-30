@@ -185,7 +185,7 @@ export const ar: SiteContent = {
     stats: [
       { n: 90, label: 'موصلات حية للبيانات والمحافظ والاجتماعيات والأسواق' },
       { n: 6, label: 'فئات أصول على لوحة واحدة' },
-      { n: 10, suffix: 'K', label: 'رصيد AI مجاني محجوز عند التسجيل' },
+      { n: 100, suffix: 'K', label: 'رصيد AI مجاني محجوز عند التسجيل' },
       { n: 30, prefix: '<', suffix: 's', label: 'من الجملة إلى أداة تعمل' },
     ],
     showcase: {
@@ -563,7 +563,7 @@ export const ar: SiteContent = {
         { status: 'shipped', title: 'السوق', body: 'نشر وتثبيت الأدوات والسمات والشاشات والبوتات — مع سلسلة نسب تنسب الفضل لكل إعادة صنع.' },
         { status: 'shipped', title: 'السمعة والميداليات', body: 'نقاط وإنجازات متدرجة وميداليات نادرة ومستويات لما تبنيه وتشاركه.' },
         { status: 'soon', title: 'أدوات وإشارات مميزة', body: 'نشر أدوات مميزة وإشارات الاستراتيجية ودع الآخرين يشتركون فيها والعائد على ما تديره.' },
-        { status: 'soon', title: 'خطط مدفوعة وأرصدة مكافآت', body: 'الدفع لـ Supporter و Sponsor وأرصدة المنصة وتحويل السمعة إلى أرصدة مكافآت.' },
+        { status: 'soon', title: 'خطط مدفوعة وأرصدة مكافآت', body: 'الدفع لـ Lite و Elite وأرصدة المنصة وتحويل السمعة إلى أرصدة مكافآت.' },
       ],
     },
     faq: {
@@ -601,7 +601,7 @@ export const ar: SiteContent = {
         },
         {
           q: "كم التكلفة؟",
-          a: "يشمل Free لوحة العناصر الكاملة والمكتبة والمزامنة السحابية و10 بوتات و3 وكلاء ووصول المجتمع و100,000 رصيد ذكاء اصطناعي عند التسجيل. يضيف Supporter وSponsor أرصدة شهرية وحصص أتمتة أعلى ومظهرًا مميزًا — الدفع قريبًا. انظر الخطط للمقارنة الكاملة.",
+          a: "يشمل Free لوحة العناصر الكاملة والمكتبة والمزامنة السحابية و10 بوتات و3 وكلاء ووصول المجتمع و100,000 رصيد ذكاء اصطناعي عند التسجيل. يضيف Lite وElite أرصدة شهرية وحصص أتمتة أعلى ومظهرًا مميزًا — الدفع قريبًا. انظر الخطط للمقارنة الكاملة.",
         },
       ],
     },
@@ -1328,7 +1328,7 @@ export const ar: SiteContent = {
           { icon: 'users', title: 'المجتمع', body: 'تابع الصنّاع، أعجب وعلّق في خلاصة اجتماعية للبناة، استكشف boards، وشارك أدوات يضيفها الآخرون إلى مكتبتهم — مع ملفات صنّاع عامة.' },
           { icon: 'mail', title: 'دردشات فورية', body: 'راسل الأصدقاء والجهات مباشرة من الحساب أو Dock — رسائل فردية وجماعية مع presence وتفاعلات و followers/following وصندوق جهات.' },
           { icon: 'store', title: 'Marketplace', body: 'انشر وثبّت أدوات وسمات وشاشات و Bots و Agents — مع lineage يُسجّل كل إعادة صنع. الشراء والبيع قادمان.' },
-          { icon: 'trophy', title: 'السمعة والميداليات', body: 'اكسب نقاط سمعة للبناء والمشاركة، افتح إنجازات متدرجة وميداليات نادرة — متاح اليوم. reward credits قادمة.' },
+          { icon: 'trophy', title: 'السمعة والميداليات', body: 'اكسب نقاط سمعة للبناء والمشاركة، افتح إنجازات متدرجة وميداليات نادرة — متاح اليوم. كل مستوى شارة يدفع أرصدة مجانية إلى رصيدك.' },
         ],
       },
       {
@@ -1348,7 +1348,7 @@ export const ar: SiteContent = {
     meta: {
       title: 'الخطط — Nexow',
       description:
-        'مجاني للأبد للبناء — محليا مع مفتاحك الخاص أو مع 100,000 رصيد AI محجوز على حساب مجاني. قارن Free و Supporter و Sponsor و Partner لأرصدة والبوتات والوكلاء والتخصيص.',
+        'مجاني للأبد للبناء — محليا مع مفتاحك الخاص أو مع 100,000 رصيد AI محجوز على حساب مجاني. قارن Free و Lite و Elite و Partner لأرصدة والبوتات والوكلاء والتخصيص.',
     },
     hero: {
       badge: 'الخطط',
@@ -1357,7 +1357,7 @@ export const ar: SiteContent = {
         'بناء مجانا — تشغيل محلي مع مفتاحك الخاص أو تسجيل لحجز 100,000 رصيد AI. ترقية عندما تحتاج إلى المزيد من السعة والأتمتة والاهتمام.',
     },
     comingSoon:
-      'سداد Supporter و Sponsor قريبا وأرصدة النصة إطلاق بجانبه. الجميع على Free اليوم — إنشاء حساب لتكون أول عندما تفتح الفواتير.',
+      'سداد Lite و Elite قريبا وأرصدة النصة إطلاق بجانبه. الجميع على Free اليوم — إنشاء حساب لتكون أول عندما تفتح الفواتير.',
     highlights: {
       title: 'ما يتسع مع خطتك',
       items: [
@@ -1411,7 +1411,7 @@ export const ar: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'للصناع الذين يريدون مزيدا من المساحة.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
@@ -1419,7 +1419,7 @@ export const ar: SiteContent = {
         cadence: '/شهر',
         stats: ['115K رصيد/شهر', '30 بوت', '10 وكلاء'],
         note: 'كل شيء في Free، بالإضافة إلى:',
-        cta: 'أصبح Supporter',
+        cta: 'أصبح Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
           '115,000 رصيد كل شهر',
@@ -1431,7 +1431,7 @@ export const ar: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'لمستخدمي الطاقة الاحترافية.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
@@ -1439,8 +1439,8 @@ export const ar: SiteContent = {
         cadence: '/شهر',
         badge: 'أفضل عودة',
         stats: ['800K رصيد/شهر', '300 بوت', '100 وكيل'],
-        note: 'كل شيء في Supporter، بالإضافة إلى:',
-        cta: 'أصبح Sponsor',
+        note: 'كل شيء في Lite، بالإضافة إلى:',
+        cta: 'أصبح Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
@@ -1460,7 +1460,7 @@ export const ar: SiteContent = {
         priceYearly: 'Custom',
         cadence: '',
         stats: ['بنية خاصة', 'عناية بيضاء', 'SLA'],
-        note: 'كل شيء في Sponsor، بالإضافة إلى:',
+        note: 'كل شيء في Elite، بالإضافة إلى:',
         cta: 'اتصل بنا',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1552,15 +1552,15 @@ export const ar: SiteContent = {
       },
       {
         q: "ما هي الأرصدة؟",
-        a: "تقيس الأرصدة استخدام الذكاء الاصطناعي: إنشاء العناصر وتعديلها بالمحادثة وإنشاء الروابط واستخدام Copilot. رصيد واحد يساوي رمز إخراج Sonnet واحدًا من تكلفة المزود، لذا لا يعتمد السعر على النموذج الذي تختاره — يمدّد Haiku الرصيد إلى نحو 3 رموز؛ يستخدمه Opus في نحو 0.6. يحجز Free 100,000 عند التسجيل؛ يمنح Supporter 115,000 شهريًا؛ Sponsor 800,000 — ويمكنك شراء حزم في أي وقت.",
+        a: "تقيس الأرصدة استخدام الذكاء الاصطناعي: إنشاء العناصر وتعديلها بالمحادثة وإنشاء الروابط واستخدام Copilot. رصيد واحد يساوي رمز إخراج Sonnet واحدًا من تكلفة المزود، لذا لا يعتمد السعر على النموذج الذي تختاره — يمدّد Haiku الرصيد إلى نحو 3 رموز؛ يستخدمه Opus في نحو 0.6. يحجز Free 100,000 عند التسجيل؛ يمنح Lite 115,000 شهريًا؛ Elite 800,000 — ويمكنك شراء حزم في أي وقت.",
       },
       {
         q: "متى تُطلق الخطط المدفوعة؟",
-        a: "Supporter وSponsor معرفان ويظهران في التطبيق، لكن الدفع قريبًا. الجميع على Free اليوم — أنشئ حسابًا لتكون من الأوائل عند فتح الفوترة.",
+        a: "Lite وElite معرفان ويظهران في التطبيق، لكن الدفع قريبًا. الجميع على Free اليوم — أنشئ حسابًا لتكون من الأوائل عند فتح الفوترة.",
       },
       {
         q: "هل يمكنني الدفع سنويًا؟",
-        a: "نعم. الفوترة السنوية تمنحك شهرين مجانًا مقابل الشهرية — 99.90$ سنويًا لـ Supporter و699.90$ لـ Sponsor. يمكنك التبديل بين الشهري والسنوي في أي وقت.",
+        a: "نعم. الفوترة السنوية تمنحك شهرين مجانًا مقابل الشهرية — 99.90$ سنويًا لـ Lite و699.90$ لـ Elite. يمكنك التبديل بين الشهري والسنوي في أي وقت.",
       },
       {
         q: "كيف تُحسب السمعة؟",
@@ -1582,7 +1582,7 @@ export const ar: SiteContent = {
     subtitle: 'كل منشور وأداة وبوت ونشر يصبّ في نتيجة واحدة. النتيجة تفتح الشارات، والشارات تفتح المستويات — وعند إطلاق الـ DAO يُدفع الاثنان أرصدةً ورموز حوكمة.',
     live: 'يعمل في التطبيق',
     planned: 'مخطط له',
-    plannedNote: 'النقاط والشارات والمستويات تعمل في التطبيق اليوم. أما الدفع بالأرصدة وبـ NXW فيأتي مع Nexow DAO — والجدول أدناه هو المقترح المعروض على أول تصويت.',
+    plannedNote: 'النقاط والشارات والمستويات ومكافآت الأرصدة المجانية تعمل في التطبيق اليوم. أما دفع NXW ومكافآت المستوى فتأتي مع Nexow DAO — NXW يقوم بـ dry mint في 14 أغسطس 2026.',
     teaser: {
       badges: 'ميداليات لما تبنيه وتنشره',
       levels: 'رتب تُفتح بنقاط السمعة',
@@ -1656,7 +1656,7 @@ export const ar: SiteContent = {
         commentsReceived: 'تعليقات استلمتها',
         followers: 'المتابعون',
         following: 'من تتابعهم',
-        contacts: 'جهات اتصال متبادلة',
+        friends: 'جهات اتصال متبادلة',
         widgetsBuilt: 'أدوات بنيتها',
         assetsPublished: 'أصول نشرتها',
         installsReceived: 'تثبيتات لعملك',
@@ -1666,6 +1666,18 @@ export const ar: SiteContent = {
         likesGiven: 'إعجابات منحتها',
         reactionsGiven: 'تفاعلات منحتها',
         nightPosts: 'منشورات بين 00:00 و05:00',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'محادثات خاصة فتحتها',
       },
       names: {
@@ -1687,6 +1699,15 @@ export const ar: SiteContent = {
         emojiSommelier: 'خبير الإيموجي',
         nightOwl: 'بومة الليل',
         penPal: 'صديق المراسلة',
+        greenLight: 'ضوء أخضر',
+        buildFlagger: 'مبلّغ البناء',
+        tagClose: 'صديق',
+        tagFamily: 'عائلة',
+        tagWork: 'زميل',
+        tagTeam: 'زميل فريق',
+        tagSchool: 'زميل دراسة',
+        tagMentor: 'موجّه',
+        tagFavorite: 'المفضّلون',
         oracle: 'العرّاف',
         agora: 'الأغورا',
         catalyst: 'المحفّز',
@@ -1697,6 +1718,9 @@ export const ar: SiteContent = {
         benefactor: 'المحسن',
         midnightSun: 'شمس منتصف الليل',
         nexus: 'المحور',
+        tagPartner: 'شريك',
+        tagLove: 'واقع في الحب',
+        rolodex: 'دفتر العناوين',
         immortal: 'الخالد',
         folkHero: 'بطل شعبي',
         luminary: 'المنارة',
@@ -1712,7 +1736,7 @@ export const ar: SiteContent = {
         commentsReceived: 'تلقَّ تعليقات على منشوراتك.',
         followers: 'اكسب متابعين على ملفك الشخصي.',
         following: 'تابع أشخاصًا آخرين على Nexow.',
-        contacts: 'أضف جهات اتصال متبادلة — من تتابعهم ويتابعونك.',
+        friends: 'أضف جهات اتصال متبادلة — من تتابعهم ويتابعونك.',
         widgetsBuilt: 'ابنِ ودجات على لوحتك.',
         assetsPublished: 'انشر أصولًا في السوق.',
         installsReceived: 'احصل على تثبيتات لودجاتك أو بوتاتك أو سماتك المنشورة.',
@@ -1739,7 +1763,11 @@ export const ar: SiteContent = {
         bronze: 'الدرجة البرونزية',
         silver: 'الدرجة الفضية',
         gold: 'الدرجة الذهبية',
+        tagBronze: 'صديق · bronze',
+        tagSilver: 'صديق · silver',
+        tagGold: 'صديق · gold',
         rare: 'ميدالية نادرة',
+        tagRare: 'صديق · rare',
         legendary: 'ميدالية أسطورية',
       },
       levelRow: 'بلوغ {level}',
@@ -1748,7 +1776,7 @@ export const ar: SiteContent = {
       creditsLabel: 'رصيد',
       tokensLabel: 'NXW',
       worth: 'ما يعادل {usd} من توليد الذكاء الاصطناعي بسعر القائمة',
-      months: 'أي {n} شهرًا من التوليد بمستوى Sponsor، مكتسبة',
+      months: 'أي {n} شهرًا من التوليد بمستوى Elite، مكتسبة',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'رمز واحد. خمس وظائف. عشرون مليونًا كحد أقصى.',
@@ -1986,7 +2014,7 @@ export const ar: SiteContent = {
   waitlist: {
     eyebrow: 'قائمة انتظار الفوترة',
     title: 'الدفع على وشك الوصول',
-    subtitle: 'فوترة Supporter و Sponsor ستنطلق قريبًا. اترك بريدك الإلكتروني وسنخبرك يوم فتح الدفع — بلا رسائل مزعجة.',
+    subtitle: 'فوترة Lite و Elite ستنطلق قريبًا. اترك بريدك الإلكتروني وسنخبرك يوم فتح الدفع — بلا رسائل مزعجة.',
     placeholder: 'you@email.com',
     submit: 'انضم إلى قائمة الانتظار',
     submitting: 'جارٍ الانضمام…',

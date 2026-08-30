@@ -91,7 +91,7 @@ export const en: SiteContent = {
     hero: {
       badge: 'Early access',
       titleLead: 'DATA IS THE NEW OIL.',
-      titleGradient: 'BUILD ANYTHING &',
+      titleGradient: 'BUILD ANYTHING',
       titleWatch: 'WATCH EVERYTHING.',
       titleTail: 'ACT FAST, SHARE - GROW - EARN',
       titleKicker: 'Live real-time dashboards in seconds — not weeks, or quarters.',
@@ -223,7 +223,7 @@ export const en: SiteContent = {
     stats: [
       { n: 90, label: 'live connectors for data, wallets, socials and markets' },
       { n: 6, label: 'example workspaces from one canvas' },
-      { n: 10, suffix: 'K', label: 'starter AI credits on Free' },
+      { n: 100, suffix: 'K', label: 'starter AI credits on Free' },
       { n: 30, prefix: '<', suffix: 's', label: 'from sentence to running widget' },
     ],
     showcase: {
@@ -773,7 +773,7 @@ export const en: SiteContent = {
         {
           icon: 'trophy',
           title: 'Reputation & medals',
-          body: 'Every widget, bot and share earns reputation — points, tiered achievements, rare medals and levels on your public profile. Converting them into reward credits comes next.',
+          body: 'Every widget, bot and share earns reputation — points, tiered achievements, rare medals and levels on your public profile. Every badge tier pays free credits into your balance.',
           status: 'live',
         },
       ],
@@ -784,7 +784,7 @@ export const en: SiteContent = {
         '100,000 starter AI credits on Free',
         'Cross-device cloud sync for workspaces & widgets',
         'Community, marketplace & the widget library',
-        'Reputation points, medals & levels as you build and share',
+        'Reputation points, medals, levels — and free credits for every badge you unlock',
       ],
       accountCta: 'Create your free account',
     },
@@ -824,9 +824,9 @@ export const en: SiteContent = {
         { status: 'shipped', title: 'Community feed & profiles', body: 'Follow makers, share widgets to the feed, and claim your public @handle.' },
         { status: 'shipped', title: 'Agents & Copilot', body: 'Cloud agents with a full harness, deployed with tool grants and run history — plus a Copilot that builds and arranges your workspace.' },
         { status: 'shipped', title: 'Marketplace & USDC sales', body: 'Publish widgets, screens, workspaces, bots, agents and themes — free or priced in USDC on Solana, wallet to wallet, with lineage that credits every remake.' },
-        { status: 'shipped', title: 'Reputation & medals', body: 'Points, tiered achievements, rare medals and levels for what you build and share.' },
+        { status: 'shipped', title: 'Reputation & medals', body: 'Points, tiered achievements, rare medals and levels — and every badge tier pays free credits into your balance.' },
         { status: 'soon', title: 'Premium widgets & signals', body: 'Publish premium widgets and strategy signals, let others subscribe, and earn on what you run.' },
-        { status: 'soon', title: 'Paid plans & reward credits', body: 'Supporter and Sponsor checkout, platform credits, and converting reputation into reward credits.' },
+        { status: 'soon', title: 'Paid plans', body: 'Lite and Elite checkout — monthly credit refreshes, higher bot and agent quotas, and premium appearance.' },
       ],
     },
     faq: {
@@ -864,7 +864,7 @@ export const en: SiteContent = {
         },
         {
           q: 'How much does it cost?',
-          a: 'Free includes the full widget canvas, library, cloud sync, 10 bots, 3 agents, community access and 100,000 AI credits at sign-up. Supporter and Sponsor add monthly credits, higher automation quotas and premium appearance — checkout is coming soon. See Plans for the full comparison.',
+          a: 'Free includes the full widget canvas, library, cloud sync, 10 bots, 3 agents, community access and 100,000 AI credits at sign-up. Badge unlocks pay more free credits as you build. Lite and Elite add monthly credits, higher automation quotas and premium appearance — checkout is coming soon. See Plans for the full comparison.',
         },
       ],
     },
@@ -968,12 +968,12 @@ export const en: SiteContent = {
       eyebrow: 'Grow the network',
       title: 'Reputation that follows the work you share.',
       subtitle:
-        'Building, shipping and helping others earns points, medals and levels on your public profile — the same reputation surface across Free and paid plans.',
+        'Building, shipping and helping others earns points, medals, levels — and free credits for every badge you unlock. The same reputation surface across Free and paid plans.',
       items: [
         {
           icon: 'trophy',
-          title: 'Points, medals & levels',
-          body: 'Earn reputation for widgets, bots, shares and social activity. Unlock tiered achievements and rare medals that show on your profile.',
+          title: 'Points, medals & free credits',
+          body: 'Earn reputation for widgets, bots, shares and social activity. Unlock tiered achievements and rare medals — every badge tier pays real credits into your balance.',
         },
         {
           icon: 'signal',
@@ -1379,7 +1379,7 @@ export const en: SiteContent = {
           { icon: 'users', title: 'Community', body: 'Follow makers, like and comment in a social feed for builders, explore boards, and share widgets others can add straight to their library — with public maker profiles.' },
           { icon: 'mail', title: 'Realtime chats', body: 'Message friends and contacts live from Account or the dock — 1:1 and group DMs with presence, reactions, followers/following and a contacts inbox.' },
           { icon: 'store', title: 'Marketplace', body: 'Publish and install widgets, themes, screens, bots and agents — free or priced in USDC on Solana, with no escrow, no platform cut, and lineage that credits every remake.' },
-          { icon: 'trophy', title: 'Reputation & medals', body: 'Earn reputation points for building and sharing, unlock tiered achievements and rare medals — live today. Reward credits come next.' },
+          { icon: 'trophy', title: 'Reputation & medals', body: 'Earn reputation points for building and sharing, unlock tiered achievements and rare medals — and every badge tier pays free credits into your balance.' },
         ],
       },
       {
@@ -1405,22 +1405,22 @@ export const en: SiteContent = {
       badge: 'Plans',
       title: 'Start simple. Scale only when needed.',
       subtitle:
-        'Four plans, one canvas. Free is a real workspace with credits, sync, bots and community reputation. Supporter, Sponsor and Partner add capacity, premium appearance and a direct line to us.',
+        'Four plans, one canvas. Free is a real workspace with credits, sync, bots and community reputation. Lite, Elite and Partner add capacity, premium appearance and a direct line to us.',
     },
     comingSoon:
-      'Supporter & Sponsor checkout is coming soon, and platform credits launch alongside it. Everyone is on Free today — create an account to be first when billing opens.',
+      'Lite & Elite checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens. Badge unlocks already pay free credits on every plan.',
     highlights: {
       title: 'What changes when you grow',
       items: [
         {
           icon: 'coins',
           title: 'AI credits',
-          body: 'Credits meter every generation and AI edit. Free reserves 100,000 at sign-up; Supporter and Sponsor refresh 115,000 and 800,000 every month.',
+          body: 'Credits meter every generation and AI edit. Free reserves 100,000 at sign-up; Lite and Elite refresh 115,000 and 800,000 every month. Badge unlocks pay more free credits on every plan.',
         },
         {
           icon: 'bot',
           title: 'More automation',
-          body: 'Bot and agent quotas climb from 10 / 3 on Free to 300 / 100 on Sponsor — with Connector Builder, for APIs we do not ship yet, landing on Sponsor after that.',
+          body: 'Bot and agent quotas climb from 10 / 3 on Free to 300 / 100 on Elite — with Connector Builder, for APIs we do not ship yet, landing on Elite after that.',
         },
         {
           icon: 'sparkles',
@@ -1462,7 +1462,7 @@ export const en: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'For makers using Nexow every week.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
@@ -1470,7 +1470,7 @@ export const en: SiteContent = {
         cadence: '/mo',
         stats: ['115,000 credits/mo', '30 bots · 10 agents', 'Premium UI'],
         note: 'Everything in Free, plus:',
-        cta: 'Become a Supporter',
+        cta: 'Get Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
           '115,000 credits every month',
@@ -1482,7 +1482,7 @@ export const en: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'For power users with live workspaces.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
@@ -1490,8 +1490,8 @@ export const en: SiteContent = {
         cadence: '/mo',
         badge: 'Best return',
         stats: ['800,000 credits/mo', '300 bots · 100 agents', 'Priority support'],
-        note: 'Everything in Supporter, plus:',
-        cta: 'Become a Sponsor',
+        note: 'Everything in Lite, plus:',
+        cta: 'Get Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
@@ -1511,7 +1511,7 @@ export const en: SiteContent = {
         priceYearly: 'Custom',
         cadence: '',
         stats: ['Private infra', 'Custom bot & agent quotas', 'Dedicated support'],
-        note: 'Everything in Sponsor, plus:',
+        note: 'Everything in Elite, plus:',
         cta: 'Contact us',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1604,15 +1604,15 @@ export const en: SiteContent = {
       },
       {
         q: 'What are credits?',
-        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 100,000 at sign-up; Supporter grants 115,000 a month; Sponsor 800,000 — and you can buy packs anytime.',
+        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 100,000 at sign-up; Lite grants 115,000 a month; Elite 800,000 — and you can buy packs anytime. Badge unlocks also pay free credits on every plan.',
       },
       {
         q: 'When do paid plans launch?',
-        a: 'Supporter and Sponsor are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.',
+        a: 'Lite and Elite are defined and shown in the app, but paid checkout is coming soon. Everyone is on Free today — create an account to be first when billing opens.',
       },
       {
         q: 'Can I pay yearly?',
-        a: 'Yes. Yearly billing gives you two months free versus monthly — $99.90 a year for Supporter, $699.90 for Sponsor. You can switch between monthly and yearly anytime.',
+        a: 'Yes. Yearly billing gives you two months free versus monthly — $99.90 a year for Lite, $699.90 for Elite. You can switch between monthly and yearly anytime.',
       },
       {
         q: 'How is reputation calculated?',
@@ -1620,11 +1620,11 @@ export const en: SiteContent = {
       },
       {
         q: 'Are badges tied to my plan?',
-        a: 'No. All 34 badges, five levels and the full community layer are available on Free. Plans buy capacity and appearance, never status — a Free account can reach Legend.',
+        a: 'No. Every badge, five levels and the full community layer are available on Free. Plans buy capacity and appearance, never status — a Free account can reach Legend, and every badge tier pays the same free credits on every plan.',
       },
       {
         q: 'When do credit and token rewards land?',
-        a: 'Badges and points are live today. Credit and NXW payouts ship with the Nexow DAO. NXW dry-mints on Solana on August 14, 2026 — 10M utility (mint/burn for goods & services) plus 10M open mint at 1 USDC each. The ladder numbers on this page are the proposal we are committing to.',
+        a: 'Badge credit rewards are live today — every tier and medal pays prepaid credits into your balance once the app verifies the unlock. NXW payouts and level-up bonuses ship with the Nexow DAO. NXW dry-mints on Solana on August 14, 2026 — 10M utility (mint/burn for goods & services) plus 10M open mint at 1 USDC each.',
       },
     ],
   },
@@ -1632,15 +1632,15 @@ export const en: SiteContent = {
     eyebrow: 'Reputation & rewards',
     title: 'Building on Nexow earns you something',
     subtitle:
-      'Every post, widget, bot and publish feeds one score. The score unlocks badges, the badges unlock levels — and when the DAO opens, both pay out in credits and governance tokens.',
+      'Every post, widget, bot and publish feeds one score. The score unlocks badges, every badge tier pays free credits into your balance, and when the DAO opens the same ladder pays NXW governance tokens.',
     live: 'Live in the app',
     planned: 'Planned',
     plannedNote:
-      'Points, badges and levels are live in the app today. Credit and NXW payouts ship with the Nexow DAO — NXW dry-mints August 14, 2026. The schedule below is the proposal going to the first ballot.',
+      'Points, badges, levels and free credit rewards are live in the app today. NXW payouts and level-up bonuses ship with the Nexow DAO — NXW dry-mints August 14, 2026.',
     teaser: {
       badges: 'Medals for what you build and ship',
       levels: 'Ranks unlocked by reputation points',
-      credits: 'Spendable AI generation from unlocks',
+      credits: 'Free AI credits paid when you unlock a badge',
       tokens: 'NXW — governance, treasury, dividends & more',
     },
     points: {
@@ -1671,7 +1671,7 @@ export const en: SiteContent = {
     badges: {
       title: 'The badge vault',
       body:
-        '34 badges in three rarities — and the bars are steep on purpose. Eighteen climb bronze → silver → gold with real unlock numbers (e.g. Conversationalist: 50 / 1,000 / 10,000 comments); ten rare medals sit past gold; six legendary medals ask for something almost nobody should clear. Each card shows how to earn it, the exact thresholds, and what every tier pays in credits and NXW.',
+        'Badges in three rarities, each paying free credits when you unlock it. Regular badges climb bronze → silver → gold (2,500 / 10,000 / 40,000 credits); friend-tag badges pay a smaller purse; rare medals pay 100,000; legendary medals pay 250,000. Each card shows how to earn it, the exact thresholds, and what every tier pays.',
       filters: { all: 'All', tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       count: '{n} badges',
       unit: 'badges',
@@ -1681,9 +1681,9 @@ export const en: SiteContent = {
       tiers: { bronze: 'Bronze', silver: 'Silver', gold: 'Gold' },
       rarity: { tiered: 'Tiered', rare: 'Rare', legendary: 'Legendary' },
       rarityBody: {
-        tiered: 'Three hard thresholds on one stat — bronze, silver, then gold. Bronze is a habit; gold is a grind. 18 badges, 54 tiers.',
-        rare: 'A single brutal bar set past gold. No tiers, no partial credit — 10 medals.',
-        legendary: 'One absurd threshold each. Six medals. Most accounts will never see them.',
+        tiered: 'Three thresholds on one stat — bronze, silver, then gold. Regular badges pay 2,500 / 10,000 / 40,000 credits; friend-tag badges pay a smaller purse.',
+        rare: 'A single bar, usually past gold. Regular rares pay 100,000 credits; partner, love and rolodex medals pay 5,000.',
+        legendary: 'One hard threshold each. Six medals, 250,000 credits apiece.',
       },
       flipHint: 'Tap a badge for full reward detail',
       stats: {
@@ -1694,7 +1694,7 @@ export const en: SiteContent = {
         commentsReceived: 'Comments received',
         followers: 'Followers',
         following: 'People you follow',
-        contacts: 'Mutual contacts',
+        friends: 'Friends',
         widgetsBuilt: 'Widgets built',
         assetsPublished: 'Assets published',
         installsReceived: 'Installs of your work',
@@ -1703,8 +1703,20 @@ export const en: SiteContent = {
         reportsFiled: 'Reports filed',
         likesGiven: 'Likes given',
         reactionsGiven: 'Reactions given',
-        nightPosts: 'Posts between 00:00 and 05:00',
+        buildLikesGiven: 'Build likes given',
+        buildReportsFiled: 'Build reports filed',
+        nightPosts: 'Posts between 00:00 and 04:59 UTC',
         dmThreads: 'DM threads opened',
+        closeTags: 'Friends tagged Friend',
+        familyTags: 'Friends tagged Family',
+        workTags: 'Friends tagged Work',
+        teamTags: 'Friends tagged Team',
+        schoolTags: 'Friends tagged School',
+        mentorTags: 'Friends tagged Mentor',
+        favoriteTags: 'Friends tagged Favourite',
+        partnerTags: 'Friends tagged Partner',
+        loveTags: 'Friends tagged Love',
+        tagKindsUsed: 'Different friend tags used',
       },
       how: {
         accountAgeDays: 'Keep your account — counted as days since you joined Nexow.',
@@ -1714,7 +1726,7 @@ export const en: SiteContent = {
         commentsReceived: 'Receive comments on your posts.',
         followers: 'Gain followers on your profile.',
         following: 'Follow other people on Nexow.',
-        contacts: 'Add mutual contacts — people you follow who follow you back.',
+        friends: 'Add friends — people you follow who follow you back.',
         widgetsBuilt: 'Build widgets on your canvas.',
         assetsPublished: 'Publish assets to the marketplace.',
         installsReceived: 'Get installs of your published widgets, bots or themes.',
@@ -1723,8 +1735,20 @@ export const en: SiteContent = {
         reportsFiled: 'File moderation reports that help keep the community clean.',
         likesGiven: 'Like other people’s posts.',
         reactionsGiven: 'React to posts with emoji.',
-        nightPosts: 'Publish posts between 00:00 and 05:00 local time.',
+        buildLikesGiven: 'Tap Went well under a widget build that landed cleanly.',
+        buildReportsFiled: 'Use Report build under a widget reply that went wrong.',
+        nightPosts: 'Publish posts between 00:00 and 04:59 UTC.',
         dmThreads: 'Open direct-message threads with other people.',
+        closeTags: 'Open a friend’s profile and tag them Friend.',
+        familyTags: 'Tag friends Family from their profile.',
+        workTags: 'Tag friends Work from their profile.',
+        teamTags: 'Tag friends Team from their profile.',
+        schoolTags: 'Tag friends School from their profile.',
+        mentorTags: 'Tag friends Mentor from their profile.',
+        favoriteTags: 'Tag friends Favourite from their profile.',
+        partnerTags: 'Tag one friend as Partner — one person, one medal.',
+        loveTags: 'Tag one friend as Love — one person, one medal.',
+        tagKindsUsed: 'Use eight different friend tags at least once each.',
       },
       names: {
         pioneer: 'Pioneer',
@@ -1745,6 +1769,15 @@ export const en: SiteContent = {
         emojiSommelier: 'Emoji sommelier',
         nightOwl: 'Night owl',
         penPal: 'Pen pal',
+        greenLight: 'Green light',
+        buildFlagger: 'Build flagger',
+        tagClose: 'Friend',
+        tagFamily: 'Family',
+        tagWork: 'Colleague',
+        tagTeam: 'Teammate',
+        tagSchool: 'Classmate',
+        tagMentor: 'Mentor',
+        tagFavorite: 'Favourites',
         oracle: 'Oracle',
         agora: 'Agora',
         catalyst: 'Catalyst',
@@ -1755,6 +1788,9 @@ export const en: SiteContent = {
         benefactor: 'Benefactor',
         midnightSun: 'Midnight sun',
         nexus: 'Nexus',
+        tagPartner: 'Plus one',
+        tagLove: 'In love',
+        rolodex: 'Rolodex',
         immortal: 'Immortal',
         folkHero: 'Folk hero',
         luminary: 'Luminary',
@@ -1766,7 +1802,7 @@ export const en: SiteContent = {
     ledger: {
       title: 'The reward ladder',
       body:
-        'Each unlock pays twice: spendable AI credits, and NXW — the Solana token for governance, treasury, dividends, credits, and random rewards. Same schedule for everyone, on every plan.',
+        'Each badge unlock pays spendable AI credits today. NXW — the Solana token for governance, treasury, dividends, credits, and random rewards — ships with the DAO. Same credit schedule for everyone, on every plan.',
       tokenName: 'NXW',
       tokenNote:
         'Ladder NXW comes from the 10M utility pool — minted and burned when it is spent on goods and services.',
@@ -1779,7 +1815,11 @@ export const en: SiteContent = {
         bronze: 'Bronze tier',
         silver: 'Silver tier',
         gold: 'Gold tier',
+        tagBronze: 'Friend-tag bronze',
+        tagSilver: 'Friend-tag silver',
+        tagGold: 'Friend-tag gold',
         rare: 'Rare medal',
+        tagRare: 'Friend-tag rare',
         legendary: 'Legendary medal',
       },
       levelRow: 'Reach {level}',
@@ -1788,7 +1828,7 @@ export const en: SiteContent = {
       creditsLabel: 'credits',
       tokensLabel: 'NXW',
       worth: '≈ {usd} of AI generation at list price',
-      months: '= {n} months of Sponsor-grade generation, earned',
+      months: '= {n} months of Elite-grade generation, earned',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'One token. Five jobs. Twenty million max.',
@@ -2013,7 +2053,7 @@ export const en: SiteContent = {
     eyebrow: 'Billing waitlist',
     title: 'Checkout is almost here',
     subtitle:
-      'Supporter and Sponsor billing is landing soon. Leave your email and we’ll notify you the day checkout opens — no spam.',
+      'Lite and Elite billing is landing soon. Leave your email and we’ll notify you the day checkout opens — no spam.',
     placeholder: 'you@email.com',
     submit: 'Join the waitlist',
     submitting: 'Joining…',

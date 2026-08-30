@@ -390,9 +390,8 @@ describe('MATRIX', () => {
 
   it('marks the capabilities that are not live yet, and labels them', () => {
     const soon = MATRIX.flatMap((g) => g.rows.filter((r) => r.soon).map((r) => r.key));
-    // The reward ladder and the DAO are documented as planned, so they must
-    // always carry the chip — see the header comment in gamification.ts.
-    expect(soon).toContain('rewards');
+    // Credit rewards are live; NXW / DAO stay planned.
+    expect(soon).not.toContain('rewards');
     expect(soon).toContain('dao');
     expect(new Set(soon).size, 'a row is marked soon twice').toBe(soon.length);
 
@@ -484,11 +483,11 @@ describe('LEVELS', () => {
 });
 
 describe('badges', () => {
-  it('ships 18 tiered, 10 rare and 6 legendary achievements', () => {
-    expect(TIERED_BADGES).toHaveLength(18);
-    expect(RARE_BADGES).toHaveLength(10);
+  it('ships 27 tiered, 13 rare and 6 legendary achievements', () => {
+    expect(TIERED_BADGES).toHaveLength(27);
+    expect(RARE_BADGES).toHaveLength(13);
     expect(LEGENDARY_BADGES).toHaveLength(6);
-    expect(ALL_BADGES).toHaveLength(34);
+    expect(ALL_BADGES).toHaveLength(46);
     expect(ALL_BADGES).toEqual([...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES]);
   });
 
@@ -529,8 +528,21 @@ describe('badges', () => {
   it('tracks a stat the reputation engine knows', () => {
     const weighted = new Set(Object.keys(POINT_WEIGHTS));
     for (const badge of ALL_BADGES) {
-      // `accountAgeDays` and `nightPosts` are badge-only: no separate weight.
-      const known = weighted.has(badge.stat) || ['accountAgeDays', 'nightPosts'].includes(badge.stat);
+      const badgeOnly = [
+        'accountAgeDays',
+        'nightPosts',
+        'closeTags',
+        'familyTags',
+        'workTags',
+        'teamTags',
+        'schoolTags',
+        'mentorTags',
+        'favoriteTags',
+        'partnerTags',
+        'loveTags',
+        'tagKindsUsed',
+      ];
+      const known = weighted.has(badge.stat) || badgeOnly.includes(badge.stat);
       expect(known, `${badge.id} tracks unknown stat ${badge.stat}`).toBe(true);
     }
   });
@@ -554,8 +566,8 @@ describe('badges', () => {
   });
 
   it('totals every point available from badges alone', () => {
-    expect(MAX_BADGE_POINTS).toBe(18 * 3 * 20 + 10 * 100 + 6 * 250);
-    expect(MAX_BADGE_POINTS).toBe(3_580);
+    expect(MAX_BADGE_POINTS).toBe(27 * 3 * 20 + 13 * 100 + 6 * 250);
+    expect(MAX_BADGE_POINTS).toBe(4_420);
   });
 
   it('gives every rarity and tier band a gradient', () => {
@@ -575,21 +587,46 @@ describe('POINT_WEIGHTS', () => {
   });
 
   it('leaves badge-only stats unweighted so they are not double-counted', () => {
-    const badgeOnly: StatKey[] = ['accountAgeDays', 'nightPosts'];
+    const badgeOnly: StatKey[] = [
+      'accountAgeDays',
+      'nightPosts',
+      'closeTags',
+      'familyTags',
+      'workTags',
+      'teamTags',
+      'schoolTags',
+      'mentorTags',
+      'favoriteTags',
+      'partnerTags',
+      'loveTags',
+      'tagKindsUsed',
+    ];
     for (const stat of badgeOnly) {
       expect(POINT_WEIGHTS[stat], stat).toBeUndefined();
     }
   });
 });
 
-describe('reward ladder (planned)', () => {
+describe('reward ladder', () => {
   it('has one row per rarity band, counted off the badge lists', () => {
-    expect(REWARD_LADDER.map((r) => r.key)).toEqual(['bronze', 'silver', 'gold', 'rare', 'legendary']);
+    expect(REWARD_LADDER.map((r) => r.key)).toEqual([
+      'bronze',
+      'silver',
+      'gold',
+      'tagBronze',
+      'tagSilver',
+      'tagGold',
+      'rare',
+      'tagRare',
+      'legendary',
+    ]);
     const counts = Object.fromEntries(REWARD_LADDER.map((r) => [r.key, r.count]));
-    expect(counts.bronze).toBe(TIERED_BADGES.length);
-    expect(counts.silver).toBe(TIERED_BADGES.length);
-    expect(counts.gold).toBe(TIERED_BADGES.length);
-    expect(counts.rare).toBe(RARE_BADGES.length);
+    expect(counts.bronze).toBe(20);
+    expect(counts.silver).toBe(20);
+    expect(counts.gold).toBe(20);
+    expect(counts.tagBronze).toBe(7);
+    expect(counts.rare).toBe(10);
+    expect(counts.tagRare).toBe(3);
     expect(counts.legendary).toBe(LEGENDARY_BADGES.length);
   });
 
@@ -600,16 +637,31 @@ describe('reward ladder (planned)', () => {
     }
   });
 
-  it('grows credits and tokens monotonically up the ladder', () => {
-    const credits = REWARD_LADDER.map((r) => r.credits);
-    const tokens = REWARD_LADDER.map((r) => r.tokens);
-    expect(credits).toEqual([...credits].sort((a, b) => a - b));
-    expect(tokens).toEqual([...tokens].sort((a, b) => a - b));
+  it('pays live app credit amounts on the regular rungs', () => {
+    const byKey = Object.fromEntries(REWARD_LADDER.map((r) => [r.key, r]));
+    expect(byKey.bronze.credits).toBe(2_500);
+    expect(byKey.silver.credits).toBe(10_000);
+    expect(byKey.gold.credits).toBe(40_000);
+    expect(byKey.tagBronze.credits).toBe(500);
+    expect(byKey.rare.credits).toBe(100_000);
+    expect(byKey.tagRare.credits).toBe(5_000);
+    expect(byKey.legendary.credits).toBe(250_000);
   });
 
   it('draws each row medallion from the shared rarity palette', () => {
+    const paletteKey: Record<string, keyof typeof RARITY_COLORS> = {
+      bronze: 'bronze',
+      silver: 'silver',
+      gold: 'gold',
+      tagBronze: 'bronze',
+      tagSilver: 'silver',
+      tagGold: 'gold',
+      rare: 'rare',
+      tagRare: 'rare',
+      legendary: 'legendary',
+    };
     for (const row of REWARD_LADDER) {
-      const palette = RARITY_COLORS[row.key as keyof typeof RARITY_COLORS];
+      const palette = RARITY_COLORS[paletteKey[row.key]];
       expect({ from: row.from, to: row.to }, row.key).toEqual(palette);
       expect(ICON_PATHS, `${row.key} → ${row.icon}`).toHaveProperty(row.icon);
     }
@@ -625,15 +677,13 @@ describe('reward ladder (planned)', () => {
     }
   });
 
-  it('totals exactly 1,600,000 credits and 25,000 NXW for a complete set', () => {
-    expect(TOTAL_REWARD_CREDITS).toBe(1_600_000);
-    expect(TOTAL_REWARD_TOKENS).toBe(25_000);
+  it('totals live badge credits and planned NXW from the rows', () => {
+    expect(TOTAL_REWARD_CREDITS).toBe(3_617_500);
+    expect(TOTAL_REWARD_TOKENS).toBe(25_250);
   });
 
   it('derives the totals from the rows, not from a hard-coded number', () => {
-    const credits =
-      REWARD_LADDER.reduce((a, r) => a + r.credits * r.count, 0) +
-      LEVEL_REWARDS.reduce((a, r) => a + r.credits, 0);
+    const credits = REWARD_LADDER.reduce((a, r) => a + r.credits * r.count, 0);
     const tokens =
       REWARD_LADDER.reduce((a, r) => a + r.tokens * r.count, 0) +
       LEVEL_REWARDS.reduce((a, r) => a + r.tokens, 0);
@@ -641,13 +691,11 @@ describe('reward ladder (planned)', () => {
     expect(TOTAL_REWARD_TOKENS).toBe(tokens);
   });
 
-  it('values the full haul at list price', () => {
+  it('values the live credit haul at list price', () => {
     expect(TOTAL_REWARD_USD).toBeCloseTo(creditsToUsd(TOTAL_REWARD_CREDITS), 10);
-    expect(TOTAL_REWARD_USD).toBeCloseTo(139.2, 6);
   });
 
-  it('covers two months of Sponsor-grade generation', () => {
-    expect(TOTAL_REWARD_SPONSOR_MONTHS).toBe(2);
+  it('covers months of Elite-grade generation', () => {
     expect(TOTAL_REWARD_SPONSOR_MONTHS).toBe(Math.round(TOTAL_REWARD_CREDITS / planCredits(69.99)));
   });
 

@@ -302,7 +302,7 @@ export interface RewardsContent {
      * Optional so partial locales compile; `useContent` merges English at runtime.
      */
     how?: Record<string, string>;
-    /** One name per badge id (18 tiered + 10 rare + 6 legendary). */
+    /** One name per badge id. */
     names: Record<string, string>;
   };
   ledger: {
@@ -315,7 +315,7 @@ export interface RewardsContent {
     colPoints: string;
     colCredits: string;
     colTokens: string;
-    rows: Record<'bronze' | 'silver' | 'gold' | 'rare' | 'legendary', string>;
+    rows: Record<string, string>;
     /** "Reach {level}" for the level-up rows. */
     levelRow: string;
     totalTitle: string;

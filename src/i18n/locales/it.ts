@@ -84,7 +84,7 @@ export const it: SiteContent = {
     hero: {
       badge: 'Accesso anticipato',
       titleLead: 'I dati sono il nuovo petrolio.',
-      titleGradient: 'Costruisci qualsiasi cosa e',
+      titleGradient: 'Costruisci qualsiasi cosa',
       titleWatch: 'osserva tutto.',
       titleTail: 'Agisci in fretta, condividi - cresci - guadagna',
       titleKicker: 'Dashboard in tempo reale in pochi secondi — non settimane, né trimestri.',
@@ -185,7 +185,7 @@ export const it: SiteContent = {
     stats: [
       { n: 90, label: 'connettori attivi per dati, wallet, social e mercati' },
       { n: 6, label: 'classi di asset su un unico canvas' },
-      { n: 10, suffix: 'K', label: 'crediti AI gratuiti riservati alla registrazione' },
+      { n: 100, suffix: 'K', label: 'crediti AI gratuiti riservati alla registrazione' },
       { n: 30, prefix: '<', suffix: 's', label: 'dalla frase al widget in esecuzione' },
     ],
     showcase: {
@@ -563,7 +563,7 @@ export const it: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Pubblica e installa widget, temi, schermate e bot — con una lineage che dà credito a ogni remake.' },
         { status: 'shipped', title: 'Reputazione e medaglie', body: 'Punti, traguardi progressivi, medaglie rare e livelli per ciò che costruisci e condividi.' },
         { status: 'soon', title: 'Widget premium e segnali', body: 'Pubblica widget premium e segnali di strategia, lascia che altri si abbonino e guadagna su ciò che esegui.' },
-        { status: 'soon', title: 'Piani a pagamento e crediti ricompensa', body: 'Checkout Supporter e Sponsor, crediti di piattaforma e conversione della reputazione in crediti ricompensa.' },
+        { status: 'soon', title: 'Piani a pagamento e crediti ricompensa', body: 'Checkout Lite e Elite, crediti di piattaforma e conversione della reputazione in crediti ricompensa.' },
       ],
     },
     faq: {
@@ -601,7 +601,7 @@ export const it: SiteContent = {
         },
         {
           q: "Quanto costa?",
-          a: "Free include il canvas completo di widget, libreria, sync cloud, 10 bot, 3 agent, accesso community e 100.000 crediti AI alla registrazione. Supporter e Sponsor aggiungono crediti mensili, più automazione e aspetto premium — il checkout arriva presto. Vedi Piani per il confronto completo.",
+          a: "Free include il canvas completo di widget, libreria, sync cloud, 10 bot, 3 agent, accesso community e 100.000 crediti AI alla registrazione. Lite e Elite aggiungono crediti mensili, più automazione e aspetto premium — il checkout arriva presto. Vedi Piani per il confronto completo.",
         },
       ],
     },
@@ -1349,7 +1349,7 @@ export const it: SiteContent = {
     meta: {
       title: 'Piani — Nexow',
       description:
-        'Gratis per sempre per costruire — in locale con la tua chiave, oppure con 100.000 crediti AI riservati su un account gratuito. Confronta Free, Supporter, Sponsor e Partner per crediti, bot, agenti e personalizzazione.',
+        'Gratis per sempre per costruire — in locale con la tua chiave, oppure con 100.000 crediti AI riservati su un account gratuito. Confronta Free, Lite, Elite e Partner per crediti, bot, agenti e personalizzazione.',
     },
     hero: {
       badge: 'Piani',
@@ -1358,7 +1358,7 @@ export const it: SiteContent = {
         'Costruisci gratis — gira in locale con la tua chiave, oppure registrati per riservare 100.000 crediti AI. Fai l’upgrade quando hai bisogno di più capacità, automazione e rifinitura.',
     },
     comingSoon:
-      'Il checkout di Supporter e Sponsor è in arrivo, e i crediti della piattaforma verranno lanciati insieme. Oggi sono tutti su Free — crea un account per essere tra i primi quando apre la fatturazione.',
+      'Il checkout di Lite e Elite è in arrivo, e i crediti della piattaforma verranno lanciati insieme. Oggi sono tutti su Free — crea un account per essere tra i primi quando apre la fatturazione.',
     highlights: {
       title: 'Cosa cresce con il tuo piano',
       items: [
@@ -1412,7 +1412,7 @@ export const it: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'Per i maker che vogliono più spazio.',
         priceMonthly: '9,99 €',
         priceYearly: '8,33 €',
@@ -1420,7 +1420,7 @@ export const it: SiteContent = {
         cadence: '/mese',
         stats: ['115K crediti/mese', '30 bot', '10 agenti'],
         note: 'Tutto ciò che c’è in Free, più:',
-        cta: 'Diventa Supporter',
+        cta: 'Diventa Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
           '115.000 crediti ogni mese',
@@ -1432,7 +1432,7 @@ export const it: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'Per i power user che passano al pro.',
         priceMonthly: '69,99 €',
         priceYearly: '58,33 €',
@@ -1440,8 +1440,8 @@ export const it: SiteContent = {
         cadence: '/mese',
         badge: 'Miglior ritorno',
         stats: ['800K crediti/mese', '300 bot', '100 agenti'],
-        note: 'Tutto ciò che c’è in Supporter, più:',
-        cta: 'Diventa Sponsor',
+        note: 'Tutto ciò che c’è in Lite, più:',
+        cta: 'Diventa Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
@@ -1461,7 +1461,7 @@ export const it: SiteContent = {
         priceYearly: 'Su misura',
         cadence: '',
         stats: ['Infra privata', 'White-glove', 'SLA'],
-        note: 'Tutto ciò che c’è in Sponsor, più:',
+        note: 'Tutto ciò che c’è in Elite, più:',
         cta: 'Contattaci',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1553,15 +1553,15 @@ export const it: SiteContent = {
       },
       {
         q: "Cosa sono i crediti?",
-        a: "I crediti misurano l’uso dell’AI: generare widget, modificarli in conversazione, creare link e usare Copilot. Un credito equivale a un token di output Sonnet di costo provider, quindi il prezzo non dipende dal modello — Haiku allunga un credito a circa 3 token; Opus lo consuma in circa 0,6. Free riserva 100.000 alla registrazione; Supporter dà 115.000 al mese; Sponsor 800.000 — e puoi comprare pack in qualsiasi momento.",
+        a: "I crediti misurano l’uso dell’AI: generare widget, modificarli in conversazione, creare link e usare Copilot. Un credito equivale a un token di output Sonnet di costo provider, quindi il prezzo non dipende dal modello — Haiku allunga un credito a circa 3 token; Opus lo consuma in circa 0,6. Free riserva 100.000 alla registrazione; Lite dà 115.000 al mese; Elite 800.000 — e puoi comprare pack in qualsiasi momento.",
       },
       {
         q: "Quando partono i piani a pagamento?",
-        a: "Supporter e Sponsor sono definiti e mostrati nell’app, ma il checkout a pagamento arriva presto. Oggi tutti sono su Free — crea un account per essere tra i primi all’apertura della fatturazione.",
+        a: "Lite e Elite sono definiti e mostrati nell’app, ma il checkout a pagamento arriva presto. Oggi tutti sono su Free — crea un account per essere tra i primi all’apertura della fatturazione.",
       },
       {
         q: "Posso pagare annualmente?",
-        a: "Sì. La fatturazione annuale ti dà due mesi gratis rispetto al mensile — 99,90 $ all’anno per Supporter, 699,90 $ per Sponsor. Puoi passare da mensile ad annuale in qualsiasi momento.",
+        a: "Sì. La fatturazione annuale ti dà due mesi gratis rispetto al mensile — 99,90 $ all’anno per Lite, 699,90 $ per Elite. Puoi passare da mensile ad annuale in qualsiasi momento.",
       },
       {
         q: "Come si calcola la reputazione?",
@@ -1583,7 +1583,7 @@ export const it: SiteContent = {
     subtitle: 'Ogni post, widget, bot e pubblicazione alimenta un unico punteggio. Il punteggio sblocca i badge, i badge sbloccano i livelli — e quando aprirà la DAO, entrambi pagheranno in crediti e token di governance.',
     live: 'Attivo nell’app',
     planned: 'Pianificato',
-    plannedNote: 'Punti, badge e livelli sono già attivi nell’app. I pagamenti in crediti e NXW arrivano con la Nexow DAO — la tabella qui sotto è la proposta che andrà al primo voto.',
+    plannedNote: 'Punti, badge e livelli sono già attivi nell’app. Punti, badge, livelli e crediti premio sono già attivi nell’app. I pagamenti in NXW e i bonus di livello arrivano con la Nexow DAO — NXW dry-mint il 14 agosto 2026.',
     teaser: {
       badges: 'Medaglie per ciò che costruisci e pubblichi',
       levels: 'Gradi sbloccati con la reputazione',
@@ -1657,7 +1657,7 @@ export const it: SiteContent = {
         commentsReceived: 'Commenti ricevuti',
         followers: 'Follower',
         following: 'Persone che segui',
-        contacts: 'Contatti reciproci',
+        friends: 'Contatti reciproci',
         widgetsBuilt: 'Widget creati',
         assetsPublished: 'Asset pubblicati',
         installsReceived: 'Installazioni del tuo lavoro',
@@ -1667,6 +1667,18 @@ export const it: SiteContent = {
         likesGiven: 'Like dati',
         reactionsGiven: 'Reazioni date',
         nightPosts: 'Post tra le 00:00 e le 05:00',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'Conversazioni DM aperte',
       },
       names: {
@@ -1688,6 +1700,15 @@ export const it: SiteContent = {
         emojiSommelier: 'Sommelier di emoji',
         nightOwl: 'Nottambulo',
         penPal: 'Amico di penna',
+        greenLight: 'Luce verde',
+        buildFlagger: 'Segnalatore di build',
+        tagClose: 'Amico',
+        tagFamily: 'Famiglia',
+        tagWork: 'Collega',
+        tagTeam: 'Compagno di squadra',
+        tagSchool: 'Compagno di classe',
+        tagMentor: 'Mentore',
+        tagFavorite: 'Preferiti',
         oracle: 'Oracolo',
         agora: 'Agorà',
         catalyst: 'Catalizzatore',
@@ -1698,6 +1719,9 @@ export const it: SiteContent = {
         benefactor: 'Benefattore',
         midnightSun: 'Sole di mezzanotte',
         nexus: 'Nexus',
+        tagPartner: 'Partner',
+        tagLove: 'Innamorato',
+        rolodex: 'Rolodex',
         immortal: 'Immortale',
         folkHero: 'Eroe popolare',
         luminary: 'Luminare',
@@ -1713,7 +1737,7 @@ export const it: SiteContent = {
         commentsReceived: 'Ricevi commenti sui tuoi post.',
         followers: 'Guadagna follower sul tuo profilo.',
         following: 'Segui altre persone su Nexow.',
-        contacts: 'Aggiungi contatti reciproci — persone che segui e che ti seguono.',
+        friends: 'Aggiungi contatti reciproci — persone che segui e che ti seguono.',
         widgetsBuilt: 'Costruisci widget sul tuo canvas.',
         assetsPublished: 'Pubblica risorse sul marketplace.',
         installsReceived: 'Ottieni installazioni dei tuoi widget, bot o temi pubblicati.',
@@ -1740,7 +1764,11 @@ export const it: SiteContent = {
         bronze: 'Livello bronzo',
         silver: 'Livello argento',
         gold: 'Livello oro',
+        tagBronze: 'Amico · bronze',
+        tagSilver: 'Amico · silver',
+        tagGold: 'Amico · gold',
         rare: 'Medaglia rara',
+        tagRare: 'Amico · rare',
         legendary: 'Medaglia leggendaria',
       },
       levelRow: 'Raggiungi {level}',
@@ -1749,7 +1777,7 @@ export const it: SiteContent = {
       creditsLabel: 'crediti',
       tokensLabel: 'NXW',
       worth: '≈ {usd} di generazione AI a listino',
-      months: '= {n} mesi di generazione da livello Sponsor, guadagnati',
+      months: '= {n} mesi di generazione da livello Elite, guadagnati',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'Un token. Cinque compiti. Venti milioni al massimo.',
@@ -1987,7 +2015,7 @@ export const it: SiteContent = {
   waitlist: {
     eyebrow: 'Lista d’attesa fatturazione',
     title: 'Il checkout è quasi pronto',
-    subtitle: 'La fatturazione Supporter e Sponsor arriva presto. Lascia la tua email e ti avviseremo il giorno in cui apre il checkout — niente spam.',
+    subtitle: 'La fatturazione Lite e Elite arriva presto. Lascia la tua email e ti avviseremo il giorno in cui apre il checkout — niente spam.',
     placeholder: 'tu@email.com',
     submit: 'Entra in lista',
     submitting: 'Iscrizione…',
