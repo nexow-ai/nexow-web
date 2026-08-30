@@ -102,17 +102,34 @@
       vec3 h = hash3(i);
 
       if (f < 0.5) {
-        /* 0 — DUST (hero): a slow three-armed spiral. The raw material, before
-           anyone has said what it should become. */
-        float r = 8.0 + 12.5 * pow(h.y, 0.55);
-        float arm = floor(h.z * 3.0);
-        float th = seed * 1.6 + arm * 2.0944 + r * 0.17 + t * 0.045;
-        float ph = 1.5708 + (h.x - 0.5) * 0.55;
-        return vec3(
-          r * sin(ph) * cos(th),
-          r * cos(ph) * 0.9 + sin(r * 0.4 + t * 0.2) * 0.5,
-          r * sin(ph) * sin(th)
-        );
+        /* 0 — THE CAROUSEL (hero): screens standing on concentric rings that
+           turn slowly around the headline.
+
+           A ring, not a scatter, because the headline sits dead centre and a
+           ring is the one arrangement that leaves the middle empty while still
+           filling the frame — the type reads through the hole, and the screens
+           orbit it. Three bands at different radii, each turning at its own
+           rate, so the wall has depth instead of moving as one cylinder.
+
+           The camera sits ~22 out and the outer band reaches 17, so the near
+           side of the ring passes between the lens and the title and fades out
+           on the near plane: screens genuinely sweep past you. */
+        float bands = 3.0;
+        float band = mod(i, bands);
+        float idx = floor(i / bands);
+        float per = ceil(n / bands);
+
+        float R = 10.5 + band * 3.4;
+        /* Each band turns a little slower than the one inside it. */
+        float spin = t * (0.085 - band * 0.016);
+        float th = (idx / per) * 6.2831 + spin + band * 0.7;
+
+        /* Stacked a few screens high, staggered so rows do not line up. */
+        float rows = 3.0;
+        float row = mod(idx, rows);
+        float y = (row - (rows - 1.0) * 0.5) * 3.5 + (h.y - 0.5) * 1.2;
+
+        return vec3(cos(th) * R, y + sin(th * 2.0 + t * 0.3) * 0.35, sin(th) * R);
       }
       if (f < 1.5) {
         /* 1 — WIDGET: the matter condenses into one card.
