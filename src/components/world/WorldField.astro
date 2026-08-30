@@ -68,15 +68,12 @@
 
   /* How present the screens are against the backdrop. Blending stays off —
    * screens occlude one another, and a see-through field of them reads as
-   * smear — so this dissolves each panel halfway into the world's own ink
-   * instead, which is what half opacity over that backdrop looks like. The
-   * field is scenery behind the copy, and at 1 it competed with it. */
-  const SCREEN_ALPHA = 0.5;
-  /* Stronger on the light theme. The dissolve target is the page surface, and
-   * on the light stage that surface is nearly white — half strength put every
-   * panel within a few percent of the backdrop, so the field stopped being a
-   * crowd of screens and became a smudge. */
-  const SCREEN_ALPHA_LIGHT = 0.84;
+   * smear — so this dissolves each panel into the world's own surface instead,
+   * which is what the same opacity over that backdrop looks like. At 0.8 the
+   * panels hold as objects while still sitting a fifth of the way back into the
+   * stage; the same value on both themes, since either surface is what the
+   * fifth is made of. */
+  const SCREEN_ALPHA = 0.8;
 
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
   const CAM_DAMP = 3.2;
@@ -242,11 +239,7 @@
            Two things keep it clear of the collar in scene 03: it is centred on
            the solid rather than on the origin, and it turns. 03 hangs still
            around its hub and reads as a fitting; this one sweeps, and a circle
-           is only an orbit while something is going round it. The plane is
-           rolled out of the horizontal as well, so the near arc passes under
-           the solid and the far arc over it — level, and with the camera
-           already looking down here, a hoop reads as a ring painted on a
-           floor.
+           is only an orbit while something is going round it.
 
            Two shells three rows deep, the hero's cross-section wrapped into a
            hoop and for the same reason: 160 screens strung along a single
@@ -271,12 +264,17 @@
         /* And it breathes on the same beat the solid does — the same sine
            drawCore's beat rides — so the two read as one mechanism rather than
            as a shape with something circling it. */
-        float R = 7.6 + mod(slot, shells) * 1.7 + sin(t * 3.1) * 0.22;
+        float R = 6.2 + mod(slot, shells) * 1.45 + sin(t * 3.1) * 0.22;
         float off = (floor(slot / shells) - 1.0) * 1.3;
-        /* The circle, then the plane it lies in rolled ~24° about X. Centred on
-           the solid, which stands 1.5 up (see OBJECTS). */
+        /* The circle, then the plane it lies in rolled 35° about X, which is
+           what tips the orbit's axis toward the lens: level, the camera is only
+           19° above the plane here and the hoop closes to a flat band with the
+           far arc lying across the hole. Rolled, it opens to about four fifths
+           of a face-on circle — an ellipse with the solid alone inside it,
+           still deep enough that the near arc is visibly nearer. Centred on the
+           solid, which stands 1.5 up (see OBJECTS). */
         vec3 c = vec3(cos(th) * R, off, sin(th) * R);
-        return vec3(c.x, 1.5 + c.y * 0.91 - c.z * 0.41, c.y * 0.41 + c.z * 0.91);
+        return vec3(c.x, 1.5 + c.y * 0.82 - c.z * 0.57, c.y * 0.57 + c.z * 0.82);
       }
       if (f < 5.5) {
         /* 5 — AGENTS: six harness clusters in slow orbit around a core. */
@@ -2122,8 +2120,6 @@
     let coreC3: [number, number, number] = [0, 0, 0];
     let coreFog: [number, number, number] = [0, 0, 0];
     let coreLight = 0;
-    /** How present the screens are, per theme. Set by `paintTheme`. */
-    let screenAlpha = SCREEN_ALPHA;
 
     /* The core's yaw, integrated rather than read off the clock.
      *
@@ -2257,7 +2253,6 @@
          page, one toggle behind. */
       coreLight = document.documentElement.classList.contains('dark') ? 0 : 1;
       ctx.uniform1f(uLight, coreLight);
-      screenAlpha = coreLight ? SCREEN_ALPHA_LIGHT : SCREEN_ALPHA;
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
       coreFog = readColor(probe, '--w-surface');
@@ -2451,7 +2446,7 @@
       ctx.uniform1f(uFormB, Math.min(a + 1, 7));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
-      ctx.uniform1f(uAlpha, screenAlpha);
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2534,7 +2529,7 @@
       ctx.uniform1f(uFormB, 1);
       ctx.uniform1f(uMorph, 0.34);
       ctx.uniform1f(uTime, 6);
-      ctx.uniform1f(uAlpha, screenAlpha);
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
