@@ -248,26 +248,33 @@
            already looking down here, a hoop reads as a ring painted on a
            floor.
 
-           Three lanes, two deep, for the reason the hero's ring is three rows
-           deep: 160 screens spread along a single circle of this radius land a
-           quarter of a screen apart, and what the eye can actually trace is a
-           band. */
-        float lanes = 3.0;
-        float rows = 2.0;
-        float slots = lanes * rows;
+           Two shells three rows deep, the hero's cross-section wrapped into a
+           hoop and for the same reason: 160 screens strung along a single
+           circle this size land a fraction of a screen apart, and what the eye
+           can actually trace is a band.
+
+           The radius is the whole difficulty. Wide enough and the hoop runs off
+           both edges of the frame, leaving screens crossing rather than a
+           circle; tight enough to be comfortably inside it and the band is
+           thicker than the hole it goes round, which is a blob. This is the
+           size that closes inside the shot with the solid alone in the middle
+           of it, and the band is kept to two shells so the hole stays open. */
+        float shells = 2.0;
+        float rows = 3.0;
+        float slots = shells * rows;
         float slot = mod(i, slots);
         float idx = floor(i / slots);
         float per = ceil(n / slots);
-        /* Every lane starts a fraction of a slot on from the one before, so
+        /* Every slot starts a fraction of a place on from the one before, so
            they interleave rather than line up as spokes. */
         float th = (idx / per) * 6.2831 + t * 0.34 + slot * 6.2831 / (per * slots);
-        /* And it breathes on the beat the solid does (`beat`, in drawCore), so
-           the two of them read as one mechanism rather than as a shape with
-           something circling it. */
-        float R = 8.6 + mod(slot, lanes) * 1.5 + sin(t * 3.1) * 0.22;
-        float off = (floor(slot / lanes) - 0.5) * 1.8;
+        /* And it breathes on the same beat the solid does — the same sine
+           drawCore's beat rides — so the two read as one mechanism rather than
+           as a shape with something circling it. */
+        float R = 7.6 + mod(slot, shells) * 1.7 + sin(t * 3.1) * 0.22;
+        float off = (floor(slot / shells) - 1.0) * 1.3;
         /* The circle, then the plane it lies in rolled ~24° about X. Centred on
-           the solid, which stands 1.5 up (see `OBJECTS`). */
+           the solid, which stands 1.5 up (see OBJECTS). */
         vec3 c = vec3(cos(th) * R, off, sin(th) * R);
         return vec3(c.x, 1.5 + c.y * 0.91 - c.z * 0.41, c.y * 0.41 + c.z * 0.91);
       }
@@ -1487,18 +1494,25 @@
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
       col += lightest * sheen * sheen * 0.026;
 
-      /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ---- */
+      /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ----
+         Dark theme: near-black plastic, which is what gives a bright display
+         its housing. Light theme: the same frame in mid-grey drew a hard rule
+         around all 160 panels and the field read as a sheet of empty boxes, so
+         there the bezel is the white of the glass and the only edge is a
+         hairline of ink at the very rim — a card, not a border. */
       float topLight = smoothstep(-0.5, 0.5, vUv.y);
-      vec3 frameDark = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9),
-                           vec3(0.80, 0.84, 0.90), uLight) + accent * 0.05;
-      vec3 frameLite = mix(frameDark, lightest, 0.12 + 0.18 * vLight);
-      vec3 frame = mix(frameDark, frameLite, topLight * (0.5 + 0.5 * vLight));
-      frame = mix(frame, lightest, (1.0 - aastep(0.010, abs(sd + 0.004))) * topLight * 0.35);
+      vec3 frameBase = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9) + accent * 0.05,
+                           mix(vec3(1.0), accent, 0.03), uLight);
+      vec3 frameLite = mix(frameBase, lightest, 0.12 + 0.18 * vLight);
+      vec3 frame = mix(frameBase, frameLite, topLight * (0.5 + 0.5 * vLight));
+      float rim = 1.0 - aastep(0.010, abs(sd + 0.004));
+      frame = mix(frame, mix(lightest, mix(frameBase, paper, 0.14), uLight),
+                  rim * mix(topLight * 0.35, 0.85, uLight));
       col = mix(col, frame, bezel);
 
       col += accent * vFres * 0.13;
       /* Toned down on the light theme: white added to near-white just clips. */
-      col += lightest * vSpec * (0.30 - 0.15 * uLight);
+      col += lightest * vSpec * (0.30 - 0.24 * uLight);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. */
@@ -1590,7 +1604,10 @@
       body *= 1.0 - 0.30 * inset;
       body = mix(body, mix(uC1 * 1.35, uC1 * 0.30, uLight), line * 0.85);
 
-      float fog = smoothstep(48.0, 2.0, length(uCam - vP));
+      /* Distance still dissolves the solid, but far more slowly than it did:
+         it is drawn in front of the screens now, and a half-fogged object over
+         a field of panels is a surface-coloured ghost rather than a subject. */
+      float fog = smoothstep(80.0, 6.0, length(uCam - vP));
       gl_FragColor = vec4(mix(uFog, body, fog * uAlpha), 1.0);
     }
   `;
@@ -2499,9 +2516,15 @@
 
       ctx.clearColor(0, 0, 0, 0);
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
-      drawCore(seconds, a, morph, a + local);
       ctx.useProgram(prog);
       instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      /* The solid last, and over a cleared depth buffer, so it is never cut
+       * into by a panel that happens to pass in front of it. It is the subject
+       * of every scene; the screens are the crowd around it. Clearing depth
+       * rather than disabling the test keeps the solid's own faces sorted
+       * against each other, which is what makes it read as cut. */
+      ctx.clear(ctx.DEPTH_BUFFER_BIT);
+      drawCore(seconds, a, morph, a + local);
       frame = requestAnimationFrame(draw);
     }
 
@@ -2523,9 +2546,10 @@
       ctx.uniformMatrix4fv(uView, false, view);
       ctx.clearColor(0, 0, 0, 0);
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
-      drawCore(6, 1, 0.34);
       ctx.useProgram(prog);
       instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      ctx.clear(ctx.DEPTH_BUFFER_BIT);
+      drawCore(6, 1, 0.34);
     }
 
     /** Fade at the world's edges without redrawing. Reduced-motion only. */
