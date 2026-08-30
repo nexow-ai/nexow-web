@@ -1,10 +1,12 @@
 ---
 /**
- * The one playground SVG for acts 01 and 02.
+ * The one playground for acts 01 and 02.
  *
- * Rendered once. While #widget is on screen it types, generates and lives.
- * As #app-showcase takes the pin, the same nodes stay — the generate loop
- * parks, a mosaic bound draws, and Links wire the same widgets.
+ * Chrome is HTML — screens and workspaces open and close on a real width /
+ * height the way the Features playground does. The stage stays SVG: type,
+ * generate, live widgets. As #app-showcase takes the pin the generate loop
+ * parks, a mosaic bound draws, and Links wire the same widgets. Chrome
+ * keeps cycling through both acts.
  */
 import { ICON_PATHS } from '../icon-paths';
 
@@ -19,17 +21,34 @@ const CELLS = [
   1, 3, 2, 1,
 ];
 
-const TABS = [
-  { label: 'Playground', on: true },
-  { label: 'Markets', on: false },
-  { label: 'Habits', on: false },
-  { label: 'Research', on: false },
-];
+/** Active screen stays put; the rest open and close on `--w-step`. `--w` is
+ *  the label width in `ch` so the keyframes animate a real width. */
+const activeTab = 'Playground';
+const loopTabs = ['Markets', 'Habits', 'Research'];
 
-const WORKSPACES = [
-  { label: 'Personal', tint: 'var(--color-brand-400)', on: true },
-  { label: 'Trading', tint: 'var(--color-accent-400)', on: false },
-  { label: 'Markets', tint: 'var(--color-sky-400)', on: false },
+const activeWorkspace = { label: 'Personal', tint: 'var(--color-brand-400)' };
+const loopWorkspaces = [
+  { label: 'Trading', tint: 'var(--color-accent-400)' },
+  { label: 'Markets', tint: 'var(--color-sky-400)' },
+  { label: 'Games', tint: 'var(--color-plasma-400, var(--color-accent-400))' },
+  { label: 'Studio', tint: 'var(--color-brand-400)' },
+  { label: 'Health', tint: 'var(--color-brand-300)' },
+  { label: 'Travel', tint: 'var(--color-sky-400)' },
+  { label: 'Music', tint: 'var(--color-accent-400)' },
+  { label: 'Home', tint: 'var(--color-sky-300, var(--color-sky-400))' },
+  { label: 'Team', tint: 'var(--color-accent-300, var(--color-accent-400))' },
+  { label: 'Labs', tint: 'var(--color-brand-400)' },
+  { label: 'Clients', tint: 'var(--color-sky-400)' },
+];
+const PARKED_WORKSPACES = 3;
+
+const profiles = [
+  { handle: '@quanta', initial: 'Q', tint: 'var(--color-brand-500)' },
+  { handle: '@nova.eth', initial: 'N', tint: 'var(--color-accent-500)' },
+  { handle: '@mira_dev', initial: 'M', tint: 'var(--color-sky-500)' },
+  { handle: '@0xkaito', initial: 'K', tint: 'var(--color-plasma-500, var(--color-accent-500))' },
+  { handle: '@lunaris', initial: 'L', tint: 'var(--color-brand-400)' },
+  { handle: '@vega-01', initial: 'V', tint: 'var(--color-accent-400)' },
 ];
 
 const MOOD = [
@@ -71,6 +90,7 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
 
 <div class="act-scene w-scene" data-playground-art aria-hidden="true">
       <div class="w-slab"></div>
+      <div class="w-frame">
       <svg
         class="w-art"
         viewBox="0 0 640 400"
@@ -100,92 +120,8 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
         <g clip-path="url(#w-frame-clip)">
           <rect x="16" y="16" width="608" height="368" rx="18" fill="var(--w-panel)"></rect>
           <rect x="16" y="16" width="608" height="368" rx="18" fill="url(#w-dots)" opacity="0.55"></rect>
-
-          <!-- Header -->
           <rect x="16" y="16" width="608" height="40" fill="var(--w-panel-2)"></rect>
-          <line x1="16" y1="56" x2="624" y2="56" stroke="var(--w-line)" stroke-width="1"></line>
-
-          <image href="/favicon.png" x="28" y="26" width="16" height="16"></image>
-
-          {
-            TABS.map((tab, i) => (
-              <g
-                class:list={[!tab.on && 'w-tab-loop']}
-                style={!tab.on ? `--i:${i - 1}` : undefined}
-                transform={`translate(${56 + i * 76} 32)`}
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="70"
-                  height="24"
-                  rx="6"
-                  fill={tab.on ? 'var(--w-tab-on)' : 'var(--w-tab)'}
-                />
-                <text
-                  x="35"
-                  y="16"
-                  text-anchor="middle"
-                  class="w-label"
-                  fill={tab.on ? 'var(--w-text)' : 'var(--w-text-4)'}
-                >
-                  {tab.label}
-                </text>
-              </g>
-            ))
-          }
-
-          <g class="w-add">
-            <rect x="360" y="34" width="20" height="20" rx="5" stroke="var(--w-line)" stroke-dasharray="2 2"></rect>
-            <path d="M370 39v10M365 44h10" stroke="var(--w-text-4)" stroke-width="1.4" stroke-linecap="round"></path>
-          </g>
-
-          <g transform="translate(490 28)">
-            <circle cx="11" cy="11" r="11" fill="var(--color-accent-500)"></circle>
-            <text x="11" y="15" text-anchor="middle" class="w-avatar">N</text>
-            <text x="28" y="15" class="w-handle">@nova.eth</text>
-            <path d="M98 8l4 4 4-4" stroke="var(--w-accent)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
-          </g>
-
-          <!-- Workspace rail -->
           <rect x="16" y="56" width="96" height="328" fill="var(--w-rail-bg)"></rect>
-          <line x1="112" y1="56" x2="112" y2="384" stroke="var(--w-line)" stroke-width="1"></line>
-          <text x="28" y="76" class="w-tiny" fill="var(--w-text-4)">WORKSPACES</text>
-
-          {
-            WORKSPACES.map((ws, i) => (
-              <g
-                class:list={[!ws.on && 'w-ws-loop']}
-                style={!ws.on ? `--i:${i - 1}` : undefined}
-                transform={`translate(24 ${88 + i * 28})`}
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="72"
-                  height="22"
-                  rx="6"
-                  fill={ws.on ? 'var(--w-tab-on)' : 'transparent'}
-                />
-                <circle cx="12" cy="11" r="3" fill={ws.tint}></circle>
-                <text
-                  x="22"
-                  y="15"
-                  class="w-label"
-                  fill={ws.on ? 'var(--w-accent)' : 'var(--w-text-4)'}
-                >
-                  {ws.label}
-                </text>
-              </g>
-            ))
-          }
-
-          <g class="w-add">
-            <rect x="24" y="176" width="22" height="22" rx="5" stroke="var(--color-brand-400)" stroke-opacity="0.55"></rect>
-            <path d="M35 182v10M30 187h10" stroke="var(--color-brand-400)" stroke-width="1.4" stroke-linecap="round"></path>
-          </g>
-
-          <text class="w-screen-tag" x="372" y="38" fill="var(--w-accent)">SCREEN · 01</text>
 
           <rect
             class="w-mosaic"
@@ -368,6 +304,59 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
           stroke-width="1.4"
         ></rect>
       </svg>
+
+      <div class="w-chrome">
+        <div class="w-head">
+          <img class="w-mark" src="/favicon.png" alt="" width="16" height="16" />
+          <div class="w-tabs">
+            <span class="w-tab w-tab-active">{activeTab}</span>
+            {loopTabs.map((label, i) => (
+              <span class="w-tab w-tab-loop" style={`--i:${i};--w:${label.length}ch`}>{label}</span>
+            ))}
+            <span class="w-tab-add">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M6 2.5v7M2.5 6h7"></path>
+              </svg>
+            </span>
+          </div>
+          <span class="w-screen-tag">SCREEN · 01</span>
+          <span class="w-switcher">
+            <span class="w-switcher-stack">
+              {profiles.map((profile, i) => (
+                <span class="w-profile" style={`--i:${i}`}>
+                  <span class="w-avatar" style={`background:${profile.tint}`}>{profile.initial}</span>
+                  <span class="w-handle">{profile.handle}</span>
+                </span>
+              ))}
+            </span>
+            <svg class="w-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 4.5 6 7.5 9 4.5"></path>
+            </svg>
+          </span>
+        </div>
+        <aside class="w-rail" style={`--w-ws-cycle:calc(var(--w-step) * ${loopWorkspaces.length})`}>
+          <p class="w-rail-label">Workspaces</p>
+          <span class="w-ws w-ws-active">
+            <span class="w-ws-dot" style={`background:${activeWorkspace.tint}`}></span>
+            {activeWorkspace.label}
+          </span>
+          {loopWorkspaces.map((workspace, i) => (
+            <span
+              class:list={['w-ws', 'w-ws-loop', i >= PARKED_WORKSPACES && 'w-ws-extra']}
+              style={`--i:${i}`}
+            >
+              <span class="w-ws-dot" style={`background:${workspace.tint}`}></span>
+              {workspace.label}
+            </span>
+          ))}
+          <span class="w-ws-add">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M6 2.5v7M2.5 6h7"></path>
+            </svg>
+          </span>
+        </aside>
+      </div>
+      </div>
     </div>
 
 <style>
@@ -391,16 +380,15 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     pointer-events: none;
   }
 
-  .w-art {
+  .w-frame {
     position: relative;
-    display: block;
     width: 100%;
-    height: auto;
-    border-radius: 1.25rem;
-    filter: drop-shadow(0 28px 60px var(--w-shadow));
+    container-type: inline-size;
     --w-cycle: 16s;
     --w-step: 1.6s;
     --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    --w-add-flash: var(--color-brand-100);
+    --w-add-flash-text: var(--color-brand-600);
     /* Daylight playground: ink on mist, solid pigment — not a 38% wash
        of the 400s (pastel) and not a dark island on a light page. */
     --w-text: var(--color-ink-950);
@@ -426,10 +414,19 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     --w-shadow: rgba(15, 23, 42, 0.16);
   }
 
+  .w-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+    filter: drop-shadow(0 28px 60px var(--w-shadow));
+  }
+
   /* Night chrome: page is dark *or* this band is inverted on a light page.
-   * `:global(.dark) .w-art` alone would keep a dark mock on the white invert. */
-  :global(.dark) .w-art,
-  :global(html:not(.dark) .tone-invert) .w-art {
+   * `:global(.dark) .w-frame` alone would keep a dark mock on the white invert. */
+  :global(.dark) .w-frame,
+  :global(html:not(.dark) .tone-invert) .w-frame {
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -450,9 +447,11 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     --w-mood-2: color-mix(in oklab, var(--color-accent-400) 52%, transparent);
     --w-mood-3: color-mix(in oklab, var(--color-sky-400) 46%, transparent);
     --w-mood-4: color-mix(in oklab, var(--color-brand-300) 28%, transparent);
+    --w-add-flash: color-mix(in oklab, var(--color-brand-400) 20%, transparent);
+    --w-add-flash-text: var(--color-brand-200);
   }
 
-  :global(.dark .tone-invert) .w-art {
+  :global(.dark .tone-invert) .w-frame {
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
@@ -482,32 +481,228 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     stroke-width: 1;
   }
 
-  .w-label,
-  .w-handle,
+  /* HTML chrome — same open/close life as Features PlaygroundMock. Sized in
+     cqi so tabs and the rail stay locked to the SVG as the pin scales. */
+  .w-chrome {
+    position: absolute;
+    inset: 4% 2.5%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2.8cqi;
+    pointer-events: none;
+  }
+
+  .w-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.8cqi;
+    height: 10.87%;
+    padding: 0 1.8cqi;
+    background: var(--w-panel-2);
+    border-bottom: 1px solid var(--w-line);
+  }
+
+  .w-mark {
+    width: 2.5cqi;
+    height: 2.5cqi;
+    margin-bottom: 1.2cqi;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .w-tabs {
+    display: flex;
+    align-items: flex-end;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, black calc(100% - 2cqi), transparent);
+  }
+
+  .w-tab {
+    display: flex;
+    height: 3.75cqi;
+    flex-shrink: 0;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.7cqi 0.7cqi 0 0;
+    padding-inline: 1.15cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.4cqi;
+    color: var(--w-text-4);
+  }
+
+  .w-tab-active {
+    background: var(--w-tab-on);
+    color: var(--w-accent);
+  }
+
+  .w-tab-loop {
+    width: 0;
+    margin-inline-start: 0;
+    padding-inline: 0;
+    background: var(--w-tab);
+  }
+
+  .w-tab-add,
+  .w-ws-add {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    color: var(--w-text-4);
+  }
+
+  .w-tab-add {
+    height: 3.75cqi;
+    width: 3.75cqi;
+    margin-inline-start: 0.4cqi;
+    border-radius: 0.7cqi 0.7cqi 0 0;
+    border: 1px dashed var(--w-line);
+  }
+
+  .w-tab-add svg,
+  .w-ws-add svg {
+    width: 1.6cqi;
+    height: 1.6cqi;
+  }
+
+  .w-screen-tag {
+    display: none;
+    margin-bottom: 1.1cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.15cqi;
+    letter-spacing: 0.12em;
+    color: var(--w-accent);
+    white-space: nowrap;
+  }
+
+  .w-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.45cqi;
+    margin-bottom: 1cqi;
+    flex-shrink: 0;
+    padding: 0.35cqi 0.7cqi 0.35cqi 0.35cqi;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-brand-400) 12%, transparent);
+  }
+
+  .w-switcher-stack {
+    display: grid;
+  }
+
+  .w-profile {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.55cqi;
+    opacity: 0;
+  }
+
+  .w-avatar {
+    display: flex;
+    width: 1.9cqi;
+    height: 1.9cqi;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-family: var(--font-display, ui-sans-serif);
+    font-size: 0.95cqi;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .w-handle {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.2cqi;
+    color: var(--w-accent);
+    white-space: nowrap;
+  }
+
+  .w-chevron {
+    width: 1.5cqi;
+    height: 1.5cqi;
+    color: color-mix(in oklab, var(--w-accent) 60%, transparent);
+  }
+
+  .w-rail {
+    position: absolute;
+    left: 0;
+    top: 10.87%;
+    bottom: 0;
+    width: 15.79%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 1.5cqi 0 1.5cqi 1.2cqi;
+    background: var(--w-rail-bg);
+    border-right: 1px solid var(--w-line);
+  }
+
+  .w-rail-label {
+    margin: 0 0 0.6cqi 0.4cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.05cqi;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--w-text-4);
+  }
+
+  .w-ws {
+    display: flex;
+    height: 3.5cqi;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.7cqi;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.7cqi 0 0 0.7cqi;
+    padding-inline: 0.85cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.35cqi;
+    color: var(--w-text-4);
+  }
+
+  .w-ws-active {
+    background: var(--w-tab-on);
+    color: var(--w-accent);
+  }
+
+  .w-ws-loop {
+    height: 0;
+    margin-block-start: 0;
+    background: var(--w-tab);
+  }
+
+  .w-ws-dot {
+    width: 0.85cqi;
+    height: 0.85cqi;
+    flex-shrink: 0;
+    border-radius: 999px;
+  }
+
+  .w-ws-add {
+    height: 3.5cqi;
+    margin-block-start: 0.5cqi;
+    border-radius: 0.7cqi 0 0 0.7cqi;
+    border: 1px dashed var(--w-line);
+    border-inline-end: 0;
+    padding-inline: 0.85cqi;
+    justify-content: flex-start;
+  }
+
   .w-card-title,
   .w-tiny,
   .w-note,
-  .w-avatar,
   .w-streak-n,
   .w-pairs,
   .w-kpi {
     font-family: var(--font-mono, ui-monospace, monospace);
-  }
-
-  .w-label {
-    font-size: 9px;
-  }
-
-  .w-handle {
-    font-size: 10px;
-    fill: var(--w-accent);
-  }
-
-  .w-avatar {
-    font-size: 9px;
-    font-weight: 700;
-    fill: #fff;
-    font-family: var(--font-display, ui-sans-serif);
   }
 
   .w-card-title {
@@ -540,8 +735,6 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
   .w-caret,
   .w-widget,
   .w-source,
-  .w-tab-loop,
-  .w-ws-loop,
   .w-glow,
   .w-spark,
   .w-mood-tile,
@@ -639,12 +832,18 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     }
 
     .w-ws-loop {
-      animation: w-ws-life calc(var(--w-step) * 6) var(--w-e) infinite both;
+      animation: w-ws-life var(--w-ws-cycle, calc(var(--w-step) * 11)) var(--w-e) infinite both;
       animation-delay: calc(var(--i) * var(--w-step) + var(--w-step) / 2);
     }
 
-    .w-add {
+    .w-tab-add,
+    .w-ws-add {
       animation: w-add-flash var(--w-step) ease-out infinite;
+    }
+
+    .w-profile {
+      animation: w-profile-roll calc(6 * 3s) var(--w-e) infinite backwards;
+      animation-delay: calc(var(--i) * 3s);
     }
 
     .w-glow {
@@ -810,45 +1009,90 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
 
   @keyframes w-tab-life {
     0% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(0.5cqi);
     }
-    8%,
-    70% {
+    7% {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
       opacity: 1;
       transform: none;
     }
-    80%,
+    72% {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
+      opacity: 1;
+      transform: none;
+    }
+    82%,
     100% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
       opacity: 0;
-      transform: translateY(6px);
+      transform: translateY(0.5cqi);
     }
   }
 
   @keyframes w-ws-life {
     0% {
+      height: 0;
+      margin-block-start: 0;
       opacity: 0;
-      transform: translateX(-8px);
+      transform: translateX(-0.7cqi);
     }
-    6%,
-    24% {
+    4% {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
       opacity: 1;
       transform: none;
     }
-    30%,
+    22% {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
+      opacity: 1;
+      transform: none;
+    }
+    27%,
     100% {
+      height: 0;
+      margin-block-start: 0;
       opacity: 0;
-      transform: translateX(-8px);
+      transform: translateX(-0.7cqi);
     }
   }
 
   @keyframes w-add-flash {
     0% {
-      opacity: 1;
+      background: var(--w-add-flash);
+      color: var(--w-add-flash-text);
     }
-    28%,
+    30%,
     100% {
-      opacity: 0.45;
+      background: transparent;
+      color: var(--w-text-4);
+    }
+  }
+
+  @keyframes w-profile-roll {
+    0% {
+      opacity: 0;
+      transform: translateY(0.7cqi);
+    }
+    3%,
+    13.6% {
+      opacity: 1;
+      transform: none;
+    }
+    16.667%,
+    100% {
+      opacity: 0;
+      transform: translateY(-0.7cqi);
     }
   }
 
@@ -1133,7 +1377,9 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     .w-widget,
     .w-tab-loop,
     .w-ws-loop,
-    .w-add,
+    .w-tab-add,
+    .w-ws-add,
+    .w-profile,
     .w-glow,
     .w-spark,
     .w-live,
@@ -1179,9 +1425,31 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     .w-streak-n:last-child {
       opacity: 1;
     }
+
+    .w-tab-loop {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
+    }
+
+    .w-ws-loop {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
+    }
+
+    .w-ws-extra {
+      display: none;
+    }
+
+    .w-profile {
+      opacity: 0;
+    }
+
+    .w-profile:first-child {
+      opacity: 1;
+    }
   }
 
-  .w-screen-tag,
   .w-mosaic-label {
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 8px;
@@ -1205,7 +1473,6 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     fill: var(--color-brand-300);
   }
 
-  .w-screen-tag,
   .w-mosaic,
   .w-mosaic-label,
   .w-links {
@@ -1233,10 +1500,14 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     transform: none;
   }
 
-  .w-scene.is-arrange .w-screen-tag,
   .w-scene.is-arrange .w-mosaic,
   .w-scene.is-arrange .w-mosaic-label,
   .w-scene.is-arrange .w-links {
+    opacity: var(--arr, 1);
+  }
+
+  .w-scene.is-arrange .w-screen-tag {
+    display: flex;
     opacity: var(--arr, 1);
   }
 
