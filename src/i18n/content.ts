@@ -398,6 +398,9 @@ export interface SiteContent {
     /** Aria labels for the fixed corner page arrows (see `PageNav.astro`). */
     prevPage?: string;
     nextPage?: string;
+    /** Aria labels for the hands-free scroll tour (see `Header.astro`). */
+    tourPlay?: string;
+    tourStop?: string;
   };
   footer: {
     tagline: string;

@@ -47,6 +47,9 @@ const otherLangs = (Object.keys(languages) as Lang[])
   }));
 const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
 const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
+/* Optional, English fallback: no locale bundle has to change for this to ship. */
+const tourPlay = t.nav.tourPlay ?? 'Play the tour';
+const tourStop = t.nav.tourStop ?? 'Stop the tour';
 ---
 
 <header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50" data-hidden="false">
@@ -97,6 +100,23 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       </ul>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
+        {/* Hands-free scroll. Only rendered as visible on pages that carry a
+            world (`html[data-world]`) — a play button on the blog would scroll
+            a page that has no story to tell. CSS does the hiding, so the
+            header stays one component for every route. */}
+        <button
+          type="button"
+          id="tour-toggle"
+          class="tour-toggle size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
+          aria-pressed="false"
+          aria-label={tourPlay}
+          data-play-label={tourPlay}
+          data-stop-label={tourStop}
+        >
+          <Icon name="play" class="tour-toggle__play size-4" />
+          <Icon name="pause" class="tour-toggle__stop size-4" />
+        </button>
+
         <ThemeToggle toDarkLabel={themeToDark} toLightLabel={themeToLight} />
 
         <details class="group relative hidden sm:block">
@@ -299,6 +319,114 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     color: white;
   }
 </style>
+
+<script>
+  /**
+   * Hands-free scroll tour.
+   *
+   * The home page is a scroll-driven story with holds built into it, so it is
+   * worth being able to watch rather than drive. This advances the scroll at a
+   * fixed real-world speed and gets out of the way the moment the visitor
+   * touches anything.
+   *
+   * Speed is in CSS pixels per second, not per frame, so a 120Hz laptop and a
+   * 60Hz monitor travel the page at the same rate.
+   */
+  const TOUR_PX_PER_SECOND = 88;
+
+  let tourAbort: AbortController | undefined;
+  let tourRaf = 0;
+
+  function initTour() {
+    tourAbort?.abort();
+    tourAbort = new AbortController();
+    const { signal } = tourAbort;
+
+    const btn = document.getElementById('tour-toggle');
+    if (!btn) return;
+
+    let playing = false;
+    let last = 0;
+
+    const setPlaying = (on: boolean) => {
+      playing = on;
+      btn.setAttribute('aria-pressed', String(on));
+      const label = on ? btn.dataset.stopLabel : btn.dataset.playLabel;
+      if (label) btn.setAttribute('aria-label', label);
+      /* `scroll-behavior: smooth` is on the document for anchor jumps; left on,
+       * it would fight a per-frame scrollBy into a stutter. */
+      document.documentElement.style.scrollBehavior = on ? 'auto' : '';
+    };
+
+    const stop = () => {
+      if (!playing) return;
+      if (tourRaf) cancelAnimationFrame(tourRaf);
+      tourRaf = 0;
+      last = 0;
+      setPlaying(false);
+    };
+
+    const step = (now: number) => {
+      tourRaf = 0;
+      if (!playing) return;
+      // Clamped: a background tab or a long task must not teleport the page.
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+      last = now;
+
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const next = window.scrollY + TOUR_PX_PER_SECOND * dt;
+      if (next >= max) {
+        window.scrollTo(0, max);
+        stop();
+        return;
+      }
+      window.scrollTo(0, next);
+      tourRaf = requestAnimationFrame(step);
+    };
+
+    btn.addEventListener(
+      'click',
+      () => {
+        if (playing) {
+          stop();
+          return;
+        }
+        // Reached the end already? Start the tour over rather than do nothing.
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        if (window.scrollY >= max - 2) window.scrollTo(0, 0);
+        setPlaying(true);
+        last = 0;
+        tourRaf = requestAnimationFrame(step);
+      },
+      { signal },
+    );
+
+    /* Any intent to move the page yourself ends the tour. `wheel` and
+     * `touchstart` are passive listeners, so this never delays a scroll. */
+    for (const evt of ['wheel', 'touchstart', 'pointerdown'] as const) {
+      window.addEventListener(evt, stop, { passive: true, signal });
+    }
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        // The button's own Enter/Space is a toggle, not an escape.
+        if (e.target === btn) return;
+        stop();
+      },
+      { signal },
+    );
+    // Nothing to watch in a hidden tab.
+    document.addEventListener('visibilitychange', () => document.hidden && stop(), { signal });
+  }
+
+  document.addEventListener('astro:page-load', initTour);
+  document.addEventListener('astro:before-swap', () => {
+    if (tourRaf) cancelAnimationFrame(tourRaf);
+    tourRaf = 0;
+    tourAbort?.abort();
+    document.documentElement.style.scrollBehavior = '';
+  });
+</script>
 
 <script>
   // Header: solidify on scroll, hide on scroll down / reveal on scroll up,
