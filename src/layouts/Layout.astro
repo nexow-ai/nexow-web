@@ -27,6 +27,13 @@ interface Props {
    * user theme preference. Omit to honour light/dark mode from the toggle.
    */
   theme?: 'light' | 'dark';
+  /**
+   * Set when the page opens straight into a full-bleed dark world (see
+   * `components/world/World.astro`). The header floats over ink rather than
+   * over the page surface before the first scroll, and `global.css` repaints
+   * light-theme chrome for that one case.
+   */
+  world?: boolean;
   /** In-page section rail (right side, desktop). Omit to hide. */
   sections?: { id: string; label: string }[];
   /** Accessible label for the section rail. */
@@ -39,7 +46,7 @@ interface Props {
   availableLangs?: Lang[];
 }
 
-const { lang, theme, route, sections, sectionNavLabel, ...head } = Astro.props;
+const { lang, theme, route, sections, sectionNavLabel, world, ...head } = Astro.props;
 const { availableLangs } = head;
 const accent = getPageAccent(route);
 const themeLocked = theme === 'light' || theme === 'dark';
@@ -54,6 +61,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
   data-accent={accent}
   data-theme={theme ?? undefined}
   data-theme-locked={themeLocked ? '' : undefined}
+  data-world={world ? '' : undefined}
 >
   <head>
     <script is:inline>

@@ -4,7 +4,7 @@ import { useContent } from '../../i18n/content';
 import { CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../sections/Hero.astro';
-import ActsStage from '../acts/ActsStage.astro';
+import World from '../world/World.astro';
 import ActWidget from '../acts/ActWidget.astro';
 import ActCanvas from '../acts/ActCanvas.astro';
 import ActConnectors from '../acts/ActConnectors.astro';
@@ -91,22 +91,23 @@ const sections = [
   description={t.meta.description}
   schema={[websiteSchema, softwareSchema, faqSchema]}
   sections={sections}
+  world
 >
-  <Hero lang={lang} />
-
   {/*
-    One continuous dark interior. The acts run without a heading cadence or a
-    band between them on purpose — that repetition is what made this page read
-    as a longer version of /about.
+    One continuous dark interior, opening on the hero rather than below it. The
+    scenes run without a heading cadence or a band between them on purpose —
+    that repetition is what made this page read as a longer version of /about.
+    Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
   */}
-  <ActsStage>
+  <World>
+    <Hero lang={lang} />
     <ActWidget lang={lang} />
     <ActCanvas lang={lang} />
     <ActConnectors lang={lang} />
     <ActBots lang={lang} />
     <ActAgents lang={lang} />
     <ActUseCases lang={lang} />
-  </ActsStage>
+  </World>
 
   <Features lang={lang} />
   <Privacy lang={lang} />

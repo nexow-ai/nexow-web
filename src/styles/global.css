@@ -863,6 +863,66 @@ html.is-theme-transition [data-astro-transition-scope] {
 }
 
 /* ------------------------------------------------------------------ *
+ * Header over the world.
+ *
+ * `/` opens straight into `components/world/World.astro`, which is dark in both
+ * themes. Before the first scroll the header floats over that ink instead of
+ * over the page surface, so light-theme chrome would be dark-on-dark — and the
+ * wordmark, which is two images swapped by the `dark:` variant, would be the
+ * black one. From 8px in the header paints its own solid background
+ * (`.is-scrolled`, written by Header.astro) and every rule here stops applying.
+ *
+ * Specificity note: `#site-nav a` is an id plus a type, which already outranks
+ * the single-class Tailwind utilities on those links, so nothing here needs
+ * `!important`. The language dropdown keeps its own white panel — it is not a
+ * direct child of the nav, which is what the `>` in the selectors excludes.
+ * ------------------------------------------------------------------ */
+html[data-world]:not(.dark) #site-header:not(.is-scrolled) :is(
+    #site-nav > ul a,
+    #site-nav summary,
+    #site-nav #theme-toggle,
+    #site-nav #menu-toggle
+  ) {
+  color: var(--color-ink-300);
+}
+
+html[data-world]:not(.dark) #site-header:not(.is-scrolled) :is(
+    #site-nav > ul a,
+    #site-nav summary,
+    #site-nav #menu-toggle
+  ):hover {
+  color: #fff;
+}
+
+html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav > ul a[aria-current='page'] {
+  color: var(--color-brand-300);
+}
+
+html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav img[src$='logo-black.png'] {
+  display: none;
+}
+
+html[data-world]:not(.dark) #site-header:not(.is-scrolled) #site-nav img[src$='logo-white.png'] {
+  display: block;
+}
+
+/* Without JavaScript there is no `.is-scrolled` to switch on, so the header can
+ * never know which surface it is over. Give it its solid pill from the start
+ * instead: legible over the world at the top and over the page at the bottom,
+ * which the transparent state cannot be at both ends. */
+html[data-world]:not(.js) #site-nav {
+  border-color: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+html[data-world]:not(.js).dark #site-nav {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: color-mix(in oklab, var(--color-ink-900) 92%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
  * Acts — the home page's scroll stages.
  *
  * An act is a tall section holding one `position: sticky` stage, so the scene

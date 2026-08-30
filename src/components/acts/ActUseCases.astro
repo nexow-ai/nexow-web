@@ -26,7 +26,12 @@ const cases = c.home.botsAgents?.cases;
 const items = cases?.items ?? [];
 ---
 
-<section id="use-cases" class="relative py-20 sm:py-28" aria-labelledby="act-usecases-title">
+<section
+  id="use-cases"
+  class="relative py-20 sm:py-28"
+  data-world-scene
+  aria-labelledby="act-usecases-title"
+>
   <div class="container-page">
     <div class="mx-auto max-w-2xl text-center">
       <ActCopyBlock copy={copy} headingId="act-usecases-title" />

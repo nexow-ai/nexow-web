@@ -1,10 +1,28 @@
 ---
+/**
+ * Scene 0 of the world — the opening beat, not a landing-page hero.
+ *
+ * The old one carried a badge, a three-line headline, a kicker, a forty-word
+ * subtitle, a composer, a label, twelve example chips, a "more" chip, a second
+ * CTA, a trust note and a full product mock, on a light gradient wash. That is
+ * eleven things competing for one screen, and none of them won.
+ *
+ * What is left is what the reader actually needs before they scroll: the
+ * headline, the promise, one thing to type into, four examples of what to type,
+ * and a way down. Everything cut is still on the page — the product is shown
+ * six times over in the acts below, which is where showing it belongs.
+ *
+ * The composer is not decoration. Typing into it charges the matter behind the
+ * headline (`data-world-charge`, read by `WorldField`), and sending throws a
+ * shockwave through it (`nexow:world-send`), so the one interaction in the hero
+ * is also the page's thesis: your words give the material a shape.
+ *
+ * Dark in both themes — see `World.astro` for why.
+ */
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { promptAppUrl } from '../../lib/appDeepLinks';
-import Button from '../Button.astro';
 import Icon from '../Icon.astro';
-import PlaygroundMock from '../PlaygroundMock.astro';
 
 interface Props {
   lang: Lang;
@@ -13,233 +31,409 @@ const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
 const defaultPromptUrl = promptAppUrl(t.promptExample);
 
-const examples = t.promptExamples ?? [];
-/** Starter prompts shown before the “more examples” chip reveals the rest. */
-const EXAMPLES_VISIBLE = 8;
+/** Four starter prompts, not twelve. A wall of chips is a menu, not an example. */
+const examples = (t.promptExamples ?? []).slice(0, 4);
 
 /** Entrance order. The headline leads, everything else follows it up. */
 const D = {
-  badge: '0.05s',
-  line1: '0.14s',
-  line2: '0.22s',
+  line1: '0.10s',
+  line2: '0.20s',
   line3: '0.30s',
-  kicker: '0.40s',
-  sub: '0.48s',
-  forge: '0.54s',
-  examples: '0.60s',
-  cta: '0.68s',
-  note: '0.76s',
-  mock: '0.30s',
+  kicker: '0.52s',
+  forge: '0.64s',
+  examples: '0.74s',
+  note: '0.84s',
+  cue: '0.96s',
 };
 ---
 
-<section
-  id="hero"
-  class="relative overflow-x-clip pb-16 pt-32 text-ink-950 sm:pb-24 sm:pt-40 dark:text-white"
->
-  {/*
-    No aurora mesh here any more. That backdrop is what made the home hero read
-    as a wider copy of every `PageHero` on the site; the depth field behind the
-    whole page (see `HomeField.astro`) carries this one instead. The hairline is
-    kept — it is what separates the hero from the dark stage below it.
-  */}
-  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-    <div class="hero-wash absolute inset-0"></div>
-    <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
-  </div>
+<section id="hero" class="hero" data-world-scene aria-labelledby="hero-title">
+  {/* A soft well of ink under the type. The matter passes behind the headline
+      at full strength; without this the brightest instances cross the glyphs
+      and the first line of the page becomes the least readable thing on it. */}
+  <div class="hero__veil" aria-hidden="true"></div>
 
-  <div class="container-page relative">
-    <div class="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
-      <!-- Copy -->
-      {/* min-w-0: grid items floor at min-content by default, and the mock's is
-          wider than a phone. Without this the shared track inflates to fit it and
-          drags this column past the viewport, where overflow-x-clip eats the copy. */}
-      <div class="min-w-0 max-w-xl">
-        <p
-          class="enter inline-flex items-center gap-1.5 rounded-full border border-brand-200/80 bg-brand-100 px-3 py-1.5 text-xs font-semibold text-brand-800 shadow-sm dark:border-brand-400/20 dark:bg-brand-400/15 dark:text-brand-300"
-          style={`--enter-delay:${D.badge}`}
-        >
-          <span class="badge-spark grid size-4 place-items-center text-brand-500 dark:text-brand-400">
-            <Icon name="sparkles" class="size-full" />
-          </span>
-          {t.badge}
+  <div class="container-page hero__inner">
+    <h1 id="hero-title" class="hero__title">
+      <span class="hero__line" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>
+      <span class="hero__line text-gradient-live" data-text-appear data-text-appear-delay="0.20">
+        {t.titleGradient}
+      </span>
+      <span class="hero__line" data-text-appear data-text-appear-delay="0.30">{t.titleTail}</span>
+    </h1>
+
+    {
+      t.titleKicker && (
+        <p class="enter hero__kicker" style={`--enter-delay:${D.kicker}`}>
+          {t.titleKicker}
         </p>
+      )
+    }
 
-        {/* Phone size is fluid, not a fixed 2.7rem: locales with long compounds
-            (el "Περιγράψτε", ru "Опишите.") overrun a 320px screen and the hero's
-            overflow clip silently eats the end of the word. */}
-        <h1
-          class="mt-7 font-display text-[clamp(1.9rem,8.5vw,2.7rem)] font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-[4rem]"
+    <!-- Live prompt → app: deep-links with ?prompt= (see appDeepLinks.promptAppUrl). -->
+    <form
+      id="forge"
+      class="enter hero__forge"
+      style={`--enter-delay:${D.forge}`}
+      data-app-base={SITE.appUrl}
+      action={defaultPromptUrl}
+      method="get"
+      target="_blank"
+    >
+      <label class="sr-only" for="hero-prompt">{t.promptPlaceholder}</label>
+      <div class="hero__composer">
+        <Icon name="sparkles" />
+        <textarea
+          id="hero-prompt"
+          name="prompt"
+          rows="1"
+          maxlength="500"
+          placeholder={t.promptPlaceholder}
+          data-world-charge
+          class="hero__input"
+        >{t.promptExample}</textarea>
+        <button type="submit" class="hero__send">
+          <span>{t.ctaPrimary}</span>
+          <Icon name="rocket" />
+        </button>
+      </div>
+    </form>
+
+    {
+      examples.length > 0 && (
+        <div
+          class="enter hero__examples"
+          style={`--enter-delay:${D.examples}`}
+          role="group"
+          aria-label={t.promptExamplesLabel ?? t.promptPlaceholder}
         >
-          {/* Particle assemble — inverse of the app composer vanish-on-send. */}
-          <span class="block" data-text-appear data-text-appear-delay={D.line1.replace('s', '')}>{t.titleLead}</span>
-          <span class="block text-gradient-live" data-text-appear data-text-appear-delay={D.line2.replace('s', '')}>{t.titleGradient}</span>
-          <span class="block" data-text-appear data-text-appear-delay={D.line3.replace('s', '')}>{t.titleTail}</span>
-        </h1>
-
-        {
-          t.titleKicker && (
-            <p
-              class="enter mt-5 flex items-center gap-3 font-display text-lg font-medium text-ink-500 sm:text-xl dark:text-ink-300"
-              style={`--enter-delay:${D.kicker}`}
-            >
-              <span class="rule-gradient hidden h-px w-10 shrink-0 sm:block" />
-              {t.titleKicker}
-            </p>
-          )
-        }
-
-        <p
-          class="enter mt-6 max-w-lg text-lg leading-relaxed text-ink-600 dark:text-ink-300"
-          style={`--enter-delay:${D.sub}`}
-        >
-          {t.subtitle}
-        </p>
-
-        <!-- Live prompt → app: deep-links with ?prompt= (see appDeepLinks.promptAppUrl). -->
-        <form
-          id="forge"
-          class="enter mt-8"
-          style={`--enter-delay:${D.forge}`}
-          data-app-base={SITE.appUrl}
-          action={defaultPromptUrl}
-          method="get"
-          target="_blank"
-        >
-          <label class="sr-only" for="hero-prompt">{t.promptPlaceholder}</label>
-          <div
-            class="flex flex-col gap-2 rounded-2xl border border-ink-900/10 bg-white/80 p-2 shadow-sm backdrop-blur dark:border-white/12 dark:bg-white/[0.06] sm:flex-row sm:items-stretch"
-          >
-            <div class="flex min-w-0 flex-1 items-start gap-2.5 px-2.5 py-2">
-              <Icon name="sparkles" class="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
-              <textarea
-                id="hero-prompt"
-                name="prompt"
-                rows="2"
-                maxlength="500"
-                placeholder={t.promptPlaceholder}
-                class="min-h-[2.75rem] w-full resize-none bg-transparent text-sm leading-relaxed text-ink-800 placeholder:text-ink-400 focus:outline-none dark:text-ink-100 dark:placeholder:text-ink-500"
-              >{t.promptExample}</textarea>
-            </div>
+          {examples.map((example) => (
             <button
-              type="submit"
-              class="group inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,var(--grad-a),var(--grad-b)_52%,var(--grad-c))] px-5 text-sm font-medium text-white transition-all hover:brightness-[1.06] hover:-translate-y-0.5 sm:self-end"
+              type="button"
+              data-prompt-example
+              data-prompt={example.prompt}
+              aria-pressed="false"
+              title={example.prompt}
+              class="hero__chip"
             >
-              {t.ctaPrimary}
-              <Icon
-                name="rocket"
-                class="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              />
+              <Icon name={example.icon} />
+              {example.label}
             </button>
-          </div>
-        </form>
-
-        <!-- Starter prompts: click fills the composer and syncs the form action. -->
-        {
-          examples.length > 0 && (
-            <div class="enter mt-5" style={`--enter-delay:${D.examples}`} data-prompt-examples>
-              <p
-                id="hero-examples-label"
-                class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500"
-              >
-                {t.promptExamplesLabel}
-              </p>
-              <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="hero-examples-label">
-                {examples.map((example, i) => (
-                  <button
-                    type="button"
-                    data-prompt-example
-                    data-prompt={example.prompt}
-                    data-example-extra={i >= EXAMPLES_VISIBLE ? '' : undefined}
-                    aria-pressed="false"
-                    title={example.prompt}
-                    class="group inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white/70 py-1.5 pl-2.5 pr-3 text-xs font-medium text-ink-600 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-ink-900 aria-pressed:border-brand-400 aria-pressed:bg-brand-50 aria-pressed:text-brand-700 dark:border-white/12 dark:bg-white/[0.05] dark:text-ink-300 dark:hover:border-brand-400/40 dark:hover:text-white dark:aria-pressed:border-brand-400/50 dark:aria-pressed:bg-brand-400/12 dark:aria-pressed:text-brand-200"
-                  >
-                    <Icon
-                      name={example.icon}
-                      class="size-3.5 shrink-0 text-brand-600 transition-transform group-hover:scale-110 dark:text-brand-300"
-                    />
-                    {example.label}
-                  </button>
-                ))}
-                {examples.length > EXAMPLES_VISIBLE && (
-                  <button
-                    type="button"
-                    data-prompt-examples-more
-                    class="hidden items-center gap-1.5 rounded-full border border-dashed border-ink-900/15 px-3 py-1.5 text-xs font-medium text-ink-500 transition-colors hover:border-brand-300 hover:text-brand-700 dark:border-white/15 dark:text-ink-400 dark:hover:border-brand-400/40 dark:hover:text-brand-200"
-                  >
-                    {t.promptExamplesMore}
-                    <span class="font-mono text-[0.7rem]">+{examples.length - EXAMPLES_VISIBLE}</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          )
-        }
-
-        <div class="enter mt-6 flex flex-wrap items-center gap-3" style={`--enter-delay:${D.cta}`}>
-          <Button href="#app-showcase" variant="secondary" size="lg" icon="sparkles">
-            {t.ctaSecondary}
-          </Button>
+          ))}
         </div>
+      )
+    }
 
-        <p
-          class="enter mt-7 font-mono text-xs leading-relaxed text-ink-500 dark:text-ink-400"
-          style={`--enter-delay:${D.note}`}
-        >
-          {t.note}
-        </p>
-      </div>
-
-      <!-- Product mock -->
-      <div class="enter min-w-0 lg:pl-4" style={`--enter-delay:${D.mock}`}>
-        <div data-motion="tilt-lg rise depth" style="--m-persp:1100px">
-          <PlaygroundMock promptExample={t.promptExample} />
-        </div>
-      </div>
-    </div>
+    <p class="enter hero__note" style={`--enter-delay:${D.note}`}>{t.note}</p>
   </div>
+
+  <a class="enter hero__cue" href="#widget" style={`--enter-delay:${D.cue}`}>
+    <span class="hero__cue-label">{t.ctaSecondary}</span>
+    <span class="hero__cue-rail" aria-hidden="true"><span class="hero__cue-dot"></span></span>
+  </a>
 </section>
 
 <style>
-  /* Badge glyph twinkles instead of the old flat dot: a slow scale/rotate beat
-     with a brightness lift at the peak, so the mark reads "live" without
-     pulling focus from the headline. */
-  @keyframes badge-twinkle {
-    0%,
-    100% {
-      transform: rotate(0deg) scale(1);
-      opacity: 0.8;
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* svh, not vh: on iOS the collapsing address bar makes `100vh` taller than
+     * the screen, which pushes the scroll cue below the fold on the one screen
+     * where it has a job to do. */
+    min-height: 100svh;
+    padding-block: 9rem 7rem;
+    color: #fff;
+  }
+
+  .hero__veil {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      64% 52% at 50% 46%,
+      color-mix(in oklab, var(--color-ink-950) 88%, transparent),
+      color-mix(in oklab, var(--color-ink-950) 55%, transparent) 46%,
+      transparent 76%
+    );
+  }
+
+  .hero__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero__title {
+    display: grid;
+    max-width: 20ch;
+    font-family: var(--font-display);
+    /* Fluid down to 1.9rem: locales with long compounds (el "Περιγράψτε",
+     * ru "Опишите.") overrun a 320px screen at any fixed size. */
+    font-size: clamp(2.1rem, 1rem + 7.4vw, 5.25rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  .hero__kicker {
+    margin-top: 1.6rem;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 0.86rem + 0.6vw, 1.3rem);
+    font-weight: 400;
+    /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
+    color: var(--color-ink-200);
+  }
+
+  /* ---- composer ---- */
+
+  .hero__forge {
+    width: min(100%, 42rem);
+    margin-top: 2.6rem;
+  }
+
+  .hero__composer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 1.15rem;
+    background: rgba(10, 13, 21, 0.68);
+    box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    transition:
+      border-color 0.3s var(--ease-out-expo),
+      box-shadow 0.3s var(--ease-out-expo);
+  }
+
+  .hero__composer:focus-within {
+    border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    box-shadow:
+      0 24px 60px -30px rgba(0, 0, 0, 0.9),
+      0 0 0 1px color-mix(in oklab, var(--color-brand-400) 35%, transparent);
+  }
+
+  /* `Icon.astro` renders the svg, so it never carries this file's scope hash and
+   * a class passed to <Icon> would not match. Reach it structurally instead —
+   * which is also why every icon rule here is a child selector. */
+  .hero__composer > :global(svg) {
+    flex: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--color-brand-300);
+  }
+
+  .hero__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    /* Grown by script to fit its content; one line is the resting state. */
+    max-height: 7.5rem;
+    padding-block: 0.55rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink-100);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    text-align: start;
+    resize: none;
+    overflow-y: auto;
+  }
+
+  .hero__input::placeholder {
+    color: var(--color-ink-400);
+  }
+
+  .hero__input:focus {
+    outline: none;
+  }
+
+  .hero__send {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    align-self: stretch;
+    gap: 0.5rem;
+    padding-inline: 1.15rem;
+    border-radius: 0.85rem;
+    background: linear-gradient(100deg, var(--grad-a), var(--grad-b) 52%, var(--grad-c));
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: filter 0.2s var(--ease-out-expo), transform 0.2s var(--ease-out-expo);
+  }
+
+  .hero__send:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+
+  .hero__send > :global(svg) {
+    flex: none;
+    width: 0.85rem;
+    height: 0.85rem;
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+
+  .hero__send:hover > :global(svg) {
+    transform: translate(1px, -2px);
+  }
+
+  /* Below 30rem the button under the field beats a button squeezed beside it. */
+  @media (max-width: 30rem) {
+    .hero__composer {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0.85rem;
     }
-    35% {
-      transform: rotate(12deg) scale(1.16);
+    .hero__composer > :global(svg) {
+      display: none;
+    }
+    .hero__send {
+      justify-content: center;
+      padding-block: 0.7rem;
+    }
+  }
+
+  /* ---- starter prompts ---- */
+
+  .hero__examples {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+
+  .hero__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-ink-200);
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition:
+      border-color 0.2s var(--ease-out-expo),
+      color 0.2s var(--ease-out-expo),
+      transform 0.2s var(--ease-out-expo);
+  }
+
+  .hero__chip:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
+    color: #fff;
+  }
+
+  .hero__chip[aria-pressed='true'] {
+    border-color: color-mix(in oklab, var(--color-brand-400) 60%, transparent);
+    background: color-mix(in oklab, var(--color-brand-400) 14%, transparent);
+    color: #fff;
+  }
+
+  .hero__chip > :global(svg) {
+    width: 0.85rem;
+    height: 0.85rem;
+    flex: none;
+    color: var(--color-brand-300);
+  }
+
+  .hero__note {
+    margin-top: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-400);
+  }
+
+  /* ---- the way down ---- */
+
+  .hero__cue {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--color-ink-300);
+    transition: color 0.25s var(--ease-out-expo);
+  }
+
+  .hero__cue:hover {
+    color: #fff;
+  }
+
+  .hero__cue-label {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .hero__cue-rail {
+    position: relative;
+    width: 1px;
+    height: 2.75rem;
+    overflow: hidden;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), transparent);
+  }
+
+  .hero__cue-dot {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 0.9rem;
+    background: linear-gradient(to bottom, transparent, var(--color-brand-400));
+    animation: hero-cue 2.4s var(--ease-out-expo) infinite;
+  }
+
+  @keyframes hero-cue {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    30% {
       opacity: 1;
     }
-    70% {
-      transform: rotate(-6deg) scale(0.94);
-      opacity: 0.85;
+    100% {
+      transform: translateY(275%);
+      opacity: 0;
     }
   }
-  .badge-spark {
-    animation: badge-twinkle 3.2s var(--ease-out-expo, ease-in-out) infinite;
-    transform-origin: center;
-  }
+
+  /* The cue is the one thing here that loops. Under reduced motion it holds
+     still rather than disappearing — it is navigation, not decoration. */
   @media (prefers-reduced-motion: reduce) {
-    .badge-spark {
+    .hero__cue-dot {
       animation: none;
+      top: 35%;
       opacity: 1;
     }
   }
 
-  /* Extra starter prompts stay collapsed only where JS can reveal them. */
-  :global(.js) [data-prompt-examples]:not([data-open]) [data-example-extra] {
-    display: none;
-  }
-  :global(.js) [data-prompt-examples-more] {
-    display: inline-flex;
-  }
-  [data-prompt-examples][data-open] [data-prompt-examples-more] {
-    display: none;
+  /* Short viewports (landscape phones) cannot afford a full-height opening.
+     Drop the cue and let the hero be as tall as its content. */
+  @media (max-height: 34rem) {
+    .hero {
+      min-height: 0;
+      padding-block: 7rem 3rem;
+    }
+    .hero__cue {
+      display: none;
+    }
   }
 </style>
 
@@ -266,6 +460,12 @@ const D = {
       return `${base}/?${qs}`;
     };
 
+    /** One line at rest, growing to the CSS max-height as the prompt does. */
+    const autosize = () => {
+      input.style.height = 'auto';
+      input.style.height = `${input.scrollHeight}px`;
+    };
+
     const syncLinks = () => {
       form.action = promptUrl(input.value.trim());
     };
@@ -281,6 +481,9 @@ const D = {
         input.value = prompt;
         markActive(chip);
         syncLinks();
+        autosize();
+        // Let the world hear it: `WorldField` charges the matter off `input`.
+        input.dispatchEvent(new Event('input', { bubbles: true }));
         input.focus({ preventScroll: true });
         input.setSelectionRange(prompt.length, prompt.length);
       });
@@ -288,66 +491,21 @@ const D = {
 
     input.addEventListener('input', () => {
       const value = input.value.trim();
-      const match = chips.find((chip) => chip.dataset.prompt === value) ?? null;
-      markActive(match);
+      markActive(chips.find((chip) => chip.dataset.prompt === value) ?? null);
       syncLinks();
-    });
-
-    const rail = document.querySelector<HTMLElement>('[data-prompt-examples]');
-    rail?.querySelector<HTMLButtonElement>('[data-prompt-examples-more]')?.addEventListener('click', () => {
-      rail.dataset.open = '';
-      rail.querySelector<HTMLButtonElement>('[data-example-extra]')?.focus({ preventScroll: true });
+      autosize();
     });
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      // The shockwave fires whether or not the popup is allowed through.
+      document.dispatchEvent(new CustomEvent('nexow:world-send'));
       window.open(promptUrl(input.value.trim()), '_blank', 'noopener,noreferrer');
     });
+
+    autosize();
+    window.addEventListener('resize', autosize);
   }
 
   document.addEventListener('astro:page-load', initHeroForge);
 </script>
-
-<style>
-  /* A single wide wash, not the `aurora-mesh` + three blobs that `PageHero`
-   * gives every other page — that recipe is exactly what made this hero read as
-   * a wider copy of /about. It also has to stand alone: unlike the acts below,
-   * the hero has no WebGL layer behind it. */
-  .hero-wash {
-    background:
-      radial-gradient(
-        62% 52% at 16% 0%,
-        color-mix(in oklab, var(--color-brand-400) 24%, transparent),
-        transparent 70%
-      ),
-      radial-gradient(
-        56% 46% at 88% 10%,
-        color-mix(in oklab, var(--color-accent-500) 20%, transparent),
-        transparent 72%
-      ),
-      radial-gradient(
-        74% 62% at 52% 104%,
-        color-mix(in oklab, var(--color-sky-500) 15%, transparent),
-        transparent 76%
-      );
-  }
-
-  :global(.dark) .hero-wash {
-    background:
-      radial-gradient(
-        62% 52% at 16% 0%,
-        color-mix(in oklab, var(--color-brand-500) 26%, transparent),
-        transparent 70%
-      ),
-      radial-gradient(
-        56% 46% at 88% 10%,
-        color-mix(in oklab, var(--color-accent-600) 30%, transparent),
-        transparent 72%
-      ),
-      radial-gradient(
-        74% 62% at 52% 104%,
-        color-mix(in oklab, var(--color-plasma-500) 14%, transparent),
-        transparent 78%
-      );
-  }
-</style>

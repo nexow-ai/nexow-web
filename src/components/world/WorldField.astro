@@ -1,0 +1,771 @@
+---
+/**
+ * The world the home page is staged inside.
+ *
+ * ONE IDEA: a single body of matter travels the whole page under one camera
+ * that never cuts. In the hero it is unformed dust that the words you type
+ * charge and tighten; at each act it condenses into the thing that act
+ * explains — a widget, a canvas of widgets, a ring of connectors, a signal
+ * fanning out, an agent's harness — and at the end it opens back out.
+ *
+ * Sacrificed for it: every other effect. No bloom, no depth of field, no
+ * chromatic aberration, no second particle system. The morph is the whole show,
+ * and the budget goes to holding 60fps while it happens.
+ *
+ * BUDGET (set before building, enforced by tests/build/payload.test.ts)
+ *   · total shipped JS  < 150 KB   · any single script < 60 KB
+ *   · zero external origins        — which is why this is hand-rolled WebGL and
+ *                                    not three.js: the CDN is not reachable and
+ *                                    a bundled copy blows the budget on its own
+ *   · DPR clamped to 2 (1.5 on coarse pointers)
+ *   · 2600 instances wide / 900 narrow, one draw call, zero per-frame uploads
+ *
+ * Every formation is a closed-form function of the instance index, so morphing
+ * is a `mix()` in the vertex shader and no buffer is ever re-uploaded. The
+ * projection and view matrices are ~40 lines at the bottom of this file.
+ *
+ * Stacking inside `World.astro` — load-bearing:
+ *
+ *     .world          z-index: 0, opaque ink   ← what axe measures against
+ *       .world-field  z-index: 1, this canvas  ← the matter, additive
+ *       .world__content z-index: 2             ← hero + acts, always on top
+ *
+ * The canvas is `position: fixed`: one viewport-sized surface for the whole
+ * world rather than one per section, faded out at the world's two edges.
+ */
+---
+
+<div class="world-field" aria-hidden="true">
+  <canvas class="world-field__canvas"></canvas>
+</div>
+
+<script>
+  /** Billboards. Each is two triangles; the formations below place them. */
+  /* Backing-store scale. The canvas is stretched to full size by CSS. */
+  const RENDER_SCALE = 0.66;
+  const COUNT_WIDE = 1900;
+  const COUNT_NARROW = 900;
+
+  /** Damping for the camera's follow, per second. Lower = heavier lens. */
+  const CAM_DAMP = 3.2;
+  /** Damping for the pointer parallax. Slower than the camera, so it trails. */
+  const PTR_DAMP = 2.1;
+
+  const VERT = `
+    precision highp float;
+    attribute vec2 aCorner;
+    attribute float aId;
+    attribute float aSeed;
+
+    uniform mat4 uProj;
+    uniform mat4 uView;
+    uniform float uN;
+    uniform float uFormA;
+    uniform float uFormB;
+    uniform float uMorph;
+    uniform float uTime;
+    uniform float uShift;
+    uniform float uCharge;
+    uniform float uBurst;
+
+    varying float vTone;
+    varying float vGlow;
+    varying float vTwinkle;
+    varying vec2 vUv;
+
+    vec3 hash3(float i) {
+      return fract(sin(vec3(i * 12.9898, i * 78.233, i * 37.719)) * 43758.5453);
+    }
+
+    /* Seven formations — one per scene, hero included. Every one is a
+       closed-form function of the instance index, which is what makes the morph
+       a mix() and keeps the buffers static for the life of the page. */
+    vec3 form(float f, float i, float n, float seed, float t) {
+      float a = i / n;
+      vec3 h = hash3(i);
+
+      if (f < 0.5) {
+        /* 0 — DUST (hero): a slow three-armed spiral. The raw material, before
+           anyone has said what it should become. */
+        float r = 8.0 + 12.5 * pow(h.y, 0.55);
+        float arm = floor(h.z * 3.0);
+        float th = seed * 1.6 + arm * 2.0944 + r * 0.17 + t * 0.045;
+        float ph = 1.5708 + (h.x - 0.5) * 0.55;
+        return vec3(
+          r * sin(ph) * cos(th),
+          r * cos(ph) * 0.9 + sin(r * 0.4 + t * 0.2) * 0.5,
+          r * sin(ph) * sin(th)
+        );
+      }
+      if (f < 1.5) {
+        /* 1 — WIDGET: the dust condenses into one dense slab. A single card. */
+        float cols = 44.0;
+        float x = mod(i, cols);
+        float y = floor(i / cols);
+        float rows = ceil(n / cols);
+        return vec3(
+          (x - cols * 0.5) * 0.32,
+          -(y - rows * 0.5) * 0.32 * 0.56,
+          sin(x * 0.28 + y * 0.17 + t * 0.35) * 0.32
+        );
+      }
+      if (f < 2.5) {
+        /* 2 — CANVAS: the slab splits into four widgets on one screen. */
+        float g = floor(a * 4.0);
+        float k = fract(a * 4.0);
+        float cols = 14.0;
+        float idx = k * (n / 4.0);
+        float x = mod(idx, cols);
+        float y = floor(idx / cols);
+        float rows = ceil((n / 4.0) / cols);
+        vec3 base = vec3(g < 2.0 ? -4.8 : 4.8, mod(g, 2.0) < 1.0 ? 3.1 : -3.1, (g - 1.5) * 1.3);
+        return base + vec3((x - cols * 0.5) * 0.31, -(y - rows * 0.5) * 0.31, 0.0);
+      }
+      if (f < 3.5) {
+        /* 3 — CONNECTORS: a ring docking around the workspace. A torus, not a
+           circle — a one-dimensional wire of points is too thin to read as an
+           object once it is spread across the viewport. */
+        float u = a * 6.2831 * 2.0;
+        float v = h.x * 6.2831;
+        float R = 8.4;
+        float rt = 1.8;
+        float ring = R + rt * cos(v);
+        return vec3(
+          ring * cos(u),
+          ring * sin(u) * 0.44,
+          rt * sin(v) + sin(u * 3.0 + t * 0.4) * 0.55
+        );
+      }
+      if (f < 4.5) {
+        /* 4 — BOTS: one column of signal splitting into four branches. */
+        float tt = a;
+        float br = floor(h.z * 4.0);
+        float spread = smoothstep(0.42, 1.0, tt);
+        float ang = (br - 1.5) * 0.54;
+        return vec3(
+          sin(ang) * spread * 8.8 + (h.x - 0.5) * 0.5,
+          (tt - 0.5) * -13.0,
+          cos(ang) * spread * 2.5 + (h.y - 0.5) * 0.5
+        );
+      }
+      if (f < 5.5) {
+        /* 5 — AGENTS: six harness clusters in slow orbit around a core. */
+        float g = floor(h.z * 6.0);
+        float th = g / 6.0 * 6.2831 + t * 0.13;
+        vec3 c = vec3(cos(th) * 7.2, sin(th) * 7.2 * 0.44, sin(th * 2.0) * 1.7);
+        /* One in six stays at the core, so the centre reads as the agent. */
+        float core = step(h.x, 0.16);
+        return mix(c + (h - 0.5) * 2.1, (h - 0.5) * 1.6, core);
+      }
+      /* 6 — RELEASE: the matter opens back out into a wide, slow horizon. This
+         is the exhale after five pinned scenes; nothing is being explained any
+         more, so nothing is being held. */
+      float th = a * 6.2831 * 4.0 + t * 0.05;
+      float r = 7.0 + 13.0 * h.x;
+      return vec3(
+        cos(th) * r,
+        (h.y - 0.5) * 5.5 + sin(th * 0.5) * 1.3,
+        sin(th) * r * 0.55 - 2.0
+      );
+    }
+
+    void main() {
+      vec3 pa = form(uFormA, aId, uN, aSeed, uTime);
+      vec3 pb = form(uFormB, aId, uN, aSeed, uTime);
+
+      /* Stagger the morph per instance so the change reads as matter flowing
+         rather than every point cutting on the same frame. */
+      float lead = aSeed * 0.4;
+      float m = clamp((uMorph - lead) / max(1.0 - lead, 0.35), 0.0, 1.0);
+      m = m * m * (3.0 - 2.0 * m);
+      vec3 p = mix(pa, pb, m);
+
+      /* The hero's one interaction: what you type charges the matter. It winds
+         up and tightens as the composer fills, and the send throws a shockwave
+         through it. Confined to the dust formation: heroness is 1 only while
+         formation A is the dust and the morph out of it has not started. */
+      float heroness = (1.0 - clamp(uFormA, 0.0, 1.0)) * (1.0 - uMorph);
+      float k = uCharge * heroness;
+      float burst = uBurst * heroness;
+      float ang = k * (1.1 + aSeed * 1.4) + burst * 0.7;
+      float ca = cos(ang);
+      float sa = sin(ang);
+      p.xz = mat2(ca, -sa, sa, ca) * p.xz;
+      p *= mix(1.0, 0.58, k);
+      p += normalize(p + 0.0001) * burst * (2.5 + aSeed * 5.0);
+
+      /* Billboard: offset in view space so every quad faces the camera. */
+      vec4 mv = uView * vec4(p, 1.0);
+      float size = 0.062 + aSeed * 0.105 + k * 0.045 + burst * 0.07;
+      mv.xy += aCorner * size;
+      /* Slide the world into the scene column so it frames the copy rather
+       * than sitting on top of it. Zero where the layout stacks. */
+      mv.x += uShift;
+
+      gl_Position = uProj * mv;
+
+      /* Fog. Additive blending means fading alpha to 0 *is* fading to the
+         ground colour, so distance falloff costs one smoothstep and buys the
+         whole sense of depth. */
+      float dist = -mv.z;
+      vGlow = smoothstep(54.0, 3.0, dist);
+      vTone = fract(aSeed + m * 0.4 + uFormA * 0.06);
+      vTwinkle = 0.72 + 0.28 * sin(uTime * (0.6 + aSeed * 2.2) + aSeed * 40.0);
+      vUv = aCorner;
+    }
+  `;
+
+  const FRAG = `
+    precision mediump float;
+    uniform vec3 uC1;
+    uniform vec3 uC2;
+    uniform vec3 uC3;
+    uniform float uAlpha;
+    varying float vTone;
+    varying float vGlow;
+    varying float vTwinkle;
+    varying vec2 vUv;
+
+    void main() {
+      float r = dot(vUv, vUv) * 4.0;
+      if (r > 1.0) discard;
+      /* Squared falloff: a tight core with a soft halo, which is what stops
+         2600 additive quads reading as a grey fog once they overlap. */
+      float a = smoothstep(1.0, 0.0, r);
+      a *= a;
+      vec3 col = mix(uC1, uC2, smoothstep(0.0, 0.55, vTone));
+      col = mix(col, uC3, smoothstep(0.6, 1.0, vTone));
+      gl_FragColor = vec4(col, a * vGlow * vTwinkle * uAlpha);
+    }
+  `;
+
+  type Handle = { stop: () => void };
+  let handles: Handle[] = [];
+
+  function compile(gl: WebGLRenderingContext, type: number, src: string) {
+    const sh = gl.createShader(type);
+    if (!sh) return null;
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      gl.deleteShader(sh);
+      return null;
+    }
+    return sh;
+  }
+
+  /** Column-major perspective, the same one every GL tutorial derives. */
+  function perspective(out: Float32Array, fovy: number, aspect: number, near: number, far: number) {
+    const f = 1 / Math.tan(fovy / 2);
+    out.fill(0);
+    out[0] = f / aspect;
+    out[5] = f;
+    out[10] = (far + near) / (near - far);
+    out[11] = -1;
+    out[14] = (2 * far * near) / (near - far);
+    return out;
+  }
+
+  /** Look-at with an assumed +Y up; the camera never rolls, so that is enough. */
+  function lookAt(out: Float32Array, ex: number, ey: number, ez: number) {
+    // Target is always the origin — the world is built around it.
+    let zx = ex,
+      zy = ey,
+      zz = ez;
+    let len = Math.hypot(zx, zy, zz) || 1;
+    zx /= len;
+    zy /= len;
+    zz /= len;
+    // x = normalize(cross(up, z)), up = (0, 1, 0)  ->  (z.z, 0, -z.x)
+    let xx = zz,
+      xy = 0,
+      xz = -zx;
+    len = Math.hypot(xx, xy, xz) || 1;
+    xx /= len;
+    xy /= len;
+    xz /= len;
+    // y = cross(z, x)
+    const yx = zy * xz - zz * xy;
+    const yy = zz * xx - zx * xz;
+    const yz = zx * xy - zy * xx;
+
+    out[0] = xx; out[1] = yx; out[2] = zx; out[3] = 0;
+    out[4] = xy; out[5] = yy; out[6] = zy; out[7] = 0;
+    out[8] = xz; out[9] = yz; out[10] = zz; out[11] = 0;
+    out[12] = -(xx * ex + xy * ey + xz * ez);
+    out[13] = -(yx * ex + yy * ey + yz * ez);
+    out[14] = -(zx * ex + zy * ey + zz * ez);
+    out[15] = 1;
+    return out;
+  }
+
+  function readColor(probe: HTMLElement, token: string): [number, number, number] {
+    probe.style.color = `var(${token})`;
+    const m = getComputedStyle(probe).color.match(/[\d.]+/g);
+    if (!m || m.length < 3) return [0.06, 0.77, 0.64];
+    return [Number(m[0]) / 255, Number(m[1]) / 255, Number(m[2]) / 255];
+  }
+
+  function start(root: HTMLElement): Handle | null {
+    const canvas = root.querySelector<HTMLCanvasElement>('.world-field__canvas');
+    const world = root.closest<HTMLElement>('.world');
+    if (!canvas || !world) return null;
+
+    /* One formation per scene, in document order — the hero is scene 0, so its
+     * formation index is 0 and the mapping needs no offset. Deriving the
+     * formation from a single progress value across the whole world drifted out
+     * of step, because the scenes are not all the same height and the closing
+     * gallery does not pin at all. Reading each scene's own rect keeps the
+     * matter locked to whatever the reader is actually looking at. */
+    const scenes = Array.from(world.querySelectorAll<HTMLElement>('[data-world-scene]'));
+    if (!scenes.length) return null;
+
+    let gl: WebGLRenderingContext | null = null;
+    try {
+      gl = canvas.getContext('webgl', {
+        alpha: true,
+        antialias: false,
+        depth: false,
+        premultipliedAlpha: false,
+        powerPreference: 'high-performance',
+      }) as WebGLRenderingContext | null;
+    } catch {
+      gl = null;
+    }
+    if (!gl) return null;
+    const ctx = gl;
+
+    const instanced = ctx.getExtension('ANGLE_instanced_arrays');
+    if (!instanced) return null;
+
+    const vs = compile(ctx, ctx.VERTEX_SHADER, VERT);
+    const fs = compile(ctx, ctx.FRAGMENT_SHADER, FRAG);
+    const prog = ctx.createProgram();
+    if (!vs || !fs || !prog) return null;
+    ctx.attachShader(prog, vs);
+    ctx.attachShader(prog, fs);
+    ctx.linkProgram(prog);
+    if (!ctx.getProgramParameter(prog, ctx.LINK_STATUS)) return null;
+    ctx.useProgram(prog);
+    ctx.deleteShader(vs);
+    ctx.deleteShader(fs);
+
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const count = coarse || window.innerWidth < 900 ? COUNT_NARROW : COUNT_WIDE;
+
+    // One quad, reused by every instance.
+    const quad = new Float32Array([-0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5]);
+    const quadBuf = ctx.createBuffer();
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, quadBuf);
+    ctx.bufferData(ctx.ARRAY_BUFFER, quad, ctx.STATIC_DRAW);
+    const aCorner = ctx.getAttribLocation(prog, 'aCorner');
+    ctx.enableVertexAttribArray(aCorner);
+    ctx.vertexAttribPointer(aCorner, 2, ctx.FLOAT, false, 0, 0);
+
+    // Per-instance id + seed. Deterministic LCG so the world is identical on
+    // every load and nothing depends on Math.random ordering.
+    const inst = new Float32Array(count * 2);
+    let s = 0x9e3779b1;
+    for (let i = 0; i < count; i++) {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      inst[i * 2] = i;
+      inst[i * 2 + 1] = s / 4294967296;
+    }
+    const instBuf = ctx.createBuffer();
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, instBuf);
+    ctx.bufferData(ctx.ARRAY_BUFFER, inst, ctx.STATIC_DRAW);
+    const aId = ctx.getAttribLocation(prog, 'aId');
+    const aSeed = ctx.getAttribLocation(prog, 'aSeed');
+    ctx.enableVertexAttribArray(aId);
+    ctx.vertexAttribPointer(aId, 1, ctx.FLOAT, false, 8, 0);
+    instanced.vertexAttribDivisorANGLE(aId, 1);
+    ctx.enableVertexAttribArray(aSeed);
+    ctx.vertexAttribPointer(aSeed, 1, ctx.FLOAT, false, 8, 4);
+    instanced.vertexAttribDivisorANGLE(aSeed, 1);
+
+    const u = (n: string) => ctx.getUniformLocation(prog, n);
+    const uProj = u('uProj');
+    const uView = u('uView');
+    const uN = u('uN');
+    const uFormA = u('uFormA');
+    const uFormB = u('uFormB');
+    const uMorph = u('uMorph');
+    const uTime = u('uTime');
+    const uAlpha = u('uAlpha');
+    const uShift = u('uShift');
+    const uCharge = u('uCharge');
+    const uBurst = u('uBurst');
+    const uC1 = u('uC1');
+    const uC2 = u('uC2');
+    const uC3 = u('uC3');
+    ctx.uniform1f(uN, count);
+
+    const proj = new Float32Array(16);
+    const view = new Float32Array(16);
+
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
+    root.appendChild(probe);
+
+    function paintTheme() {
+      ctx.uniform3fv(uC1, readColor(probe, '--color-brand-400'));
+      ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
+      ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
+    }
+    ctx.enable(ctx.BLEND);
+    // Always additive: this canvas only ever sits on the world's dark ink.
+    ctx.blendFunc(ctx.SRC_ALPHA, ctx.ONE);
+    paintTheme();
+
+    let dpr = 1;
+    function resize() {
+      /* Render below display resolution and let the compositor scale it up.
+       * Additive glow has no hard edges to lose, and this is a ~3x cut in
+       * fill rate — the difference between 15fps and a smooth scroll on
+       * integrated graphics. */
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5) * RENDER_SCALE;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas!.width = Math.floor(w * dpr);
+      canvas!.height = Math.floor(h * dpr);
+      ctx.viewport(0, 0, canvas!.width, canvas!.height);
+      perspective(proj, 0.85, w / h, 0.1, 140);
+      ctx.uniformMatrix4fv(uProj, false, proj);
+      // Frame the copy column on wide screens; centred where the layout stacks.
+      ctx.uniform1f(uShift, w >= 1024 ? 3.0 : 0);
+    }
+    resize();
+
+    /* ---- state the render loop integrates ---- */
+
+    // Camera. `cam` chases `aim`; the gap between them is the lens's mass, and
+    // is most of what separates "crafted" from "bound directly to scrollTop".
+    const cam = { x: 0, y: 2, z: 24 };
+    let camPrimed = false;
+    // Pointer parallax, normalised to -1..1 and damped slower than the camera.
+    let ptrX = 0;
+    let ptrY = 0;
+    let ptrAimX = 0;
+    let ptrAimY = 0;
+    // Hero composer: how loaded it is, and the decaying shockwave from a send.
+    let charge = 0;
+    let chargeAim = 0;
+    let burst = 0;
+
+    // Last written mask strength, so the style write is skipped most frames.
+    let lastDim = -1;
+
+    let frame = 0;
+    let running = true;
+    let onScreen = true;
+    let t0 = 0;
+    let last = 0;
+
+    function draw(now: number) {
+      frame = 0;
+      if (!running) return;
+      if (!t0) t0 = now;
+      const seconds = (now - t0) / 1000;
+      // Clamped: a backgrounded tab or a long task must not teleport the camera.
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+      last = now;
+
+      const rect = world!.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // Fade the matter in and out at the world's edges so it never bleeds onto
+      // the header above or the conversion sections below.
+      const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
+      const exit = Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      const presence = Math.min(enter, exit);
+      root.style.opacity = String(presence);
+
+      if (presence <= 0.001) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
+
+      // Which scene owns the middle of the viewport, and how far through it we
+      // are. Hold the formation while it is being read, then flow into the next.
+      const mid = vh * 0.5;
+      let a = 0;
+      let local = 0;
+      for (let i = 0; i < scenes.length; i++) {
+        const r = scenes[i].getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= mid) {
+          a = i;
+          local = Math.min(1, Math.max(0, (mid - r.top) / Math.max(r.height, 1)));
+          break;
+        }
+        if (r.top > mid) break;
+        a = i;
+        local = 1;
+      }
+      const last_i = scenes.length - 1;
+      // The hold: nothing morphs for the first 62% of a scene, so there is
+      // always a moment where the matter is still and the copy can be read.
+      const morph = Math.min(1, Math.max(0, (local - 0.62) / 0.38));
+      // Overall progress, for the camera path.
+      const p = Math.min(1, Math.max(0, (a + local) / Math.max(last_i, 1)));
+
+      /* Retune how hard the matter is held back where the copy sits. The
+       * hero's headline is centred, so the field stays near-even behind it;
+       * the acts put their copy in the inline-start column, so it is pushed
+       * away from there. Interpolated across the first scene boundary so the
+       * change is never a visible step. */
+      const dim = a === 0 ? 0.72 - 0.56 * morph : 0.16;
+      if (Math.abs(dim - lastDim) > 0.004) {
+        root.style.setProperty('--field-dim', dim.toFixed(3));
+        lastDim = dim;
+      }
+
+      ctx.uniform1f(uFormA, Math.min(a, 6));
+      ctx.uniform1f(uFormB, Math.min(a + 1, 6));
+      ctx.uniform1f(uMorph, morph);
+      ctx.uniform1f(uTime, seconds);
+      ctx.uniform1f(uAlpha, 1.0);
+
+      // Composer charge eases toward its target; the send burst decays.
+      charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
+      burst *= Math.exp(-2.2 * dt);
+      ctx.uniform1f(uCharge, charge);
+      ctx.uniform1f(uBurst, burst);
+
+      // Pointer parallax trails the cursor rather than tracking it.
+      const pl = 1 - Math.exp(-PTR_DAMP * dt);
+      ptrX += (ptrAimX - ptrX) * pl;
+      ptrY += (ptrAimY - ptrY) * pl;
+
+      /* The camera path: one continuous orbit that dollies in as the story
+       * advances, rising and falling so the matter is never seen from the same
+       * height twice. Pointer parallax is added to the *aim*, not to the
+       * camera, so it inherits the same inertia as everything else. */
+      const ang = -1.05 + p * 2.35 + ptrX * 0.22;
+      const dist = 24 - p * 7.5 + Math.sin(seconds * 0.22) * 0.6;
+      const aimX = Math.sin(ang) * dist;
+      const aimY = 1.6 + 5.4 * Math.sin(p * 3.1) + ptrY * 2.4;
+      const aimZ = Math.cos(ang) * dist;
+
+      if (!camPrimed) {
+        // First frame lands on the aim rather than easing in from wherever the
+        // struct was initialised — otherwise the page opens on a lens swoop
+        // nobody asked for.
+        cam.x = aimX;
+        cam.y = aimY;
+        cam.z = aimZ;
+        camPrimed = true;
+      } else {
+        const cl = 1 - Math.exp(-CAM_DAMP * dt);
+        cam.x += (aimX - cam.x) * cl;
+        cam.y += (aimY - cam.y) * cl;
+        cam.z += (aimZ - cam.z) * cl;
+      }
+
+      lookAt(view, cam.x, cam.y, cam.z);
+      ctx.uniformMatrix4fv(uView, false, view);
+
+      ctx.clearColor(0, 0, 0, 0);
+      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      frame = requestAnimationFrame(draw);
+    }
+
+    /** One composed frame, for reduced-motion visitors. Never loops. */
+    function drawStill() {
+      ctx.uniform1f(uFormA, 0);
+      ctx.uniform1f(uFormB, 1);
+      ctx.uniform1f(uMorph, 0.34);
+      ctx.uniform1f(uTime, 6);
+      ctx.uniform1f(uAlpha, 1);
+      ctx.uniform1f(uCharge, 0);
+      ctx.uniform1f(uBurst, 0);
+      lookAt(view, -14.6, 3.4, 18.2);
+      ctx.uniformMatrix4fv(uView, false, view);
+      ctx.clearColor(0, 0, 0, 0);
+      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+    }
+
+    /** Fade at the world's edges without redrawing. Reduced-motion only. */
+    function fadeStill() {
+      const rect = world!.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
+      const exit = Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      root.style.opacity = String(Math.min(enter, exit));
+    }
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (still) {
+      // A composed frame and a normal page scroll. The canvas is `fixed`, so it
+      // still has to fade out at the world's edges — but that is one style
+      // write on scroll, not a render loop.
+      root.style.setProperty('--field-dim', '0.72');
+      drawStill();
+      fadeStill();
+      window.addEventListener('scroll', fadeStill, { passive: true });
+    } else {
+      frame = requestAnimationFrame(draw);
+    }
+
+    /* ---- pausing ---- */
+
+    function pause() {
+      running = false;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+    }
+    function play() {
+      if (running || still || !onScreen || document.hidden) return;
+      running = true;
+      // Restart the clock so a paused tab does not resume mid-swoop.
+      t0 = 0;
+      last = 0;
+      frame = requestAnimationFrame(draw);
+    }
+
+    function onVisibility() {
+      if (document.hidden) pause();
+      else play();
+    }
+
+    // Stop entirely once the world is well off-screen: a 3D hero that keeps
+    // rendering while the reader is in the FAQ is a battery bill for nothing.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        if (onScreen) play();
+        else pause();
+      },
+      { rootMargin: '20% 0px 20% 0px' },
+    );
+    io.observe(world);
+
+    /* ---- the hero's one interaction ---- */
+
+    function onCompose(event: Event) {
+      const el = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-world-charge]');
+      if (!el) return;
+      const value = (el as HTMLInputElement | HTMLTextAreaElement).value ?? '';
+      chargeAim = Math.min(1, value.trim().length / 90);
+    }
+    function onSend() {
+      burst = 1;
+      chargeAim = 0;
+    }
+
+    function onPointer(e: PointerEvent) {
+      if (coarse) return;
+      ptrAimX = (e.clientX / window.innerWidth) * 2 - 1;
+      ptrAimY = 1 - (e.clientY / window.innerHeight) * 2;
+    }
+
+    function onLost(e: Event) {
+      e.preventDefault();
+      pause();
+      root.style.opacity = '0';
+    }
+
+    function onResize() {
+      resize();
+      if (still) {
+        drawStill();
+        fadeStill();
+      }
+    }
+
+    window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener('nexow:themechange', paintTheme);
+    document.addEventListener('input', onCompose);
+    document.addEventListener('nexow:world-send', onSend);
+    if (!coarse) window.addEventListener('pointermove', onPointer, { passive: true });
+    canvas.addEventListener('webglcontextlost', onLost);
+
+    return {
+      stop() {
+        pause();
+        io.disconnect();
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('scroll', fadeStill);
+        document.removeEventListener('visibilitychange', onVisibility);
+        document.removeEventListener('nexow:themechange', paintTheme);
+        document.removeEventListener('input', onCompose);
+        document.removeEventListener('nexow:world-send', onSend);
+        window.removeEventListener('pointermove', onPointer);
+        canvas.removeEventListener('webglcontextlost', onLost);
+        probe.remove();
+        ctx.deleteBuffer(quadBuf);
+        ctx.deleteBuffer(instBuf);
+        ctx.deleteProgram(prog);
+        ctx.getExtension('WEBGL_lose_context')?.loseContext();
+      },
+    };
+  }
+
+  function teardown() {
+    for (const h of handles) h.stop();
+    handles = [];
+  }
+
+  function init() {
+    teardown();
+    for (const root of document.querySelectorAll<HTMLElement>('.world-field')) {
+      const h = start(root);
+      if (h) handles.push(h);
+    }
+  }
+
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', teardown);
+</script>
+
+<style>
+  .world-field {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    /* How hard the matter is held back where the copy sits. `World.astro`
+     * retunes this per scene: near-even under the hero, whose headline is
+     * centred, and weighted away from the inline-start column under the acts,
+     * whose copy is not. */
+    --field-dim: 0.16;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, var(--field-dim)),
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
+      #000 68%
+    );
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, var(--field-dim)),
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
+      #000 68%
+    );
+    /* No transition on opacity: it is written every frame from the world's
+     * position, and a transition would fight the scroll. */
+  }
+
+  :global([dir='rtl']) .world-field {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      rgba(0, 0, 0, var(--field-dim)),
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
+      #000 68%
+    );
+    mask-image: linear-gradient(
+      to left,
+      rgba(0, 0, 0, var(--field-dim)),
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
+      #000 68%
+    );
+  }
+
+  .world-field__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

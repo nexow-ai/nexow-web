@@ -1,0 +1,96 @@
+---
+/**
+ * The dark theatre the home story plays inside — hero and all six acts.
+ *
+ * The hero used to sit outside this stage, on the page's own light surface,
+ * with the WebGL world only fading in once the acts began. That put the whole
+ * point of the page one screen below the fold: you arrived at a landing page
+ * and had to scroll to reach the experience. The hero is now scene 0 of the
+ * same world, so the camera opens on the matter and never cuts until the story
+ * is over.
+ *
+ * It is dark in both themes on purpose. This is a lit stage in a dark room; an
+ * additive point cloud has nothing to add to a white page, and the six act
+ * scenes are built as glass on ink. The theme toggle still works — everything
+ * below the closing seam (features, privacy, plans, rewards, FAQ, CTA) follows
+ * it as usual. `global.css` repaints the header for the one case this creates:
+ * light-theme chrome floating over ink before the first scroll.
+ *
+ * Three layers, and the order matters:
+ *   1. this element    opaque ink. Text contrast is computed against it, which
+ *                      is what keeps `tests/e2e/contrast.spec.ts` deterministic.
+ *   2. .world-field    the WebGL matter, additive, fixed to the viewport.
+ *   3. .world__content the hero and the acts, always above the matter.
+ *
+ * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
+ * field paints under the content and over the ink instead of over the header.
+ * Nothing here may set `overflow`, which would break the `position: sticky`
+ * every act depends on.
+ *
+ * Every direct child that the camera should treat as a beat carries
+ * `data-world-scene`; `WorldField` reads them in document order and maps scene
+ * *i* to formation *i*. Adding a scene without adding a formation leaves the
+ * matter holding its last shape — safe, but the act will not have its own.
+ */
+import WorldField from './WorldField.astro';
+---
+
+<div class="world">
+  <WorldField />
+  <div class="world__content">
+    <slot />
+    <div class="world__seam" aria-hidden="true"></div>
+  </div>
+</div>
+
+<style>
+  .world {
+    position: relative;
+    z-index: 0;
+    background: var(--color-ink-950);
+    color: #fff;
+  }
+
+  /* A wash that sits between the ink and the matter: enough colour that the
+   * world is not a black rectangle before WebGL has painted a frame, and it is
+   * also exactly what a no-WebGL visitor keeps. */
+  .world::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        58% 40% at 18% 6%,
+        color-mix(in oklab, var(--color-brand-500) 22%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        50% 34% at 86% 2%,
+        color-mix(in oklab, var(--color-accent-600, var(--color-accent-500)) 24%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        70% 44% at 60% 98%,
+        color-mix(in oklab, var(--color-plasma-500) 12%, transparent),
+        transparent 76%
+      );
+  }
+
+  .world__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Fade out of the theatre and back onto the page instead of cutting to a
+   * hard edge. There is no matching seam at the top: the world starts at the
+   * top of the document, so there is nothing above it to fade from. */
+  .world__seam {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 9rem;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--color-ink-950), transparent);
+  }
+</style>
