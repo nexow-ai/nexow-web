@@ -199,18 +199,37 @@ test.describe('page-to-page slide', () => {
   }
 
   test('runs backwards to the previous page and forwards to the next', async ({ page }) => {
-    await gotoReady(page, '/features');
+    // Start mid-tour so both arrows stay in view. Home hides its next arrow
+    // until the page end, which is a different contract (see the test below).
+    await gotoReady(page, '/community');
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
-    await expect(page).toHaveURL(/localhost:\d+\/$/, SWAP);
+    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
 
     await page.locator('.page-nav__btn--next').click();
-    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
+    await expect(page).toHaveURL(/\/community\/?$/, SWAP);
 
     // Each navigation reports twice: the event's direction, then the attribute
     // the router put on <html> for the animation to key off.
     expect(await directions()).toEqual(['back', 'back', 'forward', 'forward']);
+  });
+
+  test('holds the home next-page arrow until the foot of the page', async ({ page }) => {
+    await page.goto('/');
+    const next = page.locator('.page-nav__btn--next');
+    await expect(next).toBeHidden();
+
+    // The world can still be growing the document; keep landing on the real bottom.
+    await page.waitForFunction(() => {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      return document.querySelector('.page-nav')?.classList.contains('is-at-end');
+    });
+    await expect(next).toBeVisible();
+    await expect(next).toHaveAttribute('aria-label', /Features/);
+
+    await page.goto('/features');
+    await expect(page.locator('.page-nav__btn--next')).toBeVisible();
   });
 
   test.describe('from the header', () => {

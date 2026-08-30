@@ -16,6 +16,7 @@ import Hex from '../../src/components/Hex.astro';
 import Icon from '../../src/components/Icon.astro';
 import Logo from '../../src/components/Logo.astro';
 import PageHero from '../../src/components/PageHero.astro';
+import PageNav from '../../src/components/PageNav.astro';
 import SectionHeading from '../../src/components/SectionHeading.astro';
 import ThemeToggle from '../../src/components/ThemeToggle.astro';
 import { ICON_PATHS } from '../../src/components/icon-paths';
@@ -237,6 +238,29 @@ describe('Footer', () => {
     const html = await render(Footer, '/', { props: { lang: 'en', route: '/' } });
     expect(text(html)).toContain(SITE.legalName);
     expect(text(html)).toMatch(/\b20\d{2}\b/);
+  });
+});
+
+describe('PageNav', () => {
+  it('holds the home next-page arrow for the foot of the page', async () => {
+    const home = await render(PageNav, '/');
+    expect(home).toContain('page-nav--end-only');
+    expect(home).toMatch(/page-nav__btn--next[^>]*aria-hidden="true"/);
+    expect(home).toMatch(/page-nav__btn--next[^>]*\binert\b/);
+    expect(home).toContain('href="/features"');
+
+    const es = await render(PageNav, '/es');
+    expect(es).toContain('page-nav--end-only');
+    expect(es).toContain('href="/es/features"');
+  });
+
+  it('leaves other tour pages with the arrows in view', async () => {
+    const features = await render(PageNav, '/features');
+    expect(features).toContain('page-nav__btn--prev');
+    expect(features).toContain('page-nav__btn--next');
+    expect(features).not.toContain('page-nav--end-only');
+    expect(features).not.toMatch(/page-nav__btn--next[^>]*aria-hidden="true"/);
+    expect(features).not.toMatch(/page-nav__btn--next[^>]*\binert\b/);
   });
 });
 
