@@ -33,6 +33,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = useContent(lang).home.hero;
 const defaultPromptUrl = promptAppUrl(t.promptExample);
+/** Two sentences stay two lines, even when the viewport could fit one. */
+const title = t.title.includes('\n')
+  ? t.title
+  : t.title.replace(/^(.+?[.!?。．])\s+/, '$1\n');
 
 /** Four starter prompts, not twelve. A wall of chips is a menu, not an example. */
 const examples = (t.promptExamples ?? []).slice(0, 4);
@@ -62,7 +66,7 @@ const D = {
       data-text-appear
       data-text-appear-delay={D.title}
     >
-      {t.title}
+      {title}
     </h1>
 
     {
@@ -199,7 +203,10 @@ const D = {
     line-height: 0.96;
     letter-spacing: -0.035em;
     text-align: center;
-    text-wrap: balance;
+    /* Honor the forced break after the first sentence. Global `h1` balance
+       would otherwise keep both on one line once the font fits. */
+    white-space: pre-line;
+    text-wrap: unset;
     color: var(--w-text);
     /* Carries the readability the veil used to buy with opacity, but only
        where there are glyphs, so the matter stays visible around them. */
