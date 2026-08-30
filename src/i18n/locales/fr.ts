@@ -83,7 +83,7 @@ export const fr: SiteContent = {
     },
     hero: {
       badge: 'Accès anticipé',
-      title: 'Restez informé',
+      title: 'Construisez tout. Surveillez tout.',
       titleKicker: 'Tableaux de bord en temps réel en quelques secondes — pas en semaines, ni en trimestres.',
       subtitle:
         'Décrivez ce dont vous avez besoin et Nexow le construit : de vrais widgets fonctionnels, branchés aux données live, disposés sur un canvas que vous contrôlez. Séismes, qualité de l’air, indicateurs mondiaux, flux de marché ou votre propre base de données — visualisez, surveillez et agissez.',
@@ -1415,12 +1415,12 @@ export const fr: SiteContent = {
         priceYearly: '8,33 €',
         billedYearly: '99,90 € par an',
         cadence: '/mois',
-        stats: ['115K crédits/mois', '30 bots', '10 agents'],
+        stats: ['670K crédits/mois', '30 bots', '10 agents'],
         note: 'Tout ce qui est dans Free, plus :',
         cta: 'Devenir Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115 000 crédits chaque mois',
+          '670 000 crédits chaque mois',
           'Jusqu’à 30 bots et 10 agents',
           'Deuxième couleur d’accent (dégradés)',
           'Huit motifs de canvas, surfaces de widget et verres de panneau en plus',
@@ -1436,13 +1436,13 @@ export const fr: SiteContent = {
         billedYearly: '699,90 € par an',
         cadence: '/mois',
         badge: 'Meilleur rapport',
-        stats: ['800K crédits/mois', '300 bots', '100 agents'],
+        stats: ['4.7M crédits/mois', '300 bots', '100 agents'],
         note: 'Tout ce qui est dans Lite, plus :',
         cta: 'Devenir Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800 000 crédits chaque mois',
+          '4 675 000 crédits chaque mois',
           'Jusqu’à 300 bots et 100 agents',
           'Deux motifs de canvas et écrans de démarrage en plus, avec réglage aurora',
           'Support prioritaire pour les configurations complexes',
@@ -1550,7 +1550,7 @@ export const fr: SiteContent = {
       },
       {
         q: "Que sont les crédits ?",
-        a: "Les crédits mesurent l’usage de l’IA : générer des widgets, les modifier par conversation, créer des liens et utiliser Copilot. Un crédit égale un token de sortie Sonnet au coût fournisseur, donc le prix ne dépend pas du modèle choisi — Haiku étire un crédit à environ 3 tokens ; Opus le consomme en environ 0,6. Free réserve 100 000 à l’inscription ; Lite donne 115 000 par mois ; Elite 800 000 — et vous pouvez acheter des packs à tout moment.",
+        a: "Les crédits mesurent l’usage de l’IA : générer des widgets, les modifier par conversation, créer des liens et utiliser Copilot. Un crédit égale un token de sortie Sonnet au coût fournisseur, donc le prix ne dépend pas du modèle choisi — Haiku étire un crédit à environ 2 tokens ; Opus le consomme en environ 0,4. Free réserve 100 000 à l’inscription ; Lite donne 670 000 par mois ; Elite 4 675 000 — et vous pouvez acheter des packs à tout moment.",
       },
       {
         q: "Quand les plans payants arrivent-ils ?",

@@ -55,18 +55,18 @@ const HEX = /^#[0-9a-f]{6}$/;
 
 describe('credit economics', () => {
   it('pegs one credit to one Sonnet output token of provider cost', () => {
-    expect(PEG_CENTS).toBe(1500);
+    expect(PEG_CENTS).toBe(1000);
     expect(CREDIT_COST_CENTS).toBeCloseTo(PEG_CENTS / 1_000_000, 12);
   });
 
   it('sells a credit at cost plus the shipped margin', () => {
-    expect(CREDIT_MARGIN_PCT).toBe(480);
-    expect(CREDIT_SALE_CENTS).toBeCloseTo(CREDIT_COST_CENTS * 5.8, 12);
+    expect(CREDIT_MARGIN_PCT).toBe(50);
+    expect(CREDIT_SALE_CENTS).toBeCloseTo(CREDIT_COST_CENTS * 1.5, 12);
     expect(CREDIT_SALE_CENTS).toBeGreaterThan(CREDIT_COST_CENTS);
   });
 
-  it('publishes the headline rate of $87 per million credits', () => {
-    expect(USD_PER_MILLION_CREDITS).toBeCloseTo(87, 10);
+  it('publishes the headline rate of $15 per million credits', () => {
+    expect(USD_PER_MILLION_CREDITS).toBeCloseTo(15, 10);
   });
 
   it('quotes model token rates relative to the Sonnet peg', () => {
@@ -142,8 +142,8 @@ describe('niceRound', () => {
 
 describe('planCredits', () => {
   it('derives the shipped catalog numbers from the list prices', () => {
-    expect(planCredits(9.99)).toBe(115_000);
-    expect(planCredits(69.99)).toBe(800_000);
+    expect(planCredits(9.99)).toBe(670_000);
+    expect(planCredits(69.99)).toBe(4_675_000);
   });
 
   it('grants nothing for a free plan', () => {
@@ -384,8 +384,8 @@ describe('MATRIX', () => {
 
     const grant = MATRIX.find((g) => g.key === 'ai')!.rows.find((r) => r.key === 'creditsGrant')!;
     expect(grant.cells[0]).toEqual({ n: SIGNUP_BONUS_CREDITS.toLocaleString('en-US'), t: 'onSignup' });
-    expect(grant.cells[1]).toEqual({ n: (115_000).toLocaleString('en-US'), t: 'perMonth' });
-    expect(grant.cells[2]).toEqual({ n: (800_000).toLocaleString('en-US'), t: 'perMonth' });
+    expect(grant.cells[1]).toEqual({ n: (670_000).toLocaleString('en-US'), t: 'perMonth' });
+    expect(grant.cells[2]).toEqual({ n: (4_675_000).toLocaleString('en-US'), t: 'perMonth' });
   });
 
   it('marks the capabilities that are not live yet, and labels them', () => {
@@ -418,7 +418,7 @@ describe('credit packs', () => {
       const expected = niceRound((pack.priceUsd * 100 * (1 + pack.volumeBonus)) / CREDIT_SALE_CENTS);
       expect(packCredits(pack), pack.id).toBe(expected);
     }
-    expect(CREDIT_PACKS.map(packCredits)).toEqual([55_000, 210_000, 640_000, 1_800_000]);
+    expect(CREDIT_PACKS.map(packCredits)).toEqual([330_000, 1_200_000, 3_725_000, 10_400_000]);
   });
 
   it('gives every pack a unique catalog id', () => {

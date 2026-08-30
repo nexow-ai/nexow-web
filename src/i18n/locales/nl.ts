@@ -83,7 +83,7 @@ export const nl: SiteContent = {
     },
     hero: {
       badge: 'Vroege toegang',
-      title: 'Blijf op de hoogte',
+      title: 'Bouw alles. Bekijk alles.',
       titleKicker: 'Live realtime dashboards in seconden — niet in weken of kwartalen.',
       subtitle:
         'Beschrijf wat je nodig hebt en Nexow bouwt het: echte werkende widgets, gekoppeld aan live data, neergezet op een canvas dat jij beheert. Aardbevingen, luchtkwaliteit, wereldindicatoren, marktfeeds of je eigen database — visualiseer het, volg het en handel ernaar.',
@@ -1415,12 +1415,12 @@ export const nl: SiteContent = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 jaarlijks gefactureerd',
         cadence: '/mnd',
-        stats: ['115K credits/mnd', '30 bots', '10 agenten'],
+        stats: ['670K credits/mnd', '30 bots', '10 agenten'],
         note: 'Alles in Gratis, plus:',
         cta: 'Word Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115.000 credits per maand',
+          '670.000 credits per maand',
           'Tot 30 bots en 10 agents',
           'Tweede accentkleur (gradiënten)',
           'Acht extra canvaspatronen, widgetoppervlakken en paneelglas',
@@ -1436,13 +1436,13 @@ export const nl: SiteContent = {
         billedYearly: '$699.90 jaarlijks gefactureerd',
         cadence: '/mnd',
         badge: 'Beste rendement',
-        stats: ['800K credits/mnd', '300 bots', '100 agenten'],
+        stats: ['4.7M credits/mnd', '300 bots', '100 agenten'],
         note: 'Alles in Lite, plus:',
         cta: 'Word Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800.000 credits per maand',
+          '4.675.000 credits per maand',
           'Tot 300 bots en 100 agents',
           'Twee extra canvaspatronen en bootloaders, plus aurora-afstemming',
           'Prioriteitssupport voor complexe opstellingen',
@@ -1550,7 +1550,7 @@ export const nl: SiteContent = {
       },
       {
         q: "Wat zijn credits?",
-        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 3 tokens; Opus gebruikt hem in ongeveer 0,6. Free reserveert 100.000 bij aanmelding; Lite geeft 115.000 per maand; Elite 800.000 — en je kunt altijd packs kopen.",
+        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 2 tokens; Opus gebruikt hem in ongeveer 0,4. Free reserveert 100.000 bij aanmelding; Lite geeft 670.000 per maand; Elite 4.675.000 — en je kunt altijd packs kopen.",
       },
       {
         q: "Wanneer starten betaalde plannen?",

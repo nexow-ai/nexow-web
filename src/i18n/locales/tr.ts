@@ -83,7 +83,7 @@ export const tr = {
     },
     hero: {
       badge: 'Erken erişim',
-      title: 'Gelişmelerden haberdar olun',
+      title: 'Her şeyi kur. Her şeyi izle.',
       titleKicker: 'Saniyeler içinde canlı gerçek zamanlı panolar — haftalar veya çeyrekler değil.',
       subtitle:
         'Neye ihtiyacınız olduğunu anlatın, Nexow onu kursun: gerçekten çalışan widget’lar, canlı veriye bağlı, sizin kontrolünüzdeki bir kanvasa yerleşmiş. Depremler, hava kalitesi, dünya göstergeleri, piyasa akışları ya da kendi veritabanınız — görselleştirin, izleyin ve harekete geçin.',
@@ -1415,12 +1415,12 @@ export const tr = {
         priceYearly: '$8.33',
         billedYearly: 'Yıllık $99.90 Faturalandırılır',
         cadence: '/ay',
-        stats: ['50K Kredi/Ay', '30 Bot', '10 Ajan'],
+        stats: ['670K Kredi/Ay', '30 Bot', '10 Ajan'],
         note: 'Ücretsiz İçinde Her Şey, Artı:',
         cta: 'Lite Olun',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          'Her ay 115.000 kredi',
+          'Her ay 670.000 kredi',
           '30 bota ve 10 ajana kadar',
           'İkinci vurgu rengi (gradyanlar)',
           'Sekiz kanvas deseni, widget yüzeyi ve panel camı daha',
@@ -1436,13 +1436,13 @@ export const tr = {
         billedYearly: 'Yıllık $699.90 Faturalandırılır',
         cadence: '/ay',
         badge: 'En İyi Dönüş',
-        stats: ['800K Kredi/Ay', '300 Bot', '100 Ajan'],
+        stats: ['4.7M Kredi/Ay', '300 Bot', '100 Ajan'],
         note: 'Lite İçinde Her Şey, Artı:',
         cta: 'Elite Olun',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          'Her ay 800.000 kredi',
+          'Her ay 4.675.000 kredi',
           '300 bota ve 100 ajana kadar',
           'İki kanvas deseni ve açılış ekranı daha, ayrıca aurora ince ayarı',
           'Karmaşık kurulumlar için öncelikli destek',
@@ -1478,7 +1478,7 @@ export const tr = {
       },
       {
         q: "Krediler nedir?",
-        a: "Krediler AI kullanımını ölçer: widget üretmek, konuşmayla düzenlemek, bağlantı oluşturmak ve Copilot kullanmak. Bir kredi, sağlayıcı maliyetinde bir Sonnet çıktı token’ına eşittir; bu yüzden fiyat seçtiğiniz modele bağlı değildir — Haiku bir krediyi yaklaşık 3 tokene uzatır; Opus yaklaşık 0,6’da tüketir. Free kayıtta 100.000 ayırır; Lite ayda 115.000 verir; Elite 800.000 — paketleri istediğiniz zaman alabilirsiniz.",
+        a: "Krediler AI kullanımını ölçer: widget üretmek, konuşmayla düzenlemek, bağlantı oluşturmak ve Copilot kullanmak. Bir kredi, sağlayıcı maliyetinde bir Sonnet çıktı token’ına eşittir; bu yüzden fiyat seçtiğiniz modele bağlı değildir — Haiku bir krediyi yaklaşık 2 tokene uzatır; Opus yaklaşık 0,4’da tüketir. Free kayıtta 100.000 ayırır; Lite ayda 670.000 verir; Elite 4.675.000 — paketleri istediğiniz zaman alabilirsiniz.",
       },
       {
         q: "Ücretli planlar ne zaman başlar?",

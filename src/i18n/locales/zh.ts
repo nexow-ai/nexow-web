@@ -83,7 +83,7 @@ export const zh: SiteContent = {
     },
     hero: {
       badge: '抢先体验',
-      title: '保持关注',
+      title: '什么都能建。什么都能看。',
       titleKicker: '实时仪表盘，几秒完成 — 不是几周，更不是一个季度。',
       subtitle:
         '描述你需要什么，Nexow 就把它做出来：真正能用的组件，接上实时数据，排布在你掌控的画布上。地震、空气质量、世界指标、市场行情，或你自己的数据库——把它可视化、盯住它，并据此行动。',
@@ -1411,12 +1411,12 @@ export const zh: SiteContent = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 按年计费',
         cadence: '/月',
-        stats: ['115K 积分/月', '30 个机器人', '10 个智能体'],
+        stats: ['670K 积分/月', '30 个机器人', '10 个智能体'],
         note: '包含 Free 的一切，另加：',
         cta: '成为 Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '每月 115,000 积分',
+          '每月 670,000 积分',
           '最多 30 个机器人和 10 个智能体',
           '第二种强调色（渐变）',
           '另加八种画布纹理、组件表面与面板玻璃',
@@ -1432,13 +1432,13 @@ export const zh: SiteContent = {
         billedYearly: '$699.90 按年计费',
         cadence: '/月',
         badge: '最佳回报',
-        stats: ['800K 积分/月', '300 个机器人', '100 个智能体'],
+        stats: ['4.7M 积分/月', '300 个机器人', '100 个智能体'],
         note: '包含 Lite 的一切，另加：',
         cta: '成为 Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '每月 800,000 积分',
+          '每月 4,675,000 积分',
           '最多 300 个机器人和 100 个智能体',
           '另加两种画布纹理与启动画面，以及极光微调',
           '复杂配置的优先支持',
@@ -1546,7 +1546,7 @@ export const zh: SiteContent = {
       },
       {
         q: "积分是什么？",
-        a: "积分计量 AI 用量：生成小组件、用对话编辑、创建链接以及使用 Copilot。1 积分等于 1 个 Sonnet 输出 token 的供应商成本，因此价格不取决于你选哪个模型——Haiku 大约把 1 积分拉长到 3 个 token；Opus 大约用掉 0.6。Free 在注册时预留 100,000；Lite 每月 115,000；Elite 800,000——也可随时购买加油包。",
+        a: "积分计量 AI 用量：生成小组件、用对话编辑、创建链接以及使用 Copilot。1 积分等于 1 个 Sonnet 输出 token 的供应商成本，因此价格不取决于你选哪个模型——Haiku 大约把 1 积分拉长到 2 个 token；Opus 大约用掉 0.4。Free 在注册时预留 100,000；Lite 每月 670,000；Elite 4,675,000——也可随时购买加油包。",
       },
       {
         q: "付费方案何时上线？",

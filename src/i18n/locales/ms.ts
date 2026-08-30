@@ -83,7 +83,7 @@ export const ms = {
     },
     hero: {
       badge: 'Akses awal',
-      title: 'Kekal dimaklumkan',
+      title: 'Bina apa sahaja. Pantau semuanya.',
       titleKicker: 'Papan pemuka masa nyata langsung dalam beberapa saat — bukan minggu, atau suku tahun.',
       subtitle:
         'Terangkan apa yang anda perlukan dan Nexow membinanya: widget sebenar yang berfungsi, disambung ke data langsung, disusun pada kanvas yang anda kawal. Gempa bumi, kualiti udara, penunjuk dunia, suapan pasaran atau pangkalan data anda sendiri — gambarkan, pantau dan bertindak.',
@@ -1415,12 +1415,12 @@ export const ms = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 dibilkan tahunan',
         cadence: '/bln',
-        stats: ['50K kredit/bln', '30 bot', '10 ejen'],
+        stats: ['670K kredit/bln', '30 bot', '10 ejen'],
         note: 'Semua dalam Percuma, tambah:',
         cta: 'Menjadi Penyokong',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115,000 kredit setiap bulan',
+          '670,000 kredit setiap bulan',
           'Sehingga 30 bot dan 10 ejen',
           'Warna aksen kedua (kecerunan)',
           'Lapan lagi corak kanvas, permukaan widget dan kaca panel',
@@ -1436,13 +1436,13 @@ export const ms = {
         billedYearly: '$699.90 dibilkan tahunan',
         cadence: '/bln',
         badge: 'Pulangan terbaik',
-        stats: ['800K kredit/bln', '300 bot', '100 ejen'],
+        stats: ['4.7M kredit/bln', '300 bot', '100 ejen'],
         note: 'Semua dalam Penyokong, tambah:',
         cta: 'Menjadi Penaja',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800,000 kredit setiap bulan',
+          '4,675,000 kredit setiap bulan',
           'Sehingga 300 bot dan 100 ejen',
           'Dua lagi corak kanvas dan pemuat but, serta penalaan aurora',
           'Sokongan keutamaan untuk persediaan kompleks',
@@ -1478,7 +1478,7 @@ export const ms = {
       },
       {
         q: "Apakah kredit?",
-        a: "Kredit mengukur penggunaan AI: menjana widget, mengedit melalui perbualan, mencipta pautan dan menggunakan Copilot. Satu kredit bersamaan satu token output Sonnet kos pembekal, jadi harga tidak bergantung pada model yang dipilih — Haiku meregangkan kredit kepada kira-kira 3 token; Opus menggunakannya dalam kira-kira 0.6. Free menempah 100,000 semasa daftar; Lite memberi 115,000 sebulan; Elite 800,000 — dan anda boleh beli pek bila-bila masa.",
+        a: "Kredit mengukur penggunaan AI: menjana widget, mengedit melalui perbualan, mencipta pautan dan menggunakan Copilot. Satu kredit bersamaan satu token output Sonnet kos pembekal, jadi harga tidak bergantung pada model yang dipilih — Haiku meregangkan kredit kepada kira-kira 2 token; Opus menggunakannya dalam kira-kira 0.4. Free menempah 100,000 semasa daftar; Lite memberi 670,000 sebulan; Elite 4,675,000 — dan anda boleh beli pek bila-bila masa.",
       },
       {
         q: "Bila pelan berbayar dilancarkan?",

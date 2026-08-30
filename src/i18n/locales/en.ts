@@ -90,7 +90,7 @@ export const en: SiteContent = {
     },
     hero: {
       badge: 'Early access',
-      title: 'Stay in the loop',
+      title: 'Build anything. Watch everything.',
       titleKicker: 'Live real-time dashboards in seconds — not weeks, or quarters.',
       subtitle:
         'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
@@ -1413,7 +1413,7 @@ export const en: SiteContent = {
         {
           icon: 'coins',
           title: 'AI credits',
-          body: 'Credits meter every generation and AI edit. Free reserves 100,000 at sign-up; Lite and Elite refresh 115,000 and 800,000 every month. Badge unlocks pay more free credits on every plan.',
+          body: 'Credits meter every generation and AI edit. Free reserves 100,000 at sign-up; Lite and Elite refresh 670,000 and 4,675,000 every month. Badge unlocks pay more free credits on every plan.',
         },
         {
           icon: 'bot',
@@ -1466,12 +1466,12 @@ export const en: SiteContent = {
         priceYearly: '$8.33',
         billedYearly: '$99.90 billed yearly',
         cadence: '/mo',
-        stats: ['115,000 credits/mo', '30 bots · 10 agents', 'Premium UI'],
+        stats: ['670,000 credits/mo', '30 bots · 10 agents', 'Premium UI'],
         note: 'Everything in Free, plus:',
         cta: 'Get Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115,000 credits every month',
+          '670,000 credits every month',
           'Up to 30 bots & 10 agents',
           'Second accent colour (gradients)',
           'Eight more canvas patterns, widget surfaces & panel glass',
@@ -1487,13 +1487,13 @@ export const en: SiteContent = {
         billedYearly: '$699.90 billed yearly',
         cadence: '/mo',
         badge: 'Best return',
-        stats: ['800,000 credits/mo', '300 bots · 100 agents', 'Priority support'],
+        stats: ['4,675,000 credits/mo', '300 bots · 100 agents', 'Priority support'],
         note: 'Everything in Lite, plus:',
         cta: 'Get Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800,000 credits every month',
+          '4,675,000 credits every month',
           'Up to 300 bots & 100 agents',
           'Two more canvas patterns and boot loaders, plus aurora tuning',
           'Priority support for complex setups',
@@ -1602,7 +1602,7 @@ export const en: SiteContent = {
       },
       {
         q: 'What are credits?',
-        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 3 tokens; Opus uses it in about 0.6. Free reserves 100,000 at sign-up; Lite grants 115,000 a month; Elite 800,000 — and you can buy packs anytime. Badge unlocks also pay free credits on every plan.',
+        a: 'Credits meter AI usage: generating widgets, editing them by conversation, creating links and using Copilot. One credit equals one Sonnet output token of provider cost, so the price never depends on which model you pick — Haiku stretches a credit to about 2 tokens; Opus uses it in about 0.4. Free reserves 100,000 at sign-up; Lite grants 670,000 a month; Elite 4,675,000 — and you can buy packs anytime. Badge unlocks also pay free credits on every plan.',
       },
       {
         q: 'When do paid plans launch?',

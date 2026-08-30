@@ -5,7 +5,7 @@
  * so the marketing site can never drift from what the product actually does:
  *
  *   app/utils/reputation.ts        badges, thresholds, point weights, level bands
- *   app/billing/pricing.ts         the credit ⇄ token ⇄ dollar engine (margin 480 %)
+ *   app/billing/pricing.ts         the credit ⇄ token ⇄ dollar engine (margin 50 %)
  *   app/billing/plans.ts           subscription prices, credit packs, signup bonus
  *   app/components/account/plans.ts  per-plan accent, quotas and feature order
  *   app/composables/settings/useAppearance.ts  which appearance options are premium
@@ -25,20 +25,21 @@ import { CONNECTOR_COUNT } from './connectors';
  * Credit economics — mirrors app/billing/pricing.ts
  * ------------------------------------------------------------------ */
 
-/** Anthropic list price in cents per 1M output tokens for the peg model (Sonnet).
- *  1 credit ≡ one Sonnet output token of real provider cost. */
-export const PEG_CENTS = 1500;
+/** Anthropic list price in cents per 1M output tokens for the peg model (Sonnet 5).
+ *  1 credit ≡ one Sonnet output token of real provider cost ($10 / 1M). */
+export const PEG_CENTS = 1000;
 
 /** What one credit COSTS the operator, in USD cents (PEG_CENTS / 1e6). */
 export const CREDIT_COST_CENTS = PEG_CENTS / 1_000_000;
 
-/** The operator's margin over cost, in percent (NUXT_PUBLIC_CREDIT_MARGIN_PCT). */
-export const CREDIT_MARGIN_PCT = 480;
+/** The operator's margin over cost, in percent (NUXT_PUBLIC_CREDIT_MARGIN_PCT).
+ *  Thin on purpose: credits should feel like provider cost, not a 5× markup. */
+export const CREDIT_MARGIN_PCT = 50;
 
 /** What one credit SELLS for, in USD cents: cost × (1 + margin). */
 export const CREDIT_SALE_CENTS = CREDIT_COST_CENTS * (1 + CREDIT_MARGIN_PCT / 100);
 
-/** Headline rate: USD per 1,000,000 credits ($87.00 at the shipped margin). */
+/** Headline rate: USD per 1,000,000 credits ($15.00 at the shipped margin). */
 export const USD_PER_MILLION_CREDITS = (CREDIT_SALE_CENTS * 1_000_000) / 100;
 
 /** USD value of a credit balance, at list price. */
@@ -48,10 +49,10 @@ export function creditsToUsd(credits: number): number {
 
 /** How many tokens one credit buys, per model (PEG_CENTS / output rate). */
 export const TOKENS_PER_CREDIT = [
-  { model: 'Haiku 4.5', tokens: 3 },
+  { model: 'Haiku 4.5', tokens: 2 },
   { model: 'Sonnet 5', tokens: 1 },
-  { model: 'Opus 4.8', tokens: 0.6 },
-  { model: 'Fable 5', tokens: 0.3 },
+  { model: 'Opus 5', tokens: 0.4 },
+  { model: 'Fable 5', tokens: 0.2 },
 ] as const;
 
 /* ------------------------------------------------------------------ *
@@ -124,7 +125,7 @@ export const PLANS: PlanSpec[] = [
     accent: '#b072ff',
     accentInk: '#7c3aed',
     monthly: 9.99,
-    monthlyCredits: planCredits(9.99), // 115,000
+    monthlyCredits: planCredits(9.99), // 670,000
     bots: '30',
     agents: '10',
     inherits: 'free',
@@ -137,7 +138,7 @@ export const PLANS: PlanSpec[] = [
     accent: '#22c55e',
     accentInk: '#15803d',
     monthly: 69.99,
-    monthlyCredits: planCredits(69.99), // 800,000
+    monthlyCredits: planCredits(69.99), // 4,675,000
     bots: '300',
     agents: '100',
     featured: true,
@@ -180,7 +181,7 @@ export function yearlyPerMonth(plan: PlanSpec): number | null {
  *
  * A cell is a boolean (✓ / —) or an object: `t` is an i18n leaf resolved against
  * `plansPage.matrix.values`, `n` is a literal that needs no translation (a
- * number, a quota, "∞"). Both together render as "115,000 / month".
+ * number, a quota, "∞"). Both together render as "670,000 / month".
  * ------------------------------------------------------------------ */
 
 export type MatrixCell = boolean | {
@@ -576,7 +577,7 @@ export const MAX_BADGE_POINTS =
  * NXW amounts and LEVEL_REWARDS stay PLANNED and ship with the DAO.
  *
  * Two currencies, one ladder:
- *   • CREDITS  — spendable AI generation, priced at the same $87 / 1M as a pack.
+ *   • CREDITS  — spendable AI generation, priced at the same $15 / 1M as a pack.
  *   • NXW     — the DAO's Solana governance token, from the community allocation.
  * ------------------------------------------------------------------ */
 
