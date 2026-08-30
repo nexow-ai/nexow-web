@@ -1,15 +1,21 @@
 ---
 /**
- * Act VI — where people point it.
+ * Act VII — where people point it.
+ *
+ * One idea: vertical scroll walks a single row of eight cases, and the card
+ * under the lens is the one you read. The 4×2 grid is what was sacrificed —
+ * seeing every case at once — so the walk can hold one at a time.
  *
  * The eight use cases already exist in the locale bundles with their real
  * recipes, and `UseCaseScene` already draws one illustration per case. This act
  * re-stages them rather than restating them, so there is exactly one place to
  * edit a use case.
  *
- * This is the act that lets the reader out: after five pinned scenes it drifts
- * rather than scrubs, which is what makes the end of the story feel like an
- * exhale instead of more work.
+ * `data-stages` lives on this section (the world scene itself) so ScrollMotion
+ * writes `--ps` here and WorldField never sees a descendant beat counter — the
+ * room stays on this scene while the row walks. Desktop-only, and only with
+ * motion allowed: a phone keeps a snap-scrolling row, and reduced motion /
+ * no-JS keep that same row without a pin.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -24,34 +30,39 @@ const c = useContent(lang);
 const copy = c.home.acts!.useCases;
 const cases = c.home.botsAgents?.cases;
 const items = cases?.items ?? [];
+const span = Math.max(items.length - 1, 0);
 ---
 
 <section
   id="use-cases"
-  class="relative py-20 sm:py-28"
+  class="uc-act relative overflow-x-clip"
   data-world-scene
+  data-stages={items.length || 1}
+  style={`--uc-span:${span};--uc-card:min(20rem, 78vw);--uc-gap:1.25rem`}
   aria-labelledby="act-usecases-title"
 >
-  <div class="container-page">
-    <div class="mx-auto max-w-2xl text-center">
+  <div class="uc-stage__pin">
+    <div class="uc-copy mx-auto max-w-2xl text-center">
       <ActCopyBlock copy={copy} headingId="act-usecases-title" />
     </div>
 
-    <ul class="u-grid reveal-stagger" role="list">
-      {
-        items.map((item, i) => (
-          <li class="u-card" data-motion="fan" style={`--i:${i}`}>
-            <span class="u-kind" data-kind={item.kind}>
-              {item.kind === 'bot' ? (cases?.botLabel ?? 'Bot') : (cases?.agentLabel ?? 'Agent')}
-            </span>
-            <UseCaseScene scene={item.scene} class="u-scene" />
-            <h3 class="u-title">{item.title}</h3>
-            <p class="u-body">{item.body}</p>
-            <p class="u-recipe">{item.recipe}</p>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="uc-rail">
+      <ul class="uc-track" role="list">
+        {
+          items.map((item, i) => (
+            <li class="u-card" style={`--i:${i}`}>
+              <span class="u-kind" data-kind={item.kind}>
+                {item.kind === 'bot' ? (cases?.botLabel ?? 'Bot') : (cases?.agentLabel ?? 'Agent')}
+              </span>
+              <UseCaseScene scene={item.scene} class="u-scene" />
+              <h3 class="u-title">{item.title}</h3>
+              <p class="u-body">{item.body}</p>
+              <p class="u-recipe">{item.recipe}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -64,23 +75,67 @@ const items = cases?.items ?? [];
     justify-content: center;
   }
 
-  .u-grid {
-    display: grid;
-    gap: 1rem;
-    margin-top: 3rem;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  .uc-copy :global(.act-copy::before) {
+    inset: -3rem -6rem;
+    background: radial-gradient(
+      ellipse 70% 62% at 50% 42%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 78%, transparent) 48%,
+      transparent 78%
+    );
+  }
+
+  .uc-act {
+    padding-block: 5rem;
+    --uc-step: calc(var(--uc-card) + var(--uc-gap));
+  }
+
+  .uc-stage__pin {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* Base: one horizontal row. First and last can sit on the lens because the
+     track is padded by half the rail minus half a card. Native overflow is
+     what phones, reduced-motion and no-JS actually scroll. */
+  .uc-rail {
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-block: 1.25rem;
+  }
+
+  .uc-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .uc-track {
+    display: flex;
+    align-items: stretch;
+    gap: var(--uc-gap);
+    width: max-content;
+    padding-inline: max(1.25rem, calc(50% - var(--uc-card) / 2));
   }
 
   .u-card {
     position: relative;
+    z-index: 1;
     display: grid;
     align-content: start;
+    flex: 0 0 var(--uc-card);
+    width: var(--uc-card);
     gap: 0.5rem;
     padding: 1rem;
     border-radius: 1rem;
     border: 1px solid var(--w-line);
-    /* Dark plate over the world field so title, body, and recipe stay readable. */
     background: var(--w-panel);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    transform-origin: center center;
   }
 
   .u-kind {
@@ -120,6 +175,10 @@ const items = cases?.items ?? [];
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--w-text-2);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .u-recipe {
@@ -128,5 +187,106 @@ const items = cases?.items ?? [];
     color: var(--w-accent);
     border-top: 1px solid var(--w-line-soft);
     padding-top: 0.5rem;
+  }
+
+  /* Phone / reduced-motion: the card on the lens grows as it crosses the
+     scrollport. Desktop pin uses `--ps` instead — view() would measure the
+     translated track against the viewport and fight the scrub. */
+  @supports (animation-timeline: view()) {
+    @media (max-width: 767px) {
+      .u-card {
+        animation: uc-lens linear both;
+        animation-timeline: view(inline);
+        animation-range: cover;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .u-card {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes uc-lens {
+    0%,
+    100% {
+      transform: scale(0.9);
+    }
+    50% {
+      transform: scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* One viewport to hold the heading and the row, plus a beat of travel
+         per step between cards. 0.55 of a screen is long enough to read a
+         title and its line, short enough that eight of them is not a chapter. */
+      :global(html.js) .uc-act {
+        height: calc(100vh + var(--uc-span, 7) * 0.55 * 100vh);
+        padding-block: 0;
+      }
+
+      :global(html.js) .uc-stage__pin {
+        position: sticky;
+        top: 5rem;
+        height: calc(100vh - 5rem);
+        justify-content: center;
+        gap: 1.5rem;
+        overflow: hidden;
+      }
+
+      :global(html.js) .uc-copy {
+        flex-shrink: 0;
+      }
+
+      :global(html.js) .uc-rail {
+        overflow: hidden;
+        scroll-snap-type: none;
+        flex: 0 1 auto;
+        min-height: 0;
+      }
+
+      /* `--ps` 0 → 1 walks the row so card 0 sits on the lens, then card N.
+         `--dir` mirrors the travel in RTL. */
+      :global(html.js) .uc-track {
+        transform: translate3d(
+          calc(var(--ps, 0) * var(--uc-span, 7) * var(--uc-step) * -1 * var(--dir, 1)),
+          0,
+          0
+        );
+        will-change: transform;
+      }
+
+      /* Distance from the lens, in cards. 0 on the focused one, 1 on its
+         neighbours, more beyond that. Scale and lift fall off over ~1.15
+         cards so only the centre reads as the subject. */
+      :global(html.js) .u-card {
+        --focus: calc(var(--ps, 0) * var(--uc-span, 7));
+        --dist: abs(calc(var(--i) - var(--focus)));
+        --near: max(0, calc(1.15 - var(--dist)));
+        --t: calc(var(--near) / 1.15);
+        scroll-snap-align: none;
+        z-index: calc(1 + var(--t) * 12);
+        transform: translateY(calc((1 - var(--t)) * 0.85rem)) scale(calc(0.82 + 0.3 * var(--t)));
+        opacity: calc(0.62 + 0.38 * var(--t));
+        border-color: color-mix(in oklab, var(--w-line) calc(100% - var(--t) * 35%), var(--color-brand-400));
+      }
+
+      :global(html.js) .uc-act.is-offscreen .uc-track {
+        will-change: auto;
+      }
+    }
+
+    @media (min-width: 768px) and (max-height: 780px) {
+      :global(html.js) .u-body {
+        -webkit-line-clamp: 3;
+      }
+
+      :global(html.js) .u-card :global(.u-scene) {
+        max-height: 5.75rem;
+      }
+    }
   }
 </style>
