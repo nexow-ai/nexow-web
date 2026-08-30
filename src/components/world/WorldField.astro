@@ -1703,6 +1703,7 @@
     uniform float uAlpha;
     uniform float uLight;
     uniform float uStamp;
+    uniform float uTime;
     varying vec3 vN;
     varying vec3 vP;
     varying vec3 vE;
@@ -1771,16 +1772,27 @@
 
       /* The token's mark. Only the two flat faces (object normal along Z);
          the rim stays blank. Back face mirrors X so NXW reads the right way
-         around after a half turn. */
+         around after a half turn. Accent, not ink: a hot core, a corona, and
+         a gleam that rides the same key as the rim, so the letters light up
+         as the face turns into the lamp rather than pulsing on a clock. */
       vec2 lp = vObj.xy;
       lp.x = mix(-lp.x, lp.x, step(0.0, vObj.z));
-      float face = step(0.88, abs(vON.z));
+      float on = step(0.88, abs(vON.z)) * uStamp;
       float sd = stampNXW(lp);
-      float mark = (1.0 - smoothstep(-0.003, 0.007, sd)) * face * uStamp;
-      float well = (1.0 - smoothstep(0.008, 0.022, sd)) * face * uStamp - mark;
-      body *= 1.0 - 0.28 * max(well, 0.0);
-      vec3 ink = mix(vec3(0.92, 0.98, 0.96), uC1 * 0.18, uLight);
-      body = mix(body, ink, mark);
+      float mark = (1.0 - smoothstep(-0.003, 0.007, sd)) * on;
+      float core = (1.0 - smoothstep(-0.020, -0.002, sd)) * on;
+      float halo = (1.0 - smoothstep(0.010, 0.14, sd)) * on;
+      float well = (1.0 - smoothstep(0.008, 0.030, sd)) * on - mark;
+      body *= 1.0 - 0.20 * max(well, 0.0);
+      float sweep = 0.5 + 0.5 * sin(lp.x * 4.2 + lp.y * 1.4 + toEye.x * 5.0);
+      float gleam = pow(max(sin(lp.x * 5.5 + lp.y * 2.0 - uTime * 1.35), 0.0), 10.0);
+      float glint = (pow(spec, 0.42) * (0.45 + 0.55 * sweep) + gleam * 0.85) * on;
+      vec3 accent = mix(uC3 * 1.45, uC3 * 0.72, uLight);
+      vec3 hot = mix(mix(uC3, vec3(1.0), 0.78), mix(uC3, vec3(1.0), 0.22), uLight);
+      body = mix(body, mix(accent, hot, 0.35 + 0.65 * glint), mark);
+      body = mix(body, hot, core * (0.40 + 0.55 * glint));
+      body += uC3 * halo * (0.18 + 0.42 * glint) * (1.0 - uLight * 0.55);
+      body += hot * mark * glint * 0.70;
 
       /* Distance still dissolves the solid, but far more slowly than it did:
          it is drawn in front of the screens now, and a half-fogged object over
@@ -2282,6 +2294,7 @@
     let cuLight: WebGLUniformLocation | null = null;
     let cuAlpha: WebGLUniformLocation | null = null;
     let cuStamp: WebGLUniformLocation | null = null;
+    let cuTime: WebGLUniformLocation | null = null;
 
     if (cvs && cfs && coreProg) {
       ctx.attachShader(coreProg, cvs);
@@ -2311,6 +2324,7 @@
         cuLight = ctx.getUniformLocation(coreProg, 'uLight');
         cuAlpha = ctx.getUniformLocation(coreProg, 'uAlpha');
         cuStamp = ctx.getUniformLocation(coreProg, 'uStamp');
+        cuTime = ctx.getUniformLocation(coreProg, 'uTime');
         coreReady = true;
       }
     }
@@ -2421,6 +2435,7 @@
       ctx.uniform1f(cuLight, coreLight);
       ctx.uniform1f(cuAlpha, 1);
       ctx.uniform1f(cuStamp, obj.mesh === 5 ? 1 : 0);
+      ctx.uniform1f(cuTime, seconds);
       ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
 
       // Hand the screens' attribute state back exactly as they expect it.
