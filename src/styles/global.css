@@ -272,9 +272,13 @@
   --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
 
-  /* Scrollbar — accent-tinted; follows the per-page `data-accent` remap. */
+  /* Scrollbar — accent-tinted; follows the per-page `data-accent` remap.
+   * Track stays transparent in light (page white shows through). Dark needs
+   * an explicit ink fill: browsers paint the gutter from `color-scheme`, and
+   * a transparent track on a light scheme stays a white strip. */
   --scrollbar-thumb: color-mix(in oklab, var(--color-brand-600) 55%, transparent);
   --scrollbar-thumb-hover: var(--color-brand-600);
+  --scrollbar-track: transparent;
 
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
    * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
@@ -313,6 +317,7 @@ html:not(.dark) .tone-invert {
 
   --scrollbar-thumb: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
   --scrollbar-thumb-hover: var(--color-brand-400);
+  --scrollbar-track: var(--color-ink-950);
 
   /* Cold nebula — teal / indigo / sky, no magenta. Saturated cores read as
    * coloured light on ink instead of the grey haze pale tints turn into, and
@@ -362,6 +367,7 @@ html.dark .tone-invert {
   --text-body: var(--color-ink-600);
   --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
+  --scrollbar-track: transparent;
   background-color: #ffffff;
   color: var(--color-ink-950);
   color-scheme: light;
@@ -381,6 +387,11 @@ html:not(.dark) .tone-invert {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem; /* clear the sticky header on anchor jumps */
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -463,13 +474,13 @@ html:not(.dark) .tone-invert {
     border-radius: 2px;
   }
 
-  /* Scrollbars — slim, track-less, tinted with the per-page accent. Both
-   * standard properties inherit, so setting them on <html> reaches every
-   * nested scroller (tables, code blocks); the WebKit pseudo-elements are
-   * unscoped for the same reason. */
+  /* Scrollbars — slim, accent-tinted. Track is transparent in light and ink
+   * in dark (see `--scrollbar-track`). Standard properties inherit, so
+   * setting them on <html> reaches every nested scroller; the WebKit
+   * pseudo-elements are unscoped for the same reason. */
   html {
     scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   }
 
   ::-webkit-scrollbar {
@@ -479,7 +490,7 @@ html:not(.dark) .tone-invert {
 
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-corner {
-    background: transparent;
+    background: var(--scrollbar-track);
   }
 
   ::-webkit-scrollbar-thumb {
