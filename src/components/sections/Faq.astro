@@ -15,8 +15,10 @@ interface Props {
   tone?: 'light' | 'dark';
   /** Shared <details name> so only one item is open at a time. */
   group?: string;
+  /** Form the title out of particles as it scrolls into view (home page). */
+  appear?: boolean;
 }
-const { lang, tone = 'light', group = 'faq' } = Astro.props;
+const { lang, tone = 'light', group = 'faq', appear = false } = Astro.props;
 const home = useContent(lang).home.faq;
 const items = Astro.props.items ?? home.items;
 const eyebrow = Astro.props.eyebrow ?? home.eyebrow;
@@ -27,7 +29,7 @@ const dark = tone === 'dark';
 
 <section id="faq" class:list={['py-20 sm:py-24', dark && 'text-white']}>
   <div class="container-page">
-    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} tone={tone} />
+    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} tone={tone} appear={appear} />
 
     <div
       class:list={[

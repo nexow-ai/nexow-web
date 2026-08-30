@@ -21,6 +21,8 @@ interface Props {
   primaryHref?: string;
   /** Soft fireworks backdrop (used on the claim-@handle band). */
   fireworks?: boolean;
+  /** Form the title out of particles as it scrolls into view (home page). */
+  appear?: boolean;
 }
 const { lang } = Astro.props;
 const home = useContent(lang).home.cta;
@@ -31,6 +33,7 @@ const secondary = Astro.props.secondary ?? home.secondary;
 const secondaryHref = Astro.props.secondaryHref ?? localizePath('/features', lang);
 const primaryHref = Astro.props.primaryHref ?? SITE.appUrl;
 const fireworks = Astro.props.fireworks ?? false;
+const appear = Astro.props.appear ?? false;
 const primaryIcon = Astro.props.primaryIcon ?? 'arrow';
 const secondaryIcon = Astro.props.secondaryIcon;
 const primaryExternal = primaryHref.startsWith('http') || primaryHref.startsWith('mailto');
@@ -69,7 +72,10 @@ const secondaryExternal = secondaryHref.startsWith('http') || secondaryHref.star
       <span data-motion="breathe-lg" class="inline-block">
         <BrandMark class="h-16 w-auto" title="Nexow" tone="auto" />
       </span>
-      <h2 class="mt-8 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+      <h2
+        class="mt-8 text-balance font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl"
+        data-text-appear={appear ? 'scroll' : undefined}
+      >
         {title}
       </h2>
       <p class="mt-4 max-w-xl text-lg leading-relaxed text-ink-600 dark:text-ink-300">{subtitle}</p>

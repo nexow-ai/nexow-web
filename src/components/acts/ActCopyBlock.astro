@@ -7,6 +7,10 @@
  * thing that changes here is which beat is lit, and that is a pure opacity ramp
  * off the act's `--k0…--k3` — so with no JavaScript, or under reduced motion,
  * every beat sits at full strength and the whole act still reads.
+ *
+ * The title is the one exception: it forms out of particles as the act scrolls
+ * in (`data-text-appear="scroll"`, see `TextAppear.astro`) — the hero's
+ * entrance, replayed once per section.
  */
 import type { ActCopy } from '../../i18n/content';
 
@@ -26,7 +30,9 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     {copy.eyebrow}
   </p>
 
-  <h2 id={headingId} class="act-copy__title">{copy.title}</h2>
+  <h2 id={headingId} class="act-copy__title" data-text-appear="scroll">
+    {copy.title}
+  </h2>
 
   <p class="act-copy__body">{copy.body}</p>
 

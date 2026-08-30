@@ -7,6 +7,8 @@ interface Props {
   tone?: 'light' | 'dark';
   /** Apply brand → sky → accent gradient to the title. */
   gradientTitle?: boolean;
+  /** Form the title out of particles as it scrolls into view — the hero's entrance. */
+  appear?: boolean;
   class?: string;
 }
 const {
@@ -16,6 +18,7 @@ const {
   align = 'center',
   tone = 'light',
   gradientTitle = false,
+  appear = false,
   class: className = '',
 } = Astro.props;
 
@@ -37,7 +40,10 @@ const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-
       </span>
     )
   }
-  <h2 class:list={['text-balance text-3xl sm:text-4xl md:text-[2.75rem] md:leading-[1.05]', titleColor]}>
+  <h2
+    class:list={['text-balance text-3xl sm:text-4xl md:text-[2.75rem] md:leading-[1.05]', titleColor]}
+    data-text-appear={appear ? 'scroll' : undefined}
+  >
     {title}
   </h2>
   {subtitle && <p class:list={['mt-4 text-lg leading-relaxed', subColor]}>{subtitle}</p>}

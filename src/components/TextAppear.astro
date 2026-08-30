@@ -9,6 +9,10 @@
  *
  * Mark page-hero titles with `data-text-appear`. Optional
  * `data-text-appear-delay` (seconds) staggers multi-line heroes.
+ *
+ * `data-text-appear="scroll"` holds the clip until the title scrolls into view
+ * and then runs the same reveal — how every section title on the home page
+ * gets the hero's entrance at the moment the reader reaches it.
  */
 ---
 
@@ -143,6 +147,11 @@
     el.style.clipPath = '';
   }
 
+  /** Fully hidden, whatever the element's width is or becomes while it waits. */
+  function hideClip(el: HTMLElement) {
+    el.style.clipPath = 'inset(0 100% 0 0)';
+  }
+
   /** Offscreen paint only to harvest particle targets — never shown as the title. */
   function harvestParticles(
     el: HTMLElement,
@@ -253,6 +262,7 @@
     if (el.dataset.textAppearDone === '1') return null;
 
     const delayMs = Math.max(0, parseFloat(el.dataset.textAppearDelay || '0') || 0) * 1000;
+    const onScroll = el.dataset.textAppear === 'scroll';
 
     if (prefersReducedMotion()) {
       el.dataset.textAppearDone = '1';
@@ -281,17 +291,21 @@
 
     // Hide glyphs via clip (layout unchanged) until the wavefront reveals them.
     const rtl = isRtl();
-    setClip(el, el.offsetWidth || 1, 0, rtl);
+    hideClip(el);
     el.classList.add('is-text-appearing');
 
     let cancelled = false;
+    let launched = false;
     let raf = 0;
     let timer = 0;
     let watchdog = 0;
+    let observer: IntersectionObserver | null = null;
 
     const finish = () => {
       if (cancelled) return;
       cancelled = true;
+      observer?.disconnect();
+      observer = null;
       if (raf) cancelAnimationFrame(raf);
       if (timer) clearTimeout(timer);
       if (watchdog) clearTimeout(watchdog);
@@ -301,12 +315,6 @@
       el.dataset.textAppearDone = '1';
       canvas.remove();
     };
-
-    /* The clip above hides the real title, and the title is the LCP element on
-       every page that uses this. Nothing downstream — fonts.ready, the canvas
-       harvest, rAF itself — is guaranteed to resolve, so bound the hidden state
-       here rather than trusting the animation to end. */
-    watchdog = window.setTimeout(finish, delayMs + TRAVEL_MS_MAX + WATCHDOG_SLACK_MS);
 
     const begin = () => {
       if (cancelled) return;
@@ -418,12 +426,45 @@
       void ready.then(begin).catch(finish);
     };
 
-    if (delayMs) timer = window.setTimeout(start, delayMs);
-    else start();
+    const launch = () => {
+      if (cancelled || launched) return;
+      launched = true;
+      /* The clip above hides the real title, and on page heroes the title is
+         the LCP element. Nothing downstream — fonts.ready, the canvas harvest,
+         rAF itself — is guaranteed to resolve, so bound the hidden state here
+         rather than trusting the animation to end. Armed from launch, not from
+         setup, so a scroll-mode title never times out while it waits. */
+      watchdog = window.setTimeout(finish, delayMs + TRAVEL_MS_MAX + WATCHDOG_SLACK_MS);
+      if (delayMs) timer = window.setTimeout(start, delayMs);
+      else start();
+    };
+
+    if (onScroll && 'IntersectionObserver' in window) {
+      /* Scroll mode: hold the clip until the title scrolls into view, then run
+         the reveal the hero runs on load. The stage is observed rather than
+         the clipped title so the clip can never hide the title from its own
+         observer. Same margin and threshold as the `.reveal` observer in
+         Layout.astro, so a title and the block around it wake on the same
+         scroll tick. */
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer?.disconnect();
+          observer = null;
+          launch();
+        },
+        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+      );
+      observer.observe(stage);
+    } else {
+      launch();
+    }
 
     return {
       stop() {
         cancelled = true;
+        observer?.disconnect();
+        observer = null;
         if (timer) clearTimeout(timer);
         if (watchdog) clearTimeout(watchdog);
         if (raf) cancelAnimationFrame(raf);
