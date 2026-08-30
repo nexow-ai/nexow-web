@@ -66,6 +66,13 @@
   const COUNT_WIDE = 160;
   const COUNT_NARROW = 80;
 
+  /* How present the screens are against the backdrop. Blending stays off —
+   * screens occlude one another, and a see-through field of them reads as
+   * smear — so this dissolves each panel halfway into the world's own ink
+   * instead, which is what half opacity over that backdrop looks like. The
+   * field is scenery behind the copy, and at 1 it competed with it. */
+  const SCREEN_ALPHA = 0.5;
+
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
   const CAM_DAMP = 3.2;
   /** Damping for the pointer parallax. Slower than the camera, so it trails. */
@@ -388,14 +395,14 @@
          screens is a set of like objects, and the circle only traces if the
          things on it are comparable. Still a little spread, so the ring is a
          wall of screens and not a stamped pattern. */
-      /* One screen in ten is a feature screen, four times the size of
-         whatever tier it landed in. Picked by id, not seed, so they fall
-         evenly through every formation — every tenth seat on the ring, every
-         tenth cell of the slab — and floated a little toward the eye so each
-         sits in front of its neighbours instead of slicing through them. */
-      float big = 1.0 - step(0.5, mod(aId, 10.0));
-      float sz = (mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16) * mix(1.0, 4.0, big);
-      vec3 world = p + toEye * big * 1.4 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
+      /* One screen in five is a feature screen, twice the size of whatever
+         tier it landed in. Picked by id, not seed, so they fall evenly through
+         every formation — every fifth seat on the ring, every fifth cell of
+         the slab — and floated a little toward the eye so each sits in front
+         of its neighbours instead of slicing through them. */
+      float big = 1.0 - step(0.5, mod(aId, 5.0));
+      float sz = (mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16) * mix(1.0, 2.0, big);
+      vec3 world = p + toEye * big * 0.7 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
       /* Slide the world into the scene column so it frames the copy rather
@@ -1779,7 +1786,7 @@
        here with a flat front, which is what a coin is; the yaw the scroll
        drives then flips it edge-on and back, so it reads as a coin turning
        rather than a disc sitting there. */
-    { mesh: 5, scale: 2.1, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    { mesh: 5, scale: 1.95, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
     /* 07 point it anywhere — smaller, sharper, calmer. Lifted clear of the
        closing gallery: this section fills the middle of the viewport with
        cards, and a solid at the origin projects straight behind them, which is
@@ -2385,7 +2392,7 @@
       ctx.uniform1f(uFormB, Math.min(a + 1, 7));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
-      ctx.uniform1f(uAlpha, 1.0);
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2462,7 +2469,7 @@
       ctx.uniform1f(uFormB, 1);
       ctx.uniform1f(uMorph, 0.34);
       ctx.uniform1f(uTime, 6);
-      ctx.uniform1f(uAlpha, 1);
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
