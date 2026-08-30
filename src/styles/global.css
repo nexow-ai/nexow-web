@@ -971,23 +971,34 @@ html.is-theme-transition [data-astro-transition-scope] {
    * card, so a gallery keeps raking row after row rather than building one
    * runaway offset. (`%` is not a calc operator. Written that way it silently
    * invalidates the whole composed transform, which is how the use-case grid
-   * lost its drift entirely.)
+   * lost its drift entirely.) The rake alone reads as a row of cards that
+   * failed to line up, so it carries a depth push too: every card starts held
+   * back from the camera and reaches its true size at mid-screen, which is what
+   * makes the row arrive rather than merely slide.
    *
-   * Both stay inside a section's own vertical padding, so no card bleeds into
-   * the band above or below. */
+   * All of them stay inside a section's own vertical padding, so no card bleeds
+   * into the band above or below. */
   @media (min-width: 64rem) {
     .js [data-motion~='lead'] { --m-shift: -56px; }
     .js [data-motion~='lag'] { --m-shift: 56px; }
-    .js [data-motion~='fan'] { --m-shift: calc(-16px - mod(var(--i, 0), 4) * 16px); }
+    .js [data-motion~='fan'] {
+      --m-shift: calc(-12px - mod(var(--i, 0), 4) * 20px);
+      --m-depth: -120px;
+    }
   }
 
   /* Cards on a 3D stage own their transform already (the pointer lean below),
    * so they cannot also be the element the scroll writes to. This is the
-   * wrapper that drifts on their behalf: translate only, and `preserve-3d` so
+   * wrapper that drifts on their behalf: position only, and `preserve-3d` so
    * the card inside keeps the stage's shared camera instead of being flattened
-   * into its own. */
+   * into its own — which is also what projects the depth push here, since the
+   * wrapper deliberately sets no perspective of its own. */
   .js .card-drift[data-motion] {
-    transform: translate3d(0, calc(var(--pc, 0) * var(--m-shift, 0px)), 0);
+    transform: translate3d(
+      0,
+      calc(var(--pc, 0) * var(--m-shift, 0px)),
+      calc((1 - var(--pb, 1)) * var(--m-depth, 0px))
+    );
     transform-style: preserve-3d;
   }
 
