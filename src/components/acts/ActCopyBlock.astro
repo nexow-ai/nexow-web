@@ -5,7 +5,7 @@
  * Deliberately motionless: the scene beside it travels, the words do not, which
  * is what keeps a scroll-driven page readable rather than exhausting. The only
  * thing that changes here is which beat is lit, and that is a pure opacity ramp
- * off the act's `--k0…--k3` — so with no JavaScript, or under reduced motion,
+ * off the act's `--k0…--k4` — so with no JavaScript, or under reduced motion,
  * every beat sits at full strength and the whole act still reads.
  *
  * The title is the one exception: it forms out of particles once the act has
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const { copy, headingId } = Astro.props;
-const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
+const RAMPS = ['--k0', '--k1', '--k2', '--k3', '--k4'];
 ---
 
 <div class="act-copy">
@@ -40,7 +40,7 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
     copy.beats.length > 0 && (
       <ul class="act-copy__beats">
         {copy.beats.map((beat, i) => (
-          <li class="act-copy__beat" style={`--lit: var(${RAMPS[Math.min(i, 3)]}, 1)`}>
+          <li class="act-copy__beat" style={`--lit: var(${RAMPS[Math.min(i, RAMPS.length - 1)]}, 1)`}>
             <span class="act-copy__beat-label">{beat.label}</span>
             <span class="act-copy__beat-detail">{beat.detail}</span>
           </li>

@@ -23,7 +23,7 @@ export interface Step {
 /**
  * One act of the home page's scroll story.
  *
- * `beats` are the four things the act teaches, revealed one per scroll beat.
+ * `beats` are the things the act teaches, revealed one per scroll beat.
  * They are copy, not configuration — the scene decides how to draw each one.
  */
 export interface ActCopy {
@@ -438,7 +438,7 @@ export interface SiteContent {
       /**
        * The actual hero title — the large lit line ("WATCH EVERYTHING.").
        * When set, `titleGradient` is the quieter lead-in above it
-       * ("BUILD ANYTHING &"). Locales without it keep the combined middle line.
+       * ("BUILD ANYTHING"). Locales without it keep the combined middle line.
        */
       titleWatch?: string;
       titleTail: string;

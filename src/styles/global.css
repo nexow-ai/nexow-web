@@ -1175,6 +1175,9 @@ html[data-world]:not(.js).dark #site-nav {
       --k1: clamp(0, calc((var(--ps, 0) - 0.25) * 5), 1);
       --k2: clamp(0, calc((var(--ps, 0) - 0.5) * 5), 1);
       --k3: clamp(0, calc((var(--ps, 0) - 0.75) * 5), 1);
+      /* Fifth beat is optional — acts with four ignore it. Starts late so
+         the existing quarter ramps keep their timing. */
+      --k4: clamp(0, calc((var(--ps, 0) - 0.82) * 6), 1);
       /* Centred scrub, for parallax that reads in both directions. */
       --psc: calc(var(--ps, 0) * 2 - 1);
     }
