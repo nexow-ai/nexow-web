@@ -46,7 +46,27 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3'];
 
 <style>
   .act-copy {
+    position: relative;
+    isolation: isolate;
     max-width: 34rem;
+  }
+
+  /* A soft well of the page surface behind the copy, so the world can sit
+   * centred on the screen — solids and all — without a lit screen edge ever
+   * crossing a line of type. Theme-aware through the world's own token. The
+   * ellipse reaches well past the block so its edge is never seen. */
+  .act-copy::before {
+    content: '';
+    position: absolute;
+    inset: -3rem -7rem -3rem -5rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 62% 58% at 42% 50%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 82%, transparent) 46%,
+      transparent 78%
+    );
   }
 
   .act-copy__eyebrow {
