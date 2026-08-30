@@ -32,6 +32,7 @@ pnpm-debug.log*
 scratchpad/*-report.json
 scratchpad/shots/
 scratchpad/probe.mjs
+scratchpad/probe-*.mjs
 scratchpad/theme.mjs
 scratchpad/verify.mjs
 scratchpad/panels.mjs
