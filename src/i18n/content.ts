@@ -20,6 +20,21 @@ export interface Step {
   body: string;
 }
 
+/**
+ * One act of the home page's scroll story.
+ *
+ * `beats` are the four things the act teaches, revealed one per scroll beat.
+ * They are copy, not configuration — the scene decides how to draw each one.
+ */
+export interface ActCopy {
+  /** Two-digit step marker, e.g. "01". */
+  step: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  beats: { label: string; detail: string }[];
+}
+
 export interface Faq {
   q: string;
   a: string;
@@ -485,6 +500,19 @@ export interface SiteContent {
       title: string;
       subtitle: string;
       steps: Step[];
+    };
+    /**
+     * The home page's scroll story. Optional so a locale that has not been
+     * translated yet falls back to English through the `useContent` merge
+     * rather than shipping a half-empty page.
+     */
+    acts?: {
+      widget: ActCopy;
+      canvas: ActCopy;
+      connectors: ActCopy;
+      bots: ActCopy;
+      agents: ActCopy;
+      useCases: ActCopy;
     };
     automate: {
       eyebrow: string;
