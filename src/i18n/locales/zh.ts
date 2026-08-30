@@ -84,9 +84,9 @@ export const zh: SiteContent = {
     hero: {
       badge: '抢先体验',
       titleLead: '数据就是新石油。',
-      titleGradient: '全部用上。',
-      titleTail: '看见、分享、行动、赚钱、成长。',
-      titleKicker: '几秒完成，而不是几周或几个月。',
+      titleGradient: '什么都能建，什么都能看。',
+      titleTail: '行动、赚钱、成长、分享。',
+      titleKicker: '实时仪表盘，几秒完成 — 不是几周，更不是一个季度。',
       subtitle:
         '描述你需要什么，Nexow 就把它做出来：真正能用的组件，接上实时数据，排布在你掌控的画布上。地震、空气质量、世界指标、市场行情，或你自己的数据库——把它可视化、盯住它，并据此行动。',
       ctaPrimary: '启动应用',

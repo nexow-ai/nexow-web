@@ -91,9 +91,9 @@ export const en: SiteContent = {
     hero: {
       badge: 'Early access',
       titleLead: 'DATA IS THE NEW OIL.',
-      titleGradient: 'USE ALL OF THEM.',
-      titleTail: 'SEE, SHARE, ACT, EARN, GROW.',
-      titleKicker: 'In seconds — not weeks or months.',
+      titleGradient: 'BUILD ANYTHING & WATCH EVERYTHING.',
+      titleTail: 'ACT, EARN, GROW, SHARE.',
+      titleKicker: 'Live real-time dashboards in seconds — not weeks, or quarters.',
       subtitle:
         'Describe what you need and Nexow builds it: real working widgets, wired to live data, laid out on a canvas you control. Earthquakes, air quality, world indicators, market feeds or your own database — visualize it, watch it, and act on it.',
       ctaPrimary: 'Launch the app',
