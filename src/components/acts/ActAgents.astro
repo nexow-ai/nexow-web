@@ -99,6 +99,8 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
 
     <div class="act-scene a-scene" aria-hidden="true">
       <div class="a-orb">
+        <span class="a-fog"></span>
+
         <div class="a-tilt">
           {/* The runtime shell. */}
           <div class="a-globe">
@@ -133,7 +135,6 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
               core's own plane, which is what keeps it crisp — see the note
               about slicing below. */}
           <div class="a-core">
-            <span class="a-core-glow"></span>
             <span class="a-core-face"></span>
             <span class="a-core-ring"></span>
             <span class="a-core-label">agent</span>
@@ -180,7 +181,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     /* Everything below is sized off one length so the whole rig scales as a
      * unit — and so `translateZ` has something real to work with, which a
      * percentage width could never give it. */
-    --orb: clamp(16rem, 34vw, 27rem);
+    --orb: clamp(16.5rem, 34vw, 27rem);
     /* Sphere radius, harness orbit radius, tool-loop radius. The harness sits
      * well clear of the shell: a label crossing the sphere is unreadable. */
     --gr: calc(var(--orb) * 0.23);
@@ -201,20 +202,30 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     gap: 2rem;
   }
 
-  /* Atmosphere, painted by the container rather than a layer inside it: a
-   * child at z=0 would be sorted into the middle of the sphere and fog its own
-   * back half. The wide scrim is what lifts the rig off the world field behind
-   * it — the field is busy by design, and the object has to win locally.
-   * Static, too: an animated blur is the one thing here that would cost frames.
-   *
-   * A background is clipped to its box, so every stop has to reach zero alpha
-   * before the edge — `farthest-corner` is 0.707 of the square, which is why
-   * these percentages look small. */
   .a-orb {
     position: relative;
     width: var(--orb);
     height: var(--orb);
     transform-style: preserve-3d;
+  }
+
+  /* Atmosphere: the scrim that lifts the rig off the world field, which is busy
+   * by design — the object has to win locally.
+   *
+   * Parked *behind* every orbit rather than at z=0, and that placement is the
+   * whole point. A wide filled plane in the middle of this context gets split
+   * along its intersection with the orbit polygons, and the seam reads as a
+   * ghost rectangle across the sphere. Nothing here reaches past half the rig's
+   * width in depth, so from back there no polygon can cross it. Sitting that
+   * far back also costs it perspective scale, hence the outset.
+   *
+   * A background is clipped to its box, so every stop has to reach zero alpha
+   * before the edge — `farthest-corner` is 0.707 of the square, which is why
+   * these percentages look small. */
+  .a-fog {
+    position: absolute;
+    inset: -24%;
+    transform: translateZ(calc(var(--orb) * -0.5));
     background:
       radial-gradient(
         circle at 50% 47%,
@@ -342,42 +353,33 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
 
   /* Two rules of this 3D context, both learned the hard way:
    *
-   * - A wide, filled, flat layer gets *split* along its intersection with the
-   *   orbit planes, which shows up as a hard seam across the sphere. So the
-   *   core is one modest plane and everything soft about it lives inside that
-   *   plane, and the glow carries a blur — a filtered element is composited as
-   *   one group, which is what puts it out of reach of the splitting.
-   * - The container's own fog (see `.a-orb`) is a plane at z=0 too, and a body
-   *   sitting at exactly z=0 loses the coin toss against it. Pushing the core
-   *   towards the reader by most of the sphere's radius settles it, and buys a
-   *   little perspective scale for free. */
+   * - A 3D-transformed element is rasterised as one quad, and anything soft
+   *   that reaches the edge of that quad gets cut off square — a ghost
+   *   rectangle sitting over the atmosphere behind the sphere. So the core's
+   *   box is more than twice the body it draws, and every bloom below is sized
+   *   as a fraction of the rig so it fades out well inside those bounds at any
+   *   viewport.
+   * - Depth ties are decided arbitrarily, so the body does not sit at exactly
+   *   z=0 where the shell's own rings meet it. Pushing it towards the reader by
+   *   most of the sphere's radius settles the order and buys a little
+   *   perspective scale for free. */
   .a-core {
     position: relative;
-    width: calc(var(--orb) * 0.19);
-    height: calc(var(--orb) * 0.19);
+    width: calc(var(--orb) * 0.42);
+    height: calc(var(--orb) * 0.42);
     display: grid;
     place-items: center;
     transform: translateZ(calc(var(--gr) * 0.8));
   }
 
-  .a-core-glow {
-    position: absolute;
-    inset: -55%;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      color-mix(in oklab, var(--color-brand-400) 40%, transparent),
-      transparent 58%
-    );
-    /* Static blur: the breathe below only moves the layer, never re-filters it. */
-    filter: blur(14px);
-    animation: a-breathe 4.8s ease-in-out infinite;
+  .a-core > * {
+    grid-area: 1 / 1;
   }
 
   /* The solid body: the shell is see-through, the runtime is not. */
   .a-core-face {
-    position: absolute;
-    inset: 0;
+    width: calc(var(--orb) * 0.19);
+    height: calc(var(--orb) * 0.19);
     border-radius: 50%;
     border: 1px solid color-mix(in oklab, var(--color-brand-400) 80%, transparent);
     background:
@@ -387,11 +389,15 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
         transparent 80%
       ),
       color-mix(in oklab, var(--w-surface) 78%, var(--w-panel));
+    box-shadow:
+      0 0 calc(var(--orb) * 0.09) -2px color-mix(in oklab, var(--color-brand-500) 50%, transparent),
+      0 0 calc(var(--orb) * 0.2) 0 color-mix(in oklab, var(--color-brand-500) 26%, transparent);
+    animation: a-breathe 4.8s ease-in-out infinite;
   }
 
   .a-core-ring {
-    position: absolute;
-    inset: -16%;
+    width: calc(var(--orb) * 0.25);
+    height: calc(var(--orb) * 0.25);
     border-radius: 50%;
     border: 1px dashed color-mix(in oklab, var(--color-brand-300) 50%, transparent);
     animation: a-spin 18s linear infinite;
@@ -407,11 +413,19 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     text-shadow: 0 0 12px color-mix(in oklab, var(--color-brand-500) 70%, transparent);
   }
 
+  /* Anchor points, not boxes. A full-size wrapper here would be rotated out
+   * past the column and count towards the document's width — which is a
+   * sideways scrollbar on a phone, for three elements that never paint
+   * anything. At zero size they carry the transform and nothing else, and
+   * `place-items: center` still hangs the card off the point. */
   .a-mod,
   .a-arm,
   .a-face {
     position: absolute;
-    inset: 0;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
     display: grid;
     place-items: center;
     transform-style: preserve-3d;
@@ -542,9 +556,19 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     to { transform: rotate(360deg); }
   }
 
+  /* Repaints rather than composites, which is the point: a composited layer is
+   * what left a ghost rectangle here. One small circle can afford the paint. */
   @keyframes a-breathe {
-    0%, 100% { transform: scale(0.94); opacity: 0.75; }
-    50% { transform: scale(1.08); opacity: 1; }
+    0%, 100% {
+      box-shadow:
+        0 0 calc(var(--orb) * 0.08) -3px color-mix(in oklab, var(--color-brand-500) 42%, transparent),
+        0 0 calc(var(--orb) * 0.17) 0 color-mix(in oklab, var(--color-brand-500) 20%, transparent);
+    }
+    50% {
+      box-shadow:
+        0 0 calc(var(--orb) * 0.1) 0 color-mix(in oklab, var(--color-brand-500) 58%, transparent),
+        0 0 calc(var(--orb) * 0.22) 0 color-mix(in oklab, var(--color-brand-500) 32%, transparent);
+    }
   }
 
   /* Starts at the module's own angle, so a stopped animation is still a ring. */
@@ -600,10 +624,19 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     28%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
   }
 
-  @media (max-width: 480px) {
+  /* A phone gets the whole rig assembled at once — no scroll ramps down here —
+   * so the chips have to be small enough that six of them clear each other and
+   * the body in the middle. */
+  @media (max-width: 640px) {
     .a-card {
-      font-size: 0.625rem;
-      padding: 0.25rem 0.5rem;
+      font-size: 0.5625rem;
+      padding: 0.2rem 0.5rem;
+      gap: 0.3rem;
+    }
+
+    .a-card-dot {
+      width: 0.25rem;
+      height: 0.25rem;
     }
   }
 
@@ -634,7 +667,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
    * motes sit on their plane, and the run strip reads as four stages. */
   @media (prefers-reduced-motion: reduce) {
     .a-globe,
-    .a-core-glow,
+    .a-core-face,
     .a-core-ring,
     .a-mod,
     .a-face,
