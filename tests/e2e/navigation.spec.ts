@@ -67,6 +67,41 @@ test.describe('header navigation', () => {
     await skip.press('Enter');
     await expect(page).toHaveURL(/#main$/);
   });
+
+  test('shows a numbered kbd on inactive links and an icon on the current page', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await expect(page.locator('#site-nav kbd').first()).toHaveText('1');
+    await expect(page.locator('#site-nav a[href="/community"] kbd')).toHaveText('2');
+    await expect(page.locator('#site-nav kbd', { hasText: '0' })).toHaveCount(0);
+
+    await page.goto('/features');
+    await expect(page.locator('#site-nav a[href="/features"][aria-current="page"] svg')).toBeVisible();
+    await expect(page.locator('#site-nav a[href="/features"] kbd')).toHaveCount(0);
+    await expect(page.locator('#site-nav a[href="/community"] kbd')).toHaveText('2');
+  });
+
+  test('number keys switch pages and 0 returns home', async ({ page }) => {
+    await page.goto('/');
+    await page.keyboard.press('1');
+    await expect(page).toHaveURL(/\/features\/?$/);
+
+    await page.keyboard.press('4');
+    await expect(page).toHaveURL(/\/plans\/?$/);
+
+    await page.keyboard.press('0');
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test('does not steal digits typed into a field', async ({ page }) => {
+    await page.goto('/contact');
+    const field = page.locator('#contact-name');
+    await field.click();
+    await page.keyboard.type('1');
+    await expect(page).toHaveURL(/\/contact\/?$/);
+    await expect(field).toHaveValue('1');
+  });
 });
 
 test.describe('mobile menu', () => {

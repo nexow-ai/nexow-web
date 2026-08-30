@@ -196,6 +196,23 @@ describe('Header', () => {
     expect(html).toContain('href="/features"');
     expect(html).toContain('aria-current="page"');
   });
+
+  it('numbers inactive nav links and skips the current page’s kbd', async () => {
+    const home = await render(Header, '/', { props: { lang: 'en', route: '/' } });
+    const t = useContent('en');
+    t.nav.links.forEach((link, i) => {
+      const key = String(i + 1);
+      expect(home, `${link.label} kbd`).toContain(`data-nav-key="${key}"`);
+      expect(home, `${link.label} kbd`).toMatch(new RegExp(`<kbd[^>]*>${key}</kbd>`));
+    });
+    expect(home).toContain('data-nav-key="0"');
+    expect(home).not.toMatch(/<kbd[^>]*>0<\/kbd>/);
+
+    const features = await render(Header, '/features', { props: { lang: 'en', route: '/features' } });
+    expect(features).not.toMatch(/<kbd[^>]*>1<\/kbd>/);
+    expect(features).toMatch(/<kbd[^>]*>2<\/kbd>/);
+    expect(features).toMatch(/<kbd[^>]*>6<\/kbd>/);
+  });
 });
 
 describe('Footer', () => {

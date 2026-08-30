@@ -56,7 +56,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       id="site-nav"
       aria-label="Primary"
     >
-      <Logo lang={lang} class="h-7" />
+      <Logo lang={lang} class="h-7" shortcut="0" />
 
       <!-- Desktop nav — `lg` not `md`: seven links plus the language picker and
            the CTA need ~870px, so at 768px they would run off the right edge.
@@ -64,23 +64,35 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
            (el, ru) still fit at 1024; `xl` restores the roomier spacing. -->
       <ul class="hidden items-center gap-0.5 lg:flex xl:gap-1">
         {
-          links.map((l) => (
-            <li>
-              <a
-                href={l.url}
-                class:list={[
-                  'inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[0.8125rem] font-medium transition-colors xl:px-3.5 xl:text-sm',
-                  l.active
-                    ? 'text-brand-600 dark:text-brand-300'
-                    : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
-                ]}
-                aria-current={l.active ? 'page' : undefined}
-              >
-                {l.active && l.icon && <Icon name={l.icon} class="size-4 shrink-0" />}
-                {l.label}
-              </a>
-            </li>
-          ))
+          links.map((l, i) => {
+            const key = String(i + 1);
+            const icon = l.active ? l.icon : undefined;
+            return (
+              <li>
+                <a
+                  href={l.url}
+                  data-nav-key={key}
+                  aria-keyshortcuts={key}
+                  class:list={[
+                    'inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[0.8125rem] font-medium transition-colors xl:px-3.5 xl:text-sm',
+                    l.active
+                      ? 'text-brand-600 dark:text-brand-300'
+                      : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
+                  ]}
+                  aria-current={l.active ? 'page' : undefined}
+                >
+                  {icon ? (
+                    <Icon name={icon} class="size-4 shrink-0" />
+                  ) : (
+                    <kbd class="nav-kbd" aria-hidden="true">
+                      {key}
+                    </kbd>
+                  )}
+                  {l.label}
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
 
@@ -144,7 +156,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     hidden
   >
     <div class="container-page flex h-16 items-center justify-between pt-3">
-      <Logo lang={lang} class="h-7" />
+      <Logo lang={lang} class="h-7" shortcut="0" />
       <button
         type="button"
         id="menu-close"
@@ -156,21 +168,31 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     </div>
     <nav class="container-page mt-8 flex flex-col gap-1" aria-label="Mobile">
       {
-        links.map((l) => (
-          <a
-            href={l.url}
-            class:list={[
-              'flex items-center gap-3 border-b border-ink-900/5 py-4 font-display text-2xl font-semibold text-ink-900 dark:border-white/10 dark:text-white',
-              l.active && 'text-brand-600 dark:text-brand-300',
-            ]}
-            aria-current={l.active ? 'page' : undefined}
-          >
-            {l.active && l.icon ? (
-              <Icon name={l.icon} class="size-6 shrink-0" />
-            ) : null}
-            {l.label}
-          </a>
-        ))
+        links.map((l, i) => {
+          const key = String(i + 1);
+          const icon = l.active ? l.icon : undefined;
+          return (
+            <a
+              href={l.url}
+              data-nav-key={key}
+              aria-keyshortcuts={key}
+              class:list={[
+                'flex items-center gap-3 border-b border-ink-900/5 py-4 font-display text-2xl font-semibold text-ink-900 dark:border-white/10 dark:text-white',
+                l.active && 'text-brand-600 dark:text-brand-300',
+              ]}
+              aria-current={l.active ? 'page' : undefined}
+            >
+              {icon ? (
+                <Icon name={icon} class="size-6 shrink-0" />
+              ) : (
+                <kbd class="nav-kbd nav-kbd--lg" aria-hidden="true">
+                  {key}
+                </kbd>
+              )}
+              {l.label}
+            </a>
+          );
+        })
       }
       <div class="mt-6 flex flex-col gap-3">
         <Button href={SITE.appUrl} size="lg" external iconRight="rocket">
@@ -213,6 +235,53 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     #site-header-bar {
       transition: none;
     }
+  }
+
+  /* Shortcut chip — same 16px box as the active-page icon, so swapping
+     kbd → icon on the current route does not shift the label. */
+  .nav-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    border-radius: 0.28rem;
+    border: 1px solid color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    background: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    box-shadow: 0 1px 0 color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--color-ink-500);
+  }
+
+  .nav-kbd--lg {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  :global(.dark) .nav-kbd {
+    border-color: rgb(255 255 255 / 0.16);
+    background: rgb(255 255 255 / 0.06);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
+    color: var(--color-ink-400);
+  }
+
+  a:hover .nav-kbd,
+  a:focus-visible .nav-kbd {
+    border-color: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    color: var(--color-ink-800);
+  }
+
+  :global(.dark) a:hover .nav-kbd,
+  :global(.dark) a:focus-visible .nav-kbd {
+    border-color: rgb(255 255 255 / 0.32);
+    color: white;
   }
 </style>
 
@@ -310,8 +379,32 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     menu?.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => setMenu(false), { signal }),
     );
+    const typingIn = (el) => {
+      if (!(el instanceof HTMLElement)) return false;
+      if (el.isContentEditable) return true;
+      const tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    };
+
+    const samePath = (href) => {
+      const there = new URL(href, location.href).pathname.replace(/\/+$/, '') || '/';
+      const here = location.pathname.replace(/\/+$/, '') || '/';
+      return there === here;
+    };
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setMenu(false);
+      if (e.defaultPrevented || e.repeat) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (!/^[0-6]$/.test(e.key)) return;
+      if (typingIn(e.target)) return;
+
+      const link = header.querySelector(`[data-nav-key="${e.key}"]`);
+      if (!(link instanceof HTMLAnchorElement) || samePath(link.href)) return;
+
+      e.preventDefault();
+      setMenu(false);
+      link.click();
     }, { signal });
   }
 
