@@ -1,7 +1,8 @@
 ---
 /**
  * Shared renderer for public legal documents (privacy, terms, cookies, legal, AUP).
- * English is the governing source of truth; locales may omit copy and fall back.
+ * Each locale ships a full translation; English remains the governing text and
+ * is the fallback if a document is omitted.
  */
 import { type Lang } from '../../i18n/config';
 import { useContent, type LegalPageContent } from '../../i18n/content';
@@ -26,12 +27,8 @@ const { lang, route, doc } = Astro.props;
 const localized = useContent(lang)[doc];
 const english = useContent('en')[doc]!;
 const copy: LegalPageContent = localized ?? english;
-const showGoverningNote = lang !== 'en' || Boolean(copy.governingNote);
-const governingNote =
-  lang !== 'en'
-    ? (english.governingNote ??
-      'This legal document is provided in English, which is the governing language.')
-    : copy.governingNote;
+const governingNote = copy.governingNote;
+const showGoverningNote = Boolean(governingNote);
 
 /** Stable section anchors; labels reuse each heading. */
 const sections = copy.sections.map((s, i) => ({

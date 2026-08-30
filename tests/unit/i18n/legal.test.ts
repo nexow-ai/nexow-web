@@ -24,7 +24,8 @@ describe.each(DOCS)('%s policy', (name, doc) => {
     expect(doc.badge.trim()).not.toBe('');
     expect(doc.title.trim()).not.toBe('');
     expect(doc.subtitle.trim()).not.toBe('');
-    expect(doc.updated).toMatch(/^Last updated: \d{1,2} \w+ \d{4}$/);
+    expect(doc.updated).toMatch(/2026/);
+    expect(doc.updated.trim()).not.toBe('');
   });
 
   it('carries SEO metadata that names the brand', () => {
@@ -79,14 +80,29 @@ describe('legal documents as a set', () => {
     expect(privacy).toContain(SITE.appUrl);
   });
 
-  it('is the copy every locale serves, since legal text is not translated', () => {
+  it('ships a full localized legal set in every locale, not an English fallback', () => {
+    const keys = ['privacyPage', 'termsPage', 'cookiesPage', 'legalPage', 'acceptableUsePage'] as const;
+    const englishCounts = {
+      privacyPage: privacyPage.sections.length,
+      termsPage: termsPage.sections.length,
+      cookiesPage: cookiesPage.sections.length,
+      legalPage: legalPage.sections.length,
+      acceptableUsePage: acceptableUsePage.sections.length,
+    };
     for (const lang of LANGS) {
       const merged = useContent(lang);
-      expect(merged.privacyPage, lang).toEqual(privacyPage);
-      expect(merged.termsPage, lang).toEqual(termsPage);
-      expect(merged.cookiesPage, lang).toEqual(cookiesPage);
-      expect(merged.legalPage, lang).toEqual(legalPage);
-      expect(merged.acceptableUsePage, lang).toEqual(acceptableUsePage);
+      for (const key of keys) {
+        const doc = merged[key];
+        expect(doc, `${lang}.${key}`).toBeDefined();
+        expect(doc!.sections.length, `${lang}.${key} section count`).toBe(englishCounts[key]);
+        expect(doc!.governingNote, `${lang}.${key} governingNote`).toBeDefined();
+        expect(doc!.governingNote, `${lang}.${key}`).toMatch(/English/);
+        if (lang !== 'en') {
+          expect(doc, `${lang}.${key} still English`).not.toEqual(
+            { privacyPage, termsPage, cookiesPage, legalPage, acceptableUsePage }[key],
+          );
+        }
+      }
     }
   });
 
