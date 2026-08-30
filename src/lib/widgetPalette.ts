@@ -57,3 +57,6 @@ export function hexToRgb(hex: string): [number, number, number] {
 
 /** 400s — the shade the 3D chrome uses on a dark stage. */
 export const WAY_RGB400: [number, number, number][] = TAILWIND_WAYS.map((w) => hexToRgb(w.c400));
+
+/** 600s — the same families, deep enough to hold on daylight glass. */
+export const WAY_RGB600: [number, number, number][] = TAILWIND_WAYS.map((w) => hexToRgb(w.c600));

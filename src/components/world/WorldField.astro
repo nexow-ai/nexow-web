@@ -43,7 +43,7 @@
 </div>
 
 <script>
-  import { WAY_RGB400, WAY_COUNT } from '../../lib/widgetPalette';
+  import { WAY_RGB400, WAY_RGB600, WAY_COUNT } from '../../lib/widgetPalette';
 
   /** Last formation index — must match the shader's form() tail. */
   const FORM_LAST = 14;
@@ -801,22 +801,18 @@
       float shade = mix(0.78, 1.16, fract(s * 5.13));
       vec3 accent = tw(fam) * shade;
       vec3 accent2 = tw(fam + 11.0) * mix(0.86, 1.08, fract(s * 3.71));
-      /* On the light theme the pale 400s are too thin on near-white glass. */
-      accent = mix(accent, accent * 0.62, uLight);
-      accent2 = mix(accent2, accent2 * 0.62, uLight);
       /* paper is what type and rules are drawn in: soft white on the dark
          theme, ink on the light. lightest is the highlight colour, white on
          both, which is what the sheen and the glint are made of. */
       vec3 paper = mix(vec3(0.74, 0.79, 0.88), vec3(0.07, 0.10, 0.16), uLight);
       vec3 lightest = mix(paper, vec3(1.0), uLight);
-      /* On the light theme the glass is white, not the pale grey it was: grey
-         glass on a near-white page is the same value as the page, so the panel
-         only existed because of the frame around it. White glass and darker
-         ink means the *content* is what you see. */
+      /* Dark theme: near-black glass. Light theme: a family-tinted card, not
+         a white slab — white glass plus a *0.62 accent was what washed the
+         wall into pastel. The 600s are already uploaded for daylight. */
       vec3 glassDark = mix(mix(uFog, vec3(0.040, 0.058, 0.090), 0.75),
-                           mix(uFog, vec3(1.0), 0.94), uLight);
+                           mix(mix(uFog, vec3(1.0), 0.58), accent, 0.24), uLight);
       vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
-                           mix(glassDark, vec3(1.0), 0.45), uLight);
+                           mix(glassDark, vec3(1.0), 0.28), uLight);
       /* Every screen wears its family a little; studio beats wear it as
          product chrome so the wall reads as customised widgets, not mint. */
       float wear = mix(0.28, 0.52, uStudio);
@@ -2467,15 +2463,18 @@
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
       ctx.uniform3fv(uFog, readColor(probe, '--w-surface'));
-      /* Screens stay dark-theatre in both themes. Inverting glass and
-         accents onto a pale page washed the wall into pastel cards; the
-         cool look is mint chrome on ink, sitting on whatever the page is.
-         Fog still tracks `--w-surface`, so distance dissolves into the
-         light field instead of a black hole. The core follows.
-         Read from the class only inside a frame after it changed (see
-         onTheme): the toggle event used to fire before the class flipped. */
-      coreLight = 0;
-      ctx.uniform1f(uLight, 0);
+      /* Which theme is on. Read from the class, but only ever from inside a
+         frame after it changed (see onTheme / the observer below): read at the
+         moment the toggle's event fires, the class had not flipped yet, and the
+         world painted the *previous* theme's glass — pale screens on a dark
+         page, one toggle behind. */
+      const isDark = document.documentElement.classList.contains('dark');
+      coreLight = isDark ? 0 : 1;
+      ctx.uniform1f(uLight, coreLight);
+      const pal = isDark ? WAY_RGB400 : WAY_RGB600;
+      for (let i = 0; i < WAY_COUNT; i++) {
+        ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), pal[i]);
+      }
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
       coreFog = readColor(probe, '--w-surface');
