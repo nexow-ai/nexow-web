@@ -194,6 +194,10 @@ function iconPath(icon: string) {
     outline-offset: 2px;
   }
 
+  .feature-map-node {
+    transition: color 0.35s ease, background-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
   .feature-map-node.is-on {
     background: color-mix(in oklab, var(--fm-way) 18%, transparent);
     color: var(--fm-way-600);
