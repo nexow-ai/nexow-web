@@ -1,0 +1,357 @@
+---
+/**
+ * Home field — the depth layer the home page is staged on.
+ *
+ * A hand-rolled WebGL point field: the camera flies forward through a wrapping
+ * slab of points, so the page reads as one continuous move through space rather
+ * than a stack of sections. There is no 3D library here on purpose — the payload
+ * budget in `tests/build/payload.test.ts` caps total JS at 150 KB and forbids
+ * every external origin, and a bundled three.js core would break both.
+ *
+ * The projection is done in the vertex shader with a plain perspective divide,
+ * so no matrix code ships at all. Points wrap on `mod(z - camZ, DEPTH)`, which
+ * makes the field endless for the cost of one subtraction.
+ *
+ * This replaces `DotField` on the home route rather than stacking a second
+ * full-viewport canvas — `Layout.astro` picks one via its `backdrop` prop.
+ *
+ * Everything here is decorative. The canvas is `aria-hidden`, carries no product
+ * copy, and never initialises under `prefers-reduced-motion`, without WebGL, or
+ * after a lost context — in each of those cases the CSS atmosphere below is the
+ * whole backdrop, which is a complete, legible page on its own.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`home-field ${className}`} aria-hidden="true">
+  <div class="home-field__wash"></div>
+  <canvas class="home-field__canvas"></canvas>
+</div>
+
+<script>
+  /** Points at full size; coarse pointers get a fraction of this. */
+  const POINTS_WIDE = 1400;
+  const POINTS_NARROW = 520;
+  /** Depth of the wrapping slab, in world units. */
+  const DEPTH = 60;
+  /** How far the camera travels over one full page scroll. */
+  const TRAVEL = 210;
+  /** Lateral spread. A point leaves the frustum edge at z ≈ SPREAD. */
+  const SPREAD = 18;
+
+  const VERT = `
+    attribute vec3 a_pos;
+    attribute float a_seed;
+    uniform float u_camZ;
+    uniform float u_time;
+    uniform float u_aspect;
+    uniform float u_dpr;
+    varying float v_fade;
+    varying float v_mix;
+    void main() {
+      float z = mod(a_pos.z - u_camZ, ${DEPTH}.0);
+      float zz = z + 0.75;
+      vec2 drift = vec2(
+        sin(u_time * 0.05 + a_seed * 6.283),
+        cos(u_time * 0.04 + a_seed * 4.11)
+      ) * 0.6;
+      vec2 xy = (a_pos.xy + drift) / zz;
+      gl_Position = vec4(xy.x * u_aspect, xy.y, 0.0, 1.0);
+      gl_PointSize = clamp(105.0 / zz, 1.0, 26.0) * u_dpr;
+      v_fade = (1.0 - smoothstep(${DEPTH}.0 * 0.55, ${DEPTH}.0, z)) * smoothstep(1.0, 7.0, z);
+      v_mix = fract(a_seed + z / ${DEPTH}.0);
+    }
+  `;
+
+  const FRAG = `
+    precision mediump float;
+    uniform vec3 u_c1;
+    uniform vec3 u_c2;
+    uniform vec3 u_c3;
+    uniform float u_alpha;
+    varying float v_fade;
+    varying float v_mix;
+    void main() {
+      vec2 d = gl_PointCoord - 0.5;
+      float r = dot(d, d);
+      if (r > 0.25) discard;
+      float a = smoothstep(0.25, 0.0, r);
+      vec3 col = mix(u_c1, u_c2, smoothstep(0.0, 0.55, v_mix));
+      col = mix(col, u_c3, smoothstep(0.62, 1.0, v_mix));
+      gl_FragColor = vec4(col, a * v_fade * u_alpha);
+    }
+  `;
+
+  type Handle = { stop: () => void };
+  let handles: Handle[] = [];
+
+  const prefersReducedMotion = () =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /** Resolve a CSS custom property to linear-ish rgb triplets for the shader. */
+  function readColor(probe: HTMLElement, token: string): [number, number, number] {
+    probe.style.color = `var(${token})`;
+    const parsed = getComputedStyle(probe).color.match(/[\d.]+/g);
+    if (!parsed || parsed.length < 3) return [0.06, 0.77, 0.64];
+    return [Number(parsed[0]) / 255, Number(parsed[1]) / 255, Number(parsed[2]) / 255];
+  }
+
+  function compile(gl: WebGLRenderingContext, type: number, src: string) {
+    const sh = gl.createShader(type);
+    if (!sh) return null;
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      gl.deleteShader(sh);
+      return null;
+    }
+    return sh;
+  }
+
+  function start(root: HTMLElement): Handle | null {
+    const canvas = root.querySelector<HTMLCanvasElement>('.home-field__canvas');
+    if (!canvas) return null;
+
+    let gl: WebGLRenderingContext | null = null;
+    try {
+      gl =
+        (canvas.getContext('webgl', { alpha: true, antialias: false, depth: false }) as
+          | WebGLRenderingContext
+          | null) ?? null;
+    } catch {
+      gl = null;
+    }
+    if (!gl) return null;
+
+    const ctx = gl;
+    const vs = compile(ctx, ctx.VERTEX_SHADER, VERT);
+    const fs = compile(ctx, ctx.FRAGMENT_SHADER, FRAG);
+    const program = ctx.createProgram();
+    if (!vs || !fs || !program) return null;
+    ctx.attachShader(program, vs);
+    ctx.attachShader(program, fs);
+    ctx.linkProgram(program);
+    if (!ctx.getProgramParameter(program, ctx.LINK_STATUS)) return null;
+    ctx.useProgram(program);
+    ctx.deleteShader(vs);
+    ctx.deleteShader(fs);
+
+    // Deterministic scatter: a cheap LCG, so the field looks identical run to run
+    // and nothing depends on Math.random ordering.
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
+    const count = coarse || window.innerWidth < 768 ? POINTS_NARROW : POINTS_WIDE;
+    const data = new Float32Array(count * 4);
+    let seed = 0x2f6e2b1;
+    const rnd = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+    for (let i = 0; i < count; i++) {
+      data[i * 4] = (rnd() * 2 - 1) * SPREAD;
+      data[i * 4 + 1] = (rnd() * 2 - 1) * SPREAD;
+      data[i * 4 + 2] = rnd() * DEPTH;
+      data[i * 4 + 3] = rnd();
+    }
+
+    const buffer = ctx.createBuffer();
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, buffer);
+    ctx.bufferData(ctx.ARRAY_BUFFER, data, ctx.STATIC_DRAW);
+
+    const aPos = ctx.getAttribLocation(program, 'a_pos');
+    const aSeed = ctx.getAttribLocation(program, 'a_seed');
+    ctx.enableVertexAttribArray(aPos);
+    ctx.vertexAttribPointer(aPos, 3, ctx.FLOAT, false, 16, 0);
+    ctx.enableVertexAttribArray(aSeed);
+    ctx.vertexAttribPointer(aSeed, 1, ctx.FLOAT, false, 16, 12);
+
+    const uCamZ = ctx.getUniformLocation(program, 'u_camZ');
+    const uTime = ctx.getUniformLocation(program, 'u_time');
+    const uAspect = ctx.getUniformLocation(program, 'u_aspect');
+    const uDpr = ctx.getUniformLocation(program, 'u_dpr');
+    const uAlpha = ctx.getUniformLocation(program, 'u_alpha');
+    const uC1 = ctx.getUniformLocation(program, 'u_c1');
+    const uC2 = ctx.getUniformLocation(program, 'u_c2');
+    const uC3 = ctx.getUniformLocation(program, 'u_c3');
+
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
+    root.appendChild(probe);
+
+    let dpr = 1;
+    let dark = false;
+
+    function paintTheme() {
+      dark = document.documentElement.classList.contains('dark');
+      const c1 = readColor(probe, '--color-brand-400');
+      const c2 = readColor(probe, '--color-sky-500');
+      const c3 = readColor(probe, '--color-accent-500');
+      ctx.uniform3fv(uC1, c1);
+      ctx.uniform3fv(uC2, c2);
+      ctx.uniform3fv(uC3, c3);
+      // Additive glow reads beautifully on ink, but blows out a white page.
+      ctx.blendFunc(ctx.SRC_ALPHA, dark ? ctx.ONE : ctx.ONE_MINUS_SRC_ALPHA);
+      ctx.uniform1f(uAlpha, dark ? 0.85 : 0.5);
+    }
+
+    ctx.enable(ctx.BLEND);
+    paintTheme();
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+      const w = root.clientWidth || window.innerWidth;
+      const h = root.clientHeight || window.innerHeight;
+      canvas!.width = Math.floor(w * dpr);
+      canvas!.height = Math.floor(h * dpr);
+      canvas!.style.width = `${w}px`;
+      canvas!.style.height = `${h}px`;
+      ctx.viewport(0, 0, canvas!.width, canvas!.height);
+      ctx.uniform1f(uAspect, h / w);
+      ctx.uniform1f(uDpr, dpr);
+    }
+    resize();
+
+    let frame = 0;
+    let running = true;
+    let t0 = 0;
+
+    function draw(now: number) {
+      frame = 0;
+      if (!running) return;
+      if (!t0) t0 = now;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+      const seconds = (now - t0) / 1000;
+      ctx.uniform1f(uCamZ, progress * TRAVEL + seconds * 0.35);
+      ctx.uniform1f(uTime, seconds);
+      ctx.clearColor(0, 0, 0, 0);
+      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      ctx.drawArrays(ctx.POINTS, 0, count);
+      frame = requestAnimationFrame(draw);
+    }
+    frame = requestAnimationFrame(draw);
+
+    function onVisibility() {
+      if (document.hidden) {
+        running = false;
+        if (frame) cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!running) {
+        running = true;
+        t0 = 0;
+        frame = requestAnimationFrame(draw);
+      }
+    }
+
+    function onContextLost(e: Event) {
+      e.preventDefault();
+      running = false;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      root.classList.add('is-inert');
+    }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', onVisibility);
+    document.addEventListener('nexow:themechange', paintTheme);
+    canvas.addEventListener('webglcontextlost', onContextLost);
+
+    return {
+      stop() {
+        running = false;
+        if (frame) cancelAnimationFrame(frame);
+        frame = 0;
+        window.removeEventListener('resize', resize);
+        document.removeEventListener('visibilitychange', onVisibility);
+        document.removeEventListener('nexow:themechange', paintTheme);
+        canvas.removeEventListener('webglcontextlost', onContextLost);
+        probe.remove();
+        ctx.deleteBuffer(buffer);
+        ctx.deleteProgram(program);
+        ctx.getExtension('WEBGL_lose_context')?.loseContext();
+      },
+    };
+  }
+
+  function teardown() {
+    for (const h of handles) h.stop();
+    handles = [];
+  }
+
+  function initHomeField() {
+    teardown();
+    if (prefersReducedMotion()) return;
+    for (const root of document.querySelectorAll<HTMLElement>('.home-field')) {
+      const handle = start(root);
+      if (handle) handles.push(handle);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initHomeField);
+  document.addEventListener('astro:before-swap', teardown);
+</script>
+
+<style>
+  .home-field {
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* The atmosphere. This is the entire backdrop when WebGL is unavailable, the
+   * context is lost, JavaScript never runs, or motion is reduced — so it has to
+   * stand on its own rather than read as a broken canvas. */
+  .home-field__wash {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        60% 50% at 18% 0%,
+        color-mix(in oklab, var(--color-brand-400) 22%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        55% 45% at 88% 12%,
+        color-mix(in oklab, var(--color-accent-500) 18%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        70% 60% at 50% 100%,
+        color-mix(in oklab, var(--color-sky-500) 14%, transparent),
+        transparent 75%
+      );
+  }
+
+  :global(.dark) .home-field__wash {
+    background:
+      radial-gradient(
+        60% 50% at 18% 0%,
+        color-mix(in oklab, var(--color-brand-500) 24%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        55% 45% at 88% 12%,
+        color-mix(in oklab, var(--color-accent-600) 26%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        70% 60% at 50% 100%,
+        color-mix(in oklab, var(--color-plasma-500) 12%, transparent),
+        transparent 78%
+      );
+  }
+
+  .home-field__canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .home-field.is-inert .home-field__canvas {
+    display: none;
+  }
+</style>
