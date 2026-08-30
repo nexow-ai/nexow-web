@@ -42,7 +42,7 @@
 <script>
   /** Billboards. Each is two triangles; the formations below place them. */
   /* Backing-store scale. The canvas is stretched to full size by CSS. */
-  const RENDER_SCALE = 0.66;
+  const RENDER_SCALE = 0.58;
   const COUNT_WIDE = 1900;
   const COUNT_NARROW = 900;
 
@@ -113,13 +113,15 @@
         /* 2 — CANVAS: the slab splits into four widgets on one screen. */
         float g = floor(a * 4.0);
         float k = fract(a * 4.0);
-        float cols = 14.0;
+        /* 30 columns, not 14: a quarter of the instances over 14 columns is
+           ~46 rows, which draws four tall ribbons rather than four widgets. */
+        float cols = 30.0;
         float idx = k * (n / 4.0);
         float x = mod(idx, cols);
         float y = floor(idx / cols);
         float rows = ceil((n / 4.0) / cols);
-        vec3 base = vec3(g < 2.0 ? -4.8 : 4.8, mod(g, 2.0) < 1.0 ? 3.1 : -3.1, (g - 1.5) * 1.3);
-        return base + vec3((x - cols * 0.5) * 0.31, -(y - rows * 0.5) * 0.31, 0.0);
+        vec3 base = vec3(g < 2.0 ? -4.6 : 4.6, mod(g, 2.0) < 1.0 ? 3.0 : -3.0, (g - 1.5) * 1.3);
+        return base + vec3((x - cols * 0.5) * 0.24, -(y - rows * 0.5) * 0.24, 0.0);
       }
       if (f < 3.5) {
         /* 3 — CONNECTORS: a ring docking around the workspace. A torus, not a
@@ -208,7 +210,7 @@
          ground colour, so distance falloff costs one smoothstep and buys the
          whole sense of depth. */
       float dist = -mv.z;
-      vGlow = smoothstep(54.0, 3.0, dist);
+      vGlow = smoothstep(48.0, 2.0, dist);
       vTone = fract(aSeed + m * 0.4 + uFormA * 0.06);
       vTwinkle = 0.72 + 0.28 * sin(uTime * (0.6 + aSeed * 2.2) + aSeed * 40.0);
       vUv = aCorner;
@@ -418,6 +420,10 @@
     paintTheme();
 
     let dpr = 1;
+    // How far the world slides toward the scene column once there is one.
+    // Set by `resize`, applied per frame — the hero has no scene column.
+    let shiftFull = 0;
+
     function resize() {
       /* Render below display resolution and let the compositor scale it up.
        * Additive glow has no hard edges to lose, and this is a ~3x cut in
@@ -432,7 +438,8 @@
       perspective(proj, 0.85, w / h, 0.1, 140);
       ctx.uniformMatrix4fv(uProj, false, proj);
       // Frame the copy column on wide screens; centred where the layout stacks.
-      ctx.uniform1f(uShift, w >= 1024 ? 3.0 : 0);
+      // Applied per frame in `draw`, because the hero has no copy column.
+      shiftFull = w >= 1024 ? 3.0 : 0;
     }
     resize();
 
@@ -519,6 +526,11 @@
         lastDim = dim;
       }
 
+      /* The hero centres its headline, so the world stays centred under it and
+       * slides into the scene column on the same beat the matter takes its
+       * first shape. */
+      ctx.uniform1f(uShift, shiftFull * (a === 0 ? morph : 1));
+
       ctx.uniform1f(uFormA, Math.min(a, 6));
       ctx.uniform1f(uFormB, Math.min(a + 1, 6));
       ctx.uniform1f(uMorph, morph);
@@ -579,6 +591,7 @@
       ctx.uniform1f(uAlpha, 1);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
+      ctx.uniform1f(uShift, 0);
       lookAt(view, -14.6, 3.4, 18.2);
       ctx.uniformMatrix4fv(uView, false, view);
       ctx.clearColor(0, 0, 0, 0);
