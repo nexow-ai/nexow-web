@@ -23,6 +23,7 @@ import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { promptAppUrl } from '../../lib/appDeepLinks';
 import Icon from '../Icon.astro';
+import SocialLinks from '../SocialLinks.astro';
 
 interface Props {
   lang: Lang;
@@ -43,6 +44,7 @@ const D = {
   forge: '0.64s',
   examples: '0.74s',
   note: '0.84s',
+  socials: '0.90s',
   cue: '0.96s',
 };
 ---
@@ -125,6 +127,10 @@ const D = {
     }
 
     <p class="enter hero__note" style={`--enter-delay:${D.note}`}>{t.note}</p>
+
+    <div class="enter hero__socials" style={`--enter-delay:${D.socials}`}>
+      <SocialLinks landmark={false} label="Follow Nexow" />
+    </div>
   </div>
 
   <a class="enter hero__cue" href="#widget" style={`--enter-delay:${D.cue}`}>
@@ -356,6 +362,10 @@ const D = {
     font-size: 0.72rem;
     letter-spacing: 0.04em;
     color: var(--color-ink-400);
+  }
+
+  .hero__socials {
+    margin-top: 1.35rem;
   }
 
   /* ---- the way down ---- */

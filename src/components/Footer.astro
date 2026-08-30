@@ -1,9 +1,9 @@
 ---
-import { SITE, SOCIALS } from '../i18n/config';
+import { SITE } from '../i18n/config';
 import { useContent } from '../i18n/content';
 import { getLangFromUrl, localizePath } from '../i18n/utils';
 import Logo from './Logo.astro';
-import Icon from './Icon.astro';
+import SocialLinks from './SocialLinks.astro';
 import DotField from './DotField.astro';
 
 const lang = getLangFromUrl(Astro.url);
@@ -29,21 +29,7 @@ const localize = (href: string) =>
       <div class="max-w-sm">
         <Logo lang={lang} tone="light" class="h-8" />
         <p class="mt-5 text-sm leading-relaxed text-ink-400">{t.footer.tagline}</p>
-        <div class="mt-6 flex flex-wrap items-center gap-2.5">
-          {
-            SOCIALS.map((s) => (
-              <a
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex size-9 items-center justify-center rounded-full ring-1 ring-white/10 text-ink-300 transition-colors hover:bg-white/5 hover:text-white"
-                aria-label={s.label}
-              >
-                <Icon name={s.icon} class="size-4.5" />
-              </a>
-            ))
-          }
-        </div>
+        <SocialLinks class="mt-6" align="start" />
       </div>
 
       <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">

@@ -55,12 +55,60 @@ export const SITE = {
   solanaUrl: 'https://solana.com',
 } as const;
 
-/** Footer + schema social links (icon names match `Icon.astro`). */
+/**
+ * Prefer the env value when it is a non-empty string; otherwise keep the
+ * published fallback so the site still builds without a `.env`.
+ */
+export function resolveSocialUrl(configured: string | undefined, fallback: string): string {
+  const value = configured?.trim();
+  return value ? value : fallback;
+}
+
+/** Footer + hero + schema social links (icon names match `Icon.astro`). */
 export const SOCIALS = [
-  { label: 'X', href: 'https://x.com/nexowofficial', icon: 'x-logo' },
-  { label: 'TikTok', href: 'https://tiktok.com/nexow-ai', icon: 'tiktok' },
-  { label: 'Instagram', href: 'https://instagram.com/nexow-ai', icon: 'instagram' },
-  { label: 'YouTube', href: 'https://youtube.com/nexow-ai', icon: 'youtube' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/nexow-ai', icon: 'linkedin' },
-  { label: 'GitHub', href: 'https://github.com/nexow-ai', icon: 'github' },
+  {
+    label: 'Telegram',
+    href: resolveSocialUrl(process.env.TELEGRAM_URL, 'https://t.me/nexowofficial'),
+    icon: 'telegram',
+  },
+  {
+    label: 'Discord',
+    href: resolveSocialUrl(process.env.DISCORD_URL, 'https://discord.gg/nexow'),
+    icon: 'discord',
+  },
+  {
+    label: 'X',
+    href: resolveSocialUrl(process.env.X_URL, 'https://x.com/nexowofficial'),
+    icon: 'x-logo',
+  },
+  {
+    label: 'TikTok',
+    href: resolveSocialUrl(process.env.TIKTOK_URL, 'https://tiktok.com/nexow-ai'),
+    icon: 'tiktok',
+  },
+  {
+    label: 'Instagram',
+    href: resolveSocialUrl(process.env.INSTAGRAM_URL, 'https://instagram.com/nexow-ai'),
+    icon: 'instagram',
+  },
+  {
+    label: 'LinkedIn',
+    href: resolveSocialUrl(process.env.LINKEDIN_URL, 'https://linkedin.com/company/nexow-ai'),
+    icon: 'linkedin',
+  },
+  {
+    label: 'YouTube',
+    href: resolveSocialUrl(process.env.YOUTUBE_URL, 'https://youtube.com/nexow-ai'),
+    icon: 'youtube',
+  },
+  {
+    label: 'Skool',
+    href: resolveSocialUrl(process.env.SKOOL_URL, 'https://www.skool.com/nexow'),
+    icon: 'skool',
+  },
+  {
+    label: 'GitHub',
+    href: resolveSocialUrl(process.env.GITHUB_URL, 'https://github.com/nexow-ai'),
+    icon: 'github',
+  },
 ] as const;

@@ -1,0 +1,197 @@
+---
+/**
+ * Brand-coloured social marks for the hero and footer.
+ *
+ * Each tile is the platform's own mark (circle for Telegram / Discord, rounded
+ * square for the rest) so the row reads as a set of official buttons rather
+ * than generic monochrome glyphs.
+ */
+import { SOCIALS } from '../i18n/config';
+
+interface Props {
+  class?: string;
+  /** Footer sits start-aligned; the hero row is centered under the copy. */
+  align?: 'start' | 'center';
+  /** Accessible name. Must be unique among landmarks on the same page. */
+  label?: string;
+  /**
+   * The footer is the page's social landmark. The hero row is the same
+   * links again, so it renders as a group rather than a second `<nav>`.
+   */
+  landmark?: boolean;
+}
+
+const { class: className, align = 'center', label = 'Social', landmark = true } = Astro.props;
+const Tag = landmark ? 'nav' : 'div';
+---
+
+<Tag
+  class:list={['socials', align === 'start' && 'is-start', className]}
+  aria-label={label}
+  role={landmark ? undefined : 'group'}
+>
+  {
+    SOCIALS.map((s) => (
+      <a
+        href={s.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class:list={['socials__link', `is-${s.icon}`]}
+        aria-label={s.label}
+      >
+        {s.icon === 'telegram' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="12" fill="#2AABEE" />
+            <path
+              fill="#fff"
+              d="M17.6 7.15c.17-.75-.46-1.1-1.12-.86L5.6 10.55c-.72.28-.71.8.13 1l2.77.86 1.64 5.18c.2.63.36.88.74.9.3.02.54-.13.75-.4l1.86-2.3 3.86 2.85c.71.39 1.22.19 1.4-.66l2.45-11.83zM9.3 13.08l7.05-4.45c.24-.15.46-.07.28.2l-6.05 5.74-.24 2.68-1.04-4.17z"
+            />
+          </svg>
+        )}
+        {s.icon === 'discord' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="12" fill="#5865F2" />
+            <path
+              fill="#fff"
+              d="M16.8 7.4A13.2 13.2 0 0013.8 6.6a.08.08 0 00-.08.04c-.17.3-.36.7-.5 1a12.1 12.1 0 00-3.64 0 8.2 8.2 0 00-.5-1 .08.08 0 00-.08-.04 13.1 13.1 0 00-3 0.8.07.07 0 00-.03.02C3.6 10.3 3.1 13 3.35 15.6c0 .02.01.04.03.05 1.35 1 2.66 1.6 3.94 2 .03 0 .06 0 .07-.02.3-.42.58-.86.81-1.32 0-.03 0-.07-.04-.08-.43-.16-.84-.36-1.24-.59-.03-.02-.03-.07 0-.09.08-.06.17-.13.25-.2a.08.08 0 01.07 0c2.6 1.2 5.4 1.2 7.96 0a.08.08 0 01.07 0c.08.07.17.14.25.2.03.02.03.07 0 .09-.4.23-.81.43-1.24.59-.03.01-.04.05-.04.08.24.46.51.9.82 1.32a.08.08 0 00.07.02c1.28-.4 2.6-1 3.94-2 .02-.01.03-.03.03-.05.26-3.05-.44-5.72-2.25-8.18a.07.07 0 00-.03-.02zM9.7 14.4c-.78 0-1.43-.72-1.43-1.6s.64-1.6 1.43-1.6 1.44.72 1.43 1.6c0 .88-.64 1.6-1.43 1.6zm4.6 0c-.78 0-1.43-.72-1.43-1.6s.64-1.6 1.43-1.6 1.44.72 1.43 1.6c0 .88-.63 1.6-1.43 1.6z"
+            />
+          </svg>
+        )}
+        {s.icon === 'x-logo' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5" fill="#0F1419" />
+            <path
+              fill="#fff"
+              d="M7.2 6.2h2.7l2.1 3 2.1-3H17l-3.5 4.8L17.2 17.8h-2.7l-2.4-3.3-2.4 3.3H7l3.6-5.1L7.2 6.2z"
+            />
+          </svg>
+        )}
+        {s.icon === 'tiktok' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5" fill="#010101" />
+            <path
+              fill="#25F4EE"
+              d="M15.7 6.9a3.6 3.6 0 01-2.82-3.18V3.5h-2.58v10.25a2.17 2.17 0 01-3.9 1.31 2.17 2.17 0 012.39-3.38V8.86a4.75 4.75 0 00-4.04 8 4.75 4.75 0 008.14-3.32V8.4a6.14 6.14 0 003.58 1.14V7a3.62 3.62 0 01-.77-.1z"
+              transform="translate(-0.7 0.55)"
+            />
+            <path
+              fill="#FE2C55"
+              d="M15.7 6.9a3.6 3.6 0 01-2.82-3.18V3.5h-2.58v10.25a2.17 2.17 0 01-3.9 1.31 2.17 2.17 0 012.39-3.38V8.86a4.75 4.75 0 00-4.04 8 4.75 4.75 0 008.14-3.32V8.4a6.14 6.14 0 003.58 1.14V7a3.62 3.62 0 01-.77-.1z"
+              transform="translate(0.7 -0.45)"
+            />
+            <path
+              fill="#fff"
+              d="M15.7 6.9a3.6 3.6 0 01-2.82-3.18V3.5h-2.58v10.25a2.17 2.17 0 01-3.9 1.31 2.17 2.17 0 012.39-3.38V8.86a4.75 4.75 0 00-4.04 8 4.75 4.75 0 008.14-3.32V8.4a6.14 6.14 0 003.58 1.14V7a3.62 3.62 0 01-.77-.1z"
+            />
+          </svg>
+        )}
+        {s.icon === 'instagram' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="#fff"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+              d="M8 6.5h8A2.5 2.5 0 0118.5 9v8A2.5 2.5 0 0116 19.5H8A2.5 2.5 0 015.5 17V9A2.5 2.5 0 018 6.5z"
+            />
+            <circle cx="12" cy="12.2" r="3.1" fill="none" stroke="#fff" stroke-width="1.7" />
+            <circle cx="16.15" cy="8.85" r="0.85" fill="#fff" />
+          </svg>
+        )}
+        {s.icon === 'linkedin' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5" fill="#0A66C2" />
+            <path
+              fill="#fff"
+              d="M8.1 9.3H5.7V18h2.4V9.3zM6.9 5.4a1.4 1.4 0 100 2.8 1.4 1.4 0 000-2.8zM18.3 18h-2.4v-4.5c0-1.07 0-2.45-1.5-2.45s-1.72 1.16-1.72 2.37V18H10.3V9.3h2.28v1.19h.03c.32-.6 1.1-1.24 2.26-1.24 2.42 0 2.87 1.59 2.87 3.66V18z"
+            />
+          </svg>
+        )}
+        {s.icon === 'youtube' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="6" fill="#FF0000" />
+            <path fill="#fff" d="M10 8.6v6.8L16.2 12 10 8.6z" />
+          </svg>
+        )}
+        {s.icon === 'skool' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5" fill="#fff" />
+            <text
+              x="12"
+              y="16.4"
+              text-anchor="middle"
+              font-size="11.5"
+              font-weight="800"
+              font-family="ui-sans-serif, system-ui, sans-serif"
+              letter-spacing="-0.06em"
+            >
+              <tspan fill="#6C47FF">s</tspan><tspan fill="#FF3B5C">k</tspan>
+            </text>
+          </svg>
+        )}
+        {s.icon === 'github' && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5" fill="#181717" />
+            <path
+              fill="#fff"
+              d="M12 4.4c-4.2 0-7.6 3.4-7.6 7.6 0 3.36 2.18 6.2 5.2 7.2.38.07.52-.16.52-.36 0-.18-.01-.77-.01-1.4-1.91.36-2.4-.47-2.55-.9-.09-.22-.46-.9-.79-1.08-.27-.15-.66-.51-.01-.52.61-.01 1.05.56 1.19.79.7 1.17 1.81.84 2.26.64.07-.51.27-.84.49-1.04-1.72-.2-3.53-.86-3.53-3.82 0-.84.3-1.54.79-2.08-.08-.2-.34-.98.07-2.05 0 0 .65-.21 2.13.79a7.3 7.3 0 013.88 0c1.48-1 2.13-.79 2.13-.79.41 1.07.15 1.85.07 2.05.49.54.79 1.23.79 2.08 0 2.97-1.81 3.62-3.54 3.82.28.24.52.7.52 1.42 0 1.04-.01 1.87-.01 2.13 0 .2.14.43.52.36 3.02-.99 5.2-3.83 5.2-7.19 0-4.2-3.4-7.6-7.6-7.6z"
+            />
+          </svg>
+        )}
+      </a>
+    ))
+  }
+</Tag>
+
+<style>
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+  }
+
+  .socials.is-start {
+    justify-content: flex-start;
+  }
+
+  .socials__link {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.55rem;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition:
+      transform 0.2s var(--ease-out-expo),
+      box-shadow 0.2s var(--ease-out-expo);
+  }
+
+  .socials__link.is-telegram,
+  .socials__link.is-discord {
+    border-radius: 999px;
+  }
+
+  .socials__link.is-instagram {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  }
+
+  .socials__link:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 8px 18px -10px rgba(0, 0, 0, 0.7);
+  }
+
+  .socials__link:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-brand-400) 70%, white);
+    outline-offset: 3px;
+  }
+
+  .socials__link svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

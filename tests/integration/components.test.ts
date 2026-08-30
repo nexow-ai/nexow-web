@@ -10,6 +10,8 @@ import FeatureCard from '../../src/components/FeatureCard.astro';
 import FeatureMap from '../../src/components/FeatureMap.astro';
 import Footer from '../../src/components/Footer.astro';
 import Header from '../../src/components/Header.astro';
+import Hero from '../../src/components/sections/Hero.astro';
+import SocialLinks from '../../src/components/SocialLinks.astro';
 import Hex from '../../src/components/Hex.astro';
 import Icon from '../../src/components/Icon.astro';
 import Logo from '../../src/components/Logo.astro';
@@ -18,7 +20,7 @@ import SectionHeading from '../../src/components/SectionHeading.astro';
 import ThemeToggle from '../../src/components/ThemeToggle.astro';
 import { ICON_PATHS } from '../../src/components/icon-paths';
 import { CONNECTORS } from '../../src/data/connectors';
-import { SITE, languages } from '../../src/i18n/config';
+import { SITE, SOCIALS, languages } from '../../src/i18n/config';
 import { useContent } from '../../src/i18n/content';
 import { localizePath } from '../../src/i18n/utils';
 import { resolveFeatureMapGroups } from '../../src/lib/featureMap';
@@ -43,7 +45,7 @@ describe('Icon', () => {
   });
 
   it('renders the filled brand marks with a fill, not a stroke', async () => {
-    for (const name of ['youtube', 'tiktok']) {
+    for (const name of ['youtube', 'tiktok', 'telegram', 'discord']) {
       const html = await render(Icon, '/', { props: { name } });
       expect(html, name).toContain('fill="currentColor"');
     }
@@ -207,8 +209,8 @@ describe('Footer', () => {
 
   it('links every social profile with rel=noopener', async () => {
     const html = await render(Footer, '/', { props: { lang: 'en', route: '/' } });
-    for (const social of SOCIAL_HREFS) {
-      expect(html, social).toContain(social);
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(social.href);
     }
     expect(html).toContain('noopener');
   });
@@ -220,7 +222,41 @@ describe('Footer', () => {
   });
 });
 
-const SOCIAL_HREFS = ['https://x.com/nexowofficial', 'https://github.com/nexow-ai'];
+describe('SocialLinks', () => {
+  it('renders every profile as a branded outbound link', async () => {
+    const html = await render(SocialLinks, '/');
+    expect(html).toContain('aria-label="Social"');
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(`href="${social.href}"`);
+      expect(html, social.label).toContain(`aria-label="${social.label}"`);
+    }
+    expect(html).toContain('noopener');
+  });
+
+  it('can sit start-aligned in the footer', async () => {
+    const html = await render(SocialLinks, '/', { props: { align: 'start' } });
+    expect(html).toContain('is-start');
+  });
+
+  it('drops the nav landmark when it is a second copy of the same links', async () => {
+    const html = await render(SocialLinks, '/', {
+      props: { landmark: false, label: 'Follow Nexow' },
+    });
+    expect(html).not.toContain('<nav');
+    expect(html).toContain('role="group"');
+    expect(html).toContain('aria-label="Follow Nexow"');
+  });
+});
+
+describe('Hero', () => {
+  it('includes the social row with every profile', async () => {
+    const html = await render(Hero, '/', { props: { lang: 'en' } });
+    expect(html).toContain('hero__socials');
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(social.href);
+    }
+  });
+});
 
 describe('Logo and BrandMark', () => {
   it.each(['auto', 'light', 'dark'] as const)('renders the %s logo tone', async (tone) => {

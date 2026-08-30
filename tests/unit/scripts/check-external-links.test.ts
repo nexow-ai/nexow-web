@@ -66,6 +66,17 @@ describe('collectUrls', () => {
       { url: 'https://x.test/nexow', source: 'social:X' },
     ]);
   });
+
+  it('reads env-backed social hrefs from their published fallbacks', () => {
+    const urls = collectUrls(
+      '{ "id": "acme", "url": "https://acme.test/" }',
+      "{ label: 'Telegram', href: resolveSocialUrl(process.env.TELEGRAM_URL, 'https://t.me/nexow') }",
+    );
+    expect(urls).toEqual([
+      { url: 'https://acme.test/', source: 'connector:acme' },
+      { url: 'https://t.me/nexow', source: 'social:Telegram' },
+    ]);
+  });
 });
 
 describe('checkAll', () => {
