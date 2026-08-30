@@ -388,11 +388,19 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     height: calc(var(--orb) * 0.19);
     border-radius: 50%;
     border: 1px solid color-mix(in oklab, var(--ink) 75%, transparent);
+    /* Lit cap, then a rim from below. The shading has to live in the fill:
+     * `box-shadow` is the breathe animation's, and a keyframe replaces the
+     * whole property. */
     background:
       radial-gradient(
         76% 76% at 50% 28%,
         color-mix(in oklab, var(--ink) 58%, transparent),
         transparent 80%
+      ),
+      radial-gradient(
+        130% 100% at 50% 122%,
+        color-mix(in oklab, var(--ink) 40%, transparent),
+        transparent 62%
       ),
       color-mix(in oklab, var(--w-surface) 78%, var(--w-panel));
     box-shadow:
