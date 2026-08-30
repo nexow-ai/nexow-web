@@ -14,16 +14,16 @@
 
 /* Class-based dark mode: sections opt in with `.dark`, the whole doc can too. */
 /* `dark:` is an exclusive-or, not a class check. It applies inside `.dark`
- * *unless* the element sits in an `.invert` wrapper, and it applies inside an
- * `.invert` wrapper on a page that is not dark. That is what lets one wrapper
+ * *unless* the element sits in an `.tone-invert` wrapper, and it applies inside an
+ * `.tone-invert` wrapper on a page that is not dark. That is what lets one wrapper
  * mean "the opposite of the page": a dark band on the light theme, a light
  * band on the dark one, with every `dark:` utility inside it flipping for
  * free and no JavaScript needing to know which theme is on. */
 @custom-variant dark {
-  &:where(.dark, .dark *):not(:where(.invert, .invert *)) {
+  &:where(.dark, .dark *):not(:where(.tone-invert, .tone-invert *)) {
     @slot;
   }
-  &:where(html:not(.dark) .invert, html:not(.dark) .invert *) {
+  &:where(html:not(.dark) .tone-invert, html:not(.dark) .tone-invert *) {
     @slot;
   }
 }
@@ -301,7 +301,7 @@
 }
 
 .dark,
-html:not(.dark) .invert {
+html:not(.dark) .tone-invert {
   --surface: color-mix(in oklab, white 4%, transparent);
   --surface-sunk: color-mix(in oklab, white 2%, transparent);
   --surface-line: color-mix(in oklab, white 11%, transparent);
@@ -334,12 +334,26 @@ html:not(.dark) .invert {
 /* ------------------------------------------------------------------ *
  * Inverted sections.
  *
- * Wrap a section in `.invert` and it paints in the opposite theme to the
+ * Named `tone-invert`, not `invert`: `invert` is a Tailwind filter utility
+ * (`filter: invert(100%)`), and a wrapper called that had its whole band
+ * pixel-inverted straight back to the page theme.
+ *
+ * Wrap a section in `.tone-invert` and it paints in the opposite theme to the
  * page, tokens and `dark:` utilities both (see the variant at the top). The
  * wrapper carries the opaque ground, because the sections themselves only
  * tint what is behind them.
  * ------------------------------------------------------------------ */
-html.dark .invert {
+.tone-invert {
+  /* Above the world. `.world` is a positioned `z-index: 0` stacking context,
+   * which paints over the backgrounds of non-positioned blocks that follow it
+   * in the DOM — so an unpositioned wrapper had the world's fixed canvas
+   * drawing straight through its ground. Positioning it puts the band on top,
+   * where a later sibling belongs. */
+  position: relative;
+  z-index: 1;
+}
+
+html.dark .tone-invert {
   --surface: #ffffff;
   --surface-sunk: #f7fbfb;
   --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
@@ -353,7 +367,7 @@ html.dark .invert {
   color-scheme: light;
 }
 
-html:not(.dark) .invert {
+html:not(.dark) .tone-invert {
   background-color: var(--color-ink-950);
   color: #ffffff;
   color-scheme: dark;
