@@ -130,7 +130,7 @@ const localize = (href: string) =>
             datetime=""
           ></time>
           <span
-            class="status-badge inline-flex items-center gap-1.5 rounded-full bg-emerald-400/[0.08] py-1 pe-2.5 ps-1.5 font-mono text-[0.7rem] text-emerald-300 ring-1 ring-emerald-400/20"
+            class="status-badge inline-flex items-center gap-1.5 overflow-visible rounded-full bg-emerald-400/[0.08] py-1 pe-2.5 ps-1.5 font-mono text-[0.7rem] text-emerald-300 ring-1 ring-emerald-400/20"
           >
             <svg class="status-rack size-3.5" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <rect class="slab" x="1.75" y="1.5" width="10.5" height="3" rx="1.1" />
@@ -141,6 +141,10 @@ const localize = (href: string) =>
               <circle class="led" cx="10.4" cy="11" r="0.85" />
             </svg>
             {t.footer.status}
+            <span class="status-ping" aria-hidden="true">
+              <span class="status-ping-ring"></span>
+              <span class="status-ping-core"></span>
+            </span>
           </span>
         </div>
       </div>
@@ -149,8 +153,8 @@ const localize = (href: string) =>
 </footer>
 
 <style>
-  /* Service-health badge: a 3-slab rack whose LEDs blink in sequence, with a
-     slow breathing halo on the pill itself. */
+  /* Service-health badge: a 3-slab rack whose LEDs blink in sequence, a
+     trailing ping that radiates, and a slow breathing halo on the pill. */
   .status-badge {
     animation: status-halo 3.6s ease-in-out infinite;
   }
@@ -175,6 +179,36 @@ const localize = (href: string) =>
     animation-delay: 0.4s;
   }
 
+  .status-ping {
+    position: relative;
+    display: inline-flex;
+    width: 0.375rem;
+    height: 0.375rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-ping-core,
+  .status-ping-ring {
+    border-radius: 9999px;
+    background: currentColor;
+  }
+
+  .status-ping-core {
+    position: relative;
+    width: 0.375rem;
+    height: 0.375rem;
+    box-shadow: 0 0 6px currentColor;
+  }
+
+  .status-ping-ring {
+    position: absolute;
+    inset: 0;
+    opacity: 0.7;
+    animation: status-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
   @keyframes status-led {
     0%,
     55%,
@@ -196,13 +230,25 @@ const localize = (href: string) =>
     }
   }
 
+  @keyframes status-ping {
+    75%,
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .status-badge,
-    .status-rack .led {
+    .status-rack .led,
+    .status-ping-ring {
       animation: none;
     }
     .status-rack .led {
       opacity: 0.9;
+    }
+    .status-ping-ring {
+      opacity: 0;
     }
   }
 </style>
