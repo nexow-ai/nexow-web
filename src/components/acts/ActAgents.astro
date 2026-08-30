@@ -1,0 +1,176 @@
+---
+/**
+ * Act V — agents.
+ *
+ * The harness assembles around a core, then the run loop ticks through its four
+ * moves. The six harness parts and the four stages are the app's real
+ * vocabulary; they are also what `AgentRunDiagram` uses, so the two stay
+ * consistent if either is edited.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Act from './Act.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang);
+const copy = c.home.acts!.agents;
+
+/** Real harness parts, in the app's order. Localized where the locale has them. */
+const HARNESS = c.home.automate.harnessChips ?? [
+  'model',
+  'memory',
+  'skills',
+  'tools',
+  'knowledge',
+  'triggers',
+];
+
+/** Six seats on a ring, starting at the top. */
+const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
+  label,
+  angle: (i / Math.min(HARNESS.length, 6)) * 360,
+  k: `--k${Math.min(Math.floor(i / 2), 2)}`,
+}));
+---
+
+<Act id="bots-agents" labelledBy="act-agents-title" height="250vh">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+    <ActCopyBlock copy={copy} headingId="act-agents-title" />
+
+    <div class="a-scene" aria-hidden="true">
+      <div class="a-ring">
+        <span class="a-core">
+          <span class="a-core-label">agent</span>
+        </span>
+        {
+          SEATS.map((seat) => (
+            <span
+              class="a-seat"
+              style={`--angle:${seat.angle}deg;--k:var(${seat.k}, 1)`}
+            >
+              <span class="a-seat-inner">{seat.label}</span>
+            </span>
+          ))
+        }
+      </div>
+
+      <ol class="a-loop">
+        {
+          copy.beats.map((beat, i) => (
+            <li class="a-step" style={`--k:var(--k3, 1);--i:${i}`}>
+              <span class="a-step-n">{String(i + 1).padStart(2, '0')}</span>
+              {beat.label}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</Act>
+
+<style>
+  .a-scene {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: center;
+  }
+
+  .a-ring {
+    position: relative;
+    width: min(100%, 22rem);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  .a-core {
+    display: grid;
+    place-items: center;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-brand-500) 32%, transparent),
+      transparent
+    );
+  }
+
+  .a-core-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-brand-200);
+  }
+
+  .a-seat {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    /* Rotate the seat out to the rim, then counter-rotate the label upright. */
+    transform: rotate(var(--angle)) translateY(-9.25rem);
+  }
+
+  .a-seat-inner {
+    transform: rotate(calc(var(--angle) * -1));
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-100);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(9, 12, 20, 0.9);
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
+  }
+
+  .a-loop {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .a-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 0.8125rem;
+    color: var(--color-ink-100);
+  }
+
+  .a-step-n {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    color: var(--color-brand-300);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* Seats swing out from the core in pairs as the harness is granted. */
+      :global(html.js) .a-seat {
+        opacity: var(--k, 1);
+        transform: rotate(var(--angle)) translateY(calc(-9.25rem * var(--k, 1)));
+      }
+
+      :global(html.js) .a-core {
+        transform: scale(calc(0.9 + var(--k0, 1) * 0.1));
+      }
+
+      :global(html.js) .a-step {
+        opacity: clamp(0, calc(var(--k, 1) * 4 - var(--i) * 0.7), 1);
+      }
+    }
+  }
+</style>

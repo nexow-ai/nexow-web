@@ -1,0 +1,143 @@
+---
+/**
+ * Act III — live data.
+ *
+ * The logos are real, pulled from the generated catalogue rather than hand-typed,
+ * so the act cannot drift out of sync with `src/data/connectors.ts`. The live
+ * count is read from the same place for the same reason — copy never hardcodes it.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { CONNECTORS, CONNECTOR_LIVE_COUNT } from '../../data/connectors';
+import Act from './Act.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang);
+const copy = c.home.acts!.connectors;
+
+/** One recognisable live venue per beat category, in catalogue order. */
+const pick = (category: string, n: number) =>
+  CONNECTORS.filter((x) => x.status === 'live' && x.category === category && x.logo).slice(0, n);
+
+const RINGS = [
+  { k: '--k0', items: pick('finance', 6) },
+  { k: '--k1', items: pick('data', 6) },
+  { k: '--k2', items: pick('wallets', 5) },
+  { k: '--k3', items: pick('socials', 5) },
+];
+---
+
+<Act id="connectors" labelledBy="act-connectors-title" height="215vh">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+    <ActCopyBlock copy={copy} headingId="act-connectors-title" />
+
+    <div class="k-scene" aria-hidden="true">
+      <div class="k-core">
+        <span class="k-count">{CONNECTOR_LIVE_COUNT}</span>
+        <span class="k-count-label">{c.home.connectors.countLabel}</span>
+      </div>
+
+      <div class="k-rows">
+        {
+          RINGS.map((ring) => (
+            <div class="k-row" style={`--k:var(${ring.k}, 1)`}>
+              {ring.items.map((item) => (
+                <span class="k-pill">
+                  <img src={item.logo} alt="" loading="lazy" decoding="async" width="16" height="16" />
+                  <span>{item.name}</span>
+                </span>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Act>
+
+<style>
+  .k-scene {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+  }
+
+  .k-core {
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 35%, transparent);
+    background: radial-gradient(
+      70% 70% at 50% 30%,
+      color-mix(in oklab, var(--color-brand-500) 22%, transparent),
+      transparent
+    );
+  }
+
+  .k-count {
+    font-family: var(--font-display);
+    font-size: 2.75rem;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .k-count-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-brand-300);
+  }
+
+  .k-rows {
+    display: grid;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .k-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .k-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.8125rem;
+    color: var(--color-ink-100);
+  }
+
+  .k-pill img {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    object-fit: contain;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* Each category docks on its own beat, arriving from depth. */
+      :global(html.js) .k-row {
+        opacity: var(--k, 1);
+        transform: translate3d(0, calc((1 - var(--k, 1)) * 1.2rem), calc((1 - var(--k, 1)) * -140px));
+      }
+
+      :global(html.js) .k-core {
+        transform: scale(calc(0.94 + var(--k0, 1) * 0.06));
+      }
+    }
+  }
+</style>

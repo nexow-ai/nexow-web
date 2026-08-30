@@ -1,0 +1,128 @@
+---
+/**
+ * Act VI — where people point it.
+ *
+ * The eight use cases already exist in the locale bundles with their real
+ * recipes, and `UseCaseScene` already draws one illustration per case. This act
+ * re-stages them rather than restating them, so there is exactly one place to
+ * edit a use case.
+ *
+ * This is the act that lets the reader out: after five pinned scenes it drifts
+ * rather than scrubs, which is what makes the end of the story feel like an
+ * exhale instead of more work.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import UseCaseScene from '../UseCaseScene.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang);
+const copy = c.home.acts!.useCases;
+const cases = c.home.botsAgents?.cases;
+const items = cases?.items ?? [];
+---
+
+<section id="use-cases" class="relative py-20 sm:py-28" aria-labelledby="act-usecases-title">
+  <div class="container-page">
+    <div class="mx-auto max-w-2xl text-center">
+      <ActCopyBlock copy={copy} headingId="act-usecases-title" />
+    </div>
+
+    <ul class="u-grid reveal-stagger" role="list">
+      {
+        items.map((item, i) => (
+          <li class="u-card" data-motion="rise" style={`--i:${i}`}>
+            <span class="u-kind" data-kind={item.kind}>
+              {item.kind === 'bot' ? (cases?.botLabel ?? 'Bot') : (cases?.agentLabel ?? 'Agent')}
+            </span>
+            <UseCaseScene scene={item.scene} class="u-scene" />
+            <h3 class="u-title">{item.title}</h3>
+            <p class="u-body">{item.body}</p>
+            <p class="u-recipe">{item.recipe}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* The copy block is centred here, unlike the pinned acts. */
+  #use-cases :global(.act-copy) {
+    max-width: none;
+  }
+  #use-cases :global(.act-copy__eyebrow) {
+    justify-content: center;
+  }
+
+  .u-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .u-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    /* Stagger the drift so the gallery breathes instead of moving as one slab. */
+    --m-shift: calc(-14px - (var(--i) % 4) * 6px);
+  }
+
+  .u-kind {
+    justify-self: start;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: var(--color-ink-200);
+  }
+
+  .u-kind[data-kind='bot'] {
+    color: var(--color-brand-300);
+    border-color: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
+  }
+
+  .u-kind[data-kind='agent'] {
+    color: var(--color-accent-300);
+    border-color: color-mix(in oklab, var(--color-accent-400) 45%, transparent);
+  }
+
+  .u-card :global(.u-scene) {
+    width: 100%;
+    height: auto;
+  }
+
+  .u-title {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    color: #fff;
+  }
+
+  .u-body {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-ink-200);
+  }
+
+  .u-recipe {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-brand-300);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.5rem;
+  }
+</style>

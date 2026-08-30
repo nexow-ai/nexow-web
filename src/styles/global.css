@@ -614,9 +614,12 @@
  * ------------------------------------------------------------------ */
 :root {
   --page-slide: 1;
+  /* Inline direction for scroll-driven travel; see `.act`. */
+  --dir: 1;
 }
 [dir='rtl'] {
   --page-slide: -1;
+  --dir: -1;
 }
 
 @keyframes nexow-page-out-start {
@@ -856,6 +859,53 @@ html.is-theme-transition [data-astro-transition-scope] {
    * under the section's overflow clip. */
   @media (max-width: 63.999rem) {
     .js [data-motion] { --m-slide: 0px; }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Acts — the home page's scroll stages.
+ *
+ * An act is a tall section holding one `position: sticky` stage, so the scene
+ * holds still while the reader scrolls "through" it. `ScrollMotion` writes
+ * `--ps` (0 → 1 across the act's travel) because the act carries `data-stages`;
+ * the act turns that into four overlapping ramps its scene keys off.
+ *
+ * The base state below is a plain, complete section. That is deliberately what
+ * renders with no JavaScript, for crawlers, and under reduced motion — the act
+ * simply becomes an ordinary block with its scene at rest, still legible and
+ * still teaching the same thing. Only inside the `no-preference` + `.js` gate
+ * does it become tall and sticky, which is also why it can never shift layout
+ * after paint: the height only ever changes before the first frame.
+ * ------------------------------------------------------------------ */
+.act-stage {
+  position: static;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Pinning is a desktop affordance. A phone has no room to hold a scene still
+   * beside its own copy, and a tall act there only means more thumb work for a
+   * frame that never fits — so below this width an act stays an ordinary
+   * section with its scene fully assembled. The ramps are scoped in here too,
+   * so outside this range they fall back to their `var(--kN, 1)` defaults and
+   * every beat renders lit rather than invisible. */
+  @media (min-width: 768px) {
+    .js .act {
+      height: var(--act-h, 220vh);
+      /* ×5, not ×4, so each beat completes about three-quarters of the way
+       * through its quarter and the reader gets a moment to read it. */
+      --k0: clamp(0, calc(var(--ps, 0) * 5), 1);
+      --k1: clamp(0, calc((var(--ps, 0) - 0.25) * 5), 1);
+      --k2: clamp(0, calc((var(--ps, 0) - 0.5) * 5), 1);
+      --k3: clamp(0, calc((var(--ps, 0) - 0.75) * 5), 1);
+      /* Centred scrub, for parallax that reads in both directions. */
+      --psc: calc(var(--ps, 0) * 2 - 1);
+    }
+
+    .js .act-stage {
+      position: sticky;
+      /* Clears the fixed header, matching `scroll-padding-top`. */
+      top: 5rem;
+    }
   }
 }
 

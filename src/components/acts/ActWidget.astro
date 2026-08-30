@@ -1,0 +1,284 @@
+---
+/**
+ * Act I — a sentence becomes a running widget.
+ *
+ * The scene is a small depth stack: the prompt recedes, generated source slides
+ * under it, and a real widget (a habit heatmap, the example the copy names)
+ * assembles cell by cell in front. Everything is DOM and CSS 3D rather than
+ * canvas, so the labels stay selectable, translatable and reachable by a screen
+ * reader, and the whole thing renders at rest with no JavaScript.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Act from './Act.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang);
+const copy = c.home.acts!.widget;
+
+// A fixed 7×5 fortnight of "streak" intensities. Deterministic on purpose: the
+// scene must look identical on every render and in every locale.
+const CELLS = [
+  2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 3, 1, 2, 0, 3, 2, 0, 1, 3, 2, 3, 1, 2, 2, 0, 3,
+  1, 3, 2, 1, 0, 2, 3, 1, 2,
+];
+---
+
+<Act id="widget" labelledBy="act-widget-title" height="235vh">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
+    <ActCopyBlock copy={copy} headingId="act-widget-title" />
+
+    <div class="w-scene" aria-hidden="true">
+      <div class="w-depth">
+        <div class="w-plane w-plane--prompt">
+          <span class="w-dot"></span>
+          <span class="w-prompt-text">{copy.beats[0]?.detail}</span><span class="w-caret"></span>
+        </div>
+
+        <div class="w-plane w-plane--source">
+          <span class="w-src-label">generating</span>
+          <span class="w-src-bar" style="--i:0"></span>
+          <span class="w-src-bar" style="--i:1"></span>
+          <span class="w-src-bar" style="--i:2"></span>
+          <span class="w-src-bar" style="--i:3"></span>
+        </div>
+
+        <div class="w-plane w-plane--widget">
+          <div class="w-card-head">
+            <span class="w-card-title">habit streaks</span>
+            <span class="w-card-badge">live</span>
+          </div>
+          <div class="w-grid">
+            {CELLS.map((v, i) => <span class="w-cell" style={`--v:${v};--i:${i}`} />)}
+          </div>
+          <div class="w-card-foot">
+            <span class="w-chip">sandboxed</span>
+            <span class="w-chip">v3</span>
+            <span class="w-chip">editable</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Act>
+
+<style>
+  .w-scene {
+    position: relative;
+    perspective: 1200px;
+    perspective-origin: 50% 45%;
+  }
+
+  .w-depth {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    transform-style: preserve-3d;
+  }
+
+  .w-plane {
+    position: relative;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(12, 16, 26, 0.72);
+    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(2px);
+  }
+
+  @media (min-width: 768px) {
+    .w-scene {
+      min-height: 30rem;
+    }
+
+    .w-depth {
+      display: block;
+      height: 100%;
+      min-height: 30rem;
+    }
+
+    .w-plane {
+      position: absolute;
+      inset-inline-start: 0;
+    }
+
+    .w-plane--prompt {
+      top: 0;
+      inset-inline-end: 2.5rem;
+    }
+    .w-plane--source {
+      top: 6rem;
+      inset-inline-end: 5.5rem;
+    }
+    .w-plane--widget {
+      top: 12rem;
+      inset-inline-end: 0;
+      width: min(100%, 21rem);
+    }
+  }
+
+  /* ---- beat 1: the sentence ---- */
+  .w-plane--prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-ink-100);
+  }
+
+  .w-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--color-brand-400);
+    box-shadow: 0 0 12px var(--color-brand-500);
+  }
+
+  .w-prompt-text {
+    opacity: 0.92;
+  }
+
+  .w-caret {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--color-brand-400);
+  }
+
+  /* ---- beat 2: generated source ---- */
+  .w-plane--source {
+    display: grid;
+    gap: 0.45rem;
+    padding: 1rem;
+  }
+
+  .w-src-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-brand-300);
+  }
+
+  .w-src-bar {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-brand-500), var(--color-accent-500));
+    opacity: 0.55;
+    width: calc(4rem + var(--i) * 2.6rem);
+  }
+
+  /* ---- beats 3 & 4: the widget itself ---- */
+  .w-plane--widget {
+    padding: 1rem;
+    background: rgba(9, 12, 20, 0.92);
+  }
+
+  .w-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+
+  .w-card-title {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-200);
+  }
+
+  .w-card-badge {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-brand-300);
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 45%, transparent);
+    border-radius: 999px;
+    padding: 0.1rem 0.45rem;
+  }
+
+  .w-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.3rem;
+  }
+
+  .w-cell {
+    aspect-ratio: 1;
+    border-radius: 0.25rem;
+    background: color-mix(
+      in oklab,
+      var(--color-brand-400) calc(var(--v) * 26%),
+      rgba(255, 255, 255, 0.06)
+    );
+  }
+
+  .w-card-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.9rem;
+  }
+
+  .w-chip {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-200);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Motion. Everything above is the at-rest scene: all three planes are
+   * present and legible before a single variable is written, which is what a
+   * reduced-motion visitor, a crawler, and a no-JS browser get.
+   * ------------------------------------------------------------------ */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .w-depth {
+      transform: translate3d(0, calc(var(--psc, 0) * -1.5rem), 0);
+    }
+
+    :global(html.js) .w-plane {
+      /* Each plane arrives on its own beat: fade, lift and settle out of depth. */
+      opacity: calc(0.12 + 0.88 * var(--k, 1));
+      transform: translate3d(0, calc((1 - var(--k, 1)) * 2.5rem), calc((1 - var(--k, 1)) * -220px))
+        rotateX(calc((1 - var(--k, 1)) * 8deg));
+      transition: none;
+    }
+
+    :global(html.js) .w-plane--prompt {
+      --k: var(--k0, 1);
+    }
+    :global(html.js) .w-plane--source {
+      --k: var(--k1, 1);
+    }
+    :global(html.js) .w-plane--widget {
+      --k: var(--k2, 1);
+    }
+
+    /* The heatmap fills in as beat three completes, then the chips land. */
+    :global(html.js) .w-cell {
+      opacity: clamp(0, calc(var(--k2, 1) * 35 - var(--i) * 0.8), 1);
+    }
+
+    :global(html.js) .w-card-foot {
+      opacity: var(--k3, 1);
+    }
+
+    :global(html.js) .w-caret {
+      opacity: calc(1 - var(--k1, 0));
+    }
+  }
+</style>

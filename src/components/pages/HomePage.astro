@@ -4,13 +4,14 @@ import { useContent } from '../../i18n/content';
 import { CONNECTOR_LIVE_COUNT } from '../../data/connectors';
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../sections/Hero.astro';
-import Stats from '../sections/Stats.astro';
-import AppShowcase from '../sections/AppShowcase.astro';
+import ActsStage from '../acts/ActsStage.astro';
+import ActWidget from '../acts/ActWidget.astro';
+import ActCanvas from '../acts/ActCanvas.astro';
+import ActConnectors from '../acts/ActConnectors.astro';
+import ActBots from '../acts/ActBots.astro';
+import ActAgents from '../acts/ActAgents.astro';
+import ActUseCases from '../acts/ActUseCases.astro';
 import Features from '../sections/Features.astro';
-import HowItWorks from '../sections/HowItWorks.astro';
-import Automate from '../sections/Automate.astro';
-import BotsAgents from '../sections/BotsAgents.astro';
-import Connectors from '../sections/Connectors.astro';
 import Privacy from '../sections/Privacy.astro';
 import Plans from '../sections/Plans.astro';
 import RewardsTeaser from '../sections/RewardsTeaser.astro';
@@ -65,21 +66,21 @@ const websiteSchema = {
   inLanguage: lang,
 };
 
-/** Right-rail labels reuse existing section eyebrows (already localized). */
+/**
+ * Right-rail stops. One per act plus the two ends — thirteen entries used to
+ * collide with the hero mock below 1620px, and a rail that lists every band is
+ * a symptom of a page built out of bands.
+ */
+const acts = t.acts;
 const sections = [
   { id: 'hero', label: t.hero.titleLead.replace(/\.$/, '') },
-  { id: 'stats', label: 'Stats' },
-  { id: 'app-showcase', label: t.appShowcase?.eyebrow ?? 'App' },
-  { id: 'how', label: t.how.eyebrow },
-  { id: 'features', label: t.features.eyebrow },
-  { id: 'automate', label: t.automate.eyebrow },
-  { id: 'bots-agents', label: t.botsAgents?.eyebrow ?? 'Bots & Agents' },
-  { id: 'connectors', label: t.connectors.eyebrow },
-  { id: 'privacy', label: t.privacy.eyebrow },
+  { id: 'widget', label: acts?.widget.eyebrow ?? 'Say it' },
+  { id: 'app-showcase', label: acts?.canvas.eyebrow ?? 'Arrange it' },
+  { id: 'connectors', label: acts?.connectors.eyebrow ?? 'Wire it' },
+  { id: 'automate', label: acts?.bots.eyebrow ?? 'Watch it' },
+  { id: 'bots-agents', label: acts?.agents.eyebrow ?? 'Reason about it' },
+  { id: 'use-cases', label: acts?.useCases.eyebrow ?? 'Point it anywhere' },
   { id: 'plans', label: t.plans.eyebrow },
-  { id: 'rewards', label: c.rewards.eyebrow },
-  { id: 'faq', label: t.faq.eyebrow },
-  { id: 'cta', label: t.cta.primary },
 ];
 ---
 
@@ -90,15 +91,25 @@ const sections = [
   description={t.meta.description}
   schema={[websiteSchema, softwareSchema, faqSchema]}
   sections={sections}
+  backdrop="field"
 >
   <Hero lang={lang} />
-  <Stats lang={lang} />
-  <AppShowcase lang={lang} />
-  <HowItWorks lang={lang} />
+
+  {/*
+    One continuous dark interior. The acts run without a heading cadence or a
+    band between them on purpose — that repetition is what made this page read
+    as a longer version of /about.
+  */}
+  <ActsStage>
+    <ActWidget lang={lang} />
+    <ActCanvas lang={lang} />
+    <ActConnectors lang={lang} />
+    <ActBots lang={lang} />
+    <ActAgents lang={lang} />
+    <ActUseCases lang={lang} />
+  </ActsStage>
+
   <Features lang={lang} />
-  <Automate lang={lang} />
-  <BotsAgents lang={lang} />
-  <Connectors lang={lang} />
   <Privacy lang={lang} />
   <Plans lang={lang} />
   <RewardsTeaser lang={lang} />

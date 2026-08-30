@@ -1,0 +1,47 @@
+---
+/**
+ * The dark interior the acts play on.
+ *
+ * One unbroken surface rather than a background per section — that is what
+ * stops the page reading as a stack of bands the way the rest of the site does.
+ * It is opaque on purpose: text sits on a known solid colour, so contrast is
+ * computable and `tests/e2e/contrast.spec.ts` (whose baseline is empty) has
+ * something deterministic to measure. The field behind it carries the depth
+ * either side of this stretch.
+ *
+ * Nothing here may set `overflow`, which would break the `position: sticky`
+ * every act depends on.
+ */
+---
+
+<div class="acts-stage">
+  <div class="acts-stage__seam acts-stage__seam--top" aria-hidden="true"></div>
+  <slot />
+  <div class="acts-stage__seam acts-stage__seam--bottom" aria-hidden="true"></div>
+</div>
+
+<style>
+  .acts-stage {
+    position: relative;
+    background: var(--color-ink-950);
+    color: #fff;
+  }
+
+  /* Fade in and out of the surrounding page instead of cutting to a hard edge. */
+  .acts-stage__seam {
+    position: absolute;
+    inset-inline: 0;
+    height: 6rem;
+    pointer-events: none;
+  }
+
+  .acts-stage__seam--top {
+    top: 0;
+    background: linear-gradient(to bottom, var(--color-ink-900), transparent);
+  }
+
+  .acts-stage__seam--bottom {
+    bottom: 0;
+    background: linear-gradient(to top, var(--color-ink-900), transparent);
+  }
+</style>
