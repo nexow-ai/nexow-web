@@ -22,6 +22,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
     'text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10',
     className,
   ]}
+  data-theme-toggle
   data-to-dark={toDarkLabel}
   data-to-light={toLightLabel}
   aria-label={toDarkLabel}
@@ -31,7 +32,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
 </button>
 
 <style>
-  :global([data-theme-locked]) .theme-toggle {
+  :global([data-theme-locked] [data-theme-toggle]) {
     display: none;
   }
 </style>
@@ -69,13 +70,20 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
     document.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
   }
 
+  function allToggles(): HTMLButtonElement[] {
+    return [...document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')];
+  }
+
   function syncToggle(btn: HTMLButtonElement) {
     const theme = currentTheme();
-    btn.setAttribute(
-      'aria-label',
-      toggleLabel(theme, { toDark: btn.dataset.toDark!, toLight: btn.dataset.toLight! }),
-    );
+    const toDark = btn.dataset.toDark ?? 'Switch to dark mode';
+    const toLight = btn.dataset.toLight ?? 'Switch to light mode';
+    btn.setAttribute('aria-label', toggleLabel(theme, { toDark, toLight }));
     btn.setAttribute('aria-pressed', String(theme === 'dark'));
+  }
+
+  function syncToggles() {
+    for (const btn of allToggles()) syncToggle(btn);
   }
 
   async function toggleTheme(btn: HTMLButtonElement) {
@@ -86,7 +94,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
 
     if (reduce) {
       applyTheme(next);
-      syncToggle(btn);
+      syncToggles();
       return;
     }
 
@@ -103,7 +111,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
     try {
       const transition = document.startViewTransition(() => {
         applyTheme(next);
-        syncToggle(btn);
+        syncToggles();
       });
 
       await transition.ready;
@@ -125,7 +133,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
       await transition.finished;
     } catch {
       applyTheme(next);
-      syncToggle(btn);
+      syncToggles();
     } finally {
       document.documentElement.classList.remove('is-theme-transition');
     }
@@ -138,11 +146,13 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
     abort = new AbortController();
     const { signal } = abort;
 
-    const btn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
-    if (!btn) return;
+    const buttons = allToggles();
+    if (!buttons.length) return;
 
-    syncToggle(btn);
-    btn.addEventListener('click', () => void toggleTheme(btn), { signal });
+    syncToggles();
+    for (const btn of buttons) {
+      btn.addEventListener('click', () => void toggleTheme(btn), { signal });
+    }
   }
 
   document.addEventListener('astro:page-load', initThemeToggle);

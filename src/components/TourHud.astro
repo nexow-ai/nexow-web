@@ -7,13 +7,15 @@
  * the two questions a hands-free visitor has — how long is left, and can I have
  * a different record — have nowhere else to be answered.
  *
- * Four controls, in the order they are wanted: stop, the countdown to the end
- * of the story, a new song, and the scroll rate. None of them speaks to the
- * tour directly. The pill dispatches `nexow:tourtoggle`, `nexow:tracknext` and
+ * Five controls, in the order they are wanted: stop, the countdown, the
+ * scroll rate, light/dark, and a new song. None of them speaks to the tour
+ * directly. The pill dispatches `nexow:tourtoggle`, `nexow:tracknext` and
  * `nexow:tourpace`, which the tour (`Header.astro`) and the deck
  * (`TourSound.astro`) answer, and it listens for `nexow:tour` and
- * `nexow:tourtime` coming back. That keeps the transport a piece of chrome
- * that can ship on every route while the machinery stays where it belongs.
+ * `nexow:tourtime` coming back. The theme button is the same control as the
+ * header's (`ThemeToggle.astro`): the circular wipe starts from whichever
+ * one was pressed. That keeps the transport a piece of chrome that can ship
+ * on every route while the machinery stays where it belongs.
  *
  * `data-tour-control` is the other half of the contract: any intent to move the
  * page yourself ends the tour, and these buttons are the exception.
@@ -29,6 +31,8 @@ const tourTrack = t.nav.tourTrack ?? 'Play a different song';
 const tourLeft = t.nav.tourLeft ?? 'Time left';
 const tourControls = t.nav.tourControls ?? 'Tour controls';
 const tourPace = t.nav.tourPace ?? 'Scroll speed';
+const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
+const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 ---
 
 {/* A landmark, not a bare div: the countdown is page content, and content
@@ -59,16 +63,6 @@ const tourPace = t.nav.tourPace ?? 'Scroll speed';
 
     <button
       type="button"
-      class="tour-hud__btn"
-      data-tour-control
-      data-tour-action="track"
-      aria-label={tourTrack}
-    >
-      <Icon name="music" class="tour-hud__icon size-4" />
-    </button>
-
-    <button
-      type="button"
       class="tour-hud__btn tour-hud__btn--pace"
       data-tour-control
       data-tour-action="pace"
@@ -77,6 +71,29 @@ const tourPace = t.nav.tourPace ?? 'Scroll speed';
       aria-label={`${tourPace} x1`}
     >
       <span class="tour-hud__pace">x1</span>
+    </button>
+
+    <button
+      type="button"
+      class="tour-hud__btn"
+      data-tour-control
+      data-theme-toggle
+      data-to-dark={themeToDark}
+      data-to-light={themeToLight}
+      aria-label={themeToDark}
+    >
+      <Icon name="moon" class="tour-hud__icon size-4 dark:hidden" />
+      <Icon name="sun" class="tour-hud__icon size-4 hidden dark:block" />
+    </button>
+
+    <button
+      type="button"
+      class="tour-hud__btn"
+      data-tour-control
+      data-tour-action="track"
+      aria-label={tourTrack}
+    >
+      <Icon name="music" class="tour-hud__icon size-4" />
     </button>
   </div>
 </section>

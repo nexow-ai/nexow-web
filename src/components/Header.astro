@@ -459,7 +459,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     btn.addEventListener('click', toggle, { signal });
     // The transport at the foot of the screen drives the same tour.
     document.addEventListener('nexow:tourtoggle', toggle, { signal });
-    // A new rate shortens or stretches the time left; recount at once.
+    // Recount at once: speed() reads the transport's data-rate every frame.
     document.addEventListener(
       'nexow:tourpace',
       () => {
