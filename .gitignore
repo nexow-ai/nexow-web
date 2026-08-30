@@ -39,6 +39,7 @@ scratchpad/diag.mjs
 scratchpad/shot-*.mjs
 scratchpad/*-shot.mjs
 scratchpad/centre.mjs
+scratchpad/parallax-*.mjs
 scratchpad/*.png
 
 # local Claude / Cursor agent state
