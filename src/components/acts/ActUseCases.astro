@@ -80,8 +80,25 @@ const items = cases?.items ?? [];
     border-radius: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.03);
+    /* Let the world through. The closing act is the exhale, and the screens
+     * behind it are the point — a fully opaque card here would seal them off. */
+    opacity: 0.8;
     /* Stagger the drift so the gallery breathes instead of moving as one slab. */
     --m-shift: calc(-14px - (var(--i) % 4) * 6px);
+  }
+
+  /* `.reveal-stagger.is-visible > *` sets `opacity: 1` at two classes, which
+   * outranks the single class above — so once the gallery revealed, the card
+   * snapped back to fully opaque. Re-stating it through the same combinator
+   * keeps the reveal's fade-in and lands it at 0.8 instead of 1. */
+  /* `!important` deliberately. `.reveal-stagger` owns `opacity` on these cards
+   * — it animates 0 → 1 on reveal — and it is a global rule in another
+   * stylesheet, so the two are competing for the same property from different
+   * files. Rather than keep escalating specificity against a system that is
+   * entitled to that property, this states the intent once and lets the
+   * reveal's transition still animate, just to 0.8 instead of 1. */
+  :global(.reveal-stagger.is-visible) > .u-card {
+    opacity: 0.8 !important;
   }
 
   .u-kind {
