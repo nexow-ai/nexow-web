@@ -40,7 +40,7 @@ const items = cases?.items ?? [];
     <ul class="u-grid reveal-stagger" role="list">
       {
         items.map((item, i) => (
-          <li class="u-card" data-motion="rise" style={`--i:${i}`}>
+          <li class="u-card" data-motion="fan" style={`--i:${i}`}>
             <span class="u-kind" data-kind={item.kind}>
               {item.kind === 'bot' ? (cases?.botLabel ?? 'Bot') : (cases?.agentLabel ?? 'Agent')}
             </span>
@@ -81,8 +81,6 @@ const items = cases?.items ?? [];
     border: 1px solid var(--w-line);
     /* Dark plate over the world field so title, body, and recipe stay readable. */
     background: var(--w-panel);
-    /* Stagger the drift so the gallery breathes instead of moving as one slab. */
-    --m-shift: calc(-14px - (var(--i) % 4) * 6px);
   }
 
   .u-kind {
