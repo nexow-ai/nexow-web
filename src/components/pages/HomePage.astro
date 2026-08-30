@@ -110,20 +110,30 @@ const sections = [
     <Hero lang={lang} />
     <PlaygroundSpan lang={lang} />
     <ActConnectors lang={lang} />
-    <ActBots lang={lang} />
+    <div class="tone-invert">
+      <ActBots lang={lang} />
+    </div>
     <ActAgents lang={lang} />
-    <ActDao lang={lang} />
+    <div class="tone-invert">
+      <ActDao lang={lang} />
+    </div>
     <ActUseCases lang={lang} />
-    {/* The white band was a false floor. These scenes stay in the same room:
-        the camera dollies deeper and the copy floats as glass holds. Order is
-        still load-bearing — `WorldField` maps scene *i* to formation *i*. */}
-    <Features lang={lang} />
+    {/* Even bands are `.tone-invert`: opposite of the page theme at 50% so the
+        field still reads through. Order is load-bearing — `WorldField` maps
+        scene *i* to formation *i*. */}
+    <div class="tone-invert">
+      <Features lang={lang} />
+    </div>
     <Privacy lang={lang} />
-    <Plans lang={lang} />
+    <div class="tone-invert">
+      <Plans lang={lang} />
+    </div>
     <RewardsTeaser lang={lang} />
-    <Faq lang={lang} group="home-faq" appear />
+    <div class="tone-invert">
+      <Faq lang={lang} group="home-faq" appear />
+    </div>
     <CtaBand lang={lang} appear />
-    <div data-world-scene class="world-close">
+    <div data-world-scene class="world-close tone-invert">
       <Footer />
     </div>
   </World>

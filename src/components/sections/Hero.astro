@@ -17,8 +17,9 @@
  * shockwave through it (`nexow:world-send`), so the one interaction in the hero
  * is also the page's thesis: your words give the material a shape.
  *
- * Follows the page theme. The next band (`PlaygroundSpan`) is `.tone-invert`,
- * so dark mode opens black and flips to white, and light mode does the reverse.
+ * Follows the page theme. Every other band after this is `.tone-invert`
+ * (50% wash) through the footer, so dark mode reads black / white / black
+ * and light mode does the reverse.
  */
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -190,7 +191,7 @@ const D = {
 
   .hero__title {
     width: 100%;
-    max-width: 18ch;
+    max-width: 24ch;
     margin-inline: auto;
     font-family: var(--font-display);
     font-size: clamp(2.05rem, 0.5rem + 6.4vw, 4.5rem);
