@@ -22,7 +22,7 @@ const copy = useContent(lang).home.acts!.bots;
 const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
 ---
 
-<Act id="automate" labelledBy="act-bots-title" height="225vh">
+<Act id="automate" labelledBy="act-bots-title" height="200vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-bots-title" />
 
@@ -65,6 +65,8 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
 
 <style>
   .b-scene {
+    perspective: 900px;
+    perspective-origin: 50% 45%;
     display: grid;
     gap: 1.4rem;
   }
@@ -152,14 +154,15 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
       :global(html.js) .b-node,
       :global(html.js) .b-wire {
         opacity: var(--k, 1);
-        transform: translate3d(calc((1 - var(--k, 1)) * -1rem * var(--dir, 1)), 0, 0);
+        transform: translate3d(calc((1 - var(--k, 1)) * -2rem * var(--dir, 1)), 0, calc((1 - var(--k, 1)) * -480px))
+          rotateY(calc((1 - var(--k, 1)) * 18deg * var(--dir, 1)));
       }
 
       /* The four targets land together but not in lockstep — a short cascade
        * reads as "at the same time" far better than a single hard cut. */
       :global(html.js) .b-target {
         opacity: clamp(0, calc(var(--k, 1) * 3 - var(--i) * 0.45), 1);
-        transform: translate3d(0, calc((1 - var(--k, 1)) * 0.75rem), 0);
+        transform: translate3d(0, calc((1 - var(--k, 1)) * 1.5rem), calc((1 - var(--k, 1)) * -360px));
       }
 
       :global(html.js) .b-caption {

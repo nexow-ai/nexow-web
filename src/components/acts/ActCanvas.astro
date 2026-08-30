@@ -32,7 +32,7 @@ const TILES = [
 ];
 ---
 
-<Act id="app-showcase" labelledBy="act-canvas-title" height="240vh">
+<Act id="app-showcase" labelledBy="act-canvas-title" height="210vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-canvas-title" />
 
@@ -72,7 +72,7 @@ const TILES = [
 
 <style>
   .c-scene {
-    perspective: 1400px;
+    perspective: 900px;
     perspective-origin: 50% 40%;
   }
 
@@ -157,14 +157,14 @@ const TILES = [
   @media (prefers-reduced-motion: no-preference) {
     @media (min-width: 768px) {
       :global(html.js) .c-screen {
-        transform: rotateX(calc(var(--psc, 0) * -3deg)) rotateY(calc(var(--psc, 0) * 4deg * var(--dir, 1)))
+        transform: rotateX(calc(var(--psc, 0) * -9deg)) rotateY(calc(var(--psc, 0) * 13deg * var(--dir, 1)))
           translate3d(0, calc(var(--psc, 0) * -1rem), 0);
       }
 
       /* Tiles drop onto the screen a pair at a time. */
       :global(html.js) .c-tile {
         opacity: var(--k, 1);
-        transform: translate3d(0, calc((1 - var(--k, 1)) * 1.5rem), calc((1 - var(--k, 1)) * -160px));
+        transform: translate3d(0, calc((1 - var(--k, 1)) * 1.5rem), calc((1 - var(--k, 1)) * -620px));
       }
 
       /* Links draw last, once there is something to connect. */

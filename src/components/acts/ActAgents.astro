@@ -37,7 +37,7 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
 }));
 ---
 
-<Act id="bots-agents" labelledBy="act-agents-title" height="250vh">
+<Act id="bots-agents" labelledBy="act-agents-title" height="215vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-agents-title" />
 
@@ -74,6 +74,8 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
 
 <style>
   .a-scene {
+    perspective: 1000px;
+    perspective-origin: 50% 45%;
     display: grid;
     gap: 1.75rem;
     justify-items: center;
@@ -81,6 +83,7 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
 
   .a-ring {
     position: relative;
+    transform-style: preserve-3d;
     width: min(100%, 22rem);
     aspect-ratio: 1;
     display: grid;
@@ -164,8 +167,13 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
         transform: rotate(var(--angle)) translateY(calc(-9.25rem * var(--k, 1)));
       }
 
+      :global(html.js) .a-ring {
+        transform: rotateX(calc(18deg - var(--psc, 0) * 10deg))
+          rotateZ(calc(var(--psc, 0) * 6deg * var(--dir, 1)));
+      }
+
       :global(html.js) .a-core {
-        transform: scale(calc(0.9 + var(--k0, 1) * 0.1));
+        transform: translateZ(40px) scale(calc(0.9 + var(--k0, 1) * 0.1));
       }
 
       :global(html.js) .a-step {

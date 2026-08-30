@@ -28,7 +28,7 @@ const CELLS = [
 ];
 ---
 
-<Act id="widget" labelledBy="act-widget-title" height="235vh">
+<Act id="widget" labelledBy="act-widget-title" height="205vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-widget-title" />
 
@@ -69,7 +69,7 @@ const CELLS = [
 <style>
   .w-scene {
     position: relative;
-    perspective: 1200px;
+    perspective: 800px;
     perspective-origin: 50% 45%;
   }
 
@@ -247,14 +247,14 @@ const CELLS = [
    * ------------------------------------------------------------------ */
   @media (prefers-reduced-motion: no-preference) {
     :global(html.js) .w-depth {
-      transform: translate3d(0, calc(var(--psc, 0) * -1.5rem), 0);
+      transform: rotateY(calc(var(--psc, 0) * 7deg * var(--dir, 1))) rotateX(calc(var(--psc, 0) * -4deg)) translate3d(0, calc(var(--psc, 0) * -2rem), 0);
     }
 
     :global(html.js) .w-plane {
       /* Each plane arrives on its own beat: fade, lift and settle out of depth. */
       opacity: calc(0.12 + 0.88 * var(--k, 1));
-      transform: translate3d(0, calc((1 - var(--k, 1)) * 2.5rem), calc((1 - var(--k, 1)) * -220px))
-        rotateX(calc((1 - var(--k, 1)) * 8deg));
+      transform: translate3d(0, calc((1 - var(--k, 1)) * 2.5rem), calc((1 - var(--k, 1)) * -700px))
+        rotateX(calc((1 - var(--k, 1)) * 22deg)) rotateY(calc((1 - var(--k, 1)) * -14deg * var(--dir, 1)));
       transition: none;
     }
 
