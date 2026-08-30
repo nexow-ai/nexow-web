@@ -394,9 +394,32 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     --w-cycle: 16s;
     --w-step: 1.6s;
     --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
-    /* Dark product glass in both themes. The cool look is mint chrome on
-       ink; inverting those mixes onto white glass washes every tile into
-       pastel. Scoped here so the page copy stays on the light surface. */
+    /* Daylight playground: ink on mist, solid pigment — not a 38% wash
+       of the 400s (pastel) and not a dark island on a light page. */
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    --w-panel: #fff;
+    --w-panel-2: color-mix(in oklab, var(--color-brand-100) 50%, #fff);
+    --w-dot: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-tab: color-mix(in oklab, var(--color-ink-900) 5%, transparent);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-200) 72%, #fff);
+    --w-rail-bg: color-mix(in oklab, var(--color-brand-50) 70%, transparent);
+    --w-icon-bg: var(--color-brand-100);
+    --w-src: var(--color-brand-400);
+    --w-cell: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    --w-chrome: var(--color-brand-400);
+    --w-mood-1: var(--color-brand-200);
+    --w-mood-2: var(--color-accent-200);
+    --w-mood-3: var(--color-sky-200);
+    --w-mood-4: var(--color-brand-100);
+    --w-shadow: rgba(15, 23, 42, 0.16);
+  }
+
+  :global(.dark) .w-art {
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);
     --w-text-3: var(--color-ink-100);
@@ -417,19 +440,6 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     --w-mood-2: color-mix(in oklab, var(--color-accent-400) 52%, transparent);
     --w-mood-3: color-mix(in oklab, var(--color-sky-400) 46%, transparent);
     --w-mood-4: color-mix(in oklab, var(--color-brand-300) 28%, transparent);
-  }
-
-  :global(html:not(.dark)) .w-art {
-    --w-shadow: rgba(15, 23, 42, 0.4);
-    --w-panel: rgba(9, 12, 20, 0.96);
-  }
-
-  :global(html:not(.dark)) .w-slab {
-    background: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--color-brand-400) 44%, transparent),
-      transparent 70%
-    );
   }
 
   .w-card {
