@@ -1,6 +1,6 @@
 ---
-title: 'Widget\'larınızı bağlayın: tek yüzey, tek cümle ve Test it düğmesi'
-description: 'Bir widget\'ın bağlanabileceği her şey artık tek arama kutusunun arkasında — diğer widget\'lar, bağlantılar, bot\'lar ve agent\'lar. Kablolamayı düz dilde tarif edin ve hangi uçun kırık olduğunu bulmak için gerçek bir olay gönderin.'
+title: 'Widget''larınızı bağlayın: tek yüzey, tek cümle ve Test it düğmesi'
+description: 'Bir widget''ın bağlanabileceği her şey artık tek arama kutusunun arkasında — diğer widget''lar, bağlantılar, bot''lar ve agent''lar. Kablolamayı düz dilde tarif edin ve hangi uçun kırık olduğunu bulmak için gerçek bir olay gönderin.'
 pubDate: 2026-08-08
 heroImage: ../../../assets/blog/wires.svg
 tags: ['ürün', 'widgets', 'otomasyon']

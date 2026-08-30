@@ -1,99 +1,115 @@
 ---
-title: 'Συνδέστε τα widgets σας: tek yüzey, tek cümle ve Test it düğmesi'
-description: 'Ό,τι μπορεί να συνδεθεί σε widget ζει τώρα πίσω από ένα search box — diğer widget\'lar, bağlantılar, bot\'lar ve agent\'lar. Kablolamayı düz dilde tarif edin ve hangi uçun kırık olduğunu bulmak için gerçek bir olay gönderin.'
+title: 'Συνδέστε τα widgets σας: μία επιφάνεια, μία πρόταση και ένα κουμπί Δοκιμή'
+description: 'Ό,τι μπορεί να συνδεθεί σε ένα widget ζει πλέον πίσω από ένα πλαίσιο αναζήτησης — άλλα widgets, συνδέσεις, bots και agents. Περιγράψτε την καλωδίωση σε απλή γλώσσα και στείλτε ένα πραγματικό γεγονός για να δείτε ποιο άκρο έχει σπάσει.'
 pubDate: 2026-08-08
 heroImage: ../../../assets/blog/wires.svg
 tags: ['προϊόν', 'widgets', 'αυτοματοποίηση']
 ---
 
-**Link** iki widget arasında olay taşır: birinde sembolü değiştirin, diğeri tepki
-verir. Two-way\'i açın, her iki yönde senkron kalırlar. Ayrı karolarla dolu ekran
-ile tek enstrüman gibi davranan ekran arasındaki fark budur.
+Ένα **link** μεταφέρει γεγονότα ανάμεσα σε δύο widgets: αλλάξτε το σύμβολο στο
+ένα και το άλλο αντιδρά. Ενεργοποιήστε το Αμφίδρομο και μένουν συγχρονισμένα και
+στις δύο κατευθύνσεις. Είναι η διαφορά ανάμεσα σε μια οθόνη γεμάτη χωριστά
+πλακίδια και σε μια οθόνη που συμπεριφέρεται σαν ένα όργανο.
 
-Fikir iyiydi. Onu bulmak değildi, işe yarayıp yaramadığını bilmek de değildi.
-İkisi de bu sürümde düzeltildi.
+Η ιδέα ήταν σωστή. Το να τη βρεις δεν ήταν, ούτε το να ξέρεις αν δουλεύει. Και
+τα δύο διορθώνονται σε αυτή την έκδοση.
 
-## Tek yüzey ve «All» gerçekten hepsi demek
+## Μία επιφάνεια, και το «Όλα» σημαίνει πραγματικά όλα
 
-Seçici eskiden iki alt sekmeye bölünmüştü — *Widgets* ve *Sources* — envanterinizin
-yarısı her zaman basmanız gereken bir toggle\'ın arkasındaydı. Ekranında yalnız
-widget boş ızgara gösterirdi; bot, agent ve bağlantıların var olduğuna dair ipucu
-yoktu.
+Ο επιλογέας χωριζόταν σε δύο υποκαρτέλες — *Widgets* και *Πηγές* — οπότε η μισή
+αποθήκη σας κρυβόταν πάντα πίσω από έναν διακόπτη που έπρεπε να ξέρετε να
+πατήσετε. Ένα widget μόνο του στην οθόνη του έδειχνε άδειο πλέγμα, χωρίς
+κανέναν υπαινιγμό ότι υπάρχουν bots, agents και συνδέσεις.
 
-Artık tek arama kutusu ve her şeyin üstünde bir tür filtresi satırı: bu ekranda,
-bu workspace\'te veya başka yerde diğer widget\'lar; veri bağlantılarınız; bot\'larınız;
-agent\'larınız. **All** hepsini gösterir.
+Τώρα υπάρχει ένα πλαίσιο αναζήτησης και μία σειρά φίλτρων τύπου πάνω από τα
+πάντα: άλλα widgets σε αυτή την οθόνη, σε αυτό το workspace ή αλλού· οι
+συνδέσεις δεδομένων σας· τα bots σας· οι agents σας. Το **Όλα** τα δείχνει όλα.
 
-Sıra da değişti. **My wiring** artık gezinti yüzeyinin *üstünde*. Eskiden onlarca
-karoya uzanan seçici ızgarasının altındaydı — yönetmek için döndüğünüz liste,
-bunu devre dışı bırak, şunu kaldır — her şeyin altına kaydırmanız gerekirken, yalnızca
-yeni eklerken ihtiyaç duyduğunuz seçici her seferinde karşıladı.
+Άλλαξε και η σειρά. Η **Δική μου καλωδίωση** κάθεται πλέον *πάνω* από την
+επιφάνεια περιήγησης. Παλιά καθόταν κάτω από ένα πλέγμα επιλογέα που μπορεί να
+φτάσει δεκάδες πλακίδια, οπότε η λίστα στην οποία επιστρέφετε για να
+διαχειριστείτε — απενεργοποίηση αυτού, αφαίρεση εκείνου — ήταν αυτό που έπρεπε
+να προσπεράσετε κυλώντας τα υπόλοιπα, ενώ ο επιλογέας που χρειάζεστε μόνο όταν
+προσθέτετε κάτι νέο σας χαιρετούσε κάθε φορά.
 
-Aynı bölgede küçük dürüstlük düzeltmesi: boş durum artık bağlanacak bir şey
-olmadığını iddia etmeden önce bot ve agent store\'larının yanıt vermesini bekler,
-bu arada **Looking…** gösterir; her filtre chip\'inin kendi sayacı vardır. «Hâlâ
-yükleniyor» anlamına gelen boş ızgara, arayüzün rutin olarak söylediği bir yalandı.
+Μικρή διόρθωση ειλικρίνειας στην ίδια περιοχή: η κενή κατάσταση περιμένει πλέον
+να απαντήσουν τα stores των bots και των agents πριν ισχυριστεί ότι δεν υπάρχει
+τίποτα για καλωδίωση, δείχνοντας **Αναζήτηση…** στο μεταξύ, και κάθε chip
+φίλτρου κουβαλάει τον δικό του μετρητή. Ένα άδειο πλέγμα που σημαίνει «ακόμα
+φορτώνει» ήταν ένα ψέμα που το περιβάλλον έλεγε συχνά.
 
-## İki mekanizma, bir soru
+## Δύο μηχανισμοί, μία ερώτηση
 
-Tek seçicinin arkasında gerçekten farklı iki şey var:
+Πίσω από αυτόν τον έναν επιλογέα κάθονται δύο πραγματικά διαφορετικά πράγματα:
 
-- **Başka widget** → AI üretilmiş **glue link**. Gerçek kod, kendi sürüm geçmişi,
-  kendi gizli runtime\'ında çalışır; A\'nın emit ettiğini B\'nin beklediğine map eder.
-- **Bağlantı, bot veya agent** → hafif **attachment**; rebuild\'in bu widget\'ın
-  *kendi* koduna ne öğrettiğinin kaydı. Kademeli, otomatik değil — arka arkaya beş
-  kaynağa bakmak beş rebuild değil bir rebuild tutar.
+- **Άλλο widget** → ένα **glue link** που παράγει η ΤΝ. Πραγματικός κώδικας, με
+  δικό του ιστορικό εκδόσεων, που τρέχει στο δικό του κρυφό runtime, αντιστοιχίζοντας
+  ό,τι εκπέμπει το A σε ό,τι περιμένει το B.
+- **Σύνδεση, bot ή agent** → ένα ελαφρύ **attachment**, δηλαδή μια εγγραφή του τι
+  έμαθε ένας rebuild στον *ίδιο* τον κώδικα αυτού του widget να κάνει. Σταδιακό,
+  όχι αυτόματο, ώστε η περιήγηση σε πέντε πηγές στη σειρά να κοστίζει έναν
+  rebuild, όχι πέντε.
 
-Ne olmasını istediğinizi söylemeden hangisini istediğinizi bilmek kötü ilk sorudur.
-Links sekmesi artık bir composer ile açılır: **describe the wiring**.
+Το να ξέρετε ποιον μηχανισμό θέλετε, πριν πείτε τι θέλετε να συμβεί στην
+πράξη, είναι κακή πρώτη ερώτηση. Η καρτέλα Συνδέσεις ανοίγει πλέον με έναν
+συνθέτη: **περιγράψτε την καλωδίωση**.
 
-> *«Sync the symbol both ways with the chart.»*
-> *«When I click a row here, filter the other widget.»*
-> *«Show my price-alert bot's signals in this widget.»*
+> *«Συγχρόνισε το σύμβολο και προς τις δύο κατευθύνσεις με το γράφημα.»*
+> *«Όταν κάνω κλικ σε μια γραμμή εδώ, φιλτράρισε το άλλο widget.»*
+> *«Δείξε σε αυτό το widget τα σήματα του bot ειδοποιήσεων τιμής.»*
 
-Planner seçicinin gösterdiği aynı envanteri okur; mekanizmayı ve karşı tarafı çözer
-— «the price bot» bir id olur. **Yalnızca çözer**; asla üretmez. Pahalı streaming
-codegen her zaman çalıştığı yerde çalışır; kendi Stop düğmesi ve sürüm geçmişiyle.
+Ένας planner διαβάζει την ίδια αποθήκη που δείχνει ο επιλογέας και επιλύει και
+τον μηχανισμό και το αντίστοιχο — «το bot τιμής» γίνεται id. **Μόνο επιλύει**·
+ποτέ δεν παράγει. Το ακριβό streaming codegen συνεχίζει εκεί που πάντα, με το
+δικό του κουμπί Διακοπή και το δικό του ιστορικό εκδόσεων.
 
-Kendiniz işaret etmeyi tercih ederseniz seçici hâlâ yapar — ve artık zaten bağlı
-olduğunuzu işaretler; ikinci seçim birinciyi sessizce tekrarlamak yerine *«already
-linked»* okunur. Tekrar seçmek yinelenen satır eklemek yerine mevcut kablolamayı
-günceller; rozet rebuild ödemeden **önce** bunu söyler.
+Αν προτιμάτε να δείχνετε μόνοι σας, ο επιλογέας το κάνει ακόμα — και πλέον
+σημειώνει τι έχετε ήδη καλωδιώσει, ώστε μια δεύτερη επιλογή να διαβάζεται ως
+*«ήδη συνδεδεμένο»* αντί να επαναλαμβάνει σιωπηλά την πρώτη. Αν το επιλέξετε
+ξανά, ενημερώνει την υπάρχουσα καλωδίωση αντί να προσθέσει διπλή γραμμή, και το
+σήμα το λέει **πριν** πληρώσετε για rebuild.
 
-## «Test it»: hangi uç gerçekten kırık?
+## «Δοκιμή»: ποιο άκρο είναι πραγματικά σπασμένο;
 
-Bu sürüme kadar link yalnızca yazma içindi. Tarif ettiniz, codegen ödediniz,
-düzenleyiciden çıktınız, bir şey olup olmadığını görmek için gerçek widget\'lara
-dokundunuz. Hiçbir şey olmadığında *hangi* parçanın yanlış olduğunu söylemenin yolu
-yoktu — emit etmeyen widget, map etmeyen link, dinlemeyen diğer widget.
+Μέχρι αυτή την έκδοση ένα link ήταν μόνο εγγραφή. Το περιγράφατε, πληρώνατε το
+codegen, βγαίνατε από τον επεξεργαστή και ακουμπούσατε τα πραγματικά widgets για
+να δείτε αν συνέβη κάτι. Όταν δεν συνέβαινε, δεν υπήρχε τρόπος να πείτε *ποιο*
+μέρος έφταιγε — το widget που δεν εξέπεμπε, το link που δεν αντιστοιχούσε, ή το
+άλλο widget που δεν άκουγε.
 
-Düzenleyicide artık **Test it** çubuğu var. Topic ve değer seçin, hangi uçun emit
-ediyormuş gibi davranacağını seçin (yalnızca two-way link\'te sunulur — one-way
-uzak taraftan her zaman hiçbir şey bildirir), gönderin. Olay link\'in gerçek runtime\'ına
-girer, üretilmiş `connect(ctx)`\'i çalıştırır — simülasyon değil — karar her boş
-kalma biçimini ayırır:
+Ο επεξεργαστής έχει πλέον μια μπάρα **Δοκιμή**. Διαλέξτε θέμα και τιμή, διαλέξτε
+ποιο άκρο προσποιείται ότι εκπέμπει (προσφέρεται μόνο σε αμφίδρομο link, γιατί
+ένα μονόδρομο θα ανέφερε πάντα τίποτα από την απέναντι πλευρά), και στείλτε. Το
+γεγονός μπαίνει στο πραγματικό runtime του link και εκτελεί το παραγόμενο
+`connect(ctx)` — όχι μια προσομοίωσή του — και η ετυμηγορία διακρίνει κάθε τρόπο
+με τον οποίο μπορεί να μείνει άδειο:
 
-- **This link isn't running.** Açın — veya henüz kod yok.
-- **It ran but forwarded nothing for that topic.** Mapping yanlış; Logs sekmesinde
-  ayrıntı.
-- **Sent "symbol" on to Chart.** Çalışıyor.
-- **Forwarded, but that widget isn't on screen to receive it.** Bug değil — diğer
-  uç başka ekranda.
+- **Αυτό το link δεν τρέχει.** Ενεργοποιήστε το — ή δεν έχει ακόμα κώδικα.
+- **Έτρεξε αλλά δεν προώθησε τίποτα για αυτό το θέμα.** Η αντιστοίχιση είναι
+  λάθος· η καρτέλα Logs έχει τη λεπτομέρεια.
+- **Στάλθηκε το «symbol» στο Chart.** Δουλεύει.
+- **Προωθήθηκε, αλλά εκείνο το widget δεν είναι στην οθόνη για να το λάβει.** Δεν
+  είναι σφάλμα — το άλλο άκρο είναι σε άλλη οθόνη.
 
-Test sizi başka yere atmak yerine listede kalır; kaydedici yalnızca çubuk ekrandayken
-silahlanır — tick akışı ileten link enstrümantasyon için ödeme yapmaz.
+Η δοκιμή μένει στη λίστα αντί να σας πετάξει αλλού, και ο καταγραφέας οπλίζεται
+μόνο όσο η μπάρα είναι στην οθόνη, ώστε ένα link που προωθεί ροή ticks να μην
+πληρώνει την εργαλειοποίηση.
 
-## Sessiz olanlar
+## Τα ήσυχα
 
-Two-way link\'ler yardım olmadan sonsuza echo eder; teslim edilen değer hatırlanır,
-özdeş geri sekme bir kez düşürülür — kanonik A↔B ayna döngüsü kırılır, gerçekten
-yeni değer geçer. Link\'ler ve attachment\'lar tek bir sekmede yaşamak yerine
-sekmeler ve cihazlar arasında çoğalır; başka yerde silmek düzenleyicide **gone**
-durumu gösterir, hiçbir şeye kaydetmenize izin vermez. Rebuild başarısız olursa
-söyler ve Builder sekmesini gösterir; cevap olması gereken yerde spinner bırakmaz.
+Τα αμφίδρομα links θα αντηχούσαν για πάντα χωρίς βοήθεια, οπότε μια παραδομένη
+τιμή θυμάται και το ίδιο αναπήδημα απορρίπτεται μία φορά — ο κανονικός καθρέφτης
+A↔B σπάει, ενώ μια πραγματικά νέα τιμή περνάει. Links και attachments
+αντιγράφονται στις καρτέλες και τις συσκευές σας αντί να ζουν σε μία από αυτές,
+οπότε η διαγραφή αλλού εμφανίζει πλέον κατάσταση **gone** στον επεξεργαστή αντί
+να σας αφήνει να αποθηκεύσετε στο κενό. Και όταν ένας rebuild αποτύχει, το λέει
+και δείχνει την καρτέλα Builder, αντί να αφήνει έναν spinner εκεί που έπρεπε να
+υπάρχει απάντηση.
 
-Bir değişiklik daha yolda: uygulama insanların zaten kullandığı kelimenin etrafında
-yeniden adlandırılıyor. *Link* **wire** oluyor; *My wiring* tam olduğu yerde kalıyor.
+Ακόμα μία αλλαγή έρχεται: η εφαρμογή μετονομάζεται γύρω από τη λέξη που ήδη
+χρησιμοποιεί ο κόσμος. Το *Link* γίνεται **wire**, και η **Δική μου καλωδίωση**
+μένει ακριβώς εκεί που είναι.
 
-[Ξεκινήστε το Nexow](https://x.nexow.ai), herhangi bir widget\'ın Links sekmesini
-açın ve tıkladığınızda ne olması gerektiğini tarif edin. Sonra ayrılmadan önce test edin.
+[Εκκινήστε το Nexow](https://x.nexow.ai), ανοίξτε την καρτέλα Συνδέσεις οποιουδήποτε
+widget και περιγράψτε τι πρέπει να συμβεί όταν κάνετε κλικ σε κάτι. Μετά
+δοκιμάστε το πριν φύγετε.

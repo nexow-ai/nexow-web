@@ -5,6 +5,7 @@ pubDate: 2026-08-08
 heroImage: ../../../assets/blog/verify.svg
 tags: ['제품', 'ai', '작동-방식']
 ---
+
 생성 위젯이 실패하는 가장 흔한 방법은 생성 코드의 bug가
 아니었습니다. 존재하지 않던 endpoint였습니다.
 
@@ -87,23 +88,28 @@ runtime host는 fresh build crash 시 **auto fix turn
   ineligible. build당 auto follow-up 최대 one.
 
 Repair turn은 app defect report wording, data endpoint
-면 probe before rewrite. fix, keep works, scope don't
-grow.
+failure면 rewrite 전 probe. fix, keep what works, widget
+scope don't grow.
 
-Server: rescued background build는 same widget live
-turn 있으면 wait, duplicate version race 대신.
+Server: rescued background build는 same widget의 another
+turn이 이미 live면 wait — duplicate version race 대신.
 
-## Same loop, every mode
+## 모든 mode, 같은 loop
 
-Shared module — platform builds, browser BYOK, server
-build sweep **identical**: same tools, probe format,
-verifier, repair budget. [열 개 예제
-위젯](/blog/starter-widgets-examples-workspace)도
-이 loop, 이 checks.
+Shared module — platform builds, browser bring-your-own-key
+builds, server-side build sweep **identical** behaviour:
+same tools, probe formatting, verifier, repair budget.
+modes는 tools 존재 여부나 widget check strictness diverge
+불가 — answer implementation 하나뿐. [열 개 예제
+위젯](/blog/starter-widgets-examples-workspace)도 next
+release와 함께 — exactly this loop, exactly these checks로
+built.
 
-Model correct 안 만듦. wrong survivable, usually
-invisible: endpoint check before depend, check runs
-anyway, first crash one honest fix before you.
+Model correct 안 만듦. wrong survivable, usually invisible:
+endpoint는 code가 depend하기 전 check, check는 model
+feel 여부와 무관하게 runs, first crash는 you에게 도달
+전 one honest fix attempt.
 
 [Nexow 실행](https://x.nexow.ai) obscure — 조석, 공기질,
-공휴일. activity rail parsing 전 probe.
+공휴일. activity rail이 parsing code 한 줄 쓰기 전
+endpoint probe하는 걸 watch.

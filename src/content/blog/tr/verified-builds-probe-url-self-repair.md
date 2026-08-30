@@ -1,6 +1,6 @@
 ---
-title: 'Kendi tesisatını kontrol eden widget\'lar: probe_url, bir verifier agent ve bir ücretsiz onarım'
-description: 'Ölü widget\'ların en büyük kaynağı hayali bir API\'ye yazılmış koddur. Artık builder yazarken endpoint\'i çeker, verifier atladıklarını yeniden probe eder ve ilk 45 saniyedeki crash bir otomatik düzeltme satın alır.'
+title: 'Kendi tesisatını kontrol eden widget''lar: probe_url, bir verifier agent ve bir ücretsiz onarım'
+description: 'Ölü widget''ların en büyük kaynağı hayali bir API''ye yazılmış koddur. Artık builder yazarken endpoint''i çeker, verifier atladıklarını yeniden probe eder ve ilk 45 saniyedeki crash bir otomatik düzeltme satın alır.'
 pubDate: 2026-08-08
 heroImage: ../../../assets/blog/verify.svg
 tags: ['ürün', 'yapay zeka', 'nasıl çalışır']

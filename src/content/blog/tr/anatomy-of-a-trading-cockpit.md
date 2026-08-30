@@ -1,6 +1,6 @@
 ---
-title: 'Bir trading cockpit\'in anatomisi: bir ekran, sekiz widget ve her birini ne besliyor'
-description: 'Referans masa karo karo sökülmüş — her widget nedir, hangi bağlantı besliyor, hangi kablolar bir arada tutuyor ve sekme kapalıyken ne çalışmaya devam ediyor. Release note\'dan çok harita.'
+title: 'Bir trading cockpit''in anatomisi: bir ekran, sekiz widget ve her birini ne besliyor'
+description: 'Referans masa karo karo sökülmüş — her widget nedir, hangi bağlantı besliyor, hangi kablolar bir arada tutuyor ve sekme kapalıyken ne çalışmaya devam ediyor. Release note''dan çok harita.'
 pubDate: 2026-08-09
 heroImage: ../../../assets/blog/cockpit-teardown.svg
 tags: ['söküm', 'çalışma alanı', 'kripto']

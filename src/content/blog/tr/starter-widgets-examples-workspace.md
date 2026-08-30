@@ -1,6 +1,6 @@
 ---
 title: 'On örnek widget artık Nexow ile geliyor — konuşma dahil'
-description: 'Yeni hesap artık boş tuvalde açılmıyor. On bitmiş widget Örnekler workspace\'i olarak geliyor; her biri onu kuran gerçek sohbeti ve gerçek sürüm geçmişini taşıyor — sizin kullandığınız codegen döngüsüyle, hiçbir şey bağlı değilken üretilmiş.'
+description: 'Yeni hesap artık boş tuvalde açılmıyor. On bitmiş widget Örnekler workspace''i olarak geliyor; her biri onu kuran gerçek sohbeti ve gerçek sürüm geçmişini taşıyor — sizin kullandığınız codegen döngüsüyle, hiçbir şey bağlı değilken üretilmiş.'
 pubDate: 2026-08-09
 heroImage: ../../../assets/blog/starters.svg
 tags: ['ürün', 'onboarding', 'widgets']
