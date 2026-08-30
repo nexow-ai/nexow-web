@@ -185,7 +185,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
      * well clear of the shell: a label crossing the sphere is unreadable. */
     --gr: calc(var(--orb) * 0.23);
     --r: calc(var(--orb) * 0.42);
-    --ri: calc(var(--orb) * 0.17);
+    --ri: calc(var(--orb) * 0.185);
     /* Inclination of the two orbital planes. Shallow for the harness (depth
      * reads as scale), steep for the loop (it should read as a circle). */
     --tilt: 24deg;
@@ -353,20 +353,20 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
    *   little perspective scale for free. */
   .a-core {
     position: relative;
-    width: calc(var(--orb) * 0.24);
-    height: calc(var(--orb) * 0.24);
+    width: calc(var(--orb) * 0.19);
+    height: calc(var(--orb) * 0.19);
     display: grid;
     place-items: center;
-    transform: translateZ(calc(var(--gr) * 0.95));
+    transform: translateZ(calc(var(--gr) * 0.8));
   }
 
   .a-core-glow {
     position: absolute;
-    inset: -60%;
+    inset: -55%;
     border-radius: 50%;
     background: radial-gradient(
       circle,
-      color-mix(in oklab, var(--color-brand-400) 42%, transparent),
+      color-mix(in oklab, var(--color-brand-400) 38%, transparent),
       transparent 58%
     );
     animation: a-breathe 4.8s ease-in-out infinite;
@@ -623,7 +623,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
 
       /* The core comes up first: nothing else means anything without it. */
       :global(html.js) .a-core {
-        transform: translateZ(calc(var(--gr) * 0.95)) scale(calc(0.86 + var(--k0, 1) * 0.14));
+        transform: translateZ(calc(var(--gr) * 0.8)) scale(calc(0.86 + var(--k0, 1) * 0.14));
       }
     }
   }
