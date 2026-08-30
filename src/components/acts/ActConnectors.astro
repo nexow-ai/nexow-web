@@ -175,10 +175,14 @@ const GROUPS: {
   .k-group-label {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.14em;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.25;
     text-transform: uppercase;
-    color: var(--w-accent);
+    /* Accent pulled toward the primary text token so the label stays teal
+       but clears AA on both the light stage and the dark one. */
+    color: color-mix(in oklab, var(--w-accent) 40%, var(--w-text));
   }
 
   .k-row {
