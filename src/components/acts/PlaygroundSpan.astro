@@ -7,8 +7,8 @@
  * Below 768px the pin sits in flow between the two copy blocks and scales to
  * the screen. A phone has no room to hold the mock beside the copy.
  *
- * `.tone-invert` is the first opposite band. Later even bands keep the same
- * flip through the footer. The solid ground sits behind the field.
+ * Act 01 wears `.tone-invert`; act 02 does not. The pin sits above both
+ * boxes so the same mock can flip with whichever act is on the lens.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -23,7 +23,7 @@ const { lang } = Astro.props;
 const prompt = useContent(lang).home.hero.promptExample;
 ---
 
-<div class="pg-span tone-invert">
+<div class="pg-span">
   <div class="pg-pin">
     <div class="container-page pg-pin__in">
       <div class="pg-pin__grid">

@@ -2164,9 +2164,9 @@
     const scenes = Array.from(world.querySelectorAll<HTMLElement>('[data-world-scene]'));
     if (!scenes.length) return null;
 
-    /** The opposite-tone sections, in order. `World` paints the ground for these. */
-    const bands = Array.from(
-      world.querySelectorAll<HTMLElement>('.world__content > .tone-invert'),
+    /** Opposite-tone scenes. `World` paints a solid box under each of these. */
+    const bands = scenes.filter(
+      (el) => el.classList.contains('tone-invert') || !!el.closest('.tone-invert'),
     );
 
     let gl: WebGLRenderingContext | null = null;
@@ -2777,7 +2777,11 @@
       /* Fog and glass snap to the box under the lens: pale screens on a
        * white box, dark screens on a black one. Last, so a `world--day`
        * repaint earlier in the frame cannot leave the page tone behind. */
-      applyGround(scenes[a]?.closest('.tone-invert') ? 1 : 0);
+      const invert = !!(
+        scenes[a]?.classList.contains('tone-invert') || scenes[a]?.closest('.tone-invert')
+      );
+      applyGround(invert ? 1 : 0);
+      world.querySelector('.pg-pin')?.classList.toggle('tone-invert', invert);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2907,6 +2911,7 @@
       if (ground === stillGround) return;
       stillGround = ground;
       applyGround(ground);
+      world.querySelector('.pg-pin')?.classList.toggle('tone-invert', ground === 1);
       drawStill();
     }
 

@@ -109,8 +109,11 @@ import WorldField from './WorldField.astro';
     const bands = world?.querySelector('.world__bands');
     if (!(world instanceof HTMLElement)) return;
     if (!(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
-    const kids = Array.from(content.children).filter(
-      (el): el is HTMLElement => el instanceof HTMLElement && el.offsetHeight > 0,
+    /* One box per world scene, not per content wrapper: acts 01 and 02 live
+     * in the same span so the mock can pin across both, but they are still
+     * opposite tones. */
+    const kids = Array.from(world.querySelectorAll<HTMLElement>('[data-world-scene]')).filter(
+      (el) => el.offsetHeight > 0,
     );
     while (bands.children.length < kids.length) {
       bands.appendChild(document.createElement('div'));
@@ -120,9 +123,8 @@ import WorldField from './WorldField.astro';
     kids.forEach((kid, i) => {
       const rect = kid.getBoundingClientRect();
       const band = bands.children[i] as HTMLElement;
-      band.className = kid.classList.contains('tone-invert')
-        ? 'world__band world__band--invert'
-        : 'world__band';
+      const invert = kid.classList.contains('tone-invert') || !!kid.closest('.tone-invert');
+      band.className = invert ? 'world__band world__band--invert' : 'world__band';
       band.style.top = `${Math.round(rect.top + window.scrollY - worldTop)}px`;
       band.style.height = `${Math.round(rect.height)}px`;
     });
@@ -145,7 +147,7 @@ import WorldField from './WorldField.astro';
     if (content) {
       bandRo = new ResizeObserver(syncBands);
       bandRo.observe(content);
-      for (const kid of content.children) bandRo.observe(kid);
+      for (const kid of content.querySelectorAll('[data-world-scene]')) bandRo.observe(kid);
     }
     window.addEventListener('resize', syncBands, { passive: true });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
