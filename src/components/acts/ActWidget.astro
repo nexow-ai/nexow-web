@@ -184,7 +184,9 @@ const GAME = [1, 8, 12, 4, 6, 13];
                 <p xmlns="http://www.w3.org/1999/xhtml" class="w-prompt">{prompt}</p>
               </foreignObject>
             </g>
-            <rect class="w-caret" x="180" y="86" width="2" height="18" rx="1" fill="var(--color-brand-400)"></rect>
+            <g class="w-caret">
+              <rect class="w-caret-bar" x="180" y="86" width="2" height="18" rx="1" fill="var(--color-brand-400)"></rect>
+            </g>
           </g>
 
           <g class="w-source">
@@ -289,18 +291,45 @@ const GAME = [1, 8, 12, 4, 6, 13];
     height: auto;
     border-radius: 1.25rem;
     filter: drop-shadow(0 28px 60px var(--w-shadow));
-    --w-dot: color-mix(in oklab, var(--w-text) 14%, transparent);
-    --w-tab: color-mix(in oklab, var(--w-text) 6%, transparent);
-    --w-tab-on: color-mix(in oklab, var(--color-brand-400) 28%, transparent);
-    --w-rail-bg: color-mix(in oklab, var(--w-text) 3%, transparent);
-    --w-icon-bg: color-mix(in oklab, var(--color-brand-400) 18%, transparent);
+    --w-cycle: 12s;
+    --w-step: 1.6s;
+    --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    /* Dark product glass in both themes. The cool look is mint chrome on
+       ink; inverting those mixes onto white glass washes every tile into
+       pastel. Scoped here so the page copy stays on the light surface. */
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-panel: rgba(9, 12, 20, 0.94);
+    --w-panel-2: rgba(255, 255, 255, 0.05);
+    --w-dot: rgba(255, 255, 255, 0.14);
+    --w-tab: rgba(255, 255, 255, 0.06);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-400) 32%, transparent);
+    --w-rail-bg: rgba(255, 255, 255, 0.035);
+    --w-icon-bg: color-mix(in oklab, var(--color-brand-400) 22%, transparent);
     --w-src: color-mix(in oklab, var(--color-brand-400) 45%, var(--color-accent-500));
-    --w-cell: color-mix(in oklab, var(--w-text) 8%, transparent);
-    --w-chrome: color-mix(in oklab, var(--color-brand-400) 55%, var(--w-line));
-    --w-mood-1: color-mix(in oklab, var(--color-brand-400) 38%, transparent);
-    --w-mood-2: color-mix(in oklab, var(--color-accent-400) 42%, transparent);
-    --w-mood-3: color-mix(in oklab, var(--color-sky-400) 36%, transparent);
-    --w-mood-4: color-mix(in oklab, var(--color-brand-300) 22%, transparent);
+    --w-cell: rgba(255, 255, 255, 0.08);
+    --w-chrome: color-mix(in oklab, var(--color-brand-400) 70%, rgba(255, 255, 255, 0.16));
+    --w-mood-1: color-mix(in oklab, var(--color-brand-400) 48%, transparent);
+    --w-mood-2: color-mix(in oklab, var(--color-accent-400) 52%, transparent);
+    --w-mood-3: color-mix(in oklab, var(--color-sky-400) 46%, transparent);
+    --w-mood-4: color-mix(in oklab, var(--color-brand-300) 28%, transparent);
+  }
+
+  :global(html:not(.dark)) .w-art {
+    --w-shadow: rgba(15, 23, 42, 0.4);
+    --w-panel: rgba(9, 12, 20, 0.96);
+  }
+
+  :global(html:not(.dark)) .w-slab {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-brand-400) 44%, transparent),
+      transparent 70%
+    );
   }
 
   .w-card {
@@ -357,53 +386,110 @@ const GAME = [1, 8, 12, 4, 6, 13];
     color: var(--w-text-3);
   }
 
-  .w-type-mask {
+  .w-type-mask,
+  .w-caret,
+  .w-widget,
+  .w-source,
+  .w-tab-loop,
+  .w-ws-loop,
+  .w-glow,
+  .w-spark {
     transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .w-type-mask {
     transform-origin: left center;
-    transform: scaleX(var(--k0, 1));
   }
 
   .w-caret {
-    transform-box: fill-box;
     transform-origin: left center;
-    transform: translateX(calc(var(--k0, 1) * 360px));
   }
 
-  /* Writing bars only exist during the second beat — the finished playground
-     does not keep a "generating" strip under the widgets. */
-  .w-source {
-    opacity: 0;
-  }
-
-  /* ------------------------------------------------------------------ *
-   * Motion. The at-rest SVG above is the finished playground — that is
-   * what a reduced-motion visitor, a crawler, and a no-JS browser get.
-   * ------------------------------------------------------------------ */
+  /* At rest — finished playground. The loop below only runs when motion is allowed. */
   @media (prefers-reduced-motion: no-preference) {
-    :global(html.js) .w-art {
-      transform: rotateY(calc(var(--psc, 0) * 8deg * var(--dir, 1))) rotateX(calc(var(--psc, 0) * -5deg))
-        translate3d(0, calc(var(--psc, 0) * -1.4rem), 0);
-      transform-origin: 50% 55%;
+    .w-type-mask {
+      animation: w-type var(--w-cycle) steps(22, end) infinite;
     }
 
-    :global(html.js) .w-plane {
-      opacity: var(--k, 1);
-      transform: translate3d(0, calc((1 - var(--k, 1)) * 18px), calc((1 - var(--k, 1)) * -420px));
+    .w-caret {
+      animation: w-caret-move var(--w-cycle) steps(22, end) infinite;
     }
 
-    :global(html.js) .w-source {
+    .w-caret-bar {
+      animation: w-blink 0.9s steps(2, start) infinite;
+    }
+
+    .w-source {
+      animation: w-source var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-src-bar {
+      transform-box: fill-box;
+      transform-origin: left center;
+      animation: w-src-bar var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.08s);
+    }
+
+    .w-widget {
+      animation: w-widget var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.18s);
+    }
+
+    .w-tab-loop {
+      animation: w-tab-life calc(var(--w-step) * 6) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-step));
+    }
+
+    .w-ws-loop {
+      animation: w-ws-life calc(var(--w-step) * 6) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-step) + var(--w-step) / 2);
+    }
+
+    .w-add {
+      animation: w-add-flash var(--w-step) ease-out infinite;
+    }
+
+    .w-glow {
+      animation: w-glow var(--w-cycle) ease-in-out infinite;
+    }
+
+    .w-spark {
+      animation: w-spark 2.4s ease-in-out infinite;
+    }
+  }
+
+  /* Type 0–22%, hold through the widgets, wipe 90–100%. */
+  @keyframes w-type {
+    0% {
+      transform: scaleX(0.02);
+    }
+    22%,
+    88% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(0.02);
+    }
+  }
+
+  @keyframes w-caret-move {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    22% {
+      transform: translateX(360px);
+      opacity: 1;
+    }
+    24%,
+    88% {
+      transform: translateX(360px);
       opacity: 0;
     }
-
-    @media (min-width: 768px) {
-      :global(html.js) .w-source {
-        opacity: calc(var(--k1, 1) * (1 - var(--k2, 0)));
-      }
-    }
-
-    :global(html.js) .w-caret {
-      opacity: calc(1 - var(--k1, 0));
-      animation: w-blink 0.9s steps(2, start) infinite;
+    100% {
+      transform: translateX(0);
+      opacity: 1;
     }
   }
 
@@ -413,9 +499,141 @@ const GAME = [1, 8, 12, 4, 6, 13];
     }
   }
 
+  /* Generating sits between the typed prompt and the widgets. */
+  @keyframes w-source {
+    0%,
+    20% {
+      opacity: 0;
+    }
+    24%,
+    34% {
+      opacity: 1;
+    }
+    40%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-src-bar {
+    0%,
+    22% {
+      transform: scaleX(0.08);
+    }
+    28%,
+    36% {
+      transform: scaleX(1);
+    }
+    42%,
+    100% {
+      transform: scaleX(0.08);
+    }
+  }
+
+  @keyframes w-widget {
+    0%,
+    34% {
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+    }
+    42%,
+    88% {
+      opacity: 1;
+      transform: none;
+    }
+    96%,
+    100% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  @keyframes w-tab-life {
+    0% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    8%,
+    70% {
+      opacity: 1;
+      transform: none;
+    }
+    80%,
+    100% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  @keyframes w-ws-life {
+    0% {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    6%,
+    24% {
+      opacity: 1;
+      transform: none;
+    }
+    30%,
+    100% {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+  }
+
+  @keyframes w-add-flash {
+    0% {
+      opacity: 1;
+    }
+    28%,
+    100% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes w-glow {
+    0%,
+    18% {
+      opacity: 0.35;
+    }
+    28%,
+    70% {
+      opacity: 1;
+    }
+    90%,
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes w-spark {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .w-caret {
-      animation: none;
+    .w-type-mask,
+    .w-caret,
+    .w-caret-bar,
+    .w-source,
+    .w-src-bar,
+    .w-widget,
+    .w-tab-loop,
+    .w-ws-loop,
+    .w-add,
+    .w-glow,
+    .w-spark {
+      animation: none !important;
+    }
+
+    .w-source {
+      opacity: 0;
     }
   }
 </style>
