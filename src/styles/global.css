@@ -925,6 +925,7 @@ html.is-theme-transition [data-astro-transition-scope] {
  *   rise / sink      drift against the scroll        (--pc)
  *   slide-l/-r       the same, horizontally          (--pc)
  *   lead / lag       two-up columns drift apart      (--pc)
+ *   fan              a grid of cards, each deeper    (--pc, --i)
  *   breathe          expand mid-screen, contract     (--pb)
  *   tilt / turn      lean in 3D as it travels        (--pc)
  *   depth            push away from the camera       (--pb)
@@ -965,6 +966,26 @@ html.is-theme-transition [data-astro-transition-scope] {
   @media (min-width: 64rem) {
     .js [data-motion~='lead'] { --m-shift: -56px; }
     .js [data-motion~='lag'] { --m-shift: 56px; }
+  }
+
+  /* A grid of cards: each one travels further than the card before it, so the
+   * row rakes as it passes instead of arriving as one plate. The call site sets
+   * `--i` to the card's index; `mod` wraps it every fourth card so a long
+   * gallery keeps raking row after row rather than building one runaway offset.
+   * (`%` is not a calc operator — written that way it silently invalidates the
+   * whole composed transform, which is exactly how the use-case grid lost its
+   * drift.) Top of the range matches `rise-lg`, still inside a section's own
+   * vertical padding. */
+  .js [data-motion~='fan'] { --m-shift: calc(-16px - mod(var(--i, 0), 4) * 16px); }
+
+  /* Cards on a 3D stage own their transform already (the pointer lean below),
+   * so they cannot also be the element the scroll writes to. This is the
+   * wrapper that drifts on their behalf: translate only, and `preserve-3d` so
+   * the card inside keeps the stage's shared camera instead of being flattened
+   * into its own. */
+  .js .card-drift[data-motion] {
+    transform: translate3d(0, calc(var(--pc, 0) * var(--m-shift, 0px)), 0);
+    transform-style: preserve-3d;
   }
 
   .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
