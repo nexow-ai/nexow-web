@@ -61,10 +61,18 @@
    * density. The panels come in four sizes now (see `sz` in the vertex
    * shader), and a crowd this varied only reads as a mosaic if there is space
    * between the pieces — at 260 the big ones had nowhere to sit and the whole
-   * thing went back to being a texture. The size spread costs less fill than
-   * the instances it replaces, so this is also the cheaper field. */
-  const COUNT_WIDE = 160;
-  const COUNT_NARROW = 80;
+   * thing went back to being a texture.
+   *
+   * Down again, from 160. A screen is only a screen if you can see what is on
+   * it: at 160 the frame held more panels than it had room to draw them in,
+   * every one of them a little smaller than the last needed to be, and the
+   * wall read as a texture of half-legible chrome. What this buys is spent
+   * twice over — on the resolution they are drawn at (`resize`, which now
+   * renders at the display's own pixel ratio rather than three quarters of it)
+   * and on the size they are drawn at (`tiered`, below). Fewer, bigger,
+   * sharper: the same field, at a size it can actually be read at. */
+  const COUNT_WIDE = 96;
+  const COUNT_NARROW = 56;
 
   /* How present the screens are against the backdrop. Blending stays off —
    * screens occlude one another, and a see-through field of them reads as
@@ -323,10 +331,12 @@
          slightly different size, which is not a mosaic — it is the same crowd
          with noise on it. Four discrete steps in a geometric run read as a
          wall of real screens: phones, panels, displays, boards. The roll is
-         squared before it is quantised, so half the field takes the smallest
-         size and the biggest is the rare one that anchors a corner.
+         weighted before it is quantised, so the smallest size is still the
+         commonest and the biggest still the rare one that anchors a corner —
+         though less lopsidedly than the square it was, now that there are
+         fewer screens in the frame for each of them to carry.
          Its own hash, not aSeed, which already owns the fly-by and the tone. */
-      float tier = floor(pow(hash3(aId + 57.3).x, 2.0) * 3.999);
+      float tier = floor(pow(hash3(aId + 57.3).x, 1.9) * 3.999);
       float grade = tier / 3.0;
 
       /* Stagger the morph per instance so the change reads as matter flowing
@@ -426,8 +436,10 @@
          scale is what varies here, and every screen keeps the same shape. */
       /* The four sizes, a geometric run so each step is visibly a different
          class of screen and not a rounding error. The floor is where a chart
-         drawn inside the panel is still a chart rather than noise. */
-      float tiered = 0.68 * pow(1.50, tier);
+         drawn inside the panel is still a chart rather than noise — which is
+         why it went up with the count coming down: the smallest tier is half
+         the field, and at 0.68 it was under that floor for most of the page. */
+      float tiered = 0.72 * pow(1.50, tier);
       /* Pulled toward one size in the hero. Four size classes are what make the
          acts read as a mosaic, but around a ring they read as debris: a bank of
          screens is a set of like objects, and the circle only traces if the
@@ -488,7 +500,7 @@
 
          Still offset by the formation, so each act keeps its own bias in the
          mix — connectors leaning to market and data screens, bots to alerts. */
-      float dwell = 4.0 + ho.x * 5.0;
+      float dwell = 7.0 + ho.x * 7.0;
       float phase = (uTime + aSeed * 41.0) / dwell;
       float slot = mod(floor(phase), 61.0);
       vKind = fract(hash3(aId * 0.37 + slot * 2.71).z + uFormA * 0.17);
@@ -2272,17 +2284,30 @@
     let shiftFull = 0;
 
     /* Adaptive resolution. The backing store starts at full scale and drops
-     * (to a floor of 0.6) while the loop runs under ~42fps, climbing back once
-     * it is comfortable again. The cadence measured is requestAnimationFrame
-     * itself, which is what the visitor feels; a GPU-bound page recovers from
-     * a smaller store, and a CPU-bound one is not hurt by it. */
+     * while the loop runs under ~42fps, climbing back once it is comfortable
+     * again. The cadence measured is requestAnimationFrame itself, which is
+     * what the visitor feels; a GPU-bound page recovers from a smaller store,
+     * and a CPU-bound one is not hurt by it.
+     *
+     * The floor is 0.75, not the 0.6 it was, and it is a floor under a ceiling
+     * that went up: the worst this can now look on a 2× display is the 1.5
+     * backing store that used to be its best. Below that the panels stop being
+     * panels — their borders are hard lit edges and their contents hairline
+     * chrome, and neither survives being drawn at half size and stretched. A
+     * field that has to give something up should give up a screen, not the
+     * sharpness of all of them, which is what the count above is for. */
     let renderScale = 1;
     let frameEma = 1 / 60;
     let lastGovern = 0;
     let lastUpscale = 0;
 
     function resize() {
-      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5) * RENDER_SCALE * renderScale;
+      /* The display's own pixel ratio, not a fraction of it. Capped at 2 —
+       * past that the panels are already beyond what the eye resolves and it
+       * is only fill rate — but never below it on the 2× screens most of this
+       * is read on, where the old 1.5 cap drew every border a quarter soft and
+       * then upscaled it. */
+      dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2) * RENDER_SCALE * renderScale;
       const w = window.innerWidth;
       const h = window.innerHeight;
       canvas!.width = Math.floor(w * dpr);
@@ -2361,8 +2386,8 @@
         frameEma += (rawDt - frameEma) * 0.1;
         if (now - lastGovern > 1000) {
           lastGovern = now;
-          if (frameEma > 1 / 42 && renderScale > 0.6) {
-            renderScale = Math.max(0.6, renderScale - 0.15);
+          if (frameEma > 1 / 42 && renderScale > 0.75) {
+            renderScale = Math.max(0.75, renderScale - 0.05);
             resize();
           } else if (frameEma < 1 / 57 && renderScale < 1 && now - lastUpscale > 4000) {
             renderScale = Math.min(1, renderScale + 0.1);
