@@ -424,11 +424,11 @@ html:not(.dark) .tone-invert {
   /* Home world owns the page through the footer — don't flash the marketing
    * white under a transparent canvas at the bottom of the document. */
   html[data-world] body {
-    background-color: #ffffff !important;
+    background-color: #f6f8fb !important;
   }
 
   html[data-world].dark body {
-    background-color: #000000;
+    background-color: var(--color-ink-950);
   }
 
   /*

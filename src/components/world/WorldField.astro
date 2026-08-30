@@ -2164,6 +2164,11 @@
     const scenes = Array.from(world.querySelectorAll<HTMLElement>('[data-world-scene]'));
     if (!scenes.length) return null;
 
+    /** The opposite-tone sections, in order. `World` paints the ground for these. */
+    const bands = Array.from(
+      world.querySelectorAll<HTMLElement>('.world__content > .tone-invert'),
+    );
+
     let gl: WebGLRenderingContext | null = null;
     try {
       gl = canvas.getContext('webgl', {
@@ -2470,27 +2475,77 @@
     probe.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
     root.appendChild(probe);
 
+    /* A second probe wearing `tone-invert`, so the opposite-tone bands' own
+     * surface is read from the stylesheet rather than restated here. */
+    const probeInvert = document.createElement('span');
+    probeInvert.className = 'tone-invert';
+    probeInvert.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
+    root.appendChild(probeInvert);
+
+    /** The two grounds the story alternates between, and the ramp between them. */
+    let pageFog: [number, number, number] = [0, 0, 0];
+    let invertFog: [number, number, number] = [0, 0, 0];
+    let pageLight = 0;
+    let invertLight = 1;
+    let bandFade = 180;
+    const groundFog: [number, number, number] = [0, 0, 0];
+
+    /** Accent family follows the ground, not the page: 600s on light, 400s on ink. */
+    let palDark: boolean | null = null;
+    function usePalette(dark: boolean) {
+      if (palDark === dark) return;
+      palDark = dark;
+      const pal = dark ? WAY_RGB400 : WAY_RGB600;
+      for (let i = 0; i < WAY_COUNT; i++) {
+        ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), pal[i]);
+      }
+    }
+
+    /** `t` is 0 on the page's own tone, 1 deep inside an opposite-tone band. */
+    function applyGround(t: number) {
+      for (let i = 0; i < 3; i++) {
+        groundFog[i] = pageFog[i] + (invertFog[i] - pageFog[i]) * t;
+      }
+      coreLight = pageLight + (invertLight - pageLight) * t;
+      coreFog = groundFog;
+      ctx.useProgram(prog);
+      ctx.uniform3fv(uFog, groundFog);
+      ctx.uniform1f(uLight, coreLight);
+      usePalette(coreLight < 0.5);
+    }
+
+    /** How far into an opposite-tone band `y` (viewport space) sits. */
+    function groundAt(band: HTMLElement | null | undefined, y: number) {
+      if (!band) return 0;
+      const rect = band.getBoundingClientRect();
+      return Math.max(0, Math.min(1, (y - rect.top) / bandFade, (rect.bottom - y) / bandFade));
+    }
+
     function paintTheme() {
       ctx.useProgram(prog);
       ctx.uniform3fv(uC1, readColor(probe, '--color-brand-400'));
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
-      ctx.uniform3fv(uFog, readColor(probe, '--w-surface'));
+      pageFog = readColor(probe, '--w-surface');
+      invertFog = readColor(probeInvert, '--w-surface');
+      bandFade =
+        parseFloat(getComputedStyle(world).getPropertyValue('--w-band-fade')) || 180;
+      ctx.uniform3fv(uFog, pageFog);
       /* Which theme is on. Read from the class, but only ever from inside a
          frame after it changed (see onTheme / the observer below): read at the
          moment the toggle's event fires, the class had not flipped yet, and the
          world painted the *previous* theme's glass — pale screens on a dark
          page, one toggle behind. */
       const isDark = document.documentElement.classList.contains('dark');
-      coreLight = isDark ? 0 : 1;
+      pageLight = isDark ? 0 : 1;
+      invertLight = isDark ? 1 : 0;
+      coreLight = pageLight;
       ctx.uniform1f(uLight, coreLight);
-      const pal = isDark ? WAY_RGB400 : WAY_RGB600;
-      for (let i = 0; i < WAY_COUNT; i++) {
-        ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), pal[i]);
-      }
+      palDark = null;
+      usePalette(isDark);
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
-      coreFog = readColor(probe, '--w-surface');
+      coreFog = pageFog;
     }
     /* Opaque and depth-tested rather than additive. Screens occlude; they do
      * not glow through one another. Distance is carried by fogging toward the
@@ -2714,17 +2769,6 @@
       ctx.uniform1f(uTime, seconds);
       ctx.uniform1f(uAlpha, SCREEN_ALPHA);
 
-      /* Fog and glass follow the band under the lens, not only the page
-       * theme: a white invert on a dark page needs pale screens, a black
-       * invert on a light page needs dark ones. */
-      const invert = !!scenes[a]?.closest('.tone-invert');
-      const darkPage = document.documentElement.classList.contains('dark');
-      const lightGround = invert ? darkPage : !darkPage;
-      ctx.uniform1f(uLight, lightGround ? 1 : 0);
-      ctx.uniform3fv(uFog, lightGround ? [1, 1, 1] : [0, 0, 0]);
-      coreLight = lightGround ? 1 : 0;
-      coreFog = lightGround ? [1, 1, 1] : [0, 0, 0];
-
       /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
          view switches too — that is how a single section shows every family. */
       const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');
@@ -2742,6 +2786,16 @@
       /* Later copy sits in the middle; hold the screens back a little more
          than the acts, so a FeatureMap title is not struck through. */
       if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : 0.16);
+
+      /* The ground under the lens.
+       *
+       * The page alternates tone every section, and the bands crossfade over
+       * `--w-band-fade` instead of cutting. So the fog a far screen dissolves
+       * into, the light its glass is lit by, and the accent family its chrome
+       * uses all ride that same ramp — otherwise the matter is a grey ghost
+       * for half a screen on either side of every seam. Last, so a `world--day`
+       * repaint earlier in the frame cannot leave the page tone behind. */
+      applyGround(groundAt(scenes[a]?.closest<HTMLElement>('.tone-invert'), mid));
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2846,6 +2900,7 @@
     }
 
     /** Fade at the world's edges without redrawing. Reduced-motion only. */
+    let stillGround = -1;
     function fadeStill() {
       const rect = world!.getBoundingClientRect();
       const { h: vh } = viewBox();
@@ -2854,6 +2909,23 @@
       const worldOwnsEnd = rect.bottom >= pageEnd - 12;
       const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
       root.style.opacity = String(Math.min(enter, exit));
+
+      /* The still frame is fixed to the viewport while the ground alternates
+       * under it, so it has to follow the band or the screens ghost grey over
+       * the opposite tone. One redraw when the tone actually moves — still no
+       * loop. */
+      const mid = vh * 0.5;
+      let ground = 0;
+      for (const band of bands) {
+        const br = band.getBoundingClientRect();
+        if (br.top > mid || br.bottom < mid) continue;
+        ground = groundAt(band, mid);
+        break;
+      }
+      if (Math.abs(ground - stillGround) < 0.02) return;
+      stillGround = ground;
+      applyGround(ground);
+      drawStill();
     }
 
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2980,6 +3052,7 @@
         ctx.deleteProgram(prog);
         if (coreBuf) ctx.deleteBuffer(coreBuf);
         if (coreProg) ctx.deleteProgram(coreProg);
+        probeInvert.remove();
         ctx.getExtension('WEBGL_lose_context')?.loseContext();
       },
     };
