@@ -230,6 +230,7 @@ describe('Footer', () => {
       expect(html, social.label).toContain(social.href);
     }
     expect(html).toContain('noopener');
+    expect(html).toContain('is-grid');
   });
 
   it('shows the legal entity and the current year', async () => {
@@ -253,6 +254,11 @@ describe('SocialLinks', () => {
   it('can sit start-aligned in the footer', async () => {
     const html = await render(SocialLinks, '/', { props: { align: 'start' } });
     expect(html).toContain('is-start');
+  });
+
+  it('can lay out as a 3×3 grid', async () => {
+    const html = await render(SocialLinks, '/', { props: { layout: 'grid' } });
+    expect(html).toContain('is-grid');
   });
 
   it('drops the nav landmark when it is a second copy of the same links', async () => {

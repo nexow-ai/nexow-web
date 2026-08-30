@@ -12,6 +12,8 @@ interface Props {
   class?: string;
   /** Footer sits start-aligned; the hero row is centered under the copy. */
   align?: 'start' | 'center';
+  /** Hero stays a wrapping row; the footer is a 3×3 tile grid. */
+  layout?: 'row' | 'grid';
   /** Accessible name. Must be unique among landmarks on the same page. */
   label?: string;
   /**
@@ -21,12 +23,18 @@ interface Props {
   landmark?: boolean;
 }
 
-const { class: className, align = 'center', label = 'Social', landmark = true } = Astro.props;
+const {
+  class: className,
+  align = 'center',
+  layout = 'row',
+  label = 'Social',
+  landmark = true,
+} = Astro.props;
 const Tag = landmark ? 'nav' : 'div';
 ---
 
 <Tag
-  class:list={['socials', align === 'start' && 'is-start', className]}
+  class:list={['socials', align === 'start' && 'is-start', layout === 'grid' && 'is-grid', className]}
   aria-label={label}
   role={landmark ? undefined : 'group'}
 >
@@ -154,6 +162,12 @@ const Tag = landmark ? 'nav' : 'div';
 
   .socials.is-start {
     justify-content: flex-start;
+  }
+
+  .socials.is-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 2.25rem);
+    width: max-content;
   }
 
   .socials__link {
