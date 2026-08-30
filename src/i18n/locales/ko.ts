@@ -83,9 +83,9 @@ export const ko: SiteContent = {
     },
     hero: {
       badge: '얼리 액세스',
-      titleLead: '설명하세요.',
-      titleGradient: 'Nexow가 만듭니다.',
-      titleTail: '거래하세요.',
+      titleLead: '데이터는 새로운 석유다.',
+      titleGradient: '전부 써라.',
+      titleTail: '보고, 공유하고, 행동하고, 벌고, 성장하라.',
       titleKicker: '몇 주나 몇 달이 아니라, 몇 초 만에.',
       subtitle:
         '필요한 것을 설명하면 Nexow가 만들어 줍니다. 실제로 동작하는 위젯이 라이브 데이터에 연결되어, 여러분이 통제하는 캔버스에 배치됩니다. 지진, 대기질, 세계 지표, 마켓 피드 또는 자체 데이터베이스 — 시각화하고, 지켜보고, 실행하세요.',

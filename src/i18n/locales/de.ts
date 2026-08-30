@@ -83,9 +83,9 @@ export const de: SiteContent = {
     },
     hero: {
       badge: 'Früher Zugang',
-      titleLead: 'Beschreib es.',
-      titleGradient: 'Nexow baut es.',
-      titleTail: 'Handle es.',
+      titleLead: 'Daten sind das neue Öl.',
+      titleGradient: 'Nutze sie alle.',
+      titleTail: 'Sehen, teilen, handeln, verdienen, wachsen.',
       titleKicker: 'In Sekunden — nicht in Wochen oder Monaten.',
       subtitle:
         'Beschreibe, was du brauchst, und Nexow baut es: echte funktionierende Widgets, an Live-Daten angebunden, auf einem Canvas, den du kontrollierst. Erdbeben, Luftqualität, Weltindikatoren, Markt-Feeds oder deine eigene Datenbank — sichtbar machen, im Blick behalten, handeln.',

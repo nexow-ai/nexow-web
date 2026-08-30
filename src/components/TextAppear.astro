@@ -144,14 +144,21 @@
   }
 
   function cssColor(name: string, fallback: string): string {
+    return cssColorOn(document.body, name, fallback);
+  }
+
+  /** Resolve a custom property from a host so per-line `--ga/--gb/--gc` work. */
+  function cssColorOn(el: Element, name: string, fallback: string): string {
     const probe = document.createElement('span');
     probe.style.color = `var(${name})`;
     probe.style.position = 'absolute';
     probe.style.visibility = 'hidden';
-    document.body.appendChild(probe);
+    el.appendChild(probe);
     const resolved = getComputedStyle(probe).color;
     probe.remove();
-    return resolved && resolved !== 'rgba(0, 0, 0, 0)' ? resolved : fallback;
+    return resolved && resolved !== 'rgba(0, 0, 0, 0)' && resolved !== 'transparent'
+      ? resolved
+      : fallback;
   }
 
   function primaryTextNode(el: HTMLElement): Text | null {
@@ -291,13 +298,17 @@
     const gradientHost =
       el.classList.contains('text-gradient') ||
       el.classList.contains('text-gradient-live') ||
-      el.querySelector('.text-gradient, .text-gradient-live');
+      el.classList.contains('hero__grad') ||
+      el.querySelector('.text-gradient, .text-gradient-live, .hero__grad');
 
     if (gradientHost) {
+      const host = gradientHost instanceof Element ? (gradientHost as HTMLElement) : el;
+      const stop = (name: string, fallbackToken: string, fallback: string) =>
+        cssColorOn(host, name, '') || cssColor(fallbackToken, fallback);
       const grad = octx.createLinearGradient(0, 0, cssW, 0);
-      grad.addColorStop(0, cssColor('--color-brand-600', '#0d9488'));
-      grad.addColorStop(0.52, cssColor('--color-sky-500', '#0ea5e9'));
-      grad.addColorStop(1, cssColor('--color-accent-600', '#4f46e5'));
+      grad.addColorStop(0, stop('--ga', '--color-brand-600', '#0d9488'));
+      grad.addColorStop(0.52, stop('--gb', '--color-sky-500', '#0ea5e9'));
+      grad.addColorStop(1, stop('--gc', '--color-accent-600', '#4f46e5'));
       octx.fillStyle = grad;
     } else {
       const color = cs.color;

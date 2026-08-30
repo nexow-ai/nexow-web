@@ -83,9 +83,9 @@ export const ja: SiteContent = {
     },
     hero: {
       badge: '早期アクセス',
-      titleLead: '説明する。',
-      titleGradient: 'Nexow が構築する。',
-      titleTail: '取引する。',
+      titleLead: 'データは新しい石油だ。',
+      titleGradient: 'すべて使え。',
+      titleTail: '見る、共有する、動く、稼ぐ、伸びる。',
       titleKicker: '数秒で完成 — 数週間や数か月ではありません。',
       subtitle:
         '必要なものを説明すれば、Nexow がつくります。実際に動くウィジェットを、ライブデータにつなぎ、あなたが管理するキャンバスに配置します。地震、大気質、世界指標、マーケットのフィード、あるいは自分のデータベース — 可視化し、見守り、動く。',

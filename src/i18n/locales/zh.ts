@@ -83,9 +83,9 @@ export const zh: SiteContent = {
     },
     hero: {
       badge: '抢先体验',
-      titleLead: '描述它。',
-      titleGradient: 'Nexow 构建它。',
-      titleTail: '交易它。',
+      titleLead: '数据就是新石油。',
+      titleGradient: '全部用上。',
+      titleTail: '看见、分享、行动、赚钱、成长。',
       titleKicker: '几秒完成，而不是几周或几个月。',
       subtitle:
         '描述你需要什么，Nexow 就把它做出来：真正能用的组件，接上实时数据，排布在你掌控的画布上。地震、空气质量、世界指标、市场行情，或你自己的数据库——把它可视化、盯住它，并据此行动。',

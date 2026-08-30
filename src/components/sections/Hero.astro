@@ -57,11 +57,13 @@ const D = {
 
   <div class="container-page hero__inner">
     <h1 id="hero-title" class="hero__title">
-      <span class="hero__line" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>
-      <span class="hero__line text-gradient-live" data-text-appear data-text-appear-delay="0.20">
-        {t.titleGradient}
-      </span>
-      <span class="hero__line" data-text-appear data-text-appear-delay="0.30">{t.titleTail}</span>
+      {/* Split-complementary triad on the dark green→purple world: gold sits
+          opposite the violet, teal is harmonic with the left forest, magenta
+          is opposite the teal and harmonic with the right purple. Each line
+          drifts on its own clock so they never lock into one wash. */}
+      <span class="hero__line hero__grad hero__grad--oil" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>
+      <span class="hero__line hero__grad hero__grad--use" data-text-appear data-text-appear-delay="0.20">{t.titleGradient}</span>
+      <span class="hero__line hero__grad hero__grad--act" data-text-appear data-text-appear-delay="0.30">{t.titleTail}</span>
     </h1>
 
     {
@@ -190,14 +192,14 @@ const D = {
 
   .hero__title {
     display: grid;
-    max-width: 20ch;
+    max-width: 28ch;
     font-family: var(--font-display);
-    /* Fluid down to 1.9rem: locales with long compounds (el "Περιγράψτε",
-     * ru "Опишите.") overrun a 320px screen at any fixed size. */
-    font-size: clamp(2.1rem, 1rem + 7.4vw, 5.25rem);
+    /* Fluid down for the long closer ("SEE, SHARE, ACT, EARN, GROW.") and
+     * locales whose first line runs longer than the English slogan. */
+    font-size: clamp(1.7rem, 0.7rem + 5.8vw, 4.35rem);
     font-weight: 600;
-    line-height: 1.02;
-    letter-spacing: -0.035em;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
     text-wrap: balance;
     /* Carries the readability the veil used to buy with opacity, but only
        where there are glyphs, so the matter stays visible around them. */
@@ -206,6 +208,75 @@ const D = {
 
   .hero__line {
     display: block;
+  }
+
+  .hero__grad {
+    background-image: linear-gradient(
+      100deg,
+      var(--ga),
+      var(--gb) 30%,
+      var(--gc) 55%,
+      var(--gb) 78%,
+      var(--ga)
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-drift 14s ease-in-out infinite;
+    /* Dark punch from the title, plus a halo in the line's own hue so the
+       screens behind cannot flatten the glyphs into the world. */
+    text-shadow:
+      0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent),
+      0 0 38px color-mix(in oklab, var(--gb) 55%, transparent);
+  }
+
+  /* Light theme needs the deep stops; dark theme needs the luminous ones. */
+  .hero__grad--oil {
+    --ga: var(--color-gold-700);
+    --gb: var(--color-amber-600);
+    --gc: var(--color-amber-500);
+    animation-duration: 16s;
+  }
+
+  .hero__grad--use {
+    --ga: var(--color-brand-700);
+    --gb: var(--color-sky-600);
+    --gc: var(--color-accent-600);
+    animation-duration: 14s;
+    animation-delay: -4.6s;
+  }
+
+  .hero__grad--act {
+    --ga: var(--color-plasma-600);
+    --gb: var(--color-violet-600);
+    --gc: var(--color-rose-500);
+    animation-duration: 18s;
+    animation-delay: -9.2s;
+  }
+
+  :global(.dark) .hero__grad--oil {
+    --ga: var(--color-amber-200);
+    --gb: var(--color-gold-300);
+    --gc: var(--color-amber-400);
+  }
+
+  :global(.dark) .hero__grad--use {
+    --ga: var(--color-brand-200);
+    --gb: var(--color-sky-300);
+    --gc: var(--color-sky-400);
+  }
+
+  :global(.dark) .hero__grad--act {
+    --ga: var(--color-plasma-300);
+    --gb: var(--color-plasma-400);
+    --gc: var(--color-violet-400);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__grad {
+      animation: none;
+    }
   }
 
   .hero__kicker {
