@@ -84,7 +84,7 @@ export const tr = {
     hero: {
       badge: 'Erken erişim',
       titleLead: 'Veri yeni petroldür.',
-      titleGradient: 'Her şeyi kur,',
+      titleGradient: 'Her şeyi kur',
       titleWatch: 'her şeyi izle.',
       titleTail: 'Hızlı harekete geç, paylaş - büyü - kazan',
       titleKicker: 'Saniyeler içinde canlı gerçek zamanlı panolar — haftalar veya çeyrekler değil.',

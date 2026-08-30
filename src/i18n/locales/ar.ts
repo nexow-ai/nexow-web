@@ -84,7 +84,7 @@ export const ar: SiteContent = {
     hero: {
       badge: 'وصول مبكر',
       titleLead: 'البيانات هي النفط الجديد.',
-      titleGradient: 'ابنِ أي شيء و',
+      titleGradient: 'ابنِ أي شيء',
       titleWatch: 'راقب كل شيء.',
       titleTail: 'اعمل بسرعة، شارك - انمُ - اربح',
       titleKicker: 'لوحات مباشرة في الوقت الفعلي في ثوانٍ — لا أسابيع ولا أرباع سنة.',
