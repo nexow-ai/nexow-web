@@ -5,7 +5,6 @@ pubDate: 2026-08-09
 heroImage: ../../../assets/blog/starters.svg
 tags: ['제품', '온보딩', 'widgets']
 ---
-
 Nexow에서 가장 어려운 화면은 항상 첫 화면이었습니다: 빈
 canvas, prompt 상자, 그리고 작동한다는 증거가 없었습니다.
 문서를 읽거나, 뭔가 입력하고 기다릴 수 있었습니다.
@@ -85,9 +84,9 @@ onboarding은 여전히 깨끗한 화면을 줍니다. 패키지
 
 Seeded 위젯은 실제 marketplace install로 stamp —
 개선 후 publish하면 공식 lineage를 이어 rival copy가
-아님. 더 나은 예제를 ship해도 **이미 seeded 사용자는
-자신의 것 유지** — 지금은 그들 widget, 편집됐을
-수 있음. push-update path 없고, 있어서도 안 됩니다.
+아님. **이미 seeded 사용자는 자신의 것 유지** — 지금은
+그들 widget, 편집됐을 수 있음. push-update path 없고,
+있어서도 안 됩니다.
 
 ## 패키지로 verified, 눈으로가 아님
 

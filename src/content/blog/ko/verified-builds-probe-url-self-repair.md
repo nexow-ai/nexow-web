@@ -5,7 +5,6 @@ pubDate: 2026-08-08
 heroImage: ../../../assets/blog/verify.svg
 tags: ['제품', 'ai', '작동-방식']
 ---
-
 생성 위젯이 실패하는 가장 흔한 방법은 생성 코드의 bug가
 아니었습니다. 존재하지 않던 endpoint였습니다.
 
@@ -83,11 +82,9 @@ runtime host는 fresh build crash 시 **auto fix turn
 
 - AI build *just* produced version만 — restored old
   version·hand-edited crash never qualify;
-- build 후 **45초**만 — hour later crash는 new info,
-  obvious build defect 아님;
+- build 후 **45초**만 — hour later crash는 new info;
 - **version당 once**, auto-repair turn이 만든 version
-  ineligible. build당 auto follow-up 최대 one — model
-  self-pay fail chain never.
+  ineligible. build당 auto follow-up 최대 one.
 
 Repair turn은 app defect report wording, data endpoint
 면 probe before rewrite. fix, keep works, scope don't
@@ -100,8 +97,7 @@ turn 있으면 wait, duplicate version race 대신.
 
 Shared module — platform builds, browser BYOK, server
 build sweep **identical**: same tools, probe format,
-verifier, repair budget. modes can't drift — one
-implementation. [열 개 예제
+verifier, repair budget. [열 개 예제
 위젯](/blog/starter-widgets-examples-workspace)도
 이 loop, 이 checks.
 

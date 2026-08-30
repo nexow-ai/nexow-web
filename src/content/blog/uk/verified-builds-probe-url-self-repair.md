@@ -61,11 +61,11 @@ datasets, ймовірно, існують. Дійти до кінця драб�
   verdict як model: unreachable, або 4xx, що каже, що URL чи parameters wrong.
 
 Справжні проблеми купують **одну автоматичну in-turn repair round** з probe
-output як evidence і instruction виправити лише named. Round, поки build context
-ще hot — набагато дешевше, ніж ship broken і цілий новий turn пізніше. Model
-rewrites module mid-flight — verification already running superseded, verdict
-discarded. Verifier fails internally — verifies clean: can delay build, never
-break one.
+output як доказом і інструкцією виправити лише назване. Round, поки повний
+контекст build ще гарячий — набагато дешевше, ніж ship broken і цілий новий turn
+пізніше. Model rewrites module mid-flight — verification already running
+superseded, verdict discarded. Verifier fails internally — verifies clean: can
+delay build, never break one.
 
 ## Якщо все одно crash: одна правка, жорстко обмежена
 
