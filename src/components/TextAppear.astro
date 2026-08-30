@@ -10,9 +10,13 @@
  * Mark page-hero titles with `data-text-appear`. Optional
  * `data-text-appear-delay` (seconds) staggers multi-line heroes.
  *
- * `data-text-appear="scroll"` holds the clip until the title scrolls into view
- * and then runs the same reveal — how every section title on the home page
- * gets the hero's entrance at the moment the reader reaches it.
+ * `data-text-appear="scroll"` holds the clip until the title's section has
+ * *arrived* — it fills the window, its top parked under the header where a
+ * deep link or a rail stop would put it (for the pinned acts, the moment the
+ * stage pins), or, when it is short enough, the whole of it sits inside the
+ * window — and then runs the same reveal. That is how every section title on
+ * the home page gets the hero's entrance: once the reader is on the section,
+ * not as it first peeks over the fold.
  */
 ---
 
@@ -38,6 +42,87 @@
   }
 
   let handles: AppearHandle[] = [];
+
+  /**
+   * Scroll-mode titles waiting for their section. One passive scroll listener
+   * serves all of them, reads batched into a single frame, and it is removed
+   * the moment the last one launches.
+   */
+  interface Pending {
+    section: HTMLElement;
+    stage: HTMLElement;
+    launch: () => void;
+  }
+
+  let pending: Pending[] = [];
+  let pendingFrame = 0;
+  let pendingListening = false;
+
+  /** Where a deep link or a rail stop parks a section: `scroll-padding-top`. */
+  function parkedTop(): number {
+    return parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  }
+
+  /**
+   * Has the section arrived? Either it covers the parked line — its top at the
+   * header, or already past it — or the whole of it sits inside the window.
+   * A section taller than the viewport can only do the first; a short one at
+   * the end of the page may only ever manage the second. The title itself has
+   * to be on screen as well, so a page restored deep inside a section keeps
+   * its reveal for when the reader scrolls back up to the title.
+   */
+  function hasArrived({ section, stage }: Pending, vh: number, top: number): boolean {
+    const s = section.getBoundingClientRect();
+    const covers = s.top <= top + 1 && s.bottom >= top;
+    const fits = s.top >= -1 && s.bottom <= vh + 1;
+    if (!covers && !fits) return false;
+    const t = stage.getBoundingClientRect();
+    return t.bottom > 0 && t.top < vh;
+  }
+
+  function checkPending() {
+    pendingFrame = 0;
+    if (!pending.length) return;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const top = parkedTop();
+    // Every read first; a launch writes layout, and must not land between them.
+    const ready = pending.filter((entry) => hasArrived(entry, vh, top));
+    if (!ready.length) return;
+    pending = pending.filter((entry) => !ready.includes(entry));
+    if (!pending.length) stopWatching();
+    for (const entry of ready) entry.launch();
+  }
+
+  function schedulePending() {
+    if (pendingFrame || !pending.length) return;
+    pendingFrame = requestAnimationFrame(checkPending);
+  }
+
+  function stopWatching() {
+    if (pendingFrame) cancelAnimationFrame(pendingFrame);
+    pendingFrame = 0;
+    if (pendingListening) {
+      window.removeEventListener('scroll', schedulePending);
+      window.removeEventListener('resize', schedulePending);
+      pendingListening = false;
+    }
+  }
+
+  function watch(entry: Pending) {
+    pending.push(entry);
+    if (!pendingListening) {
+      window.addEventListener('scroll', schedulePending, { passive: true });
+      window.addEventListener('resize', schedulePending);
+      pendingListening = true;
+    }
+    schedulePending();
+  }
+
+  function unwatch(entry: Pending) {
+    const i = pending.indexOf(entry);
+    if (i !== -1) pending.splice(i, 1);
+    if (!pending.length) stopWatching();
+  }
 
   /** Hard ceiling on the wavefront's travel time, ms. */
   const TRAVEL_MS_MAX = 2600;
@@ -299,13 +384,13 @@
     let raf = 0;
     let timer = 0;
     let watchdog = 0;
-    let observer: IntersectionObserver | null = null;
+    let entry: Pending | null = null;
 
     const finish = () => {
       if (cancelled) return;
       cancelled = true;
-      observer?.disconnect();
-      observer = null;
+      if (entry) unwatch(entry);
+      entry = null;
       if (raf) cancelAnimationFrame(raf);
       if (timer) clearTimeout(timer);
       if (watchdog) clearTimeout(watchdog);
@@ -439,23 +524,13 @@
       else start();
     };
 
-    if (onScroll && 'IntersectionObserver' in window) {
-      /* Scroll mode: hold the clip until the title scrolls into view, then run
-         the reveal the hero runs on load. The stage is observed rather than
-         the clipped title so the clip can never hide the title from its own
-         observer. Same margin and threshold as the `.reveal` observer in
-         Layout.astro, so a title and the block around it wake on the same
-         scroll tick. */
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (!entries.some((entry) => entry.isIntersecting)) return;
-          observer?.disconnect();
-          observer = null;
-          launch();
-        },
-        { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
-      );
-      observer.observe(stage);
+    if (onScroll) {
+      /* Scroll mode: hold the clip until the section this title names has
+         arrived (see `hasArrived`), then run the reveal the hero runs on load.
+         The section is what is measured, never the clipped title, and the
+         stage stands in for the title's box. */
+      entry = { section: el.closest<HTMLElement>('section') ?? stage, stage, launch };
+      watch(entry);
     } else {
       launch();
     }
@@ -463,8 +538,8 @@
     return {
       stop() {
         cancelled = true;
-        observer?.disconnect();
-        observer = null;
+        if (entry) unwatch(entry);
+        entry = null;
         if (timer) clearTimeout(timer);
         if (watchdog) clearTimeout(watchdog);
         if (raf) cancelAnimationFrame(raf);
@@ -482,6 +557,8 @@
   function teardown() {
     for (const h of handles) h.stop();
     handles = [];
+    pending = [];
+    stopWatching();
   }
 
   function initTextAppear() {
