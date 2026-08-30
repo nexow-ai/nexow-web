@@ -27,8 +27,13 @@ const securityHref = localizePath('/security', lang);
   </div>
   <div class="container-page relative">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+      {/*
+        The two columns scroll at different rates (`lead` / `lag` in
+        global.css), so the claim and the diagram that illustrates it separate
+        and re-align as the band passes instead of travelling as one slab.
+      */}
       <!-- Copy -->
-      <div class="reveal min-w-0 max-w-xl">
+      <div class="reveal min-w-0 max-w-xl" data-motion="lead">
         <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
           <span class="h-px w-6 bg-brand-500/50"></span>
           {t.eyebrow}
@@ -79,7 +84,7 @@ const securityHref = localizePath('/security', lang);
       </div>
 
       <!-- Visual: animated trust-boundary diagram + workspace panel -->
-      <div class="reveal relative min-w-0">
+      <div class="reveal relative min-w-0" data-motion="lag">
         <SecurityDiagram />
 
         <div

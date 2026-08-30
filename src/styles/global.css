@@ -924,6 +924,7 @@ html.is-theme-transition [data-astro-transition-scope] {
  *
  *   rise / sink      drift against the scroll        (--pc)
  *   slide-l/-r       the same, horizontally          (--pc)
+ *   lead / lag       two-up columns drift apart      (--pc)
  *   breathe          expand mid-screen, contract     (--pb)
  *   tilt / turn      lean in 3D as it travels        (--pc)
  *   depth            push away from the camera       (--pb)
@@ -952,6 +953,19 @@ html.is-theme-transition [data-astro-transition-scope] {
    * with slack to spare, and the section's overflow clip shaves the text. */
   .js [data-motion~='slide-l'] { --m-slide: -24px; }
   .js [data-motion~='slide-r'] { --m-slide: 24px; }
+
+  /* Column parallax for a two-up band: the copy runs ahead of the scroll while
+   * the art beside it trails, so the pair drifts apart and back together as the
+   * section passes. Bigger than `rise`/`sink` because the effect has to read
+   * across a gap rather than within one card, and only above `lg`, where the
+   * columns actually sit side by side — stacked, the two drifts point at each
+   * other and close the gap between the copy and the art. Kept under the
+   * section's own vertical padding so neither column bleeds into its
+   * neighbours. */
+  @media (min-width: 64rem) {
+    .js [data-motion~='lead'] { --m-shift: -56px; }
+    .js [data-motion~='lag'] { --m-shift: 56px; }
+  }
 
   .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
   .js [data-motion~='breathe-lg'] { --m-base: 0.918; --m-zoom: 0.082; }
