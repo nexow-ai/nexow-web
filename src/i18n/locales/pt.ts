@@ -1569,7 +1569,7 @@ export const pt: SiteContent = {
       },
       {
         q: "Os badges dependem do plano?",
-        a: "Não. Todos os 34 badges, cinco níveis e toda a camada da comunidade estão no Free. Os planos compram capacidade e aspeto, nunca estatuto — uma conta Free pode chegar a Legend.",
+        a: "Não. Todos os badges, cinco níveis e toda a camada da comunidade estão no Free. Os planos compram capacidade e aspeto, nunca estatuto — uma conta Free pode chegar a Legend.",
       },
       {
         q: "Quando chegam as recompensas em créditos e tokens?",
@@ -1621,7 +1621,7 @@ export const pt: SiteContent = {
     },
     badges: {
       title: 'O cofre de distintivos',
-      body: '34 distintivos em três raridades. Dezoito vêm em bronze, prata e ouro; dez medalhas raras ficam para lá do ouro; seis medalhas lendárias pedem algo absurdo. Vira qualquer cartão para ver o que mede.',
+      body: 'Distintivos em três raridades. Os clássicos vêm em bronze, prata e ouro; medalhas raras e lendárias são limiares únicos. Vira qualquer cartão para ver o que mede — e que créditos cada nível paga.',
       filters: {
         all: 'Todos',
         tiered: 'Por níveis',
@@ -1746,7 +1746,7 @@ export const pt: SiteContent = {
         reportsFiled: 'Envie denúncias de moderação que ajudem a manter a comunidade limpa.',
         likesGiven: 'Dê like aos posts de outras pessoas.',
         reactionsGiven: 'Reaja aos posts com emoji.',
-        nightPosts: 'Publique posts entre as 00:00 e as 05:00, hora local.',
+        nightPosts: 'Publique posts entre as 00:00 e as 04:59 UTC.',
         dmThreads: 'Abra conversas por mensagem direta com outras pessoas.',
       },
     },

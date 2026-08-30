@@ -84,7 +84,7 @@ export const zh: SiteContent = {
     hero: {
       badge: '抢先体验',
       titleLead: '数据就是新石油。',
-      titleGradient: '什么都能建，',
+      titleGradient: '什么都能建',
       titleWatch: '什么都能看。',
       titleTail: '快速行动、分享 - 成长 - 赚钱',
       titleKicker: '实时仪表盘，几秒完成 — 不是几周，更不是一个季度。',
@@ -510,7 +510,7 @@ export const zh: SiteContent = {
         {
           icon: 'trophy',
           title: '声望与勋章',
-          body: '每个组件、机器人和分享都能赚取声望——公开主页上的点数、分级成就、稀有勋章和等级。把它们兑换成奖励积分的功能随后推出。',
+          body: '每个组件、机器人和分享都能赚取声望——公开主页上的点数、分级成就、稀有勋章和等级。每个徽章等级都会把免费积分打入你的余额。',
           status: 'live',
         },
       ],
@@ -563,7 +563,7 @@ export const zh: SiteContent = {
         { status: 'shipped', title: '市场', body: '发布并安装组件、主题、界面和机器人——溯源机制为每一次重制致谢原作者。' },
         { status: 'shipped', title: '声望与勋章', body: '为你构建和分享的一切提供点数、分级成就、稀有勋章和等级。' },
         { status: 'soon', title: '高级组件与信号', body: '发布高级组件和策略信号，让他人订阅，并从你运行的内容中获得收益。' },
-        { status: 'soon', title: '付费方案与奖励积分', body: 'Lite 与 Elite 结账、平台积分，以及把声望兑换成奖励积分。' },
+        { status: 'soon', title: '付费方案', body: 'Lite 与 Elite 结账 — 每月积分刷新、更高的机器人和智能体配额，以及高级外观。' },
       ],
     },
     faq: {
@@ -1325,7 +1325,7 @@ export const zh: SiteContent = {
           { icon: 'users', title: '社区', body: '关注创作者，在面向构建者的社交信息流中点赞与评论，探索看板，并分享他人可直接加入库的组件 — 附带公开创作者主页。' },
           { icon: 'mail', title: '实时聊天', body: '从账户或 Dock 与好友、联系人即时消息 — 一对一与群组 DM、在线状态、表情回应、关注/粉丝与联系人收件箱。' },
           { icon: 'store', title: '市场', body: '发布并安装组件、主题、界面、Bots 与 Agents — 溯源机制为每一次重制致谢。买卖功能随后推出。' },
-          { icon: 'trophy', title: '声望与勋章', body: '构建与分享赚取声望点数，解锁分级成就与稀有勋章 — 现已上线。奖励积分随后推出。' },
+          { icon: 'trophy', title: '声望与勋章', body: '构建与分享赚取声望点数，解锁分级成就与稀有勋章 — 现已上线。每个徽章等级都会把免费积分打入你的余额。' },
         ],
       },
       {

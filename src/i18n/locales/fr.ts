@@ -541,7 +541,7 @@ export const fr: SiteContent = {
         {
           icon: 'trophy',
           title: 'Réputation et médailles',
-          body: 'Chaque widget, bot et partage rapporte de la réputation — points, succès par paliers, médailles rares et niveaux sur votre profil public. La conversion en crédits de récompense arrive ensuite.',
+          body: 'Chaque widget, bot et partage rapporte de la réputation — points, succès par paliers, médailles rares et niveaux sur votre profil public. Chaque palier de badge verse des crédits gratuits sur votre solde.',
           status: 'live',
         },
       ],
@@ -594,7 +594,7 @@ export const fr: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Publiez et installez widgets, thèmes, écrans et bots — avec une lignée qui crédite chaque remake.' },
         { status: 'shipped', title: 'Réputation et médailles', body: 'Points, succès par paliers, médailles rares et niveaux pour ce que vous construisez et partagez.' },
         { status: 'soon', title: 'Widgets premium et signaux', body: 'Publiez des widgets premium et des signaux de stratégie, laissez les autres s’abonner et gagnez sur ce que vous exécutez.' },
-        { status: 'soon', title: 'Plans payants et crédits de récompense', body: 'Checkout Lite et Elite, crédits de plateforme et conversion de la réputation en crédits de récompense.' },
+        { status: 'soon', title: 'Plans payants', body: 'Checkout Lite et Elite — recharges mensuelles de crédits, plus de bots et d’agents, et une apparence premium.' },
       ],
     },
     faq: {
@@ -1329,7 +1329,7 @@ export const fr: SiteContent = {
           { icon: 'users', title: 'Communauté', body: 'Suivez des makers, likez et commentez dans un fil social pour bâtisseurs, explorez des boards et partagez des widgets que d’autres ajoutent directement à leur bibliothèque — avec profils publics de maker.' },
           { icon: 'mail', title: 'Chats en temps réel', body: 'Messagez amis et contacts en direct depuis Compte ou le Dock — DMs 1:1 et de groupe avec présence, réactions, abonnés/abonnements et boîte de contacts.' },
           { icon: 'store', title: 'Marketplace', body: 'Publiez et installez widgets, thèmes, écrans, bots et agents — avec une lignée qui crédite chaque remake. L’achat et la vente arrivent ensuite.' },
-          { icon: 'trophy', title: 'Réputation et médailles', body: 'Gagnez des points de réputation en construisant et partageant, débloquez des succès par paliers et des médailles rares — en direct aujourd’hui. Les crédits de récompense arrivent ensuite.' },
+          { icon: 'trophy', title: 'Réputation et médailles', body: 'Gagnez des points de réputation en construisant et partageant, débloquez des succès par paliers et des médailles rares — en direct aujourd’hui. Chaque palier de badge verse des crédits gratuits sur votre solde.' },
         ],
       },
       {
@@ -1569,7 +1569,7 @@ export const fr: SiteContent = {
       },
       {
         q: "Les badges dépendent-ils du plan ?",
-        a: "Non. Les 34 badges, cinq niveaux et toute la couche communauté sont disponibles sur Free. Les plans achètent de la capacité et de l’apparence, jamais du statut — un compte Free peut atteindre Legend.",
+        a: "Non. Tous les badges, cinq niveaux et toute la couche communauté sont disponibles sur Free. Les plans achètent de la capacité et de l’apparence, jamais du statut — un compte Free peut atteindre Legend.",
       },
       {
         q: "Quand arrivent les récompenses en crédits et tokens ?",
@@ -1583,7 +1583,7 @@ export const fr: SiteContent = {
     subtitle: 'Chaque post, widget, bot et publication alimente un même score. Le score débloque des badges, les badges débloquent des niveaux — et à l’ouverture de la DAO, les deux se paient en crédits et en tokens de gouvernance.',
     live: 'Actif dans l’app',
     planned: 'Prévu',
-    plannedNote: 'Les points, badges et niveaux sont déjà actifs dans l’app. Les points, badges, niveaux et crédits de récompense sont déjà actifs dans l’app. Les versements NXW et les bonus de niveau arrivent avec la Nexow DAO — NXW dry-mint le 14 août 2026.',
+    plannedNote: 'Les points, badges, niveaux et crédits de récompense sont déjà actifs dans l’app. Les versements NXW et les bonus de niveau arrivent avec la Nexow DAO — NXW dry-mint le 14 août 2026.',
     teaser: {
       badges: 'Médailles pour ce que vous construisez',
       levels: 'Rangs débloqués par la réputation',
@@ -1621,7 +1621,7 @@ export const fr: SiteContent = {
     },
     badges: {
       title: 'Le coffre à badges',
-      body: '34 badges en trois raretés. Dix-huit se déclinent en bronze, argent et or ; dix médailles rares se situent au-delà de l’or ; six médailles légendaires demandent quelque chose d’absurde. Retournez une carte pour voir ce qu’elle mesure.',
+      body: 'Des badges en trois raretés. Les badges classiques se déclinent en bronze, argent et or ; les médailles rares et légendaires sont des seuils uniques. Retournez une carte pour voir ce qu’elle mesure — et ce que chaque palier verse en crédits.',
       filters: {
         all: 'Tous',
         tiered: 'À paliers',
@@ -1746,7 +1746,7 @@ export const fr: SiteContent = {
         reportsFiled: 'Signalez des contenus pour aider à garder la communauté saine.',
         likesGiven: 'Likez les posts des autres.',
         reactionsGiven: 'Réagissez aux posts avec des emoji.',
-        nightPosts: 'Publiez des posts entre 00h00 et 05h00, heure locale.',
+        nightPosts: 'Publiez des posts entre 00h00 et 04h59 UTC.',
         dmThreads: 'Ouvrez des conversations privées avec d’autres personnes.',
       },
     },

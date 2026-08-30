@@ -1569,7 +1569,7 @@ export const es: SiteContent = {
       },
       {
         q: "¿Las insignias dependen del plan?",
-        a: "No. Las 34 insignias, cinco niveles y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta Free puede llegar a Leyenda.",
+        a: "No. Todas las insignias, cinco niveles y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta Free puede llegar a Leyenda.",
       },
       {
         q: "¿Cuándo llegan las recompensas en créditos y tokens?",
@@ -1621,7 +1621,7 @@ export const es: SiteContent = {
     },
     badges: {
       title: 'La cámara de insignias',
-      body: '34 insignias en tres rarezas. Dieciocho vienen en bronce, plata y oro; diez medallas raras están más allá del oro; seis medallas legendarias piden algo absurdo. Gira cualquier tarjeta para ver qué mide.',
+      body: 'Insignias en tres rarezas. Las clásicas vienen en bronce, plata y oro; las medallas raras y legendarias son umbrales únicos. Gira cualquier tarjeta para ver qué mide — y qué créditos paga cada nivel.',
       filters: {
         all: 'Todas',
         tiered: 'Por niveles',
@@ -1746,7 +1746,7 @@ export const es: SiteContent = {
         reportsFiled: 'Envía reportes de moderación que ayuden a mantener limpia la comunidad.',
         likesGiven: 'Da like a los posts de otras personas.',
         reactionsGiven: 'Reacciona a los posts con emoji.',
-        nightPosts: 'Publica posts entre las 00:00 y las 05:00 hora local.',
+        nightPosts: 'Publica posts entre las 00:00 y las 04:59 UTC.',
         dmThreads: 'Abre conversaciones por mensaje directo con otras personas.',
       },
     },

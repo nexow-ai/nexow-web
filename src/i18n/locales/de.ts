@@ -1621,7 +1621,7 @@ export const de: SiteContent = {
     },
     badges: {
       title: 'Die Abzeichen-Kammer',
-      body: '34 Abzeichen in drei Seltenheiten. Achtzehn gibt es in Bronze, Silber und Gold; zehn seltene Medaillen liegen jenseits von Gold; sechs legendäre Medaillen verlangen etwas Absurdes. Dreh eine Karte um, um zu sehen, was sie misst.',
+      body: 'Abzeichen in drei Seltenheiten. Klassische Badges gibt es in Bronze, Silber und Gold; seltene und legendäre Medaillen sind einzelne Schwellen. Dreh eine Karte um, um zu sehen, was sie misst — und welche Credits jede Stufe zahlt.',
       filters: {
         all: 'Alle',
         tiered: 'Gestuft',
@@ -1746,7 +1746,7 @@ export const de: SiteContent = {
         reportsFiled: 'Melde Inhalte und hilf, die Community sauber zu halten.',
         likesGiven: 'Like Beiträge anderer.',
         reactionsGiven: 'Reagiere auf Beiträge mit Emoji.',
-        nightPosts: 'Veröffentliche Beiträge zwischen 00:00 und 05:00 Ortszeit.',
+        nightPosts: 'Veröffentliche Beiträge zwischen 00:00 und 04:59 UTC.',
         dmThreads: 'Starte Direktnachrichten-Unterhaltungen mit anderen.',
       },
     },

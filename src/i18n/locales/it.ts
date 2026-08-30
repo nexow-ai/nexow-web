@@ -510,7 +510,7 @@ export const it: SiteContent = {
         {
           icon: 'trophy',
           title: 'Reputazione e medaglie',
-          body: 'Ogni widget, bot e condivisione fa guadagnare reputazione — punti, traguardi progressivi, medaglie rare e livelli sul tuo profilo pubblico. La conversione in crediti ricompensa arriva dopo.',
+          body: 'Ogni widget, bot e condivisione fa guadagnare reputazione — punti, traguardi progressivi, medaglie rare e livelli sul tuo profilo pubblico. Ogni livello di badge versa crediti gratis sul tuo saldo.',
           status: 'live',
         },
       ],
@@ -563,7 +563,7 @@ export const it: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Pubblica e installa widget, temi, schermate e bot — con una lineage che dà credito a ogni remake.' },
         { status: 'shipped', title: 'Reputazione e medaglie', body: 'Punti, traguardi progressivi, medaglie rare e livelli per ciò che costruisci e condividi.' },
         { status: 'soon', title: 'Widget premium e segnali', body: 'Pubblica widget premium e segnali di strategia, lascia che altri si abbonino e guadagna su ciò che esegui.' },
-        { status: 'soon', title: 'Piani a pagamento e crediti ricompensa', body: 'Checkout Lite e Elite, crediti di piattaforma e conversione della reputazione in crediti ricompensa.' },
+        { status: 'soon', title: 'Piani a pagamento', body: 'Checkout Lite e Elite — rinnovi mensili di crediti, più bot e agent, e aspetto premium.' },
       ],
     },
     faq: {
@@ -1329,7 +1329,7 @@ export const it: SiteContent = {
           { icon: 'users', title: 'Community', body: 'Segui i maker, metti like e commenta in un feed social per builder, esplora board e condividi widget che altri aggiungono direttamente alla libreria — con profili maker pubblici.' },
           { icon: 'mail', title: 'Chat in tempo reale', body: 'Messaggia amici e contatti live da Account o dal Dock — DM 1:1 e di gruppo con presenza, reazioni, follower/following e inbox contatti.' },
           { icon: 'store', title: 'Marketplace', body: 'Pubblica e installa widget, temi, schermate, bot e agenti — con lineage che accredita ogni remake. Comprare e vendere arriva dopo.' },
-          { icon: 'trophy', title: 'Reputazione e medaglie', body: 'Guadagna punti reputazione costruendo e condividendo, sblocca achievement a livelli e medaglie rare — live oggi. I crediti ricompensa arrivano dopo.' },
+          { icon: 'trophy', title: 'Reputazione e medaglie', body: 'Guadagna punti reputazione costruendo e condividendo, sblocca achievement a livelli e medaglie rare — live oggi. Ogni livello di badge versa crediti gratis sul tuo saldo.' },
         ],
       },
       {
@@ -1569,7 +1569,7 @@ export const it: SiteContent = {
       },
       {
         q: "I badge dipendono dal piano?",
-        a: "No. Tutti i 34 badge, cinque livelli e l’intera community layer sono su Free. I piani comprano capacità e aspetto, mai status — un account Free può arrivare a Legend.",
+        a: "No. Tutti i badge, cinque livelli e l’intera community layer sono su Free. I piani comprano capacità e aspetto, mai status — un account Free può arrivare a Legend.",
       },
       {
         q: "Quando arrivano le ricompense in crediti e token?",
@@ -1621,7 +1621,7 @@ export const it: SiteContent = {
     },
     badges: {
       title: 'Il caveau dei badge',
-      body: '34 badge in tre rarità. Diciotto arrivano in bronzo, argento e oro; dieci medaglie rare stanno oltre l’oro; sei medaglie leggendarie chiedono qualcosa di assurdo. Gira una carta per vedere cosa misura.',
+      body: 'Badge in tre rarità. Quelli classici arrivano in bronzo, argento e oro; medaglie rare e leggendarie sono soglie uniche. Gira una carta per vedere cosa misura — e quali crediti paga ogni livello.',
       filters: {
         all: 'Tutti',
         tiered: 'A livelli',

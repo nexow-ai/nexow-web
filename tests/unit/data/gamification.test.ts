@@ -632,7 +632,12 @@ describe('reward ladder', () => {
 
   it('pays the rarity bonus the reputation engine awards', () => {
     for (const row of REWARD_LADDER) {
-      const expected = row.key === 'rare' ? RARE_BONUS : row.key === 'legendary' ? LEGENDARY_BONUS : TIER_BONUS;
+      const expected =
+        row.key === 'rare' || row.key === 'tagRare'
+          ? RARE_BONUS
+          : row.key === 'legendary'
+            ? LEGENDARY_BONUS
+            : TIER_BONUS;
       expect(row.points, row.key).toBe(expected);
     }
   });

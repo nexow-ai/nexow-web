@@ -510,7 +510,7 @@ export const nl: SiteContent = {
         {
           icon: 'trophy',
           title: 'Reputatie & medailles',
-          body: 'Elke widget, bot en share verdient reputatie — punten, gelaagde achievements, zeldzame medailles en levels op je openbare profiel. Ze omzetten in beloningscredits komt daarna.',
+          body: 'Elke widget, bot en share verdient reputatie — punten, gelaagde achievements, zeldzame medailles en levels op je openbare profiel. Elke badge-tier stort gratis credits op je saldo.',
           status: 'live',
         },
       ],
@@ -563,7 +563,7 @@ export const nl: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Publiceer en installeer widgets, thema\'s, schermen en bots — met herkomst die elke remake crediteert.' },
         { status: 'shipped', title: 'Reputatie & medailles', body: 'Punten, gelaagde achievements, zeldzame medailles en levels voor wat je bouwt en deelt.' },
         { status: 'soon', title: 'Premium widgets & signalen', body: 'Publiceer premium widgets en strategische signalen, laat anderen zich abonneren, en verdien aan wat je uitvoert.' },
-        { status: 'soon', title: 'Betaalde plannen & beloningscredits', body: 'Lite- en Elite-checkout, platformcredits, en reputatie omzetten in beloningscredits.' },
+        { status: 'soon', title: 'Betaalde plannen', body: 'Lite- en Elite-checkout — maandelijkse creditvernieuwingen, hogere bot- en agentquota, en premium uiterlijk.' },
       ],
     },
     faq: {
@@ -1569,7 +1569,7 @@ export const nl: SiteContent = {
       },
       {
         q: "Hangen badges aan mijn plan?",
-        a: "Nee. Alle 34 badges, vijf levels en de volledige community-laag zijn beschikbaar op Free. Plannen kopen capaciteit en uiterlijk, nooit status — een Free-account kan Legend bereiken.",
+        a: "Nee. Alle badges, vijf levels en de volledige community-laag zijn beschikbaar op Free. Plannen kopen capaciteit en uiterlijk, nooit status — een Free-account kan Legend bereiken.",
       },
       {
         q: "Wanneer landen credit- en tokenbeloningen?",
@@ -1621,7 +1621,7 @@ export const nl: SiteContent = {
     },
     badges: {
       title: 'De badgekluis',
-      body: '34 badges in drie zeldzaamheden. Achttien komen in brons, zilver en goud; tien zeldzame medailles liggen voorbij goud; zes legendarische medailles vragen iets absurds. Draai een kaart om te zien wat hij meet.',
+      body: 'Badges in drie zeldzaamheden. Klassieke badges komen in brons, zilver en goud; zeldzame en legendarische medailles zijn enkele drempels. Draai een kaart om te zien wat hij meet — en welke credits elke trede uitkeert.',
       filters: {
         all: 'Alle',
         tiered: 'Getrapt',

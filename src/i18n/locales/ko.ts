@@ -84,7 +84,7 @@ export const ko: SiteContent = {
     hero: {
       badge: '얼리 액세스',
       titleLead: '데이터는 새로운 석유다.',
-      titleGradient: '무엇이든 만들고',
+      titleGradient: '무엇이든 만들어',
       titleWatch: '모든 것을 봐라.',
       titleTail: '빨리 행동하고, 공유하라 - 성장하라 - 벌어라',
       titleKicker: '실시간 대시보드를 몇 초 만에 — 몇 주나 분기가 아니라.',
@@ -510,7 +510,7 @@ export const ko: SiteContent = {
         {
           icon: 'trophy',
           title: '평판 & 메달',
-          body: '모든 위젯, 봇 및 공유가 평판을 얻습니다 — 공개 프로필의 포인트, 단계별 성취, 희귀 메달 및 레벨. 보상 크레딧으로의 전환은 다음에 옵니다.',
+          body: '모든 위젯, 봇 및 공유가 평판을 얻습니다 — 공개 프로필의 포인트, 단계별 성취, 희귀 메달 및 레벨. 배지 티어마다 잔액에 무료 크레딧이 지급됩니다.',
           status: 'live',
         },
       ],
@@ -563,7 +563,7 @@ export const ko: SiteContent = {
         { status: 'shipped', title: '마켓플레이스', body: '위젯, 테마, 스크린 및 봇을 게시 및 설치 — 모든 리메이크에 원작자를 표시하는 계보 포함.' },
         { status: 'shipped', title: '평판 & 메달', body: '구축하고 공유하는 것에 대한 포인트, 단계별 성취, 희귀 메달 및 레벨.' },
         { status: 'soon', title: '프리미엄 위젯 & 신호', body: '프리미엄 위젯과 전략 신호를 게시하고, 다른 사람이 구독하게 하고, 실행하는 것에 대해 수익을 올리세요.' },
-        { status: 'soon', title: '유료 요금제 & 보상 크레딧', body: 'Lite 및 Elite 결제, 플랫폼 크레딧, 그리고 평판을 보상 크레딧으로 전환.' },
+        { status: 'soon', title: '유료 요금제', body: 'Lite 및 Elite 결제 — 월간 크레딧 충전, 더 많은 봇과 에이전트, 프리미엄 외관.' },
       ],
     },
     faq: {
@@ -1327,7 +1327,7 @@ export const ko: SiteContent = {
           { icon: 'users', title: '커뮤니티', body: '메이커 팔로우, 빌더용 소셜 피드에서 좋아요·댓글, 보드 탐색, 다른 사람이 라이브러리에 바로 추가할 수 있는 위젯 공유 — 공개 메이커 프로필.' },
           { icon: 'mail', title: '실시간 채팅', body: '계정 또는 Dock에서 친구·연락처와 라이브 메시지 — 1:1 및 그룹 DM, 프레즌스, 반응, 팔로워/팔로잉, 연락처 받은편지함.' },
           { icon: 'store', title: '마켓플레이스', body: '위젯, 테마, 스크린, 봇, 에이전트 게시·설치 — 계보 포함. 구매·판매는 다음에.' },
-          { icon: 'trophy', title: '평판 및 메달', body: '구축·공유로 평판 포인트, 단계별 업적, 희귀 메달 획득 — 오늘 라이브. 보상 크레딧은 다음에.' },
+          { icon: 'trophy', title: '평판 및 메달', body: '구축·공유로 평판 포인트, 단계별 업적, 희귀 메달 획득 — 오늘 라이브. 배지 티어마다 잔액에 무료 크레딧이 지급됩니다.' },
         ],
       },
       {
