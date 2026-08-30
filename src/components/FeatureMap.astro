@@ -280,11 +280,48 @@ function iconPath(icon: string) {
         }
       };
 
+      /* The walkthrough (`sections/Features.astro`): while the plate is pinned,
+       * the scroll spends a beat on each surface and `ScrollMotion` counts them
+       * off on the stage as `data-stage`. Following it is the whole tour of the
+       * app — every surface selects itself on the way past.
+       *
+       * Until you touch it. A visitor who picks a surface is reading that one,
+       * and a scroll that took it back off them a beat later would be the page
+       * arguing with them; from the first click the stage is ignored. Leaving
+       * the section resets that, so coming back plays the walkthrough again. */
+      const stage = root.closest<HTMLElement>('[data-stages]');
+      let manual = false;
+
+      if (stage) {
+        const walk = () => {
+          if (manual) return;
+          const id = buttons[Number(stage.dataset.stage) || 0]?.dataset.fmNode;
+          if (id) select(id);
+        };
+        const stages = new MutationObserver(walk);
+        stages.observe(stage, { attributeFilter: ['data-stage'] });
+
+        const away = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) manual = false;
+          },
+          { rootMargin: '25% 0px' },
+        );
+        away.observe(stage);
+
+        signal.addEventListener('abort', () => {
+          stages.disconnect();
+          away.disconnect();
+        });
+        walk();
+      }
+
       buttons.forEach((btn, i) => {
         btn.addEventListener(
           'click',
           (e) => {
             e.preventDefault();
+            manual = true;
             const id = btn.dataset.fmNode;
             if (id) select(id);
           },
@@ -297,6 +334,7 @@ function iconPath(icon: string) {
               return;
             }
             e.preventDefault();
+            manual = true;
             const dir = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1;
             const next = (i + dir + buttons.length) % buttons.length;
             const nextId = buttons[next].dataset.fmNode;

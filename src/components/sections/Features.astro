@@ -16,6 +16,8 @@ const en = useContent('en').home.features;
 const explore = useContent(lang).nav.links.find((l) => l.href === '/features')?.label ?? 'Features';
 const mapUi = t.map ?? en.map!;
 const groups = resolveFeatureMapGroups(t, en);
+/** One beat of the pinned walkthrough per surface — see the stage below. */
+const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
 ---
 
 <section id="features" class="relative overflow-x-clip bg-[#f7fbfb]/70 py-20 text-ink-950 sm:py-24 dark:bg-white/[0.015] dark:text-white">
@@ -23,18 +25,30 @@ const groups = resolveFeatureMapGroups(t, en);
     <!-- Plain ink title + solid eyebrow (no gradient text / chip fill) -->
     <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} appear />
 
-    {/* The map is one wide box, so it drifts as one: `rise` against the scroll
-        and a lean into it, which is what keeps a flat plate from reading as a
-        screenshot pasted onto the page. */}
-    <div class="mt-10 sm:mt-12" data-motion="rise tilt">
-      <FeatureMap
-        lang={lang}
-        groups={groups}
-        hint={mapUi.hint}
-        moreLabel={mapUi.moreLabel}
-        openLabel={mapUi.openLabel}
-        closeLabel={mapUi.closeLabel}
-      />
+    {/* The map holds the page while it introduces itself.
+        A list of sixteen surfaces that you scroll straight past is a list
+        nobody reads: the plate drifted by with whichever node happened to be
+        selected on it. So the section is tall and the plate is pinned inside
+        it, and the scroll spends one beat on each surface — `ScrollMotion`
+        turns the travel into `data-stage`, and `FeatureMap` selects the node
+        of that number. Scrolling through is the demo.
+
+        Desktop only, and only with motion allowed (the styles below): a phone
+        has no room to hold a plate still beside its own scroll, and a visitor
+        who asked for less motion gets the plain plate with its first surface
+        on it, exactly as before. It also drifts no more — `rise tilt` on a
+        pinned element freezes mid-lean, and the pin is the motion now. */}
+    <div class="fm-stage mt-10 sm:mt-12" style={`--fm-beats:${surfaces}`} data-stages={surfaces}>
+      <div class="fm-stage__pin">
+        <FeatureMap
+          lang={lang}
+          groups={groups}
+          hint={mapUi.hint}
+          moreLabel={mapUi.moreLabel}
+          openLabel={mapUi.openLabel}
+          closeLabel={mapUi.closeLabel}
+        />
+      </div>
     </div>
 
     <div class="reveal mt-12 flex justify-center sm:mt-14">
@@ -44,3 +58,33 @@ const groups = resolveFeatureMapGroups(t, en);
     </div>
   </div>
 </section>
+
+<style>
+  /* The at-rest plate: an ordinary block, which is what ships without
+     JavaScript, under reduced motion and on a phone. */
+  .fm-stage__pin {
+    position: static;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* One viewport to hold the plate, plus a beat of travel per surface.
+         0.62 of a screen each is about a second and a quarter at the scroll
+         tour's pace — long enough to read a title and its line, short enough
+         that sixteen of them is not a chapter. */
+      :global(html.js) .fm-stage {
+        height: calc(100vh + var(--fm-beats, 1) * 0.62 * 100vh);
+      }
+
+      /* Clears the fixed header, matching `scroll-padding-top`, then centres
+         the plate in what is left so the walkthrough happens mid-screen. */
+      :global(html.js) .fm-stage__pin {
+        position: sticky;
+        top: 5rem;
+        display: flex;
+        height: calc(100vh - 5rem);
+        align-items: center;
+      }
+    }
+  }
+</style>
