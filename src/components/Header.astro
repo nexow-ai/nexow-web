@@ -410,6 +410,8 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       /* `scroll-behavior: smooth` is on the document for anchor jumps; left on,
        * it would fight a per-frame scrollBy into a stutter. */
       document.documentElement.style.scrollBehavior = on ? 'auto' : '';
+      // The world listens: its soundtrack follows the tour (`world/WorldSound.astro`).
+      document.dispatchEvent(new CustomEvent('nexow:tour', { detail: { playing: on } }));
     };
 
     const stop = () => {

@@ -1,0 +1,56 @@
+---
+/**
+ * The world's sound. No markup: this listens for the scroll tour and plays the
+ * ambient piece in `lib/ambient` under it, from the moment the tour starts to
+ * the moment it stops — for any reason: the button, a scroll, a keypress, the
+ * end of the page, a hidden tab.
+ *
+ * Why here and not in the header, where the tour lives: the header ships on
+ * every route, and only the world has a soundtrack. The engine itself is a
+ * dynamic import, fetched the first time somebody presses play; a visitor who
+ * scrolls the story by hand never loads it.
+ *
+ * The context is created in the click, synchronously, before the import
+ * resolves. Browsers unmute audio only for contexts born from a user gesture,
+ * and the gesture is over by the time an `await` returns.
+ */
+---
+
+<script>
+  import type { Ambient } from '../../lib/ambient';
+
+  let ctx: AudioContext | undefined;
+  let ambient: Ambient | undefined;
+  /** Play was pressed and the engine is still loading — unless stop came first. */
+  let wanted = false;
+
+  async function play() {
+    wanted = true;
+    if (!ctx) {
+      if (!('AudioContext' in window)) return;
+      // The piece is not interactive; a playback hint lets the browser buffer
+      // generously and spend less power on it.
+      ctx = new AudioContext({ latencyHint: 'playback' });
+    }
+    // Hidden tabs, and Safari, leave a context suspended. Harmless otherwise.
+    if (ctx.state !== 'running') void ctx.resume();
+    if (!ambient) {
+      const { createAmbient } = await import('../../lib/ambient');
+      ambient ??= createAmbient(ctx);
+    }
+    if (wanted) ambient.start();
+  }
+
+  function stop(seconds?: number) {
+    wanted = false;
+    ambient?.stop(seconds);
+  }
+
+  document.addEventListener('nexow:tour', (event) => {
+    const { playing } = (event as CustomEvent<{ playing: boolean }>).detail;
+    if (playing) void play();
+    else stop();
+  });
+  // Leaving the page: out quickly, before the next one paints.
+  document.addEventListener('astro:before-swap', () => stop(0.3));
+</script>
