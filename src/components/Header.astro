@@ -326,16 +326,68 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
    *
    * The home page is a scroll-driven story with holds built into it, so it is
    * worth being able to watch rather than drive. This advances the scroll at a
-   * fixed real-world speed and gets out of the way the moment the visitor
-   * touches anything.
+   * real-world speed and gets out of the way the moment the visitor touches
+   * anything.
    *
    * Speed is in CSS pixels per second, not per frame, so a 120Hz laptop and a
-   * 60Hz monitor travel the page at the same rate.
+   * 60Hz monitor travel the page at the same rate. It is not one number: the
+   * right-hand scene is the part that was crawling, so that half of a pinned
+   * act runs fast; the left-hand copy then gets a few seconds to be read.
    */
-  const TOUR_PX_PER_SECOND = 88;
+  const TOUR_SCENE = 380;
+  const TOUR_CRUISE = 260;
+  const TOUR_READ = 64;
+  /** How long the copy hold at the end of a pinned act should last. */
+  const TOUR_READ_HOLD = 4.2;
+  /** Time constant for easing from one pace into the next. */
+  const TOUR_EASE = 0.18;
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
+
+  function inReadingBand(el: Element, top = 0.22, bot = 0.72): boolean {
+    const r = el.getBoundingClientRect();
+    const t = window.innerHeight * top;
+    const b = window.innerHeight * bot;
+    return r.bottom > t && r.top < b;
+  }
+
+  function tourTargetSpeed(acts: HTMLElement[]): number {
+    const vh = window.innerHeight;
+    let best: HTMLElement | null = null;
+    let bestCover = 0;
+    for (const act of acts) {
+      const r = act.getBoundingClientRect();
+      const cover = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+      if (cover > bestCover) {
+        bestCover = cover;
+        best = act;
+      }
+    }
+
+    if (best && bestCover > vh * 0.15) {
+      const r = best.getBoundingClientRect();
+      const travel = r.height - vh;
+      if (travel > 80) {
+        /* Pinned: zip the right-hand scene together, then linger on the copy
+         * once every beat is lit. */
+        const scrolled = Math.max(0, -r.top);
+        const holdPx = Math.min(travel * 0.42, TOUR_READ * TOUR_READ_HOLD);
+        return scrolled >= travel - holdPx ? TOUR_READ : TOUR_SCENE;
+      }
+
+      /* Stacked (phone): pace off whichever half is in the reading band. */
+      const copy = best.querySelector('.act-copy');
+      const scene = best.querySelector('.act-scene');
+      if (scene && inReadingBand(scene) && !(copy && inReadingBand(copy))) return TOUR_SCENE;
+      if (copy && inReadingBand(copy)) return TOUR_READ;
+    }
+
+    for (const el of document.querySelectorAll('.act-copy')) {
+      if (inReadingBand(el)) return TOUR_READ;
+    }
+    return TOUR_CRUISE;
+  }
 
   function initTour() {
     tourAbort?.abort();
@@ -345,8 +397,10 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
     const btn = document.getElementById('tour-toggle');
     if (!btn) return;
 
+    const acts = Array.from(document.querySelectorAll<HTMLElement>('.act'));
     let playing = false;
     let last = 0;
+    let speed = TOUR_CRUISE;
 
     const setPlaying = (on: boolean) => {
       playing = on;
@@ -366,6 +420,9 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       setPlaying(false);
     };
 
+    const fromTourButton = (e: Event) =>
+      e.target === btn || (e.target instanceof Node && btn.contains(e.target));
+
     const step = (now: number) => {
       tourRaf = 0;
       if (!playing) return;
@@ -373,8 +430,12 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
 
+      const target = tourTargetSpeed(acts);
+      const ease = 1 - Math.exp(-dt / TOUR_EASE);
+      speed += (target - speed) * ease;
+
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      const next = window.scrollY + TOUR_PX_PER_SECOND * dt;
+      const next = window.scrollY + speed * dt;
       if (next >= max) {
         window.scrollTo(0, max);
         stop();
@@ -396,15 +457,24 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
         if (window.scrollY >= max - 2) window.scrollTo(0, 0);
         setPlaying(true);
         last = 0;
+        speed = tourTargetSpeed(acts);
         tourRaf = requestAnimationFrame(step);
       },
       { signal },
     );
 
-    /* Any intent to move the page yourself ends the tour. `wheel` and
-     * `touchstart` are passive listeners, so this never delays a scroll. */
+    /* Any intent to move the page yourself ends the tour. The button is
+     * excluded so its own pointerdown does not cancel the click that toggles
+     * it. `wheel` and `touchstart` stay passive, so this never delays a scroll. */
     for (const evt of ['wheel', 'touchstart', 'pointerdown'] as const) {
-      window.addEventListener(evt, stop, { passive: true, signal });
+      window.addEventListener(
+        evt,
+        (e) => {
+          if (fromTourButton(e)) return;
+          stop();
+        },
+        { passive: true, signal },
+      );
     }
     window.addEventListener(
       'keydown',
