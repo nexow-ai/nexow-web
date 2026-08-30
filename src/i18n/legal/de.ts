@@ -8,7 +8,7 @@ export const de: LegalBundle = {
     badge: 'Datenschutz',
     title: 'Datenschutzerklärung',
     subtitle:
-      'Wie Nexow, Inc. personenbezogene Daten erhebt, verwendet und schützt, wenn Sie nexow.ai und die Nexow-Anwendung nutzen.',
+      `Wie Nexow, Inc. personenbezogene Daten erhebt, verwendet und schützt, wenn Sie ${WEB} und die Nexow-Anwendung nutzen.`,
     meta: {
       title: 'Datenschutzerklärung — Nexow',
       description:
@@ -151,7 +151,7 @@ export const de: LegalBundle = {
   termsPage: {
     badge: 'Nutzungsbedingungen',
     title: 'Nutzungsbedingungen',
-    subtitle: 'Die Vereinbarung zwischen Ihnen und Nexow, Inc. zur Nutzung von nexow.ai und der Nexow-Anwendung.',
+    subtitle: `Die Vereinbarung zwischen Ihnen und Nexow, Inc. zur Nutzung von ${WEB} und der Nexow-Anwendung.`,
     meta: {
       title: 'Nutzungsbedingungen — Nexow',
       description:
@@ -233,7 +233,7 @@ export const de: LegalBundle = {
       {
         h: '11. Haftungsbeschränkung',
         paragraphs: [
-          `IM GRÖSSTMÖGLICHEN GESETZLICH ZULÄSSIGEN UMFANG HAFTEN ${ENTITY.toUpperCase()} UND SEINE GESCHÄFTSFÜHRER, VORSTÄNDE, MITARBEITER UND BEAUFTRAGTEN NICHT FÜR INDIREKTE, ZUFÄLLIGE, BESONDERE, FOLGE-, EXEMPLARISCHE ODER STRAFSCHÄDEN ODER FÜR ENTGANGENEN GEWINN, UMSATZVERLUST, DATEN- ODER GOODWILL-VERLUST, DIE AUS ODER IM ZUSAMMENHANG MIT DEN DIENSTEN ODER DIESEN BEDINGUNGEN ENTSTEHEN, SEI ES AUS VERTRAG, UNERLAUBTER HANDLUNG ODER ANDERWEITIG, AUCH BEI KENNTNIS DER MÖGLICHKEIT.`,
+          `IM GRÖSSTMÖGLICHEN GESETZLICH ZULÄSSIGEN UMFANG HAFTEN ${ENTITY} UND SEINE GESCHÄFTSFÜHRER, VORSTÄNDE, MITARBEITER UND BEAUFTRAGTEN NICHT FÜR INDIREKTE, ZUFÄLLIGE, BESONDERE, FOLGE-, EXEMPLARISCHE ODER STRAFSCHÄDEN ODER FÜR ENTGANGENEN GEWINN, UMSATZVERLUST, DATEN- ODER GOODWILL-VERLUST, DIE AUS ODER IM ZUSAMMENHANG MIT DEN DIENSTEN ODER DIESEN BEDINGUNGEN ENTSTEHEN, SEI ES AUS VERTRAG, UNERLAUBTER HANDLUNG ODER ANDERWEITIG, AUCH BEI KENNTNIS DER MÖGLICHKEIT.`,
           'UNSERE GESAMTHAFTUNG FÜR ALLE ANSPRÜCHE IM ZUSAMMENHANG MIT DEN DIENSTEN ODER DIESEN BEDINGUNGEN ÜBERSTEIGT NICHT DEN HÖHEREN BETRAG AUS (A) DEN VON IHNEN FÜR DIE DIENSTE IN DEN ZWÖLF (12) MONATEN VOR DEM ANSPRUCH GEZAHLTEN BETRÄGEN ODER (B) EINHUNDERT US-DOLLAR (100 USD). EINIGE RECHTSORDNUNGEN ERLAUBEN BESTIMMTE BESCHRÄNKUNGEN NICHT; IN DIESEM FALL IST UNSERE HAFTUNG AUF DAS GESETZLICH ZULÄSSIGE MAXIMUM BESCHRÄNKT.',
         ],
       },
@@ -276,7 +276,7 @@ export const de: LegalBundle = {
     badge: 'Cookies',
     title: 'Cookie-Richtlinie',
     subtitle:
-      'Wie Nexow, Inc. Cookies und ähnliche Technologien auf nexow.ai und in der Nexow-Anwendung verwendet.',
+      `Wie Nexow, Inc. Cookies und ähnliche Technologien auf ${WEB} und in der Nexow-Anwendung verwendet.`,
     meta: {
       title: 'Cookie-Richtlinie — Nexow',
       description:

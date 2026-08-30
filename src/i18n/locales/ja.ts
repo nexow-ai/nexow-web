@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ja as legal } from '../legal/ja';
 
 export const ja: SiteContent = {
   nav: {
@@ -2340,4 +2341,9 @@ export const ja: SiteContent = {
       ctaSecondary: 'コミュニティに参加',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { el as legal } from '../legal/el';
 
 export const el = {
   nav: {
@@ -2340,4 +2341,9 @@ export const el = {
       packCta: 'Ανοίξτε την εφαρμογή',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 } as unknown as SiteContent;

@@ -8,7 +8,7 @@ export const nl: LegalBundle = {
     badge: 'Privacy',
     title: 'Privacybeleid',
     subtitle:
-      'Hoe Nexow, Inc. persoonsgegevens verzamelt, gebruikt en beschermt wanneer u nexow.ai en de Nexow-applicatie gebruikt.',
+      `Hoe Nexow, Inc. persoonsgegevens verzamelt, gebruikt en beschermt wanneer u ${WEB} en de Nexow-applicatie gebruikt.`,
     meta: {
       title: 'Privacybeleid — Nexow',
       description:
@@ -151,7 +151,7 @@ export const nl: LegalBundle = {
   termsPage: {
     badge: 'Voorwaarden',
     title: 'Gebruiksvoorwaarden',
-    subtitle: 'De overeenkomst tussen u en Nexow, Inc. voor het gebruik van nexow.ai en de Nexow-applicatie.',
+    subtitle: `De overeenkomst tussen u en Nexow, Inc. voor het gebruik van ${WEB} en de Nexow-applicatie.`,
     meta: {
       title: 'Gebruiksvoorwaarden — Nexow',
       description:
@@ -233,7 +233,7 @@ export const nl: LegalBundle = {
       {
         h: '11. Beperking van aansprakelijkheid',
         paragraphs: [
-          `VOOR ZOVER MAXIMAAL TOEGESTAAN DOOR DE WET ZIJN ${ENTITY.toUpperCase()} EN HAAR DIRECTEUREN, BESTUURSLIDEN, MEDEWERKERS EN AGENTEN NIET AANSPRAKELIJK VOOR INDIRECTE, INCIDENTELE, BIJZONDERE, GEVOLG-, VOORBEELD- OF STRAFSCHADE, OF VOOR GEDERFDE WINST, OMZET, GEGEVENS OF GOODWILL, VOORTVLOEIEND UIT OF VERBAND HOUDEND MET DE DIENSTEN OF DEZE VOORWAARDEN, ONGEACHT OF GEBASEERD OP OVEREENKOMST, ONRECHTMATIGE DAAD OF ANDERSZINS, ZELFS INDIEN OP DE MOGELIJKHEID GEWEZEN.`,
+          `VOOR ZOVER MAXIMAAL TOEGESTAAN DOOR DE WET ZIJN ${ENTITY} EN HAAR DIRECTEUREN, BESTUURSLIDEN, MEDEWERKERS EN AGENTEN NIET AANSPRAKELIJK VOOR INDIRECTE, INCIDENTELE, BIJZONDERE, GEVOLG-, VOORBEELD- OF STRAFSCHADE, OF VOOR GEDERFDE WINST, OMZET, GEGEVENS OF GOODWILL, VOORTVLOEIEND UIT OF VERBAND HOUDEND MET DE DIENSTEN OF DEZE VOORWAARDEN, ONGEACHT OF GEBASEERD OP OVEREENKOMST, ONRECHTMATIGE DAAD OF ANDERSZINS, ZELFS INDIEN OP DE MOGELIJKHEID GEWEZEN.`,
           'ONZE TOTALE AANSPRAKELIJKHEID VOOR ALLE VORDERINGEN MET BETREKKING TOT DE DIENSTEN OF DEZE VOORWAARDEN ZAL NIET HOGER ZIJN DAN HET GROOTSTE VAN (A) DE BEDRAGEN DIE U ONS VOOR DE DIENSTEN HEEFT BETAALD IN DE TWAALF (12) MAANDEN VOORAFGAAND AAN DE VORDERING OF (B) HONDERD AMERIKAANSE DOLLAR (100 USD). SOMMIGE RECHTSGEBIEDEN STAAN BEPAALDE BEPERKINGEN NIET TOE; IN DIE GEVALLEN IS ONZE AANSPRAKELIJKHEID BEPERKT TOT HET MAXIMAAL TOEGESTANE.',
         ],
       },
@@ -276,7 +276,7 @@ export const nl: LegalBundle = {
     badge: 'Cookies',
     title: 'Cookiebeleid',
     subtitle:
-      'Hoe Nexow, Inc. cookies en vergelijkbare technologieën gebruikt op nexow.ai en in de Nexow-applicatie.',
+      `Hoe Nexow, Inc. cookies en vergelijkbare technologieën gebruikt op ${WEB} en in de Nexow-applicatie.`,
     meta: {
       title: 'Cookiebeleid — Nexow',
       description:

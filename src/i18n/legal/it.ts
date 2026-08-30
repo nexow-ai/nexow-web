@@ -8,7 +8,7 @@ export const it: LegalBundle = {
     badge: 'Privacy',
     title: 'Informativa sulla Privacy',
     subtitle:
-      'Come Nexow, Inc. raccoglie, utilizza e protegge le informazioni personali quando utilizzi nexow.ai e l’applicazione Nexow.',
+      `Come Nexow, Inc. raccoglie, utilizza e protegge le informazioni personali quando utilizzi ${WEB} e l’applicazione Nexow.`,
     meta: {
       title: 'Informativa sulla Privacy — Nexow',
       description:
@@ -151,7 +151,7 @@ export const it: LegalBundle = {
   termsPage: {
     badge: 'Termini',
     title: 'Termini di Utilizzo',
-    subtitle: 'L’accordo tra voi e Nexow, Inc. per l’utilizzo di nexow.ai e dell’applicazione Nexow.',
+    subtitle: `L’accordo tra voi e Nexow, Inc. per l’utilizzo di ${WEB} e dell’applicazione Nexow.`,
     meta: {
       title: 'Termini di Utilizzo — Nexow',
       description:
@@ -233,7 +233,7 @@ export const it: LegalBundle = {
       {
         h: '11. Limitazione di responsabilità',
         paragraphs: [
-          `NELLA MASSIMA MISURA CONSENTITA DALLA LEGGE, ${ENTITY.toUpperCase()} E I SUOI AMMINISTRATORI, DIRIGENTI, DIPENDENTI E AGENTI NON SARANNO RESPONSABILI PER DANNI INDIRETTI, INCIDENTALI, SPECIALI, CONSEQUENZIALI, ESEMPLARI O PUNITIVI, NÉ PER MANCATO GUADAGNO, PERDITA DI RICAVI, DATI O AVVIAMENTO, DERIVANTI DA O RELATIVI AI SERVIZI O AI PRESENTI TERMINI, SIA IN CONTRATTO, ILLECITO CIVILE O ALTRO, ANCHE SE INFORMATI DELLA POSSIBILITÀ.`,
+          `NELLA MASSIMA MISURA CONSENTITA DALLA LEGGE, ${ENTITY} E I SUOI AMMINISTRATORI, DIRIGENTI, DIPENDENTI E AGENTI NON SARANNO RESPONSABILI PER DANNI INDIRETTI, INCIDENTALI, SPECIALI, CONSEQUENZIALI, ESEMPLARI O PUNITIVI, NÉ PER MANCATO GUADAGNO, PERDITA DI RICAVI, DATI O AVVIAMENTO, DERIVANTI DA O RELATIVI AI SERVIZI O AI PRESENTI TERMINI, SIA IN CONTRATTO, ILLECITO CIVILE O ALTRO, ANCHE SE INFORMATI DELLA POSSIBILITÀ.`,
           'LA NOSTRA RESPONSABILITÀ AGGREGATA PER TUTTE LE RICHIESTE RELATIVE AI SERVIZI O AI PRESENTI TERMINI NON SUPERERÀ IL MAGGIORE TRA (A) GLI IMPORTI DA VOI PAGATI PER I SERVIZI NEI DODICI (12) MESI PRECEDENTI LA RICHIESTA O (B) CENTO DOLLARI STATUNITENSI (100 USD). ALCUNE GIURISPRUDENZE NON CONSENTONO DETERMINATE LIMITAZIONI; IN TALI CASI LA NOSTRA RESPONSABILITÀ È LIMITATA AL MASSIMO CONSENTITO.',
         ],
       },
@@ -276,7 +276,7 @@ export const it: LegalBundle = {
     badge: 'Cookie',
     title: 'Informativa sui Cookie',
     subtitle:
-      'Come Nexow, Inc. utilizza cookie e tecnologie simili su nexow.ai e nell’applicazione Nexow.',
+      `Come Nexow, Inc. utilizza cookie e tecnologie simili su ${WEB} e nell’applicazione Nexow.`,
     meta: {
       title: 'Informativa sui Cookie — Nexow',
       description:

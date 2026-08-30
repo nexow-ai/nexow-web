@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ms as legal } from '../legal/ms';
 
 export const ms = {
   nav: {
@@ -2340,4 +2341,9 @@ export const ms = {
       packCta: 'Buka aplikasi',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 } as unknown as SiteContent;

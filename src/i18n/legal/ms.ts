@@ -8,7 +8,7 @@ export const ms: LegalBundle = {
     badge: 'Privasi',
     title: 'Dasar Privasi',
     subtitle:
-      'Cara Nexow, Inc. mengumpul, menggunakan dan melindungi maklumat peribadi apabila anda menggunakan nexow.ai dan aplikasi Nexow.',
+      `Cara Nexow, Inc. mengumpul, menggunakan dan melindungi maklumat peribadi apabila anda menggunakan ${WEB} dan aplikasi Nexow.`,
     meta: {
       title: 'Dasar Privasi — Nexow',
       description:
@@ -151,7 +151,7 @@ export const ms: LegalBundle = {
   termsPage: {
     badge: 'Terma',
     title: 'Terma Penggunaan',
-    subtitle: 'Perjanjian antara anda dan Nexow, Inc. untuk penggunaan nexow.ai dan aplikasi Nexow.',
+    subtitle: `Perjanjian antara anda dan Nexow, Inc. untuk penggunaan ${WEB} dan aplikasi Nexow.`,
     meta: {
       title: 'Terma Penggunaan — Nexow',
       description:
@@ -233,7 +233,7 @@ export const ms: LegalBundle = {
       {
         h: '11. Had liabiliti',
         paragraphs: [
-          `SETAKAT MAKSIMUM YANG DIBENARKAN UNDANG-UNDANG, ${ENTITY.toUpperCase()} DAN PENGARAH, PEGAWAI, PEKERJA DAN EJENNYA TIDAK AKAN BERTANGGUNGJAWAB ATAS KEROSAKAN TIDAK LANGSUNG, SAMPINGAN, KHAS, AKIBAT, CONTOH ATAU PUNITIF, ATAU KEHILANGAN KEUNTUNGAN, HASIL, DATA ATAU GOODWILL, YANG TIMBUL DARIPADA ATAU BERKAITAN DENGAN PERKHIDMATAN ATAU TERMA INI, SAMA ADA BERDASARKAN KONTRAK, TORT ATAU SEBALIKNYA, WALAUPUN DINASIHATKAN KEMUNGKINANNYA.`,
+          `SETAKAT MAKSIMUM YANG DIBENARKAN UNDANG-UNDANG, ${ENTITY} DAN PENGARAH, PEGAWAI, PEKERJA DAN EJENNYA TIDAK AKAN BERTANGGUNGJAWAB ATAS KEROSAKAN TIDAK LANGSUNG, SAMPINGAN, KHAS, AKIBAT, CONTOH ATAU PUNITIF, ATAU KEHILANGAN KEUNTUNGAN, HASIL, DATA ATAU GOODWILL, YANG TIMBUL DARIPADA ATAU BERKAITAN DENGAN PERKHIDMATAN ATAU TERMA INI, SAMA ADA BERDASARKAN KONTRAK, TORT ATAU SEBALIKNYA, WALAUPUN DINASIHATKAN KEMUNGKINANNYA.`,
           'LIABILITI AGREGAT KAMI UNTUK SEMUA TUNTUTAN BERKAITAN PERKHIDMATAN ATAU TERMA INI TIDAK MELEBIHI YANG LEBIH TINGGI ANTARA (A) JUMLAH YANG ANDA BAYAR KEPADA KAMI UNTUK PERKHIDMATAN DALAM DUA BELAS (12) BULAN SEBELUM TUNTUTAN ATAU (B) SERATUS DOLAR AS (100 USD). SESSETENGAH BIDANG KUASA TIDAK MEMBENARKAN HAD TERTENTU; DALAM KES ITU LIABILITI KAMI TERHAD KEPADA MAKSIMUM YANG DIBENARKAN.',
         ],
       },
@@ -276,7 +276,7 @@ export const ms: LegalBundle = {
     badge: 'Kuki',
     title: 'Dasar Kuki',
     subtitle:
-      'Cara Nexow, Inc. menggunakan kuki dan teknologi serupa di nexow.ai dan dalam aplikasi Nexow.',
+      `Cara Nexow, Inc. menggunakan kuki dan teknologi serupa di ${WEB} dan dalam aplikasi Nexow.`,
     meta: {
       title: 'Dasar Kuki — Nexow',
       description:

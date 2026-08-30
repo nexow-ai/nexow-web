@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ko as legal } from '../legal/ko';
 
 export const ko: SiteContent = {
   nav: {
@@ -2338,4 +2339,9 @@ export const ko: SiteContent = {
       ctaSecondary: '커뮤니티 참여',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

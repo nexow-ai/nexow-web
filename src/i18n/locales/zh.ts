@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { zh as legal } from '../legal/zh';
 
 export const zh: SiteContent = {
   nav: {
@@ -2336,4 +2337,9 @@ export const zh: SiteContent = {
       ctaSecondary: '加入社区',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

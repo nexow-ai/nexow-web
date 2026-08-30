@@ -8,7 +8,7 @@ export const fr: LegalBundle = {
     badge: 'Confidentialité',
     title: 'Politique de confidentialité',
     subtitle:
-      'Comment Nexow, Inc. collecte, utilise et protège les informations personnelles lorsque vous utilisez nexow.ai et l’application Nexow.',
+      `Comment Nexow, Inc. collecte, utilise et protège les informations personnelles lorsque vous utilisez ${WEB} et l’application Nexow.`,
     meta: {
       title: 'Politique de confidentialité — Nexow',
       description:
@@ -151,7 +151,7 @@ export const fr: LegalBundle = {
   termsPage: {
     badge: 'Conditions',
     title: 'Conditions d’utilisation',
-    subtitle: 'L’accord entre vous et Nexow, Inc. pour l’usage de nexow.ai et de l’application Nexow.',
+    subtitle: `L’accord entre vous et Nexow, Inc. pour l’usage de ${WEB} et de l’application Nexow.`,
     meta: {
       title: 'Conditions d’utilisation — Nexow',
       description:
@@ -233,7 +233,7 @@ export const fr: LegalBundle = {
       {
         h: '11. Limitation de responsabilité',
         paragraphs: [
-          `DANS LA MESURE MAXIMALE PERMISE PAR LA LOI, ${ENTITY.toUpperCase()} AINSI QUE SES ADMINISTRATEURS, DIRIGEANTS, SALARIÉS ET MANDATAIRES NE SERONT PAS RESPONSABLES DES DOMMAGES INDIRECTS, ACCESSOIRES, SPÉCIAUX, CONSÉCUTIFS, EXEMPLAIRES OU PUNITIFS, NI DES PERTES DE BÉNÉFICES, DE CHIFFRE D’AFFAIRES, DE DONNÉES OU DE FONDS DE COMMERCE, DÉCOULANT DES SERVICES OU DES PRÉSENTES CONDITIONS OU S’Y RAPPORTANT, QUE CE SOIT SUR LE FONDEMENT CONTRACTUEL, DÉLICTUEL OU AUTRE, MÊME S’ILS ONT ÉTÉ AVERTIS DE LA POSSIBILITÉ DE TELS DOMMAGES.`,
+          `DANS LA MESURE MAXIMALE PERMISE PAR LA LOI, ${ENTITY} AINSI QUE SES ADMINISTRATEURS, DIRIGEANTS, SALARIÉS ET MANDATAIRES NE SERONT PAS RESPONSABLES DES DOMMAGES INDIRECTS, ACCESSOIRES, SPÉCIAUX, CONSÉCUTIFS, EXEMPLAIRES OU PUNITIFS, NI DES PERTES DE BÉNÉFICES, DE CHIFFRE D’AFFAIRES, DE DONNÉES OU DE FONDS DE COMMERCE, DÉCOULANT DES SERVICES OU DES PRÉSENTES CONDITIONS OU S’Y RAPPORTANT, QUE CE SOIT SUR LE FONDEMENT CONTRACTUEL, DÉLICTUEL OU AUTRE, MÊME S’ILS ONT ÉTÉ AVERTIS DE LA POSSIBILITÉ DE TELS DOMMAGES.`,
           'NOTRE RESPONSABILITÉ GLOBALE POUR L’ENSEMBLE DES RÉCLAMATIONS RELATIVES AUX SERVICES OU AUX PRÉSENTES CONDITIONS N’EXCÉDERA PAS LE PLUS ÉLEVÉ DE (A) LES MONTANTS QUE VOUS NOUS AVEZ VERSÉS POUR LES SERVICES AU COURS DES DOUZE (12) MOIS PRÉCÉDANT LA RÉCLAMATION OU (B) CENT DOLLARS AMÉRICAINS (100 USD). CERTAINES JURIDICTIONS N’AUTORISENT PAS CERTAINES LIMITATIONS ; DANS CES CAS, NOTRE RESPONSABILITÉ EST LIMITÉE AU MAXIMUM AUTORISÉ.',
         ],
       },
@@ -276,7 +276,7 @@ export const fr: LegalBundle = {
     badge: 'Cookies',
     title: 'Politique relative aux cookies',
     subtitle:
-      'Comment Nexow, Inc. utilise les cookies et technologies similaires sur nexow.ai et dans l’application Nexow.',
+      `Comment Nexow, Inc. utilise les cookies et technologies similaires sur ${WEB} et dans l’application Nexow.`,
     meta: {
       title: 'Politique relative aux cookies — Nexow',
       description:

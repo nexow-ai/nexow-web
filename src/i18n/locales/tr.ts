@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { tr as legal } from '../legal/tr';
 
 export const tr = {
   nav: {
@@ -2340,4 +2341,9 @@ export const tr = {
       packCta: 'Uygulamayı aç',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 } as unknown as SiteContent;

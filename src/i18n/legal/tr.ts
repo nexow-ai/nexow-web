@@ -8,7 +8,7 @@ export const tr: LegalBundle = {
     badge: 'Gizlilik',
     title: 'Gizlilik Politikası',
     subtitle:
-      'Nexow, Inc.\'nin nexow.ai ve Nexow uygulamasını kullandığınızda kişisel bilgileri nasıl topladığı, kullandığı ve koruduğu.',
+      `Nexow, Inc.'nin ${WEB} ve Nexow uygulamasını kullandığınızda kişisel bilgileri nasıl topladığı, kullandığı ve koruduğu.`,
     meta: {
       title: 'Gizlilik Politikası — Nexow',
       description:
@@ -151,7 +151,7 @@ export const tr: LegalBundle = {
   termsPage: {
     badge: 'Koşullar',
     title: 'Kullanım Koşulları',
-    subtitle: 'nexow.ai ve Nexow uygulamasının kullanımına ilişkin sizinle Nexow, Inc. arasındaki sözleşme.',
+    subtitle: `Sizinle Nexow, Inc. arasındaki ${WEB} ve Nexow uygulaması kullanım sözleşmesi.`,
     meta: {
       title: 'Kullanım Koşulları — Nexow',
       description:
@@ -233,7 +233,7 @@ export const tr: LegalBundle = {
       {
         h: '11. Sorumluluk sınırlaması',
         paragraphs: [
-          `YASA İZİN VERDİĞİ AZAMİ ÖLÇÜDE, ${ENTITY.toUpperCase()} VE YÖNETİCİLERİ, MEMURLARI, ÇALIŞANLARI VE TEMSİLCİLERİ, SÖZLEŞME, HAKSIZ FİİL VEYA BAŞKA BİR DAYANAKLA, OLANAKLILIĞI BİLDİRİLMİŞ OLSA BİLE, HİZMETLERDEN VEYA BU KOŞULLARDAN KAYNAKLANAN VEYA BUNLARLA İLGİLİ DOLAYLI, ARIZİ, ÖZEL, SONUÇSAL, ÖRNEK VEYA CEZAİ ZARARLARDAN VEYA KÂR, GELİR, VERİ VEYA İTİBAR KAYBINDAN SORUMLU OLMAYACAKTIR.`,
+          `YASA İZİN VERDİĞİ AZAMİ ÖLÇÜDE, ${ENTITY} VE YÖNETİCİLERİ, MEMURLARI, ÇALIŞANLARI VE TEMSİLCİLERİ, SÖZLEŞME, HAKSIZ FİİL VEYA BAŞKA BİR DAYANAKLA, OLANAKLILIĞI BİLDİRİLMİŞ OLSA BİLE, HİZMETLERDEN VEYA BU KOŞULLARDAN KAYNAKLANAN VEYA BUNLARLA İLGİLİ DOLAYLI, ARIZİ, ÖZEL, SONUÇSAL, ÖRNEK VEYA CEZAİ ZARARLARDAN VEYA KÂR, GELİR, VERİ VEYA İTİBAR KAYBINDAN SORUMLU OLMAYACAKTIR.`,
           'HİZMETLER VEYA BU KOŞULLARLA İLGİLİ TÜM TALEPLER İÇİN TOPLAM SORUMLULUĞUMUZ, (A) TALEP ÖNCESİ ON İKİ (12) AY İÇİNDE HİZMETLER İÇİN BİZE ÖDEDİĞİNİZ TUTARLAR VEYA (B) YÜZ ABD DOLARI (100 USD) TUTARLARINDAN BÜYÜK OLANI AŞMAYACAKTIR. BAZI YARGI ALANLARI BELİRLİ SINIRLAMALARA İZİN VERMEZ; BU DURUMLARDA SORUMLULUĞUMUZ İZİN VERİLEN AZAMİ ÖLÇÜYLE SINIRLIDIR.',
         ],
       },
@@ -276,7 +276,7 @@ export const tr: LegalBundle = {
     badge: 'Çerezler',
     title: 'Çerez Politikası',
     subtitle:
-      'Nexow, Inc.\'nin nexow.ai ve Nexow uygulamasında çerezleri ve benzer teknolojileri nasıl kullandığı.',
+      `Nexow, Inc.'nin ${WEB} ve Nexow uygulamasında çerezleri ve benzer teknolojileri nasıl kullandığı.`,
     meta: {
       title: 'Çerez Politikası — Nexow',
       description:

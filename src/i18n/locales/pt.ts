@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { pt as legal } from '../legal/pt';
 
 export const pt: SiteContent = {
   nav: {
@@ -2340,4 +2341,9 @@ export const pt: SiteContent = {
       ctaSecondary: 'Juntar-se à comunidade',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

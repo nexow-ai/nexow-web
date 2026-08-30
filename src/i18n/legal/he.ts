@@ -8,7 +8,7 @@ export const he: LegalBundle = {
     badge: 'פרטיות',
     title: 'מדיניות פרטיות',
     subtitle:
-      'כיצד Nexow, Inc. אוספת, משתמשת ומגינה על מידע אישי בעת השימוש ב-nexow.ai וביישום Nexow.',
+      `כיצד Nexow, Inc. אוספת, משתמשת ומגינה על מידע אישי בעת השימוש ב-${WEB} וביישום Nexow.`,
     meta: {
       title: 'מדיניות פרטיות — Nexow',
       description:
@@ -151,7 +151,7 @@ export const he: LegalBundle = {
   termsPage: {
     badge: 'תנאים',
     title: 'תנאי שימוש',
-    subtitle: 'ההסכם ביניכם לבין Nexow, Inc. לשימוש ב-nexow.ai וביישום Nexow.',
+    subtitle: `ההסכם ביניכם לבין Nexow, Inc. לשימוש ב-${WEB} וביישום Nexow.`,
     meta: {
       title: 'תנאי שימוש — Nexow',
       description:
@@ -276,7 +276,7 @@ export const he: LegalBundle = {
     badge: 'עוגיות',
     title: 'מדיניות עוגיות',
     subtitle:
-      'כיצד Nexow, Inc. משתמשת בעוגיות ובטכנולוגיות דומות ב-nexow.ai וביישום Nexow.',
+      `כיצד Nexow, Inc. משתמשת בעוגיות ובטכנולוגיות דומות ב-${WEB} וביישום Nexow.`,
     meta: {
       title: 'מדיניות עוגיות — Nexow',
       description:

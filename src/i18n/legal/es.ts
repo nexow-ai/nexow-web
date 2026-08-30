@@ -8,7 +8,7 @@ export const es: LegalBundle = {
     badge: 'Privacidad',
     title: 'Política de Privacidad',
     subtitle:
-      'Cómo Nexow, Inc. recopila, usa y protege la información personal cuando utiliza nexow.ai y la aplicación Nexow.',
+      `Cómo Nexow, Inc. recopila, usa y protege la información personal cuando utiliza ${WEB} y la aplicación Nexow.`,
     meta: {
       title: 'Política de Privacidad — Nexow',
       description:
@@ -151,7 +151,7 @@ export const es: LegalBundle = {
   termsPage: {
     badge: 'Términos',
     title: 'Términos de Uso',
-    subtitle: 'El acuerdo entre usted y Nexow, Inc. para el uso de nexow.ai y la aplicación Nexow.',
+    subtitle: `El acuerdo entre usted y Nexow, Inc. para el uso de ${WEB} y la aplicación Nexow.`,
     meta: {
       title: 'Términos de Uso — Nexow',
       description:
@@ -233,7 +233,7 @@ export const es: LegalBundle = {
       {
         h: '11. Limitación de responsabilidad',
         paragraphs: [
-          `EN LA MÁXIMA MEDIDA PERMITIDA POR LA LEY, ${ENTITY.toUpperCase()} Y SUS ADMINISTRADORES, DIRECTIVOS, EMPLEADOS Y AGENTES NO SERÁN RESPONSABLES DE DAÑOS INDIRECTOS, INCIDENTALES, ESPECIALES, CONSECUENCIALES, EJEMPLARES O PUNITIVOS, NI DE LUCRO CESANTE, PÉRDIDA DE INGRESOS, DATOS O FONDO DE COMERCIO, DERIVADOS DE O RELACIONADOS CON LOS SERVICIOS O ESTOS TÉRMINOS, YA SEA POR CONTRATO, ILÍCITO CIVIL U OTRA TEORÍA, AUNQUE SE HUBIERA ADVERTIDO DE SU POSIBILIDAD.`,
+          `EN LA MÁXIMA MEDIDA PERMITIDA POR LA LEY, ${ENTITY} Y SUS ADMINISTRADORES, DIRECTIVOS, EMPLEADOS Y AGENTES NO SERÁN RESPONSABLES DE DAÑOS INDIRECTOS, INCIDENTALES, ESPECIALES, CONSECUENCIALES, EJEMPLARES O PUNITIVOS, NI DE LUCRO CESANTE, PÉRDIDA DE INGRESOS, DATOS O FONDO DE COMERCIO, DERIVADOS DE O RELACIONADOS CON LOS SERVICIOS O ESTOS TÉRMINOS, YA SEA POR CONTRATO, ILÍCITO CIVIL U OTRA TEORÍA, AUNQUE SE HUBIERA ADVERTIDO DE SU POSIBILIDAD.`,
           'NUESTRA RESPONSABILIDAD AGREGADA POR TODAS LAS RECLAMACIONES RELACIONADAS CON LOS SERVICIOS O ESTOS TÉRMINOS NO EXCEDERÁ EL MAYOR DE (A) LOS IMPORTES QUE NOS HAYA PAGADO POR LOS SERVICIOS EN LOS DOCE (12) MESES ANTERIORES A LA RECLAMACIÓN O (B) CIEN DÓLARES ESTADOUNIDENSES (100 USD). ALGUNAS JURISDICCIONES NO PERMITEN CIERTAS LIMITACIONES; EN ESOS CASOS NUESTRA RESPONSABILIDAD SE LIMITA AL MÁXIMO PERMITIDO.',
         ],
       },
@@ -276,7 +276,7 @@ export const es: LegalBundle = {
     badge: 'Cookies',
     title: 'Política de Cookies',
     subtitle:
-      'Cómo Nexow, Inc. usa cookies y tecnologías similares en nexow.ai y en la aplicación Nexow.',
+      `Cómo Nexow, Inc. usa cookies y tecnologías similares en ${WEB} y en la aplicación Nexow.`,
     meta: {
       title: 'Política de Cookies — Nexow',
       description:

@@ -943,42 +943,7 @@ import { ms } from './locales/ms';
 import { el } from './locales/el';
 import { tr } from './locales/tr';
 
-import { es as legalEs } from './legal/es';
-import { fr as legalFr } from './legal/fr';
-import { it as legalIt } from './legal/it';
-import { de as legalDe } from './legal/de';
-import { nl as legalNl } from './legal/nl';
-import { pt as legalPt } from './legal/pt';
-import { zh as legalZh } from './legal/zh';
-import { ja as legalJa } from './legal/ja';
-import { ar as legalAr } from './legal/ar';
-import { he as legalHe } from './legal/he';
-import { ko as legalKo } from './legal/ko';
-import { ru as legalRu } from './legal/ru';
-import { uk as legalUk } from './legal/uk';
-import { ms as legalMs } from './legal/ms';
-import { el as legalEl } from './legal/el';
-import { tr as legalTr } from './legal/tr';
-
-export const content: Record<Lang, SiteContent> = {
-  en,
-  es: { ...es, ...legalEs },
-  fr: { ...fr, ...legalFr },
-  it: { ...it, ...legalIt },
-  de: { ...de, ...legalDe },
-  nl: { ...nl, ...legalNl },
-  pt: { ...pt, ...legalPt },
-  zh: { ...zh, ...legalZh },
-  ja: { ...ja, ...legalJa },
-  ar: { ...ar, ...legalAr },
-  he: { ...he, ...legalHe },
-  ko: { ...ko, ...legalKo },
-  ru: { ...ru, ...legalRu },
-  uk: { ...uk, ...legalUk },
-  ms: { ...ms, ...legalMs },
-  el: { ...el, ...legalEl },
-  tr: { ...tr, ...legalTr },
-};
+export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, nl, pt, zh, ja, ar, he, ko, ru, uk, ms, el, tr };
 
 /**
  * Deep-merge locale content onto English so incomplete translations still

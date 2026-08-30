@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { nl as legal } from '../legal/nl';
 
 export const nl: SiteContent = {
   nav: {
@@ -2340,4 +2341,9 @@ export const nl: SiteContent = {
       ctaSecondary: 'Word lid van de community',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

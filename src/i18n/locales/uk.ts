@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { uk as legal } from '../legal/uk';
 
 export const uk: SiteContent = {
   nav: {
@@ -2340,4 +2341,9 @@ export const uk: SiteContent = {
       ctaSecondary: 'Долучитися до спільноти',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ar as legal } from '../legal/ar';
 
 export const ar: SiteContent = {
   nav: {
@@ -2339,4 +2340,9 @@ export const ar: SiteContent = {
       ctaSecondary: 'انضم إلى المجتمع',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

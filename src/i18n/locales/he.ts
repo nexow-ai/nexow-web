@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { he as legal } from '../legal/he';
 
 export const he: SiteContent = {
   nav: {
@@ -2338,4 +2339,9 @@ export const he: SiteContent = {
       ctaSecondary: 'הצטרפו לקהילה',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

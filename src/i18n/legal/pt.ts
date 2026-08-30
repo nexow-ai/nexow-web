@@ -8,7 +8,7 @@ export const pt: LegalBundle = {
     badge: 'Privacidade',
     title: 'Política de Privacidade',
     subtitle:
-      'Como a Nexow, Inc. recolhe, utiliza e protege informações pessoais quando utiliza nexow.ai e a aplicação Nexow.',
+      `Como a Nexow, Inc. recolhe, utiliza e protege informações pessoais quando utiliza ${WEB} e a aplicação Nexow.`,
     meta: {
       title: 'Política de Privacidade — Nexow',
       description:
@@ -151,7 +151,7 @@ export const pt: LegalBundle = {
   termsPage: {
     badge: 'Termos',
     title: 'Termos de Utilização',
-    subtitle: 'O acordo entre si e a Nexow, Inc. para a utilização de nexow.ai e da aplicação Nexow.',
+    subtitle: `O acordo entre si e a Nexow, Inc. para a utilização de ${WEB} e da aplicação Nexow.`,
     meta: {
       title: 'Termos de Utilização — Nexow',
       description:
@@ -233,7 +233,7 @@ export const pt: LegalBundle = {
       {
         h: '11. Limitação de responsabilidade',
         paragraphs: [
-          `NA MÁXIMA MEDIDA PERMITIDA POR LEI, A ${ENTITY.toUpperCase()} E OS SEUS ADMINISTRADORES, DIRETORES, EMPREGADOS E AGENTES NÃO SERÃO RESPONSÁVEIS POR DANOS INDIRETOS, INCIDENTAIS, ESPECIAIS, CONSEQUENCIAIS, EXEMPLARES OU PUNITIVOS, NEM POR LUCROS CESSANTES, PERDA DE RECEITAS, DADOS OU FUNDO DE COMÉRCIO, DECORRENTES DE OU RELACIONADOS COM OS SERVIÇOS OU ESTES TERMOS, SEJA POR CONTRATO, ATO ILÍCITO OU OUTRO, AINDA QUE TENHAM SIDO ADVERTIDOS DA POSSIBILIDADE.`,
+          `NA MÁXIMA MEDIDA PERMITIDA POR LEI, A ${ENTITY} E OS SEUS ADMINISTRADORES, DIRETORES, EMPREGADOS E AGENTES NÃO SERÃO RESPONSÁVEIS POR DANOS INDIRETOS, INCIDENTAIS, ESPECIAIS, CONSEQUENCIAIS, EXEMPLARES OU PUNITIVOS, NEM POR LUCROS CESSANTES, PERDA DE RECEITAS, DADOS OU FUNDO DE COMÉRCIO, DECORRENTES DE OU RELACIONADOS COM OS SERVIÇOS OU ESTES TERMOS, SEJA POR CONTRATO, ATO ILÍCITO OU OUTRO, AINDA QUE TENHAM SIDO ADVERTIDOS DA POSSIBILIDADE.`,
           'A NOSSA RESPONSABILIDADE AGREGADA POR TODAS AS RECLAMAÇÕES RELACIONADAS COM OS SERVIÇOS OU ESTES TERMOS NÃO EXCEDERÁ O MAIOR DE (A) OS VALORES QUE NOS PAGOU PELOS SERVIÇOS NOS DOZE (12) MESES ANTERIORES À RECLAMAÇÃO OU (B) CEM DÓLARES AMERICANOS (100 USD). ALGUMAS JURISDIÇÕES NÃO PERMITEM CERTAS LIMITAÇÕES; NESSAS SITUAÇÕES, A NOSSA RESPONSABILIDADE LIMITA-SE AO MÁXIMO PERMITIDO.',
         ],
       },
@@ -276,7 +276,7 @@ export const pt: LegalBundle = {
     badge: 'Cookies',
     title: 'Política de Cookies',
     subtitle:
-      'Como a Nexow, Inc. utiliza cookies e tecnologias similares em nexow.ai e na aplicação Nexow.',
+      `Como a Nexow, Inc. utiliza cookies e tecnologias similares em ${WEB} e na aplicação Nexow.`,
     meta: {
       title: 'Política de Cookies — Nexow',
       description:

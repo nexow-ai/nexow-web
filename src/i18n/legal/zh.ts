@@ -8,7 +8,7 @@ export const zh: LegalBundle = {
     badge: '隐私',
     title: '隐私政策',
     subtitle:
-      '说明 Nexow, Inc. 在您使用 nexow.ai 及 Nexow 应用程序时如何收集、使用和保护个人信息。',
+      `说明 Nexow, Inc. 在您使用 ${WEB} 及 Nexow 应用程序时如何收集、使用和保护个人信息。`,
     meta: {
       title: '隐私政策 — Nexow',
       description:
@@ -151,7 +151,7 @@ export const zh: LegalBundle = {
   termsPage: {
     badge: '条款',
     title: '使用条款',
-    subtitle: '您与 Nexow, Inc. 之间关于使用 nexow.ai 及 Nexow 应用程序的协议。',
+    subtitle: `您与 Nexow, Inc. 之间关于使用 ${WEB} 及 Nexow 应用程序的协议。`,
     meta: {
       title: '使用条款 — Nexow',
       description:
@@ -276,7 +276,7 @@ export const zh: LegalBundle = {
     badge: 'Cookie',
     title: 'Cookie 政策',
     subtitle:
-      '说明 Nexow, Inc. 如何在 nexow.ai 及 Nexow 应用程序中使用 Cookie 及类似技术。',
+      `说明 Nexow, Inc. 如何在 ${WEB} 及 Nexow 应用程序中使用 Cookie 及类似技术。`,
     meta: {
       title: 'Cookie 政策 — Nexow',
       description:
