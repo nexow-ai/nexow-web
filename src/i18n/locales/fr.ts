@@ -83,10 +83,7 @@ export const fr: SiteContent = {
     },
     hero: {
       badge: 'Accès anticipé',
-      titleLead: 'La data est le nouvel or.',
-      titleGradient: 'Construisez tout',
-      titleWatch: 'surveillez tout.',
-      titleTail: 'Agis vite, partage - grandis - gagne',
+      title: 'Restez informé',
       titleKicker: 'Tableaux de bord en temps réel en quelques secondes — pas en semaines, ni en trimestres.',
       subtitle:
         'Décrivez ce dont vous avez besoin et Nexow le construit : de vrais widgets fonctionnels, branchés aux données live, disposés sur un canvas que vous contrôlez. Séismes, qualité de l’air, indicateurs mondiaux, flux de marché ou votre propre base de données — visualisez, surveillez et agissez.',

@@ -433,20 +433,10 @@ export interface SiteContent {
     meta: { title: string; description: string };
     hero: {
       badge: string;
-      titleLead: string;
-      titleGradient: string;
+      title: string;
       /**
-       * The actual hero title — the large lit line ("WATCH EVERYTHING.").
-       * When set, `titleGradient` is the quieter lead-in above it
-       * ("BUILD ANYTHING"). Locales without it keep the combined middle line.
-       */
-      titleWatch?: string;
-      titleTail: string;
-      /**
-       * Optional fourth beat under the three-line headline ("Live real-time
-       * dashboards in seconds — not weeks, or quarters."). Set apart
-       * typographically because four equal lines stop reading as a slogan.
-       * Locales without it just show three.
+       * One supporting line under the headline. Optional so a locale can
+       * ship the title alone and fall back to English via `useContent`.
        */
       titleKicker?: string;
       subtitle: string;

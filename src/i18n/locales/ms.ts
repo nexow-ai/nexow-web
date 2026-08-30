@@ -83,10 +83,7 @@ export const ms = {
     },
     hero: {
       badge: 'Akses awal',
-      titleLead: 'Data ialah minyak baharu.',
-      titleGradient: 'Bina apa sahaja',
-      titleWatch: 'pantau semuanya.',
-      titleTail: 'Bertindak pantas, kongsi - tumbuh - jana',
+      title: 'Kekal dimaklumkan',
       titleKicker: 'Papan pemuka masa nyata langsung dalam beberapa saat — bukan minggu, atau suku tahun.',
       subtitle:
         'Terangkan apa yang anda perlukan dan Nexow membinanya: widget sebenar yang berfungsi, disambung ke data langsung, disusun pada kanvas yang anda kawal. Gempa bumi, kualiti udara, penunjuk dunia, suapan pasaran atau pangkalan data anda sendiri — gambarkan, pantau dan bertindak.',

@@ -37,16 +37,13 @@ const examples = (t.promptExamples ?? []).slice(0, 4);
 
 /** Entrance order. The headline leads, everything else follows it up. */
 const D = {
-  line1: '0.10s',
-  line2: '0.20s',
-  lineWatch: '0.28s',
-  line3: '0.40s',
-  kicker: '0.58s',
-  forge: '0.70s',
-  examples: '0.80s',
-  note: '0.90s',
-  socials: '0.96s',
-  cue: '1.02s',
+  title: '0.10s',
+  kicker: '0.28s',
+  forge: '0.40s',
+  examples: '0.52s',
+  note: '0.64s',
+  socials: '0.72s',
+  cue: '0.80s',
 };
 ---
 
@@ -57,25 +54,13 @@ const D = {
   <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="container-page hero__inner">
-    <h1 id="hero-title" class="hero__title">
-      {/* Four beats, four hues: gold for the proverb, red→orange for the
-          build line, cyan for the lit hero, magenta for the close. Each
-          drifts on its own clock so they never lock into one wash. */}
-      <span class="hero__line hero__grad hero__grad--oil" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>{' '}
-      <span class="hero__line hero__grad hero__grad--use" data-text-appear data-text-appear-delay="0.20">{t.titleGradient}</span>{' '}
-      {
-        t.titleWatch && (
-          <span
-            class="hero__line hero__grad hero__grad--watch"
-            data-text={t.titleWatch}
-            data-text-appear
-            data-text-appear-delay="0.28"
-          >
-            {t.titleWatch}
-          </span>
-        )
-      }{' '}
-      <span class="hero__line hero__grad hero__grad--act" data-text-appear data-text-appear-delay={t.titleWatch ? '0.40' : '0.30'}>{t.titleTail}</span>
+    <h1
+      id="hero-title"
+      class="hero__title"
+      data-text-appear
+      data-text-appear-delay={D.title}
+    >
+      {t.title}
     </h1>
 
     {
@@ -203,249 +188,17 @@ const D = {
   }
 
   .hero__title {
-    display: grid;
-    max-width: 34ch;
+    max-width: 18ch;
     font-family: var(--font-display);
-    /* Supporting lines sit under the lit hero title. Locales whose lead-in
-     * runs long still wrap; the watch line sizes itself. */
-    font-size: clamp(1.2rem, 0.5rem + 3.4vw, 2.35rem);
-    font-weight: 600;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
+    font-size: clamp(2.05rem, 0.5rem + 6.4vw, 4.5rem);
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
     text-wrap: balance;
+    color: var(--w-text);
     /* Carries the readability the veil used to buy with opacity, but only
        where there are glyphs, so the matter stays visible around them. */
     text-shadow: 0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent);
-  }
-
-  .hero__line {
-    display: block;
-  }
-
-  .hero__grad {
-    background-image: linear-gradient(
-      100deg,
-      var(--ga),
-      var(--gb) 30%,
-      var(--gc) 55%,
-      var(--gb) 78%,
-      var(--ga)
-    );
-    background-size: 250% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: gradient-drift 14s ease-in-out infinite;
-    /* Dark punch from the title, plus a halo in the line's own hue so the
-       screens behind cannot flatten the glyphs into the world. */
-    text-shadow:
-      0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent),
-      0 0 38px color-mix(in oklab, var(--gb) 55%, transparent);
-  }
-
-  /* Light theme needs the deep stops; dark theme needs the luminous ones. */
-  .hero__grad--oil {
-    --ga: var(--color-gold-700);
-    --gb: var(--color-amber-600);
-    --gc: var(--color-amber-500);
-    animation-duration: 16s;
-  }
-
-  .hero__grad--use {
-    --ga: var(--color-rose-700);
-    --gb: var(--color-rose-600);
-    --gc: var(--color-amber-500);
-    /* Horizontal red → orange. Red holds through BUILD so the line does
-       not collapse into a single peach wash. */
-    background-image: linear-gradient(90deg, var(--ga) 0%, var(--gb) 42%, var(--gc) 100%);
-    background-size: 100% 100%;
-    animation: none;
-  }
-
-  /* One idea: a searchlight crossing the hero title. The specular lives in
-     the glyphs; a soft flare rides with it so the line reads as lit, not
-     just recolored. */
-  .hero__grad--watch {
-    --ga: var(--color-brand-700);
-    --gb: var(--color-sky-600);
-    --gc: var(--color-accent-600);
-    position: relative;
-    isolation: isolate;
-    margin-block: 0.02em 0.04em;
-    font-size: clamp(2.05rem, 0.5rem + 6.4vw, 4.75rem);
-    font-weight: 700;
-    letter-spacing: -0.035em;
-    line-height: 0.96;
-    background-image:
-      linear-gradient(
-        108deg,
-        transparent 28%,
-        color-mix(in oklab, white 70%, var(--gb)) 44%,
-        #fff 50%,
-        color-mix(in oklab, white 62%, var(--ga)) 56%,
-        transparent 72%
-      ),
-      linear-gradient(
-        100deg,
-        var(--ga),
-        var(--gb) 28%,
-        color-mix(in oklab, white 42%, var(--gb)) 50%,
-        var(--gc) 72%,
-        var(--ga)
-      );
-    background-size: 280% 160%, 240% 100%;
-    animation: hero-watch-light 3.8s var(--ease-out-expo) infinite;
-    text-shadow:
-      0 2px 28px color-mix(in oklab, var(--w-surface) 82%, transparent),
-      0 0 22px color-mix(in oklab, var(--gb) 60%, transparent),
-      0 0 58px color-mix(in oklab, white 36%, var(--gb));
-  }
-
-  .hero__grad--watch::before {
-    content: '';
-    position: absolute;
-    top: -8%;
-    left: -22%;
-    z-index: 1;
-    width: 1.15em;
-    height: 116%;
-    border-radius: 50%;
-    background: radial-gradient(
-      ellipse at center,
-      color-mix(in oklab, white 92%, var(--gb)) 0%,
-      color-mix(in oklab, white 55%, var(--gb)) 22%,
-      color-mix(in oklab, var(--gb) 48%, transparent) 48%,
-      transparent 74%
-    );
-    filter: blur(14px);
-    mix-blend-mode: plus-lighter;
-    pointer-events: none;
-    animation: hero-watch-flare 3.8s var(--ease-out-expo) infinite;
-  }
-
-  .hero__grad--watch::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      108deg,
-      transparent 32%,
-      color-mix(in oklab, white 82%, var(--gb)) 46%,
-      #fff 50%,
-      color-mix(in oklab, white 70%, var(--ga)) 54%,
-      transparent 68%
-    );
-    background-size: 280% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    pointer-events: none;
-    animation: hero-watch-sheen 3.8s var(--ease-out-expo) infinite;
-  }
-
-  .hero__grad--act {
-    --ga: var(--color-plasma-600);
-    --gb: var(--color-violet-600);
-    --gc: var(--color-rose-500);
-    animation-duration: 18s;
-    animation-delay: -9.2s;
-  }
-
-  :global(.dark) .hero__grad--oil {
-    --ga: var(--color-amber-200);
-    --gb: var(--color-gold-300);
-    --gc: var(--color-amber-400);
-  }
-
-  :global(.dark) .hero__grad--use {
-    --ga: var(--color-rose-600);
-    --gb: var(--color-rose-500);
-    --gc: var(--color-amber-400);
-  }
-
-  :global(.dark) .hero__grad--watch {
-    --ga: var(--color-brand-200);
-    --gb: var(--color-sky-300);
-    --gc: var(--color-sky-400);
-  }
-
-  :global(.dark) .hero__grad--act {
-    --ga: var(--color-plasma-300);
-    --gb: var(--color-plasma-400);
-    --gc: var(--color-violet-400);
-  }
-
-  @keyframes hero-watch-light {
-    0% {
-      background-position: 145% 50%, 0% 50%;
-      filter: brightness(1);
-    }
-    32% {
-      background-position: 42% 50%, 30% 50%;
-      filter: brightness(1.42);
-    }
-    52% {
-      background-position: -18% 50%, 58% 50%;
-      filter: brightness(1.18);
-    }
-    72%,
-    100% {
-      background-position: -48% 50%, 100% 50%;
-      filter: brightness(1);
-    }
-  }
-
-  @keyframes hero-watch-sheen {
-    0% {
-      background-position: 145% 50%;
-      opacity: 0;
-    }
-    18% {
-      opacity: 1;
-    }
-    52% {
-      background-position: -18% 50%;
-      opacity: 0.85;
-    }
-    72%,
-    100% {
-      background-position: -48% 50%;
-      opacity: 0;
-    }
-  }
-
-  @keyframes hero-watch-flare {
-    0% {
-      left: -22%;
-      opacity: 0;
-    }
-    16% {
-      opacity: 1;
-    }
-    52% {
-      left: 78%;
-      opacity: 0.75;
-    }
-    72%,
-    100% {
-      left: 112%;
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__grad {
-      animation: none;
-    }
-    .hero__grad--watch {
-      background-position: 42% 50%, 30% 50%;
-      filter: none;
-    }
-    .hero__grad--watch::before,
-    .hero__grad--watch::after {
-      animation: none;
-      opacity: 0;
-    }
   }
 
   .hero__kicker {

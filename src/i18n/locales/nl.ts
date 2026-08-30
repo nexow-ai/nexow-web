@@ -83,10 +83,7 @@ export const nl: SiteContent = {
     },
     hero: {
       badge: 'Vroege toegang',
-      titleLead: 'Data is de nieuwe olie.',
-      titleGradient: 'Bouw alles',
-      titleWatch: 'bekijk alles.',
-      titleTail: 'Handel snel, deel - groei - verdien',
+      title: 'Blijf op de hoogte',
       titleKicker: 'Live realtime dashboards in seconden — niet in weken of kwartalen.',
       subtitle:
         'Beschrijf wat je nodig hebt en Nexow bouwt het: echte werkende widgets, gekoppeld aan live data, neergezet op een canvas dat jij beheert. Aardbevingen, luchtkwaliteit, wereldindicatoren, marktfeeds of je eigen database — visualiseer het, volg het en handel ernaar.',

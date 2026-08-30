@@ -83,10 +83,7 @@ export const tr = {
     },
     hero: {
       badge: 'Erken erişim',
-      titleLead: 'Veri yeni petroldür.',
-      titleGradient: 'Her şeyi kur',
-      titleWatch: 'her şeyi izle.',
-      titleTail: 'Hızlı harekete geç, paylaş - büyü - kazan',
+      title: 'Gelişmelerden haberdar olun',
       titleKicker: 'Saniyeler içinde canlı gerçek zamanlı panolar — haftalar veya çeyrekler değil.',
       subtitle:
         'Neye ihtiyacınız olduğunu anlatın, Nexow onu kursun: gerçekten çalışan widget’lar, canlı veriye bağlı, sizin kontrolünüzdeki bir kanvasa yerleşmiş. Depremler, hava kalitesi, dünya göstergeleri, piyasa akışları ya da kendi veritabanınız — görselleştirin, izleyin ve harekete geçin.',
