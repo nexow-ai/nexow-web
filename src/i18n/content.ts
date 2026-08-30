@@ -437,9 +437,10 @@ export interface SiteContent {
       titleGradient: string;
       titleTail: string;
       /**
-       * Optional fourth beat under the three-line headline ("In seconds — not
-       * weeks or months."). Set apart typographically because four equal lines
-       * stop reading as a slogan. Locales without it just show three.
+       * Optional fourth beat under the three-line headline ("Live real-time
+       * dashboards in seconds — not weeks, or quarters."). Set apart
+       * typographically because four equal lines stop reading as a slogan.
+       * Locales without it just show three.
        */
       titleKicker?: string;
       subtitle: string;
