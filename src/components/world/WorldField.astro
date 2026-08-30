@@ -1452,16 +1452,19 @@
     precision highp float;
     attribute vec3 aPos;
     attribute vec3 aNrm;
+    attribute vec3 aEdge;
     uniform mat4 uProj;
     uniform mat4 uView;
     uniform mat4 uModel;
     uniform float uShift;
     varying vec3 vN;
     varying vec3 vP;
+    varying vec3 vE;
     void main() {
       vec4 wp = uModel * vec4(aPos, 1.0);
       vN = normalize((uModel * vec4(aNrm, 0.0)).xyz);
       vP = wp.xyz;
+      vE = aEdge;
       vec4 mv = uView * wp;
       mv.x += uShift;
       gl_Position = uProj * mv;
@@ -1478,6 +1481,7 @@
     uniform float uLight;
     varying vec3 vN;
     varying vec3 vP;
+    varying vec3 vE;
     void main() {
       vec3 n = normalize(vN);
       vec3 toEye = normalize(uCam - vP);
@@ -1500,31 +1504,98 @@
       body = mix(body, uC3, rim * (0.65 - 0.25 * uLight));
       body += vec3(1.0) * spec * 0.9;
 
+      /* Machined edges. vE interpolates to the distance, in object units, from
+         this fragment to each of its face's three boundaries — the ones the
+         triangulation invented are held out of range — so a single pair of
+         thresholds gives every face of every solid the same treatment: a wide
+         inset that darkens the face towards its border, and a bright line in
+         the border itself. This is the difference between a low-poly blob and
+         an object that looks fabricated, and it costs one min() and two
+         smoothsteps. */
+      float ed = min(min(vE.x, vE.y), vE.z);
+      float inset = 1.0 - smoothstep(0.03, 0.16, ed);
+      float line = 1.0 - smoothstep(0.004, 0.026, ed);
+      /* The face darkens into its own edge on both themes; the line then goes
+         the other way — emissive mint in the dark, near-black in the light,
+         where a glowing hairline on a pale solid reads as a rendering error. */
+      body *= 1.0 - 0.30 * inset;
+      body = mix(body, mix(uC1 * 1.35, uC1 * 0.30, uLight), line * 0.85);
+
       float fog = smoothstep(48.0, 2.0, length(uCam - vP));
       gl_FragColor = vec4(mix(uFog, body, fog * uAlpha), 1.0);
     }
   `;
 
   /**
-   * Three flat-shaded solids in one buffer: cube, octahedron, icosahedron.
+   * Five flat-shaded solids in one buffer: cube, octahedron, icosahedron,
+   * dodecahedron and a stella octangula.
    * Flat shading means one normal per face, so every face gets its own value
    * and the silhouette reads as cut rather than smooth — which is the whole
    * reason to use a low-poly solid instead of a sphere.
+   *
+   * Each vertex also carries the distance, in object units, from itself to the
+   * opposite edge of its triangle — which interpolates to the distance from any
+   * fragment to that edge, and is what the shader bevels the faces with. Edges
+   * introduced by triangulating a quad or a pentagon are masked out with a
+   * large value instead, so a fan does not draw its own spokes.
    */
   function solids() {
+    const FLOATS = 9;
+    const MASK = 9;
     const tri: number[] = [];
-    const push = (A: number[], B: number[], C: number[]) => {
+    /** One triangle. `keep` is a bitmask: bit i is the edge opposite vertex i. */
+    const push = (A: number[], B: number[], C: number[], keep: number) => {
+      const P = [A, B, C];
       const u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]];
       const w = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
       const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
       const l = Math.hypot(n[0], n[1], n[2]) || 1;
-      for (const P of [A, B, C]) tri.push(P[0], P[1], P[2], n[0] / l, n[1] / l, n[2] / l);
+      /* Outward by construction rather than by winding: every solid here is
+         star-shaped about the origin, so the face normal is the one of the two
+         that points the same way as the face itself. Removes any need to get
+         the winding of twelve hand-listed pentagons right. */
+      const mid = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3, (A[2] + B[2] + C[2]) / 3];
+      const s = (n[0] * mid[0] + n[1] * mid[1] + n[2] * mid[2] < 0 ? -1 : 1) / l;
+      for (let i = 0; i < 3; i++) {
+        const b = [0, 0, 0];
+        for (let j = 0; j < 3; j++) {
+          /* A masked edge is held far away at all three corners, so it can
+             never win the min() the shader takes. */
+          if (!(keep & (1 << j))) b[j] = MASK;
+          /* Otherwise: the height from this vertex to the opposite edge, twice
+             the area over that edge's length, and zero at the two vertices that
+             sit on it. Linear interpolation of that is the perpendicular
+             distance from any point on the face. */
+          else if (j === i) {
+            const O = [P[(j + 1) % 3], P[(j + 2) % 3]];
+            b[j] = l / (Math.hypot(O[1][0] - O[0][0], O[1][1] - O[0][1], O[1][2] - O[0][2]) || 1);
+          }
+        }
+        tri.push(P[i][0], P[i][1], P[i][2], n[0] * s, n[1] * s, n[2] * s, b[0], b[1], b[2]);
+      }
+    };
+    /**
+     * A convex polygon, fan-triangulated from its first vertex. The spokes the
+     * fan invents are dropped from the edge mask: in triangle (v0, vi, vi+1)
+     * the edge (vi, vi+1) is always a real polygon edge — it is the one
+     * opposite v0, hence bit 0 — while the two spokes are only real where the
+     * fan meets the ends of the ring.
+     */
+    const poly = (v: number[][]) => {
+      const n = v.length;
+      for (let i = 1; i < n - 1; i++) {
+        push(v[0], v[i], v[i + 1], 1 | (i === 1 ? 4 : 0) | (i + 1 === n - 1 ? 2 : 0));
+      }
     };
     const ranges: { first: number; count: number }[] = [];
     const mark = (fn: () => void) => {
-      const first = tri.length / 6;
+      const first = tri.length / FLOATS;
       fn();
-      ranges.push({ first, count: tri.length / 6 - first });
+      ranges.push({ first, count: tri.length / FLOATS - first });
+    };
+    const unit = ([x, y, z]: number[]) => {
+      const l = Math.hypot(x, y, z) || 1;
+      return [x / l, y / l, z / l];
     };
 
     // 0 — cube. Also used flattened, as the board the widgets sit on.
@@ -1537,40 +1608,88 @@
         [0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4],
         [2, 3, 7, 6], [1, 2, 6, 5], [0, 4, 7, 3],
       ];
-      for (const [a, b, d, e] of faces) {
-        push(c[a], c[b], c[d]);
-        push(c[a], c[d], c[e]);
-      }
+      for (const f of faces) poly(f.map((i) => c[i]));
     });
 
-    // 1 — octahedron. Sharp and few-faced: the signal that fires.
+    // 1 — octahedron. Sharp and few-faced: the calm point at the end.
     mark(() => {
       const v = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
       const f = [
         [0, 2, 4], [2, 1, 4], [1, 3, 4], [3, 0, 4],
         [2, 0, 5], [1, 2, 5], [3, 1, 5], [0, 3, 5],
       ];
-      for (const [a, b, d] of f) push(v[a], v[b], v[d]);
+      for (const face of f) poly(face.map((i) => v[i]));
     });
 
-    // 2 — icosahedron. Twenty faces: the hub, and the agent's core.
+    // 2 — icosahedron. Twenty faces: the hub, one for every source it takes.
+    const t = (1 + Math.sqrt(5)) / 2;
+    const iv = [
+      [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
+      [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
+      [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1],
+    ].map(unit);
+    const if_ = [
+      [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+      [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+      [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+      [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
+    ];
     mark(() => {
-      const t = (1 + Math.sqrt(5)) / 2;
-      const v = [
-        [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
-        [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
-        [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1],
-      ].map(([x, y, z]) => {
-        const l = Math.hypot(x, y, z);
-        return [x / l, y / l, z / l];
-      });
-      const f = [
-        [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
-        [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
-        [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
-        [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
-      ];
-      for (const [a, b, d] of f) push(v[a], v[b], v[d]);
+      for (const f of if_) poly(f.map((i) => iv[i]));
+    });
+
+    /* 3 — dodecahedron, taken as the dual of the icosahedron above rather than
+       hand-listed: one pentagon per icosahedral vertex, its corners the centres
+       of the five faces meeting there. Twelve pentagons is the most considered
+       shape in the set and the only one whose faces are not triangles, which is
+       exactly why it stands for the section that thinks. */
+    mark(() => {
+      for (let i = 0; i < iv.length; i++) {
+        const axis = iv[i];
+        /* A tangent frame to sort the ring in. Any vector not parallel to the
+           axis will do; the smallest component of the axis is guaranteed not
+           to be. */
+        const seed = Math.abs(axis[0]) < 0.6 ? [1, 0, 0] : [0, 1, 0];
+        const t1 = unit([
+          seed[1] * axis[2] - seed[2] * axis[1],
+          seed[2] * axis[0] - seed[0] * axis[2],
+          seed[0] * axis[1] - seed[1] * axis[0],
+        ]);
+        const t2 = [
+          axis[1] * t1[2] - axis[2] * t1[1],
+          axis[2] * t1[0] - axis[0] * t1[2],
+          axis[0] * t1[1] - axis[1] * t1[0],
+        ];
+        const ring = if_
+          .filter((f) => f.includes(i))
+          .map((f) => {
+            const c = unit([
+              (iv[f[0]][0] + iv[f[1]][0] + iv[f[2]][0]) / 3,
+              (iv[f[0]][1] + iv[f[1]][1] + iv[f[2]][1]) / 3,
+              (iv[f[0]][2] + iv[f[1]][2] + iv[f[2]][2]) / 3,
+            ]);
+            const a = Math.atan2(
+              c[0] * t2[0] + c[1] * t2[1] + c[2] * t2[2],
+              c[0] * t1[0] + c[1] * t1[1] + c[2] * t1[2],
+            );
+            return { c, a };
+          })
+          .sort((A, B) => A.a - B.a);
+        poly(ring.map((r) => r.c));
+      }
+    });
+
+    /* 4 — stella octangula: two tetrahedra through each other, eight faces and
+       eight points. The one shape here that looks like it is going off rather
+       than sitting still, which is what the section that fires needs. */
+    mark(() => {
+      const corners = [
+        [1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1],
+      ].map(unit);
+      for (const sign of [1, -1]) {
+        const v = corners.map(([x, y, z]) => [x * sign, y * sign, z * sign]);
+        for (const f of [[0, 1, 2], [0, 2, 3], [0, 3, 1], [1, 3, 2]]) poly(f.map((i) => v[i]));
+      }
     });
 
     return { data: new Float32Array(tri), ranges };
@@ -1580,9 +1699,14 @@
    * What stands at the centre of each scene, and why.
    *
    * The object is the section's subject made solid, so the shape has to say
-   * what the copy says. `mesh` indexes `solids()`; `sy` flattens the cube into
-   * a board; `pulse` is the only one that beats, because a bot is the only
-   * thing here that fires.
+   * what the copy says — and no two sections say the same thing, so no two
+   * share a solid. `mesh` indexes `solids()`; `sy` flattens the cube into a
+   * board; `pulse` is the only one that beats, because a bot is the only thing
+   * here that fires.
+   *
+   * Every field is interpolated into the next scene's on the way out (see
+   * `drawCore`), so these are keyframes rather than settings: two entries with
+   * the same `mesh` describe one solid that reshapes itself between them.
    */
   const OBJECTS = [
     // hero — nothing. The opening is the screens themselves.
@@ -1592,17 +1716,21 @@
        slab through the origin: left at the centre the block is simply inside
        it and never seen. */
     { mesh: 0, scale: 1.3, spin: 0.16, sy: 1, pulse: 0, pos: [0, 4.2, 2.6] },
-    /* 02 arrange it — the same block flattened, sitting under the tiles as the
-       board they are laid out on. */
+    /* 02 arrange it — the same block, lying down. Same mesh as 01, so the
+       handover interpolates instead of swapping: the block travels down under
+       the tiles and flattens into the board they are laid out on, which is the
+       one transition in the set that is literally what the copy describes. */
     { mesh: 0, scale: 3.2, spin: 0.09, sy: 0.1, pulse: 0, pos: [0, -4.4, 0] },
     // 03 wire it — a hub with a face for every source it takes, inside the ring.
     { mesh: 2, scale: 1.85, spin: 0.24, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    // 04 watch it — the sharpest solid here, and the only one that pulses.
-    { mesh: 1, scale: 1.7, spin: 0.34, sy: 1, pulse: 1, pos: [0, 1.5, 0] },
-    // 05 reason about it — the agent core, turning fastest: it is working.
-    { mesh: 2, scale: 1.95, spin: 0.5, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    // 06 point it anywhere — smaller and calmer; the story is handing off.
-    { mesh: 1, scale: 1.25, spin: 0.16, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 04 watch it — eight points going outward, the only solid here that does
+       not look like it is at rest, and the only one that beats. */
+    { mesh: 4, scale: 1.9, spin: 0.34, sy: 1, pulse: 1, pos: [0, 1.5, 0] },
+    /* 05 reason about it — twelve pentagons, the most considered shape in the
+       set, turning fastest: it is working. */
+    { mesh: 3, scale: 1.95, spin: 0.5, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    // 06 point it anywhere — smaller, sharper, calmer; the story is handing off.
+    { mesh: 1, scale: 1.3, spin: 0.16, sy: 1, pulse: 0, pos: [0, 0, 0] },
   ];
 
   /** Y-rotation, X-rotation and a non-uniform scale, composed. */
@@ -1816,10 +1944,13 @@
     const coreProg = ctx.createProgram();
     let coreReady = false;
     const coreModel = new Float32Array(16);
+    /** The interpolated staging position, reused so the loop allocates nothing. */
+    const corePos = [0, 0, 0];
     let coreBuf: WebGLBuffer | null = null;
     let coreRanges: { first: number; count: number }[] = [];
     let cAPos = -1;
     let cANrm = -1;
+    let cAEdge = -1;
     let cuProj: WebGLUniformLocation | null = null;
     let cuView: WebGLUniformLocation | null = null;
     let cuModel: WebGLUniformLocation | null = null;
@@ -1847,6 +1978,7 @@
         ctx.bufferData(ctx.ARRAY_BUFFER, built.data, ctx.STATIC_DRAW);
         cAPos = ctx.getAttribLocation(coreProg, 'aPos');
         cANrm = ctx.getAttribLocation(coreProg, 'aNrm');
+        cAEdge = ctx.getAttribLocation(coreProg, 'aEdge');
         cuProj = ctx.getUniformLocation(coreProg, 'uProj');
         cuView = ctx.getUniformLocation(coreProg, 'uView');
         cuModel = ctx.getUniformLocation(coreProg, 'uModel');
@@ -1867,45 +1999,94 @@
     let coreFog: [number, number, number] = [0, 0, 0];
     let coreLight = 0;
 
+    /* The core's yaw, integrated rather than read off the clock.
+     *
+     * It used to be `seconds * spin`, which is only continuous while `spin` is:
+     * the moment one scene handed over to a solid that turns at a different
+     * rate, the angle jumped by the whole elapsed time times the difference —
+     * half a minute in, a visible snap. Integrating the rate instead means the
+     * rate itself can be interpolated and the object merely speeds up. */
+    let coreYaw = 0;
+    let coreClock = -1;
+
     /**
-     * Draw the core. It grows out of nothing through the hero and settles at
-     * full size once the story starts, so the opening frame is the screens and
-     * the object arrives with the first act rather than sitting there waiting.
+     * Draw the core.
+     *
+     * The solid is handed over mid-morph: the outgoing one collapses across the
+     * first half, the incoming one grows across the second, and the exchange
+     * itself happens at the instant there is nothing on screen to see it. Where
+     * two neighbouring scenes name the same mesh there is no exchange to hide,
+     * so the collapse is skipped entirely and the object reshapes on the move.
+     *
+     * Everything else — scale, proportion, position, rate, beat — interpolates
+     * across the whole morph regardless, so the object travels to its next
+     * staging as one continuous body. It grows out of nothing through the hero,
+     * so the opening frame is the screens alone and the object arrives with the
+     * first act rather than sitting there waiting for it.
+     *
+     * `flow` is the reader's own position in the story, sections plus fraction,
+     * and it turns the object directly. That is the part the scroll drives: a
+     * solid that only ever spun on a clock ignored the reader completely, and
+     * during a hold — where by design nothing else moves — it was the only
+     * thing that could answer them.
      */
-    function drawCore(seconds: number, scene: number, morph: number) {
+    function drawCore(seconds: number, scene: number, morph: number, flow: number) {
       if (!coreReady) return;
-      const obj = OBJECTS[Math.min(scene, OBJECTS.length - 1)];
+
+      const m = Math.min(1, Math.max(0, morph));
+      const e = m * m * (3 - 2 * m);
+      const from = OBJECTS[Math.min(scene, OBJECTS.length - 1)];
+      const to = OBJECTS[Math.min(scene + 1, OBJECTS.length - 1)];
+      const lerp = (u: number, v: number) => u + (v - u) * e;
+
+      /* Advance the turn before any early return, or the object would come
+       * back from a scene it does not appear in facing the way it left. */
+      const dtc = coreClock < 0 ? 0 : Math.min(0.05, Math.max(0, seconds - coreClock));
+      coreClock = seconds;
+      coreYaw += lerp(from.spin, to.spin) * dtc;
+
+      const obj = m < 0.5 ? from : to;
       if (obj.mesh < 0) return;
       const range = coreRanges[obj.mesh];
       if (!range) return;
 
-      /* The object shrinks to nothing exactly when the matter is mid-morph and
-       * grows back as the next scene settles, so each section's solid replaces
-       * the last one during the change rather than popping. Same sine the
-       * screens' fly-by rides, so the two are one gesture. */
-      const swap = 1 - Math.sin(Math.min(1, Math.max(0, morph)) * Math.PI);
-      const beat = obj.pulse ? 1 + 0.14 * Math.sin(seconds * 3.1) : 1;
-      const sx = obj.scale * swap * beat;
+      /* The collapse. Same sine the screens' fly-by rides, so the solid and
+       * the matter are one gesture. Skipped when the mesh does not change,
+       * including on the last scene, which has nothing to hand over to. */
+      const fold = from.mesh === to.mesh ? 1 : 1 - Math.sin(m * Math.PI);
+      const beat = 1 + lerp(from.pulse, to.pulse) * 0.14 * Math.sin(seconds * 3.1);
+      const sx = lerp(from.scale, to.scale) * fold * beat;
       if (sx < 0.01) return;
+      for (let i = 0; i < 3; i++) corePos[i] = lerp(from.pos[i], to.pos[i]);
 
       ctx.useProgram(coreProg);
       ctx.bindBuffer(ctx.ARRAY_BUFFER, coreBuf);
       ctx.enableVertexAttribArray(cAPos);
-      ctx.vertexAttribPointer(cAPos, 3, ctx.FLOAT, false, 24, 0);
+      ctx.vertexAttribPointer(cAPos, 3, ctx.FLOAT, false, 36, 0);
       ctx.enableVertexAttribArray(cANrm);
-      ctx.vertexAttribPointer(cANrm, 3, ctx.FLOAT, false, 24, 12);
+      ctx.vertexAttribPointer(cANrm, 3, ctx.FLOAT, false, 36, 12);
+      ctx.enableVertexAttribArray(cAEdge);
+      ctx.vertexAttribPointer(cAEdge, 3, ctx.FLOAT, false, 36, 24);
       // These attributes are non-instanced; the screens set a divisor of 1 on
       // theirs, and a stale divisor here would draw one triangle per instance.
       instanced!.vertexAttribDivisorANGLE(cAPos, 0);
       instanced!.vertexAttribDivisorANGLE(cANrm, 0);
+      instanced!.vertexAttribDivisorANGLE(cAEdge, 0);
 
+      /* Scroll drives the yaw on top of the clock: half a turn per section,
+       * plus one whole turn taken during each handover so the object is visibly
+       * turning through the change rather than only shrinking. Both terms are
+       * built from quantities that are continuous across a section boundary —
+       * `flow` is, and a whole turn is congruent to none — so neither can put a
+       * seam in the rotation. */
       modelMatrix(
         coreModel,
-        seconds * obj.spin,
-        Math.sin(seconds * 0.11) * 0.35,
+        coreYaw + flow * Math.PI + e * 6.2831,
+        /* Tilt, likewise part clock and part reader. */
+        Math.sin(seconds * 0.11) * 0.22 + Math.sin(flow * 1.3) * 0.26,
         sx,
-        sx * obj.sy,
-        obj.pos,
+        sx * lerp(from.sy, to.sy),
+        corePos,
       );
       ctx.uniformMatrix4fv(cuProj, false, proj);
       ctx.uniformMatrix4fv(cuView, false, view);
@@ -2202,7 +2383,7 @@
 
       ctx.clearColor(0, 0, 0, 0);
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
-      drawCore(seconds, a, morph);
+      drawCore(seconds, a, morph, a + local);
       ctx.useProgram(prog);
       instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
       frame = requestAnimationFrame(draw);
