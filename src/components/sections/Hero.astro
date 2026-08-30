@@ -243,8 +243,31 @@ const D = {
     --ga: var(--color-brand-700);
     --gb: var(--color-sky-600);
     --gc: var(--color-accent-600);
-    animation-duration: 14s;
-    animation-delay: -4.6s;
+    /* Specular blade over the teal. The white-hot core is the shine; the
+       colour field underneath is the metal. One idea — light crossing chrome. */
+    background-image:
+      linear-gradient(
+        112deg,
+        transparent 34%,
+        color-mix(in oklab, white 55%, var(--gb)) 46%,
+        #fff 50%,
+        color-mix(in oklab, white 45%, var(--ga)) 54%,
+        transparent 66%
+      ),
+      linear-gradient(
+        100deg,
+        var(--ga),
+        var(--gb) 28%,
+        color-mix(in oklab, white 35%, var(--gb)) 50%,
+        var(--gc) 72%,
+        var(--ga)
+      );
+    background-size: 220% 100%, 250% 100%;
+    animation: hero-chrome 4.8s var(--ease-out-expo) infinite;
+    text-shadow:
+      0 2px 26px color-mix(in oklab, var(--w-surface) 82%, transparent),
+      0 0 28px color-mix(in oklab, var(--gb) 50%, transparent),
+      0 0 52px color-mix(in oklab, white 28%, var(--gb));
   }
 
   .hero__grad--act {
@@ -273,9 +296,25 @@ const D = {
     --gc: var(--color-violet-400);
   }
 
+  @keyframes hero-chrome {
+    0%,
+    58% {
+      background-position: 140% 50%, 0% 50%;
+    }
+    82% {
+      background-position: -30% 50%, 55% 50%;
+    }
+    100% {
+      background-position: -30% 50%, 100% 50%;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero__grad {
       animation: none;
+    }
+    .hero__grad--use {
+      background-position: 42% 50%, 30% 50%;
     }
   }
 
