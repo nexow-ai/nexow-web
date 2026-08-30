@@ -117,9 +117,9 @@ describe('SOCIALS', () => {
 
   it('publishes the eight community profiles plus GitHub', () => {
     expect(SOCIALS.map((s) => s.label)).toEqual([
-      'Telegram',
-      'Discord',
       'X',
+      'Discord',
+      'Telegram',
       'TikTok',
       'Instagram',
       'LinkedIn',

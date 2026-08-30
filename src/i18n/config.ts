@@ -67,9 +67,9 @@ export function resolveSocialUrl(configured: string | undefined, fallback: strin
 /** Footer + hero + schema social links (icon names match `Icon.astro`). */
 export const SOCIALS = [
   {
-    label: 'Telegram',
-    href: resolveSocialUrl(process.env.TELEGRAM_URL, 'https://t.me/nexowofficial'),
-    icon: 'telegram',
+    label: 'X',
+    href: resolveSocialUrl(process.env.X_URL, 'https://x.com/nexowofficial'),
+    icon: 'x-logo',
   },
   {
     label: 'Discord',
@@ -77,9 +77,9 @@ export const SOCIALS = [
     icon: 'discord',
   },
   {
-    label: 'X',
-    href: resolveSocialUrl(process.env.X_URL, 'https://x.com/nexowofficial'),
-    icon: 'x-logo',
+    label: 'Telegram',
+    href: resolveSocialUrl(process.env.TELEGRAM_URL, 'https://t.me/nexowofficial'),
+    icon: 'telegram',
   },
   {
     label: 'TikTok',
