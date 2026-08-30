@@ -181,7 +181,7 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     /* Everything below is sized off one length so the whole rig scales as a
      * unit — and so `translateZ` has something real to work with, which a
      * percentage width could never give it. */
-    --orb: clamp(16.5rem, 34vw, 27rem);
+    --orb: clamp(11.75rem, 70vw, 27rem);
     /* Sphere radius, harness orbit radius, tool-loop radius. The harness sits
      * well clear of the shell: a label crossing the sphere is unreadable. */
     --gr: calc(var(--orb) * 0.23);
@@ -636,6 +636,12 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     0%, 2% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
     7%, 22% { transform: scale(1.4); box-shadow: 0 0 12px var(--color-brand-500); }
     28%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+  }
+
+  @media (max-width: 767.98px) {
+    .a-scene {
+      overflow-x: clip;
+    }
   }
 
   /* A phone gets the whole rig assembled at once — no scroll ramps down here —

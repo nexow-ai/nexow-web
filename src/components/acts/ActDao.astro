@@ -180,7 +180,7 @@ const WEEKS = [
   .d-scene {
     /* One length sizes the whole rig, so `translateZ` has something real to
      * work with — a percentage never could. */
-    --orb: clamp(16.5rem, 34vw, 27rem);
+    --orb: clamp(11.75rem, 70vw, 27rem);
     /* Seat radius, treasury radius, coin diameter, coin half-thickness. The
      * spokes run from the treasury ring to the seats, so a spoke is `--len`. */
     --r: calc(var(--orb) * 0.42);
@@ -751,6 +751,7 @@ const WEEKS = [
   @media (max-width: 767px) {
     .d-scene {
       padding-top: calc(var(--orb) * 0.16);
+      overflow-x: clip;
     }
   }
 

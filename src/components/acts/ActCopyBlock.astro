@@ -144,4 +144,24 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3', '--k4'];
     line-height: 1.5;
     color: var(--w-text-2);
   }
+
+  @media (max-width: 767.98px) {
+    .act-copy {
+      max-width: none;
+    }
+
+    .act-copy::before {
+      inset: -1.25rem -0.75rem -1.75rem;
+      background: radial-gradient(
+        ellipse 92% 72% at 50% 38%,
+        var(--w-surface, var(--color-ink-950)) 0%,
+        color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 90%, transparent) 54%,
+        transparent 82%
+      );
+    }
+
+    .act-copy__title {
+      font-size: clamp(1.7rem, 1.15rem + 4.6vw, 2.35rem);
+    }
+  }
 </style>

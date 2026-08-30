@@ -4,7 +4,8 @@
  *
  * The pin is sticky for the combined height of the two acts, so the art never
  * swaps. Copy still lives in each act (two world scenes, two rail stops).
- * Below 768px the pin sits in flow between the two copy blocks.
+ * Below 768px the pin sits between the two copy blocks and sticks under the
+ * header, so the mock stays on screen while the second act is read.
  *
  * `.tone-invert` paints this band as the opposite of the page theme — white
  * after a dark hero, ink after a light one — so the first scroll is a cut.
@@ -50,9 +51,27 @@ const prompt = useContent(lang).home.hero.promptExample;
       flex-direction: column;
     }
 
+    /* Copy, then the mock, then the next copy. The pin sticks under the
+     * header so the playground stays on screen while 02 is read — the
+     * same hold the desktop two-column layout buys, without a pin height
+     * a phone cannot afford. */
     .pg-pin {
       order: 2;
-      padding-block: 0.5rem 2rem;
+      position: sticky;
+      top: 4.5rem;
+      z-index: 3;
+      padding-block: 0.4rem 0.85rem;
+      background: linear-gradient(
+        to bottom,
+        var(--w-surface) 72%,
+        color-mix(in oklab, var(--w-surface) 55%, transparent)
+      );
+      pointer-events: none;
+    }
+
+    .pg-pin :global(.w-scene) {
+      width: min(100%, 22rem);
+      margin-inline: auto;
     }
 
     :global(#widget) {

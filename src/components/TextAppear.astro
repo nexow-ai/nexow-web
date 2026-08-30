@@ -147,6 +147,16 @@
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  /**
+   * The particle reveal needs a wide line and a hold. On a phone the title
+   * wraps, the section never pins, and the reader has already scrolled past
+   * before the wavefront finishes — so the headline sits as a cloud of dots.
+   * Compact viewports get the real glyphs, same as reduced motion.
+   */
+  function isCompact(): boolean {
+    return window.matchMedia('(max-width: 767.98px)').matches;
+  }
+
   function isRtl(): boolean {
     return document.documentElement.dir === 'rtl';
   }
@@ -233,10 +243,15 @@
   }
 
   function placeCanvas(el: HTMLElement, canvas: HTMLCanvasElement) {
-    canvas.style.left = `${el.offsetLeft}px`;
-    canvas.style.top = `${el.offsetTop}px`;
-    canvas.style.width = `${el.offsetWidth}px`;
-    canvas.style.height = `${el.offsetHeight}px`;
+    const parent = canvas.offsetParent as HTMLElement | null;
+    const elRect = el.getBoundingClientRect();
+    const parentRect = parent?.getBoundingClientRect();
+    const left = parentRect ? elRect.left - parentRect.left : el.offsetLeft;
+    const top = parentRect ? elRect.top - parentRect.top : el.offsetTop;
+    canvas.style.left = `${left}px`;
+    canvas.style.top = `${top}px`;
+    canvas.style.width = `${elRect.width}px`;
+    canvas.style.height = `${elRect.height}px`;
   }
 
   /** Reveal the real glyphs up to settleEdge (CSS px). */
@@ -374,7 +389,7 @@
     const delayMs = Math.max(0, parseFloat(el.dataset.textAppearDelay || '0') || 0) * 1000;
     const onScroll = el.dataset.textAppear === 'scroll';
 
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || (onScroll && isCompact())) {
       el.dataset.textAppearDone = '1';
       el.classList.add('is-text-appear-done');
       return null;
@@ -398,6 +413,7 @@
     parent.insertBefore(stage, el);
     stage.appendChild(el);
     stage.appendChild(canvas);
+    placeCanvas(el, canvas);
 
     // Hide glyphs via clip (layout unchanged) until the wavefront reveals them.
     const rtl = isRtl();
@@ -588,12 +604,19 @@
 
   function initTextAppear() {
     teardown();
+    const compact = isCompact();
     if (prefersReducedMotion()) {
       document.querySelectorAll<HTMLElement>('[data-text-appear]').forEach((el) => {
         el.dataset.textAppearDone = '1';
         el.classList.add('is-text-appear-done');
       });
       return;
+    }
+    if (compact) {
+      document.querySelectorAll<HTMLElement>('[data-text-appear="scroll"]').forEach((el) => {
+        el.dataset.textAppearDone = '1';
+        el.classList.add('is-text-appear-done');
+      });
     }
 
     const els = document.querySelectorAll<HTMLElement>('[data-text-appear]');

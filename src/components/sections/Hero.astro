@@ -149,7 +149,7 @@ const D = {
      * the screen, which pushes the scroll cue below the fold on the one screen
      * where it has a job to do. */
     min-height: 100svh;
-    padding-block: 9rem 7rem;
+    padding-block: 9rem max(7rem, calc(5.5rem + env(safe-area-inset-bottom, 0px)));
     color: var(--w-text);
   }
 
@@ -392,7 +392,7 @@ const D = {
   .hero__cue {
     position: absolute;
     inset-inline: 0;
-    bottom: 2rem;
+    bottom: max(2rem, calc(1.15rem + env(safe-area-inset-bottom, 0px)));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -450,6 +450,20 @@ const D = {
       animation: none;
       top: 35%;
       opacity: 1;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .hero {
+      padding-block: 7.25rem max(5.5rem, calc(4.25rem + env(safe-area-inset-bottom, 0px)));
+    }
+
+    .hero__forge {
+      margin-top: 1.85rem;
+    }
+
+    .hero__kicker {
+      margin-top: 1.25rem;
     }
   }
 
