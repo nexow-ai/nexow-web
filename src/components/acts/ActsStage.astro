@@ -1,47 +1,61 @@
 ---
 /**
- * The dark interior the acts play on.
+ * The dark interior the acts play inside.
  *
- * One unbroken surface rather than a background per section — that is what
- * stops the page reading as a stack of bands the way the rest of the site does.
- * It is opaque on purpose: text sits on a known solid colour, so contrast is
- * computable and `tests/e2e/contrast.spec.ts` (whose baseline is empty) has
- * something deterministic to measure. The field behind it carries the depth
- * either side of this stretch.
+ * One unbroken surface rather than a background per section — that is what stops
+ * the page reading as the stack of bands the rest of the site is built from.
  *
- * Nothing here may set `overflow`, which would break the `position: sticky`
- * every act depends on.
+ * Three layers, and the order matters:
+ *   1. this element   opaque ink. Text contrast is computed against it, which is
+ *                     what keeps `tests/e2e/contrast.spec.ts` deterministic.
+ *   2. .acts-field    the WebGL world, additive, fixed to the viewport.
+ *   3. .acts-stage__content   the acts themselves, always above the world.
+ *
+ * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
+ * field's `position: fixed` is confined to the stage instead of painting over
+ * the header. Nothing here may set `overflow`, which would break the
+ * `position: sticky` every act depends on.
  */
+import ActsField from './ActsField.astro';
 ---
 
 <div class="acts-stage">
-  <div class="acts-stage__seam acts-stage__seam--top" aria-hidden="true"></div>
-  <slot />
-  <div class="acts-stage__seam acts-stage__seam--bottom" aria-hidden="true"></div>
+  <ActsField />
+  <div class="acts-stage__content">
+    <div class="acts-stage__seam acts-stage__seam--top" aria-hidden="true"></div>
+    <slot />
+    <div class="acts-stage__seam acts-stage__seam--bottom" aria-hidden="true"></div>
+  </div>
 </div>
 
 <style>
   .acts-stage {
     position: relative;
+    z-index: 0;
     background: var(--color-ink-950);
     color: #fff;
   }
 
-  /* Fade in and out of the surrounding page instead of cutting to a hard edge. */
+  .acts-stage__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Fade into and out of the surrounding page instead of cutting to a hard edge. */
   .acts-stage__seam {
     position: absolute;
     inset-inline: 0;
-    height: 6rem;
+    height: 7rem;
     pointer-events: none;
   }
 
   .acts-stage__seam--top {
     top: 0;
-    background: linear-gradient(to bottom, var(--color-ink-900), transparent);
+    background: linear-gradient(to bottom, var(--color-ink-950), transparent);
   }
 
   .acts-stage__seam--bottom {
     bottom: 0;
-    background: linear-gradient(to top, var(--color-ink-900), transparent);
+    background: linear-gradient(to top, var(--color-ink-950), transparent);
   }
 </style>

@@ -4,7 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ScrollMotion from '../components/ScrollMotion.astro';
 import DotField from '../components/DotField.astro';
-import HomeField from '../components/HomeField.astro';
 import TextAppear from '../components/TextAppear.astro';
 import SectionNav from '../components/SectionNav.astro';
 import PageNav from '../components/PageNav.astro';
@@ -28,12 +27,6 @@ interface Props {
    * user theme preference. Omit to honour light/dark mode from the toggle.
    */
   theme?: 'light' | 'dark';
-  /**
-   * Which full-viewport backdrop sits behind the page. `dots` is the site-wide
-   * dot grid; `field` is the home page's WebGL depth field. Exactly one renders
-   * — two full-viewport canvases would double the compositing cost for nothing.
-   */
-  backdrop?: 'dots' | 'field';
   /** In-page section rail (right side, desktop). Omit to hide. */
   sections?: { id: string; label: string }[];
   /** Accessible label for the section rail. */
@@ -46,7 +39,7 @@ interface Props {
   availableLangs?: Lang[];
 }
 
-const { lang, theme, route, sections, sectionNavLabel, backdrop = 'dots', ...head } = Astro.props;
+const { lang, theme, route, sections, sectionNavLabel, ...head } = Astro.props;
 const { availableLangs } = head;
 const accent = getPageAccent(route);
 const themeLocked = theme === 'light' || theme === 'dark';
@@ -95,14 +88,8 @@ const themeLocked = theme === 'light' || theme === 'dark';
       Skip to content
     </a>
 
-    {
-      backdrop === 'field' ? (
-        <HomeField class="fixed inset-0 z-0" />
-      ) : (
-        /* Dot field backdrop — light/dark ink via DotField tone inheritance. */
-        <DotField class="fixed inset-0 z-0" />
-      )
-    }
+    {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
+    <DotField class="fixed inset-0 z-0" />
 
     <Header switchRoute={head.noindex ? '/' : route} availableLangs={availableLangs} />
 

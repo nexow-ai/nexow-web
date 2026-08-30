@@ -44,6 +44,7 @@ const D = {
     kept — it is what separates the hero from the dark stage below it.
   */}
   <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="hero-wash absolute inset-0"></div>
     <div class="rule-gradient absolute inset-x-0 bottom-0 h-px opacity-60"></div>
   </div>
 
@@ -306,3 +307,47 @@ const D = {
 
   document.addEventListener('astro:page-load', initHeroForge);
 </script>
+
+<style>
+  /* A single wide wash, not the `aurora-mesh` + three blobs that `PageHero`
+   * gives every other page — that recipe is exactly what made this hero read as
+   * a wider copy of /about. It also has to stand alone: unlike the acts below,
+   * the hero has no WebGL layer behind it. */
+  .hero-wash {
+    background:
+      radial-gradient(
+        62% 52% at 16% 0%,
+        color-mix(in oklab, var(--color-brand-400) 24%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        56% 46% at 88% 10%,
+        color-mix(in oklab, var(--color-accent-500) 20%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        74% 62% at 52% 104%,
+        color-mix(in oklab, var(--color-sky-500) 15%, transparent),
+        transparent 76%
+      );
+  }
+
+  :global(.dark) .hero-wash {
+    background:
+      radial-gradient(
+        62% 52% at 16% 0%,
+        color-mix(in oklab, var(--color-brand-500) 26%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        56% 46% at 88% 10%,
+        color-mix(in oklab, var(--color-accent-600) 30%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        74% 62% at 52% 104%,
+        color-mix(in oklab, var(--color-plasma-500) 14%, transparent),
+        transparent 78%
+      );
+  }
+</style>
