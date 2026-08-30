@@ -43,6 +43,69 @@ import WorldField from './WorldField.astro';
   </div>
 </div>
 
+<script>
+  /**
+   * Pointer parallax for the DOM scenes.
+   *
+   * `WorldField` already moves its camera with the cursor. Without this the six
+   * act scenes stay locked flat to the screen while the world behind them
+   * drifts, and the two layers read as unrelated pictures rather than one
+   * space. This writes `--mx` and `--my` (-1…1, damped) onto the world; each
+   * act scene turns them into a shift of its own `perspective-origin`, which is
+   * the one way to look around a CSS 3D scene without touching the transforms
+   * the scroll ramps already compose.
+   *
+   * The loop is self-terminating: it runs only while the damped value is still
+   * catching up to the cursor, so a still mouse costs nothing.
+   *
+   * Never on coarse pointers (there is no cursor to follow) and never under
+   * reduced motion.
+   */
+  let root: HTMLElement | null = null;
+  let raf = 0;
+  let aimX = 0;
+  let aimY = 0;
+  let curX = 0;
+  let curY = 0;
+
+  function tick() {
+    raf = 0;
+    if (!root) return;
+    curX += (aimX - curX) * 0.08;
+    curY += (aimY - curY) * 0.08;
+    root.style.setProperty('--mx', curX.toFixed(4));
+    root.style.setProperty('--my', curY.toFixed(4));
+    if (Math.abs(aimX - curX) > 0.002 || Math.abs(aimY - curY) > 0.002) {
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  function onPointer(e: PointerEvent) {
+    aimX = (e.clientX / window.innerWidth) * 2 - 1;
+    aimY = 1 - (e.clientY / window.innerHeight) * 2;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  function teardownWorld() {
+    window.removeEventListener('pointermove', onPointer);
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    root = null;
+  }
+
+  function initWorld() {
+    teardownWorld();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    root = document.querySelector<HTMLElement>('.world');
+    if (!root) return;
+    window.addEventListener('pointermove', onPointer, { passive: true });
+  }
+
+  document.addEventListener('astro:page-load', initWorld);
+  document.addEventListener('astro:before-swap', teardownWorld);
+</script>
+
 <style>
   .world {
     position: relative;

@@ -36,7 +36,7 @@ const TILES = [
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-canvas-title" />
 
-    <div class="c-scene" aria-hidden="true">
+    <div class="act-scene c-scene" aria-hidden="true">
       <div class="c-screen">
         <div class="c-chrome">
           <span class="c-tab c-tab--on">Personal</span>
@@ -147,7 +147,6 @@ const TILES = [
     stroke: var(--color-brand-400);
     stroke-width: 1.5;
     stroke-linecap: round;
-    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-brand-400) 60%, transparent));
   }
 
   .c-node {

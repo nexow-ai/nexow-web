@@ -32,7 +32,7 @@ const CELLS = [
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-widget-title" />
 
-    <div class="w-scene" aria-hidden="true">
+    <div class="act-scene w-scene" aria-hidden="true">
       <div class="w-depth">
         <div class="w-plane w-plane--prompt">
           <span class="w-dot"></span>
@@ -86,7 +86,6 @@ const CELLS = [
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(12, 16, 26, 0.72);
     box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(2px);
   }
 
   @media (min-width: 768px) {

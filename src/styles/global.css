@@ -259,6 +259,10 @@
   --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
 
+  /* Scrollbar — accent-tinted; follows the per-page `data-accent` remap. */
+  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-600) 55%, transparent);
+  --scrollbar-thumb-hover: var(--color-brand-600);
+
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
    * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
   --grad-a: var(--color-brand-600);
@@ -292,6 +296,9 @@
   --text-body: var(--color-ink-300);
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-300);
+
+  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
+  --scrollbar-thumb-hover: var(--color-brand-400);
 
   /* Cold nebula — teal / indigo / sky, no magenta. Saturated cores read as
    * coloured light on ink instead of the grey haze pale tints turn into, and
@@ -388,6 +395,38 @@
     outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
     border-radius: 2px;
+  }
+
+  /* Scrollbars — slim, track-less, tinted with the per-page accent. Both
+   * standard properties inherit, so setting them on <html> reaches every
+   * nested scroller (tables, code blocks); the WebKit pseudo-elements are
+   * unscoped for the same reason. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Transparent border keeps the grab target at 8px while the visible bar
+     * reads as 4px. */
+    background-color: var(--scrollbar-thumb);
+    background-clip: content-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
   }
 }
 
@@ -942,6 +981,22 @@ html[data-world]:not(.js).dark #site-nav {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* Pointer parallax for the act scenes. `World.astro` writes `--mx`/`--my`
+   * (-1…1, damped) onto the world as the cursor moves; shifting
+   * `perspective-origin` is what turns that into looking *around* the scene,
+   * and it is the one property that cannot collide with the transforms the
+   * scroll ramps already compose on the elements inside. The small translate
+   * is what sells it — origin alone is too subtle to notice.
+   *
+   * Beats the acts' own scoped `perspective-origin` on specificity: a scoped
+   * rule compiles to `.w-scene:where(.astro-cid-…)`, and `:where()` is free. */
+  @media (min-width: 768px) {
+    .js .act-scene {
+      perspective-origin: calc(50% + var(--mx, 0) * 14%) calc(44% + var(--my, 0) * -12%);
+      transform: translate3d(calc(var(--mx, 0) * 10px), calc(var(--my, 0) * -7px), 0);
+    }
+  }
+
   /* Pinning is a desktop affordance. A phone has no room to hold a scene still
    * beside its own copy, and a tall act there only means more thumb work for a
    * frame that never fits — so below this width an act stays an ordinary
