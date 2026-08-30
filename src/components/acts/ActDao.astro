@@ -1,0 +1,819 @@
+---
+/**
+ * Act VI — the DAO.
+ *
+ * The one act about *owning* the thing rather than using it: NXW, the Solana
+ * token, in the middle of a round table of the people who hold it. Governance
+ * is a ballot docked above the table, the treasury is a ring around the token,
+ * and the weekly dividend is the one gesture in the rig that repeats on a
+ * clock — motes leaving the treasury along a spoke to every seat, then again.
+ *
+ * Built the same way as the agents act (CSS 3D, one `preserve-3d` context, no
+ * second GL canvas — see the note at the top of `WorldField`), and the same
+ * two constructions carry it: billboarded seats (`rotateY(A)` → `translateZ(r)`
+ * → `rotateY(-A)` → `rotateX(-tilt)` under a ring holding `rotateX(tilt)`), and
+ * phase rather than delay for position, so a stopped animation is still a
+ * table with every seat taken.
+ *
+ * The one construction of its own is the spoke. A seat's spoke is a bar laid
+ * flat *into* the ring's plane — `rotateY(-90deg) rotateX(90deg)` about the
+ * table's centre — rather than stood up in it, because a bar stood on its edge
+ * is a hairline from some seats and nothing from others; laid flat it is a line
+ * from every seat, and the motes that travel it read as coins sliding across
+ * the table. The whole spoke lives inside the seat, so it turns with it.
+ *
+ * `opacity` is never set on a `preserve-3d` element (it flattens the subtree).
+ * Scroll ramps fade leaves and only ever move wrappers.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Act from './Act.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const c = useContent(lang);
+const copy = c.home.acts!.dao;
+
+/** The ballot on the table: the community page's own preview proposal, so the two never disagree. */
+const dao = c.communityPage.dao;
+const ballot = dao.proposals[1] ?? dao.proposals[0];
+const forLabel = dao.forLabel.replace('{pct}', String(ballot.pct));
+const votesLabel = dao.votesLabel.replace('{n}', ballot.votes.toLocaleString(lang));
+
+/**
+ * Eight seats on one inclined ring. Addresses are shaped like Solana keys
+ * (base58, no 0/O/I/l) and are not anyone's. `--a` is the seat's angle and
+ * doubles as its resting position; `--z0` is how near the reader that angle
+ * is, the still scene's stand-in for the depth fade. Seats take their places
+ * in two groups so the table fills in rather than appearing at once.
+ */
+const ADDRESSES = ['7xKp…3fQh', 'Gk2n…Vw9a', 'Bq4T…m8Rz', 'H3vs…Yd7L', 'Nc9j…Kp2e', 'Ax6M…q4Ub', 'Ue8r…Wn5S', 'Dm1F…z7Ct'];
+const SEATS = ADDRESSES.map((address, i) => {
+  const angle = i * 45;
+  const near = (Math.cos((angle * Math.PI) / 180) + 1) / 2;
+  return {
+    address,
+    angle,
+    i,
+    z0: (0.5 + 0.5 * near).toFixed(3),
+    k: i % 2 === 0 ? '--k0' : '--k1',
+  };
+});
+
+/** The treasury: four marks circling the token on their own ring. */
+const VAULT = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
+
+/** Coin thickness, as slices between the two faces. Odd count so one sits at z=0. */
+const EDGES = [-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8];
+
+/** The payout ledger: three weeks paid, the next one already on the clock. */
+const WEEKS = [
+  { label: 'week −3', state: 'paid' },
+  { label: 'week −2', state: 'paid' },
+  { label: 'week −1', state: 'paid' },
+  { label: 'this week', state: 'due', due: true },
+];
+---
+
+<Act id="dao" labelledBy="act-dao-title" height="225vh">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+    <ActCopyBlock copy={copy} headingId="act-dao-title" />
+
+    <div class="act-scene d-scene" aria-hidden="true">
+      <div class="d-orb">
+        <span class="d-fog"></span>
+
+        <div class="d-tilt">
+          {/* Light behind the token, parked behind every plane in the rig. */}
+          <span class="d-halo"></span>
+
+          {/* The table: holders on one inclined ring. See the billboarding note. */}
+          <div class="d-ring">
+            <span class="d-path"></span>
+            {
+              SEATS.map((s) => (
+                <div class="d-seat" style={`--a:${s.angle}deg;--i:${s.i};--k:var(${s.k}, 1)`}>
+                  {/* Treasury → seat. Laid into the table, turning with the seat. */}
+                  <span class="d-spoke">
+                    <span class="d-pay" />
+                  </span>
+                  <div class="d-arm">
+                    <div class="d-face">
+                      <span class="d-wallet" style={`--z0:${s.z0}`}>
+                        <span class="d-sol">◎</span>
+                        {s.address}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+
+          {/* The treasury, ringing the token on the same table. */}
+          <div class="d-vault">
+            <span class="d-vfill"></span>
+            <span class="d-vpath"></span>
+            {VAULT.map((v) => <span class="d-vtick" style={`--a:${v.angle}deg;--i:${v.i}`} />)}
+          </div>
+
+          {/* The token: two faces and a stack of rims between them, so the
+              edge is a real edge when the spin turns it side-on. */}
+          <div class="d-coin-rig">
+            <div class="d-coin">
+              {EDGES.map((z) => <span class="d-coin-edge" style={`--z:${z}`} />)}
+              <span class="d-coin-face d-coin-face--back">
+                <span class="d-coin-mark">◎</span>
+                <span class="d-coin-name">NXW</span>
+              </span>
+              <span class="d-coin-face d-coin-face--front">
+                <span class="d-coin-mark">◎</span>
+                <span class="d-coin-name">NXW</span>
+              </span>
+            </div>
+          </div>
+
+          {/* The ballot, docked above the table. */}
+          <div class="d-ballot">
+            <span class="d-ballot-head">
+              <span>{dao.previewTitle}</span>
+              <span class="d-ballot-tag">{ballot.tag}</span>
+            </span>
+            <span class="d-ballot-title">{ballot.title}</span>
+            <span class="d-ballot-bar">
+              <span class="d-ballot-fill" style={`--pct:${ballot.pct}`} />
+            </span>
+            <span class="d-ballot-meta">
+              <span>{forLabel}</span>
+              <span>{votesLabel}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* The ledger: one cell per week, the next one already on the clock. */}
+      <div class="d-ledger">
+        <p class="d-ledger-head">
+          <span>dividends</span>
+          <span class="d-ledger-chain"><span class="d-sol">◎</span> solana · weekly · on-chain</span>
+        </p>
+        <ol class="d-weeks">
+          {
+            WEEKS.map((w, i) => (
+              <li class="d-week" data-due={w.due ? '' : undefined} style={`--i:${i}`}>
+                <span class="d-week-dot" />
+                <span class="d-week-label">{w.label}</span>
+                <span class="d-week-state">{w.state}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+</Act>
+
+<style>
+  .d-scene {
+    /* One length sizes the whole rig, so `translateZ` has something real to
+     * work with — a percentage never could. */
+    --orb: clamp(16.5rem, 34vw, 27rem);
+    /* Seat radius, treasury radius, coin diameter, coin half-thickness. The
+     * spokes run from the treasury ring to the seats, so a spoke is `--len`. */
+    --r: calc(var(--orb) * 0.42);
+    --rv: calc(var(--orb) * 0.2);
+    --len: calc(var(--r) - var(--rv));
+    --cd: calc(var(--orb) * 0.2);
+    --ct: calc(var(--orb) * 0.011);
+    /* Steeper than the agents' harness: this ring has to read as a table seen
+     * from a chair, not a halo seen from the floor. */
+    --tilt: 48deg;
+    --dur: 44s;
+    --vault-dur: 11s;
+    --coin-dur: 7.5s;
+    --pay-dur: 4.4s;
+    --week-dur: 6.4s;
+    /* Every stroke is the world's accent at some strength — it flips with the
+     * theme, and a fixed brand step dissolves against the daylight scrim. */
+    --ink: var(--w-accent);
+
+    perspective: 1150px;
+    perspective-origin: 50% 45%;
+    display: grid;
+    justify-items: center;
+    gap: 2rem;
+  }
+
+  .d-orb {
+    position: relative;
+    width: var(--orb);
+    height: var(--orb);
+    transform-style: preserve-3d;
+  }
+
+  /* Atmosphere. Parked behind every plane so no polygon can cross and split
+   * it (the seam reads as a ghost rectangle); outset because sitting that far
+   * back costs perspective scale. Every stop reaches zero alpha well before
+   * the box edge, because a background is clipped to its box. */
+  .d-fog {
+    position: absolute;
+    inset: -24%;
+    transform: translateZ(calc(var(--orb) * -0.5));
+    background:
+      radial-gradient(
+        circle at 50% 47%,
+        color-mix(in oklab, var(--color-brand-500) 24%, transparent),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 50% 47%,
+        color-mix(in oklab, var(--w-surface) 94%, transparent) 30%,
+        color-mix(in oklab, var(--w-surface) 66%, transparent) 46%,
+        transparent 62%
+      );
+  }
+
+  .d-tilt,
+  .d-ring,
+  .d-vault,
+  .d-coin-rig {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+  }
+
+  /* Overlapping centred layers, so depth is the only thing stacking them. */
+  .d-tilt > *,
+  .d-ring > *,
+  .d-vault > *,
+  .d-coin-rig > * {
+    grid-area: 1 / 1;
+  }
+
+  .d-halo {
+    width: calc(var(--orb) * 0.62);
+    height: calc(var(--orb) * 0.62);
+    border-radius: 50%;
+    transform: translateZ(calc(var(--orb) * -0.14));
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-brand-500) 34%, transparent),
+      color-mix(in oklab, var(--color-accent-500) 14%, transparent) 34%,
+      transparent 62%
+    );
+    opacity: var(--k0, 1);
+    animation: d-breathe 5.2s ease-in-out infinite;
+  }
+
+  .d-ring {
+    transform: rotateX(var(--tilt));
+  }
+
+  /* The table's edge. `rotateX(90deg)` lays a circle into its parent's XZ. */
+  .d-path {
+    width: calc(var(--r) * 2);
+    height: calc(var(--r) * 2);
+    border-radius: 50%;
+    border: 1px dashed color-mix(in oklab, var(--ink) 30%, transparent);
+    transform: rotateX(90deg);
+    opacity: calc(var(--k0, 1) * 0.6);
+  }
+
+  /* Anchor points, not boxes: at zero size they carry the transform and
+   * nothing else, so nothing rotated out past the column ever counts towards
+   * the document's width. `place-items: center` still hangs the leaf off it. */
+  .d-seat,
+  .d-arm,
+  .d-face {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+  }
+
+  .d-seat {
+    transform: rotateY(var(--a));
+    animation: d-orbit var(--dur) linear infinite;
+  }
+
+  /* The spoke, laid flat into the table — see the note at the top. Its
+   * origin is pulled back to the table's centre so both rotations turn about
+   * that point, and it starts at the treasury ring rather than under the coin. */
+  .d-spoke {
+    position: absolute;
+    top: -1px;
+    left: var(--rv);
+    width: var(--len);
+    height: 2px;
+    transform-origin: calc(var(--rv) * -1) 50%;
+    transform: rotateY(-90deg) rotateX(90deg);
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--ink) 52%, transparent),
+      color-mix(in oklab, var(--ink) 18%, transparent) 70%,
+      transparent
+    );
+    opacity: calc(var(--k2, 1) * 0.85);
+  }
+
+  /* One payout, leaving the treasury for its seat. Phase-shifted per seat so
+   * the table is never all paying at once and never all still. */
+  .d-pay {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0.42rem;
+    height: 0.42rem;
+    margin: -0.21rem 0 0 -0.21rem;
+    border-radius: 50%;
+    background: var(--color-brand-300);
+    box-shadow: 0 0 12px var(--color-brand-400);
+    opacity: 0;
+    animation: d-pay var(--pay-dur) ease-in-out infinite;
+    animation-delay: calc(var(--pay-dur) * var(--i) / -8);
+  }
+
+  /* The only scroll-driven step in the chain: a seat slides out from the
+   * treasury to its place at the table as its beat lands. */
+  .d-arm {
+    transform: translateZ(calc(var(--r) * (0.3 + 0.7 * var(--k, 1))));
+  }
+
+  .d-face {
+    transform: rotateY(calc(var(--a) * -1));
+    animation: d-billboard var(--dur) linear infinite;
+  }
+
+  .d-wallet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--ink) 32%, var(--w-line));
+    /* Near-opaque on purpose: a translucent chip loses to the world field the
+     * moment the matter behind it lights up. */
+    background: color-mix(in oklab, var(--w-surface) 88%, var(--w-panel));
+    box-shadow:
+      0 14px 30px -18px var(--w-shadow),
+      0 0 18px -8px color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--w-text);
+    white-space: nowrap;
+    /* Undoes the table's inclination — the billboarding note. */
+    transform: rotateX(calc(var(--tilt) * -1));
+    opacity: calc(var(--k, 1) * var(--z0, 1));
+    animation: d-depth var(--dur) linear infinite;
+    animation-delay: calc(var(--dur) * var(--i) / -8);
+  }
+
+  .d-sol {
+    flex: none;
+    font-size: 0.8em;
+    color: var(--ink);
+    text-shadow: 0 0 8px color-mix(in oklab, var(--ink) 60%, transparent);
+  }
+
+  /* The treasury turns the other way from the seats, so the two rings read as
+   * two things sharing a table rather than one thing with a hole in it. */
+  .d-vault {
+    transform: rotateX(var(--tilt));
+    animation: d-vault var(--vault-dur) linear infinite;
+  }
+
+  .d-vfill {
+    width: calc(var(--rv) * 2);
+    height: calc(var(--rv) * 2);
+    border-radius: 50%;
+    transform: rotateX(90deg);
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-accent-500) 22%, transparent),
+      color-mix(in oklab, var(--color-accent-500) 6%, transparent) 60%,
+      transparent 72%
+    );
+    opacity: calc(var(--k2, 1) * 0.9);
+  }
+
+  .d-vpath {
+    width: calc(var(--rv) * 2);
+    height: calc(var(--rv) * 2);
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--ink) 40%, transparent);
+    transform: rotateX(90deg);
+    opacity: calc(var(--k2, 1) * 0.75);
+  }
+
+  .d-vtick {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: var(--tick, var(--color-accent-400));
+    box-shadow: 0 0 14px var(--tick, var(--color-accent-400));
+    transform: rotateY(var(--a)) translateZ(var(--rv));
+    opacity: calc(var(--k2, 1) * 0.9);
+  }
+
+  .d-vtick:nth-child(3) { --tick: var(--color-accent-400); }
+  .d-vtick:nth-child(4) { --tick: var(--color-sky-400); }
+  .d-vtick:nth-child(5) { --tick: var(--color-plasma-400); }
+  .d-vtick:nth-child(6) { --tick: var(--color-brand-400); }
+
+  /* The token comes up first — nothing else here means anything without it.
+   * Pushed towards the reader a little so it is never tied with the table's
+   * own plane at z=0, where depth order is decided arbitrarily. */
+  .d-coin-rig {
+    transform: translateZ(calc(var(--orb) * 0.03)) scale(calc(0.72 + 0.28 * var(--k0, 1)));
+  }
+
+  .d-coin {
+    position: relative;
+    width: var(--cd);
+    height: var(--cd);
+    transform-style: preserve-3d;
+    animation: d-coin var(--coin-dur) linear infinite;
+  }
+
+  .d-coin > * {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .d-coin-face {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.05em;
+    backface-visibility: hidden;
+    border: 1px solid color-mix(in oklab, var(--color-brand-200) 70%, transparent);
+    background:
+      radial-gradient(
+        circle at 34% 28%,
+        color-mix(in oklab, var(--color-brand-200) 80%, white),
+        var(--color-brand-400) 38%,
+        var(--color-brand-600) 78%,
+        var(--color-brand-700) 100%
+      );
+    box-shadow: inset 0 0 0 calc(var(--cd) * 0.06) color-mix(in oklab, var(--color-brand-700) 45%, transparent);
+    color: #fff;
+    text-shadow: 0 1px 0 color-mix(in oklab, var(--color-brand-800) 60%, transparent);
+    opacity: var(--k0, 1);
+  }
+
+  .d-coin-face--front {
+    transform: translateZ(var(--ct));
+  }
+
+  .d-coin-face--back {
+    transform: rotateY(180deg) translateZ(var(--ct));
+  }
+
+  .d-coin-mark {
+    font-size: calc(var(--cd) * 0.16);
+    line-height: 1;
+    opacity: 0.9;
+  }
+
+  .d-coin-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: calc(var(--cd) * 0.24);
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+
+  /* The rim: slices between the faces. Hidden by the faces head-on, a stack of
+   * lines side-on — which is what makes the spin read as a coin turning. */
+  .d-coin-edge {
+    border: 1px solid var(--color-brand-500);
+    background: color-mix(in oklab, var(--color-brand-600) 70%, var(--color-brand-800));
+    transform: translateZ(calc(var(--ct) * var(--z)));
+    opacity: var(--k0, 1);
+  }
+
+  /* Docked well above the far edge of the table: the seats across from the
+   * reader sit near the top of the ellipse, and a card that reaches down to
+   * them covers whoever is sitting there. */
+  .d-ballot {
+    width: min(calc(var(--orb) * 0.6), 17rem);
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.6rem 0.8rem 0.7rem;
+    border-radius: 0.8rem;
+    border: 1px solid color-mix(in oklab, var(--ink) 30%, var(--w-line));
+    background: color-mix(in oklab, var(--w-surface) 90%, var(--w-panel));
+    box-shadow:
+      0 18px 36px -22px var(--w-shadow),
+      0 0 22px -10px color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+    transform: translateY(calc(var(--orb) * -0.545)) translateZ(calc(var(--orb) * 0.12));
+    opacity: var(--k1, 1);
+  }
+
+  .d-ballot-head,
+  .d-ballot-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--w-text-4);
+  }
+
+  .d-ballot-tag {
+    color: var(--ink);
+  }
+
+  .d-ballot-title {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    color: var(--w-text);
+  }
+
+  .d-ballot-bar {
+    display: block;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--ink) 14%, var(--w-panel-2));
+    overflow: hidden;
+  }
+
+  /* Fills with its own beat: the vote is what the scroll casts. */
+  .d-ballot-fill {
+    display: block;
+    height: 100%;
+    width: calc(var(--pct) * 1% * var(--k1, 1));
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-brand-500), var(--color-accent-400));
+    transition: width 0.4s var(--ease-out-expo);
+  }
+
+  .d-ballot-meta {
+    color: var(--w-text-2);
+  }
+
+  .d-ledger {
+    position: relative;
+    width: min(100%, 26rem);
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.6rem 0.9rem 0.6rem;
+    border-radius: 1rem;
+    border: 1px solid var(--w-line);
+    background: color-mix(in oklab, var(--w-surface) 90%, var(--w-panel));
+    opacity: var(--k3, 1);
+  }
+
+  .d-ledger-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--w-text-4);
+  }
+
+  .d-ledger-chain {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--ink);
+  }
+
+  .d-weeks {
+    position: relative;
+    /* Keeps the sweep inside the last cell; the padding clears the lit glow. */
+    overflow: hidden;
+    padding: 0.7rem 0 0.2rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  /* The rail, then the payout travelling it. */
+  .d-weeks::before,
+  .d-weeks::after {
+    content: '';
+    position: absolute;
+    top: 0.95rem;
+    height: 1px;
+  }
+
+  .d-weeks::before {
+    left: 14%;
+    right: 14%;
+    background: linear-gradient(90deg, transparent, var(--w-line) 14%, var(--w-line) 86%, transparent);
+  }
+
+  .d-weeks::after {
+    left: 0;
+    width: 25%;
+    background: linear-gradient(90deg, transparent, var(--color-brand-400), transparent);
+    opacity: 0;
+    animation: d-sweep var(--week-dur) linear infinite;
+  }
+
+  .d-week {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
+    color: var(--w-text-3);
+    animation: d-lit var(--week-dur) linear infinite;
+    animation-delay: calc(var(--week-dur) * var(--i) / 4);
+  }
+
+  .d-week-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    animation: d-lit-dot var(--week-dur) linear infinite;
+    animation-delay: calc(var(--week-dur) * var(--i) / 4);
+  }
+
+  .d-week-label,
+  .d-week-state {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .d-week-state {
+    margin-top: -0.2rem;
+    font-size: 0.5625rem;
+    color: var(--w-text-4);
+  }
+
+  /* The week that has not paid yet: its dot is hollow until the sweep gets
+   * there, and it is the only one that keeps blinking. */
+  .d-week[data-due] .d-week-dot {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+  }
+
+  .d-week[data-due] .d-week-state {
+    color: var(--ink);
+    animation: d-due 1.6s ease-in-out infinite;
+  }
+
+  @keyframes d-coin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
+
+  @keyframes d-breathe {
+    0%, 100% { opacity: calc(var(--k0, 1) * 0.75); transform: translateZ(calc(var(--orb) * -0.14)) scale(1); }
+    50% { opacity: var(--k0, 1); transform: translateZ(calc(var(--orb) * -0.14)) scale(1.08); }
+  }
+
+  /* Starts at the seat's own angle, so a stopped animation is still a table. */
+  @keyframes d-orbit {
+    from { transform: rotateY(var(--a)); }
+    to { transform: rotateY(calc(var(--a) + 360deg)); }
+  }
+
+  @keyframes d-billboard {
+    from { transform: rotateY(calc(var(--a) * -1)); }
+    to { transform: rotateY(calc(var(--a) * -1 - 360deg)); }
+  }
+
+  /* Depth fade and depth scale, phase-locked to the orbit by the delay above:
+   * 0% is nearest the reader, 50% is across the table. The scroll ramp rides
+   * inside the opacity so an unseated holder stays invisible. */
+  @keyframes d-depth {
+    0%, 100% {
+      transform: rotateX(calc(var(--tilt) * -1)) scale(1.06);
+      opacity: var(--k, 1);
+    }
+    50% {
+      transform: rotateX(calc(var(--tilt) * -1)) scale(0.84);
+      opacity: calc(var(--k, 1) * 0.55);
+    }
+  }
+
+  @keyframes d-vault {
+    from { transform: rotateX(var(--tilt)) rotateY(0deg); }
+    to { transform: rotateX(var(--tilt)) rotateY(-360deg); }
+  }
+
+  /* Out from the treasury, land at the seat, gone. The scroll ramp rides in
+   * the peak opacity so nothing is paid out before its beat. */
+  @keyframes d-pay {
+    0% { transform: translateX(0); opacity: 0; }
+    12% { opacity: var(--k3, 1); }
+    62% { opacity: var(--k3, 1); }
+    72%, 100% { transform: translateX(var(--len)); opacity: 0; }
+  }
+
+  @keyframes d-sweep {
+    0% { transform: translateX(0); opacity: 0; }
+    8%, 88% { opacity: 1; }
+    100% { transform: translateX(400%); opacity: 0; }
+  }
+
+  @keyframes d-lit {
+    0%, 2% { color: var(--w-text-4); }
+    7%, 22% { color: var(--w-accent); }
+    28%, 100% { color: var(--w-text-4); }
+  }
+
+  @keyframes d-lit-dot {
+    0%, 2% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+    7%, 22% { transform: scale(1.4); box-shadow: 0 0 12px var(--color-brand-500); }
+    28%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+  }
+
+  @keyframes d-due {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+
+  /* Where the act does not pin, the scene stacks under its copy, and the
+   * ballot — which reaches above the rig's box — needs the headroom. */
+  @media (max-width: 767px) {
+    .d-scene {
+      padding-top: calc(var(--orb) * 0.16);
+    }
+  }
+
+  /* A phone gets the whole table at once — no scroll ramps down here — so the
+   * chips have to be small enough that eight of them clear each other. */
+  @media (max-width: 640px) {
+    .d-wallet {
+      font-size: 0.5625rem;
+      padding: 0.2rem 0.5rem;
+      gap: 0.3rem;
+    }
+
+    .d-ballot {
+      gap: 0.3rem;
+      padding: 0.5rem 0.65rem 0.55rem;
+    }
+
+    .d-ballot-title {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Park every loop once the act is well away from the viewport — ScrollMotion
+   * owns the class, and playing is the default so nothing is ever stuck on a
+   * blank first frame. */
+  :global(.is-offscreen) .d-scene * {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* The table leans into the scroll — the only thing the reader's travel
+       * moves, since the rings run on their own clock. */
+      :global(html.js) .d-tilt {
+        transform: rotateX(calc(12deg - var(--psc, 0) * 8deg))
+          rotateZ(calc(var(--psc, 0) * 4deg * var(--dir, 1)));
+      }
+    }
+  }
+
+  /* Reduced motion keeps the finished frame: every seat taken, the treasury
+   * ringed, the ballot docked, the ledger paid up to this week. */
+  @media (prefers-reduced-motion: reduce) {
+    .d-halo,
+    .d-seat,
+    .d-face,
+    .d-wallet,
+    .d-vault,
+    .d-coin,
+    .d-week,
+    .d-week-dot,
+    .d-week[data-due] .d-week-state {
+      animation: none;
+    }
+
+    .d-pay,
+    .d-weeks::after {
+      display: none;
+    }
+
+    /* Face-on, and slightly turned so the rim reads. */
+    .d-coin {
+      transform: rotateY(-28deg);
+    }
+  }
+</style>

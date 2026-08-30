@@ -10,6 +10,7 @@ import ActCanvas from '../acts/ActCanvas.astro';
 import ActConnectors from '../acts/ActConnectors.astro';
 import ActBots from '../acts/ActBots.astro';
 import ActAgents from '../acts/ActAgents.astro';
+import ActDao from '../acts/ActDao.astro';
 import ActUseCases from '../acts/ActUseCases.astro';
 import Features from '../sections/Features.astro';
 import Privacy from '../sections/Privacy.astro';
@@ -79,6 +80,7 @@ const sections = [
   { id: 'connectors', label: acts?.connectors.eyebrow ?? 'Wire it' },
   { id: 'automate', label: acts?.bots.eyebrow ?? 'Watch it' },
   { id: 'bots-agents', label: acts?.agents.eyebrow ?? 'Reason about it' },
+  { id: 'dao', label: acts?.dao.eyebrow ?? 'Own it' },
   { id: 'use-cases', label: acts?.useCases.eyebrow ?? 'Point it anywhere' },
   { id: 'plans', label: t.plans.eyebrow },
 ];
@@ -106,6 +108,7 @@ const sections = [
     <ActConnectors lang={lang} />
     <ActBots lang={lang} />
     <ActAgents lang={lang} />
+    <ActDao lang={lang} />
     <ActUseCases lang={lang} />
   </World>
 
@@ -119,6 +122,6 @@ const sections = [
   <Privacy lang={lang} />
   <Plans lang={lang} />
   <RewardsTeaser lang={lang} />
-  <Faq lang={lang} group="home-faq" />
-  <CtaBand lang={lang} />
+  <Faq lang={lang} group="home-faq" appear />
+  <CtaBand lang={lang} appear />
 </Layout>
