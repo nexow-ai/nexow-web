@@ -7,9 +7,15 @@
  * wallet address — never a news or social feed, which is an agent's job. The
  * one thing this act must land is the four-way fan-out, because that is what
  * people do not expect.
+ *
+ * The scene is the same product-glass SVG as Act I: a self-running loop
+ * (watch → trip → fire → four deliveries → hold → reset) on its own clock.
+ * Scroll only tilts the glass. Decorative, so it stays out of the a11y tree.
+ * Reduced motion parks on the fired frame.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import { ICON_PATHS } from '../icon-paths';
 import Act from './Act.astro';
 import ActCopyBlock from './ActCopyBlock.astro';
 
@@ -19,7 +25,58 @@ interface Props {
 const { lang } = Astro.props;
 const copy = useContent(lang).home.acts!.bots;
 
-const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
+/** Mini candles inside the source card — last bar is the dip that trips RSI. */
+const CANDLES = [
+  { h: 12, up: true },
+  { h: 8, up: false },
+  { h: 16, up: true },
+  { h: 10, up: false },
+  { h: 14, up: true },
+  { h: 7, up: false },
+  { h: 18, up: true },
+  { h: 9, up: false },
+];
+
+/** Ghost candles in the glass, just atmosphere. */
+const GHOST = [
+  { x: 44, y: 118, h: 28, up: true },
+  { x: 58, y: 108, h: 36, up: false },
+  { x: 72, y: 124, h: 22, up: true },
+  { x: 86, y: 112, h: 32, up: false },
+  { x: 100, y: 102, h: 40, up: true },
+  { x: 114, y: 128, h: 18, up: false },
+];
+
+const FANS = [
+  {
+    d: 'M320 298 C 250 298, 196 304, 164 327',
+    label: 'widget bus',
+    icon: 'layers',
+    x: 80,
+    y: 312,
+  },
+  {
+    d: 'M320 298 C 390 298, 444 304, 476 327',
+    label: 'alert inbox',
+    icon: 'bell',
+    x: 392,
+    y: 312,
+  },
+  {
+    d: 'M320 298 C 250 336, 196 352, 164 367',
+    label: 'webhook',
+    icon: 'link',
+    x: 80,
+    y: 352,
+  },
+  {
+    d: 'M320 298 C 390 336, 444 352, 476 367',
+    label: 'database',
+    icon: 'database',
+    x: 392,
+    y: 352,
+  },
+] as const;
 ---
 
 <Act id="automate" labelledBy="act-bots-title" height="200vh">
@@ -27,37 +84,220 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
     <ActCopyBlock copy={copy} headingId="act-bots-title" />
 
     <div class="act-scene b-scene" aria-hidden="true">
-      <div class="b-chain">
-        <span class="b-node b-node--source" style="--k:var(--k0, 1)">
-          <span class="b-kind">source</span>
-          <span class="b-name">BTC · 1h candles</span>
-        </span>
+      <div class="b-slab"></div>
+      <svg
+        class="b-art"
+        viewBox="0 0 640 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        role="presentation"
+      >
+        <defs>
+          <pattern id="b-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.7" fill="var(--b-dot)"></circle>
+          </pattern>
+          <clipPath id="b-frame-clip">
+            <rect x="16" y="16" width="608" height="368" rx="18"></rect>
+          </clipPath>
+          <linearGradient id="b-glow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.28"></stop>
+            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.04"></stop>
+          </linearGradient>
+          <linearGradient id="b-wire-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-300)" stop-opacity="0.15"></stop>
+            <stop offset="50%" stop-color="var(--color-brand-400)" stop-opacity="0.9"></stop>
+            <stop offset="100%" stop-color="var(--color-brand-300)" stop-opacity="0.15"></stop>
+          </linearGradient>
+          <filter id="b-soft" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="12"></feGaussianBlur>
+          </filter>
+        </defs>
 
-        <span class="b-wire" style="--k:var(--k0, 1)"></span>
+        <g clip-path="url(#b-frame-clip)">
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="var(--b-panel)"></rect>
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="url(#b-dots)" opacity="0.5"></rect>
 
-        <span class="b-node b-node--proc" style="--k:var(--k1, 1)">
-          <span class="b-kind">processor</span>
-          <span class="b-name">rsi(14) &lt; 30</span>
-        </span>
+          <!-- Atmosphere: a market that is already running behind the pipeline. -->
+          <g class="b-ghost b-ghost--chart">
+            {GHOST.map((c) => (
+              <g transform={`translate(${c.x} ${c.y})`}>
+                <path
+                  d={`M 3 ${-c.h * 0.35} V ${c.h + 4}`}
+                  stroke="var(--b-ghost)"
+                  stroke-width="1"
+                />
+                <rect
+                  x="0"
+                  y="0"
+                  width="6"
+                  height={c.h}
+                  rx="1"
+                  fill={c.up ? 'var(--color-brand-400)' : 'var(--color-sky-400)'}
+                  opacity="0.18"
+                />
+              </g>
+            ))}
+            <path
+              class="b-ghost-line"
+              d="M40 220 C 70 200, 96 236, 128 214 S 176 190, 206 208"
+              stroke="var(--color-brand-400)"
+              stroke-opacity="0.16"
+              stroke-width="1.4"
+            />
+          </g>
 
-        <span class="b-wire" style="--k:var(--k2, 1)"></span>
+          <g class="b-ghost b-ghost--gauge">
+            <circle cx="556" cy="148" r="36" stroke="var(--b-line)" stroke-width="1"></circle>
+            <circle
+              class="b-ghost-arc"
+              cx="556"
+              cy="148"
+              r="36"
+              stroke="var(--color-brand-400)"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-dasharray="80 226"
+              transform="rotate(-90 556 148)"
+            />
+            <circle cx="556" cy="148" r="4" fill="var(--color-brand-400)" opacity="0.35"></circle>
+          </g>
 
-        <span class="b-node b-node--fire" style="--k:var(--k2, 1)">
-          <span class="b-kind">signal</span>
-          <span class="b-name">condition true</span>
-        </span>
-      </div>
+          <!-- Header -->
+          <rect x="16" y="16" width="608" height="40" fill="var(--b-panel-2)"></rect>
+          <line x1="16" y1="56" x2="624" y2="56" stroke="var(--b-line)" stroke-width="1"></line>
+          <g class="b-ico" transform="translate(30 26) scale(0.75)" stroke="var(--color-brand-400)" stroke-width="1.7">
+            <path d={ICON_PATHS.bot}></path>
+          </g>
+          <text x="56" y="42" class="b-chrome">bots · flow</text>
+          <g class="b-live" transform="translate(508 26)">
+            <rect width="96" height="20" rx="10" fill="var(--b-tab-on)"></rect>
+            <circle class="b-live-dot" cx="14" cy="10" r="3" fill="var(--color-brand-400)"></circle>
+            <text class="b-status b-status--watch" x="56" y="14" text-anchor="middle">watching</text>
+            <text class="b-status b-status--fire" x="56" y="14" text-anchor="middle">fired</text>
+          </g>
 
-      <div class="b-fan">
-        {
-          DELIVERIES.map((d, i) => (
-            <span class="b-target" style={`--k:var(--k3, 1);--i:${i}`}>
-              <span class="b-dot" />
-              {d}
-            </span>
-          ))
-        }
-      </div>
+          <!-- Source -->
+          <g class="b-stage b-stage--source" style="--k:var(--k0, 1)">
+            <rect x="200" y="70" width="240" height="54" rx="12" class="b-card"></rect>
+            <text x="216" y="88" class="b-kind">source</text>
+            <text x="216" y="108" class="b-name">BTC · 1h candles</text>
+            <g transform="translate(368 86)">
+              {CANDLES.map((c, i) => (
+                <g class="b-candle" style={`--i:${i}`} transform={`translate(${i * 8} 0)`}>
+                  <path
+                    d={`M 2.5 ${10 - c.h * 0.35} V ${10 + c.h * 0.45}`}
+                    stroke="var(--color-brand-300)"
+                    stroke-width="1"
+                    opacity="0.7"
+                  />
+                  <rect
+                    x="0"
+                    y={16 - c.h}
+                    width="5"
+                    height={c.h}
+                    rx="1"
+                    fill={c.up ? 'var(--color-brand-400)' : 'var(--color-sky-400)'}
+                    opacity={c.up ? 0.85 : 0.55}
+                  />
+                </g>
+              ))}
+            </g>
+          </g>
+
+          <g class="b-stage b-stage--w1" style="--k:var(--k0, 1)">
+            <line x1="320" y1="124" x2="320" y2="152" stroke="url(#b-wire-grad)" stroke-width="2"></line>
+            <circle class="b-pulse b-pulse--1" cx="320" cy="124" r="3.5" fill="var(--color-brand-300)"></circle>
+          </g>
+
+          <!-- Processor -->
+          <g class="b-stage b-stage--proc" style="--k:var(--k1, 1)">
+            <rect x="200" y="152" width="240" height="54" rx="12" class="b-card"></rect>
+            <text x="216" y="170" class="b-kind">processor</text>
+            <text x="216" y="190" class="b-name">rsi(14) &lt; 30</text>
+            <line x1="368" y1="188" x2="424" y2="188" stroke="var(--color-brand-400)" stroke-opacity="0.35" stroke-dasharray="2 3"></line>
+            <polyline
+              class="b-rsi"
+              points="368,168 378,166 386,170 394,176 404,184 412,190 420,194 424,196"
+              stroke="var(--color-brand-400)"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+
+          <g class="b-stage b-stage--w2" style="--k:var(--k2, 1)">
+            <line x1="320" y1="206" x2="320" y2="234" stroke="url(#b-wire-grad)" stroke-width="2"></line>
+            <circle class="b-pulse b-pulse--2" cx="320" cy="206" r="3.5" fill="var(--color-brand-300)"></circle>
+          </g>
+
+          <!-- Signal -->
+          <g class="b-stage b-stage--signal" style="--k:var(--k2, 1)">
+            <ellipse
+              class="b-sig-glow"
+              cx="320"
+              cy="265"
+              rx="170"
+              ry="48"
+              fill="url(#b-glow)"
+              filter="url(#b-soft)"
+            ></ellipse>
+            <rect
+              class="b-diamond"
+              x="296"
+              y="241"
+              width="48"
+              height="48"
+              rx="6"
+              transform="rotate(45 320 265)"
+              stroke="var(--color-brand-400)"
+              stroke-opacity="0.35"
+            />
+            <rect x="178" y="234" width="284" height="62" rx="14" class="b-card b-card--signal"></rect>
+            <text x="198" y="256" class="b-kind">signal</text>
+            <text x="198" y="280" class="b-name b-name--fire">condition true</text>
+            <g class="b-ico b-ico--fire" transform="translate(424 252) scale(0.85)" stroke="var(--color-brand-300)" stroke-width="1.7">
+              <path d={ICON_PATHS.bolt}></path>
+            </g>
+          </g>
+
+          <!-- Fan-out -->
+          <g class="b-stage b-stage--fan" style="--k:var(--k3, 1)">
+            {
+              FANS.map((fan, i) => (
+                <g class="b-fan" style={`--i:${i}`}>
+                  <path class="b-fan-path" d={fan.d} />
+                  <circle class="b-mote" r="3.5" fill="var(--color-brand-300)" style={`--path: path('${fan.d}')`} />
+                  <g transform={`translate(${fan.x} ${fan.y})`}>
+                    <rect width="168" height="30" rx="10" class="b-card b-dest"></rect>
+                    <circle class="b-dest-dot" cx="14" cy="15" r="3.5" fill="var(--color-brand-400)"></circle>
+                    <g
+                      class="b-ico"
+                      transform="translate(24 6) scale(0.72)"
+                      stroke="var(--color-brand-300)"
+                      stroke-width="1.7"
+                    >
+                      <path d={ICON_PATHS[fan.icon]} />
+                    </g>
+                    <text x="48" y="20" class="b-dest-label">
+                      {fan.label}
+                    </text>
+                  </g>
+                </g>
+              ))
+            }
+          </g>
+        </g>
+
+        <rect
+          x="16"
+          y="16"
+          width="608"
+          height="368"
+          rx="18"
+          stroke="var(--b-chrome)"
+          stroke-width="1.4"
+        ></rect>
+      </svg>
       <p class="b-caption">one signal, four destinations, at the same time</p>
     </div>
   </div>
@@ -65,109 +305,602 @@ const DELIVERIES = ['widget bus', 'alert inbox', 'webhook', 'database'];
 
 <style>
   .b-scene {
-    perspective: 900px;
-    perspective-origin: 50% 45%;
-    display: grid;
-    gap: 1.4rem;
+    position: relative;
+    perspective: 880px;
+    perspective-origin: 50% 42%;
   }
 
-  .b-chain {
-    display: grid;
-    gap: 0.5rem;
-    justify-items: start;
+  .b-slab {
+    position: absolute;
+    inset: auto 8% -6% 8%;
+    height: 42%;
+    border-radius: 1.25rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-brand-400) 28%, transparent),
+      transparent 70%
+    );
+    filter: blur(18px);
+    pointer-events: none;
   }
 
-  .b-node {
-    display: grid;
-    gap: 0.15rem;
-    padding: 0.7rem 1rem;
-    border-radius: 0.85rem;
-    border: 1px solid var(--w-line);
-    background: var(--w-panel-2);
-    min-width: 14rem;
+  .b-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+    filter: drop-shadow(0 28px 60px var(--w-shadow));
+    --b-cycle: 10.5s;
+    --b-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    --b-text: #fff;
+    --b-text-3: var(--color-ink-100);
+    --b-text-4: var(--color-ink-300);
+    --b-accent: var(--color-brand-300);
+    --b-line: rgba(255, 255, 255, 0.12);
+    --b-panel: rgba(9, 12, 20, 0.94);
+    --b-panel-2: rgba(255, 255, 255, 0.05);
+    --b-dot: rgba(255, 255, 255, 0.14);
+    --b-ghost: rgba(255, 255, 255, 0.22);
+    --b-tab-on: color-mix(in oklab, var(--color-brand-400) 32%, transparent);
+    --b-chrome: color-mix(in oklab, var(--color-brand-400) 70%, rgba(255, 255, 255, 0.16));
   }
 
-  .b-node--fire {
-    border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
-    background: color-mix(in oklab, var(--color-brand-500) 12%, var(--w-panel-2));
+  :global(html:not(.dark)) .b-art {
+    --w-shadow: rgba(15, 23, 42, 0.4);
+    --b-panel: rgba(9, 12, 20, 0.96);
+  }
+
+  :global(html:not(.dark)) .b-slab {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-brand-400) 44%, transparent),
+      transparent 70%
+    );
+  }
+
+  .b-card {
+    fill: var(--b-panel-2);
+    stroke: var(--b-line);
+    stroke-width: 1;
+  }
+
+  .b-card--signal {
+    stroke: var(--b-line);
+    fill: var(--b-panel-2);
+  }
+
+  .b-chrome,
+  .b-kind,
+  .b-name,
+  .b-status,
+  .b-dest-label {
+    font-family: var(--font-mono, ui-monospace, monospace);
+  }
+
+  .b-chrome {
+    font-size: 11px;
+    fill: var(--b-text-4);
   }
 
   .b-kind {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.14em;
+    font-size: 8px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--w-accent);
+    fill: var(--b-accent);
   }
 
   .b-name {
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    color: var(--w-text-3);
+    font-size: 13px;
+    fill: var(--b-text-3);
   }
 
-  .b-wire {
-    width: 2px;
-    height: 1.5rem;
-    margin-inline-start: 1.5rem;
-    background: linear-gradient(to bottom, var(--color-brand-400), transparent);
+  .b-name--fire {
+    fill: var(--color-brand-300);
   }
 
-  .b-fan {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
+  .b-status {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    fill: var(--color-brand-300);
   }
 
-  .b-target {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.85rem;
-    border-radius: 0.75rem;
-    border: 1px solid var(--w-line);
-    background: var(--w-panel-2);
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    color: var(--w-text-3);
+  .b-dest-label {
+    font-size: 11px;
+    fill: var(--b-text-3);
   }
 
-  .b-dot {
-    width: 0.4rem;
-    height: 0.4rem;
-    flex: none;
-    border-radius: 50%;
-    background: var(--color-brand-400);
-    box-shadow: 0 0 10px var(--color-brand-500);
+  .b-ico {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .b-caption {
+    margin-top: 0.85rem;
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--w-accent);
+    text-align: center;
+  }
+
+  .b-stage,
+  .b-ghost,
+  .b-candle,
+  .b-rsi,
+  .b-pulse,
+  .b-sig-glow,
+  .b-diamond,
+  .b-fan-path,
+  .b-mote,
+  .b-dest,
+  .b-dest-dot,
+  .b-live-dot,
+  .b-status,
+  .b-ghost-arc,
+  .b-ico--fire {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .b-fan-path {
+    stroke: var(--color-brand-400);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 0;
+  }
+
+  .b-mote {
+    offset-path: var(--path);
+    offset-distance: 100%;
+    offset-rotate: 0deg;
+  }
+
+  .b-diamond {
+    fill: color-mix(in oklab, var(--color-brand-400) 12%, transparent);
+  }
+
+  .b-status--watch {
+    opacity: 0;
+  }
+
+  .b-status--fire {
+    opacity: 1;
+  }
+
+  /* At rest — the fired frame. The loop below only runs when motion is allowed. */
+  @media (prefers-reduced-motion: no-preference) {
+    .b-ghost--chart {
+      animation: b-drift var(--b-cycle) ease-in-out infinite;
+    }
+
+    .b-ghost--gauge {
+      animation: b-drift-rev var(--b-cycle) ease-in-out infinite;
+    }
+
+    .b-ghost-arc {
+      animation: b-arc var(--b-cycle) linear infinite;
+    }
+
+    .b-candle {
+      animation: b-candle var(--b-cycle) var(--b-e) infinite;
+      animation-delay: calc(var(--i) * 0.07s);
+    }
+
+    .b-rsi {
+      stroke-dasharray: 80;
+      animation: b-rsi var(--b-cycle) var(--b-e) infinite;
+    }
+
+    .b-pulse--1 {
+      animation: b-pulse-1 var(--b-cycle) var(--b-e) infinite;
+    }
+
+    .b-pulse--2 {
+      animation: b-pulse-2 var(--b-cycle) var(--b-e) infinite;
+    }
+
+    .b-sig-glow {
+      animation: b-glow var(--b-cycle) ease-in-out infinite;
+    }
+
+    .b-diamond {
+      animation: b-diamond var(--b-cycle) var(--b-e) infinite;
+    }
+
+    .b-card--signal {
+      animation: b-fire-card var(--b-cycle) ease-in-out infinite;
+    }
+
+    .b-name--fire,
+    .b-ico--fire {
+      animation: b-fire-lit var(--b-cycle) ease-in-out infinite;
+    }
+
+    .b-fan-path {
+      animation: b-draw var(--b-cycle) var(--b-e) infinite;
+    }
+
+    .b-mote {
+      animation: b-travel var(--b-cycle) var(--b-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .b-dest {
+      animation: b-dest var(--b-cycle) var(--b-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .b-dest-dot {
+      animation: b-dot var(--b-cycle) ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .b-live-dot {
+      animation: b-live 1.2s ease-in-out infinite;
+    }
+
+    .b-status--watch {
+      animation: b-status-watch var(--b-cycle) linear infinite;
+    }
+
+    .b-status--fire {
+      animation: b-status-fire var(--b-cycle) linear infinite;
+    }
+
+    .b-caption {
+      animation: b-caption var(--b-cycle) ease-in-out infinite;
+    }
+  }
+
+  /* Watch 0–14%. Pulse 1 14–28%. Evaluate 20–36%. Pulse 2 28–42%.
+   * Signal 40–50%. Fan 48–64%. Hold 64–84%. Wipe 86–100%. */
+  @keyframes b-candle {
+    0%,
+    8% {
+      transform: scaleY(0.45);
+      opacity: 0.35;
+    }
+    16%,
+    84% {
+      transform: none;
+      opacity: 1;
+    }
+    94%,
+    100% {
+      transform: scaleY(0.45);
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes b-rsi {
+    0%,
+    16% {
+      stroke-dashoffset: 80;
+    }
+    32%,
+    84% {
+      stroke-dashoffset: 0;
+    }
+    94%,
+    100% {
+      stroke-dashoffset: 80;
+    }
+  }
+
+  @keyframes b-pulse-1 {
+    0%,
+    12% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    16% {
+      opacity: 1;
+    }
+    26% {
+      transform: translateY(26px);
+      opacity: 1;
+    }
+    30%,
+    100% {
+      transform: translateY(26px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-pulse-2 {
+    0%,
+    28% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    32% {
+      opacity: 1;
+    }
+    40% {
+      transform: translateY(26px);
+      opacity: 1;
+    }
+    44%,
+    100% {
+      transform: translateY(26px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-glow {
+    0%,
+    36% {
+      opacity: 0.15;
+    }
+    46%,
+    80% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0.15;
+    }
+  }
+
+  @keyframes b-diamond {
+    0%,
+    38% {
+      transform: rotate(45deg) scale(0.72);
+      opacity: 0;
+    }
+    46%,
+    80% {
+      transform: rotate(45deg) scale(1);
+      opacity: 1;
+    }
+    92%,
+    100% {
+      transform: rotate(45deg) scale(0.72);
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-fire-card {
+    0%,
+    38% {
+      stroke: var(--b-line);
+      fill: var(--b-panel-2);
+    }
+    46%,
+    80% {
+      stroke: color-mix(in oklab, var(--color-brand-400) 80%, transparent);
+      fill: color-mix(in oklab, var(--color-brand-500) 18%, var(--b-panel-2));
+    }
+    92%,
+    100% {
+      stroke: var(--b-line);
+      fill: var(--b-panel-2);
+    }
+  }
+
+  @keyframes b-fire-lit {
+    0%,
+    38% {
+      opacity: 0.45;
+    }
+    46%,
+    80% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes b-draw {
+    0%,
+    46% {
+      stroke-dashoffset: 220;
+    }
+    60%,
+    84% {
+      stroke-dashoffset: 0;
+    }
+    94%,
+    100% {
+      stroke-dashoffset: 220;
+    }
+  }
+
+  @keyframes b-travel {
+    0%,
+    48% {
+      offset-distance: 0%;
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    62% {
+      offset-distance: 100%;
+      opacity: 1;
+    }
+    66%,
+    100% {
+      offset-distance: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-dest {
+    0%,
+    50% {
+      stroke: var(--b-line);
+    }
+    60%,
+    84% {
+      stroke: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    }
+    94%,
+    100% {
+      stroke: var(--b-line);
+    }
+  }
+
+  @keyframes b-dot {
+    0%,
+    52% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+    60%,
+    78% {
+      transform: scale(1.35);
+      opacity: 1;
+    }
+    90%,
+    100% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes b-live {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes b-status-watch {
+    0%,
+    38% {
+      opacity: 1;
+    }
+    44%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-status-fire {
+    0%,
+    40% {
+      opacity: 0;
+    }
+    46%,
+    84% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes b-caption {
+    0%,
+    52% {
+      opacity: 0.45;
+    }
+    62%,
+    84% {
+      opacity: 1;
+    }
+    94%,
+    100% {
+      opacity: 0.45;
+    }
+  }
+
+  @keyframes b-drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(6px, -8px, 0);
+    }
+  }
+
+  @keyframes b-drift-rev {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(-8px, 6px, 0);
+    }
+  }
+
+  @keyframes b-arc {
+    from {
+      stroke-dashoffset: 0;
+    }
+    to {
+      stroke-dashoffset: -226;
+    }
+  }
+
+  :global(.is-offscreen) .b-scene * {
+    animation-play-state: paused;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     @media (min-width: 768px) {
-      :global(html.js) .b-node,
-      :global(html.js) .b-wire {
-        opacity: var(--k, 1);
-        transform: translate3d(calc((1 - var(--k, 1)) * -2rem * var(--dir, 1)), 0, calc((1 - var(--k, 1)) * -480px))
-          rotateY(calc((1 - var(--k, 1)) * 18deg * var(--dir, 1)));
+      :global(html.js) .b-art {
+        transform: rotateX(calc(var(--psc, 0) * -8deg)) rotateY(calc(var(--psc, 0) * 11deg * var(--dir, 1)))
+          translate3d(0, calc(var(--psc, 0) * -0.6rem), 0);
       }
+    }
+  }
 
-      /* The four targets land together but not in lockstep — a short cascade
-       * reads as "at the same time" far better than a single hard cut. */
-      :global(html.js) .b-target {
-        opacity: clamp(0, calc(var(--k, 1) * 3 - var(--i) * 0.45), 1);
-        transform: translate3d(0, calc((1 - var(--k, 1)) * 1.5rem), calc((1 - var(--k, 1)) * -360px));
-      }
+  @media (prefers-reduced-motion: reduce) {
+    .b-ghost--chart,
+    .b-ghost--gauge,
+    .b-ghost-arc,
+    .b-candle,
+    .b-rsi,
+    .b-pulse--1,
+    .b-pulse--2,
+    .b-sig-glow,
+    .b-diamond,
+    .b-card--signal,
+    .b-name--fire,
+    .b-ico--fire,
+    .b-fan-path,
+    .b-mote,
+    .b-dest,
+    .b-dest-dot,
+    .b-live-dot,
+    .b-status--watch,
+    .b-status--fire,
+    .b-caption {
+      animation: none !important;
+    }
 
-      :global(html.js) .b-caption {
-        opacity: var(--k3, 1);
-      }
+    .b-status--watch {
+      opacity: 0;
+    }
+
+    .b-status--fire {
+      opacity: 1;
+    }
+
+    .b-card--signal {
+      stroke: color-mix(in oklab, var(--color-brand-400) 80%, transparent);
+      fill: color-mix(in oklab, var(--color-brand-500) 18%, var(--b-panel-2));
+    }
+
+    .b-pulse--1,
+    .b-pulse--2,
+    .b-mote {
+      opacity: 0;
     }
   }
 </style>
