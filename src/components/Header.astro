@@ -266,10 +266,10 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   }
 
   :global(.dark) .nav-kbd {
-    border-color: rgb(255 255 255 / 0.16);
-    background: rgb(255 255 255 / 0.06);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
-    color: var(--color-ink-400);
+    border-color: rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--color-ink-200);
   }
 
   a:hover .nav-kbd,
@@ -281,6 +281,21 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   :global(.dark) a:hover .nav-kbd,
   :global(.dark) a:focus-visible .nav-kbd {
     border-color: rgb(255 255 255 / 0.32);
+    color: white;
+  }
+
+  /* Home world: the bar is transparent over ink until the first scroll, so
+     the light-theme chip would sit too dark on the sky. */
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) .nav-kbd {
+    border-color: rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--color-ink-300);
+  }
+
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) a:hover .nav-kbd,
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) a:focus-visible .nav-kbd {
+    border-color: rgb(255 255 255 / 0.4);
     color: white;
   }
 </style>

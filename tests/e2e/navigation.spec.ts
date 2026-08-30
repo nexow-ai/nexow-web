@@ -84,6 +84,8 @@ test.describe('header navigation', () => {
 
   test('number keys switch pages and 0 returns home', async ({ page }) => {
     await page.goto('/');
+    // The home composer autofocuses; shortcuts must not fire while typing.
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
     await page.keyboard.press('1');
     await expect(page).toHaveURL(/\/features\/?$/);
 
