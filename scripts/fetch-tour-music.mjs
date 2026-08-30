@@ -120,7 +120,7 @@ const exists = (file) =>
 /** Fetch one record and write it, loudness-matched, to `outDir`. */
 export async function fetchTrack(
   track,
-  { outDir = OUT_DIR, workDir = tmpdir(), fetchImpl, run = ffmpeg } = {},
+  { outDir = OUT_DIR, workDir = tmpdir(), fetchImpl = globalThis.fetch, run = ffmpeg } = {},
 ) {
   const raw = path.join(workDir, `${track.id}.src`);
   const out = path.join(outDir, `${track.id}.mp3`);
@@ -140,8 +140,8 @@ export async function main({
   tracks = TRACKS,
   argv = process.argv.slice(2),
   outDir = OUT_DIR,
-  fetchImpl,
-  run,
+  fetchImpl = globalThis.fetch,
+  run = ffmpeg,
   log = console.log,
   error = console.error,
 } = {}) {
