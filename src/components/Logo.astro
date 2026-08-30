@@ -1,5 +1,6 @@
 ---
 import { SITE, type Lang } from '../i18n/config';
+import { useContent } from '../i18n/content';
 import { localizePath } from '../i18n/utils';
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 }
 const { lang, tone = 'auto', class: className = 'h-8', shortcut } = Astro.props;
 const home = localizePath('/', lang);
+const homeLabel = useContent(lang).nav.home ?? 'Home';
 const imgClass = ['w-auto select-none', className];
 ---
 
@@ -26,7 +28,7 @@ const imgClass = ['w-auto select-none', className];
 <a
   href={home}
   class="inline-flex shrink-0 items-center"
-  aria-label={`${SITE.name} — home`}
+  aria-label={`${SITE.name} — ${homeLabel}`}
   aria-keyshortcuts={shortcut}
   data-nav-key={shortcut}
 >

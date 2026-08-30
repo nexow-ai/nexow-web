@@ -10,6 +10,7 @@ import PageNav from '../components/PageNav.astro';
 import TourHud from '../components/TourHud.astro';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
+import { useContent } from '../i18n/content';
 import { getPageAccent } from '../i18n/accent';
 import { dir } from '../i18n/utils';
 import { slidePages } from '../lib/pageTransition';
@@ -51,6 +52,9 @@ const { lang, theme, route, sections, sectionNavLabel, world, ...head } = Astro.
 const { availableLangs } = head;
 const accent = getPageAccent(route);
 const themeLocked = theme === 'light' || theme === 'dark';
+const chrome = useContent(lang).nav;
+const skipLabel = chrome.skipToContent ?? 'Skip to content';
+const railLabel = sectionNavLabel ?? chrome.onThisPage ?? 'On this page';
 
 ---
 
@@ -94,7 +98,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
     >
-      Skip to content
+      {skipLabel}
     </a>
 
     {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
@@ -104,7 +108,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
 
     {
       sections && sections.length > 0 && (
-        <SectionNav sections={sections} label={sectionNavLabel} />
+        <SectionNav sections={sections} label={railLabel} />
       )
     }
 

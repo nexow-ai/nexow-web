@@ -405,6 +405,16 @@ export interface SiteContent {
     tourTrack?: string;
     tourLeft?: string;
     tourControls?: string;
+    /** Language switcher summary (see `Header.astro`). */
+    switchLang?: string;
+    /** Landmark name for the desktop header nav. */
+    primaryNav?: string;
+    /** Landmark name for the mobile drawer nav. */
+    mobileNav?: string;
+    /** Landmark name for the in-page section rail. */
+    onThisPage?: string;
+    /** Skip link in `Layout.astro`. */
+    skipToContent?: string;
   };
   footer: {
     tagline: string;
