@@ -40,11 +40,19 @@
 </div>
 
 <script>
-  /** Billboards. Each is two triangles; the formations below place them. */
-  /* Backing-store scale. The canvas is stretched to full size by CSS. */
-  const RENDER_SCALE = 0.58;
-  const COUNT_WIDE = 1900;
-  const COUNT_NARROW = 900;
+  /** Panels. Each is one lit rectangle; the formations below place them. */
+  /* Backing-store scale. The canvas is stretched to full size by CSS.
+   *
+   * Back to full resolution. It was 0.58 because 1900 soft round sprites could
+   * lose half their pixels without anyone noticing — a blurred glow is still a
+   * glow. Panels have hard lit borders, and a border drawn at 58% and upscaled
+   * is just a fuzzy border. The instance count dropped by a factor of six to
+   * pay for it, and fill rate went down with it: a panel covers more pixels
+   * than a mote, but six times fewer of them at ~1x overdraw is cheaper than
+   * what this replaced. */
+  const RENDER_SCALE = 1;
+  const COUNT_WIDE = 260;
+  const COUNT_NARROW = 120;
 
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
   const CAM_DAMP = 3.2;
@@ -68,10 +76,18 @@
     uniform float uCharge;
     uniform float uBurst;
     uniform vec3 uCam;
+    /** Half the backing-store height, in device pixels. Feeds edge antialiasing. */
+    uniform float uPix;
 
     varying float vTone;
     varying float vGlow;
-    varying float vTwinkle;
+    varying float vLight;
+    varying float vFres;
+    varying float vSpec;
+    varying float vKind;
+    varying float vSeed;
+    varying float vAA;
+    varying float vT;
     varying vec2 vUv;
 
     vec3 hash3(float i) {
@@ -99,14 +115,19 @@
         );
       }
       if (f < 1.5) {
-        /* 1 — WIDGET: the dust condenses into one dense slab. A single card. */
-        float cols = 44.0;
+        /* 1 — WIDGET: the matter condenses into one card.
+           Columns are derived from the instance count rather than hardcoded.
+           A fixed 44 was tuned for a swarm of 2600 motes; at 300 panels the
+           same number draws a 7-row ribbon instead of a card. This holds the
+           slab at a constant 14 units wide whatever the count is. */
+        float cols = max(4.0, floor(sqrt(n * 1.6)));
+        float gap = 14.0 / cols;
         float x = mod(i, cols);
         float y = floor(i / cols);
         float rows = ceil(n / cols);
         return vec3(
-          (x - cols * 0.5) * 0.32,
-          -(y - rows * 0.5) * 0.32 * 0.56,
+          (x - cols * 0.5) * gap,
+          -(y - rows * 0.5) * gap * 0.56,
           sin(x * 0.28 + y * 0.17 + t * 0.35) * 0.32
         );
       }
@@ -114,15 +135,17 @@
         /* 2 — CANVAS: the slab splits into four widgets on one screen. */
         float g = floor(a * 4.0);
         float k = fract(a * 4.0);
-        /* 30 columns, not 14: a quarter of the instances over 14 columns is
-           ~46 rows, which draws four tall ribbons rather than four widgets. */
-        float cols = 30.0;
-        float idx = k * (n / 4.0);
+        /* Same derivation as the single card, over a quarter of the panels —
+           hardcoding it drew four tall ribbons rather than four widgets. */
+        float quarter = n / 4.0;
+        float cols = max(3.0, floor(sqrt(quarter * 1.6)));
+        float gap = 5.8 / cols;
+        float idx = k * quarter;
         float x = mod(idx, cols);
         float y = floor(idx / cols);
-        float rows = ceil((n / 4.0) / cols);
+        float rows = ceil(quarter / cols);
         vec3 base = vec3(g < 2.0 ? -4.6 : 4.6, mod(g, 2.0) < 1.0 ? 3.0 : -3.0, (g - 1.5) * 1.3);
-        return base + vec3((x - cols * 0.5) * 0.24, -(y - rows * 0.5) * 0.24, 0.0);
+        return base + vec3((x - cols * 0.5) * gap, -(y - rows * 0.5) * gap, 0.0);
       }
       if (f < 3.5) {
         /* 3 — CONNECTORS: a ring docking around the workspace. A torus, not a
@@ -196,19 +219,20 @@
          shot at exactly the moment the reader is watching it. Toward the lens
          it fills instead.
 
-         The step() keeps it to about one instance in six. The other five
-         cross directly, so the formation stays legible the whole way through
-         and the pass reads as a few pieces of matter breaking off rather than
-         the scene detonating. */
+         The step() keeps it to about one panel in ten. A panel that sweeps
+         the lens fills a lot more of the frame than a mote did, so the same
+         one-in-six fraction that read as a few pieces breaking off now reads
+         as the scene detonating. The rest cross directly and the formation
+         stays legible the whole way through. */
       float bloom = sin(m * 3.14159265);
-      float flyby = step(0.84, aSeed);
+      float flyby = step(0.90, aSeed);
       /* Travel a fraction of the actual distance to the lens rather than a
          fixed number of units: a fixed push overshoots *behind* the camera on
          the near side of the cloud, where the point clips out instead of
          sweeping past. At peak it closes ~82% of the gap, so it comes close
          enough to flare and always stays in front. */
       vec3 toCam = uCam - p;
-      p += normalize(toCam) * bloom * flyby * length(toCam) * 0.82;
+      p += normalize(toCam) * bloom * flyby * length(toCam) * 0.70;
 
       /* The hero's one interaction: what you type charges the matter. It winds
          up and tightens as the composer fills, and the send throws a shockwave
@@ -224,28 +248,92 @@
       p *= mix(1.0, 0.58, k);
       p += normalize(p + 0.0001) * burst * (2.5 + aSeed * 5.0);
 
-      /* Billboard: offset in view space so every quad faces the camera. */
-      vec4 mv = uView * vec4(p, 1.0);
-      float size = 0.062 + aSeed * 0.105 + k * 0.045 + burst * 0.07;
-      mv.xy += aCorner * size;
+      /* The panel.
+         Not a billboard. A billboard always faces the camera, so it never
+         turns, never foreshortens and never catches light differently — which
+         is exactly why a field of them reads as dust however it is coloured.
+         Each instance here is a real rectangle standing in world space with a
+         real normal, so turning it is what shades it.
+
+         The orientation is a per-instance angle biased toward the eye. Fully
+         free orientation leaves too many panels edge-on and the frame fills
+         with slivers; pure eye-facing is the billboard again. The mix keeps
+         them readable as panels while still letting them tumble. */
+      vec3 toEye = normalize(uCam - p);
+      vec3 ho = hash3(aId + 91.7);
+      float yaw = ho.x * 6.2831 + uTime * (0.05 + aSeed * 0.10);
+      float pitch = (ho.y - 0.5) * 1.15;
+      vec3 nrm = vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
+      /* Heavily biased to the eye. At 0.55 the panels tumbled freely and the
+         crowd read as confetti; near-facing, a field of them reads as ranks of
+         screens receding, which is the thing this is meant to look like. The
+         residual tilt is what still lets them catch the key light. */
+      nrm = normalize(mix(nrm, toEye, 0.82));
+
+      /* Basis built off world +Y, so every panel shares a horizon and the set
+         reads as one system rather than as confetti. The epsilon keeps the
+         cross product defined for a panel that happens to face straight up. */
+      vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), nrm) + vec3(1e-4, 0.0, 0.0));
+      vec3 up = cross(nrm, right);
+
+      /* Widget proportions: wider than tall. */
+      /* Bigger than a blank panel needed to be. Each one now draws a widget
+         inside itself, and a chart rendered two pixels tall is just noise. */
+      float sz = 0.62 + aSeed * 0.52 + k * 0.10 + burst * 0.16;
+      vec3 world = p + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
+
+      vec4 mv = uView * vec4(world, 1.0);
       /* Slide the world into the scene column so it frames the copy rather
        * than sitting on top of it. Zero where the layout stacks. */
       mv.x += uShift;
 
       gl_Position = uProj * mv;
 
+      /* Lighting. One key plus a grazing-angle rim — no PBR, because this is
+         emissive glass on a dark stage and a Lambert term with a Fresnel edge
+         is the whole model for about four instructions. It is also the entire
+         reason the panels have to be oriented: the shading *is* the turn. */
+      vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
+      vLight = 0.20 + 0.80 * max(dot(nrm, key), 0.0);
+      vFres = pow(1.0 - abs(dot(nrm, toEye)), 2.0);
+      /* A hard specular lobe. This is the term that actually reads as glass:
+         a highlight that sweeps across a panel as it turns, rather than a face
+         that merely gets brighter. Tight exponent so it stays a glint. */
+      vSpec = pow(max(dot(reflect(-key, nrm), toEye), 0.0), 26.0);
+
+      /* Antialiasing width, in panel-UV units, for every edge the fragment
+         shader draws. WebGL 1 has no fwidth() without an extension, but the
+         projected size of a panel is knowable here: its world size over its
+         distance, through the vertical focal length, times half the viewport
+         in pixels. Inverting that gives the UV distance one pixel covers, and
+         a step() widened by it is a step() that no longer stairsteps. */
+      float px = (sz / max(-mv.z, 0.001)) * uProj[1][1] * uPix;
+      vAA = clamp(1.4 / max(px, 1.0), 0.0015, 0.45);
+      /* Which widget this panel draws, and the seed its content varies on. */
+      /* Which screen this is. Offset by the formation so each act shows a
+         different mix — the connectors act leans to market and data screens,
+         the bots act to alerts and gauges — without needing a second buffer. */
+      vKind = fract(ho.z + uFormA * 0.17);
+      vSeed = aSeed;
+      /* Per-screen clock. Same offset that placed it, so a wall of screens
+         animates out of phase instead of pulsing as one. */
+      vT = uTime + aSeed * 37.0;
+
       /* Fog. Additive blending means fading alpha to 0 *is* fading to the
          ground colour, so distance falloff costs one smoothstep and buys the
          whole sense of depth. */
       float dist = -mv.z;
       vGlow = smoothstep(48.0, 2.0, dist);
-      /* Near-field flare. Perspective already grows a quad as it approaches,
-         but alpha alone makes a point that sweeps the lens read as a light
-         being turned up rather than an object going past; this doubles it down
-         over the last few units so the pass has weight. */
-      vGlow *= 1.0 + 1.0 * smoothstep(7.0, 1.5, dist);
+      /* Near fade. A mote that drifted close was a bright speck; a *panel*
+         that drifts close is a wall across the headline. Fade anything inside
+         ~5 units to nothing, which is the standard soft near-plane and the
+         only reason the hero stays readable. */
+      vGlow *= smoothstep(1.0, 5.5, dist);
+      /* Then flare on the approach, before that fade takes over, so a panel
+         sweeping the lens still reads as an object going past rather than one
+         quietly winking out. */
+      vGlow *= 1.0 + 0.55 * smoothstep(12.0, 5.5, dist);
       vTone = fract(aSeed + m * 0.4 + uFormA * 0.06);
-      vTwinkle = 0.72 + 0.28 * sin(uTime * (0.6 + aSeed * 2.2) + aSeed * 40.0);
       vUv = aCorner;
     }
   `;
@@ -255,29 +343,378 @@
     uniform vec3 uC1;
     uniform vec3 uC2;
     uniform vec3 uC3;
+    uniform vec3 uFog;
     uniform float uAlpha;
     varying float vTone;
     varying float vGlow;
-    varying float vTwinkle;
+    varying float vLight;
+    varying float vFres;
+    varying float vSpec;
+    varying float vKind;
+    varying float vSeed;
+    varying float vAA;
+    varying float vT;
     varying vec2 vUv;
 
+    float rnd(float i) {
+      return fract(sin(i * 78.233) * 43758.5453);
+    }
+
+    /* step(), widened to the width of a pixel. Every edge below goes through
+       this: a hard step() on content this small stairsteps badly, and jagged
+       chart lines are most of what makes procedural UI look cheap. */
+    float aastep(float e, float x) {
+      return smoothstep(e - vAA, e + vAA, x);
+    }
+
+    float aaband(float lo, float hi, float x) {
+      return aastep(lo, x) * (1.0 - aastep(hi, x));
+    }
+
     void main() {
-      float r = dot(vUv, vUv) * 4.0;
-      if (r > 1.0) discard;
-      /* Squared falloff: a tight core with a soft halo, which is what stops
-         2600 additive quads reading as a grey fog once they overlap. */
-      float a = smoothstep(1.0, 0.0, r);
-      a *= a;
-      vec3 col = mix(uC1, uC2, smoothstep(0.0, 0.55, vTone));
-      col = mix(col, uC3, smoothstep(0.6, 1.0, vTone));
-      /* Emission gain. The sprites are small and the canvas renders below
-         display resolution, both of which cost brightness — and this buys it
-         back for free, because a brighter colour shades exactly the same
-         number of fragments. Anything that raised size or count instead would
-         be paid for in fill rate, which is the one budget with no slack. */
-      gl_FragColor = vec4(col * 1.45, a * vGlow * vTwinkle * uAlpha);
+      /* Rounded rectangle, as a signed distance. A hard 90-degree corner on a
+         floating card reads as a polygon; the radius is what makes it read as
+         a screen. Negative inside, zero on the boundary. */
+      float rr = 0.11;
+      vec2 cd = abs(vUv) - (0.5 - rr);
+      float sd = length(max(cd, 0.0)) + min(max(cd.x, cd.y), 0.0) - rr;
+      if (sd > 0.0) discard;
+
+      /* A screen that has fogged to nothing must not be drawn at all. When
+         these were additive an invisible one contributed zero light and could
+         be left alone; opaque, it would paint an ink-coloured rectangle and
+         occlude everything behind it — a hole in the world at both the near
+         fade and the far horizon. Discarding keeps it out of the depth buffer
+         as well as out of the colour buffer. */
+      if (vGlow < 0.025) discard;
+
+      /* Bezel, then the display inside it. Two offsets of the same distance
+         field, so the screen has an actual edge thickness rather than being a
+         lit outline drawn on nothing. */
+      float bezel = aastep(-0.052, sd);
+      float inner = 1.0 - bezel;
+
+      vec2 uv = vUv + 0.5;
+
+      /* ---- what is on the screen ----
+         Empty rectangles floating in space are an abstraction; the moment one
+         has a chart on it, it is a widget, which is the thing this product
+         actually makes. Four layouts, selected per instance from the same seed
+         that placed the screen, so it costs a branch and some arithmetic
+         rather than a texture fetch. The branch is instance-coherent — every
+         fragment of a screen takes the same path — which is the case GPUs
+         handle well. */
+      float head = aaband(0.82, 0.995, uv.y) * aaband(0.06, 0.94, uv.x);
+      float dot0 = 1.0 - aastep(0.020, length((uv - vec2(0.88, 0.885)) * vec2(1.0, 0.62)));
+
+      /* ---- twelve screens ----
+         Dashboards and interactive apps both, because that is the range of
+         what people actually build here. Each one animates off vT, which is
+         the shared clock plus this screen's own offset, so a wall of them
+         reads as many live things rather than one thing repeated.
+
+         The branch is instance-coherent — every fragment of a screen takes
+         the same path — which is the case GPUs are fast at. */
+      float kind = floor(vKind * 12.0);
+      float ink = 0.0;
+      float t = vT;
+
+      if (kind < 1.0) {
+        /* Sparkline, scrolling. */
+        float y = 0.42 + 0.18 * sin(uv.x * 8.0 - t * 1.1 + vSeed * 24.0) * cos(uv.x * 2.7);
+        ink = (1.0 - aastep(0.022, abs(uv.y - y))) * aaband(0.08, 0.92, uv.x);
+      } else if (kind < 2.0) {
+        /* Bars, breathing. */
+        float b = floor(uv.x * 8.0);
+        float h = 0.16 + 0.44 * rnd(b + vSeed * 40.0) * (0.72 + 0.28 * sin(t * 1.4 + b));
+        ink = aaband(0.14, 0.14 + h, uv.y) * (1.0 - aastep(0.62, fract(uv.x * 8.0)))
+            * aaband(0.06, 0.94, uv.x);
+      } else if (kind < 3.0) {
+        /* Heatmap, cells lighting. */
+        vec2 cell = vec2(uv.x * 7.0, (uv.y - 0.10) * 4.0);
+        float c = rnd(floor(cell.x) * 3.7 + floor(cell.y) * 11.3 + vSeed * 30.0);
+        c = c * (0.6 + 0.4 * sin(t * 0.9 + floor(cell.x) + floor(cell.y) * 2.0));
+        ink = step(0.30, c) * aaband(0.10, 0.72, uv.y)
+            * (1.0 - aastep(0.74, fract(cell.x))) * (1.0 - aastep(0.72, fract(cell.y)));
+      } else if (kind < 4.0) {
+        /* List rows, with the selection scanning down. */
+        float r = floor((uv.y - 0.12) * 5.0);
+        float w = 0.30 + 0.52 * rnd(r * 7.7 + vSeed * 15.0);
+        float sel = step(abs(r - mod(floor(t * 0.8), 5.0)), 0.5);
+        ink = aaband(0.12, 0.72, uv.y) * aaband(0.08, 0.08 + w + sel * 0.3, uv.x)
+            * (1.0 - aastep(0.46, fract((uv.y - 0.12) * 5.0)));
+      } else if (kind < 5.0) {
+        /* Candlesticks — the trading desk. */
+        float c = floor(uv.x * 9.0);
+        float fx = fract(uv.x * 9.0);
+        float mid = 0.40 + 0.16 * sin(c * 1.3 + vSeed * 9.0 + t * 0.5);
+        float hh = 0.06 + 0.10 * rnd(c + vSeed * 12.0);
+        float body = (1.0 - aastep(0.62, abs(fx - 0.5) * 2.0)) * aaband(mid - hh, mid + hh, uv.y);
+        float wick = (1.0 - aastep(0.14, abs(fx - 0.5) * 2.0)) * aaband(mid - hh * 1.9, mid + hh * 1.9, uv.y);
+        ink = max(body, wick) * aaband(0.06, 0.94, uv.x);
+      } else if (kind < 6.0) {
+        /* Radial gauge, needle sweeping. */
+        vec2 c = (uv - vec2(0.5, 0.40)) * vec2(1.0, 0.62);
+        float rad = length(c) * 2.2;
+        float ang = atan(c.y, c.x);
+        float arc = aaband(0.62, 0.80, rad) * step(0.0, ang);
+        float sweep = 0.5 + 0.5 * sin(t * 0.7 + vSeed * 6.0);
+        arc *= step(ang, 3.14159 * sweep);
+        float needle = (1.0 - aastep(0.045, abs(ang - 3.14159 * sweep))) * aaband(0.10, 0.66, rad);
+        ink = max(arc, needle);
+      } else if (kind < 7.0) {
+        /* Scatter / map plot, points blinking. */
+        vec2 g = floor(vec2(uv.x * 9.0, (uv.y - 0.08) * 6.0));
+        float on = rnd(g.x * 5.1 + g.y * 17.3 + vSeed * 21.0);
+        float blink = step(0.62, on) * (0.5 + 0.5 * sin(t * 1.6 + g.x + g.y * 3.0));
+        vec2 f = fract(vec2(uv.x * 9.0, (uv.y - 0.08) * 6.0)) - 0.5;
+        ink = (1.0 - aastep(0.22, length(f))) * step(0.35, blink) * aaband(0.08, 0.74, uv.y);
+      } else if (kind < 8.0) {
+        /* Kanban columns — a project board. */
+        float colx = floor(uv.x * 3.0);
+        float row = floor((uv.y - 0.10) * 4.0);
+        float has = step(0.34, rnd(colx * 9.3 + row * 4.1 + vSeed * 8.0));
+        float lift = step(abs(colx - mod(floor(t * 0.5), 3.0)), 0.5) * 0.04;
+        ink = has * aaband(0.10 + lift, 0.74 + lift, uv.y)
+            * (1.0 - aastep(0.78, fract(uv.x * 3.0))) * (1.0 - aastep(0.62, fract((uv.y - 0.10) * 4.0)))
+            * aaband(0.05, 0.95, uv.x);
+      } else if (kind < 9.0) {
+        /* Terminal, lines typing in under a blinking cursor. */
+        float r = floor((uv.y - 0.10) * 6.0);
+        float prog = clamp(mod(t * 0.9, 8.0) - (5.0 - r), 0.0, 1.0);
+        float w = (0.22 + 0.5 * rnd(r * 3.3 + vSeed * 6.0)) * prog;
+        float line = aaband(0.10, 0.76, uv.y) * aaband(0.08, 0.08 + w, uv.x)
+                   * (1.0 - aastep(0.42, fract((uv.y - 0.10) * 6.0)));
+        float cur = step(abs(r - mod(floor(t * 0.9), 6.0)), 0.5)
+                  * aaband(0.09 + w, 0.115 + w, uv.x) * step(0.5, fract(t * 1.6))
+                  * (1.0 - aastep(0.62, fract((uv.y - 0.10) * 6.0)));
+        ink = max(line, cur);
+      } else if (kind < 10.0) {
+        /* Donut, arc filling. */
+        vec2 c = (uv - vec2(0.5, 0.42)) * vec2(1.0, 0.62);
+        float rad = length(c) * 2.4;
+        float ang = atan(c.y, c.x) + 3.14159;
+        float fillv = 6.2831 * (0.35 + 0.3 * sin(t * 0.5 + vSeed * 4.0));
+        ink = aaband(0.46, 0.74, rad) * step(ang, fillv);
+      } else if (kind < 11.0) {
+        /* App controls — rows of toggles, one flipping. */
+        float r = floor((uv.y - 0.14) * 4.0);
+        float on = step(0.5, fract(rnd(r * 6.7 + vSeed * 3.0) + t * 0.22));
+        float label = aaband(0.08, 0.42, uv.x);
+        float track = aaband(0.62, 0.86, uv.x);
+        float knob = 1.0 - aastep(0.055, length((uv - vec2(0.68 + on * 0.14, 0.14 + (r + 0.5) * 0.25 - 0.02)) * vec2(1.0, 0.62)));
+        ink = (max(label * 0.55, track * 0.5) * aaband(0.14, 0.86, uv.y)
+              * (1.0 - aastep(0.40, fract((uv.y - 0.14) * 4.0)))) + knob;
+      } else {
+        /* Stacked area, drifting. */
+        float y1 = 0.26 + 0.10 * sin(uv.x * 6.0 + t * 0.8);
+        float y2 = y1 + 0.12 + 0.06 * cos(uv.x * 4.5 - t * 0.6);
+        float band1 = aaband(0.10, y1, uv.y) * 0.75;
+        float band2 = aaband(y1 + 0.012, y2, uv.y) * 0.45;
+        ink = max(band1, band2) * aaband(0.07, 0.93, uv.x);
+      }
+      ink *= inner;
+
+      vec3 tint = mix(uC1, uC2, smoothstep(0.0, 0.55, vTone));
+      tint = mix(tint, uC3, smoothstep(0.6, 1.0, vTone));
+
+      /* Build the surface. The display is a dark panel that is *lit* by what
+         it shows, the bezel is a solid frame catching the key light, and the
+         glint rides over both. Opaque throughout — depth does the separating
+         now, so nothing has to be see-through to sit in front of something. */
+      vec3 glass = mix(uFog, tint * 0.55, 0.30 + 0.30 * vLight);
+      vec3 lit = mix(glass, mix(tint, vec3(1.0), 0.55), clamp(ink * 0.95 + head * 0.30 + dot0, 0.0, 1.0));
+      vec3 frame = mix(tint * 0.55, mix(tint, vec3(1.0), 0.35), vLight);
+      vec3 col = mix(lit, frame, bezel);
+
+      col += tint * vFres * 0.28;
+      col += vec3(1.0) * vSpec * 0.55;
+
+      /* Distance dissolves the screen into the backdrop rather than fading it
+         out — it stays a solid object all the way to the horizon. */
+      gl_FragColor = vec4(mix(uFog, col, vGlow * uAlpha), 1.0);
     }
   `;
+
+
+  /* ------------------------------------------------------------------ *
+   * The core.
+   *
+   * A real solid at the heart of the world, not another flat quad — the one
+   * object with actual volume for the screens to orbit, and the thing that
+   * gives a field of equal rectangles a subject. An icosahedron, flat-shaded:
+   * 20 faces is enough to read as a cut solid and few enough that hardcoding
+   * the mesh costs less than the code to subdivide one.
+   * ------------------------------------------------------------------ */
+
+  const CORE_VERT = `
+    precision highp float;
+    attribute vec3 aPos;
+    attribute vec3 aNrm;
+    uniform mat4 uProj;
+    uniform mat4 uView;
+    uniform mat4 uModel;
+    uniform float uShift;
+    varying vec3 vN;
+    varying vec3 vP;
+    void main() {
+      vec4 wp = uModel * vec4(aPos, 1.0);
+      vN = normalize((uModel * vec4(aNrm, 0.0)).xyz);
+      vP = wp.xyz;
+      vec4 mv = uView * wp;
+      mv.x += uShift;
+      gl_Position = uProj * mv;
+    }
+  `;
+
+  const CORE_FRAG = `
+    precision mediump float;
+    uniform vec3 uC1;
+    uniform vec3 uC3;
+    uniform vec3 uFog;
+    uniform vec3 uCam;
+    uniform float uAlpha;
+    varying vec3 vN;
+    varying vec3 vP;
+    void main() {
+      vec3 n = normalize(vN);
+      vec3 toEye = normalize(uCam - vP);
+      vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
+      float lam = max(dot(n, key), 0.0);
+      /* Facet edges come free from flat shading; the rim is what stops the
+         unlit side reading as a hole cut in the backdrop. */
+      float rim = pow(1.0 - max(dot(n, toEye), 0.0), 2.2);
+      float spec = pow(max(dot(reflect(-key, n), toEye), 0.0), 40.0);
+
+      /* Wide lambert range on purpose. Flat shading only reads as a cut solid
+         if neighbouring faces are clearly different values; a narrow range
+         turned twenty facets into one dark blob. */
+      vec3 body = mix(uFog, uC1 * 0.95, 0.06 + 0.94 * lam * lam);
+      body = mix(body, uC3, rim * 0.65);
+      body += vec3(1.0) * spec * 0.9;
+
+      float fog = smoothstep(48.0, 2.0, length(uCam - vP));
+      gl_FragColor = vec4(mix(uFog, body, fog * uAlpha), 1.0);
+    }
+  `;
+
+  /**
+   * Three flat-shaded solids in one buffer: cube, octahedron, icosahedron.
+   * Flat shading means one normal per face, so every face gets its own value
+   * and the silhouette reads as cut rather than smooth — which is the whole
+   * reason to use a low-poly solid instead of a sphere.
+   */
+  function solids() {
+    const tri: number[] = [];
+    const push = (A: number[], B: number[], C: number[]) => {
+      const u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]];
+      const w = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+      const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]];
+      const l = Math.hypot(n[0], n[1], n[2]) || 1;
+      for (const P of [A, B, C]) tri.push(P[0], P[1], P[2], n[0] / l, n[1] / l, n[2] / l);
+    };
+    const ranges: { first: number; count: number }[] = [];
+    const mark = (fn: () => void) => {
+      const first = tri.length / 6;
+      fn();
+      ranges.push({ first, count: tri.length / 6 - first });
+    };
+
+    // 0 — cube. Also used flattened, as the board the widgets sit on.
+    mark(() => {
+      const c = [
+        [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+        [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
+      ];
+      const faces = [
+        [0, 3, 2, 1], [4, 5, 6, 7], [0, 1, 5, 4],
+        [2, 3, 7, 6], [1, 2, 6, 5], [0, 4, 7, 3],
+      ];
+      for (const [a, b, d, e] of faces) {
+        push(c[a], c[b], c[d]);
+        push(c[a], c[d], c[e]);
+      }
+    });
+
+    // 1 — octahedron. Sharp and few-faced: the signal that fires.
+    mark(() => {
+      const v = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+      const f = [
+        [0, 2, 4], [2, 1, 4], [1, 3, 4], [3, 0, 4],
+        [2, 0, 5], [1, 2, 5], [3, 1, 5], [0, 3, 5],
+      ];
+      for (const [a, b, d] of f) push(v[a], v[b], v[d]);
+    });
+
+    // 2 — icosahedron. Twenty faces: the hub, and the agent's core.
+    mark(() => {
+      const t = (1 + Math.sqrt(5)) / 2;
+      const v = [
+        [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
+        [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
+        [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1],
+      ].map(([x, y, z]) => {
+        const l = Math.hypot(x, y, z);
+        return [x / l, y / l, z / l];
+      });
+      const f = [
+        [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+        [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+        [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+        [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
+      ];
+      for (const [a, b, d] of f) push(v[a], v[b], v[d]);
+    });
+
+    return { data: new Float32Array(tri), ranges };
+  }
+
+  /**
+   * What stands at the centre of each scene, and why.
+   *
+   * The object is the section's subject made solid, so the shape has to say
+   * what the copy says. `mesh` indexes `solids()`; `sy` flattens the cube into
+   * a board; `pulse` is the only one that beats, because a bot is the only
+   * thing here that fires.
+   */
+  const OBJECTS = [
+    // hero — nothing. The opening is the screens themselves.
+    { mesh: -1, scale: 0, spin: 0, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 01 say it — the sentence, as a solid, floating above the card the
+       screens are condensing into. Offset because the formation here is a flat
+       slab through the origin: left at the centre the block is simply inside
+       it and never seen. */
+    { mesh: 0, scale: 1.3, spin: 0.16, sy: 1, pulse: 0, pos: [0, 4.2, 2.6] },
+    /* 02 arrange it — the same block flattened, sitting under the tiles as the
+       board they are laid out on. */
+    { mesh: 0, scale: 3.2, spin: 0.09, sy: 0.1, pulse: 0, pos: [0, -4.4, 0] },
+    // 03 wire it — a hub with a face for every source it takes, inside the ring.
+    { mesh: 2, scale: 1.85, spin: 0.24, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    // 04 watch it — the sharpest solid here, and the only one that pulses.
+    { mesh: 1, scale: 1.7, spin: 0.34, sy: 1, pulse: 1, pos: [0, 1.5, 0] },
+    // 05 reason about it — the agent core, turning fastest: it is working.
+    { mesh: 2, scale: 1.95, spin: 0.5, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    // 06 point it anywhere — smaller and calmer; the story is handing off.
+    { mesh: 1, scale: 1.25, spin: 0.16, sy: 1, pulse: 0, pos: [0, 0, 0] },
+  ];
+
+  /** Y-rotation, X-rotation and a non-uniform scale, composed. */
+  function modelMatrix(
+    out: Float32Array,
+    ry: number,
+    rx: number,
+    sx: number,
+    sy: number,
+    t: number[],
+  ) {
+    const cy = Math.cos(ry), sny = Math.sin(ry);
+    const cx = Math.cos(rx), snx = Math.sin(rx);
+    out[0] = cy * sx;         out[1] = 0;         out[2] = -sny * sx;       out[3] = 0;
+    out[4] = sny * snx * sy;  out[5] = cx * sy;   out[6] = cy * snx * sy;   out[7] = 0;
+    out[8] = sny * cx * sx;   out[9] = -snx * sx; out[10] = cy * cx * sx;   out[11] = 0;
+    out[12] = t[0];           out[13] = t[1];     out[14] = t[2];           out[15] = 1;
+    return out;
+  }
 
   type Handle = { stop: () => void };
   let handles: Handle[] = [];
@@ -288,6 +725,12 @@
     gl.shaderSource(sh, src);
     gl.compileShader(sh);
     if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      /* Say so. A shader that fails to compile takes the whole world with it —
+       * `start()` returns null and the page renders as if there had never been
+       * a canvas, which looks exactly like "the scene is just subtle" and is
+       * otherwise only findable by screenshot. One varying declared in the
+       * vertex shader and forgotten in the fragment is enough to do it. */
+      console.error('[world] shader failed to compile:', gl.getShaderInfoLog(sh));
       gl.deleteShader(sh);
       return null;
     }
@@ -365,7 +808,12 @@
       gl = canvas.getContext('webgl', {
         alpha: true,
         antialias: false,
-        depth: false,
+        /* Depth, and it is load-bearing. Additively blended panels add their
+         * light through each other, so 260 of them overlapping stopped reading
+         * as screens in a space and started reading as grey smear. With a
+         * depth buffer a nearer screen simply hides the one behind it, which
+         * is what makes a crowd of them look like a room rather than a mess. */
+        depth: true,
         premultipliedAlpha: false,
         powerPreference: 'high-performance',
       }) as WebGLRenderingContext | null;
@@ -385,7 +833,10 @@
     ctx.attachShader(prog, vs);
     ctx.attachShader(prog, fs);
     ctx.linkProgram(prog);
-    if (!ctx.getProgramParameter(prog, ctx.LINK_STATUS)) return null;
+    if (!ctx.getProgramParameter(prog, ctx.LINK_STATUS)) {
+      console.error('[world] screen program failed to link:', ctx.getProgramInfoLog(prog));
+      return null;
+    }
     ctx.useProgram(prog);
     ctx.deleteShader(vs);
     ctx.deleteShader(fs);
@@ -436,26 +887,156 @@
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
     const uCam = u('uCam');
+    const uPix = u('uPix');
     const uC1 = u('uC1');
     const uC2 = u('uC2');
     const uC3 = u('uC3');
+    const uFog = u('uFog');
     ctx.uniform1f(uN, count);
 
     const proj = new Float32Array(16);
     const view = new Float32Array(16);
+
+    /* ---- the core: its own program, geometry and uniforms ---- */
+    const cvs = compile(ctx, ctx.VERTEX_SHADER, CORE_VERT);
+    const cfs = compile(ctx, ctx.FRAGMENT_SHADER, CORE_FRAG);
+    const coreProg = ctx.createProgram();
+    let coreReady = false;
+    const coreModel = new Float32Array(16);
+    let coreBuf: WebGLBuffer | null = null;
+    let coreRanges: { first: number; count: number }[] = [];
+    let cAPos = -1;
+    let cANrm = -1;
+    let cuProj: WebGLUniformLocation | null = null;
+    let cuView: WebGLUniformLocation | null = null;
+    let cuModel: WebGLUniformLocation | null = null;
+    let cuShift: WebGLUniformLocation | null = null;
+    let cuCam: WebGLUniformLocation | null = null;
+    let cuC1: WebGLUniformLocation | null = null;
+    let cuC3: WebGLUniformLocation | null = null;
+    let cuFog: WebGLUniformLocation | null = null;
+    let cuAlpha: WebGLUniformLocation | null = null;
+
+    if (cvs && cfs && coreProg) {
+      ctx.attachShader(coreProg, cvs);
+      ctx.attachShader(coreProg, cfs);
+      ctx.linkProgram(coreProg);
+      if (!ctx.getProgramParameter(coreProg, ctx.LINK_STATUS)) {
+        console.error('[world] core program failed to link:', ctx.getProgramInfoLog(coreProg));
+      } else {
+        ctx.deleteShader(cvs);
+        ctx.deleteShader(cfs);
+        const built = solids();
+        coreRanges = built.ranges;
+        coreBuf = ctx.createBuffer();
+        ctx.bindBuffer(ctx.ARRAY_BUFFER, coreBuf);
+        ctx.bufferData(ctx.ARRAY_BUFFER, built.data, ctx.STATIC_DRAW);
+        cAPos = ctx.getAttribLocation(coreProg, 'aPos');
+        cANrm = ctx.getAttribLocation(coreProg, 'aNrm');
+        cuProj = ctx.getUniformLocation(coreProg, 'uProj');
+        cuView = ctx.getUniformLocation(coreProg, 'uView');
+        cuModel = ctx.getUniformLocation(coreProg, 'uModel');
+        cuShift = ctx.getUniformLocation(coreProg, 'uShift');
+        cuCam = ctx.getUniformLocation(coreProg, 'uCam');
+        cuC1 = ctx.getUniformLocation(coreProg, 'uC1');
+        cuC3 = ctx.getUniformLocation(coreProg, 'uC3');
+        cuFog = ctx.getUniformLocation(coreProg, 'uFog');
+        cuAlpha = ctx.getUniformLocation(coreProg, 'uAlpha');
+        coreReady = true;
+      }
+    }
+
+    /** Colours for the core, refreshed with the theme alongside the screens'. */
+    let coreC1: [number, number, number] = [0, 0, 0];
+    let coreC3: [number, number, number] = [0, 0, 0];
+    let coreFog: [number, number, number] = [0, 0, 0];
+
+    /**
+     * Draw the core. It grows out of nothing through the hero and settles at
+     * full size once the story starts, so the opening frame is the screens and
+     * the object arrives with the first act rather than sitting there waiting.
+     */
+    function drawCore(seconds: number, scene: number, morph: number) {
+      if (!coreReady) return;
+      const obj = OBJECTS[Math.min(scene, OBJECTS.length - 1)];
+      if (obj.mesh < 0) return;
+      const range = coreRanges[obj.mesh];
+      if (!range) return;
+
+      /* The object shrinks to nothing exactly when the matter is mid-morph and
+       * grows back as the next scene settles, so each section's solid replaces
+       * the last one during the change rather than popping. Same sine the
+       * screens' fly-by rides, so the two are one gesture. */
+      const swap = 1 - Math.sin(Math.min(1, Math.max(0, morph)) * Math.PI);
+      const beat = obj.pulse ? 1 + 0.14 * Math.sin(seconds * 3.1) : 1;
+      const sx = obj.scale * swap * beat;
+      if (sx < 0.01) return;
+
+      ctx.useProgram(coreProg);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, coreBuf);
+      ctx.enableVertexAttribArray(cAPos);
+      ctx.vertexAttribPointer(cAPos, 3, ctx.FLOAT, false, 24, 0);
+      ctx.enableVertexAttribArray(cANrm);
+      ctx.vertexAttribPointer(cANrm, 3, ctx.FLOAT, false, 24, 12);
+      // These attributes are non-instanced; the screens set a divisor of 1 on
+      // theirs, and a stale divisor here would draw one triangle per instance.
+      instanced!.vertexAttribDivisorANGLE(cAPos, 0);
+      instanced!.vertexAttribDivisorANGLE(cANrm, 0);
+
+      modelMatrix(
+        coreModel,
+        seconds * obj.spin,
+        Math.sin(seconds * 0.11) * 0.35,
+        sx,
+        sx * obj.sy,
+        obj.pos,
+      );
+      ctx.uniformMatrix4fv(cuProj, false, proj);
+      ctx.uniformMatrix4fv(cuView, false, view);
+      ctx.uniformMatrix4fv(cuModel, false, coreModel);
+      ctx.uniform1f(cuShift, shiftFull);
+      ctx.uniform3f(cuCam, cam.x, cam.y, cam.z);
+      ctx.uniform3fv(cuC1, coreC1);
+      ctx.uniform3fv(cuC3, coreC3);
+      ctx.uniform3fv(cuFog, coreFog);
+      ctx.uniform1f(cuAlpha, 1);
+      ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
+
+      // Hand the screens' attribute state back exactly as they expect it.
+      ctx.useProgram(prog);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, quadBuf);
+      ctx.enableVertexAttribArray(aCorner);
+      ctx.vertexAttribPointer(aCorner, 2, ctx.FLOAT, false, 0, 0);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, instBuf);
+      ctx.enableVertexAttribArray(aId);
+      ctx.vertexAttribPointer(aId, 1, ctx.FLOAT, false, 8, 0);
+      instanced!.vertexAttribDivisorANGLE(aId, 1);
+      ctx.enableVertexAttribArray(aSeed);
+      ctx.vertexAttribPointer(aSeed, 1, ctx.FLOAT, false, 8, 4);
+      instanced!.vertexAttribDivisorANGLE(aSeed, 1);
+    }
 
     const probe = document.createElement('span');
     probe.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
     root.appendChild(probe);
 
     function paintTheme() {
+      ctx.useProgram(prog);
       ctx.uniform3fv(uC1, readColor(probe, '--color-brand-400'));
       ctx.uniform3fv(uC2, readColor(probe, '--color-sky-500'));
       ctx.uniform3fv(uC3, readColor(probe, '--color-accent-400'));
+      ctx.uniform3fv(uFog, readColor(probe, '--color-ink-950'));
+      coreC1 = readColor(probe, '--color-brand-400');
+      coreC3 = readColor(probe, '--color-accent-400');
+      coreFog = readColor(probe, '--color-ink-950');
     }
-    ctx.enable(ctx.BLEND);
-    // Always additive: this canvas only ever sits on the world's dark ink.
-    ctx.blendFunc(ctx.SRC_ALPHA, ctx.ONE);
+    /* Opaque and depth-tested rather than additive. Screens occlude; they do
+     * not glow through one another. Distance is carried by fogging toward the
+     * world's own background ink instead of by fading alpha, so a far screen
+     * dissolves into the backdrop while still being a solid object. */
+    ctx.disable(ctx.BLEND);
+    ctx.enable(ctx.DEPTH_TEST);
+    ctx.depthFunc(ctx.LEQUAL);
     paintTheme();
 
     let dpr = 1;
@@ -476,6 +1057,8 @@
       ctx.viewport(0, 0, canvas!.width, canvas!.height);
       perspective(proj, 0.85, w / h, 0.1, 140);
       ctx.uniformMatrix4fv(uProj, false, proj);
+      // Half the backing-store height; the shader turns it into a pixel width.
+      ctx.uniform1f(uPix, canvas!.height * 0.5);
       // Frame the copy column on wide screens; centred where the layout stacks.
       // Applied per frame in `draw`, because the hero has no copy column.
       shiftFull = w >= 1024 ? 3.0 : 0;
@@ -573,7 +1156,14 @@
        * the acts put their copy in the inline-start column, so it is pushed
        * away from there. Interpolated across the first scene boundary so the
        * change is never a visible step. */
-      const dim = a === 0 ? 0.72 - 0.56 * morph : 0.16;
+      /* Panels need a harder hold-back than the motes did. A soft dot behind
+       * a sentence is texture; a lit rectangle edge crossing a line of type is
+       * a strikethrough. 0.09 in the acts, where the copy owns the inline
+       * start; near-even under the hero, whose headline is centred. */
+      /* Opaque screens are far more intrusive over type than the additive
+       * glass was — a dimmed glow disappears, a dimmed solid is still a solid.
+       * 0.05 in the acts, where the copy owns the inline start. */
+      const dim = a === 0 ? 0.62 - 0.57 * morph : 0.05;
       if (Math.abs(dim - lastDim) > 0.004) {
         root.style.setProperty('--field-dim', dim.toFixed(3));
         lastDim = dim;
@@ -633,7 +1223,9 @@
       ctx.uniform3f(uCam, cam.x, cam.y, cam.z);
 
       ctx.clearColor(0, 0, 0, 0);
-      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
+      drawCore(seconds, a, morph);
+      ctx.useProgram(prog);
       instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
       frame = requestAnimationFrame(draw);
     }
@@ -652,7 +1244,9 @@
       lookAt(view, -14.6, 3.4, 18.2);
       ctx.uniformMatrix4fv(uView, false, view);
       ctx.clearColor(0, 0, 0, 0);
-      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
+      drawCore(6, 1, 0.34);
+      ctx.useProgram(prog);
       instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
     }
 
@@ -768,6 +1362,8 @@
         ctx.deleteBuffer(quadBuf);
         ctx.deleteBuffer(instBuf);
         ctx.deleteProgram(prog);
+        if (coreBuf) ctx.deleteBuffer(coreBuf);
+        if (coreProg) ctx.deleteProgram(coreProg);
         ctx.getExtension('WEBGL_lose_context')?.loseContext();
       },
     };
@@ -805,14 +1401,14 @@
     -webkit-mask-image: linear-gradient(
       to right,
       rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
-      #000 68%
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
+      #000 76%
     );
     mask-image: linear-gradient(
       to right,
       rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
-      #000 68%
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
+      #000 76%
     );
     /* No transition on opacity: it is written every frame from the world's
      * position, and a transition would fight the scroll. */
@@ -822,14 +1418,14 @@
     -webkit-mask-image: linear-gradient(
       to left,
       rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
-      #000 68%
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
+      #000 76%
     );
     mask-image: linear-gradient(
       to left,
       rgba(0, 0, 0, var(--field-dim)),
-      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 34%,
-      #000 68%
+      rgba(0, 0, 0, calc(var(--field-dim) + 0.04)) 38%,
+      #000 76%
     );
   }
 
