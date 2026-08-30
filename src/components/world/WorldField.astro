@@ -57,8 +57,14 @@
    * than a mote, but six times fewer of them at ~1x overdraw is cheaper than
    * what this replaced. */
   const RENDER_SCALE = 1;
-  const COUNT_WIDE = 260;
-  const COUNT_NARROW = 120;
+  /* Fewer screens than the field can afford, because the point is no longer
+   * density. The panels come in four sizes now (see `sz` in the vertex
+   * shader), and a crowd this varied only reads as a mosaic if there is space
+   * between the pieces — at 260 the big ones had nowhere to sit and the whole
+   * thing went back to being a texture. The size spread costs less fill than
+   * the instances it replaces, so this is also the cheaper field. */
+  const COUNT_WIDE = 160;
+  const COUNT_NARROW = 80;
 
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
   const CAM_DAMP = 3.2;
@@ -85,6 +91,10 @@
     uniform float uLift;
     uniform float uCharge;
     uniform float uBurst;
+    /* 1 while the loop is running, 0 for the one composed reduced-motion
+       frame. Only the channel cut reads it — everything else is already still
+       in that frame because the clock is. */
+    uniform float uLive;
     uniform vec3 uCam;
     /** Half the backing-store height, in device pixels. Feeds edge antialiasing. */
     uniform float uPix;
@@ -98,6 +108,7 @@
     varying float vSeed;
     varying float vAA;
     varying float vT;
+    varying float vSwitch;
     varying vec2 vUv;
 
     vec3 hash3(float i) {
@@ -124,22 +135,41 @@
            The camera sits ~22 out and the outer band reaches 17, so the near
            side of the ring passes between the lens and the title and fades out
            on the near plane: screens genuinely sweep past you. */
-        float bands = 3.0;
+        /* Two shells, not three. Three spread 160 screens so thin that no one
+           of them had a readable circumference — the eye had nothing to trace,
+           which is why the ring read as a scatter. Two puts ~27 screens in
+           every row of every shell, close enough to spaced to be a wall. */
+        float bands = 2.0;
         float band = mod(i, bands);
         float idx = floor(i / bands);
         float per = ceil(n / bands);
 
-        float R = 10.5 + band * 3.4;
-        /* Each band turns a little slower than the one inside it. */
-        float spin = t * (0.085 - band * 0.016);
-        float th = (idx / per) * 6.2831 + spin + band * 0.7;
+        /* No radial jitter at all. Every loosening of this formation — ±1.2 on
+           the radius, ±1 slot on the angle, two thirds of the pitch on the
+           height, a breathing term on top — was added to stop a cloud looking
+           sorted, and together they cost the one thing the hero is for. A
+           carousel is a rigid object: the moment a screen can be anywhere, the
+           circle stops being traceable and the frame is back to floating
+           screens. What keeps it from looking stamped is the content, which
+           now changes on every screen, and the size spread. */
+        float R = 11.4 + band * 3.0;
+        /* Both shells on one clock, so the cylinder turns as one thing. They
+           used to differ by 20% for depth, which is a real cue and a poor
+           trade: two concentric rings at different rates read as two
+           unrelated fields, and the depth is already carried by the radius. */
+        float spin = t * 0.12;
+        /* The outer shell sits half a slot round from the inner, so it fills
+           the inner's gaps instead of hiding behind it. */
+        float th = (idx / per) * 6.2831 + spin + band * 3.1416 / per;
 
-        /* Stacked a few screens high, staggered so rows do not line up. */
+        /* Three true ranks. This is the wrapped video wall: 160 screens cannot
+           make a single readable circle at this radius (the spacing would be a
+           quarter of a screen), so the circle is three rows deep. */
         float rows = 3.0;
         float row = mod(idx, rows);
-        float y = (row - (rows - 1.0) * 0.5) * 3.5 + (h.y - 0.5) * 1.2;
+        float y = (row - (rows - 1.0) * 0.5) * 3.3;
 
-        return vec3(cos(th) * R, y + sin(th * 2.0 + t * 0.3) * 0.35, sin(th) * R);
+        return vec3(cos(th) * R, y, sin(th) * R);
       }
       if (f < 1.5) {
         /* 1 — WIDGET: the matter condenses into one card.
@@ -226,6 +256,17 @@
       vec3 pa = form(uFormA, aId, uN, aSeed, uTime);
       vec3 pb = form(uFormB, aId, uN, aSeed, uTime);
 
+      /* How big this screen is, as one of four sizes.
+         Continuous scaling from the seed gave a field where every panel was a
+         slightly different size, which is not a mosaic — it is the same crowd
+         with noise on it. Four discrete steps in a geometric run read as a
+         wall of real screens: phones, panels, displays, boards. The roll is
+         squared before it is quantised, so half the field takes the smallest
+         size and the biggest is the rare one that anchors a corner.
+         Its own hash, not aSeed, which already owns the fly-by and the tone. */
+      float tier = floor(pow(hash3(aId + 57.3).x, 2.0) * 3.999);
+      float grade = tier / 3.0;
+
       /* Stagger the morph per instance so the change reads as matter flowing
          rather than every point cutting on the same frame. */
       float lead = aSeed * 0.4;
@@ -252,7 +293,10 @@
          as the scene detonating. The rest cross directly and the formation
          stays legible the whole way through. */
       float bloom = sin(m * 3.14159265);
-      float flyby = step(0.90, aSeed);
+      /* Held back on the large sizes: the push is a fraction of the distance
+         to the lens, and on a screen three times the size that fraction is a
+         wall across the frame rather than an object going past it. */
+      float flyby = step(0.90, aSeed) * (1.0 - 0.72 * grade);
       /* Travel a fraction of the actual distance to the lens rather than a
          fixed number of units: a fixed push overshoots *behind* the camera on
          the near side of the cloud, where the point clips out instead of
@@ -297,16 +341,37 @@
          residual tilt is what still lets them catch the key light. */
       nrm = normalize(mix(nrm, toEye, 0.82));
 
+      /* Except in the hero, where they stand on the ring facing out of it like
+         the screens on a carousel. This is the whole reason the circle reads as
+         a circle: a screen at the side of the ring is caught edge-on and opens
+         up as it comes round, so the wall turns as one object. Eye-facing
+         panels cannot do that — they present the same face at every angle,
+         which is why the ring used to read as a scatter however cleanly it was
+         placed. The radial is free to know: every ring here is centred on the
+         Y axis, so it falls out of the position. The small pull back toward the
+         eye stops the edge-on screens collapsing to a hairline. */
+      vec3 radial = normalize(vec3(p.x, 0.0, p.z) + vec3(1e-4, 0.0, 0.0));
+      nrm = normalize(mix(nrm, normalize(mix(radial, toEye, 0.28)), heroness));
+
       /* Basis built off world +Y, so every panel shares a horizon and the set
          reads as one system rather than as confetti. The epsilon keeps the
          cross product defined for a panel that happens to face straight up. */
       vec3 right = normalize(cross(vec3(0.0, 1.0, 0.0), nrm) + vec3(1e-4, 0.0, 0.0));
       vec3 up = cross(nrm, right);
 
-      /* Widget proportions: wider than tall. */
-      /* Bigger than a blank panel needed to be. Each one now draws a widget
-         inside itself, and a chart rendered two pixels tall is just noise. */
-      float sz = 0.74 + aSeed * 0.56 + k * 0.10 + burst * 0.16;
+      /* Widget proportions: wider than tall. The 0.62 is also baked into the
+         fragment shader's distance metric, so it is not a per-instance dial:
+         scale is what varies here, and every screen keeps the same shape. */
+      /* The four sizes, a geometric run so each step is visibly a different
+         class of screen and not a rounding error. The floor is where a chart
+         drawn inside the panel is still a chart rather than noise. */
+      float tiered = 0.68 * pow(1.50, tier);
+      /* Pulled toward one size in the hero. Four size classes are what make the
+         acts read as a mosaic, but around a ring they read as debris: a bank of
+         screens is a set of like objects, and the circle only traces if the
+         things on it are comparable. Still a little spread, so the ring is a
+         wall of screens and not a stamped pattern. */
+      float sz = mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16;
       vec3 world = p + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
@@ -337,11 +402,33 @@
          a step() widened by it is a step() that no longer stairsteps. */
       float px = (sz / max(-mv.z, 0.001)) * uProj[1][1] * uPix;
       vAA = clamp(1.4 / max(px, 1.0), 0.0015, 0.45);
-      /* Which widget this panel draws, and the seed its content varies on. */
-      /* Which screen this is. Offset by the formation so each act shows a
-         different mix — the connectors act leans to market and data screens,
-         the bots act to alerts and gauges — without needing a second buffer. */
-      vKind = fract(ho.z + uFormA * 0.17);
+      /* ---- the channel ----
+         Each screen holds one of the thirty-six for a few seconds and then cuts
+         to another. A wall of screens that never change is a photograph of
+         software; the hero is meant to be a bank of live TVs, and a TV that
+         shows one frame forever is a poster of a TV.
+
+         The dwell is per-screen, so the cuts arrive scattered: a handful of
+         screens are always mid-change and the wall is never all still nor all
+         flickering at once.
+
+         Redrawn from the slot number rather than stepped to the next index —
+         +1 would send a visible wave of the same picture around the ring, and
+         two neighbours would stay neighbours for the life of the page. The
+         slot wraps at 61 to keep the hash argument small: this is sin() hashing
+         in a float, and it goes flat long before an hour of uptime does.
+
+         Still offset by the formation, so each act keeps its own bias in the
+         mix — connectors leaning to market and data screens, bots to alerts. */
+      float dwell = 4.0 + ho.x * 5.0;
+      float phase = (uTime + aSeed * 41.0) / dwell;
+      float slot = mod(floor(phase), 61.0);
+      vKind = fract(hash3(aId * 0.37 + slot * 2.71).z + uFormA * 0.17);
+      /* 1 on the frame the picture changes, gone about 0.2s later. The fragment
+         shader spends this on the collapse; here it only has to be a ramp.
+         Zero for the reduced-motion still, which must not catch a screen
+         halfway through a cut and render it as a broken one. */
+      vSwitch = uLive * (1.0 - smoothstep(0.0, 0.26 / dwell, fract(phase)));
       vSeed = aSeed;
       /* Per-screen clock. Same offset that placed it, so a wall of screens
          animates out of phase instead of pulsing as one. */
@@ -353,10 +440,12 @@
       float dist = -mv.z;
       vGlow = smoothstep(48.0, 2.0, dist);
       /* Near fade. A mote that drifted close was a bright speck; a *panel*
-         that drifts close is a wall across the headline. Fade anything inside
-         ~5 units to nothing, which is the standard soft near-plane and the
+         that drifts close is a wall across the headline. Scaled by the panel's
+         own size, because what has to stay under a threshold is the share of
+         the frame it covers, not its distance: the smallest size keeps roughly
+         the old ~5-unit soft near-plane, the largest is gone by 9. This is the
          only reason the hero stays readable. */
-      vGlow *= smoothstep(1.0, 5.5, dist);
+      vGlow *= smoothstep(sz * 1.3, 3.4 + sz * 2.6, dist);
       /* Then flare on the approach, before that fade takes over, so a panel
          sweeping the lens still reads as an object going past rather than one
          quietly winking out. */
@@ -402,6 +491,7 @@
     varying float vSeed;
     varying float vAA;
     varying float vT;
+    varying float vSwitch;
     varying vec2 vUv;
 
     float rnd(float i) {
@@ -482,7 +572,21 @@
       /* The bezel throws a soft shadow onto the glass just inside it. */
       float inset = 1.0 - smoothstep(-0.060, -0.135, sd);
 
+      /* ---- the cut ----
+         A channel change, done the way a CRT does it: the picture collapses to
+         a bright slit and springs back open with something else on it.
+
+         Squeezing the *coordinate* is what compresses the picture. At 0.22 the
+         panel's whole 0..1 range maps to a band a fifth as tall, so all
+         thirty-six screens and the chrome above them collapse together and
+         every content guard below clips itself to the slit without knowing
+         anything about this. One divide, and the bezel — which is drawn off
+         vUv and sd, not uv — stays a solid object while its screen misbehaves.
+
+         Squared, so the collapse snaps and the reopen eases. */
+      float cut = vSwitch * vSwitch;
       vec2 uv = vUv + 0.5;
+      uv.y = 0.5 + (uv.y - 0.5) / mix(1.0, 0.22, cut);
       float t = vT;
       float s = vSeed;
 
@@ -1296,6 +1400,20 @@
         col = mix(col, lightest, disc(uv, tc + vec2(0.2867 * 0.5 - 0.04, -(y1 - y0) * 0.33 + 0.04), 0.008) * inC * 0.7 * step(0.5, rnd(id * 2.0 + s)));
       }
 
+      /* The rest of the cut: the glass goes dark behind the collapsing picture,
+         interference bars cross it, and the slit it collapsed into flares.
+         Clipped to the inner mask so none of it touches the frame.
+         cut is constant across the panel — a per-instance value that only
+         travels as a varying — so this branch is instance-coherent, which is
+         the one kind a GPU does not pay for. */
+      if (cut > 0.001) {
+        float bars = rnd(floor(vUv.y * 52.0) * 3.7 + s * 11.0);
+        float slit = 1.0 - aastep(0.06 + 0.20 * (1.0 - vSwitch), abs(vUv.y));
+        col = mix(col, glassDark, inner * cut * 0.55);
+        col += mix(accent, lightest, 0.5) * inner * cut * (0.10 + 0.34 * bars);
+        col += lightest * inner * cut * slit * 0.55;
+      }
+
       /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ---- */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
       col += lightest * sheen * sheen * 0.026;
@@ -1676,6 +1794,7 @@
     const uLift = u('uLift');
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
+    const uLive = u('uLive');
     const uCam = u('uCam');
     const uPix = u('uPix');
     const uC1 = u('uC1');
@@ -2008,7 +2127,7 @@
        * the inline-start column — an opaque screen edge crossing a line of
        * type is a strikethrough. Ramped across the hero's exit so the change
        * is never a visible step. */
-      ctx.uniform1f(uDim, a === 0 ? 0.62 - 0.57 * morph : 0.05);
+      ctx.uniform1f(uDim, a === 0 ? 0.88 - 0.83 * morph : 0.05);
 
       /* The hero centres its headline, so the world stays centred under it and
        * slides into the scene column on the same beat the matter takes its
@@ -2031,6 +2150,7 @@
       burst *= Math.exp(-2.2 * dt);
       ctx.uniform1f(uCharge, charge);
       ctx.uniform1f(uBurst, burst);
+      ctx.uniform1f(uLive, 1);
 
       // Pointer parallax trails the cursor rather than tracking it.
       const pl = 1 - Math.exp(-PTR_DAMP * dt);
@@ -2042,9 +2162,21 @@
        * height twice. Pointer parallax is added to the *aim*, not to the
        * camera, so it inherits the same inertia as everything else. */
       const ang = -1.05 + p * 2.35 + ptrX * 0.22;
-      const dist = 24 - p * 7.5 + Math.sin(seconds * 0.22) * 0.6;
+      /* Closer in the hero, so the lens sits just outside the outer shell
+       * instead of well back from it. This is what makes the carousel a
+       * carousel: at 24 the whole ring was ahead of the camera and the near
+       * side simply sat there, but at 20 it comes within a few units of the
+       * lens, flares on the approach and fades out on the near plane — screens
+       * genuinely sweep past you rather than drifting in a box. */
+      const dist = 24 - p * 7.5 - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
       const aimX = Math.sin(ang) * dist;
-      const aimY = 1.6 + 5.4 * Math.sin(p * 3.1) + ptrY * 2.4;
+      /* Lifted a little in the hero so the lens looks slightly down into the
+       * carousel: dead level, a ring projects to a flat horizontal band and
+       * nothing in the picture says the screens are on a circle. Only a little,
+       * though — at 7 units up the ring filled the frame edge to edge and the
+       * headline lost its hole. Decays with the morph, so act 01 still gets the
+       * camera height it was staged for. */
+      const aimY = 1.6 + 5.4 * Math.sin(p * 3.1) + ptrY * 2.4 + 3.0 * hero;
       const aimZ = Math.cos(ang) * dist;
 
       if (!camPrimed) {
@@ -2085,6 +2217,7 @@
       ctx.uniform1f(uAlpha, 1);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
+      ctx.uniform1f(uLive, 0);
       const [sx, sy] = headlineOffset(Math.hypot(-14.6, 3.4, 18.2));
       ctx.uniform1f(uShift, sx);
       ctx.uniform1f(uLift, sy);
