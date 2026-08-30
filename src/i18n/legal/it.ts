@@ -8,7 +8,7 @@ export const it: LegalBundle = {
     badge: 'Privacy',
     title: 'Informativa sulla Privacy',
     subtitle:
-      'Come Nexow, Inc. raccoglie, utilizza e protegge le informazioni personali quando utilizza nexow.ai e l’applicazione Nexow.',
+      'Come Nexow, Inc. raccoglie, utilizza e protegge le informazioni personali quando utilizzi nexow.ai e l’applicazione Nexow.',
     meta: {
       title: 'Informativa sulla Privacy — Nexow',
       description:
