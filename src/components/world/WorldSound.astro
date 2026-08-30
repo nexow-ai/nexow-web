@@ -29,8 +29,12 @@
   import type { Ambient } from '../../lib/ambient';
   import { pickTrack, type Track } from '../../lib/soundtrack';
 
-  /** The files are matched to −18 LUFS by `scripts/fetch-tour-music.mjs`; this sits them under the page. */
-  const LEVEL = 0.9;
+  /**
+   * The files are matched to −18 LUFS with 1.5 dB of headroom by
+   * `scripts/fetch-tour-music.mjs`, which lands them level with the
+   * synthesised piece; nothing to trim here.
+   */
+  const LEVEL = 1;
   const FADE_IN = 2.2;
   const FADE_OUT = 1.6;
 

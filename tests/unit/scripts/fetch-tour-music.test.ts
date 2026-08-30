@@ -261,6 +261,15 @@ describe('main', () => {
     expect(log).toHaveBeenLastCalledWith(expect.stringMatching(/^\[music\] 1\/2 records/));
   });
 
+  it('reports a failure that is not an Error as it is', async () => {
+    const run = vi.fn(async () => {
+      throw 'ffmpeg is not installed';
+    });
+    const ok = await main({ tracks: [record], argv: [], outDir: out, fetchImpl: stubFetch(200), run, log, error });
+    expect(ok).toBe(false);
+    expect(error).toHaveBeenCalledWith('[music] ✗ test-record: ffmpeg is not installed');
+  });
+
   it('reads the real catalogue and the CLI flags by default', async () => {
     // Every real record is already on disk, so a default run touches nothing.
     const run = stubRun();
