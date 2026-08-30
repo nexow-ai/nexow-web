@@ -3,10 +3,10 @@
  * Act I — a sentence becomes a running widget.
  *
  * The scene is the same playground chrome as the features page: type a prompt,
- * get a live set of widgets. Scroll beats assemble it — the prompt types, then
- * the generated cards land — so the copy's four steps have a matching picture.
- * Decorative SVG, so labels stay out of the a11y tree; the copy beside it is
- * the reading. At rest (no JS, reduced motion) the finished playground shows.
+ * get a live set of widgets. The SVG runs that loop on its own clock — type,
+ * generate, land, hold, reset — independent of the act's scroll ramps. The
+ * copy beside it still lights beat by beat. Decorative, so it stays out of
+ * the a11y tree. Reduced motion parks on the finished playground.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -95,7 +95,11 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
           {
             TABS.map((tab, i) => (
-              <g transform={`translate(${56 + i * 76} 32)`}>
+              <g
+                class:list={[!tab.on && 'w-tab-loop']}
+                style={!tab.on ? `--i:${i - 1}` : undefined}
+                transform={`translate(${56 + i * 76} 32)`}
+              >
                 <rect
                   x="0"
                   y="0"
@@ -117,8 +121,10 @@ const GAME = [1, 8, 12, 4, 6, 13];
             ))
           }
 
-          <rect x="360" y="34" width="20" height="20" rx="5" stroke="var(--w-line)" stroke-dasharray="2 2"></rect>
-          <path d="M370 39v10M365 44h10" stroke="var(--w-text-4)" stroke-width="1.4" stroke-linecap="round"></path>
+          <g class="w-add">
+            <rect x="360" y="34" width="20" height="20" rx="5" stroke="var(--w-line)" stroke-dasharray="2 2"></rect>
+            <path d="M370 39v10M365 44h10" stroke="var(--w-text-4)" stroke-width="1.4" stroke-linecap="round"></path>
+          </g>
 
           <g transform="translate(490 28)">
             <circle cx="11" cy="11" r="11" fill="var(--color-accent-500)"></circle>
@@ -134,7 +140,11 @@ const GAME = [1, 8, 12, 4, 6, 13];
 
           {
             WORKSPACES.map((ws, i) => (
-              <g transform={`translate(24 ${88 + i * 28})`}>
+              <g
+                class:list={[!ws.on && 'w-ws-loop']}
+                style={!ws.on ? `--i:${i - 1}` : undefined}
+                transform={`translate(24 ${88 + i * 28})`}
+              >
                 <rect
                   x="0"
                   y="0"
@@ -156,15 +166,17 @@ const GAME = [1, 8, 12, 4, 6, 13];
             ))
           }
 
-          <rect x="24" y="176" width="22" height="22" rx="5" stroke="var(--color-brand-400)" stroke-opacity="0.55"></rect>
-          <path d="M35 182v10M30 187h10" stroke="var(--color-brand-400)" stroke-width="1.4" stroke-linecap="round"></path>
+          <g class="w-add">
+            <rect x="24" y="176" width="22" height="22" rx="5" stroke="var(--color-brand-400)" stroke-opacity="0.55"></rect>
+            <path d="M35 182v10M30 187h10" stroke="var(--color-brand-400)" stroke-width="1.4" stroke-linecap="round"></path>
+          </g>
 
-          <!-- Prompt -->
-          <g class="w-plane" style="--k:var(--k0, 1)">
-            <ellipse cx="360" cy="100" rx="180" ry="46" fill="url(#w-glow)" filter="url(#w-soft)"></ellipse>
+          <!-- Prompt — types on the shared loop, not on scroll. -->
+          <g>
+            <ellipse class="w-glow" cx="360" cy="100" rx="180" ry="46" fill="url(#w-glow)" filter="url(#w-soft)"></ellipse>
             <rect x="128" y="70" width="476" height="56" rx="14" class="w-card"></rect>
             <rect x="140" y="82" width="32" height="32" rx="8" fill="var(--w-icon-bg)"></rect>
-            <g transform="translate(146 88) scale(0.85)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
+            <g class="w-spark" transform="translate(146 88) scale(0.85)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
               <path d={ICON_PATHS.sparkles}></path>
             </g>
             <g clip-path="url(#w-type-clip)">
@@ -175,12 +187,12 @@ const GAME = [1, 8, 12, 4, 6, 13];
             <rect class="w-caret" x="180" y="86" width="2" height="18" rx="1" fill="var(--color-brand-400)"></rect>
           </g>
 
-          <!-- Generating source — beat 2 -->
-          <g class="w-plane w-source" style="--k:var(--k1, 1)">
+          <g class="w-source">
             <text x="136" y="148" class="w-tiny" fill="var(--w-accent)">GENERATING</text>
             {[0, 1, 2, 3].map((i) => (
               <rect
                 class="w-src-bar"
+                style={`--i:${i}`}
                 x="128"
                 y={156 + i * 10}
                 width={80 + i * 52}
@@ -191,8 +203,7 @@ const GAME = [1, 8, 12, 4, 6, 13];
             ))}
           </g>
 
-          <!-- Generated widgets — beats 3 & 4 -->
-          <g class="w-plane" style="--k:var(--k2, 1)">
+          <g class="w-widget" style="--i:0">
             <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
             <text x="144" y="172" class="w-card-title" fill="var(--w-text)">Moodboard</text>
             <rect x="400" y="158" width="32" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
@@ -202,7 +213,7 @@ const GAME = [1, 8, 12, 4, 6, 13];
             <text x="144" y="348" class="w-note" fill="var(--w-text-4)">calm · clear</text>
           </g>
 
-          <g class="w-plane" style="--k:var(--k2, 1)">
+          <g class="w-widget" style="--i:1">
             <rect x="460" y="148" width="144" height="100" rx="14" class="w-card"></rect>
             <text x="472" y="168" class="w-card-title" fill="var(--w-text)">Habits</text>
             <text x="560" y="168" class="w-tiny" fill="var(--w-accent)">6/8</text>
@@ -219,7 +230,7 @@ const GAME = [1, 8, 12, 4, 6, 13];
             ))}
           </g>
 
-          <g class="w-plane" style="--k:var(--k3, 1)">
+          <g class="w-widget" style="--i:2">
             <rect x="460" y="260" width="144" height="104" rx="14" class="w-card"></rect>
             <text x="472" y="280" class="w-card-title" fill="var(--w-text)">Mini game</text>
             {Array.from({ length: 15 }).map((_, i) => (
