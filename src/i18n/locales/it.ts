@@ -85,7 +85,7 @@ export const it: SiteContent = {
       badge: 'Accesso anticipato',
       titleLead: 'I dati sono il nuovo petrolio.',
       titleGradient: 'Costruisci qualsiasi cosa e osserva tutto.',
-      titleTail: 'Agisci, guadagna, cresci, condividi.',
+      titleTail: 'Agisci in fretta, condividi - cresci - guadagna',
       titleKicker: 'Dashboard in tempo reale in pochi secondi — non settimane, né trimestri.',
       subtitle:
         'Descrivi ciò che ti serve e Nexow lo costruisce: widget reali e funzionanti, collegati a dati live, disposti su un canvas che controlli tu. Terremoti, qualità dell’aria, indicatori mondiali, feed di mercato o il tuo database — visualizza, tieni d’occhio e agisci.',

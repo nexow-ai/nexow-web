@@ -85,7 +85,7 @@ export const pt: SiteContent = {
       badge: 'Acesso antecipado',
       titleLead: 'Os dados são o novo petróleo.',
       titleGradient: 'Constrói qualquer coisa e vigia tudo.',
-      titleTail: 'Age, ganha, cresce, partilha.',
+      titleTail: 'Age rápido, partilha - cresce - ganha',
       titleKicker: 'Dashboards em tempo real em segundos — não em semanas, nem em trimestres.',
       subtitle:
         'Descreva o que precisa e a Nexow constrói: widgets reais a funcionar, ligados a dados em direto, dispostos num canvas que controla. Sismos, qualidade do ar, indicadores mundiais, feeds de mercado ou a sua própria base de dados — visualize, acompanhe e aja.',
