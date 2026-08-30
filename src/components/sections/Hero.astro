@@ -58,9 +58,8 @@ const D = {
 
   <div class="container-page hero__inner">
     <h1 id="hero-title" class="hero__title">
-      {/* Split-complementary triad on the dark green→purple world: gold sits
-          opposite the violet, teal is harmonic with the left forest, magenta
-          is opposite the teal and harmonic with the right purple. Each line
+      {/* Four beats, four hues: gold for the proverb, red→orange for the
+          build line, cyan for the lit hero, magenta for the close. Each
           drifts on its own clock so they never lock into one wash. */}
       <span class="hero__line hero__grad hero__grad--oil" data-text-appear data-text-appear-delay="0.10">{t.titleLead}</span>{' '}
       <span class="hero__line hero__grad hero__grad--use" data-text-appear data-text-appear-delay="0.20">{t.titleGradient}</span>{' '}
@@ -253,9 +252,14 @@ const D = {
   }
 
   .hero__grad--use {
-    --ga: var(--color-brand-700);
-    --gb: var(--color-sky-600);
-    --gc: var(--color-accent-600);
+    --ga: var(--color-rose-700);
+    --gb: var(--color-rose-600);
+    --gc: var(--color-amber-500);
+    /* Horizontal red → orange. Red holds through BUILD so the line does
+       not collapse into a single peach wash. */
+    background-image: linear-gradient(90deg, var(--ga) 0%, var(--gb) 42%, var(--gc) 100%);
+    background-size: 100% 100%;
+    animation: none;
   }
 
   /* One idea: a searchlight crossing the hero title. The specular lives in
@@ -353,7 +357,12 @@ const D = {
     --gc: var(--color-amber-400);
   }
 
-  :global(.dark) .hero__grad--use,
+  :global(.dark) .hero__grad--use {
+    --ga: var(--color-rose-600);
+    --gb: var(--color-rose-500);
+    --gc: var(--color-amber-400);
+  }
+
   :global(.dark) .hero__grad--watch {
     --ga: var(--color-brand-200);
     --gb: var(--color-sky-300);
