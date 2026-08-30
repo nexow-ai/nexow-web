@@ -343,10 +343,10 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
   /* Two rules of this 3D context, both learned the hard way:
    *
    * - A wide, filled, flat layer gets *split* along its intersection with the
-   *   orbit planes, which shows up as a hard line across the sphere. So the
+   *   orbit planes, which shows up as a hard seam across the sphere. So the
    *   core is one modest plane and everything soft about it lives inside that
-   *   plane, where `transform-style: flat` flattens it and nothing can slice
-   *   it.
+   *   plane, and the glow carries a blur — a filtered element is composited as
+   *   one group, which is what puts it out of reach of the splitting.
    * - The container's own fog (see `.a-orb`) is a plane at z=0 too, and a body
    *   sitting at exactly z=0 loses the coin toss against it. Pushing the core
    *   towards the reader by most of the sphere's radius settles it, and buys a
@@ -366,9 +366,11 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
     border-radius: 50%;
     background: radial-gradient(
       circle,
-      color-mix(in oklab, var(--color-brand-400) 38%, transparent),
+      color-mix(in oklab, var(--color-brand-400) 40%, transparent),
       transparent 58%
     );
+    /* Static blur: the breathe below only moves the layer, never re-filters it. */
+    filter: blur(14px);
     animation: a-breathe 4.8s ease-in-out infinite;
   }
 
