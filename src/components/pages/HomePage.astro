@@ -69,21 +69,27 @@ const websiteSchema = {
 };
 
 /**
- * Right-rail stops. One per act plus the two ends — thirteen entries used to
- * collide with the hero mock below 1620px, and a rail that lists every band is
- * a symptom of a page built out of bands.
+ * Right-rail stops: one per story act, then the later rooms, then the footer.
+ * Labels are chrome ("Hero", "DAO"), not the scene headlines — those already
+ * sit in the copy. Below 1620px the rail parks the words and shows them on
+ * hover, so a longer list does not print over the hero mock.
  */
-const acts = t.acts;
+const rail = t.rail;
 const sections = [
-  { id: 'hero', label: t.hero.titleLead.replace(/\.$/, '') },
-  { id: 'widget', label: acts?.widget.eyebrow ?? 'Say it' },
-  { id: 'app-showcase', label: acts?.canvas.eyebrow ?? 'Arrange it' },
-  { id: 'connectors', label: acts?.connectors.eyebrow ?? 'Wire it' },
-  { id: 'automate', label: acts?.bots.eyebrow ?? 'Watch it' },
-  { id: 'bots-agents', label: acts?.agents.eyebrow ?? 'Reason about it' },
-  { id: 'dao', label: acts?.dao.eyebrow ?? 'Own it' },
-  { id: 'use-cases', label: acts?.useCases.eyebrow ?? 'Point it anywhere' },
-  { id: 'plans', label: t.plans.eyebrow },
+  { id: 'hero', label: rail?.hero ?? 'Hero' },
+  { id: 'widget', label: rail?.widget ?? 'Widget' },
+  { id: 'app-showcase', label: rail?.canvas ?? 'Canvas' },
+  { id: 'connectors', label: rail?.connectors ?? 'Connectors' },
+  { id: 'automate', label: rail?.bots ?? 'Bots' },
+  { id: 'bots-agents', label: rail?.agents ?? 'Agents' },
+  { id: 'dao', label: rail?.dao ?? 'DAO' },
+  { id: 'use-cases', label: rail?.useCases ?? 'Use cases' },
+  { id: 'features', label: rail?.features ?? 'Features' },
+  { id: 'privacy', label: rail?.privacy ?? 'Privacy' },
+  { id: 'plans', label: rail?.plans ?? 'Plans' },
+  { id: 'rewards', label: rail?.rewards ?? 'Rewards' },
+  { id: 'faq', label: rail?.faq ?? 'FAQ' },
+  { id: 'footer', label: rail?.footer ?? 'Footer' },
 ];
 ---
 
