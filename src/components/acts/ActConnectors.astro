@@ -73,7 +73,7 @@ const GROUPS: {
               <p class="k-group-label">{copy.beats[i]?.label}</p>
               <div class="k-row">
                 {group.items.map((item) => (
-                  <span class:list={['k-pill', item.status === 'soon' && 'k-pill--soon']} title={item.name}>
+                  <span class="k-pill" title={item.name}>
                     <img src={item.logo} alt="" loading="lazy" decoding="async" width="16" height="16" />
                     <span>{item.name}</span>
                   </span>
@@ -143,6 +143,7 @@ const GROUPS: {
     display: grid;
     gap: 0.65rem;
     width: 100%;
+    overflow: visible;
   }
 
   @media (min-width: 640px) {
@@ -168,15 +169,18 @@ const GROUPS: {
     display: grid;
     gap: 0.32rem;
     align-content: start;
+    overflow: visible;
   }
 
   .k-group-label {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.14em;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.25;
     text-transform: uppercase;
-    color: var(--w-accent);
+    color: color-mix(in oklab, var(--w-accent) 28%, var(--w-text));
   }
 
   .k-row {
@@ -194,8 +198,9 @@ const GROUPS: {
     gap: 0.28rem;
     padding: 0.18rem 0.45rem 0.18rem 0.22rem;
     border-radius: 999px;
-    border: 1px solid var(--w-line);
-    background: var(--w-panel-2);
+    border: 1px solid color-mix(in oklab, var(--w-text) 18%, var(--w-surface));
+    background: color-mix(in oklab, var(--w-text) 10%, var(--w-surface));
+    opacity: 1;
     font-size: 0.625rem;
     line-height: 1.2;
     color: var(--w-text-3);
@@ -209,14 +214,10 @@ const GROUPS: {
   }
 
   .k-pill:hover {
-    z-index: 2;
+    z-index: 8;
     color: var(--w-text);
-    border-color: color-mix(in oklab, var(--color-brand-400) 50%, var(--w-line));
-    box-shadow: 0 0 18px color-mix(in oklab, var(--color-brand-400) 28%, transparent);
-  }
-
-  .k-pill--soon {
-    opacity: 0.55;
+    border-color: color-mix(in oklab, var(--color-brand-400) 60%, var(--w-line));
+    box-shadow: 0 0 28px color-mix(in oklab, var(--color-brand-400) 38%, transparent);
   }
 
   .k-pill img {
@@ -229,7 +230,7 @@ const GROUPS: {
 
   @media (prefers-reduced-motion: no-preference) {
     .k-pill:hover {
-      transform: scale(1.16);
+      transform: scale(1.7);
     }
 
     @media (min-width: 768px) {
