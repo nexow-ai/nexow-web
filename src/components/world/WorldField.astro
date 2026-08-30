@@ -72,6 +72,11 @@
    * instead, which is what half opacity over that backdrop looks like. The
    * field is scenery behind the copy, and at 1 it competed with it. */
   const SCREEN_ALPHA = 0.5;
+  /* Stronger on the light theme. The dissolve target is the page surface, and
+   * on the light stage that surface is nearly white — half strength put every
+   * panel within a few percent of the backdrop, so the field stopped being a
+   * crowd of screens and became a smudge. */
+  const SCREEN_ALPHA_LIGHT = 0.84;
 
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
   const CAM_DAMP = 3.2;
@@ -227,16 +232,44 @@
         );
       }
       if (f < 4.5) {
-        /* 4 — BOTS: one column of signal splitting into four branches. */
-        float tt = a;
-        float br = floor(h.z * 4.0);
-        float spread = smoothstep(0.42, 1.0, tt);
-        float ang = (br - 1.5) * 0.54;
-        return vec3(
-          sin(ang) * spread * 8.8 + (h.x - 0.5) * 0.5,
-          (tt - 0.5) * -13.0,
-          cos(ang) * spread * 2.5 + (h.y - 0.5) * 0.5
-        );
+        /* 4 — BOTS: the patrol. A hoop of screens going round and round the
+           one solid on the page that beats. A bot watches a thing on a fixed
+           circuit and fires the moment the rule trips, and a circuit is a
+           circle; the branching column that used to stand here drew the
+           plumbing instead — four wires leaving a trunk, which is a diagram of
+           the delivery and says nothing about the watching.
+
+           Two things keep it clear of the collar in scene 03: it is centred on
+           the solid rather than on the origin, and it turns. 03 hangs still
+           around its hub and reads as a fitting; this one sweeps, and a circle
+           is only an orbit while something is going round it. The plane is
+           rolled out of the horizontal as well, so the near arc passes under
+           the solid and the far arc over it — level, and with the camera
+           already looking down here, a hoop reads as a ring painted on a
+           floor.
+
+           Three lanes, two deep, for the reason the hero's ring is three rows
+           deep: 160 screens spread along a single circle of this radius land a
+           quarter of a screen apart, and what the eye can actually trace is a
+           band. */
+        float lanes = 3.0;
+        float rows = 2.0;
+        float slots = lanes * rows;
+        float slot = mod(i, slots);
+        float idx = floor(i / slots);
+        float per = ceil(n / slots);
+        /* Every lane starts a fraction of a slot on from the one before, so
+           they interleave rather than line up as spokes. */
+        float th = (idx / per) * 6.2831 + t * 0.34 + slot * 6.2831 / (per * slots);
+        /* And it breathes on the beat the solid does (`beat`, in drawCore), so
+           the two of them read as one mechanism rather than as a shape with
+           something circling it. */
+        float R = 8.6 + mod(slot, lanes) * 1.5 + sin(t * 3.1) * 0.22;
+        float off = (floor(slot / lanes) - 0.5) * 1.8;
+        /* The circle, then the plane it lies in rolled ~24° about X. Centred on
+           the solid, which stands 1.5 up (see `OBJECTS`). */
+        vec3 c = vec3(cos(th) * R, off, sin(th) * R);
+        return vec3(c.x, 1.5 + c.y * 0.91 - c.z * 0.41, c.y * 0.41 + c.z * 0.91);
       }
       if (f < 5.5) {
         /* 5 — AGENTS: six harness clusters in slow orbit around a core. */
@@ -631,21 +664,27 @@
       vec3 accent2 = mix(uC2, uC1, pick);
       /* On the light theme the brand mint is too pale to carry a line on
          near-white glass, so both accents are pulled down toward their 600s. */
-      accent = mix(accent, accent * 0.70, uLight);
-      accent2 = mix(accent2, accent2 * 0.70, uLight);
+      accent = mix(accent, accent * 0.62, uLight);
+      accent2 = mix(accent2, accent2 * 0.62, uLight);
       /* paper is what type and rules are drawn in: soft white on the dark
          theme, ink on the light. lightest is the highlight colour, white on
          both, which is what the sheen and the glint are made of. */
-      vec3 paper = mix(vec3(0.74, 0.79, 0.88), vec3(0.11, 0.14, 0.20), uLight);
+      vec3 paper = mix(vec3(0.74, 0.79, 0.88), vec3(0.07, 0.10, 0.16), uLight);
       vec3 lightest = mix(paper, vec3(1.0), uLight);
+      /* On the light theme the glass is white, not the pale grey it was: grey
+         glass on a near-white page is the same value as the page, so the panel
+         only existed because of the frame around it. White glass and darker
+         ink means the *content* is what you see. */
       vec3 glassDark = mix(mix(uFog, vec3(0.040, 0.058, 0.090), 0.75),
-                           mix(uFog, vec3(0.90, 0.93, 0.97), 0.85), uLight);
+                           mix(uFog, vec3(1.0), 0.94), uLight);
       vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
                            mix(glassDark, vec3(1.0), 0.45), uLight);
 
-      /* Display: lit from above, shadowed under the bezel. */
+      /* Display: lit from above, shadowed under the bezel. The shadow is much
+         lighter on the light theme, where a dark ring inside the edge reads as
+         a second border rather than as depth. */
       vec3 col = mix(glassDark, glassLite, uv.y * 0.9);
-      col *= 1.0 - inset * (0.38 - 0.20 * uLight);
+      col *= 1.0 - inset * (0.38 - 0.29 * uLight);
 
       /* ---- chrome: title, subtitle, live dot, hairline ---- */
       float pulse = 0.65 + 0.35 * sin(t * 2.2);
@@ -2066,6 +2105,8 @@
     let coreC3: [number, number, number] = [0, 0, 0];
     let coreFog: [number, number, number] = [0, 0, 0];
     let coreLight = 0;
+    /** How present the screens are, per theme. Set by `paintTheme`. */
+    let screenAlpha = SCREEN_ALPHA;
 
     /* The core's yaw, integrated rather than read off the clock.
      *
@@ -2199,6 +2240,7 @@
          page, one toggle behind. */
       coreLight = document.documentElement.classList.contains('dark') ? 0 : 1;
       ctx.uniform1f(uLight, coreLight);
+      screenAlpha = coreLight ? SCREEN_ALPHA_LIGHT : SCREEN_ALPHA;
       coreC1 = readColor(probe, '--color-brand-400');
       coreC3 = readColor(probe, '--color-accent-400');
       coreFog = readColor(probe, '--w-surface');
@@ -2392,7 +2434,7 @@
       ctx.uniform1f(uFormB, Math.min(a + 1, 7));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
-      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+      ctx.uniform1f(uAlpha, screenAlpha);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2469,7 +2511,7 @@
       ctx.uniform1f(uFormB, 1);
       ctx.uniform1f(uMorph, 0.34);
       ctx.uniform1f(uTime, 6);
-      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+      ctx.uniform1f(uAlpha, screenAlpha);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
