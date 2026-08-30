@@ -3,12 +3,13 @@
  *
  * Every press of play pulls one track from here at random — never the one
  * just played — so the tour has a different soundtrack each time: one visit
- * gets a deep-house piece, the next a string quartet, the next the synthesised
- * ambient in D. The styles are deliberately far apart; the crate is a mood
- * board, not a playlist.
+ * gets a deep-house piece, the next a string quartet, the next a hard-techno
+ * record, the next the synthesised ambient in D. The crate is a mood board
+ * more than a playlist, with a small techno run for nights that want to go
+ * harder.
  *
- * Ten are files under `public/audio/tour`, fetched the moment play is pressed
- * and never before. They come from Mixkit under its Stock Music Free License —
+ * Thirteen are files under `public/audio/tour`, fetched the moment play is
+ * pressed and never before. They come from Mixkit under its Stock Music Free License —
  * commercial use, no attribution (https://mixkit.co/license/#musicFree) — and
  * are re-encoded and loudness-matched to −18 LUFS by
  * `scripts/fetch-tour-music.mjs`, so a random pick never jumps in level. The
@@ -140,6 +141,33 @@ export const TRACKS: readonly Track[] = [
     seconds: 289,
     src: file('deep-urban'),
     source: mixkit(623),
+  },
+  {
+    id: 'machine-drum-vibes',
+    title: 'Machine Drum Vibes',
+    artist: 'Alejandro Magaña',
+    style: 'hard techno',
+    seconds: 132,
+    src: file('machine-drum-vibes'),
+    source: mixkit(117),
+  },
+  {
+    id: 'techno-fest-vibes',
+    title: 'Techno Fest Vibes',
+    artist: 'Alejandro Magaña',
+    style: 'festival techno',
+    seconds: 134,
+    src: file('techno-fest-vibes'),
+    source: mixkit(124),
+  },
+  {
+    id: 'infected-vibes',
+    title: 'Infected Vibes',
+    artist: 'Alejandro Magaña',
+    style: 'dark techno',
+    seconds: 91,
+    src: file('infected-vibes'),
+    source: mixkit(157),
   },
 ];
 
