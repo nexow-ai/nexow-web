@@ -405,6 +405,7 @@ export interface SiteContent {
     tourTrack?: string;
     tourLeft?: string;
     tourControls?: string;
+    tourPace?: string;
     /** Language switcher summary (see `Header.astro`). */
     switchLang?: string;
     /** Landmark name for the desktop header nav. */

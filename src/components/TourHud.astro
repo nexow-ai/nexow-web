@@ -7,13 +7,13 @@
  * the two questions a hands-free visitor has — how long is left, and can I have
  * a different record — have nowhere else to be answered.
  *
- * Three controls, in the order they are wanted: stop, the countdown to the end
- * of the story, and a new song. None of them speaks to the tour directly. The
- * pill dispatches `nexow:tourtoggle` and `nexow:tracknext`, which the tour
- * (`Header.astro`) and the deck (`TourSound.astro`) answer, and
- * it listens for `nexow:tour` and `nexow:tourtime` coming back. That keeps the
- * transport a piece of chrome that can ship on every route while the machinery
- * stays where it belongs.
+ * Four controls, in the order they are wanted: stop, the countdown to the end
+ * of the story, a new song, and the scroll rate. None of them speaks to the
+ * tour directly. The pill dispatches `nexow:tourtoggle`, `nexow:tracknext` and
+ * `nexow:tourpace`, which the tour (`Header.astro`) and the deck
+ * (`TourSound.astro`) answer, and it listens for `nexow:tour` and
+ * `nexow:tourtime` coming back. That keeps the transport a piece of chrome
+ * that can ship on every route while the machinery stays where it belongs.
  *
  * `data-tour-control` is the other half of the contract: any intent to move the
  * page yourself ends the tour, and these buttons are the exception.
@@ -28,6 +28,7 @@ const tourStop = t.nav.tourStop ?? 'Stop the tour';
 const tourTrack = t.nav.tourTrack ?? 'Play a different song';
 const tourLeft = t.nav.tourLeft ?? 'Time left';
 const tourControls = t.nav.tourControls ?? 'Tour controls';
+const tourPace = t.nav.tourPace ?? 'Scroll speed';
 ---
 
 {/* A landmark, not a bare div: the countdown is page content, and content
@@ -64,6 +65,18 @@ const tourControls = t.nav.tourControls ?? 'Tour controls';
       aria-label={tourTrack}
     >
       <Icon name="music" class="tour-hud__icon size-4" />
+    </button>
+
+    <button
+      type="button"
+      class="tour-hud__btn tour-hud__btn--pace"
+      data-tour-control
+      data-tour-action="pace"
+      data-rate="1"
+      data-pace-label={tourPace}
+      aria-label={`${tourPace} x1`}
+    >
+      <span class="tour-hud__pace">x1</span>
     </button>
   </div>
 </section>
@@ -150,6 +163,19 @@ const tourControls = t.nav.tourControls ?? 'Tour controls';
     outline-offset: 2px;
   }
 
+  /* Wide enough for `x0.25` so cycling the rate never grows the pill. */
+  .tour-hud__btn--pace {
+    width: 2.85rem;
+  }
+
+  .tour-hud__pace {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
   /* Tabular figures, so the seconds ticking down never shift the pill's width. */
   .tour-hud__time {
     min-width: 3.25rem;
@@ -204,9 +230,19 @@ const tourControls = t.nav.tourControls ?? 'Tour controls';
 </style>
 
 <script>
-  import { clock } from '../lib/tour';
+  import { clock, cycleTourRate, paceMark, tourRate } from '../lib/tour';
 
   let hudAbort: AbortController | undefined;
+
+  function paintPace(btn: HTMLButtonElement) {
+    const current = tourRate();
+    const mark = paceMark(current);
+    btn.dataset.rate = String(current);
+    const face = btn.querySelector('.tour-hud__pace');
+    if (face) face.textContent = mark;
+    const stem = btn.dataset.paceLabel ?? 'Scroll speed';
+    btn.setAttribute('aria-label', `${stem} ${mark}`);
+  }
 
   function initTourHud() {
     hudAbort?.abort();
@@ -216,6 +252,8 @@ const tourControls = t.nav.tourControls ?? 'Tour controls';
     const hud = document.getElementById('tour-hud');
     if (!hud) return;
     const face = hud.querySelector('.tour-hud__clock');
+    const paceBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="pace"]');
+    if (paceBtn) paintPace(paceBtn);
 
     document.addEventListener(
       'nexow:tour',
@@ -236,8 +274,20 @@ const tourControls = t.nav.tourControls ?? 'Tour controls';
     );
 
     for (const btn of hud.querySelectorAll<HTMLButtonElement>('[data-tour-action]')) {
-      const name = btn.dataset.tourAction === 'track' ? 'nexow:tracknext' : 'nexow:tourtoggle';
-      btn.addEventListener('click', () => document.dispatchEvent(new Event(name)), { signal });
+      btn.addEventListener(
+        'click',
+        () => {
+          if (btn.dataset.tourAction === 'pace') {
+            cycleTourRate();
+            paintPace(btn);
+            document.dispatchEvent(new CustomEvent('nexow:tourpace', { detail: { rate: tourRate() } }));
+            return;
+          }
+          const name = btn.dataset.tourAction === 'track' ? 'nexow:tracknext' : 'nexow:tourtoggle';
+          document.dispatchEvent(new Event(name));
+        },
+        { signal },
+      );
     }
   }
 

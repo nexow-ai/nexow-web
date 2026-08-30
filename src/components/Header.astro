@@ -337,13 +337,13 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * scroll, so a script that fails to run leaves a working button rather than
    * an empty header on every route.
    *
-   * The pace lives in `lib/tour`: one speed in CSS pixels per second, not per
-   * frame, so a 120Hz laptop and a 60Hz monitor travel the page at the same
-   * rate — and the same tempo from the first act to the last. Because it never
-   * changes, the time left is distance over speed, which the foot-of-screen
-   * transport (`TourHud.astro`) counts down.
+   * The pace lives in `lib/tour`: a base speed in CSS pixels per second, not
+   * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the
+   * same rate — scaled by the transport's rate (`x0.25` … `x2`). Time left is
+   * distance over that speed, which the foot-of-screen transport
+   * (`TourHud.astro`) counts down.
    */
-  import { secondsLeft, TOUR_SPEED, worthTouring } from '../lib/tour';
+  import { secondsLeft, TOUR_SPEED, tourRate, worthTouring } from '../lib/tour';
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
@@ -351,6 +351,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 
   function initTour() {
     tourAbort?.abort();
+    if (tourRaf) cancelAnimationFrame(tourRaf);
+    tourRaf = 0;
     tourRo?.disconnect();
     tourRo = undefined;
     tourAbort = new AbortController();
@@ -367,9 +369,16 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     const maxScroll = () =>
       Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
+    /** The transport stamps `data-rate`; fall back to the module if it is gone. */
+    const paceOf = () => {
+      const stamped = Number(document.querySelector<HTMLElement>('[data-tour-action="pace"]')?.dataset.rate);
+      return stamped > 0 ? stamped : tourRate();
+    };
+    const speed = () => TOUR_SPEED * paceOf();
+
     /** The countdown, sent on only when the second it shows has changed. */
     const tell = (y: number, max: number) => {
-      const remaining = secondsLeft(y, max);
+      const remaining = secondsLeft(y, max, speed());
       const whole = Math.ceil(remaining);
       if (whole === shown) return;
       shown = whole;
@@ -421,7 +430,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       // Read every frame: a page that grows under the tour — a lazy image, a
       // font — moves the end of the story, and the countdown with it.
       const max = maxScroll();
-      const next = window.scrollY + TOUR_SPEED * dt;
+      const next = window.scrollY + speed() * dt;
       if (next >= max) {
         window.scrollTo(0, max);
         tell(max, max);
@@ -450,6 +459,15 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     btn.addEventListener('click', toggle, { signal });
     // The transport at the foot of the screen drives the same tour.
     document.addEventListener('nexow:tourtoggle', toggle, { signal });
+    // A new rate shortens or stretches the time left; recount at once.
+    document.addEventListener(
+      'nexow:tourpace',
+      () => {
+        shown = -1;
+        if (playing) tell(window.scrollY, maxScroll());
+      },
+      { signal },
+    );
 
     /* Any intent to move the page yourself ends the tour. The tour's own
      * controls are excluded so their pointerdown does not cancel the click

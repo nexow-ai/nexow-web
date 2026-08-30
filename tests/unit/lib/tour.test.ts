@@ -1,5 +1,18 @@
-import { describe, expect, it } from 'vitest';
-import { clock, secondsLeft, TOUR_MIN_TRAVEL, TOUR_SPEED, worthTouring } from '../../../src/lib/tour';
+import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  clock,
+  cycleTourRate,
+  nextTourRate,
+  paceMark,
+  secondsLeft,
+  setTourRate,
+  TOUR_MIN_TRAVEL,
+  TOUR_RATE_DEFAULT,
+  TOUR_RATES,
+  TOUR_SPEED,
+  tourRate,
+  worthTouring,
+} from '../../../src/lib/tour';
 
 describe('secondsLeft', () => {
   const max = 4800;
@@ -73,5 +86,45 @@ describe('clock', () => {
 
   it('never counts below zero', () => {
     expect(clock(-12)).toBe('0:00');
+  });
+});
+
+describe('tour rate', () => {
+  beforeEach(() => {
+    setTourRate(TOUR_RATE_DEFAULT);
+  });
+
+  it('defaults to x1', () => {
+    expect(tourRate()).toBe(1);
+    expect(TOUR_RATES).toEqual([0.25, 0.5, 1, 2]);
+  });
+
+  it('steps x1 → x2 → x0.25 → x0.5 → x1', () => {
+    expect(nextTourRate(1)).toBe(2);
+    expect(nextTourRate(2)).toBe(0.25);
+    expect(nextTourRate(0.25)).toBe(0.5);
+    expect(nextTourRate(0.5)).toBe(1);
+  });
+
+  it('treats an unknown rate as x1 when stepping', () => {
+    expect(nextTourRate(3)).toBe(2);
+  });
+
+  it('marks the rate the way the transport shows it', () => {
+    expect(paceMark(1)).toBe('x1');
+    expect(paceMark(0.25)).toBe('x0.25');
+    expect(paceMark(0.5)).toBe('x0.5');
+    expect(paceMark(2)).toBe('x2');
+  });
+
+  it('remembers a cycle across callers', () => {
+    expect(cycleTourRate()).toBe(2);
+    expect(tourRate()).toBe(2);
+    expect(cycleTourRate()).toBe(0.25);
+  });
+
+  it('falls back to x1 when pinned to something it does not know', () => {
+    expect(setTourRate(8)).toBe(1);
+    expect(tourRate()).toBe(1);
   });
 });
