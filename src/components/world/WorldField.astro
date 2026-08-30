@@ -67,6 +67,7 @@
     uniform float uShift;
     uniform float uCharge;
     uniform float uBurst;
+    uniform vec3 uCam;
 
     varying float vTone;
     varying float vGlow;
@@ -182,6 +183,33 @@
       m = m * m * (3.0 - 2.0 * m);
       vec3 p = mix(pa, pb, m);
 
+      /* The fly-by. A straight mix() between two shapes only ever reads as a
+         cross-fade watched from outside; nothing in it ever occupies the space
+         the camera is in. So at the midpoint of every morph a minority of the
+         instances take the long way round — they sweep toward the lens, pass
+         it close enough to blow out into soft near-field flares, and settle
+         back into the new formation.
+
+         Aimed at the camera rather than radially outward from the origin: the
+         world is built around the origin and the camera looks at it, so a
+         radial push sends the cloud sideways *out of frame* — it empties the
+         shot at exactly the moment the reader is watching it. Toward the lens
+         it fills instead.
+
+         The step() keeps it to about one instance in six. The other five
+         cross directly, so the formation stays legible the whole way through
+         and the pass reads as a few pieces of matter breaking off rather than
+         the scene detonating. */
+      float bloom = sin(m * 3.14159265);
+      float flyby = step(0.84, aSeed);
+      /* Travel a fraction of the actual distance to the lens rather than a
+         fixed number of units: a fixed push overshoots *behind* the camera on
+         the near side of the cloud, where the point clips out instead of
+         sweeping past. At peak it closes ~82% of the gap, so it comes close
+         enough to flare and always stays in front. */
+      vec3 toCam = uCam - p;
+      p += normalize(toCam) * bloom * flyby * length(toCam) * 0.82;
+
       /* The hero's one interaction: what you type charges the matter. It winds
          up and tightens as the composer fills, and the send throws a shockwave
          through it. Confined to the dust formation: heroness is 1 only while
@@ -211,6 +239,11 @@
          whole sense of depth. */
       float dist = -mv.z;
       vGlow = smoothstep(48.0, 2.0, dist);
+      /* Near-field flare. Perspective already grows a quad as it approaches,
+         but alpha alone makes a point that sweeps the lens read as a light
+         being turned up rather than an object going past; this doubles it down
+         over the last few units so the pass has weight. */
+      vGlow *= 1.0 + 1.0 * smoothstep(7.0, 1.5, dist);
       vTone = fract(aSeed + m * 0.4 + uFormA * 0.06);
       vTwinkle = 0.72 + 0.28 * sin(uTime * (0.6 + aSeed * 2.2) + aSeed * 40.0);
       vUv = aCorner;
@@ -237,7 +270,12 @@
       a *= a;
       vec3 col = mix(uC1, uC2, smoothstep(0.0, 0.55, vTone));
       col = mix(col, uC3, smoothstep(0.6, 1.0, vTone));
-      gl_FragColor = vec4(col, a * vGlow * vTwinkle * uAlpha);
+      /* Emission gain. The sprites are small and the canvas renders below
+         display resolution, both of which cost brightness — and this buys it
+         back for free, because a brighter colour shades exactly the same
+         number of fragments. Anything that raised size or count instead would
+         be paid for in fill rate, which is the one budget with no slack. */
+      gl_FragColor = vec4(col * 1.45, a * vGlow * vTwinkle * uAlpha);
     }
   `;
 
@@ -397,6 +435,7 @@
     const uShift = u('uShift');
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
+    const uCam = u('uCam');
     const uC1 = u('uC1');
     const uC2 = u('uC2');
     const uC3 = u('uC3');
@@ -512,8 +551,22 @@
       // The hold: nothing morphs for the first 62% of a scene, so there is
       // always a moment where the matter is still and the copy can be read.
       const morph = Math.min(1, Math.max(0, (local - 0.62) / 0.38));
-      // Overall progress, for the camera path.
-      const p = Math.min(1, Math.max(0, (a + local) / Math.max(last_i, 1)));
+
+      /* One clock for the whole page, not two.
+       *
+       * The camera used to run on raw scroll (`(a + local) / last`) while the
+       * matter ran on `morph`, so the lens drifted the entire time the reader
+       * was holding still on a scene — a slow continuous creep underneath copy
+       * that was supposed to be at rest. Every act is staged as one beat now:
+       *
+       *   entrance/hold   morph 0     matter still, camera still
+       *   exit            morph 0→1   matter reforms, camera travels
+       *
+       * Smoothstepped so the move eases in and out of its own accord, then
+       * damped again by the follow below. The camera is never truly frozen —
+       * the breathing term on `dist` keeps the lens alive through a hold. */
+      const beat = morph * morph * (3 - 2 * morph);
+      const p = Math.min(1, Math.max(0, (a + beat) / Math.max(last_i, 1)));
 
       /* Retune how hard the matter is held back where the copy sits. The
        * hero's headline is centred, so the field stays near-even behind it;
@@ -575,6 +628,9 @@
 
       lookAt(view, cam.x, cam.y, cam.z);
       ctx.uniformMatrix4fv(uView, false, view);
+      // After the follow, not before: the fly-by aims at where the lens is on
+      // this frame, not where it was heading two frames ago.
+      ctx.uniform3f(uCam, cam.x, cam.y, cam.z);
 
       ctx.clearColor(0, 0, 0, 0);
       ctx.clear(ctx.COLOR_BUFFER_BIT);
@@ -592,6 +648,7 @@
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uShift, 0);
+      ctx.uniform3f(uCam, -14.6, 3.4, 18.2);
       lookAt(view, -14.6, 3.4, 18.2);
       ctx.uniformMatrix4fv(uView, false, view);
       ctx.clearColor(0, 0, 0, 0);
