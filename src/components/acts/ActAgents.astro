@@ -2,10 +2,34 @@
 /**
  * Act V — agents.
  *
- * The harness assembles around a core, then the run loop ticks through its four
- * moves. The six harness parts and the four stages are the app's real
- * vocabulary; they are also what `AgentRunDiagram` uses, so the two stay
+ * The one act that has to look like *infrastructure*, not a diagram: an agent
+ * runtime sitting in the cloud with its harness in orbit around it and a tool
+ * loop ticking inside. The six harness parts and the four stages are the app's
+ * real vocabulary; they are also what `AgentRunDiagram` uses, so the two stay
  * consistent if either is edited.
+ *
+ * The scene is a genuine 3D construction — CSS 3D, not WebGL. `WorldField`
+ * already owns the page's only GL context and its budget (see the note at the
+ * top of that file); a second canvas here would cost more than the whole act.
+ * Everything below is transforms and opacity inside one `preserve-3d` context,
+ * so it composites on the GPU and parks itself when the act scrolls away.
+ *
+ * Two constructions are worth knowing before editing:
+ *
+ * 1. Billboarding. A harness module is four nested elements —
+ *    `rotateY(A)` → `translateZ(r)` → `rotateY(-A)` → `rotateX(-tilt)`, under a
+ *    ring that holds `rotateX(tilt)`. The outer and inner rotations are the same
+ *    animation in opposite directions, so the chain collapses to a pure
+ *    translation: the card really travels a tilted circle in depth while always
+ *    facing the reader. Break the pairing and the labels go edge-on.
+ * 2. Phase, not delay, carries position. The orbit keyframes start *at* each
+ *    module's own angle, so with no animation at all (reduced motion, no JS)
+ *    every module still sits at its place on the ring. Only the depth fade needs
+ *    a negative delay to line up with that angle — hence `--i` next to `--a`.
+ *
+ * `opacity` is never set on a `preserve-3d` element: per spec that flattens the
+ * subtree, which would collapse the sphere. Scroll ramps therefore fade the
+ * leaves (rings, dots, cards) and only ever *move* the transforming wrappers.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -29,41 +53,120 @@ const HARNESS = c.home.automate.harnessChips ?? [
   'triggers',
 ];
 
-/** Six seats on a ring, starting at the top. */
-const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
-  label,
-  angle: (i / Math.min(HARNESS.length, 6)) * 360,
-  k: `--k${Math.min(Math.floor(i / 2), 2)}`,
+/**
+ * Six modules on one inclined orbit. `--a` is the module's angle and doubles as
+ * its resting position; `--z0` is how near the reader that angle is (1 = front),
+ * which is the still scene's stand-in for the depth fade. They dock in two
+ * groups so the ring fills in around the core rather than appearing at once.
+ */
+const MODULES = HARNESS.slice(0, 6).map((label, i) => {
+  const angle = i * 60;
+  const near = (Math.cos((angle * Math.PI) / 180) + 1) / 2;
+  return {
+    label,
+    angle,
+    i,
+    z0: (0.45 + 0.55 * near).toFixed(3),
+    k: i % 2 === 0 ? '--k1' : '--k2',
+  };
+});
+
+/** Wireframe sphere: meridians through the poles, then three latitudes. */
+const MERIDIANS = [0, 30, 60, 90, 120, 150];
+const PARALLELS = [-0.6, 0, 0.6].map((t) => ({
+  t,
+  /** Chord diameter at that latitude, in sphere radii. */
+  d: (2 * Math.sqrt(1 - t * t)).toFixed(3),
 }));
+
+/** Telemetry on the shell — the only asymmetry, so the spin is readable. */
+const SHELL = [
+  { lon: 22, lat: -38 },
+  { lon: 96, lat: 14 },
+  { lon: 158, lat: -62 },
+  { lon: 214, lat: 34 },
+  { lon: 283, lat: -14 },
+  { lon: 331, lat: 52 },
+];
+
+/** The tool loop itself: one mote per move, running inside the shell. */
+const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
 ---
 
-<Act id="bots-agents" labelledBy="act-agents-title" height="215vh">
+<Act id="bots-agents" labelledBy="act-agents-title" height="225vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-agents-title" />
 
     <div class="act-scene a-scene" aria-hidden="true">
-      <div class="a-ring">
-        <span class="a-core">
-          <span class="a-core-label">agent</span>
-        </span>
-        {
-          SEATS.map((seat) => (
-            <span
-              class="a-seat"
-              style={`--angle:${seat.angle}deg;--k:var(${seat.k}, 1)`}
-            >
-              <span class="a-seat-inner">{seat.label}</span>
-            </span>
-          ))
-        }
+      <div class="a-orb">
+        <div class="a-tilt">
+          {/* The runtime shell. */}
+          <div class="a-globe">
+            {MERIDIANS.map((m) => <span class="a-mer" style={`--m:${m}deg`} />)}
+            {
+              PARALLELS.map((p) => (
+                <span class="a-par" style={`--ty:${p.t};--pd:${p.d}`} />
+              ))
+            }
+            {
+              SHELL.map((s) => (
+                <span class="a-node" style={`--lon:${s.lon}deg;--lat:${s.lat}deg`} />
+              ))
+            }
+          </div>
+
+          {/* The tool loop, on its own plane, crossing the harness orbit. */}
+          <div class="a-loop">
+            <span class="a-path a-path--loop"></span>
+            {
+              TICKS.map((t) => (
+                <span class="a-tick" style={`--a:${t.angle}deg;--i:${t.i}`} />
+              ))
+            }
+          </div>
+
+          {/* Silhouette of the shell, held still while the wireframe turns —
+              one circle is what makes the meridians read as a sphere. */}
+          <span class="a-rim"></span>
+
+          {/* The runtime itself. Everything inside is flattened into the
+              core's own plane, which is what keeps it crisp — see the note
+              about slicing below. */}
+          <div class="a-core">
+            <span class="a-core-glow"></span>
+            <span class="a-core-face"></span>
+            <span class="a-core-ring"></span>
+            <span class="a-core-label">agent</span>
+          </div>
+
+          {/* The harness, in orbit. See the billboarding note above. */}
+          <div class="a-ring">
+            <span class="a-path a-path--harness"></span>
+            {
+              MODULES.map((m) => (
+                <div class="a-mod" style={`--a:${m.angle}deg;--i:${m.i};--k:var(${m.k}, 1)`}>
+                  <div class="a-arm">
+                    <div class="a-face">
+                      <span class="a-card" style={`--z0:${m.z0}`}>
+                        <span class="a-card-dot" />
+                        {m.label}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
       </div>
 
-      <ol class="a-loop">
+      {/* The run itself: four stages, ticking whether or not anyone is watching. */}
+      <ol class="a-run">
         {
           copy.beats.map((beat, i) => (
-            <li class="a-step" style={`--k:var(--k3, 1);--i:${i}`}>
-              <span class="a-step-n">{String(i + 1).padStart(2, '0')}</span>
-              {beat.label}
+            <li class="a-run-step" style={`--i:${i}`}>
+              <span class="a-run-dot" />
+              <span class="a-run-label">{beat.label}</span>
             </li>
           ))
         }
@@ -74,111 +177,474 @@ const SEATS = HARNESS.slice(0, 6).map((label, i) => ({
 
 <style>
   .a-scene {
-    perspective: 1000px;
+    /* Everything below is sized off one length so the whole rig scales as a
+     * unit — and so `translateZ` has something real to work with, which a
+     * percentage width could never give it. */
+    --orb: clamp(16rem, 34vw, 27rem);
+    /* Sphere radius, harness orbit radius, tool-loop radius. The harness sits
+     * well clear of the shell: a label crossing the sphere is unreadable. */
+    --gr: calc(var(--orb) * 0.23);
+    --r: calc(var(--orb) * 0.42);
+    --ri: calc(var(--orb) * 0.17);
+    /* Inclination of the two orbital planes. Shallow for the harness (depth
+     * reads as scale), steep for the loop (it should read as a circle). */
+    --tilt: 24deg;
+    --loop-tilt: 74deg;
+    --dur: 34s;
+    --loop-dur: 7s;
+    --run-dur: 5.6s;
+
+    perspective: 1150px;
     perspective-origin: 50% 45%;
     display: grid;
-    gap: 1.75rem;
     justify-items: center;
+    gap: 2rem;
   }
 
-  .a-ring {
+  /* Atmosphere, painted by the container rather than a layer inside it: a
+   * child at z=0 would be sorted into the middle of the sphere and fog its own
+   * back half. The wide scrim is what lifts the rig off the world field behind
+   * it — the field is busy by design, and the object has to win locally.
+   * Static, too: an animated blur is the one thing here that would cost frames.
+   *
+   * A background is clipped to its box, so every stop has to reach zero alpha
+   * before the edge — `farthest-corner` is 0.707 of the square, which is why
+   * these percentages look small. */
+  .a-orb {
     position: relative;
+    width: var(--orb);
+    height: var(--orb);
     transform-style: preserve-3d;
-    width: min(100%, 22rem);
-    aspect-ratio: 1;
-    display: grid;
-    place-items: center;
+    background:
+      radial-gradient(
+        circle at 50% 47%,
+        color-mix(in oklab, var(--color-brand-500) 26%, transparent),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 50% 47%,
+        color-mix(in oklab, var(--w-surface) 94%, transparent) 30%,
+        color-mix(in oklab, var(--w-surface) 66%, transparent) 46%,
+        transparent 62%
+      );
   }
 
-  .a-core {
-    display: grid;
-    place-items: center;
-    width: 7rem;
-    height: 7rem;
-    border-radius: 50%;
-    border: 1px solid color-mix(in oklab, var(--color-brand-400) 55%, transparent);
-    background: radial-gradient(
-      60% 60% at 50% 40%,
-      color-mix(in oklab, var(--color-brand-500) 32%, transparent),
-      transparent
-    );
-  }
-
-  .a-core-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-brand-200);
-  }
-
-  .a-seat {
+  .a-tilt,
+  .a-globe,
+  .a-loop,
+  .a-ring {
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
-    /* Rotate the seat out to the rim, then counter-rotate the label upright. */
-    transform: rotate(var(--angle)) translateY(-9.25rem);
+    transform-style: preserve-3d;
   }
 
-  .a-seat-inner {
-    transform: rotate(calc(var(--angle) * -1));
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    color: var(--w-text-3);
-    border: 1px solid var(--w-line);
-    border-radius: 999px;
-    background: var(--w-panel);
-    padding: 0.3rem 0.7rem;
-    white-space: nowrap;
+  /* Overlapping centred layers, so depth is the only thing stacking them. */
+  .a-tilt > *,
+  .a-globe > *,
+  .a-loop > *,
+  .a-ring > * {
+    grid-area: 1 / 1;
+  }
+
+  .a-globe {
+    animation: a-globe var(--dur) linear infinite;
+  }
+
+  .a-mer {
+    width: calc(var(--gr) * 2);
+    height: calc(var(--gr) * 2);
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 26%, var(--w-line));
+    border-radius: 50%;
+    transform: rotateY(var(--m));
+    opacity: calc(var(--k0, 1) * 0.85);
+  }
+
+  .a-par {
+    width: calc(var(--gr) * var(--pd));
+    height: calc(var(--gr) * var(--pd));
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 38%, var(--w-line));
+    border-radius: 50%;
+    transform: translateY(calc(var(--gr) * var(--ty))) rotateX(90deg);
+    opacity: calc(var(--k0, 1) * 0.9);
+  }
+
+  .a-node {
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background: var(--color-brand-300);
+    box-shadow: 0 0 8px color-mix(in oklab, var(--color-brand-400) 70%, transparent);
+    transform: rotateY(var(--lon)) rotateX(var(--lat)) translateZ(var(--gr));
+    opacity: var(--k0, 1);
   }
 
   .a-loop {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.45rem;
+    transform: rotateX(var(--loop-tilt));
   }
 
-  .a-step {
+  .a-ring {
+    transform: rotateX(var(--tilt));
+  }
+
+  /* Both orbits get their track drawn, otherwise the two planes read as a
+   * scatter of chips instead of a system. `rotateX(90deg)` is what lays a
+   * circle into its parent plane's XZ. */
+  .a-path {
+    border-radius: 50%;
+    border: 1px dashed color-mix(in oklab, var(--color-brand-400) 24%, transparent);
+    transform: rotateX(90deg);
+  }
+
+  .a-path--harness {
+    width: calc(var(--r) * 2);
+    height: calc(var(--r) * 2);
+    opacity: calc(var(--k1, 1) * 0.55);
+  }
+
+  .a-path--loop {
+    width: calc(var(--ri) * 2);
+    height: calc(var(--ri) * 2);
+    border-style: solid;
+    border-color: color-mix(in oklab, var(--color-brand-300) 30%, transparent);
+    opacity: calc(var(--k2, 1) * 0.7);
+  }
+
+  .a-tick {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--tick, var(--color-brand-300));
+    box-shadow: 0 0 16px var(--tick, var(--color-brand-300));
+    transform: rotateY(var(--a)) translateZ(var(--ri));
+    opacity: calc(var(--k2, 1) * 0.9);
+    /* Position rides in the keyframes, brightness needs the phase delay. */
+    animation:
+      a-tick var(--loop-dur) linear infinite,
+      a-tick-depth var(--loop-dur) linear infinite;
+    animation-delay: 0s, calc(var(--loop-dur) * var(--i) / -4);
+  }
+
+  /* One hue per move of the loop, in the order the copy lists them. */
+  .a-tick:nth-child(1) { --tick: var(--color-brand-300); }
+  .a-tick:nth-child(2) { --tick: var(--color-sky-300); }
+  .a-tick:nth-child(3) { --tick: var(--color-accent-300); }
+  .a-tick:nth-child(4) { --tick: var(--color-brand-200); }
+
+  .a-rim {
+    width: calc(var(--gr) * 2);
+    height: calc(var(--gr) * 2);
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 40%, transparent);
+    opacity: var(--k0, 1);
+  }
+
+  /* Two rules of this 3D context, both learned the hard way:
+   *
+   * - A wide, filled, flat layer gets *split* along its intersection with the
+   *   orbit planes, which shows up as a hard line across the sphere. So the
+   *   core is one modest plane and everything soft about it lives inside that
+   *   plane, where `transform-style: flat` flattens it and nothing can slice
+   *   it.
+   * - The container's own fog (see `.a-orb`) is a plane at z=0 too, and a body
+   *   sitting at exactly z=0 loses the coin toss against it. Pushing the core
+   *   towards the reader by most of the sphere's radius settles it, and buys a
+   *   little perspective scale for free. */
+  .a-core {
+    position: relative;
+    width: calc(var(--orb) * 0.24);
+    height: calc(var(--orb) * 0.24);
+    display: grid;
+    place-items: center;
+    transform: translateZ(calc(var(--gr) * 0.95));
+  }
+
+  .a-core-glow {
+    position: absolute;
+    inset: -60%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--color-brand-400) 42%, transparent),
+      transparent 58%
+    );
+    animation: a-breathe 4.8s ease-in-out infinite;
+  }
+
+  /* The solid body: the shell is see-through, the runtime is not. */
+  .a-core-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 80%, transparent);
+    background:
+      radial-gradient(
+        76% 76% at 50% 28%,
+        color-mix(in oklab, var(--color-brand-500) 70%, transparent),
+        transparent 80%
+      ),
+      color-mix(in oklab, var(--w-surface) 78%, var(--w-panel));
+  }
+
+  .a-core-ring {
+    position: absolute;
+    inset: -16%;
+    border-radius: 50%;
+    border: 1px dashed color-mix(in oklab, var(--color-brand-300) 50%, transparent);
+    animation: a-spin 18s linear infinite;
+  }
+
+  .a-core-label {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--w-text);
+    text-shadow: 0 0 12px color-mix(in oklab, var(--color-brand-500) 70%, transparent);
+  }
+
+  .a-mod,
+  .a-arm,
+  .a-face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+  }
+
+  .a-mod {
+    transform: rotateY(var(--a));
+    animation: a-orbit var(--dur) linear infinite;
+  }
+
+  /* The only scroll-driven step in the chain: the module slides out from the
+   * core to its orbit as its beat lands. */
+  .a-arm {
+    transform: translateZ(calc(var(--r) * var(--k, 1)));
+  }
+
+  .a-face {
+    transform: rotateY(calc(var(--a) * -1));
+    animation: a-billboard var(--dur) linear infinite;
+  }
+
+  .a-card {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.35rem 0.75rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 999px;
-    border: 1px solid var(--w-line);
-    background: var(--w-panel-2);
-    font-size: 0.8125rem;
-    color: var(--w-text-3);
+    border: 1px solid color-mix(in oklab, var(--color-brand-400) 30%, var(--w-line));
+    /* Near-opaque on purpose: a translucent chip loses to the world field the
+     * moment the matter behind it lights up. */
+    background: color-mix(in oklab, var(--w-surface) 88%, var(--w-panel));
+    box-shadow:
+      0 14px 30px -18px var(--w-shadow),
+      0 0 18px -8px color-mix(in oklab, var(--color-brand-500) 40%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--w-text);
+    white-space: nowrap;
+    /* Undoes the ring's inclination — see the billboarding note. */
+    transform: rotateX(calc(var(--tilt) * -1));
+    opacity: calc(var(--k, 1) * var(--z0, 1));
+    animation: a-depth var(--dur) linear infinite;
+    animation-delay: calc(var(--dur) * var(--i) / -6);
   }
 
-  .a-step-n {
+  .a-card-dot {
+    flex: none;
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 50%;
+    background: var(--color-brand-400);
+    box-shadow: 0 0 8px var(--color-brand-500);
+  }
+
+  .a-run {
+    position: relative;
+    /* Keeps the sweep from escaping past the last stage. The padding is what
+     * stops it clipping the lit dot's glow. */
+    overflow: hidden;
+    padding: 0.7rem 0.9rem 0.6rem;
+    width: min(100%, 26rem);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem;
+    border-radius: 1rem;
+    border: 1px solid var(--w-line);
+    background: color-mix(in oklab, var(--w-surface) 90%, var(--w-panel));
+    opacity: var(--k3, 1);
+  }
+
+  /* The rail, then the run head travelling it. */
+  .a-run::before,
+  .a-run::after {
+    content: '';
+    position: absolute;
+    top: 0.95rem;
+    height: 1px;
+  }
+
+  .a-run::before {
+    left: 14%;
+    right: 14%;
+    background: linear-gradient(90deg, transparent, var(--w-line) 14%, var(--w-line) 86%, transparent);
+  }
+
+  .a-run::after {
+    left: 0;
+    width: 25%;
+    background: linear-gradient(90deg, transparent, var(--color-brand-400), transparent);
+    opacity: 0;
+    animation: a-sweep var(--run-dur) linear infinite;
+  }
+
+  .a-run-step {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    color: var(--w-text-3);
+    animation: a-lit var(--run-dur) linear infinite;
+    animation-delay: calc(var(--run-dur) * var(--i) / 4);
+  }
+
+  .a-run-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentColor;
+    animation: a-lit-dot var(--run-dur) linear infinite;
+    animation-delay: calc(var(--run-dur) * var(--i) / 4);
+  }
+
+  .a-run-label {
     font-family: var(--font-mono);
     font-size: 0.625rem;
-    color: var(--w-accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  @keyframes a-globe {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+  }
+
+  @keyframes a-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes a-breathe {
+    0%, 100% { transform: scale(0.94); opacity: 0.75; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
+  /* Starts at the module's own angle, so a stopped animation is still a ring. */
+  @keyframes a-orbit {
+    from { transform: rotateY(var(--a)); }
+    to { transform: rotateY(calc(var(--a) + 360deg)); }
+  }
+
+  @keyframes a-billboard {
+    from { transform: rotateY(calc(var(--a) * -1)); }
+    to { transform: rotateY(calc(var(--a) * -1 - 360deg)); }
+  }
+
+  /* Depth fade and depth scale, phase-locked to the orbit by the delay above:
+   * 0% is nearest the reader, 50% is behind the sphere. The scroll ramp rides
+   * inside the opacity so an undocked module stays invisible. */
+  @keyframes a-depth {
+    0%, 100% {
+      transform: rotateX(calc(var(--tilt) * -1)) scale(1.06);
+      opacity: var(--k, 1);
+    }
+    50% {
+      transform: rotateX(calc(var(--tilt) * -1)) scale(0.88);
+      opacity: calc(var(--k, 1) * 0.6);
+    }
+  }
+
+  @keyframes a-tick {
+    from { transform: rotateY(var(--a)) translateZ(var(--ri)); }
+    to { transform: rotateY(calc(var(--a) + 360deg)) translateZ(var(--ri)); }
+  }
+
+  @keyframes a-tick-depth {
+    0%, 100% { opacity: var(--k2, 1); }
+    50% { opacity: calc(var(--k2, 1) * 0.35); }
+  }
+
+  @keyframes a-sweep {
+    0% { transform: translateX(0); opacity: 0; }
+    8%, 88% { opacity: 1; }
+    100% { transform: translateX(400%); opacity: 0; }
+  }
+
+  @keyframes a-lit {
+    0%, 2% { color: var(--w-text-4); }
+    7%, 22% { color: var(--w-accent); }
+    28%, 100% { color: var(--w-text-4); }
+  }
+
+  @keyframes a-lit-dot {
+    0%, 2% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+    7%, 22% { transform: scale(1.4); box-shadow: 0 0 12px var(--color-brand-500); }
+    28%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+  }
+
+  @media (max-width: 480px) {
+    .a-card {
+      font-size: 0.625rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+
+  /* Park every loop once the act is well away from the viewport — ScrollMotion
+   * owns the class, and playing is the default so nothing is ever stuck on a
+   * blank first frame. */
+  :global(.is-offscreen) .a-scene * {
+    animation-play-state: paused;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     @media (min-width: 768px) {
-      /* Seats swing out from the core in pairs as the harness is granted. */
-      :global(html.js) .a-seat {
-        opacity: var(--k, 1);
-        transform: rotate(var(--angle)) translateY(calc(-9.25rem * var(--k, 1)));
+      /* The rig leans into the scroll — the only thing the reader's travel
+       * moves, since the orbits run on their own clock. */
+      :global(html.js) .a-tilt {
+        transform: rotateX(calc(14deg - var(--psc, 0) * 9deg))
+          rotateZ(calc(var(--psc, 0) * 5deg * var(--dir, 1)));
       }
 
-      :global(html.js) .a-ring {
-        transform: rotateX(calc(18deg - var(--psc, 0) * 10deg))
-          rotateZ(calc(var(--psc, 0) * 6deg * var(--dir, 1)));
-      }
-
+      /* The core comes up first: nothing else means anything without it. */
       :global(html.js) .a-core {
-        transform: translateZ(40px) scale(calc(0.9 + var(--k0, 1) * 0.1));
+        transform: translateZ(calc(var(--gr) * 0.95)) scale(calc(0.86 + var(--k0, 1) * 0.14));
       }
+    }
+  }
 
-      :global(html.js) .a-step {
-        opacity: clamp(0, calc(var(--k, 1) * 4 - var(--i) * 0.7), 1);
-      }
+  /* Reduced motion keeps the finished frame: the harness is docked, the loop
+   * motes sit on their plane, and the run strip reads as four stages. */
+  @media (prefers-reduced-motion: reduce) {
+    .a-globe,
+    .a-core-glow,
+    .a-core-ring,
+    .a-mod,
+    .a-face,
+    .a-card,
+    .a-tick,
+    .a-run-step,
+    .a-run-dot {
+      animation: none;
+    }
+
+    .a-run::after {
+      display: none;
     }
   }
 </style>
