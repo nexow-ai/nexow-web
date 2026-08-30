@@ -79,6 +79,10 @@
     uniform float uMorph;
     uniform float uTime;
     uniform float uShift;
+    /* View-space lift, the vertical twin of uShift. In the hero it carries the
+       world up until its origin sits on the headline instead of the viewport
+       centre; it is zero everywhere else. */
+    uniform float uLift;
     uniform float uCharge;
     uniform float uBurst;
     uniform vec3 uCam;
@@ -309,6 +313,7 @@
       /* Slide the world into the scene column so it frames the copy rather
        * than sitting on top of it. Zero where the layout stacks. */
       mv.x += uShift;
+      mv.y += uLift;
 
       gl_Position = uProj * mv;
 
@@ -465,7 +470,9 @@
          surface as they cross into it. */
       float sx = gl_FragCoord.x / uRes.x;
       sx = mix(sx, 1.0 - sx, uDir);
-      float glow = vGlow * mix(uDim, 1.0, smoothstep(0.36, 0.76, sx));
+      /* Narrow: the copy column only, so a centred ring and its solid are at
+         full strength from the middle of the screen out. */
+      float glow = vGlow * mix(uDim, 1.0, smoothstep(0.30, 0.56, sx));
       /* A screen fogged to nothing must not be drawn at all: opaque, it would
          paint a surface-coloured rectangle over whatever is behind it. */
       if (glow < 0.04) discard;
@@ -1666,6 +1673,7 @@
     const uTime = u('uTime');
     const uAlpha = u('uAlpha');
     const uShift = u('uShift');
+    const uLift = u('uLift');
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
     const uCam = u('uCam');
@@ -1863,12 +1871,36 @@
       // Half the backing-store height; the shader turns it into a pixel width.
       ctx.uniform1f(uPix, canvas!.height * 0.5);
       ctx.uniform2f(uRes, canvas!.width, canvas!.height);
-      // Frame the copy column on wide screens; centred where the layout stacks.
-      // Applied per frame in `draw`, because the hero has no copy column.
-      shiftFull = w >= 1024 ? 3.0 : 0;
+      /* Centred on the screen in every act. This used to slide the world 3
+       * units into the scene column on wide layouts; the copy stays legible
+       * through the hold-back below and the scrim behind each copy block
+       * (`ActCopyBlock`), so the formations and the solids can sit where the
+       * eye expects them. */
+      shiftFull = 0;
     }
     resize();
     ctx.uniform1f(uDir, document.documentElement.dir === 'rtl' ? 1 : 0);
+
+    /* The hero headline. The ring is centred on this, not on the viewport:
+     * the world's origin projects to the screen centre, and the headline sits
+     * well above it, over the composer and the chips. */
+    const headline = document.getElementById('hero-title');
+
+    /**
+     * How far, in view-space units at camera distance `D`, the world must move
+     * for its origin to land on the headline's centre. NDC offsets scaled by
+     * the frustum's half-extents at that depth (vertical fov 0.85 rad).
+     */
+    function headlineOffset(D: number): [number, number] {
+      if (!headline) return [0, 0];
+      const r = headline.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const half = Math.tan(0.425) * D;
+      const x = ((r.left + r.width * 0.5 - vw * 0.5) / (vw * 0.5)) * half * (vw / vh);
+      const y = ((vh * 0.5 - (r.top + r.height * 0.5)) / (vh * 0.5)) * half;
+      return [x, y];
+    }
 
     /* ---- state the render loop integrates ---- */
 
@@ -1981,7 +2013,12 @@
       /* The hero centres its headline, so the world stays centred under it and
        * slides into the scene column on the same beat the matter takes its
        * first shape. */
-      ctx.uniform1f(uShift, shiftFull * (a === 0 ? morph : 1));
+      /* Hero: centre the ring on the headline, both axes. Fades with the morph
+       * as act 01's formation takes the scene column instead. */
+      const hero = a === 0 ? 1 - morph : 0;
+      const [hx, hy] = hero > 0 ? headlineOffset(Math.hypot(cam.x, cam.y, cam.z)) : [0, 0];
+      ctx.uniform1f(uShift, hx * hero + shiftFull * (a === 0 ? morph : 1));
+      ctx.uniform1f(uLift, hy * hero);
 
       ctx.uniform1f(uFormA, Math.min(a, 6));
       ctx.uniform1f(uFormB, Math.min(a + 1, 6));
@@ -2048,7 +2085,9 @@
       ctx.uniform1f(uAlpha, 1);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
-      ctx.uniform1f(uShift, 0);
+      const [sx, sy] = headlineOffset(Math.hypot(-14.6, 3.4, 18.2));
+      ctx.uniform1f(uShift, sx);
+      ctx.uniform1f(uLift, sy);
       ctx.uniform3f(uCam, -14.6, 3.4, 18.2);
       lookAt(view, -14.6, 3.4, 18.2);
       ctx.uniformMatrix4fv(uView, false, view);
