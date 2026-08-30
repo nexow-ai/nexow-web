@@ -70,10 +70,16 @@
    * the end of the page may only ever manage the second. The title itself has
    * to be on screen as well, so a page restored deep inside a section keeps
    * its reveal for when the reader scrolls back up to the title.
+   *
+   * The parked line carries a little slack — a wheel notch at most. A cold
+   * load on `#plans` jumps before the layout above has settled and comes to
+   * rest a couple of dozen pixels short of the line; without the slack that
+   * title would sit hidden until the reader happened to nudge the page.
    */
   function hasArrived({ section, stage }: Pending, vh: number, top: number): boolean {
     const s = section.getBoundingClientRect();
-    const covers = s.top <= top + 1 && s.bottom >= top;
+    const slack = Math.min(96, vh * 0.12);
+    const covers = s.top <= top + slack && s.bottom >= top;
     const fits = s.top >= -1 && s.bottom <= vh + 1;
     if (!covers && !fits) return false;
     const t = stage.getBoundingClientRect();
