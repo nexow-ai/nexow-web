@@ -1,5 +1,6 @@
 # build output
 dist/
+dist-verify/
 # generated types
 .astro/
 # test coverage reports
@@ -27,8 +28,17 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# generated scratchpad reports
+# generated scratchpad reports, local screenshots, one-off probes
 scratchpad/*-report.json
+scratchpad/shots/
+scratchpad/probe.mjs
+scratchpad/theme.mjs
+scratchpad/verify.mjs
+scratchpad/panels.mjs
+scratchpad/diag.mjs
+
+# local Claude / Cursor agent state
+.claude/
 
 # playwright artifacts
 test-results/
