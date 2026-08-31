@@ -5,8 +5,10 @@
  * Chrome is HTML — screens and workspaces open and close on a real width /
  * height the way the Features playground does. The stage stays SVG: type,
  * generate, live widgets. As #app-showcase takes the pin the generate loop
- * parks, a mosaic bound draws, and Links wire the same widgets. Chrome
- * keeps cycling through both acts.
+ * parks, a mosaic bound draws, and Links wire the same widgets. Boards then
+ * cycle fast through layouts (personal, trading desk, quake map, watchlist,
+ * news) with chart / order-book / map animations. Chrome keeps cycling
+ * through both acts.
  */
 import { ICON_PATHS } from '../icon-paths';
 
@@ -231,7 +233,7 @@ const WATCH = [
             x="120"
             y="140"
             width="492"
-            height="140"
+            height="224"
             rx="16"
             stroke="var(--color-brand-400)"
             stroke-dasharray="5 4"
@@ -759,7 +761,7 @@ const WATCH = [
     container-type: inline-size;
     --w-cycle: 16s;
     --w-step: 1.2s;
-    --w-board-step: 2.1s;
+    --w-board-step: 1.65s;
     --w-board-cycle: calc(var(--w-board-step) * 5);
     --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
     --w-add-flash: var(--color-brand-100);
@@ -1846,23 +1848,27 @@ const WATCH = [
     0% {
       opacity: 0;
       visibility: hidden;
-      transform: translateY(10px) scale(0.97);
+      transform: translateY(8px) scale(0.97);
     }
-    3% {
+    2% {
       opacity: 1;
       visibility: visible;
       transform: none;
     }
-    17% {
+    18% {
       opacity: 1;
       visibility: visible;
       transform: none;
     }
-    20%,
+    22% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-5px) scale(0.98);
+    }
     100% {
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-6px) scale(0.98);
+      transform: translateY(-5px) scale(0.98);
     }
   }
 
@@ -2181,14 +2187,29 @@ const WATCH = [
     transform: none;
   }
 
+  /* Keep chart ink fully drawn while boards swap — the generate-loop
+     stroke-dash hide would otherwise blank the spark mid-cycle. */
+  .w-scene.is-arrange .w-sparkline,
+  .w-scene.is-arrange .w-ema,
+  .w-scene.is-arrange .w-mini-spark {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+
+  .w-scene.is-arrange .w-spark-dot {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
   .w-scene.is-arrange .w-board-alt {
     visibility: visible;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .w-scene.is-arrange .w-board {
-      animation: w-board-life var(--w-board-cycle, 10.5s) var(--w-e) infinite both;
-      animation-delay: calc(var(--i) * var(--w-board-step, 2.1s));
+      animation: w-board-life var(--w-board-cycle, 8.25s) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-board-step, 1.65s));
     }
   }
 
