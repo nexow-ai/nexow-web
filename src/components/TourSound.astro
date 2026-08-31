@@ -89,7 +89,9 @@
   function announce(track: Track | undefined) {
     document.dispatchEvent(
       new CustomEvent('nexow:track', {
-        detail: track ? { title: track.title, artist: track.artist, id: track.id } : null,
+        detail: track
+          ? { title: track.title, artist: track.artist, id: track.id, youtube: track.youtube }
+          : null,
       }),
     );
   }

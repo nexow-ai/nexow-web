@@ -18,7 +18,7 @@
  *
  * To add a Mixkit record: append an entry with its `source`, run the script,
  * commit the file it writes. To add a guest cut: drop `<id>.mp3` in the folder
- * and append an entry without `source`.
+ * and append an entry without `source`; if it came from YouTube, set `youtube`.
  */
 
 export interface Track {
@@ -34,6 +34,8 @@ export interface Track {
   readonly src?: string;
   /** Where the file was fetched from; `scripts/fetch-tour-music.mjs` reads it. */
   readonly source?: string;
+  /** Original YouTube watch URL when the cut was taken from YouTube. */
+  readonly youtube?: string;
 }
 
 /** Where the files live, from the site root. */
@@ -47,6 +49,7 @@ export const TOUR_FIRST_PLAY_KEY = 'nexow-tour-first-play';
 
 const file = (id: string) => `${TRACK_DIR}/${id}.mp3`;
 const mixkit = (n: number) => `https://assets.mixkit.co/music/${n}/${n}.mp3`;
+const youtube = (id: string) => `https://www.youtube.com/watch?v=${id}`;
 
 /** The piece synthesised on the spot by `lib/ambient`. */
 export const GENERATIVE: Track = {
@@ -183,6 +186,7 @@ export const TRACKS: readonly Track[] = [
     style: 'latin trap',
     seconds: 359,
     src: file('acho-pr'),
+    youtube: youtube('6ftxHrjREhE'),
   },
   {
     id: 'asimetria',
@@ -191,6 +195,7 @@ export const TRACKS: readonly Track[] = [
     style: 'argentina trap',
     seconds: 178,
     src: file('asimetria'),
+    youtube: youtube('WpNQDRHsOGo'),
   },
   {
     id: 'beautiful-things',
@@ -199,6 +204,7 @@ export const TRACKS: readonly Track[] = [
     style: 'indie pop',
     seconds: 192,
     src: file('beautiful-things'),
+    youtube: youtube('Oa_RSwwpPaA'),
   },
   {
     id: 'the-animals',
@@ -207,6 +213,7 @@ export const TRACKS: readonly Track[] = [
     style: 'spanish rap',
     seconds: 227,
     src: file('the-animals'),
+    youtube: youtube('XSW9gQ7yr6M'),
   },
   {
     id: 'road-to-zion',
@@ -215,6 +222,7 @@ export const TRACKS: readonly Track[] = [
     style: 'reggae cover',
     seconds: 352,
     src: file('road-to-zion'),
+    youtube: youtube('Jq2IfkMr_x0'),
   },
   {
     id: 'gfy',
@@ -223,6 +231,7 @@ export const TRACKS: readonly Track[] = [
     style: 'indie electronic',
     seconds: 224,
     src: file('gfy'),
+    youtube: youtube('CIqiB9zSLmM'),
   },
   {
     id: 'last-supper',
@@ -231,6 +240,7 @@ export const TRACKS: readonly Track[] = [
     style: 'conscious hip hop',
     seconds: 225,
     src: file('last-supper'),
+    youtube: youtube('BQ7IAbWKmzg'),
   },
   {
     id: 'branzino',
@@ -239,6 +249,7 @@ export const TRACKS: readonly Track[] = [
     style: 'latin urban',
     seconds: 262,
     src: file('branzino'),
+    youtube: youtube('qb0R28lV3ic'),
   },
   {
     id: 'que-cojones',
@@ -247,6 +258,7 @@ export const TRACKS: readonly Track[] = [
     style: 'reggaeton',
     seconds: 158,
     src: file('que-cojones'),
+    youtube: youtube('VDibXdkD6yQ'),
   },
   {
     id: 'si-lo-puedes-sonar',
@@ -255,6 +267,7 @@ export const TRACKS: readonly Track[] = [
     style: 'latin anthem',
     seconds: 197,
     src: file('si-lo-puedes-sonar'),
+    youtube: youtube('eFB51JXs8XQ'),
   },
   {
     id: 'mockingbird',
@@ -263,6 +276,7 @@ export const TRACKS: readonly Track[] = [
     style: 'storytelling rap',
     seconds: 257,
     src: file('mockingbird'),
+    youtube: youtube('S9bCLPwzSC0'),
   },
   {
     id: 'dont-tell-your-dreams',
@@ -271,6 +285,7 @@ export const TRACKS: readonly Track[] = [
     style: 'dream pop',
     seconds: 141,
     src: file('dont-tell-your-dreams'),
+    youtube: youtube('oY4qlsP2FxY'),
   },
   {
     id: 'bittersweet-symphony',
@@ -279,6 +294,7 @@ export const TRACKS: readonly Track[] = [
     style: 'alt cover',
     seconds: 164,
     src: file('bittersweet-symphony'),
+    youtube: youtube('JwtEOp7pC1A'),
   },
   {
     id: 'territory',
@@ -287,6 +303,7 @@ export const TRACKS: readonly Track[] = [
     style: 'french electronic',
     seconds: 337,
     src: file('territory'),
+    youtube: youtube('54fea7wuV6s'),
   },
   {
     id: 'another-love',
@@ -295,6 +312,7 @@ export const TRACKS: readonly Track[] = [
     style: 'indie remix',
     seconds: 393,
     src: file('another-love'),
+    youtube: youtube('4ZHwu0uut3k'),
   },
   {
     id: 'habits',
@@ -303,6 +321,7 @@ export const TRACKS: readonly Track[] = [
     style: 'electropop remix',
     seconds: 263,
     src: file('habits'),
+    youtube: youtube('SYM-RJwSGQ8'),
   },
   {
     id: 'bzrp-5966',
@@ -311,6 +330,7 @@ export const TRACKS: readonly Track[] = [
     style: 'corridos tumbados',
     seconds: 339,
     src: file('bzrp-5966'),
+    youtube: youtube('kRlxTJSPKK8'),
   },
   {
     id: 'adentro',
@@ -319,6 +339,7 @@ export const TRACKS: readonly Track[] = [
     style: 'deep latin',
     seconds: 292,
     src: file('adentro'),
+    youtube: youtube('qCwo5RWqzT8'),
   },
   {
     id: 'a-million-on-my-soul',
@@ -327,6 +348,7 @@ export const TRACKS: readonly Track[] = [
     style: 'cinematic soul',
     seconds: 180,
     src: file('a-million-on-my-soul'),
+    youtube: youtube('E6l5ezErGuw'),
   },
   {
     id: 'cancion-de-volteo',
@@ -335,6 +357,7 @@ export const TRACKS: readonly Track[] = [
     style: 'latin folk',
     seconds: 203,
     src: file('cancion-de-volteo'),
+    youtube: youtube('dSQab6aF0Ts'),
   },
   {
     id: 'daylight',
@@ -343,6 +366,7 @@ export const TRACKS: readonly Track[] = [
     style: 'folk pop',
     seconds: 229,
     src: file('daylight'),
+    youtube: youtube('MoN9ql6Yymw'),
   },
   {
     id: 'help-me-lose-my-mind',
@@ -351,6 +375,7 @@ export const TRACKS: readonly Track[] = [
     style: 'UK garage remix',
     seconds: 236,
     src: file('help-me-lose-my-mind'),
+    youtube: youtube('3jTjBt0Enyw'),
   },
   {
     id: 'dream-big',
@@ -359,6 +384,7 @@ export const TRACKS: readonly Track[] = [
     style: 'motivational ambient',
     seconds: 96,
     src: file('dream-big'),
+    youtube: youtube('GFiJDp5mlrw'),
   },
   {
     id: 'grim-reaper',
@@ -367,6 +393,7 @@ export const TRACKS: readonly Track[] = [
     style: 'dark hip hop',
     seconds: 125,
     src: file('grim-reaper'),
+    youtube: youtube('xkKhbSwt7YY'),
   },
   {
     id: 'interstellar-variations',
@@ -375,6 +402,7 @@ export const TRACKS: readonly Track[] = [
     style: 'piano cinematic',
     seconds: 288,
     src: file('interstellar-variations'),
+    youtube: youtube('yqYVu--uvQo'),
   },
   {
     id: 'a-yo',
@@ -383,6 +411,7 @@ export const TRACKS: readonly Track[] = [
     style: 'east coast rap',
     seconds: 271,
     src: file('a-yo'),
+    youtube: youtube('W3w49zHXzco'),
   },
   {
     id: 'malo-muchacho',
@@ -391,6 +420,7 @@ export const TRACKS: readonly Track[] = [
     style: 'spanish hip hop',
     seconds: 213,
     src: file('malo-muchacho'),
+    youtube: youtube('MoYDJfNvLXI'),
   },
   {
     id: 'my-life-is-real',
@@ -399,6 +429,7 @@ export const TRACKS: readonly Track[] = [
     style: 'melodic trap',
     seconds: 159,
     src: file('my-life-is-real'),
+    youtube: youtube('9mFhY1c7tD4'),
   },
   {
     id: 'patience',
@@ -407,6 +438,7 @@ export const TRACKS: readonly Track[] = [
     style: 'soft rock',
     seconds: 345,
     src: file('patience'),
+    youtube: youtube('y4NlW43QNQQ'),
   },
   {
     id: 'sen-emne-4ort',
@@ -415,6 +447,7 @@ export const TRACKS: readonly Track[] = [
     style: 'underground rap',
     seconds: 152,
     src: file('sen-emne-4ort'),
+    youtube: youtube('Az2TG6LnNGs'),
   },
   {
     id: 'south-side-312',
@@ -423,6 +456,7 @@ export const TRACKS: readonly Track[] = [
     style: 'chicago drill',
     seconds: 166,
     src: file('south-side-312'),
+    youtube: youtube('z6VBXUS5H8M'),
   },
   {
     id: 'posterity',
@@ -431,6 +465,7 @@ export const TRACKS: readonly Track[] = [
     style: 'orchestral score',
     seconds: 762,
     src: file('posterity'),
+    youtube: youtube('ZE5zXLOyEOQ'),
   },
   {
     id: 'rockstar',
@@ -439,6 +474,7 @@ export const TRACKS: readonly Track[] = [
     style: 'pop rap',
     seconds: 218,
     src: file('rockstar'),
+    youtube: youtube('AaxFIY-cWH0'),
   },
   {
     id: 'que-carajos-quieres',
@@ -447,6 +483,7 @@ export const TRACKS: readonly Track[] = [
     style: 'latin rock',
     seconds: 155,
     src: file('que-carajos-quieres'),
+    youtube: youtube('VkMqO_DxH3o'),
   },
   {
     id: 'bumerang',
@@ -455,6 +492,7 @@ export const TRACKS: readonly Track[] = [
     style: 'russian pop',
     seconds: 149,
     src: file('bumerang'),
+    youtube: youtube('KQ6C4LUpwc8'),
   },
   {
     id: 'became-who-i-feared-most',
@@ -463,6 +501,7 @@ export const TRACKS: readonly Track[] = [
     style: 'dark electronic',
     seconds: 344,
     src: file('became-who-i-feared-most'),
+    youtube: youtube('AfeLWtMuHIQ'),
   },
   {
     id: 'epilogo',
@@ -471,6 +510,7 @@ export const TRACKS: readonly Track[] = [
     style: 'spanish ballad',
     seconds: 428,
     src: file('epilogo'),
+    youtube: youtube('zAcwc6SEQ_o'),
   },
   {
     id: 'ni-de-oro-ni-de-goldfield',
@@ -479,6 +519,7 @@ export const TRACKS: readonly Track[] = [
     style: 'spanish indie',
     seconds: 184,
     src: file('ni-de-oro-ni-de-goldfield'),
+    youtube: youtube('SJVL1JTZXjQ'),
   },
 ];
 

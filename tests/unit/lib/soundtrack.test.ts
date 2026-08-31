@@ -45,6 +45,16 @@ describe('TRACKS', () => {
     }
   });
 
+  it('keeps YouTube credits as watch URLs, never on Mixkit cuts', () => {
+    for (const track of TRACKS.filter((t) => t.youtube)) {
+      expect(track.youtube, track.id).toMatch(/^https:\/\/www\.youtube\.com\/watch\?v=[\w-]{11}$/);
+      expect(track.source, track.id).toBeUndefined();
+    }
+    for (const track of TRACKS.filter((t) => t.source)) {
+      expect(track.youtube, track.id).toBeUndefined();
+    }
+  });
+
   it('says who made what', () => {
     for (const track of TRACKS) {
       expect(track.title.trim(), track.id).not.toBe('');

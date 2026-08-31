@@ -56,6 +56,16 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     <p class="tour-hud__now" aria-live="polite" data-has-track="false" hidden>
       <Icon name="music" class="tour-hud__now-icon size-3" />
       <span class="tour-hud__now-title"></span>
+      <a
+        class="tour-hud__now-youtube"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open on YouTube"
+        hidden
+      >
+        <Icon name="youtube" class="tour-hud__now-yt-icon size-3" />
+      </a>
     </p>
 
     <div class="tour-hud__pill">
@@ -203,10 +213,40 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     white-space: nowrap;
   }
 
+  /* The dock is pointer-events: none; re-enable the credit so the YouTube link works. */
+  .tour-hud[data-playing='true'] .tour-hud__now {
+    pointer-events: auto;
+  }
+
+  .tour-hud__now-youtube {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: #ff0000;
+    line-height: 0;
+    opacity: 0.92;
+    transition: opacity 0.2s ease;
+  }
+
+  .tour-hud__now-youtube:hover,
+  .tour-hud__now-youtube:focus-visible {
+    opacity: 1;
+  }
+
+  .tour-hud__now-youtube[hidden] {
+    display: none;
+  }
+
   /* `<Icon>` svg is unscoped — paint through :global so the glyph inherits. */
   .tour-hud__now :global(.tour-hud__now-icon) {
     flex-shrink: 0;
     color: inherit;
+  }
+
+  .tour-hud__now :global(.tour-hud__now-yt-icon) {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   /* The same crystal glass as the corner arrows (`PageNav.astro`), drawn long. */
@@ -486,6 +526,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     const face = hud.querySelector('.tour-hud__clock');
     const now = hud.querySelector<HTMLElement>('.tour-hud__now');
     const nowTitle = hud.querySelector('.tour-hud__now-title');
+    const nowYoutube = hud.querySelector<HTMLAnchorElement>('.tour-hud__now-youtube');
     const paceBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="pace"]');
     const trackBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="track"]');
     if (!paceHintDismissed()) setTourRate(TOUR_RATE_INTRO);
@@ -493,17 +534,30 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     paintPaceHint(paceBtn);
     paintTrackHint(trackBtn);
 
-    function paintTrack(track: { title: string } | null) {
+    function paintTrack(track: { title: string; youtube?: string } | null) {
       if (!now || !nowTitle) return;
       if (!track) {
         now.hidden = true;
         now.dataset.hasTrack = 'false';
         nowTitle.textContent = '';
+        if (nowYoutube) {
+          nowYoutube.hidden = true;
+          nowYoutube.removeAttribute('href');
+        }
         return;
       }
       nowTitle.textContent = track.title;
       now.dataset.hasTrack = 'true';
       now.hidden = false;
+      if (nowYoutube) {
+        if (track.youtube) {
+          nowYoutube.href = track.youtube;
+          nowYoutube.hidden = false;
+        } else {
+          nowYoutube.hidden = true;
+          nowYoutube.removeAttribute('href');
+        }
+      }
     }
 
     document.addEventListener(
@@ -519,7 +573,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     document.addEventListener(
       'nexow:track',
       (event) => {
-        const detail = (event as CustomEvent<{ title: string } | null>).detail;
+        const detail = (event as CustomEvent<{ title: string; youtube?: string } | null>).detail;
         paintTrack(detail);
       },
       { signal },
