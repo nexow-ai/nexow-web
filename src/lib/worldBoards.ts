@@ -207,8 +207,12 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
   }
   const light = !document.documentElement.classList.contains('dark');
   try {
-    for (let i = 0; i < boards.length; i++) {
-      const svg = boards[i].querySelector<SVGSVGElement>('svg');
+    /* Every one of the 16 cells must have a card. Fewer boards in the DOM
+       used to leave the back half of the atlas black, and those screens
+       read as empty slabs. Wrap what we have. */
+    for (let i = 0; i < 16; i++) {
+      const board = boards[i % boards.length];
+      const svg = board.querySelector<SVGSVGElement>('svg');
       const img = svg
         ? await new Promise<HTMLImageElement | null>((res) => {
             const el = new Image();
@@ -218,10 +222,7 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
           })
         : null;
       if (gen !== state.gen) return;
-      /* Full cell. An 8px gutter sampled edge-to-edge was a dark rim around
-         every screen — the border the wall was asked to lose. No mip chain,
-         so neighbours cannot bleed. */
-      paintCard(g2, boards[i], img, (i % 4) * 512, Math.floor(i / 4) * 256, 512, 256, light);
+      paintCard(g2, board, img, (i % 4) * 512, Math.floor(i / 4) * 256, 512, 256, light);
       // One board per macrotask — sixteen style walks in one frame is a hitch.
       await new Promise((res) => setTimeout(res, 0));
       if (gen !== state.gen) return;
