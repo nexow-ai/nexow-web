@@ -2,17 +2,25 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: Pages branch to deploy
+        type: choice
+        options: [main, dev]
+        default: main
 
-# Only one production deploy at a time; newer pushes cancel in-flight ones.
+# One in-flight deploy per target branch; newer pushes cancel the older one.
 concurrency:
-  group: deploy-main
+  group: deploy-${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   deploy:
     name: Cloudflare Pages
+    env:
+      PAGES_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -62,4 +70,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=nexow-web --branch=main --commit-dirty=true
+          command: pages deploy dist --project-name=nexow-web --branch=${{ env.PAGES_BRANCH }} --commit-dirty=true
