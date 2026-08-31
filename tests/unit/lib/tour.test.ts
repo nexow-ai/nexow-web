@@ -16,15 +16,28 @@ import {
   TOUR_END_HOLD,
   TOUR_HOLD_INSET,
   TOUR_MIN_TRAVEL,
+  TOUR_MOBILE_FACTOR,
   TOUR_RATE_DEFAULT,
   TOUR_RATE_INTRO,
   TOUR_RATES,
   TOUR_SECTION_HOLDS,
   TOUR_SPEED,
   tourRate,
+  tourSpeed,
   trackHintDismissed,
   worthTouring,
 } from '../../../src/lib/tour';
+
+describe('tourSpeed', () => {
+  it('is the base pace on desktop', () => {
+    expect(tourSpeed(false)).toBe(TOUR_SPEED);
+  });
+
+  it('is half the base pace on mobile — x1 there moves like desktop x0.5', () => {
+    expect(TOUR_MOBILE_FACTOR).toBe(0.5);
+    expect(tourSpeed(true)).toBeCloseTo(TOUR_SPEED * 0.5, 6);
+  });
+});
 
 describe('secondsLeft', () => {
   const max = 4800;

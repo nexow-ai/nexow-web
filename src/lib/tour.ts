@@ -22,6 +22,18 @@
 /** The tour's base pace, in CSS pixels per second — the `x1` rate. */
 export const TOUR_SPEED = 380;
 
+/**
+ * Phones travel at half the desktop pace: the viewport is a fraction of the
+ * height, so the same px/s reads twice as fast. `x1` on mobile moves like
+ * desktop `x0.5` — the transport's marks stay as written.
+ */
+export const TOUR_MOBILE_FACTOR = 0.5;
+
+/** The `x1` pace for the current form factor. */
+export function tourSpeed(mobile: boolean): number {
+  return mobile ? TOUR_SPEED * TOUR_MOBILE_FACTOR : TOUR_SPEED;
+}
+
 /** Multipliers the transport steps through. Default is `1`. */
 export const TOUR_RATES = [0.25, 0.5, 1, 2] as const;
 export type TourRate = (typeof TOUR_RATES)[number];
