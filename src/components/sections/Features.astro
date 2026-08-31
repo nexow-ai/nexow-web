@@ -96,14 +96,17 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
   }
 
   /* The map is a glass plate in the same room, not a white marketing card. */
-  #features :global(.feature-map > [class*='rounded-2xl']) {
+  #features :global(.fm-plate) {
+    --fm-detail-bg: var(--w-panel-2);
     background: var(--w-panel);
     border-color: var(--w-line);
     box-shadow: 0 18px 48px var(--w-shadow);
     backdrop-filter: blur(16px);
   }
 
-  #features :global([data-fm-detail]) {
+  #features :global([data-fm-detail]),
+  #features :global(.fm-art),
+  #features :global(.fm-actions) {
     background: var(--w-panel-2);
   }
 
