@@ -196,6 +196,71 @@ export const en: SiteContent = {
           label: 'Training log',
           prompt: 'Show my Strava runs this month with pace trend, weekly volume and a personal-record table.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Make a soft moodboard, a habit streak tracker, and a tiny memory game.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Flight board',
+          prompt: 'Build a live flight board: arrivals, delays, a route map and a gate-change feed.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Spend tracker',
+          prompt: 'Make a spend tracker with category donut, daily burn and a recurring-bills list.',
+        },
+        {
+          icon: 'github',
+          label: 'Ship desk',
+          prompt: 'Show my GitHub week: open PRs, deploy frequency, CI failures and a release checklist.',
+        },
+        {
+          icon: 'users',
+          label: 'Social hub',
+          prompt: 'Create a social hub: saved posts, replies to answer and a following digest.',
+        },
+        {
+          icon: 'sun',
+          label: 'Energy desk',
+          prompt: 'Build a home energy desk: solar yield, grid price, battery state and a 24-hour load chart.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Site analytics',
+          prompt: 'Make a site analytics board: live visitors, top pages, funnel drop-off and a traffic sparkline.',
+        },
+        {
+          icon: 'banknote',
+          label: 'FX desk',
+          prompt: 'Build an FX desk: EURUSD candles, a major-pairs grid, session clock and a news tape.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Week planner',
+          prompt: 'Create a week planner with time blocks, a focus timer and a rolling to-do list.',
+        },
+        {
+          icon: 'pen',
+          label: 'Content studio',
+          prompt: 'Make a content studio: idea board, publishing calendar, draft statuses and a hook list.',
+        },
+        {
+          icon: 'signal',
+          label: 'Transit map',
+          prompt: 'Map live transit: next arrivals, delayed lines, a network schematic and a disruption feed.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Kitchen board',
+          prompt: 'Build a kitchen board: meal plan, grocery list, pantry leftovers and a timer strip.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Match center',
+          prompt: 'Make a match center: live scores, a shot chart, standings and a play-by-play feed.',
+        },
       ],
     },
     ticker: { label: 'What people build' },

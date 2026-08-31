@@ -186,6 +186,71 @@ export const tr = {
           label: 'Antrenman kaydı',
           prompt: 'Bu ayki Strava koşularımı tempo trendi, haftalık hacim ve kişisel rekor tablosuyla göster.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Yumuşak bir moodboard, alışkanlık serisi takipçisi ve küçük bir hafıza oyunu yap.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Uçuş panosu',
+          prompt: 'Canlı uçuş panosu kur: varışlar, gecikmeler, rota haritası ve kapı değişim akışı.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Harcama takibi',
+          prompt: 'Kategori halkası, günlük yakım ve tekrarlayan fatura listesi olan bir harcama takibi yap.',
+        },
+        {
+          icon: 'github',
+          label: 'Ship masası',
+          prompt: 'GitHub haftamı göster: açık PR’ler, dağıtım sıklığı, CI hataları ve yayın kontrol listesi.',
+        },
+        {
+          icon: 'users',
+          label: 'Sosyal hub',
+          prompt: 'Kaydedilen gönderiler, bekleyen yanıtlar ve takip özeti olan bir sosyal hub oluştur.',
+        },
+        {
+          icon: 'sun',
+          label: 'Enerji masası',
+          prompt: 'Ev enerji masası kur: güneş üretimi, şebeke fiyatı, batarya durumu ve 24 saatlik yük grafiği.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Site analitiği',
+          prompt: 'Canlı ziyaretçiler, popüler sayfalar, hunide düşüş ve trafik çizgisi olan bir analitik pano yap.',
+        },
+        {
+          icon: 'banknote',
+          label: 'FX masası',
+          prompt: 'FX masası kur: EURUSD mumları, majör çift ızgarası, seans saati ve haber şeridi.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Haftalık plan',
+          prompt: 'Zaman blokları, odak zamanlayıcısı ve kayan yapılacaklar listesi olan bir haftalık plan oluştur.',
+        },
+        {
+          icon: 'pen',
+          label: 'İçerik stüdyosu',
+          prompt: 'Fikir panosu, yayın takvimi, taslak durumları ve kanca listesi olan bir içerik stüdyosu yap.',
+        },
+        {
+          icon: 'signal',
+          label: 'Ulaşım haritası',
+          prompt: 'Canlı ulaşımı haritala: sonraki varışlar, geciken hatlar, ağ şeması ve aksaklık akışı.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Mutfak panosu',
+          prompt: 'Yemek planı, alışveriş listesi, kiler artıkları ve zamanlayıcı şeridi olan bir mutfak panosu kur.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Maç merkezi',
+          prompt: 'Canlı skorlar, şut haritası, puan durumu ve anbean akış olan bir maç merkezi yap.',
+        },
       ],
     },
     ticker: { label: 'Canlı bağlantılar' },

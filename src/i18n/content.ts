@@ -467,7 +467,7 @@ export interface SiteContent {
        * textarea and re-points the launch CTA at that prompt. Optional so
        * locales can omit them and fall back to English via `useContent` merge.
        * `icon` is a stable `icon-paths` id (locale-agnostic); the first
-       * `HERO_EXAMPLES_VISIBLE` entries show up front, the rest behind “more”.
+       * ten entries show up front, the rest behind “more”.
        */
       promptExamplesLabel?: string;
       promptExamplesMore?: string;

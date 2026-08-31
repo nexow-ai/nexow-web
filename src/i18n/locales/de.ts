@@ -186,6 +186,71 @@ export const de: SiteContent = {
           label: 'Trainingslog',
           prompt: 'Zeig meine Strava-Läufe diesen Monat mit Pace-Trend, Wochenvolumen und einer Rekord-Tabelle.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Mach ein ruhiges Moodboard, einen Streak-Tracker und ein kleines Memory-Spiel.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Flugtafel',
+          prompt: 'Bau eine Live-Flugtafel: Ankünfte, Verspätungen, Routenkarte und ein Gate-Change-Feed.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Ausgaben',
+          prompt: 'Mach einen Ausgaben-Tracker mit Kategorie-Donut, Tagesburn und Liste wiederkehrender Rechnungen.',
+        },
+        {
+          icon: 'github',
+          label: 'Ship-Desk',
+          prompt: 'Zeig meine GitHub-Woche: offene PRs, Deploy-Frequenz, CI-Fehler und eine Release-Checkliste.',
+        },
+        {
+          icon: 'users',
+          label: 'Social-Hub',
+          prompt: 'Erstell einen Social-Hub: gespeicherte Posts, offene Antworten und ein Following-Digest.',
+        },
+        {
+          icon: 'sun',
+          label: 'Energie-Desk',
+          prompt: 'Bau einen Energie-Desk: Solarertrag, Netzpreis, Batteriestand und 24-Stunden-Lastkurve.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Site-Analytics',
+          prompt: 'Mach ein Analytics-Board: Live-Besucher, Top-Seiten, Funnel-Abfall und Traffic-Sparkline.',
+        },
+        {
+          icon: 'banknote',
+          label: 'FX-Desk',
+          prompt: 'Bau einen FX-Desk: EURUSD-Kerzen, Major-Paare-Grid, Session-Uhr und ein News-Tape.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Wochenplaner',
+          prompt: 'Erstell einen Wochenplaner mit Zeitblöcken, Fokus-Timer und einer rollenden To-do-Liste.',
+        },
+        {
+          icon: 'pen',
+          label: 'Content-Studio',
+          prompt: 'Mach ein Content-Studio: Ideenboard, Publikationskalender, Draft-Status und eine Hook-Liste.',
+        },
+        {
+          icon: 'signal',
+          label: 'Transitkarte',
+          prompt: 'Kartier den Live-Transit: nächste Ankünfte, verspätete Linien, Netzschema und Störungsfeed.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Küchenboard',
+          prompt: 'Bau ein Küchenboard: Wochenmenü, Einkaufsliste, Vorratsreste und eine Timer-Leiste.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Match-Center',
+          prompt: 'Mach ein Match-Center: Live-Scores, Shot-Chart, Tabelle und Play-by-Play-Feed.',
+        },
       ],
     },
     ticker: { label: 'Live-Konnektoren' },
