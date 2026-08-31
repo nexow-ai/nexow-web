@@ -28,20 +28,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# generated scratchpad reports, local screenshots, one-off probes
-scratchpad/*-report.json
-scratchpad/shots/
-scratchpad/probe.mjs
-scratchpad/probe-*.mjs
-scratchpad/theme.mjs
-scratchpad/verify.mjs
-scratchpad/panels.mjs
-scratchpad/diag.mjs
-scratchpad/shot-*.mjs
-scratchpad/*-shot.mjs
-scratchpad/centre.mjs
-scratchpad/parallax-*.mjs
-scratchpad/*.png
+# local one-off probes, audits, screenshots, generator scratch
+scratchpad/
 
 # local Claude / Cursor agent state
 .claude/
