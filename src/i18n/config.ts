@@ -66,6 +66,12 @@ export function resolveSocialUrl(configured: string | undefined, fallback: strin
   return value ? value : fallback;
 }
 
+/** Env lookup safe when `import.meta.env` is missing (e.g. Playwright collection). */
+function socialEnv(name: string): string | undefined {
+  const env = import.meta.env as Record<string, string | undefined> | undefined;
+  return env?.[name];
+}
+
 /**
  * Footer + hero + schema social links (icon names match `Icon.astro`).
  *
@@ -77,47 +83,47 @@ export function resolveSocialUrl(configured: string | undefined, fallback: strin
 export const SOCIALS = [
   {
     label: 'X',
-    href: resolveSocialUrl(import.meta.env.X_URL, 'https://x.com/nexowofficial'),
+    href: resolveSocialUrl(socialEnv('X_URL'), 'https://x.com/nexowofficial'),
     icon: 'x-logo',
   },
   {
     label: 'Discord',
-    href: resolveSocialUrl(import.meta.env.DISCORD_URL, 'https://discord.gg/nexow'),
+    href: resolveSocialUrl(socialEnv('DISCORD_URL'), 'https://discord.gg/nexow'),
     icon: 'discord',
   },
   {
     label: 'Telegram',
-    href: resolveSocialUrl(import.meta.env.TELEGRAM_URL, 'https://t.me/nexowofficial'),
+    href: resolveSocialUrl(socialEnv('TELEGRAM_URL'), 'https://t.me/nexowofficial'),
     icon: 'telegram',
   },
   {
     label: 'TikTok',
-    href: resolveSocialUrl(import.meta.env.TIKTOK_URL, 'https://tiktok.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('TIKTOK_URL'), 'https://tiktok.com/nexow-ai'),
     icon: 'tiktok',
   },
   {
     label: 'Instagram',
-    href: resolveSocialUrl(import.meta.env.INSTAGRAM_URL, 'https://instagram.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('INSTAGRAM_URL'), 'https://instagram.com/nexow-ai'),
     icon: 'instagram',
   },
   {
     label: 'LinkedIn',
-    href: resolveSocialUrl(import.meta.env.LINKEDIN_URL, 'https://linkedin.com/company/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('LINKEDIN_URL'), 'https://linkedin.com/company/nexow-ai'),
     icon: 'linkedin',
   },
   {
     label: 'YouTube',
-    href: resolveSocialUrl(import.meta.env.YOUTUBE_URL, 'https://youtube.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('YOUTUBE_URL'), 'https://youtube.com/nexow-ai'),
     icon: 'youtube',
   },
   {
     label: 'Skool',
-    href: resolveSocialUrl(import.meta.env.SKOOL_URL, 'https://www.skool.com/nexow'),
+    href: resolveSocialUrl(socialEnv('SKOOL_URL'), 'https://www.skool.com/nexow'),
     icon: 'skool',
   },
   {
     label: 'GitHub',
-    href: resolveSocialUrl(import.meta.env.GITHUB_URL, 'https://github.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('GITHUB_URL'), 'https://github.com/nexow-ai'),
     icon: 'github',
   },
 ] as const;
