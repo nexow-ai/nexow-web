@@ -634,9 +634,11 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
   const DELTA = 6;
 
   function initHeader() {
-    headerAbort?.abort();
-    headerAbort = new AbortController();
-    const { signal } = headerAbort;
+    /* Attach the new listeners before aborting the old ones. Aborting first
+     * left a gap during view transitions where digit shortcuts did nothing —
+     * URL already updated, `astro:page-load` still mid-flight. */
+    const next = new AbortController();
+    const { signal } = next;
 
     const header = document.getElementById('site-header');
     const nav = document.getElementById('site-nav');
@@ -716,14 +718,14 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     menu?.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => setMenu(false), { signal }),
     );
-    const typingIn = (el) => {
+    const typingIn = (el: EventTarget | null) => {
       if (!(el instanceof HTMLElement)) return false;
       if (el.isContentEditable) return true;
       const tag = el.tagName;
       return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
     };
 
-    const samePath = (href) => {
+    const samePath = (href: string) => {
       const there = new URL(href, location.href).pathname.replace(/\/+$/, '') || '/';
       const here = location.pathname.replace(/\/+$/, '') || '/';
       return there === here;
@@ -743,6 +745,9 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       setMenu(false);
       link.click();
     }, { signal });
+
+    headerAbort?.abort();
+    headerAbort = next;
   }
 
   document.addEventListener('astro:before-preparation', () => {
