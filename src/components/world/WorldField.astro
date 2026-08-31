@@ -125,8 +125,8 @@
     { dist: 24.8, lift: 4.9, calm: 0.48, yaw: 6.08 }, // 11 rewards
     { dist: 17.2, lift: 2.6, calm: 0.36, yaw: 6.52 }, // 12 faq
     { dist: 14.8, lift: 1.5, calm: 0.2, yaw: 6.98 }, // 13 cta
-    { dist: 26.4, lift: 5.3, calm: 0.58, yaw: 7.42 }, // 14 footer
-    { dist: 29.0, lift: 6.4, calm: 0.7, yaw: 7.85 }, //    exit
+    { dist: 16.8, lift: 2.2, calm: 0.14, yaw: 7.42 }, // 14 footer
+    { dist: 18.4, lift: 2.6, calm: 0.18, yaw: 7.85 }, //    exit
   ];
 
   /* How much glass, at rest and at the calmest. Clearing a panel's interface
@@ -447,14 +447,21 @@
         float r = 6.4 + 3.2 * h.x;
         return vec3(cos(th) * r, sin(th) * r * 0.7, -3.6 + h.y * 6.2);
       }
-      /* 14 — FOOT: the last quiet horizon. The room does not cut; it thins. */
-      float th = a * 6.2831 * 3.0 + t * 0.04;
-      float r = 8.0 + 11.0 * h.x;
-      return vec3(
-        cos(th) * r,
-        (h.y - 0.5) * 4.2,
-        sin(th) * r * 0.48 - 3.0
-      );
+      /* 14 — FOOT: a near wall, two ranks. The old horizon flung twelve
+         screens out to r=19, and from the footer lens they read as empty
+         grey chips — or nothing. This holds them in the frame. */
+      float bands = 2.0;
+      float band = mod(i, bands);
+      float idx = floor(i / bands);
+      float per = ceil(n / bands);
+      float rows = 2.0;
+      float row = mod(idx, rows);
+      float col = floor(idx / rows);
+      float perRow = max(1.0, ceil(per / rows));
+      float spread = (col - (perRow - 1.0) * 0.5) * 5.2;
+      float y = (row - 0.5) * 3.6;
+      float z = 2.4 - band * 3.8;
+      return vec3(spread, y, z);
     }
 
     void main() {
@@ -2109,7 +2116,13 @@
      * during a hold — where by design nothing else moves — it was the only
      * thing that could answer them.
      */
-    function drawCore(seconds: number, scene: number, morph: number, flow = scene + morph) {
+    function drawCore(
+      seconds: number,
+      scene: number,
+      morph: number,
+      flow = scene + morph,
+      accentC1: [number, number, number] = coreC1,
+    ) {
       if (!coreReady) return;
 
       const m = Math.min(1, Math.max(0, morph));
@@ -2193,7 +2206,7 @@
       ctx.uniform1f(cuShift, coreShift);
       ctx.uniform1f(cuLift, coreLift);
       ctx.uniform3f(cuCam, cam.x, cam.y, cam.z);
-      ctx.uniform3fv(cuC1, coreC1);
+      ctx.uniform3fv(cuC1, accentC1);
       ctx.uniform3fv(cuC3, coreC3);
       ctx.uniform3fv(cuFog, coreFog);
       ctx.uniform1f(cuLight, coreLight);
@@ -2587,10 +2600,20 @@
       const sweep = Math.sin(beat * Math.PI);
 
       /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
-         view switches too — that is how a single section shows every family. */
+         view switches too — that is how a single section shows every family.
+         A clicked surface writes `data-fm-way` so the field (the green
+         panels around the plate) follows the tab, not only the scroll. */
       const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');
       const stage = Number(stageEl?.dataset.stage) || 0;
-      ctx.uniform1f(uWay, a + stage);
+      const onFeatures = scenes[a]?.id === 'features';
+      const rawFm = onFeatures ? Number(scenes[a].dataset.fmWay) : NaN;
+      const tabWay = Number.isFinite(rawFm)
+        ? ((rawFm % WAY_COUNT) + WAY_COUNT) % WAY_COUNT
+        : stage;
+      ctx.uniform1f(uWay, onFeatures ? tabWay : a + stage);
+      const pal = coreLight < 0.5 ? WAY_RGB400 : WAY_RGB600;
+      const frameC1 = onFeatures ? (pal[tabWay] ?? coreC1) : coreC1;
+      ctx.uniform3fv(uC1, frameC1);
       const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
       ctx.uniform1f(uStudio, studio);
 
@@ -2605,23 +2628,26 @@
        * the page has to get its quiet from there being fewer screens, which is
        * why studio buys thinning rather than more fog. */
       ctx.uniform1f(uAlpha, SCREEN_ALPHA * (1 - 0.34 * calm));
+      /* Footer keeps every screen. Calm+studio thinning left a twelve-panel
+         wall with two survivors, and those sat too far back to read. */
       ctx.uniform1f(
         uThin,
-        Math.min(0.62, calm * (compact ? 0.56 : 0.48) + studio * 0.12),
+        a >= 14 ? 0.02 : Math.min(0.62, calm * (compact ? 0.56 : 0.48) + studio * 0.12),
       );
-      /* And the survivors run their interfaces only where the scene is staged
-       * for them to be looked at. Everywhere else they are glass. */
-      ctx.uniform1f(uGlass, Math.min(0.92, GLASS_BASE + calm * GLASS_CALM));
+      ctx.uniform1f(
+        uGlass,
+        a >= 14 ? 0.1 : Math.min(0.92, GLASS_BASE + calm * GLASS_CALM),
+      );
       const nextDay = studio > 0.45;
       if (nextDay !== dayOn) {
         dayOn = nextDay;
         world!.classList.toggle('world--day', dayOn);
         paintTheme();
       }
-      if (dayOn) world!.style.setProperty('--w-way', String(a + stage));
+      if (dayOn) world!.style.setProperty('--w-way', String(onFeatures ? tabWay : a + stage));
       /* Later copy sits in the middle; hold the screens back a little more
          than the acts, so a FeatureMap title is not struck through. */
-      if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : 0.16);
+      if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : a >= 14 ? 0.88 : 0.16);
 
       /* Fog and glass snap to the box under the lens: pale screens on a
        * white box, dark screens on a black one. Last, so a `world--day`
@@ -2697,7 +2723,7 @@
       }
       if (count > 0) instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
       ctx.clear(ctx.DEPTH_BUFFER_BIT);
-      drawCore(seconds, a, morph, a + local);
+      drawCore(seconds, a, morph, a + local, frameC1);
       frame = requestAnimationFrame(draw);
     }
 
