@@ -4,11 +4,11 @@
  *
  * Chrome is HTML — screens and workspaces open and close on a real width /
  * height the way the Features playground does. The stage stays SVG: type,
- * generate, live widgets. As #app-showcase takes the pin the generate loop
- * parks, a mosaic bound draws, and Links wire the same widgets. Boards then
- * cycle fast through layouts (personal, trading desk, quake map, watchlist,
- * news) with chart / order-book / map animations. Chrome keeps cycling
- * through both acts.
+ * generate, live widgets. Boards are packed like the real desk — tables,
+ * axes, tape, heatmaps — not candy tiles. As #app-showcase takes the pin
+ * the generate loop parks, a mosaic bound draws, and Links wire the same
+ * widgets. Boards then cycle (personal, trading, quake, watchlist, news).
+ * Chrome keeps cycling through both acts.
  */
 import { ICON_PATHS } from '../icon-paths';
 
@@ -17,11 +17,12 @@ interface Props {
 }
 const { prompt } = Astro.props;
 
-/** Four weeks of streak intensities — a monthly heatmap, not a fortnight. */
+/** Five weeks × seven days — a contribution graph, not a candy grid. */
 const CELLS = [
   2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 3, 1, 2, 0, 3, 2, 0, 1, 3, 2, 3, 1, 2, 2, 0, 3,
-  1, 3, 2, 1,
+  1, 3, 2, 1, 3, 2, 0, 3, 2,
 ];
+const HEAT_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 /** Active screen stays put; the rest open and close on `--w-step`. `--w` is
  *  the label width in `ch` so the keyframes animate a real width. Cycle is
@@ -98,24 +99,24 @@ const profiles = [
 ];
 
 const MOOD = [
-  { x: 140, y: 160, w: 156, h: 72, fill: 'var(--w-mood-1)' },
-  { x: 304, y: 160, w: 96, h: 40, fill: 'var(--w-mood-2)' },
-  { x: 304, y: 208, w: 46, h: 24, fill: 'var(--w-mood-3)' },
-  { x: 358, y: 208, w: 42, h: 24, fill: 'var(--w-mood-4)' },
+  { x: 140, y: 158, w: 156, h: 68, fill: 'var(--w-mood-1)', label: 'hero' },
+  { x: 304, y: 158, w: 96, h: 36, fill: 'var(--w-mood-2)', label: 'type' },
+  { x: 304, y: 200, w: 46, h: 26, fill: 'var(--w-mood-3)', label: 'ink' },
+  { x: 358, y: 200, w: 42, h: 26, fill: 'var(--w-mood-4)', label: 'sky' },
 ];
 
 const SWATCHES = [
-  { x: 140, fill: 'var(--color-brand-400)' },
-  { x: 162, fill: 'var(--color-accent-400)' },
-  { x: 184, fill: 'var(--color-sky-400)' },
-  { x: 206, fill: 'var(--color-brand-300)' },
+  { x: 140, fill: 'var(--color-brand-400)', hex: '#10C5A3' },
+  { x: 176, fill: 'var(--color-accent-400)', hex: '#6366F1' },
+  { x: 212, fill: 'var(--color-sky-400)', hex: '#38BDF8' },
+  { x: 248, fill: 'var(--color-brand-300)', hex: '#5EEAD4' },
 ];
 
 const JOURNAL = [
-  { y: 304, h: 14, fill: 'var(--w-mood-1)' },
-  { y: 322, h: 10, fill: 'var(--w-mood-2)' },
-  { y: 336, h: 12, fill: 'var(--w-mood-3)' },
-  { y: 352, h: 10, fill: 'var(--w-mood-4)' },
+  { y: 314, label: 'brief', time: '09:12' },
+  { y: 328, label: 'ship v4', time: '11:40' },
+  { y: 342, label: 'review', time: '14:05' },
+  { y: 356, label: 'park', time: '16:22' },
 ];
 
 /** Eight memory cards in 4×2. `pair` is which two flip together. */
@@ -137,55 +138,65 @@ const PAIR_FILL = [
   'var(--color-brand-300)',
 ];
 
-/** Air-quality spark — card 128,284,200×84. */
-const SPARK = [28, 36, 32, 44, 50, 41, 56, 62, 54, 68, 74, 70];
+/** Air-quality spark — card 128,284,200×80. */
+const SPARK = [28, 36, 32, 44, 50, 41, 56, 62, 54, 68, 74, 70, 66, 72];
 const sparkLo = Math.min(...SPARK);
 const sparkHi = Math.max(...SPARK);
-const sparkX = (i: number) => 140 + i * 14;
-const sparkY = (v: number) => 356 - ((v - sparkLo) / (sparkHi - sparkLo || 1)) * 40;
+const sparkX = (i: number) => 138 + i * 12.4;
+const sparkY = (v: number) => 354 - ((v - sparkLo) / (sparkHi - sparkLo || 1)) * 36;
 const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${sparkX(i)} ${sparkY(v)}`).join(' ');
+const sparkArea = `${sparkPath} L${sparkX(SPARK.length - 1)} 356 L${sparkX(0)} 356 Z`;
 
-/** Candle closes for the trading board. Chart 128,120,304×172. */
-const CLOSES = [42, 48, 45, 58, 64, 55, 70, 76, 68, 82, 88, 84];
-const candleY = (v: number) => 276 - (v - 38) * 2.15;
+/** Candle closes for the trading board. Chart 128,114,304×182. */
+const CLOSES = [42, 45, 43, 48, 52, 49, 55, 58, 54, 61, 64, 60, 66, 70, 67, 73, 76, 72, 80, 84];
+const VOLUME = [16, 22, 12, 28, 20, 14, 32, 18, 10, 26, 22, 16, 30, 20, 14, 24, 28, 16, 20, 34];
+const candleY = (v: number) => 246 - (v - 38) * 1.72;
 const CANDLES = CLOSES.map((c, i) => {
   const prev = i === 0 ? c - 5 : CLOSES[i - 1];
   const top = candleY(Math.max(c, prev));
   const bottom = candleY(Math.min(c, prev));
-  return { x: 152 + i * 22, top, h: Math.max(6, bottom - top + 5), up: c >= prev };
+  return { x: 146 + i * 13.6, top, h: Math.max(5, bottom - top + 4), up: c >= prev, vol: VOLUME[i] };
 });
-const emaPath = CLOSES.map((c, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${candleY(c)}`).join(' ');
+const emaPath = CLOSES.map((c, i) => `${i ? 'L' : 'M'}${146 + i * 13.6} ${candleY(c)}`).join(' ');
+const emaSlow = CLOSES.map((c, i) => {
+  const v = i < 2 ? c : (CLOSES[i] + CLOSES[i - 1] + CLOSES[i - 2]) / 3;
+  return `${i ? 'L' : 'M'}${146 + i * 13.6} ${candleY(v)}`;
+}).join(' ');
+const AXIS_PX = ['68.4', '66.1', '63.8', '61.4'];
+const VOL_MAX = Math.max(...VOLUME);
 
-/** Order-book depth rows (bid left / ask right). */
+/** Order-book rows with price / size, bid left and ask right. */
 const BOOK = [
-  { bid: 88, ask: 72 },
-  { bid: 76, ask: 68 },
-  { bid: 70, ask: 64 },
-  { bid: 54, ask: 50 },
-  { bid: 46, ask: 48 },
-  { bid: 40, ask: 42 },
-  { bid: 28, ask: 34 },
-  { bid: 16, ask: 22 },
+  { px: '67,248', bid: 1.42, ask: 0.86 },
+  { px: '67,246', bid: 1.18, ask: 1.04 },
+  { px: '67,244', bid: 0.96, ask: 0.92 },
+  { px: '67,242', bid: 0.74, ask: 0.78 },
+  { px: '67,240', bid: 0.58, ask: 0.64 },
+  { px: '67,238', bid: 0.44, ask: 0.52 },
+  { px: '67,236', bid: 0.32, ask: 0.40 },
+  { px: '67,234', bid: 0.18, ask: 0.26 },
+  { px: '67,232', bid: 0.10, ask: 0.16 },
 ];
 
 const TICKERS = [
-  { x: 128, label: 'BTC', px: '67.2k', delta: '+2.4%', up: true },
-  { x: 248, label: 'ETH', px: '3.41k', delta: '−0.8%', up: false },
-  { x: 368, label: 'SOL', px: '178', delta: '+1.6%', up: true },
-  { x: 488, label: 'OI', px: '24.1B', delta: '1h', up: true },
+  { x: 128, label: 'BTC', px: '67,241', delta: '+2.41%', vol: '24.1B', up: true },
+  { x: 248, label: 'ETH', px: '3,412', delta: '−0.82%', vol: '11.4B', up: false },
+  { x: 368, label: 'SOL', px: '178.4', delta: '+1.64%', vol: '2.8B', up: true },
+  { x: 488, label: 'OI', px: '24.18B', delta: '1H', vol: 'perp', up: true },
 ];
 
 const POSITIONS = [
-  { label: 'BTC', w: 92, up: true },
-  { label: 'ETH', w: 48, up: false },
-  { label: 'SOL', w: 70, up: true },
+  { label: 'BTC-PERP', sz: '0.42', pnl: '+1.84k', w: 86, up: true },
+  { label: 'ETH-PERP', sz: '2.10', pnl: '−418', w: 44, up: false },
+  { label: 'SOL-PERP', sz: '18.0', pnl: '+206', w: 68, up: true },
 ];
 
 const TAPE = [
-  { side: 'buy', w: 78 },
-  { side: 'sell', w: 42 },
-  { side: 'buy', w: 96 },
-  { side: 'sell', w: 28 },
+  { side: 'B', px: '67,240', sz: '0.42' },
+  { side: 'S', px: '67,238', sz: '0.18' },
+  { side: 'B', px: '67,241', sz: '1.05' },
+  { side: 'S', px: '67,236', sz: '0.09' },
+  { side: 'B', px: '67,242', sz: '0.33' },
 ];
 
 /** Coarse landmass for the quake map. */
@@ -211,28 +222,81 @@ const QUAKES = [
 const MAG = [18, 12, 26, 14, 22, 10, 28, 16, 24, 12, 20, 26, 14, 22];
 const DEPTH = [22, 36, 18, 44, 30, 50, 26, 40];
 
-/** Watchlist spark paths (local 0..110 × 0..16). */
+/** Watchlist spark paths (local 0..72 × 0..14). */
 const WATCH = [
-  { spark: 'M0 14L22 10L44 12L66 6L88 9L110 3', up: true, label: 'BTC', px: '+2.4%' },
-  { spark: 'M0 4L22 9L44 7L66 13L88 11L110 16', up: false, label: 'ETH', px: '−0.8%' },
-  { spark: 'M0 11L22 8L44 10L66 5L88 4L110 7', up: true, label: 'SOL', px: '+1.6%' },
-  { spark: 'M0 8L22 5L44 11L66 9L88 14L110 12', up: false, label: 'AAPL', px: '−0.4%' },
-  { spark: 'M0 12L22 9L44 8L66 4L88 6L110 2', up: true, label: 'NVDA', px: '+3.1%' },
-  { spark: 'M0 6L22 10L44 9L66 12L88 13L110 15', up: false, label: 'MSFT', px: '−1.1%' },
+  { spark: 'M0 12L12 9L24 10L36 5L48 7L60 2L72 3', up: true, label: 'BTC', last: '67,241', chg: '+2.41%', vol: '24.1B' },
+  { spark: 'M0 3L12 7L24 6L36 11L48 10L60 13L72 14', up: false, label: 'ETH', last: '3,412', chg: '−0.82%', vol: '11.4B' },
+  { spark: 'M0 9L12 7L24 8L36 4L48 3L60 5L72 2', up: true, label: 'SOL', last: '178.4', chg: '+1.64%', vol: '2.81B' },
+  { spark: 'M0 7L12 4L24 9L36 8L48 12L60 11L72 10', up: false, label: 'AAPL', last: '228.6', chg: '−0.44%', vol: '6.2B' },
+  { spark: 'M0 11L12 8L24 7L36 3L48 5L60 2L72 1', up: true, label: 'NVDA', last: '131.2', chg: '+3.18%', vol: '18.7B' },
+  { spark: 'M0 5L12 8L24 7L36 10L48 11L60 13L72 12', up: false, label: 'MSFT', last: '428.1', chg: '−1.12%', vol: '8.4B' },
+  { spark: 'M0 10L12 8L24 6L36 7L48 4L60 3L72 5', up: true, label: 'TSLA', last: '248.9', chg: '+0.92%', vol: '9.1B' },
+  { spark: 'M0 6L12 5L24 8L36 9L48 7L60 10L72 8', up: false, label: 'META', last: '512.4', chg: '−0.31%', vol: '5.6B' },
 ];
 
 const SECTORS = [
-  { label: 'Tech', o: 0.85 },
-  { label: 'Fin', o: 0.62 },
-  { label: 'Ene', o: 0.4 },
-  { label: 'Hlth', o: 0.7 },
-  { label: 'Ind', o: 0.5 },
-  { label: 'Util', o: 0.28 },
-  { label: 'Mat', o: 0.55 },
-  { label: 'RE', o: 0.35 },
+  { label: 'XLK', chg: '+1.4', o: 0.88 },
+  { label: 'XLF', chg: '+0.6', o: 0.62 },
+  { label: 'XLE', chg: '−0.8', o: 0.38 },
+  { label: 'XLV', chg: '+0.9', o: 0.72 },
+  { label: 'XLI', chg: '+0.2', o: 0.48 },
+  { label: 'XLU', chg: '−0.4', o: 0.28 },
+  { label: 'XLB', chg: '+0.5', o: 0.54 },
+  { label: 'XLRE', chg: '−0.2', o: 0.34 },
 ];
 
-const STORIES = [0, 1, 2, 3, 4];
+const MOVERS = [
+  { label: 'NVDA', chg: '+3.18%', w: 112 },
+  { label: 'BTC', chg: '+2.41%', w: 96 },
+  { label: 'SOL', chg: '+1.64%', w: 80 },
+  { label: 'MSFT', chg: '−1.12%', w: 52 },
+  { label: 'ETH', chg: '−0.82%', w: 40 },
+];
+
+const EARNINGS = [
+  { tkr: 'NVDA', when: 'Wed AMC', exp: '0.88' },
+  { tkr: 'META', when: 'Thu BMO', exp: '6.42' },
+  { tkr: 'AMZN', when: 'Thu AMC', exp: '1.41' },
+];
+
+const HEADLINES = [
+  { src: 'FT', title: 'Fed holds as crude spikes on a supply scare', time: '4m' },
+  { src: 'BBG', title: 'BTC ETF inflows print a six-week high', time: '12m' },
+  { src: 'REU', title: 'ECB minutes flag a slower cut path', time: '28m' },
+  { src: 'WSJ', title: 'AI capex keeps lifting semiconductor names', time: '41m' },
+  { src: 'AP', title: 'Pacific swarm: M5.1 felt across Honshu', time: '1h' },
+  { src: 'CNBC', title: 'Payrolls beat; yields snap back above 4.3%', time: '2h' },
+];
+
+const QUAKE_EVENTS = [
+  { mag: '5.1', region: 'Honshu, JP', ago: '12m', depth: '18 km' },
+  { mag: '4.6', region: 'Mindanao', ago: '28m', depth: '42 km' },
+  { mag: '4.2', region: 'Chile coast', ago: '41m', depth: '10 km' },
+];
+
+const KEYWORDS = [
+  { label: 'markets', n: 48 },
+  { label: 'energy', n: 31 },
+  { label: 'policy', n: 22 },
+  { label: 'AI', n: 19 },
+  { label: 'rates', n: 14 },
+  { label: 'oil', n: 11 },
+];
+
+const DOCK = [
+  { icon: 'chat', tip: 'copilot' },
+  { icon: 'users', tip: 'community' },
+  { icon: 'bell', tip: 'notices' },
+  { icon: 'mail', tip: 'messages' },
+];
+
+const TOOLS = [
+  { icon: 'sparkles', label: 'add' },
+  { icon: 'grid', label: 'layout' },
+  { icon: 'history', label: 'undo' },
+  { icon: 'lock', label: 'lock' },
+  { icon: 'sync', label: 'sync' },
+];
 ---
 
 <div class="act-scene w-scene" data-playground-art aria-hidden="true">
@@ -247,54 +311,79 @@ const STORIES = [0, 1, 2, 3, 4];
         aria-hidden="true"
       >
         <defs>
-          <pattern id="w-dots" width="14" height="14" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.7" fill="var(--w-dot)"></circle>
+          <pattern id="w-dots" width="10" height="10" patternUnits="userSpaceOnUse">
+            <circle cx="0.6" cy="0.6" r="0.45" fill="var(--w-dot)"></circle>
+          </pattern>
+          <pattern id="w-grid" width="16" height="16" patternUnits="userSpaceOnUse">
+            <path d="M16 0H0V16" fill="none" stroke="var(--w-line)" stroke-width="0.4"></path>
           </pattern>
           <clipPath id="w-frame-clip">
-            <rect x="16" y="16" width="608" height="368" rx="18"></rect>
+            <rect x="16" y="16" width="608" height="368" rx="8"></rect>
           </clipPath>
           <clipPath id="w-type-clip">
             <rect class="w-type-mask" x="180" y="80" width="400" height="36"></rect>
           </clipPath>
           <clipPath id="w-aq-clip">
-            <rect x="136" y="308" width="184" height="52" rx="4"></rect>
+            <rect x="136" y="310" width="184" height="46" rx="2"></rect>
+          </clipPath>
+          <clipPath id="w-chart-clip">
+            <rect x="136" y="136" width="248" height="118" rx="2"></rect>
           </clipPath>
           <clipPath id="w-stage-clip">
-            <rect x="120" y="64" width="492" height="312" rx="8"></rect>
+            <rect x="120" y="64" width="492" height="312" rx="4"></rect>
           </clipPath>
           <linearGradient id="w-glow" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.22"></stop>
-            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.08"></stop>
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.14"></stop>
+            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.04"></stop>
+          </linearGradient>
+          <linearGradient id="w-spark-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.28"></stop>
+            <stop offset="100%" stop-color="var(--color-brand-400)" stop-opacity="0"></stop>
           </linearGradient>
           <filter id="w-soft" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+            <feGaussianBlur stdDeviation="6"></feGaussianBlur>
           </filter>
         </defs>
 
         <g clip-path="url(#w-frame-clip)">
-          <rect x="16" y="16" width="608" height="368" rx="18" fill="var(--w-panel)"></rect>
-          <rect x="16" y="16" width="608" height="368" rx="18" fill="url(#w-dots)" opacity="0.55"></rect>
+          <rect x="16" y="16" width="608" height="368" rx="8" fill="var(--w-panel)"></rect>
+          <rect x="16" y="16" width="608" height="368" rx="8" fill="url(#w-dots)" opacity="0.4"></rect>
           <rect x="16" y="16" width="608" height="40" fill="var(--w-panel-2)"></rect>
+          <rect x="16" y="56" width="96" height="16" fill="var(--w-panel-2)"></rect>
           <rect x="16" y="56" width="96" height="328" fill="var(--w-rail-bg)"></rect>
+          <rect x="112" y="56" width="512" height="16" fill="var(--w-panel)"></rect>
+          <line x1="112" y1="72" x2="624" y2="72" stroke="var(--w-line)" stroke-width="0.6"></line>
+          {
+            TOOLS.map((tool, i) => (
+              <g transform={`translate(${120 + i * 42} 58)`} opacity="0.72">
+                <rect width="38" height="12" rx="2" fill="var(--w-cell)"></rect>
+                <g transform="translate(2.5 1.5) scale(0.38)" stroke="var(--w-text-2)" stroke-width="1.8" fill="none">
+                  <path d={ICON_PATHS[tool.icon] ?? ''}></path>
+                </g>
+                <text x="14" y="9" class="w-micro" fill="var(--w-text-4)">{tool.label}</text>
+              </g>
+            ))
+          }
+          <text x="560" y="67" class="w-micro" fill="var(--w-text-4)">toolbar</text>
 
           <rect
             class="w-mosaic"
             x="120"
-            y="64"
+            y="74"
             width="492"
-            height="312"
-            rx="12"
+            height="302"
+            rx="4"
             stroke="var(--color-brand-400)"
-            stroke-dasharray="5 4"
+            stroke-dasharray="3 3"
           ></rect>
-          <text class="w-mosaic-label" x="126" y="71" fill="var(--w-accent)">MOSAIC</text>
+          <text class="w-mosaic-label" x="126" y="80" fill="var(--w-accent)">MOSAIC</text>
 
           <!-- Prompt — types on the shared loop, not on scroll. -->
           <g class="w-prompt-g">
             <ellipse class="w-glow" cx="360" cy="100" rx="180" ry="46" fill="url(#w-glow)" filter="url(#w-soft)"></ellipse>
-            <rect x="128" y="70" width="476" height="56" rx="14" class="w-card"></rect>
-            <rect x="140" y="82" width="32" height="32" rx="8" fill="var(--w-icon-bg)"></rect>
-            <g class="w-spark" transform="translate(146 88) scale(0.85)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
+            <rect x="128" y="76" width="476" height="48" rx="6" class="w-card"></rect>
+            <rect x="140" y="86" width="28" height="28" rx="4" fill="var(--w-icon-bg)"></rect>
+            <g class="w-spark" transform="translate(144 90) scale(0.83)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
               <path d={ICON_PATHS.sparkles}></path>
             </g>
             <g clip-path="url(#w-type-clip)">
@@ -329,113 +418,122 @@ const STORIES = [0, 1, 2, 3, 4];
           <g class="w-board w-board-home" style={`--i:0`}>
           <g class="w-under-prompt">
             <g class="w-widget-static">
-              <rect x="128" y="72" width="148" height="56" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="142" cy="88" r="2.5" fill="var(--color-brand-400)"></circle>
-              <text x="152" y="92" class="w-card-title" fill="var(--w-text)">Now</text>
-              <text class="w-kpi" x="200" y="92" fill="var(--w-accent)">09:24</text>
-              <text x="140" y="112" class="w-note" fill="var(--w-text-4)">Mon · clear</text>
+              <rect x="128" y="76" width="148" height="48" rx="5" class="w-card"></rect>
+              <text x="136" y="90" class="w-micro" fill="var(--w-text-4)">LOCAL · MON</text>
+              <text class="w-kpi" x="136" y="106" fill="var(--w-text)">09:24:18</text>
+              <text x="200" y="106" class="w-note" fill="var(--w-text-4)">UTC+2</text>
+              <circle class="w-live" cx="264" cy="88" r="1.6" fill="var(--color-brand-400)"></circle>
             </g>
             <g class="w-widget-static">
-              <rect x="284" y="72" width="148" height="56" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="298" cy="88" r="2.5" fill="var(--color-accent-400)"></circle>
-              <text x="308" y="92" class="w-card-title" fill="var(--w-text)">Outside</text>
-              <text class="w-kpi" x="372" y="92" fill="var(--w-accent)">18°</text>
-              <rect x="296" y="104" width="72" height="6" rx="3" fill="var(--color-sky-400)" opacity="0.45"></rect>
-              <rect x="296" y="114" width="48" height="6" rx="3" fill="var(--color-brand-400)" opacity="0.4"></rect>
+              <rect x="284" y="76" width="148" height="48" rx="5" class="w-card"></rect>
+              <text x="292" y="90" class="w-micro" fill="var(--w-text-4)">OUTSIDE</text>
+              <text class="w-kpi" x="292" y="106" fill="var(--w-text)">18.4°</text>
+              <text x="336" y="106" class="w-note" fill="var(--w-text-4)">clear · 41%</text>
+              <rect x="400" y="96" width="22" height="16" rx="2" fill="var(--color-sky-400)" opacity="0.35"></rect>
+              <rect x="404" y="99" width="14" height="10" rx="1" fill="var(--color-sky-400)" opacity="0.7"></rect>
             </g>
             <g class="w-widget-static">
-              <rect x="440" y="72" width="164" height="56" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="454" cy="88" r="2.5" fill="var(--color-sky-400)"></circle>
-              <text x="464" y="92" class="w-card-title" fill="var(--w-text)">Streak</text>
-              <text class="w-kpi" x="548" y="92" fill="var(--w-accent)">12d</text>
-              <rect class="w-mover" style="--i:0" x="452" y="108" width="136" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.55"></rect>
+              <rect x="440" y="76" width="164" height="48" rx="5" class="w-card"></rect>
+              <text x="448" y="90" class="w-micro" fill="var(--w-text-4)">STREAK</text>
+              <text class="w-kpi" x="448" y="106" fill="var(--w-text)">12 days</text>
+              <rect class="w-mover" style="--i:0" x="508" y="96" width="84" height="6" rx="1" fill="var(--color-brand-400)" opacity="0.7"></rect>
+              <text x="508" y="114" class="w-micro" fill="var(--w-text-4)">goal 21</text>
             </g>
           </g>
 
           <g class="w-widget" style="--i:0">
-            <rect x="128" y="136" width="288" height="140" rx="14" class="w-card"></rect>
-            <circle class="w-live" cx="144" cy="154" r="3" fill="var(--color-brand-400)"></circle>
-            <text x="154" y="158" class="w-card-title" fill="var(--w-text)">Moodboard</text>
-            <rect x="360" y="148" width="40" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
+            <rect x="128" y="132" width="288" height="144" rx="5" class="w-card"></rect>
+            <text x="136" y="146" class="w-card-title" fill="var(--w-text)">Moodboard</text>
+            <text x="196" y="146" class="w-micro" fill="var(--w-text-4)">4 layers · v3</text>
+            <rect x="352" y="138" width="52" height="10" rx="2" fill="var(--color-brand-400)" opacity="0.16"></rect>
+            <text x="360" y="146" class="w-micro" fill="var(--w-accent)">saved</text>
+            <line x1="136" y1="152" x2="404" y2="152" stroke="var(--w-line)" stroke-width="0.6"></line>
             {
               MOOD.map((tile, i) => (
-                <rect
-                  class="w-mood-tile"
-                  style={`--i:${i}`}
-                  x={tile.x}
-                  y={tile.y}
-                  width={tile.w}
-                  height={tile.h}
-                  rx="8"
-                  fill={tile.fill}
-                />
+                <g class="w-mood-tile" style={`--i:${i}`}>
+                  <rect x={tile.x} y={tile.y} width={tile.w} height={tile.h} rx="3" fill={tile.fill}></rect>
+                  <rect
+                    x={tile.x + 4}
+                    y={tile.y + 4}
+                    width={tile.w - 8}
+                    height={Math.max(8, tile.h * 0.38)}
+                    rx="1.5"
+                    fill="var(--w-panel)"
+                    opacity="0.28"
+                  ></rect>
+                  <text x={tile.x + 6} y={tile.y + tile.h - 6} class="w-micro" fill="var(--w-text)">
+                    {tile.label}
+                  </text>
+                  <rect x={tile.x - 1.5} y={tile.y - 1.5} width="3" height="3" fill="var(--w-text-4)"></rect>
+                  <rect x={tile.x + tile.w - 1.5} y={tile.y + tile.h - 1.5} width="3" height="3" fill="var(--w-text-4)"></rect>
+                </g>
               ))
             }
-            <rect class="w-mood-pick" x="140" y="160" width="156" height="72" rx="10"></rect>
+            <rect class="w-mood-pick" x="140" y="158" width="156" height="68" rx="3"></rect>
             {
               SWATCHES.map((s, i) => (
                 <rect
                   class="w-swatch"
                   style={`--i:${i}`}
                   x={s.x}
-                  y="260"
-                  width="16"
-                  height="8"
-                  rx="2"
+                  y="252"
+                  width="28"
+                  height="10"
+                  rx="1.5"
                   fill={s.fill}
                 />
               ))
             }
-            <text x="236" y="267" class="w-note" fill="var(--w-text-4)">calm · clear</text>
+            <text x="360" y="260" class="w-micro" fill="var(--w-text-4)">palette</text>
           </g>
 
           <g class="w-widget" style="--i:1">
-            <rect x="424" y="136" width="180" height="140" rx="14" class="w-card"></rect>
-            <circle class="w-live" cx="440" cy="154" r="3" fill="var(--color-brand-400)"></circle>
-            <text x="450" y="158" class="w-card-title" fill="var(--w-text)">Habits</text>
+            <rect x="424" y="132" width="180" height="144" rx="5" class="w-card"></rect>
+            <text x="432" y="146" class="w-card-title" fill="var(--w-text)">Habits</text>
             <g class="w-streak">
-              <text class="w-streak-n" style="--i:0" x="560" y="158" fill="var(--w-accent)">3/8</text>
-              <text class="w-streak-n" style="--i:1" x="560" y="158" fill="var(--w-accent)">5/8</text>
-              <text class="w-streak-n" style="--i:2" x="560" y="158" fill="var(--w-accent)">6/8</text>
+              <text class="w-streak-n" style="--i:0" x="560" y="146" fill="var(--w-accent)">3/8</text>
+              <text class="w-streak-n" style="--i:1" x="560" y="146" fill="var(--w-accent)">5/8</text>
+              <text class="w-streak-n" style="--i:2" x="560" y="146" fill="var(--w-accent)">6/8</text>
             </g>
+            <line x1="432" y1="152" x2="596" y2="152" stroke="var(--w-line)" stroke-width="0.6"></line>
+            {
+              HEAT_DAYS.map((d, i) => (
+                <text x={436 + i * 22} y="166" class="w-micro" fill="var(--w-text-4)">{d}</text>
+              ))
+            }
             {
               CELLS.map((v, i) => (
                 <rect
                   class="w-heat"
-                  style={`--i:${i};--heat:${0.12 + v * 0.26}`}
-                  x={436 + (i % 6) * 26}
-                  y={172 + Math.floor(i / 6) * 18}
-                  width="22"
-                  height="14"
-                  rx="2.5"
+                  style={`--i:${i};--heat:${0.1 + v * 0.28}`}
+                  x={436 + (i % 7) * 22}
+                  y={172 + Math.floor(i / 7) * 16}
+                  width="18"
+                  height="12"
+                  rx="1.5"
                   fill="var(--color-brand-400)"
                 />
               ))
             }
-            <rect class="w-heat-today" x={436 + 5 * 26} y={172 + 4 * 18} width="22" height="14" rx="2.5"></rect>
+            <rect class="w-heat-today" x={436 + 6 * 22} y={172 + 4 * 16} width="18" height="12" rx="1.5"></rect>
+            <text x="432" y="268" class="w-micro" fill="var(--w-text-4)">Aug 2026 · 21-day best</text>
           </g>
 
           <g class="w-widget" style="--i:2">
-            <rect x="424" y="284" width="180" height="84" rx="14" class="w-card"></rect>
-            <circle class="w-live" cx="440" cy="300" r="3" fill="var(--color-sky-400)"></circle>
-            <text x="450" y="304" class="w-card-title" fill="var(--w-text)">Memory</text>
-            <text class="w-pairs" x="548" y="304" fill="var(--w-accent)">2 pairs</text>
+            <rect x="424" y="284" width="180" height="84" rx="5" class="w-card"></rect>
+            <text x="432" y="298" class="w-card-title" fill="var(--w-text)">Memory</text>
+            <text class="w-pairs" x="500" y="298" fill="var(--w-text-4)">0:42</text>
+            <text class="w-pairs" x="548" y="298" fill="var(--w-accent)">2 pairs</text>
+            <line x1="432" y1="304" x2="596" y2="304" stroke="var(--w-line)" stroke-width="0.6"></line>
             {
               MEMORY.map((card, i) => {
-                const x = 436 + card.col * 40;
-                const y = 316 + card.row * 22;
+                const x = 432 + card.col * 42;
+                const y = 312 + card.row * 24;
                 return (
                   <g class="w-mem" style={`--i:${i};--p:${card.pair}`} transform={`translate(${x} ${y})`}>
-                    <rect class="w-mem-back" x="0" y="0" width="36" height="18" rx="4" fill="var(--w-cell)"></rect>
-                    <rect
-                      class="w-mem-face"
-                      x="0"
-                      y="0"
-                      width="36"
-                      height="18"
-                      rx="4"
-                      fill={PAIR_FILL[card.pair]}
-                    ></rect>
+                    <rect class="w-mem-back" x="0" y="0" width="38" height="20" rx="2" fill="var(--w-cell)"></rect>
+                    <rect class="w-mem-face" x="0" y="0" width="38" height="20" rx="2" fill={PAIR_FILL[card.pair]}></rect>
+                    <text class="w-mem-face w-mem-mark" x="19" y="14" text-anchor="middle" fill="var(--w-panel)">{card.pair + 1}</text>
                   </g>
                 );
               })
@@ -443,12 +541,14 @@ const STORIES = [0, 1, 2, 3, 4];
           </g>
 
           <g class="w-widget" style="--i:3">
-            <rect x="128" y="284" width="200" height="84" rx="14" class="w-card"></rect>
-            <circle class="w-live" cx="142" cy="300" r="3" fill="var(--color-accent-400)"></circle>
-            <text x="152" y="304" class="w-card-title" fill="var(--w-text)">Air quality</text>
-            <text class="w-kpi" x="268" y="304" fill="var(--w-accent)">AQI 42</text>
+            <rect x="128" y="284" width="200" height="84" rx="5" class="w-card"></rect>
+            <text x="136" y="298" class="w-card-title" fill="var(--w-text)">Air quality</text>
+            <text class="w-kpi" x="248" y="298" fill="var(--w-accent)">AQI 42</text>
+            <text x="286" y="298" class="w-micro" fill="var(--w-text-4)">good</text>
+            <line x1="136" y1="304" x2="316" y2="304" stroke="var(--w-line)" stroke-width="0.6"></line>
             <g clip-path="url(#w-aq-clip)">
-              <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d={sparkArea} fill="url(#w-spark-fill)"></path>
+              <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
               {
                 SPARK.map((v, i) => (
                   <circle
@@ -456,29 +556,25 @@ const STORIES = [0, 1, 2, 3, 4];
                     style={`--i:${i}`}
                     cx={sparkX(i)}
                     cy={sparkY(v)}
-                    r="2.2"
+                    r="1.4"
                     fill="var(--color-brand-300)"
                   />
                 ))
               }
             </g>
+            <text x="136" y="362" class="w-micro" fill="var(--w-text-4)">PM2.5 9 · PM10 14 · O₃ 22</text>
           </g>
 
           <g class="w-widget" style="--i:4">
-            <rect x="336" y="284" width="80" height="84" rx="14" class="w-card"></rect>
-            <text x="348" y="304" class="w-card-title" fill="var(--w-text)">Notes</text>
+            <rect x="336" y="284" width="80" height="84" rx="5" class="w-card"></rect>
+            <text x="344" y="298" class="w-card-title" fill="var(--w-text)">Notes</text>
+            <line x1="344" y1="304" x2="408" y2="304" stroke="var(--w-line)" stroke-width="0.6"></line>
             {
               JOURNAL.map((row, i) => (
-                <rect
-                  class="w-mood-tile"
-                  style={`--i:${i}`}
-                  x="348"
-                  y={row.y}
-                  width="56"
-                  height={row.h}
-                  rx="3"
-                  fill={row.fill}
-                />
+                <g class="w-mood-tile" style={`--i:${i}`}>
+                  <text x="344" y={row.y + 6} class="w-micro" fill="var(--w-text-4)">{row.time}</text>
+                  <text x="368" y={row.y + 6} class="w-note" fill="var(--w-text)">{row.label}</text>
+                </g>
               ))
             }
           </g>
@@ -492,122 +588,149 @@ const STORIES = [0, 1, 2, 3, 4];
           </g>
           </g>
 
-          <!-- 1 · Trading desk -->
+            <!-- 1 · Trading desk -->
           <g class="w-board w-board-alt" style={`--i:1`}>
             {
               TICKERS.map((t, i) => (
                 <g class="w-widget w-widget-static" style={`--i:${i}`}>
-                  <rect x={t.x} y="72" width={i === 3 ? 116 : 112} height="40" rx="10" class="w-card"></rect>
-                  <text x={t.x + 10} y="88" class="w-card-title" fill="var(--w-text)">{t.label}</text>
-                  <text x={t.x + 10} y="104" class="w-note" fill="var(--w-text-4)">{t.px}</text>
+                  <rect x={t.x} y="76" width={i === 3 ? 116 : 112} height="34" rx="4" class="w-card"></rect>
+                  <text x={t.x + 8} y="88" class="w-micro" fill="var(--w-text-4)">{t.label}</text>
+                  <text x={t.x + 8} y="102" class="w-card-title" fill="var(--w-text)">{t.px}</text>
                   <text
-                    class="w-kpi"
-                    x={t.x + (i === 3 ? 70 : 68)}
-                    y="96"
+                    class="w-note"
+                    x={t.x + (i === 3 ? 72 : 68)}
+                    y="88"
                     fill={t.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
                   >
                     {t.delta}
                   </text>
+                  <text x={t.x + (i === 3 ? 72 : 68)} y="102" class="w-micro" fill="var(--w-text-4)">{t.vol}</text>
                 </g>
               ))
             }
             <g class="w-widget w-widget-static" style="--i:0">
-              <rect x="128" y="120" width="304" height="172" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="144" cy="138" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="154" y="142" class="w-card-title" fill="var(--w-text)">BTC-USD</text>
-              <text class="w-kpi" x="348" y="142" fill="var(--w-accent)">EMA 20/50</text>
+              <rect x="128" y="116" width="304" height="180" rx="5" class="w-card"></rect>
+              <text x="136" y="130" class="w-card-title" fill="var(--w-text)">BTCUSDT</text>
+              <text x="186" y="130" class="w-micro" fill="var(--w-text-4)">1H · BINANCE</text>
+              <text class="w-kpi" x="268" y="130" fill="var(--color-brand-400)">67,241.2</text>
+              <text x="336" y="130" class="w-micro" fill="var(--w-accent)">EMA 20/50</text>
+              <line x1="136" y1="136" x2="420" y2="136" stroke="var(--w-line)" stroke-width="0.6"></line>
+              <rect x="136" y="138" width="248" height="116" fill="url(#w-grid)" opacity="0.55"></rect>
               {
-                CANDLES.map((c, i) => (
-                  <g class="w-candle" style={`--i:${i}`}>
-                    <path
-                      d={`M${c.x} ${c.top - 5}V${c.top + c.h + 5}`}
-                      stroke="var(--w-text-4)"
-                      stroke-width="1.2"
-                    />
-                    <rect
-                      x={c.x - 5}
-                      y={c.top}
-                      width="10"
-                      height={c.h}
-                      rx="2"
-                      fill={c.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
-                      opacity="0.85"
-                    />
-                  </g>
+                AXIS_PX.map((px, i) => (
+                  <text x="388" y={152 + i * 28} class="w-micro" fill="var(--w-text-4)">{px}</text>
                 ))
               }
-              <path class="w-sparkline w-ema" d={emaPath} stroke="var(--color-sky-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              <g clip-path="url(#w-chart-clip)">
+                {
+                  CANDLES.map((c, i) => (
+                    <g class="w-candle" style={`--i:${i}`}>
+                      <path
+                        d={`M${c.x} ${c.top - 4}V${c.top + c.h + 4}`}
+                        stroke="var(--w-text-4)"
+                        stroke-width="0.8"
+                      />
+                      <rect
+                        x={c.x - 3.4}
+                        y={c.top}
+                        width="6.8"
+                        height={c.h}
+                        rx="0.6"
+                        fill={c.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                        opacity="0.92"
+                      />
+                    </g>
+                  ))
+                }
+                <path class="w-sparkline w-ema" d={emaPath} stroke="var(--color-sky-400)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path class="w-sparkline w-ema" d={emaSlow} stroke="var(--color-accent-400)" stroke-width="0.9" stroke-linecap="round" opacity="0.7"></path>
+              </g>
+              {
+                CANDLES.map((c, i) => (
+                  <rect
+                    class="w-mag"
+                    style={`--i:${i}`}
+                    x={c.x - 3.2}
+                    y={258 - (c.vol / VOL_MAX) * 18}
+                    width="6.4"
+                    height={(c.vol / VOL_MAX) * 18}
+                    rx="0.4"
+                    fill={c.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                    opacity="0.35"
+                  />
+                ))
+              }
+              <text x="136" y="288" class="w-micro" fill="var(--w-text-4)">08:00</text>
+              <text x="248" y="288" class="w-micro" fill="var(--w-text-4)">12:00</text>
+              <text x="360" y="288" class="w-micro" fill="var(--w-text-4)">16:00</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:1">
-              <rect x="440" y="120" width="164" height="172" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="138" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="466" y="142" class="w-card-title" fill="var(--w-text)">Order book</text>
+              <rect x="440" y="116" width="164" height="180" rx="5" class="w-card"></rect>
+              <text x="448" y="130" class="w-card-title" fill="var(--w-text)">Order book</text>
+              <text x="528" y="130" class="w-micro" fill="var(--w-text-4)">spr 1.8</text>
+              <line x1="448" y1="136" x2="596" y2="136" stroke="var(--w-line)" stroke-width="0.6"></line>
+              <text x="448" y="146" class="w-micro" fill="var(--w-text-4)">BID</text>
+              <text x="500" y="146" class="w-micro" fill="var(--w-text-4)">PX</text>
+              <text x="560" y="146" class="w-micro" fill="var(--w-text-4)">ASK</text>
               {
                 BOOK.map((row, i) => (
                   <g class="w-book-row" style={`--i:${i}`}>
                     <rect
-                      x={522 - row.bid * 0.7}
-                      y={156 + i * 16}
-                      width={row.bid * 0.7}
+                      x={516 - row.bid * 38}
+                      y={150 + i * 14}
+                      width={row.bid * 38}
                       height="12"
-                      rx="2"
+                      rx="1"
                       fill="var(--color-brand-400)"
-                      opacity="0.55"
+                      opacity="0.22"
                     />
                     <rect
-                      x="526"
-                      y={156 + i * 16}
-                      width={row.ask * 0.7}
+                      x="528"
+                      y={150 + i * 14}
+                      width={row.ask * 38}
                       height="12"
-                      rx="2"
+                      rx="1"
                       fill="var(--color-accent-400)"
-                      opacity="0.5"
+                      opacity="0.2"
                     />
+                    <text x="448" y={159 + i * 14} class="w-micro" fill="var(--color-brand-400)">{row.bid.toFixed(2)}</text>
+                    <text x="516" y={159 + i * 14} class="w-micro" text-anchor="middle" fill="var(--w-text)">{row.px}</text>
+                    <text x="596" y={159 + i * 14} class="w-micro" text-anchor="end" fill="var(--color-accent-400)">{row.ask.toFixed(2)}</text>
                   </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:2">
-              <rect x="128" y="300" width="152" height="68" rx="12" class="w-card"></rect>
-              <text x="140" y="318" class="w-card-title" fill="var(--w-text)">Positions</text>
+              <rect x="128" y="304" width="152" height="64" rx="5" class="w-card"></rect>
+              <text x="136" y="316" class="w-card-title" fill="var(--w-text)">Positions</text>
+              <text x="200" y="316" class="w-micro" fill="var(--w-text-4)">SZ</text>
+              <text x="244" y="316" class="w-micro" fill="var(--w-text-4)">PNL</text>
               {
                 POSITIONS.map((p, i) => (
                   <g class="w-book-row" style={`--i:${i}`}>
-                    <text x="140" y={334 + i * 10} class="w-note" fill="var(--w-text-4)">{p.label}</text>
-                    <rect
-                      x="168"
-                      y={326 + i * 10}
-                      width={p.w}
-                      height="6"
-                      rx="2"
-                      fill={p.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
-                      opacity="0.55"
-                    />
+                    <text x="136" y={330 + i * 12} class="w-micro" fill="var(--w-text)">{p.label}</text>
+                    <text x="200" y={330 + i * 12} class="w-micro" fill="var(--w-text-4)">{p.sz}</text>
+                    <text x="244" y={330 + i * 12} class="w-micro" fill={p.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>{p.pnl}</text>
                   </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:3">
-              <rect x="288" y="300" width="152" height="68" rx="12" class="w-card"></rect>
-              <text x="300" y="318" class="w-card-title" fill="var(--w-text)">Funding</text>
-              <text class="w-kpi w-kpi-pulse" x="300" y="340" fill="var(--w-accent)">+0.012%</text>
-              <text x="300" y="356" class="w-note" fill="var(--w-text-4)">1h · open interest</text>
+              <rect x="288" y="304" width="152" height="64" rx="5" class="w-card"></rect>
+              <text x="296" y="316" class="w-card-title" fill="var(--w-text)">Funding</text>
+              <text class="w-kpi w-kpi-pulse" x="296" y="334" fill="var(--w-accent)">+0.0124%</text>
+              <text x="296" y="348" class="w-micro" fill="var(--w-text-4)">8h · next 01:12:44</text>
+              <text x="296" y="360" class="w-micro" fill="var(--w-text-4)">OI 24.18B · mark 67,238</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:4">
-              <rect x="448" y="300" width="156" height="68" rx="12" class="w-card"></rect>
-              <text x="460" y="318" class="w-card-title" fill="var(--w-text)">Tape</text>
+              <rect x="448" y="304" width="156" height="64" rx="5" class="w-card"></rect>
+              <text x="456" y="316" class="w-card-title" fill="var(--w-text)">Tape</text>
               {
                 TAPE.map((row, i) => (
                   <g class="w-story" style={`--i:${i}`}>
-                    <rect
-                      x="460"
-                      y={326 + i * 9}
-                      width={row.w}
-                      height="6"
-                      rx="2"
-                      fill={row.side === 'buy' ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
-                      opacity="0.45"
-                    />
+                    <text x="456" y={328 + i * 8} class="w-micro" fill={row.side === 'B' ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>{row.side}</text>
+                    <text x="470" y={328 + i * 8} class="w-micro" fill="var(--w-text)">{row.px}</text>
+                    <text x="590" y={328 + i * 8} class="w-micro" text-anchor="end" fill="var(--w-text-4)">{row.sz}</text>
                   </g>
                 ))
               }
@@ -617,274 +740,297 @@ const STORIES = [0, 1, 2, 3, 4];
           <!-- 2 · Quake map -->
           <g class="w-board w-board-alt" style={`--i:2`}>
             <g class="w-widget w-widget-static" style="--i:0">
-              <rect x="128" y="72" width="304" height="212" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="144" cy="90" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="154" y="94" class="w-card-title" fill="var(--w-text)">Quake map</text>
-              <text class="w-kpi" x="360" y="94" fill="var(--w-accent)">M4+</text>
+              <rect x="128" y="76" width="304" height="208" rx="5" class="w-card"></rect>
+              <text x="136" y="90" class="w-card-title" fill="var(--w-text)">Quake map</text>
+              <text x="196" y="90" class="w-micro" fill="var(--w-text-4)">USGS · 24h</text>
+              <text class="w-kpi" x="360" y="90" fill="var(--w-accent)">M4+</text>
+              <line x1="136" y1="96" x2="420" y2="96" stroke="var(--w-line)" stroke-width="0.6"></line>
+              <rect x="136" y="100" width="288" height="176" fill="url(#w-grid)" opacity="0.35"></rect>
               {
                 MAP_DOTS.map((d) => (
-                  <circle cx={d.x} cy={d.y} r="2.2" fill="var(--w-cell)" />
+                  <circle cx={d.x} cy={d.y} r="1.8" fill="var(--w-cell)" />
                 ))
               }
               {
                 QUAKES.map((q, i) => (
                   <g class="w-quake" style={`--i:${i}`}>
-                    <circle class="w-quake-ring" cx={q.x} cy={q.y} r={q.r * 2.4} fill="none" stroke="var(--color-brand-400)" stroke-width="1.2" />
-                    <circle cx={q.x} cy={q.y} r={q.r * 0.45} fill="var(--color-brand-300)" />
+                    <circle class="w-quake-ring" cx={q.x} cy={q.y} r={q.r * 2.4} fill="none" stroke="var(--color-brand-400)" stroke-width="1" />
+                    <circle cx={q.x} cy={q.y} r={q.r * 0.4} fill="var(--color-brand-300)" />
                   </g>
                 ))
               }
+              <text x="148" y="272" class="w-micro" fill="var(--w-text-4)">PAC</text>
+              <text x="300" y="118" class="w-micro" fill="var(--w-text-4)">EUR</text>
+              <text x="248" y="200" class="w-micro" fill="var(--w-text-4)">AFR</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:1">
-              <rect x="440" y="72" width="164" height="100" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="90" r="3" fill="var(--color-accent-400)"></circle>
-              <text x="466" y="94" class="w-card-title" fill="var(--w-text)">Magnitude</text>
+              <rect x="440" y="76" width="164" height="96" rx="5" class="w-card"></rect>
+              <text x="448" y="90" class="w-card-title" fill="var(--w-text)">Magnitude</text>
+              <text x="548" y="90" class="w-micro" fill="var(--w-text-4)">n=14</text>
+              <line x1="448" y1="96" x2="596" y2="96" stroke="var(--w-line)" stroke-width="0.6"></line>
               {
                 MAG.map((h, i) => (
                   <rect
                     class="w-mag"
                     style={`--i:${i}`}
-                    x={452 + i * 10}
-                    y={160 - h}
+                    x={450 + i * 10}
+                    y={164 - h}
                     width="7"
                     height={h}
-                    rx="1.5"
+                    rx="0.6"
                     fill="var(--color-brand-400)"
-                    opacity="0.75"
+                    opacity="0.8"
                   />
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:2">
-              <rect x="440" y="180" width="164" height="104" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="198" r="3" fill="var(--color-sky-400)"></circle>
-              <text x="466" y="202" class="w-card-title" fill="var(--w-text)">Depth km</text>
+              <rect x="440" y="180" width="164" height="104" rx="5" class="w-card"></rect>
+              <text x="448" y="194" class="w-card-title" fill="var(--w-text)">Depth km</text>
+              <line x1="448" y1="200" x2="596" y2="200" stroke="var(--w-line)" stroke-width="0.6"></line>
               {
                 DEPTH.map((w, i) => (
-                  <rect
-                    class="w-mover"
-                    style={`--i:${i}`}
-                    x="452"
-                    y={214 + i * 8}
-                    width={w * 2.2}
-                    height="5"
-                    rx="2"
-                    fill="var(--color-sky-400)"
-                    opacity="0.7"
-                  />
+                  <g class="w-mover" style={`--i:${i}`}>
+                    <rect
+                      x="448"
+                      y={206 + i * 9}
+                      width={w * 2.4}
+                      height="6"
+                      rx="1"
+                      fill="var(--color-sky-400)"
+                      opacity="0.55"
+                    />
+                    <text x="452" y={211 + i * 9} class="w-micro" fill="var(--w-text)">{w}</text>
+                  </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:3">
-              <rect x="128" y="292" width="188" height="76" rx="12" class="w-card"></rect>
-              <text x="140" y="310" class="w-card-title" fill="var(--w-text)">Events</text>
-              <rect class="w-chip" x="140" y="322" width="56" height="14" rx="4" fill="var(--color-brand-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="204" y="322" width="52" height="14" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="140" y="344" width="80" height="14" rx="4" fill="var(--color-sky-400)" opacity="0.3"></rect>
-              <text x="146" y="332" class="w-note" fill="var(--w-text)">M4.6</text>
-              <text x="210" y="332" class="w-note" fill="var(--w-text)">M5.1</text>
-              <text x="146" y="354" class="w-note" fill="var(--w-text)">M4.2 · 12m</text>
+              <rect x="128" y="292" width="188" height="76" rx="5" class="w-card"></rect>
+              <text x="136" y="306" class="w-card-title" fill="var(--w-text)">Events</text>
+              <text x="176" y="306" class="w-micro" fill="var(--w-text-4)">MAG</text>
+              <text x="248" y="306" class="w-micro" fill="var(--w-text-4)">REGION</text>
+              {
+                QUAKE_EVENTS.map((e, i) => (
+                  <g class="w-story" style={`--i:${i}`}>
+                    <text x="136" y={322 + i * 14} class="w-micro" fill="var(--w-accent)">M{e.mag}</text>
+                    <text x="176" y={322 + i * 14} class="w-micro" fill="var(--w-text)">{e.region}</text>
+                    <text x="300" y={322 + i * 14} class="w-micro" fill="var(--w-text-4)">{e.ago}</text>
+                  </g>
+                ))
+              }
             </g>
             <g class="w-widget w-widget-static" style="--i:4">
-              <rect x="324" y="292" width="140" height="76" rx="12" class="w-card"></rect>
-              <text x="336" y="310" class="w-card-title" fill="var(--w-text)">Felt</text>
-              <text class="w-kpi" x="336" y="334" fill="var(--w-accent)">12.4k</text>
-              <text x="336" y="352" class="w-note" fill="var(--w-text-4)">reports · 40m</text>
+              <rect x="324" y="292" width="140" height="76" rx="5" class="w-card"></rect>
+              <text x="332" y="306" class="w-card-title" fill="var(--w-text)">Felt reports</text>
+              <text class="w-kpi" x="332" y="328" fill="var(--w-accent)">12,418</text>
+              <text x="332" y="344" class="w-micro" fill="var(--w-text-4)">40m window · 18 countries</text>
+              <text x="332" y="358" class="w-micro" fill="var(--w-text-4)">peak MMI V · Honshu</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:5">
-              <rect x="472" y="292" width="132" height="76" rx="12" class="w-card"></rect>
-              <text x="484" y="310" class="w-card-title" fill="var(--w-text)">Alerts</text>
-              <rect class="w-chip" x="484" y="322" width="100" height="14" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="484" y="344" width="84" height="14" rx="4" fill="var(--color-brand-400)" opacity="0.3"></rect>
-              <text x="490" y="332" class="w-note" fill="var(--w-text)">tsunami watch</text>
-              <text x="490" y="354" class="w-note" fill="var(--w-text)">aftershock</text>
+              <rect x="472" y="292" width="132" height="76" rx="5" class="w-card"></rect>
+              <text x="480" y="306" class="w-card-title" fill="var(--w-text)">Alerts</text>
+              <rect class="w-chip" x="480" y="316" width="116" height="16" rx="2" fill="var(--color-accent-400)" opacity="0.18"></rect>
+              <rect class="w-chip" x="480" y="336" width="100" height="16" rx="2" fill="var(--color-brand-400)" opacity="0.16"></rect>
+              <text x="486" y="327" class="w-micro" fill="var(--w-text)">tsunami watch</text>
+              <text x="486" y="347" class="w-micro" fill="var(--w-text)">aftershock seq</text>
+              <text x="480" y="360" class="w-micro" fill="var(--w-text-4)">PTWC · JMA</text>
             </g>
           </g>
 
           <!-- 3 · Markets watchlist -->
           <g class="w-board w-board-alt" style={`--i:3`}>
             <g class="w-widget w-widget-static" style="--i:0">
-              <rect x="128" y="72" width="476" height="148" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="144" cy="90" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="154" y="94" class="w-card-title" fill="var(--w-text)">Watchlist</text>
-              <text class="w-kpi" x="520" y="94" fill="var(--w-accent)">24 tickers</text>
+              <rect x="128" y="76" width="476" height="144" rx="5" class="w-card"></rect>
+              <text x="136" y="90" class="w-card-title" fill="var(--w-text)">Watchlist</text>
+              <text x="192" y="90" class="w-micro" fill="var(--w-text-4)">LIVE</text>
+              <text class="w-kpi" x="520" y="90" fill="var(--w-accent)">24</text>
+              <text x="544" y="90" class="w-micro" fill="var(--w-text-4)">tickers</text>
+              <line x1="136" y1="96" x2="592" y2="96" stroke="var(--w-line)" stroke-width="0.6"></line>
+              <text x="136" y="108" class="w-micro" fill="var(--w-text-4)">SYM</text>
+              <text x="184" y="108" class="w-micro" fill="var(--w-text-4)">LAST</text>
+              <text x="248" y="108" class="w-micro" fill="var(--w-text-4)">24H</text>
+              <text x="360" y="108" class="w-micro" fill="var(--w-text-4)">TREND</text>
+              <text x="560" y="108" class="w-micro" fill="var(--w-text-4)">VOL</text>
               {
                 WATCH.map((row, i) => (
-                  <g class="w-watch" style={`--i:${i}`} transform={`translate(144 ${104 + i * 18})`}>
-                    <text class="w-note" y="12" fill="var(--w-text)">{row.label}</text>
+                  <g class="w-watch" style={`--i:${i}`} transform={`translate(136 ${114 + i * 12.5})`}>
+                    <text class="w-micro" y="9" fill="var(--w-text)">{row.label}</text>
+                    <text class="w-micro" x="48" y="9" fill="var(--w-text-2)">{row.last}</text>
+                    <text class="w-micro" x="112" y="9" fill={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>{row.chg}</text>
                     <path
                       class="w-mini-spark"
                       d={row.spark}
-                      transform="translate(56 0)"
+                      transform="translate(220 0)"
                       stroke={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
-                      stroke-width="1.5"
+                      stroke-width="1.1"
                       fill="none"
                       stroke-linecap="round"
                     />
-                    <text class="w-note" x="400" y="12" fill={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>
-                      {row.px}
-                    </text>
+                    <text class="w-micro" x="424" y="9" fill="var(--w-text-4)">{row.vol}</text>
                   </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:1">
-              <rect x="128" y="228" width="232" height="68" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="142" cy="244" r="3" fill="var(--color-accent-400)"></circle>
-              <text x="152" y="248" class="w-card-title" fill="var(--w-text)">Sectors</text>
+              <rect x="128" y="228" width="232" height="68" rx="5" class="w-card"></rect>
+              <text x="136" y="242" class="w-card-title" fill="var(--w-text)">Sectors</text>
+              <text x="184" y="242" class="w-micro" fill="var(--w-text-4)">SPDR</text>
               {
                 SECTORS.map((s, i) => (
                   <g>
                     <rect
                       class="w-heat"
                       style={`--i:${i};--heat:${s.o}`}
-                      x={140 + (i % 4) * 52}
-                      y={256 + Math.floor(i / 4) * 18}
-                      width="48"
-                      height="14"
-                      rx="3"
+                      x={136 + (i % 4) * 54}
+                      y={250 + Math.floor(i / 4) * 20}
+                      width="50"
+                      height="16"
+                      rx="2"
                       fill="var(--color-brand-400)"
                     />
-                    <text x={144 + (i % 4) * 52} y={266 + Math.floor(i / 4) * 18} class="w-note" fill="var(--w-text)">
-                      {s.label}
+                    <text x={140 + (i % 4) * 54} y={261 + Math.floor(i / 4) * 20} class="w-micro" fill="var(--w-text)">
+                      {s.label} {s.chg}
                     </text>
                   </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:2">
-              <rect x="368" y="228" width="236" height="68" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="382" cy="244" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="392" y="248" class="w-card-title" fill="var(--w-text)">Movers</text>
+              <rect x="368" y="228" width="236" height="68" rx="5" class="w-card"></rect>
+              <text x="376" y="242" class="w-card-title" fill="var(--w-text)">Movers</text>
               {
-                [88, 64, 104, 48, 76].map((w, i) => (
-                  <rect
-                    class="w-mover"
-                    style={`--i:${i}`}
-                    x="380"
-                    y={256 + i * 7}
-                    width={w}
-                    height="5"
-                    rx="2.5"
-                    fill="var(--color-brand-400)"
-                    opacity={0.4 + i * 0.1}
-                  />
+                MOVERS.map((m, i) => (
+                  <g class="w-mover" style={`--i:${i}`}>
+                    <text x="376" y={256 + i * 8} class="w-micro" fill="var(--w-text)">{m.label}</text>
+                    <rect
+                      x="408"
+                      y={250 + i * 8}
+                      width={m.w}
+                      height="5"
+                      rx="1"
+                      fill={m.chg.startsWith('+') ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                      opacity="0.45"
+                    />
+                    <text x="590" y={256 + i * 8} class="w-micro" text-anchor="end" fill={m.chg.startsWith('+') ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>{m.chg}</text>
+                  </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:3">
-              <rect x="128" y="304" width="232" height="64" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="142" cy="320" r="3" fill="var(--color-sky-400)"></circle>
-              <text x="152" y="324" class="w-card-title" fill="var(--w-text)">Earnings</text>
-              <text class="w-kpi" x="280" y="324" fill="var(--w-accent)">4 soon</text>
-              <rect class="w-chip" x="140" y="336" width="56" height="14" rx="4" fill="var(--color-brand-400)" opacity="0.3"></rect>
-              <rect class="w-chip" x="204" y="336" width="52" height="14" rx="4" fill="var(--color-accent-400)" opacity="0.3"></rect>
-              <text x="148" y="346" class="w-note" fill="var(--w-text)">NVDA</text>
-              <text x="212" y="346" class="w-note" fill="var(--w-text)">META</text>
+              <rect x="128" y="304" width="232" height="64" rx="5" class="w-card"></rect>
+              <text x="136" y="318" class="w-card-title" fill="var(--w-text)">Earnings</text>
+              <text class="w-kpi" x="280" y="318" fill="var(--w-accent)">3 soon</text>
+              {
+                EARNINGS.map((e, i) => (
+                  <g class="w-story" style={`--i:${i}`}>
+                    <text x="136" y={334 + i * 10} class="w-micro" fill="var(--w-text)">{e.tkr}</text>
+                    <text x="176" y={334 + i * 10} class="w-micro" fill="var(--w-text-4)">{e.when}</text>
+                    <text x="240" y={334 + i * 10} class="w-micro" fill="var(--w-accent)">EPS {e.exp}</text>
+                  </g>
+                ))
+              }
             </g>
             <g class="w-widget w-widget-static" style="--i:4">
-              <rect x="368" y="304" width="236" height="64" rx="12" class="w-card"></rect>
-              <circle class="w-live" cx="382" cy="320" r="3" fill="var(--color-accent-400)"></circle>
-              <text x="392" y="324" class="w-card-title" fill="var(--w-text)">Flows</text>
-              <rect class="w-mover" style="--i:0" x="380" y="336" width="120" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.55"></rect>
-              <rect class="w-mover" style="--i:1" x="380" y="350" width="72" height="8" rx="4" fill="var(--color-accent-400)" opacity="0.45"></rect>
-              <text x="508" y="344" class="w-note" fill="var(--color-brand-400)">in</text>
-              <text x="508" y="358" class="w-note" fill="var(--color-accent-400)">out</text>
+              <rect x="368" y="304" width="236" height="64" rx="5" class="w-card"></rect>
+              <text x="376" y="318" class="w-card-title" fill="var(--w-text)">ETF flows</text>
+              <text x="376" y="336" class="w-micro" fill="var(--w-text-4)">in  24h</text>
+              <rect class="w-mover" style="--i:0" x="420" y="328" width="128" height="7" rx="1" fill="var(--color-brand-400)" opacity="0.6"></rect>
+              <text x="554" y="336" class="w-micro" fill="var(--color-brand-400)">+$1.84B</text>
+              <text x="376" y="354" class="w-micro" fill="var(--w-text-4)">out 24h</text>
+              <rect class="w-mover" style="--i:1" x="420" y="346" width="72" height="7" rx="1" fill="var(--color-accent-400)" opacity="0.5"></rect>
+              <text x="554" y="354" class="w-micro" fill="var(--color-accent-400)">−$412M</text>
             </g>
           </g>
 
           <!-- 4 · News + sentiment -->
           <g class="w-board w-board-alt" style={`--i:4`}>
             <g class="w-widget w-widget-static" style="--i:0">
-              <rect x="128" y="72" width="304" height="200" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="144" cy="90" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="154" y="94" class="w-card-title" fill="var(--w-text)">Top stories</text>
+              <rect x="128" y="76" width="304" height="196" rx="5" class="w-card"></rect>
+              <text x="136" y="90" class="w-card-title" fill="var(--w-text)">Top stories</text>
+              <text x="204" y="90" class="w-micro" fill="var(--w-text-4)">WIRE · 06:12</text>
+              <line x1="136" y1="96" x2="420" y2="96" stroke="var(--w-line)" stroke-width="0.6"></line>
               {
-                STORIES.map((i) => (
+                HEADLINES.map((h, i) => (
                   <g class="w-story" style={`--i:${i}`}>
-                    <rect
-                      x="140"
-                      y={104 + i * 32}
-                      width="280"
-                      height="28"
-                      rx="7"
-                      fill="var(--w-cell)"
-                    />
-                    <rect
-                      x="150"
-                      y={112 + i * 32}
-                      width={150 - i * 16}
-                      height="5"
-                      rx="2.5"
-                      fill="var(--w-text-4)"
-                      opacity="0.55"
-                    />
-                    <rect
-                      x="150"
-                      y={122 + i * 32}
-                      width={90 - i * 8}
-                      height="4"
-                      rx="2"
-                      fill="var(--w-text-4)"
-                      opacity="0.3"
-                    />
+                    <rect x="136" y={102 + i * 26} width="28" height="20" rx="2" fill="var(--w-cell)"></rect>
+                    <text x="150" y={115 + i * 26} class="w-micro" text-anchor="middle" fill="var(--w-accent)">{h.src}</text>
+                    <text x="172" y={111 + i * 26} class="w-note" fill="var(--w-text)">{h.title}</text>
+                    <text x="172" y={122 + i * 26} class="w-micro" fill="var(--w-text-4)">{h.time} ago</text>
                   </g>
                 ))
               }
             </g>
             <g class="w-widget w-widget-static" style="--i:1">
-              <rect x="440" y="72" width="164" height="100" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="90" r="3" fill="var(--color-sky-400)"></circle>
-              <text x="466" y="94" class="w-card-title" fill="var(--w-text)">Sentiment</text>
+              <rect x="440" y="76" width="164" height="96" rx="5" class="w-card"></rect>
+              <text x="448" y="90" class="w-card-title" fill="var(--w-text)">Sentiment</text>
+              <text x="548" y="90" class="w-micro" fill="var(--w-text-4)">24h</text>
               <path
                 class="w-donut"
-                d="M522 140 a22 22 0 1 1 0.01 0"
+                d="M496 140 a22 22 0 1 1 0.01 0"
                 stroke="var(--w-cell)"
-                stroke-width="8"
+                stroke-width="7"
                 fill="none"
               ></path>
               <path
                 class="w-donut w-donut-fill"
-                d="M522 140 a22 22 0 1 1 0.01 0"
+                d="M496 140 a22 22 0 1 1 0.01 0"
                 stroke="var(--color-brand-400)"
-                stroke-width="8"
+                stroke-width="7"
                 stroke-dasharray="90 140"
                 stroke-linecap="round"
                 fill="none"
               ></path>
-              <text class="w-kpi" x="512" y="144" fill="var(--w-accent)">62%</text>
+              <text class="w-kpi" x="486" y="144" fill="var(--w-accent)">62%</text>
+              <text x="528" y="128" class="w-micro" fill="var(--color-brand-400)">bull 62</text>
+              <text x="528" y="140" class="w-micro" fill="var(--w-text-4)">neu 24</text>
+              <text x="528" y="152" class="w-micro" fill="var(--color-accent-400)">bear 14</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:2">
-              <rect x="440" y="180" width="164" height="92" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="198" r="3" fill="var(--color-accent-400)"></circle>
-              <text x="466" y="202" class="w-card-title" fill="var(--w-text)">Keywords</text>
-              <rect class="w-chip" x="452" y="214" width="52" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.4"></rect>
-              <rect class="w-chip" x="512" y="214" width="56" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="452" y="236" width="64" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="524" y="236" width="48" height="16" rx="4" fill="var(--color-brand-300)" opacity="0.35"></rect>
-              <text x="458" y="226" class="w-note" fill="var(--w-text)">markets</text>
-              <text x="518" y="226" class="w-note" fill="var(--w-text)">energy</text>
-              <text x="458" y="248" class="w-note" fill="var(--w-text)">policy</text>
-              <text x="530" y="248" class="w-note" fill="var(--w-text)">AI</text>
+              <rect x="440" y="180" width="164" height="92" rx="5" class="w-card"></rect>
+              <text x="448" y="194" class="w-card-title" fill="var(--w-text)">Keywords</text>
+              {
+                KEYWORDS.map((k, i) => (
+                  <g class="w-chip" style={`--i:${i}`}>
+                    <rect
+                      x={448 + (i % 3) * 50}
+                      y={204 + Math.floor(i / 3) * 28}
+                      width="46"
+                      height="22"
+                      rx="2"
+                      fill="var(--w-cell)"
+                    />
+                    <text x={452 + (i % 3) * 50} y={214 + Math.floor(i / 3) * 28} class="w-micro" fill="var(--w-text)">{k.label}</text>
+                    <text x={452 + (i % 3) * 50} y={223 + Math.floor(i / 3) * 28} class="w-micro" fill="var(--w-text-4)">{k.n}</text>
+                  </g>
+                ))
+              }
             </g>
             <g class="w-widget w-widget-static" style="--i:3">
-              <rect x="128" y="280" width="304" height="88" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="144" cy="298" r="3" fill="var(--color-brand-400)"></circle>
-              <text x="154" y="302" class="w-card-title" fill="var(--w-text)">Briefing</text>
-              <rect x="140" y="316" width="220" height="6" rx="3" fill="var(--w-text-4)" opacity="0.4"></rect>
-              <rect x="140" y="330" width="176" height="6" rx="3" fill="var(--w-text-4)" opacity="0.28"></rect>
-              <rect x="140" y="344" width="148" height="6" rx="3" fill="var(--w-text-4)" opacity="0.2"></rect>
+              <rect x="128" y="280" width="304" height="88" rx="5" class="w-card"></rect>
+              <text x="136" y="294" class="w-card-title" fill="var(--w-text)">Briefing</text>
+              <text x="180" y="294" class="w-micro" fill="var(--w-text-4)">desk · 06:00 UTC</text>
+              <text x="136" y="312" class="w-note" fill="var(--w-text-2)">Rates hold. Energy leads the tape after</text>
+              <text x="136" y="326" class="w-note" fill="var(--w-text-2)">a supply scare; BTC ETFs print a six-week</text>
+              <text x="136" y="340" class="w-note" fill="var(--w-text-2)">inflow high. Watch NVDA AMC and META BMO.</text>
+              <text x="136" y="356" class="w-micro" fill="var(--w-text-4)">3 catalysts · 2 risk flags · 1 watch</text>
             </g>
             <g class="w-widget w-widget-static" style="--i:4">
-              <rect x="440" y="280" width="164" height="88" rx="14" class="w-card"></rect>
-              <circle class="w-live" cx="456" cy="298" r="3" fill="var(--color-sky-400)"></circle>
-              <text x="466" y="302" class="w-card-title" fill="var(--w-text)">Sources</text>
-              <rect class="w-chip" x="452" y="316" width="64" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.35"></rect>
-              <rect class="w-chip" x="524" y="316" width="56" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.32"></rect>
-              <rect class="w-chip" x="452" y="340" width="48" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.3"></rect>
-              <text x="458" y="328" class="w-note" fill="var(--w-text)">Reuters</text>
-              <text x="532" y="328" class="w-note" fill="var(--w-text)">AP</text>
-              <text x="458" y="352" class="w-note" fill="var(--w-text)">FT</text>
+              <rect x="440" y="280" width="164" height="88" rx="5" class="w-card"></rect>
+              <text x="448" y="294" class="w-card-title" fill="var(--w-text)">Sources</text>
+              {
+                [
+                  ['Reuters', '12'],
+                  ['Bloomberg', '9'],
+                  ['FT', '7'],
+                  ['AP', '6'],
+                ].map(([name, n], i) => (
+                  <g class="w-chip" style={`--i:${i}`}>
+                    <text x="448" y={312 + i * 13} class="w-micro" fill="var(--w-text)">{name}</text>
+                    <text x="588" y={312 + i * 13} class="w-micro" text-anchor="end" fill="var(--w-text-4)">{n}</text>
+                  </g>
+                ))
+              }
             </g>
           </g>
           </g>
@@ -900,10 +1046,10 @@ const STORIES = [0, 1, 2, 3, 4];
           y="16"
           width="608"
           height="368"
-          rx="18"
+          rx="8"
           fill="none"
           stroke="var(--w-chrome)"
-          stroke-width="1.4"
+          stroke-width="1"
         ></rect>
       </svg>
 
@@ -962,6 +1108,15 @@ const STORIES = [0, 1, 2, 3, 4];
             </svg>
           </span>
         </aside>
+        <div class="w-dock">
+          {DOCK.map((d) => (
+            <span class="w-dock-btn" title={d.tip}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d={ICON_PATHS[d.icon] ?? ''}></path>
+              </svg>
+            </span>
+          ))}
+        </div>
       </div>
       </div>
     </div>
@@ -976,8 +1131,8 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-slab {
     position: absolute;
     inset: auto 8% -8% 8%;
-    height: 42%;
-    border-radius: 1.25rem;
+    height: 36%;
+    border-radius: 0.55rem;
     background: linear-gradient(
       180deg,
       color-mix(in oklab, var(--color-brand-400) 28%, transparent),
@@ -1028,8 +1183,8 @@ const STORIES = [0, 1, 2, 3, 4];
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 1.25rem;
-    filter: drop-shadow(0 28px 60px var(--w-shadow));
+    border-radius: 0.55rem;
+    filter: drop-shadow(0 18px 40px var(--w-shadow));
   }
 
   /* Night chrome: page is dark *or* this band is inverted on a light page.
@@ -1087,7 +1242,7 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-card {
     fill: var(--w-panel-2);
     stroke: var(--w-line);
-    stroke-width: 1;
+    stroke-width: 0.75;
   }
 
   /* HTML chrome — same open/close life as Features PlaygroundMock. Sized in
@@ -1098,7 +1253,7 @@ const STORIES = [0, 1, 2, 3, 4];
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 2.8cqi;
+    border-radius: 1.25cqi;
     pointer-events: none;
   }
 
@@ -1136,7 +1291,7 @@ const STORIES = [0, 1, 2, 3, 4];
     align-items: center;
     overflow: hidden;
     white-space: nowrap;
-    border-radius: 0.7cqi 0.7cqi 0 0;
+    border-radius: 0.35cqi 0.35cqi 0 0;
     padding-inline: 1.15cqi;
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 1.4cqi;
@@ -1168,7 +1323,7 @@ const STORIES = [0, 1, 2, 3, 4];
     height: 3.75cqi;
     width: 3.75cqi;
     margin-inline-start: 0.4cqi;
-    border-radius: 0.7cqi 0.7cqi 0 0;
+    border-radius: 0.35cqi 0.35cqi 0 0;
     border: 1px dashed var(--w-line);
   }
 
@@ -1239,6 +1394,39 @@ const STORIES = [0, 1, 2, 3, 4];
     color: color-mix(in oklab, var(--w-accent) 60%, transparent);
   }
 
+  .w-dock {
+    position: absolute;
+    right: 2.1cqi;
+    bottom: 2.1cqi;
+    display: flex;
+    align-items: center;
+    gap: 0.35cqi;
+    padding: 0.4cqi 0.55cqi;
+    border: 1px solid var(--w-line);
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--w-panel) 88%, transparent);
+  }
+
+  .w-dock-btn {
+    display: flex;
+    width: 2.6cqi;
+    height: 2.6cqi;
+    align-items: center;
+    justify-content: center;
+    color: var(--w-text-2);
+  }
+
+  .w-dock-btn svg {
+    width: 1.55cqi;
+    height: 1.55cqi;
+  }
+
+  @container (max-width: 22rem) {
+    .w-dock {
+      display: none;
+    }
+  }
+
   .w-rail {
     position: absolute;
     left: 0;
@@ -1270,7 +1458,7 @@ const STORIES = [0, 1, 2, 3, 4];
     gap: 0.7cqi;
     overflow: hidden;
     white-space: nowrap;
-    border-radius: 0.7cqi 0 0 0.7cqi;
+    border-radius: 0.35cqi 0 0 0.35cqi;
     padding-inline: 0.85cqi;
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 1.35cqi;
@@ -1298,7 +1486,7 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-ws-add {
     height: 3.5cqi;
     margin-block-start: 0.5cqi;
-    border-radius: 0.7cqi 0 0 0.7cqi;
+    border-radius: 0.35cqi 0 0 0.35cqi;
     border: 1px dashed var(--w-line);
     border-inline-end: 0;
     padding-inline: 0.85cqi;
@@ -1308,15 +1496,18 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-card-title,
   .w-tiny,
   .w-note,
+  .w-micro,
   .w-streak-n,
   .w-pairs,
-  .w-kpi {
+  .w-kpi,
+  .w-mem-mark {
     font-family: var(--font-mono, ui-monospace, monospace);
   }
 
   .w-card-title {
-    font-size: 11px;
+    font-size: 8px;
     font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
   .w-tiny,
@@ -1324,11 +1515,18 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-pairs,
   .w-kpi {
     font-size: 8px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.04em;
+    font-weight: 600;
   }
 
   .w-note {
-    font-size: 9px;
+    font-size: 7.5px;
+  }
+
+  .w-micro,
+  .w-mem-mark {
+    font-size: 6.5px;
+    letter-spacing: 0.02em;
   }
 
   .w-prompt {
@@ -1402,6 +1600,12 @@ const STORIES = [0, 1, 2, 3, 4];
     opacity: 1;
   }
 
+  /* Finished desk is the rest frame — the generate loop may settle widgets,
+     it must not blank the stage under the chrome tabs. */
+  .w-widget {
+    opacity: 1;
+  }
+
   /* Top KPI strip sits under the generate prompt; only reads as a row in act 02. */
   .w-under-prompt {
     opacity: 0;
@@ -1426,7 +1630,7 @@ const STORIES = [0, 1, 2, 3, 4];
   .w-mood-pick {
     fill: none;
     stroke: var(--color-brand-300);
-    stroke-width: 1.4;
+    stroke-width: 1;
     opacity: 0;
   }
 
@@ -1708,19 +1912,18 @@ const STORIES = [0, 1, 2, 3, 4];
 
   @keyframes w-widget {
     0%,
-    30% {
-      opacity: 0;
-      transform: translateY(16px) scale(0.95);
+    22% {
+      opacity: 1;
+      transform: translateY(6px) scale(0.98);
     }
-    38%,
-    88% {
+    28% {
+      opacity: 0.55;
+      transform: translateY(10px) scale(0.97);
+    }
+    36%,
+    100% {
       opacity: 1;
       transform: none;
-    }
-    96%,
-    100% {
-      opacity: 0;
-      transform: translateY(8px) scale(0.98);
     }
   }
 
@@ -1851,12 +2054,10 @@ const STORIES = [0, 1, 2, 3, 4];
   @keyframes w-mood-breathe {
     0%,
     100% {
-      opacity: 0.85;
-      transform: scale(1);
+      opacity: 0.88;
     }
     50% {
       opacity: 1;
-      transform: scale(1.03);
     }
   }
 
@@ -2086,26 +2287,13 @@ const STORIES = [0, 1, 2, 3, 4];
   }
 
   @keyframes w-board-life {
-    0% {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(8px) scale(0.97);
-    }
-    2% {
+    0%,
+    20% {
       opacity: 1;
       visibility: visible;
       transform: none;
     }
-    18% {
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-    }
-    22% {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-5px) scale(0.98);
-    }
+    24%,
     100% {
       opacity: 0;
       visibility: hidden;
@@ -2232,12 +2420,10 @@ const STORIES = [0, 1, 2, 3, 4];
   @keyframes w-chip {
     0%,
     100% {
-      opacity: 0.55;
-      transform: scale(1);
+      opacity: 0.7;
     }
     50% {
       opacity: 1;
-      transform: scale(1.04);
     }
   }
 
@@ -2314,6 +2500,11 @@ const STORIES = [0, 1, 2, 3, 4];
     .w-mood-pick,
     .w-heat-today {
       opacity: 0;
+    }
+
+    .w-widget {
+      opacity: 1;
+      transform: none;
     }
 
     .w-board-alt {
@@ -2449,8 +2640,9 @@ const STORIES = [0, 1, 2, 3, 4];
 
   @media (prefers-reduced-motion: no-preference) {
     .w-scene.is-arrange .w-board {
-      animation: w-board-life var(--w-board-cycle, 8.25s) var(--w-e) infinite both;
-      animation-delay: calc(var(--i) * var(--w-board-step, 1.65s));
+      animation: w-board-life var(--w-board-cycle, 8.25s) var(--w-e) infinite;
+      /* Negative delay keeps the stagger after the first loop. */
+      animation-delay: calc(var(--i) * var(--w-board-step, 1.65s) - var(--w-board-cycle, 8.25s));
     }
   }
 
