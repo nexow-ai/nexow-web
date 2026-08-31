@@ -322,6 +322,11 @@ import WorldField from './WorldField.astro';
       );
   }
 
+  /* Softens the field under the nav. Colour must match the band behind the
+   * header — page surface on page bands, invert surface on invert bands —
+   * otherwise the crown reads as a white/black gradient across a solid stripe.
+   * `.chrome-invert` is stamped by `ChromeTone` while the band under the bar
+   * is the opposite tone. */
   .world__crown {
     position: fixed;
     inset-inline: 0;
@@ -333,6 +338,24 @@ import WorldField from './WorldField.astro';
       to bottom,
       var(--w-surface) 14%,
       color-mix(in oklab, var(--w-surface) 62%, transparent) 52%,
+      transparent
+    );
+  }
+
+  :global(html.dark) .world__crown.chrome-invert {
+    background: linear-gradient(
+      to bottom,
+      #ffffff 14%,
+      color-mix(in oklab, #ffffff 62%, transparent) 52%,
+      transparent
+    );
+  }
+
+  :global(html:not(.dark)) .world__crown.chrome-invert {
+    background: linear-gradient(
+      to bottom,
+      #000000 14%,
+      color-mix(in oklab, #000000 62%, transparent) 52%,
       transparent
     );
   }

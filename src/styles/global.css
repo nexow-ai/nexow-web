@@ -18,12 +18,22 @@
  * `.tone-invert` wrapper on a page that is not dark. That is what lets one wrapper
  * mean "the opposite of the page": a dark band on the light theme, a light
  * band on the dark one, with every `dark:` utility inside it flipping for
- * free and no JavaScript needing to know which theme is on. */
+ * free and no JavaScript needing to know which theme is on.
+ *
+ * `.chrome-invert` means the same thing for the fixed chrome, which is not in
+ * any band but floats over them: `components/ChromeTone.astro` stamps it on
+ * the header bar, the tour transport and the corner arrows for as long as the
+ * band behind them is the opposite tone. */
 @custom-variant dark {
-  &:where(.dark, .dark *):not(:where(.tone-invert, .tone-invert *)) {
+  &:where(.dark, .dark *):not(
+      :where(.tone-invert, .tone-invert *, .chrome-invert, .chrome-invert *)
+    ) {
     @slot;
   }
-  &:where(html:not(.dark) .tone-invert, html:not(.dark) .tone-invert *) {
+  &:where(
+      html:not(.dark) :is(.tone-invert, .chrome-invert),
+      html:not(.dark) :is(.tone-invert, .chrome-invert) *
+    ) {
     @slot;
   }
 }
@@ -305,7 +315,8 @@
 }
 
 .dark,
-html:not(.dark) .tone-invert {
+html:not(.dark) .tone-invert,
+html:not(.dark) .chrome-invert {
   --surface: color-mix(in oklab, white 4%, transparent);
   --surface-sunk: color-mix(in oklab, white 2%, transparent);
   --surface-line: color-mix(in oklab, white 11%, transparent);
@@ -358,7 +369,8 @@ html:not(.dark) .tone-invert {
   z-index: 1;
 }
 
-html.dark .tone-invert {
+html.dark .tone-invert,
+html.dark .chrome-invert {
   --surface: #ffffff;
   --surface-sunk: #f7fbfb;
   --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
@@ -368,6 +380,12 @@ html.dark .tone-invert {
   --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
   --scrollbar-track: transparent;
+}
+
+/* The ground, which only a band carries: chrome floats over the band's own
+   ink, and a `.chrome-invert` header painting a surface would be a slab
+   across the top of the page. */
+html.dark .tone-invert {
   background-color: #ffffff;
   color: var(--color-ink-950);
   color-scheme: light;
@@ -387,6 +405,7 @@ html:not(.dark) .tone-invert {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem; /* clear the sticky header on anchor jumps */
+    scroll-padding-bottom: 5.5rem; /* clear the tour dock and corner arrows */
     color-scheme: light;
   }
 
@@ -516,11 +535,11 @@ html:not(.dark) .tone-invert {
     width: 100%;
     max-width: 80rem; /* 1280px */
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    padding-inline: max(1.25rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
   @media (min-width: 640px) {
     .container-page {
-      padding-inline: 2rem;
+      padding-inline: max(2rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     }
   }
 
@@ -1057,6 +1076,36 @@ html.is-theme-transition [data-astro-transition-scope] {
  * so a script that never runs leaves the button where it is rather than
  * emptying it out of every header on the site.
  * ------------------------------------------------------------------ */
+/* The light/dark button's own glyph — moon on a light page, sun on a dark one.
+ * Keyed on the document, never on `dark:`: the toggle sits in chrome that
+ * flips with the band behind it (`lib/chrome-tone`), and the one thing in
+ * there that must keep reporting the page is this pair. */
+.theme-glyph-light {
+  display: none;
+}
+
+html.dark .theme-glyph-dark {
+  display: none;
+}
+
+html.dark .theme-glyph-light {
+  display: block;
+}
+
+/* Shared hit box for the header's round controls (play, theme, menu).
+ * 44px on a coarse pointer / phone; 40px on a mouse so the pill stays tight. */
+.chrome-hit {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .chrome-hit {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
 .tour-toggle {
   display: inline-flex;
 }
@@ -1155,10 +1204,11 @@ html[data-world]:not(.js).dark #site-nav {
 
 @media (max-width: 767.98px) {
   /* Copy stacks above the scene. A full-viewport min-height here is just
-   * empty thumb travel between two blocks that already have their own pad. */
+   * empty thumb travel between two blocks that already have their own pad.
+   * Extra foot room so a title is not sitting under the tour dock. */
   .act-stage {
     min-height: 0;
-    padding-block: 3.25rem 2.5rem;
+    padding-block: 2.75rem 4.5rem;
     align-items: flex-start;
   }
 

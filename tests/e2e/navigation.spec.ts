@@ -147,6 +147,29 @@ test.describe('mobile menu', () => {
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   });
+
+  test('scrolls when the sheet is taller than the screen', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.goto('/');
+    await page.locator('#menu-toggle').click();
+
+    const menu = page.locator('#mobile-menu');
+    await expect(menu).toBeVisible();
+
+    const canScroll = await menu.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return (
+        (cs.overflowY === 'auto' || cs.overflowY === 'scroll') &&
+        el.scrollHeight > el.clientHeight + 8
+      );
+    });
+    expect(canScroll).toBe(true);
+
+    const chip = menu.locator('.mobile-lang').first();
+    await expect(chip).toBeVisible();
+    const box = await chip.boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  });
 });
 
 /**

@@ -8,14 +8,16 @@
  * a different record — have nowhere else to be answered.
  *
  * Five controls, in the order they are wanted: stop, the countdown, the
- * scroll rate, light/dark, and a new song. None of them speaks to the tour
- * directly. The pill dispatches `nexow:tourtoggle`, `nexow:tracknext` and
- * `nexow:tourpace`, which the tour (`Header.astro`) and the deck
- * (`TourSound.astro`) answer, and it listens for `nexow:tour` and
- * `nexow:tourtime` coming back. The theme button is the same control as the
- * header's (`ThemeToggle.astro`): the circular wipe starts from whichever
- * one was pressed. That keeps the transport a piece of chrome that can ship
- * on every route while the machinery stays where it belongs.
+ * scroll rate, light/dark, and a new song. Above the pill, the title of
+ * whichever record is on stays visible for the whole tour. None of them
+ * speaks to the tour directly. The pill dispatches `nexow:tourtoggle`,
+ * `nexow:tracknext` and `nexow:tourpace`, which the tour (`Header.astro`) and
+ * the deck (`TourSound.astro`) answer, and it listens for `nexow:tour`,
+ * `nexow:tourtime` and `nexow:track` coming back. The theme button is the
+ * same control as the header's (`ThemeToggle.astro`): the circular wipe
+ * starts from whichever one was pressed. That keeps the transport a piece
+ * of chrome that can ship on every route while the machinery stays where
+ * it belongs.
  *
  * `data-tour-control` is the other half of the contract: any intent to move the
  * page yourself ends the tour, and these buttons are the exception.
@@ -45,56 +47,62 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   data-playing="false"
   transition:animate="none"
 >
-  <div class="tour-hud__pill">
-    <button
-      type="button"
-      class="tour-hud__btn"
-      data-tour-control
-      data-tour-action="toggle"
-      aria-label={tourStop}
-    >
-      <Icon name="pause" class="tour-hud__icon size-4" />
-    </button>
-
-    <p class="tour-hud__time" role="timer" aria-live="off">
-      <span class="sr-only">{tourLeft}</span>
-      <span class="tour-hud__clock">0:00</span>
+  <div class="tour-hud__stack">
+    <p class="tour-hud__now" aria-live="polite" data-has-track="false" hidden>
+      <span class="tour-hud__now-title"></span>
     </p>
 
-    <button
-      type="button"
-      class="tour-hud__btn tour-hud__btn--pace"
-      data-tour-control
-      data-tour-action="pace"
-      data-rate="1"
-      data-pace-label={tourPace}
-      aria-label={`${tourPace} x1`}
-    >
-      <span class="tour-hud__pace">x1</span>
-    </button>
+    <div class="tour-hud__pill">
+      <button
+        type="button"
+        class="tour-hud__btn"
+        data-tour-control
+        data-tour-action="toggle"
+        aria-label={tourStop}
+      >
+        <Icon name="pause" class="tour-hud__icon size-4" />
+      </button>
 
-    <button
-      type="button"
-      class="tour-hud__btn"
-      data-tour-control
-      data-theme-toggle
-      data-to-dark={themeToDark}
-      data-to-light={themeToLight}
-      aria-label={themeToDark}
-    >
-      <Icon name="moon" class="tour-hud__icon size-4 dark:hidden" />
-      <Icon name="sun" class="tour-hud__icon size-4 hidden dark:block" />
-    </button>
+      <p class="tour-hud__time" role="timer" aria-live="off">
+        <span class="sr-only">{tourLeft}</span>
+        <span class="tour-hud__clock">0:00</span>
+      </p>
 
-    <button
-      type="button"
-      class="tour-hud__btn"
-      data-tour-control
-      data-tour-action="track"
-      aria-label={tourTrack}
-    >
-      <Icon name="music" class="tour-hud__icon size-4" />
-    </button>
+      <button
+        type="button"
+        class="tour-hud__btn tour-hud__btn--pace"
+        data-tour-control
+        data-tour-action="pace"
+        data-rate="1"
+        data-pace-label={tourPace}
+        aria-label={`${tourPace} x1`}
+      >
+        <span class="tour-hud__pace">x1</span>
+      </button>
+
+      <button
+        type="button"
+        class="tour-hud__btn"
+        data-tour-control
+        data-theme-toggle
+        data-to-dark={themeToDark}
+        data-to-light={themeToLight}
+        aria-label={themeToDark}
+      >
+        <Icon name="moon" class="tour-hud__icon theme-glyph-dark size-4" />
+        <Icon name="sun" class="tour-hud__icon theme-glyph-light size-4" />
+      </button>
+
+      <button
+        type="button"
+        class="tour-hud__btn"
+        data-tour-control
+        data-tour-action="track"
+        aria-label={tourTrack}
+      >
+        <Icon name="music" class="tour-hud__icon size-4" />
+      </button>
+    </div>
   </div>
 </section>
 
@@ -102,10 +110,12 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   .tour-hud {
     position: fixed;
     inset-inline: 0;
-    bottom: 1rem;
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
     z-index: 40;
     display: flex;
     justify-content: center;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px))
+      max(0.75rem, env(safe-area-inset-right, 0px));
     pointer-events: none;
     transition:
       opacity 0.35s ease,
@@ -115,7 +125,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 
   @media (min-width: 640px) {
     .tour-hud {
-      bottom: 1.5rem;
+      bottom: max(1.5rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
     }
   }
 
@@ -129,6 +139,57 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 
   .tour-hud[data-playing='true'] .tour-hud__pill {
     pointer-events: auto;
+  }
+
+  .tour-hud__stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: min(22rem, calc(100vw - 1.5rem));
+  }
+
+  /* Now-playing label sits above the pill for the whole tour — title only,
+     so a long guest cut never stretches the dock. */
+  .tour-hud__now {
+    margin: 0;
+    max-width: 100%;
+    padding: 0.28rem 0.85rem;
+    border-radius: 9999px;
+    font-family: var(--font-display, var(--font-sans));
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    color: var(--color-ink-800);
+    border: 1px solid color-mix(in oklab, white 62%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, white 62%, transparent),
+      color-mix(in oklab, white 24%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 8px 20px -8px rgb(0 0 0 / 0.22),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+    transition:
+      color 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .tour-hud__now[hidden] {
+    display: none;
+  }
+
+  .tour-hud__now-title {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* The same crystal glass as the corner arrows (`PageNav.astro`), drawn long. */
@@ -151,13 +212,21 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       0 10px 26px -8px rgb(0 0 0 / 0.28),
       0 2px 6px -2px rgb(0 0 0 / 0.12),
       inset 0 1px 0 rgb(255 255 255 / 0.9);
+    /* The pill changes tone under a moving page, at the seam between two
+       bands — a cut there reads as a flicker, a fade as the glass catching
+       the light of the room it has just entered. */
+    transition:
+      color 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   .tour-hud__btn {
     display: grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: 9999px;
     color: inherit;
     cursor: pointer;
@@ -166,9 +235,18 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       transform 0.3s var(--ease-out-expo);
   }
 
-  .tour-hud__btn:hover {
-    background: color-mix(in oklab, white 55%, transparent);
-    transform: scale(1.06);
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tour-hud__btn:hover {
+      background: color-mix(in oklab, white 55%, transparent);
+      transform: scale(1.06);
+    }
   }
 
   .tour-hud__btn:active {
@@ -182,7 +260,13 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 
   /* Wide enough for `x0.25` so cycling the rate never grows the pill. */
   .tour-hud__btn--pace {
-    width: 2.85rem;
+    width: 3.15rem;
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn--pace {
+      width: 2.85rem;
+    }
   }
 
   .tour-hud__pace {
@@ -203,9 +287,20 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.08em;
     color: var(--color-ink-700);
+    transition: color 0.3s ease;
   }
 
-  :global(.dark) .tour-hud__pill {
+  /* Glass over ink, not frost — for a dark page, and for a light page whose
+     band under the transport is the dark one. The pill is fixed and the home
+     page's bands alternate tone beneath it, so painting from the page theme
+     alone left the glyphs white on white for half the story;
+     `components/ChromeTone.astro` stamps `.chrome-invert` while the band
+     behind disagrees with the page, and the two selectors are the same rule
+     read from either side. */
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__pill,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__pill,
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__now,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__now {
     color: white;
     border-color: rgb(255 255 255 / 0.2);
     background: linear-gradient(150deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
@@ -214,11 +309,13 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       inset 0 1px 0 rgb(255 255 255 / 0.3);
   }
 
-  :global(.dark) .tour-hud__btn:hover {
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__btn:hover,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__btn:hover {
     background: rgb(255 255 255 / 0.14);
   }
 
-  :global(.dark) .tour-hud__time {
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__time,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__time {
     color: var(--color-ink-200);
   }
 
@@ -230,6 +327,9 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 
   @media (prefers-reduced-motion: reduce) {
     .tour-hud,
+    .tour-hud__pill,
+    .tour-hud__now,
+    .tour-hud__time,
     .tour-hud__btn {
       transition: none;
     }
@@ -269,14 +369,39 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     const hud = document.getElementById('tour-hud');
     if (!hud) return;
     const face = hud.querySelector('.tour-hud__clock');
+    const now = hud.querySelector<HTMLElement>('.tour-hud__now');
+    const nowTitle = hud.querySelector('.tour-hud__now-title');
     const paceBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="pace"]');
     if (paceBtn) paintPace(paceBtn);
+
+    function paintTrack(track: { title: string } | null) {
+      if (!now || !nowTitle) return;
+      if (!track) {
+        now.hidden = true;
+        now.dataset.hasTrack = 'false';
+        nowTitle.textContent = '';
+        return;
+      }
+      nowTitle.textContent = track.title;
+      now.dataset.hasTrack = 'true';
+      now.hidden = false;
+    }
 
     document.addEventListener(
       'nexow:tour',
       (event) => {
         const { playing } = (event as CustomEvent<{ playing: boolean }>).detail;
         hud.dataset.playing = String(playing);
+        if (!playing) paintTrack(null);
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      'nexow:track',
+      (event) => {
+        const detail = (event as CustomEvent<{ title: string } | null>).detail;
+        paintTrack(detail);
       },
       { signal },
     );

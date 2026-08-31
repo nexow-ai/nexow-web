@@ -1,0 +1,108 @@
+---
+/**
+ * Keeps the fixed chrome legible over a page whose tone alternates.
+ *
+ * Behaviour only, no markup. It measures the `.tone-invert` bands once per
+ * layout, then stamps `.chrome-invert` on the header bar, the tour's transport
+ * and the corner arrows whenever the band behind that edge of the viewport is
+ * the opposite tone to the page. Each component decides what that means for
+ * its own paint: Tailwind's `dark:` variant flips inside `.chrome-invert` the
+ * same way it does inside `.tone-invert` (see `styles/global.css`), and the
+ * hand-written glass rules carry the second branch.
+ *
+ * Why the chrome needs telling at all: the page theme does not change as the
+ * story runs, so a header and a transport coloured from it are drawn in the
+ * tone of every other band they cross — white glyphs on a white band. The
+ * scroll tour is when that is worst, because nothing on screen is being
+ * touched and the transport is the only control left.
+ *
+ * The maths lives in `lib/chrome-tone`.
+ */
+---
+
+<script>
+  import {
+    CHROME_FOOT_INSET,
+    CHROME_TONE_EVENT,
+    CHROME_TOP_INSET,
+    invertedAt,
+    type ToneBand,
+  } from '../lib/chrome-tone';
+
+  /* The header bar, not the whole `#site-header`: the mobile menu is a
+   * viewport-filling overlay inside it, so it belongs to the page's tone
+   * rather than to the band under the bar. `.world__crown` is the fade that
+   * keeps WebGL screens out of the nav — it has to flip with the band too,
+   * or it paints a white wash onto a black stripe (and the reverse). */
+  const TOP = '#site-nav, .world__crown';
+  const FOOT = '#tour-hud, .page-nav';
+
+  let abort: AbortController | undefined;
+  let ro: ResizeObserver | undefined;
+  let raf = 0;
+  let bands: ToneBand[] = [];
+  /** The last pair painted, so a scroll inside one band costs one comparison. */
+  let painted = '';
+
+  function paint() {
+    raf = 0;
+    const y = window.scrollY;
+    const top = invertedAt(y + CHROME_TOP_INSET, bands);
+    const foot = invertedAt(y + window.innerHeight - CHROME_FOOT_INSET, bands);
+    const state = `${top}/${foot}`;
+    if (state === painted) return;
+    painted = state;
+
+    for (const el of document.querySelectorAll(TOP)) el.classList.toggle('chrome-invert', top);
+    for (const el of document.querySelectorAll(FOOT)) el.classList.toggle('chrome-invert', foot);
+    document.dispatchEvent(new CustomEvent(CHROME_TONE_EVENT, { detail: { top, foot } }));
+  }
+
+  const schedule = () => {
+    if (!raf) raf = requestAnimationFrame(paint);
+  };
+
+  /* Document space, so scrolling never re-reads the DOM. Re-measured whenever
+   * the page can have grown under it — a lazy image, a font, an act that pins. */
+  function measure() {
+    const y = window.scrollY;
+    bands = [...document.querySelectorAll<HTMLElement>('.tone-invert')]
+      .filter((el) => el.offsetHeight > 0)
+      .map((el) => {
+        const box = el.getBoundingClientRect();
+        return { top: box.top + y, bottom: box.bottom + y };
+      });
+    painted = '';
+    paint();
+  }
+
+  function teardown() {
+    abort?.abort();
+    abort = undefined;
+    ro?.disconnect();
+    ro = undefined;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    bands = [];
+    painted = '';
+  }
+
+  function initChromeTone() {
+    teardown();
+    abort = new AbortController();
+    const { signal } = abort;
+
+    measure();
+
+    window.addEventListener('scroll', schedule, { passive: true, signal });
+    window.addEventListener('resize', measure, { passive: true, signal });
+    if ('ResizeObserver' in window) {
+      ro = new ResizeObserver(measure);
+      ro.observe(document.documentElement);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initChromeTone);
+  document.addEventListener('astro:before-swap', teardown);
+  if (document.readyState !== 'loading') initChromeTone();
+</script>

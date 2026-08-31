@@ -18,7 +18,7 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
   type="button"
   id="theme-toggle"
   class:list={[
-    'theme-toggle inline-flex size-10 items-center justify-center rounded-full transition-colors',
+    'theme-toggle chrome-hit inline-flex items-center justify-center rounded-full transition-colors',
     'text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10',
     className,
   ]}
@@ -27,8 +27,12 @@ const { toDarkLabel, toLightLabel, class: className } = Astro.props;
   data-to-light={toLightLabel}
   aria-label={toDarkLabel}
 >
-  <Icon name="moon" class="size-4.5 dark:hidden" />
-  <Icon name="sun" class="size-4.5 hidden dark:block" />
+  {/* `theme-glyph-*`, not `dark:hidden`: this button reports which theme is
+      on, and `dark:` also flips for the tone of the band a piece of chrome is
+      floating over (`lib/chrome-tone`) — which would show a sun on a dark
+      page. See `global.css`. */}
+  <Icon name="moon" class="theme-glyph-dark size-4.5" />
+  <Icon name="sun" class="theme-glyph-light size-4.5" />
 </button>
 
 <style>

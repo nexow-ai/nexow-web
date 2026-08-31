@@ -84,9 +84,19 @@
     if (turn === mine) ambient.start();
   }
 
+  /** Tell the transport which record is on, so it can name it above the dock. */
+  function announce(track: Track | undefined) {
+    document.dispatchEvent(
+      new CustomEvent('nexow:track', {
+        detail: track ? { title: track.title, artist: track.artist, id: track.id } : null,
+      }),
+    );
+  }
+
   /** Put a record on: a file through the deck, or the synthesised piece. */
   function spin(track: Track) {
     last = track;
+    announce(track);
     const mine = ++turn;
     if (!track.src) {
       void hum(mine);
@@ -145,6 +155,7 @@
   function stop(seconds = FADE_OUT) {
     wanted = false;
     turn += 1;
+    announce(undefined);
     ambient?.stop(seconds);
     const d = deck;
     if (!d || d.el.paused) return;
