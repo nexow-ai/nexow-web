@@ -1,11 +1,12 @@
 /**
  * The scroll tour's record crate.
  *
- * Every press of play pulls one track from here at random — never the one
- * just played — so the tour has a different soundtrack each time: one visit
- * gets a deep-house piece, the next a string quartet, the next a hard-techno
- * record, the next a guest cut from the crate, the next the synthesised ambient
- * in D. The crate is a mood board more than a playlist.
+ * The first time a visitor presses play, Posterity always comes up; after that,
+ * every press pulls one track at random — never the one just played — so the
+ * tour has a different soundtrack each time: one visit gets a deep-house piece,
+ * the next a string quartet, the next a hard-techno record, the next a guest
+ * cut from the crate, the next the synthesised ambient in D. The crate is a
+ * mood board more than a playlist.
  *
  * Mixkit stock cuts under `public/audio/tour` ship with a `source` URL and are
  * re-encoded and loudness-matched to −18 LUFS by `scripts/fetch-tour-music.mjs`
@@ -37,6 +38,12 @@ export interface Track {
 
 /** Where the files live, from the site root. */
 export const TRACK_DIR = '/audio/tour';
+
+/** The record every visitor hears the first time they press play. */
+export const INTRO_TRACK_ID = 'posterity';
+
+/** Set when the visitor has pressed play on the tour soundtrack once. */
+export const TOUR_FIRST_PLAY_KEY = 'nexow-tour-first-play';
 
 const file = (id: string) => `${TRACK_DIR}/${id}.mp3`;
 const mixkit = (n: number) => `https://assets.mixkit.co/music/${n}/${n}.mp3`;
@@ -474,6 +481,44 @@ export const TRACKS: readonly Track[] = [
     src: file('ni-de-oro-ni-de-goldfield'),
   },
 ];
+
+/** The first-play record; must stay in the crate. */
+export function introTrack(tracks: readonly Track[] = TRACKS): Track {
+  const track = tracks.find((t) => t.id === INTRO_TRACK_ID);
+  if (!track) throw new Error(`Intro track ${INTRO_TRACK_ID} is missing from the crate`);
+  return track;
+}
+
+export function tourPlayedBefore(): boolean {
+  try {
+    return localStorage.getItem(TOUR_FIRST_PLAY_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function markTourPlayed(): void {
+  try {
+    localStorage.setItem(TOUR_FIRST_PLAY_KEY, '1');
+  } catch {
+    /* Storage blocked — Posterity still plays this session; next visit is random. */
+  }
+}
+
+/**
+ * Posterity on the visitor's first play; random after that. See `pickTrack`.
+ */
+export function pickTourTrack(
+  random: () => number = Math.random,
+  except?: Track,
+  tracks: readonly Track[] = TRACKS,
+): Track {
+  if (!tourPlayedBefore()) {
+    markTourPlayed();
+    return introTrack(tracks);
+  }
+  return pickTrack(random, except, tracks);
+}
 
 /**
  * One track at random from `tracks`, never `except` while there is a choice.

@@ -5,9 +5,10 @@
  * for any reason: the button, a scroll, a keypress, the end of the page, a
  * hidden tab.
  *
- * Which record is chance. Every press of play pulls one from the crate in
- * `lib/soundtrack` — never the one just played — so the tour has a different
- * soundtrack each time. Most are files under `public/audio/tour`, streamed
+ * The first press of play always pulls Posterity from the crate in
+ * `lib/soundtrack`; after that, every press is chance — never the one just
+ * played — so the tour has a different soundtrack each time. Most are files
+ * under `public/audio/tour`, streamed
  * through one <audio> element that is created on the first play and never
  * before; one is the piece `lib/ambient` synthesises, which ships no bytes at
  * all and is also what plays when a file will not (offline, a missing file, a
@@ -29,7 +30,7 @@
 
 <script>
   import type { Ambient } from '../lib/ambient';
-  import { pickTrack, type Track } from '../lib/soundtrack';
+  import { pickTourTrack, type Track } from '../lib/soundtrack';
 
   /**
    * The files are matched to −18 LUFS with 1.5 dB of headroom by
@@ -112,7 +113,7 @@
       if (turn === mine) ramp(gain.gain, LEVEL, FADE_IN);
     };
     el.onended = () => {
-      if (turn === mine && wanted) spin(pickTrack(Math.random, last));
+      if (turn === mine && wanted) spin(pickTourTrack(Math.random, last));
     };
     // Cannot be fetched or decoded: the piece that needs neither.
     el.onerror = () => {
@@ -135,7 +136,7 @@
     // Hidden tabs, and Safari, leave a context suspended. Harmless otherwise.
     if (ctx.state !== 'running') void ctx.resume();
     deck ??= makeDeck(ctx);
-    spin(pickTrack(Math.random, last));
+    spin(pickTourTrack(Math.random, last));
   }
 
   /**
@@ -145,7 +146,7 @@
    */
   function skip() {
     if (!wanted || !ctx) return;
-    const next = pickTrack(Math.random, last);
+    const next = pickTourTrack(Math.random, last);
     turn += 1;
     ambient?.stop(FADE_SKIP);
     if (deck && !deck.el.paused) ramp(deck.gain.gain, 0, FADE_SKIP);

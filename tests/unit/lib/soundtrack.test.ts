@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { GENERATIVE, TRACKS, TRACK_DIR, pickTrack, type Track } from '../../../src/lib/soundtrack';
+import { GENERATIVE, INTRO_TRACK_ID, TRACKS, TRACK_DIR, TOUR_FIRST_PLAY_KEY, introTrack, markTourPlayed, pickTrack, pickTourTrack, tourPlayedBefore, type Track } from '../../../src/lib/soundtrack';
 
 const PUBLIC = path.resolve(import.meta.dirname, '../../..', 'public');
 
@@ -107,5 +107,46 @@ describe('pickTrack', () => {
     const seen = new Set<string>();
     for (let i = 0; i < 2_000; i++) seen.add(pickTrack().id);
     expect(seen.size).toBe(TRACKS.length);
+  });
+});
+
+describe('pickTourTrack', () => {
+  const store = new Map<string, string>();
+
+  beforeEach(() => {
+    store.clear();
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        store.set(key, value);
+      },
+      removeItem: (key: string) => {
+        store.delete(key);
+      },
+    });
+  });
+
+  const crate: Track[] = [
+    { id: INTRO_TRACK_ID, title: 'Posterity', artist: 'x', style: 'score', seconds: 1 },
+    { id: 'a', title: 'A', artist: 'x', style: 'one', seconds: 1 },
+    { id: 'b', title: 'B', artist: 'x', style: 'two', seconds: 1 },
+  ];
+
+  it('opens with the intro track on the visitor’s first play', () => {
+    expect(tourPlayedBefore()).toBe(false);
+    expect(pickTourTrack(() => 0.99, undefined, crate).id).toBe(INTRO_TRACK_ID);
+    expect(tourPlayedBefore()).toBe(true);
+    expect(store.get(TOUR_FIRST_PLAY_KEY)).toBe('1');
+  });
+
+  it('is random after the first play', () => {
+    markTourPlayed();
+    expect(pickTourTrack(() => 0, undefined, crate).id).toBe(INTRO_TRACK_ID);
+    expect(pickTourTrack(() => 0.5, undefined, crate).id).toBe('a');
+  });
+
+  it('ships the intro track in the real crate', () => {
+    expect(introTrack().id).toBe(INTRO_TRACK_ID);
+    expect(TRACKS.some((t) => t.id === INTRO_TRACK_ID)).toBe(true);
   });
 });
