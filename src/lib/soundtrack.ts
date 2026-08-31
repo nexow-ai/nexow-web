@@ -449,6 +449,30 @@ export const TRACKS: readonly Track[] = [
     seconds: 149,
     src: file('bumerang'),
   },
+  {
+    id: 'became-who-i-feared-most',
+    title: 'Became Who I Feared Most',
+    artist: 'Unknown',
+    style: 'dark electronic',
+    seconds: 344,
+    src: file('became-who-i-feared-most'),
+  },
+  {
+    id: 'epilogo',
+    title: 'Epílogo',
+    artist: 'Unknown',
+    style: 'spanish ballad',
+    seconds: 428,
+    src: file('epilogo'),
+  },
+  {
+    id: 'ni-de-oro-ni-de-goldfield',
+    title: 'Ni de Oro Ni de Goldfield',
+    artist: 'Unknown',
+    style: 'spanish indie',
+    seconds: 184,
+    src: file('ni-de-oro-ni-de-goldfield'),
+  },
 ];
 
 /**
