@@ -85,14 +85,80 @@
   /* How present the screens are against the backdrop. Blending stays off —
    * screens occlude one another, and a see-through field of them reads as
    * smear — so this dissolves each panel into the world's own surface instead,
-   * which is what the same opacity over that backdrop looks like. At 0.8 the
-   * panels hold as objects while still sitting a fifth of the way back into the
-   * stage; the same value on both themes, since either surface is what the
-   * fifth is made of. */
-  const SCREEN_ALPHA = 0.8;
+   * which is what the same opacity over that backdrop looks like. At 0.56 the
+   * pane is still an object (a rim, a sheen, a glint) without claiming a fifth
+   * of the frame as a solid card; the same value on both themes, since either
+   * surface is what the dissolve is made of. */
+  const SCREEN_ALPHA = 0.56;
+
+  /* How each scene is framed: where the lens stands, how high it looks from,
+   * and how much of the field it wants.
+   *
+   * This replaces a single monotonic dolly — 24 units out at the hero, 14 at
+   * the footer — which gave the whole page one continuous pull-in. Nothing
+   * ever opened back up, so the world only ever got closer and busier, and no
+   * two sections framed it differently: fifteen shapes, one shot.
+   *
+   * Read the `dist` column down and it alternates. Sections whose subject is
+   * the matter (the four widgets, the patrol, the atelier, the aperture) are
+   * shot close, where a handful of large screens fill the frame and the eye
+   * has something to hold. Sections that are mostly copy (the acts' openings,
+   * privacy, rewards, the footer) pull well back, where the field becomes a
+   * horizon behind the words instead of a crowd around them. The contrast is
+   * the effect: a background is only quiet if it is sometimes loud.
+   *
+   * `calm` is the same idea applied to presence rather than to distance — how
+   * far the screens dissolve into the backdrop, how many of them stand down
+   * (`uThin`), and how much lens traffic the morph is allowed. Far scenes are
+   * the calm ones, so pulling back genuinely quiets the page rather than
+   * trading a near crowd for a distant one.
+   *
+   * Interpolated on the same `beat` the matter morphs on, so the lens travels
+   * only while a scene is handing over and is still while its copy is read.
+   * The last row is the exit, past the footer. */
+  const LENS = [
+    { dist: 20.5, lift: 4.6, calm: 0.28 }, // 0  hero — inside the carousel
+    { dist: 26.5, lift: 3.2, calm: 0.52 }, // 1  widget
+    { dist: 18.6, lift: 2.4, calm: 0.26 }, // 2  canvas — the four widgets
+    { dist: 27.5, lift: 5.0, calm: 0.58 }, // 3  connectors
+    { dist: 17.2, lift: 3.0, calm: 0.22 }, // 4  bots — the patrol
+    { dist: 25.5, lift: 6.0, calm: 0.54 }, // 5  agents
+    { dist: 18.0, lift: 2.2, calm: 0.28 }, // 6  dao — the ledger
+    { dist: 28.5, lift: 6.4, calm: 0.62 }, // 7  use cases — the exhale
+    { dist: 17.6, lift: 4.2, calm: 0.34 }, // 8  features — the atelier
+    { dist: 26.0, lift: 2.8, calm: 0.58 }, // 9  privacy
+    { dist: 19.2, lift: 2.0, calm: 0.4 }, //  10 plans
+    { dist: 27.0, lift: 5.4, calm: 0.58 }, // 11 rewards
+    { dist: 18.2, lift: 3.0, calm: 0.46 }, // 12 faq
+    { dist: 15.8, lift: 1.8, calm: 0.3 }, //  13 cta — the aperture, closest
+    { dist: 28.0, lift: 5.6, calm: 0.66 }, // 14 footer
+    { dist: 30.0, lift: 6.6, calm: 0.75 }, //    exit
+  ];
+
+  /* How much glass, at rest and at the calmest. A panel's interface is the
+   * loudest thing about it — thirty-six kinds of live software, each with a
+   * chart moving or a dot pulsing, all of it legible at a glance and none of
+   * it what the reader is meant to be reading. Clearing it leaves the object:
+   * a tinted pane with a sheen, a rim and a glint that sweeps as it turns.
+   *
+   * The floor is high on purpose. A third of the wall gone to glass still
+   * left a video wall; most of it gone leaves a suggestion of screens, and
+   * the close scenes keep just enough chrome that the ones you are meant to
+   * look at still read as screens rather than empty cards. */
+  const GLASS_BASE = 0.74;
+  const GLASS_CALM = 0.24;
+
+  /* Phones see the same staging at 86% of the distance and two thirds of the
+   * height — a tall frustum loses a wide shot off the sides, and a lens 6
+   * units up on a 390px viewport is looking down at the top of everything. */
+  const LENS_COMPACT_DIST = 0.86;
+  const LENS_COMPACT_LIFT = 0.68;
 
   /** Damping for the camera's follow, per second. Lower = heavier lens. */
-  const CAM_DAMP = 3.2;
+  /* Heavier than the 3.2 it was. The dolly now covers ten units between one
+   * scene and the next instead of the old one, and a light lens crossing that
+   * inside a single morph reads as a cut. */
+  const CAM_DAMP = 2.6;
   /** Damping for the pointer parallax. Slower than the camera, so it trails. */
   const PTR_DAMP = 2.1;
 
@@ -116,6 +182,9 @@
     uniform float uLift;
     uniform float uCharge;
     uniform float uBurst;
+    /* The share of the field that stands down in the scene being read, 0..1.
+       Some sections want a wall of screens; most want a suggestion of one. */
+    uniform float uThin;
     /* 1 while the loop is running, 0 for the one composed reduced-motion
        frame. Only the channel cut reads it — everything else is already still
        in that frame because the clock is. */
@@ -456,14 +525,19 @@
       /* Held back on the large sizes: the push is a fraction of the distance
          to the lens, and on a screen three times the size that fraction is a
          wall across the frame rather than an object going past it. */
-      float flyby = step(0.90, aSeed) * (1.0 - 0.72 * grade);
+      /* And thinned out with the field. One panel in ten sweeping the lens is
+         a flourish in a scene that wants a wall; in a scene staged wide and
+         quiet it is the one thing in the frame the eye cannot ignore, arriving
+         exactly when the reader is moving between two blocks of copy. Calm
+         scenes get a quarter of the traffic. */
+      float flyby = step(0.92, aSeed) * (1.0 - 0.72 * grade) * max(1.0 - uThin * 1.7, 0.25);
       /* Travel a fraction of the actual distance to the lens rather than a
          fixed number of units: a fixed push overshoots *behind* the camera on
          the near side of the cloud, where the point clips out instead of
          sweeping past. At peak it closes ~82% of the gap, so it comes close
          enough to flare and always stays in front. */
       vec3 toCam = uCam - p;
-      p += normalize(toCam) * bloom * flyby * length(toCam) * 0.70;
+      p += normalize(toCam) * bloom * flyby * length(toCam) * 0.62;
 
       /* The hero's one interaction: what you type charges the matter. It winds
          up and tightens as the composer fills, and the send throws a shockwave
@@ -539,7 +613,17 @@
          the slab — and floated a little toward the eye so each sits in front
          of its neighbours instead of slicing through them. */
       float big = 1.0 - step(0.5, mod(aId, 5.0));
-      float sz = (mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16) * mix(1.0, 2.0, big);
+      /* Density, per scene. A field that is present at the same volume from
+         the hero to the footer stops being a background and becomes noise —
+         the reader has nowhere to rest, and a section with copy to follow is
+         competing with ninety-six lit rectangles for the same attention.
+         uThin retires a share of them, chosen by a hash that never changes, so
+         the same screens leave and come back rather than the wall reshuffling
+         itself under the reader. They shrink out across a soft band, so a
+         scene handing over thins instead of dropping. */
+      float vis = smoothstep(uThin, uThin + 0.16, ho.z + 0.16);
+      float sz = (mix(tiered, 1.02 + grade * 0.42, heroness) + k * 0.10 + burst * 0.16)
+                 * mix(1.0, 2.0, big) * vis;
       vec3 world = p + toEye * big * 0.7 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
@@ -618,6 +702,9 @@
          sweeping the lens still reads as an object going past rather than one
          quietly winking out. */
       vGlow *= 1.0 + 0.55 * smoothstep(12.0, 5.5, dist);
+      /* A screen standing down goes out as it shrinks, so the cull below
+         retires it entirely rather than leaving a sliver in the frame. */
+      vGlow *= vis;
       /* Nothing to see, nothing to draw. A screen fading out on the near
          plane is the size of the viewport, and until now every one of its
          pixels ran the fragment shader just to be discarded. Pushing the
@@ -640,6 +727,12 @@
     uniform vec3 uC3;
     uniform vec3 uFog;
     uniform float uAlpha;
+    /* How far each panel reads as a pane of glass rather than as a running
+       display: 0 draws the full interface, 1 leaves bare tinted glass with its
+       sheen, its rim and its glint. What is taken away is the content, never
+       the object — a panel that loses its edges stops occluding and the field
+       goes back to being a smear. */
+    uniform float uGlass;
     /* 1 on the light theme, 0 on the dark. The glass, the type and the frame
        invert with it; the accents darken so they still hold on a pale surface. */
     uniform float uLight;
@@ -814,8 +907,11 @@
       vec3 glassLite = mix(mix(glassDark, accent * 0.16, 0.28),
                            mix(glassDark, vec3(1.0), 0.28), uLight);
       /* Every screen wears its family a little; studio beats wear it as
-         product chrome so the wall reads as customised widgets, not mint. */
-      float wear = mix(0.28, 0.52, uStudio);
+         product chrome so the wall reads as customised widgets, not mint.
+         Held back as the glass clears: a pane with nothing running on it has
+         no interface to be themed, and a blank rectangle in a saturated family
+         colour is a swatch, not a screen. */
+      float wear = mix(0.28, 0.52, uStudio) * (1.0 - 0.88 * uGlass);
       glassDark = mix(glassDark, mix(glassDark, accent, 0.42), wear);
       glassLite = mix(glassLite, mix(glassLite, accent, 0.28), wear);
 
@@ -824,7 +920,29 @@
          a second border rather than as depth — but not so light that white
          glass meets white bezel with nothing between them. */
       vec3 col = mix(glassDark, glassLite, uv.y * 0.9);
-      col *= 1.0 - inset * (0.38 - 0.20 * uLight);
+      /* The housing's shadow on the glass just inside it — eased off as that
+         housing thins. A dark ring inside the edge of a panel with nothing on
+         it is the single thing that makes it read as a matte box instead of a
+         pane: it draws a second border where there is no longer a frame to
+         cast one. */
+      col *= 1.0 - inset * (0.38 - 0.20 * uLight) * (1.0 - 0.60 * uGlass);
+      /* The pane with nothing on it, kept so the content can be mixed back out
+         of it below. One register against re-deriving the gradient after all
+         thirty-six branches, and the only way to fade an interface out without
+         also fading the surface it is drawn on. */
+      vec3 bare = col;
+      /* On the dark theme that pane is near-black, and a near-black rectangle
+         on a near-black stage is a hole in the picture rather than a piece of
+         glass. So it picks up the key light it is turned into: panes at
+         different angles sit at different values, which is the one depth cue
+         that survives having nothing drawn on them. The light theme needs none
+         of this — there the pane is already brighter than the page. */
+      bare += lightest * (0.05 + 0.12 * vLight) * uGlass * (1.0 - uLight);
+      /* Sit the cleared pane into the page. Without this a glassy field is
+         still a field of tinted cards — near-black slabs on the dark theme,
+         pastel ones on the day sections — which is louder than the interfaces
+         they replaced. The sheen and the glint stay; the fill does not. */
+      bare = mix(bare, uFog, uGlass * mix(0.28, 0.55, uLight));
 
       /* ---- chrome: title, subtitle, live dot, hairline ---- */
       float pulse = 0.65 + 0.35 * sin(t * 2.2);
@@ -1623,9 +1741,26 @@
         col += lightest * inner * cut * slit * 0.55;
       }
 
-      /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ---- */
+      /* ---- clear the glass ----
+         Back toward the bare pane. Ninety-six live interfaces is ninety-six
+         things asking to be read: charts moving, dots pulsing, channels
+         cutting, every one of them legible enough to pull the eye off the copy
+         it is behind. Mixing the content out rather than fogging the whole
+         panel is the difference between a quiet field and a murky one — the
+         panel keeps its surface, its edges and its place in the depth order,
+         and simply stops broadcasting.
+
+         After the cut, so a channel change is damped along with everything
+         else: a flash is the loudest thing a screen can do. */
+      col = mix(col, bare, uGlass);
+
+      /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ----
+         Lifted as the display clears. On a running screen the sheen is a
+         suggestion over the picture; on an empty pane it is most of what says
+         there is a pane there at all, and a clear panel with no highlight on
+         it is a hole. */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
-      col += lightest * sheen * sheen * 0.026;
+      col += lightest * sheen * sheen * (0.026 + 0.10 * uGlass);
 
       /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ----
          Dark theme: near-black plastic, which is what gives a bright display
@@ -1642,18 +1777,28 @@
       float rim = 1.0 - aastep(0.010, abs(sd + 0.004));
       frame = mix(frame, mix(lightest, mix(frameBase, paper, 0.38), uLight),
                   rim * mix(topLight * 0.35, 0.85, uLight));
-      col = mix(col, frame, bezel);
+      /* Thinned in its weight, not in its width, as the glass clears: a field
+         of cleared panels still wearing full housings is a sheet of empty
+         boxes, which is louder than the interfaces were. Never to nothing —
+         the hairline at the rim is the panel's only silhouette once its
+         content is gone. */
+      col = mix(col, frame, bezel * (1.0 - 0.68 * uGlass));
 
-      col += accent * vFres * 0.13;
-      /* Toned down on the light theme: white added to near-white just clips. */
-      col += lightest * vSpec * (0.30 - 0.24 * uLight);
+      col += accent * vFres * (0.13 + 0.10 * uGlass);
+      /* Toned down on the light theme: white added to near-white just clips.
+         Stronger on a cleared pane, where the glint sweeping across as the
+         panel turns is the whole of what reads as glass. */
+      col += lightest * vSpec * (0.30 - 0.24 * uLight) * (1.0 + 1.4 * uGlass);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. The light
-         theme dissolves far less: there the backdrop is near-white and the
-         glass is white, so a fifth of the page mixed into every panel took
-         away the little separation the panel had. */
-      gl_FragColor = vec4(mix(uFog, col, glow * mix(uAlpha, 1.0, 0.7 * uLight)), 1.0);
+         theme used to dissolve far less — white glass on a white page has
+         almost no separation — which is why a glassy field still read as a
+         wall of cards on the day sections. Glass now spends that hold-back:
+         a running screen on a pale page still sits forward; a cleared pane
+         is allowed to sit into the page the way it does on the dark one. */
+      float hold = mix(uAlpha, 1.0, 0.7 * uLight * (1.0 - uGlass));
+      gl_FragColor = vec4(mix(uFog, col, glow * hold), 1.0);
     }
   `;
 
@@ -2245,10 +2390,12 @@
     const uMorph = u('uMorph');
     const uTime = u('uTime');
     const uAlpha = u('uAlpha');
+    const uGlass = u('uGlass');
     const uShift = u('uShift');
     const uLift = u('uLift');
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
+    const uThin = u('uThin');
     const uLive = u('uLive');
     const uCam = u('uCam');
     const uPix = u('uPix');
@@ -2780,7 +2927,14 @@
       ctx.uniform1f(uFormB, Math.min(a + 1, FORM_LAST));
       ctx.uniform1f(uMorph, morph);
       ctx.uniform1f(uTime, seconds);
-      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+
+      /* The scene's framing, eased into the next one across the same beat the
+       * matter morphs on. Held flat while the copy is being read. */
+      const shot = LENS[Math.min(a, LENS.length - 1)];
+      const next = LENS[Math.min(a + 1, LENS.length - 1)];
+      const shotDist = shot.dist + (next.dist - shot.dist) * beat;
+      const shotLift = shot.lift + (next.lift - shot.lift) * beat;
+      const calm = shot.calm + (next.calm - shot.calm) * beat;
 
       /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
          view switches too — that is how a single section shows every family. */
@@ -2789,6 +2943,25 @@
       ctx.uniform1f(uWay, a + stage);
       const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
       ctx.uniform1f(uStudio, studio);
+
+      /* Calm dissolves the screens further into the backdrop and stands a
+       * share of them down. Both, rather than one harder: alpha alone leaves
+       * the same ninety-six rectangles in the frame and only makes them
+       * murkier, and thinning alone leaves the survivors as loud as ever.
+       *
+       * Except on the day sections, where alpha barely bites: the backdrop
+       * there is near-white and so is the glass, so dissolving a panel into it
+       * takes away the little separation it had (see FRAG). The second half of
+       * the page has to get its quiet from there being fewer screens, which is
+       * why studio buys thinning rather than more fog. */
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA * (1 - 0.34 * calm));
+      ctx.uniform1f(
+        uThin,
+        Math.min(0.62, calm * (compact ? 0.56 : 0.48) + studio * 0.12),
+      );
+      /* And the survivors run their interfaces only where the scene is staged
+       * for them to be looked at. Everywhere else they are glass. */
+      ctx.uniform1f(uGlass, Math.min(0.92, GLASS_BASE + calm * GLASS_CALM));
       const nextDay = studio > 0.45;
       if (nextDay !== dayOn) {
         dayOn = nextDay;
@@ -2821,35 +2994,29 @@
       ptrX += (ptrAimX - ptrX) * pl;
       ptrY += (ptrAimY - ptrY) * pl;
 
-      /* The camera path: one continuous orbit that dollies in as the story
-       * advances, rising and falling so the matter is never seen from the same
-       * height twice. Pointer parallax is added to the *aim*, not to the
-       * camera, so it inherits the same inertia as everything else. */
+      /* The camera path: one continuous orbit around the world, dollying out
+       * and back in between the shots staged in LENS, so the matter is never
+       * seen from the same distance or the same height twice. Pointer parallax
+       * is added to the *aim*, not to the camera, so it inherits the same
+       * inertia as everything else. */
       const ang = -1.05 + p * 3.05 + ptrX * 0.22;
-      /* Closer in the hero, so the lens sits just outside the outer shell
-       * instead of well back from it. This is what makes the carousel a
-       * carousel: at 24 the whole ring was ahead of the camera and the near
-       * side simply sat there, but at 20 it comes within a few units of the
-       * lens, flares on the approach and fades out on the near plane — screens
-       * genuinely sweep past you rather than drifting in a box. */
-      /* Closer in the hero, so the lens sits just outside the outer shell
-       * instead of well back from it. This is what makes the carousel a
-       * carousel: at 24 the whole ring was ahead of the camera and the near
-       * side simply sat there, but at 20 it comes within a few units of the
-       * lens, flares on the approach and fades out on the near plane — screens
-       * genuinely sweep past you rather than drifting in a box. */
+      /* Distance and height come from the scene's own row in LENS, so the
+       * dolly opens out and closes in across the page rather than creeping one
+       * way. The hero's row (20.5) is what makes the carousel a carousel: at
+       * 24 the whole ring sat ahead of the lens, but at 20 the near side comes
+       * within a few units of it, flares on the approach and fades out on the
+       * near plane — screens genuinely sweep past you.
+       *
+       * The breathing term is the only continuous movement left; it keeps the
+       * lens alive through a hold without carrying it anywhere. */
       const dist =
-        (compact ? 20.4 : 24) - p * (compact ? 8.2 : 10.2) - 3.5 * hero + Math.sin(seconds * 0.22) * 0.6;
+        shotDist * (compact ? LENS_COMPACT_DIST : 1) + Math.sin(seconds * 0.22) * 0.6;
       const aimX = Math.sin(ang) * dist;
-      /* Lifted a little in the hero so the lens looks slightly down into the
-       * carousel: dead level, a ring projects to a flat horizontal band and
-       * nothing in the picture says the screens are on a circle. Only a little,
-       * though — at 7 units up the ring filled the frame edge to edge and the
-       * headline lost its hole. Decays with the morph, so act 01 still gets the
-       * camera height it was staged for. Compact keeps the excursion smaller
-       * so a tall phone does not lose the ring off the top and bottom. */
-      const aimY =
-        1.6 + (compact ? 3.6 : 5.4) * Math.sin(p * 3.1) + ptrY * 2.4 + (compact ? 1.7 : 3.0) * hero;
+      /* Height is staged too, and for the same reason the hero needs its 4.6:
+       * dead level, a ring projects to a flat horizontal band and nothing in
+       * the picture says the screens are on a circle. Close scenes sit low and
+       * near eye level, wide ones look down from above the formation. */
+      const aimY = shotLift * (compact ? LENS_COMPACT_LIFT : 1) + ptrY * 2.4;
       const aimZ = Math.cos(ang) * dist;
 
       if (!camPrimed) {
@@ -2893,7 +3060,12 @@
       ctx.uniform1f(uFormB, 1);
       ctx.uniform1f(uMorph, 0.34);
       ctx.uniform1f(uTime, 6);
-      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+      /* Composed at the hero's own presence, thinned a little further: a still
+       * frame is looked at rather than scrolled past, and every screen in it
+       * stays in the eye for as long as the visitor is on the page. */
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA * 0.88);
+      ctx.uniform1f(uThin, 0.2);
+      ctx.uniform1f(uGlass, GLASS_BASE + 0.28 * GLASS_CALM);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
@@ -3093,8 +3265,8 @@
     position: fixed;
     inset: 0;
     z-index: 1;
-    width: 100dvw;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     opacity: 0;
     /* No transition on opacity: it is written every frame from the world's
