@@ -9,7 +9,8 @@
  *
  * Five controls, in the order they are wanted: stop, the countdown, the
  * scroll rate, light/dark, and a new song. Above the pill, the title of
- * whichever record is on stays visible for the whole tour. None of them
+ * whichever record is on stays visible for the whole tour, marked with
+ * a music glyph. None of them
  * speaks to the tour directly. The pill dispatches `nexow:tourtoggle`,
  * `nexow:tracknext` and `nexow:tourpace`, which the tour (`Header.astro`) and
  * the deck (`TourSound.astro`) answer, and it listens for `nexow:tour`,
@@ -49,6 +50,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 >
   <div class="tour-hud__stack">
     <p class="tour-hud__now" aria-live="polite" data-has-track="false" hidden>
+      <Icon name="music" class="tour-hud__now-icon size-3" />
       <span class="tour-hud__now-title"></span>
     </p>
 
@@ -149,12 +151,15 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     max-width: min(22rem, calc(100vw - 1.5rem));
   }
 
-  /* Now-playing label sits above the pill for the whole tour — title only,
+  /* Now-playing label sits above the pill for the whole tour — notes + title,
      so a long guest cut never stretches the dock. */
   .tour-hud__now {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     margin: 0;
     max-width: 100%;
-    padding: 0.28rem 0.85rem;
+    padding: 0.28rem 0.85rem 0.28rem 0.7rem;
     border-radius: 9999px;
     font-family: var(--font-display, var(--font-sans));
     font-size: 0.6875rem;
@@ -186,10 +191,16 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   }
 
   .tour-hud__now-title {
-    display: block;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  /* `<Icon>` svg is unscoped — paint through :global so the glyph inherits. */
+  .tour-hud__now :global(.tour-hud__now-icon) {
+    flex-shrink: 0;
+    color: inherit;
   }
 
   /* The same crystal glass as the corner arrows (`PageNav.astro`), drawn long. */

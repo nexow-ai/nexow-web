@@ -27,6 +27,7 @@ export const en: SiteContent = {
     nextPage: 'Next page',
     tourPlay: 'Play the tour',
     tourStop: 'Stop the tour',
+    tourPlayMe: 'Play Me',
     tourTrack: 'Play a different song',
     tourLeft: 'Time left',
     tourControls: 'Tour controls',

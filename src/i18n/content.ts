@@ -401,6 +401,8 @@ export interface SiteContent {
     /** Aria labels for the hands-free scroll tour (see `Header.astro`). */
     tourPlay?: string;
     tourStop?: string;
+    /** Visible "Play Me" label beside the tour icon on the home page only. */
+    tourPlayMe?: string;
     /** Labels for the tour's transport (see `TourHud.astro`). */
     tourTrack?: string;
     tourLeft?: string;

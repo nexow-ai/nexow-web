@@ -50,6 +50,9 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 /* Optional, English fallback: no locale bundle has to change for this to ship. */
 const tourPlay = t.nav.tourPlay ?? 'Play the tour';
 const tourStop = t.nav.tourStop ?? 'Stop the tour';
+/** Visible label next to the play icon — home only. */
+const tourPlayMe = t.nav.tourPlayMe ?? 'Play Me';
+const isHome = route === '/';
 const switchLang = t.nav.switchLang ?? 'Switch language';
 const primaryNav = t.nav.primaryNav ?? 'Primary';
 const mobileNav = t.nav.mobileNav ?? 'Mobile';
@@ -108,13 +111,23 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
         <button
           type="button"
           id="tour-toggle"
-          class="tour-toggle chrome-hit items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
+          class:list={[
+            'tour-toggle chrome-hit items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10',
+            isHome && 'tour-toggle--labeled',
+          ]}
           data-tour-control
           aria-pressed="false"
           aria-label={tourPlay}
           data-play-label={tourPlay}
           data-stop-label={tourStop}
         >
+          {
+            isHome && (
+              <span class="tour-toggle__label" aria-hidden="true">
+                {tourPlayMe}
+              </span>
+            )
+          }
           <Icon name="play" class="tour-toggle__play size-4" />
           <Icon name="pause" class="tour-toggle__stop size-4" />
         </button>

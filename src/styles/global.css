@@ -1114,14 +1114,47 @@ html.dark .theme-glyph-light {
   display: none;
 }
 
+/* Home only: "Play Me" beside the icon. Wider than the round chrome-hit box. */
+.tour-toggle.tour-toggle--labeled {
+  width: auto;
+  gap: 0.4rem;
+  padding-inline: 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .tour-toggle.tour-toggle--labeled {
+    padding-inline: 0.85rem;
+  }
+}
+
+.tour-toggle__label {
+  line-height: 1;
+}
+
 /* One glyph at a time: play while idle, pause while the tour is running. */
 .tour-toggle .tour-toggle__stop,
-.tour-toggle[aria-pressed='true'] .tour-toggle__play {
+.tour-toggle[aria-pressed='true'] .tour-toggle__play,
+.tour-toggle[aria-pressed='true'] .tour-toggle__label {
   display: none;
 }
 
 .tour-toggle[aria-pressed='true'] .tour-toggle__stop {
   display: block;
+}
+
+/* Icon-only again while the tour is running. */
+.tour-toggle.tour-toggle--labeled[aria-pressed='true'] {
+  width: 2.5rem;
+  padding-inline: 0;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .tour-toggle.tour-toggle--labeled[aria-pressed='true'] {
+    width: 2.75rem;
+  }
 }
 
 .tour-toggle[aria-pressed='true'] {
