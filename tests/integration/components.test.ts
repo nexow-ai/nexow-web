@@ -319,7 +319,7 @@ describe('Hero', () => {
     expect(html).toContain('data-hero-scene="portfolio"');
     expect(html).toContain('data-hero-scene="macro"');
     expect(html).toContain('data-hero-scene="onchain"');
-    expect((html.match(/data-hero-board="/g) ?? []).length).toBe(8);
+    expect((html.match(/data-hero-board="/g) ?? []).length).toBe(16);
   });
 });
 

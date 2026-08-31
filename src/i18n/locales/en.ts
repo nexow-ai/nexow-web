@@ -167,9 +167,24 @@ export const en: SiteContent = {
           prompt: 'Compare GDP per capita, inflation and population for five countries using World Bank indicators.',
         },
         {
+          icon: 'trophy',
+          label: 'Chess board',
+          prompt: 'Build a live chess board: Lichess blitz game with clocks, an eval bar, a move list and accuracy.',
+        },
+        {
+          icon: 'play',
+          label: 'Live Go',
+          prompt: 'Show a live 19×19 Go game: stones, captures, win probability, byoyomi clocks and a territory estimate.',
+        },
+        {
           icon: 'target',
           label: 'Prediction markets',
           prompt: 'Show Polymarket and Kalshi odds side by side with a probability timeline and a biggest-movers table.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Match center',
+          prompt: 'Build a live match center: score, xG, shot map, event tape and possession for the Premier League.',
         },
         {
           icon: 'wallet',
@@ -234,7 +249,37 @@ export const en: SiteContent = {
         {
           icon: 'banknote',
           label: 'FX desk',
-          prompt: 'Build an FX desk: EURUSD candles, a major-pairs grid, session clock and a news tape.',
+          prompt: 'Build an FX desk: EURUSD line, a G10 pairs grid, a 5×5 currency correlation heatmap and London/NY session clocks.',
+        },
+        {
+          icon: 'gem',
+          label: 'Metals & energy',
+          prompt: 'Show gold, silver, copper, WTI and Henry Hub with overlayed lines, the gold/oil ratio and COMEX inventory.',
+        },
+        {
+          icon: 'server',
+          label: 'Server fleet',
+          prompt: 'Build a live server fleet: CPU and memory per node, RPS sparkline, p99 latency and a hot-node table.',
+        },
+        {
+          icon: 'database',
+          label: 'Query desk',
+          prompt: 'Connect Postgres: QPS, cache hit, replication lag, a slow-query table and connections by role.',
+        },
+        {
+          icon: 'bot',
+          label: 'Bot farm',
+          prompt: 'Show my trading bots: status, last tick, PnL, queue depth and a kill-switch strip.',
+        },
+        {
+          icon: 'chat',
+          label: 'Ops chat',
+          prompt: 'Make an ops chat bridge: rooms, unread, a live tape, sentiment and paging when VAR breaches.',
+        },
+        {
+          icon: 'youtube',
+          label: 'Broadcast desk',
+          prompt: 'Build a master-control wall: four program previews, on-air tally, viewers and a rundown.',
         },
         {
           icon: 'hourglass',
