@@ -128,8 +128,61 @@ const PAIR_FILL = [
   'var(--color-brand-300)',
 ];
 
+/** Air-quality spark — kept inside the card (title ~y 300, floor ~y 356). */
 const SPARK = [28, 36, 32, 44, 50, 41, 56, 62, 54, 68, 74, 70];
-const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v * 0.7}`).join(' ');
+const sparkLo = Math.min(...SPARK);
+const sparkHi = Math.max(...SPARK);
+const sparkX = (i: number) => 144 + i * 24;
+const sparkY = (v: number) => 352 - ((v - sparkLo) / (sparkHi - sparkLo || 1)) * 40;
+const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${sparkX(i)} ${sparkY(v)}`).join(' ');
+
+/** Candle closes for the trading board. */
+const CLOSES = [42, 48, 45, 58, 64, 55, 70, 76, 68, 82, 88, 84];
+const candleY = (v: number) => 328 - (v - 38) * 1.55;
+const CANDLES = CLOSES.map((c, i) => {
+  const prev = i === 0 ? c - 5 : CLOSES[i - 1];
+  const top = candleY(Math.max(c, prev));
+  const bottom = candleY(Math.min(c, prev));
+  return { x: 148 + i * 24, top, h: Math.max(6, bottom - top + 5), up: c >= prev };
+});
+const emaPath = CLOSES.map((c, i) => `${i ? 'L' : 'M'}${148 + i * 24} ${candleY(c)}`).join(' ');
+
+/** Order-book depth rows (bid left / ask right). */
+const BOOK = [
+  { bid: 88, ask: 72 },
+  { bid: 70, ask: 64 },
+  { bid: 54, ask: 50 },
+  { bid: 40, ask: 42 },
+  { bid: 28, ask: 34 },
+  { bid: 16, ask: 22 },
+];
+
+/** Coarse landmass for the quake map. */
+const MAP_ROWS = [
+  '..####....###...',
+  '.######..#####..',
+  '..#####...####..',
+  '...###.....###..',
+  '...###......##..',
+  '....#.......#...',
+];
+const MAP_DOTS = MAP_ROWS.flatMap((row, r) =>
+  row.split('').flatMap((cell, c) => (cell === '#' ? [{ x: 148 + c * 18, y: 178 + r * 22 }] : [])),
+);
+const QUAKES = [
+  { x: 196, y: 210, r: 7 },
+  { x: 320, y: 196, r: 10 },
+  { x: 268, y: 248, r: 6 },
+];
+const MAG = [18, 12, 26, 14, 22, 10, 28, 16, 24, 12, 20, 26];
+
+/** Watchlist spark paths (local 0..90 × 0..18). */
+const WATCH = [
+  { spark: 'M0 14L18 10L36 12L54 6L72 9L90 3', up: true, label: 'BTC' },
+  { spark: 'M0 4L18 9L36 7L54 13L72 11L90 16', up: false, label: 'ETH' },
+  { spark: 'M0 11L18 8L36 10L54 5L72 4L90 7', up: true, label: 'SOL' },
+  { spark: 'M0 8L18 5L36 11L54 9L72 14L90 12', up: false, label: 'AAPL' },
+];
 ---
 
 <div class="act-scene w-scene" data-playground-art aria-hidden="true">
@@ -151,6 +204,12 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
           </clipPath>
           <clipPath id="w-type-clip">
             <rect class="w-type-mask" x="180" y="80" width="400" height="36"></rect>
+          </clipPath>
+          <clipPath id="w-aq-clip">
+            <rect x="136" y="308" width="304" height="48" rx="4"></rect>
+          </clipPath>
+          <clipPath id="w-stage-clip">
+            <rect x="120" y="140" width="492" height="228" rx="8"></rect>
           </clipPath>
           <linearGradient id="w-glow" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.22"></stop>
@@ -213,6 +272,9 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
             ))}
           </g>
 
+          <g class="w-boards" clip-path="url(#w-stage-clip)">
+          <!-- 0 · Personal — generate loop lands here -->
+          <g class="w-board w-board-home" style={`--i:0`}>
           <g class="w-widget" style="--i:0">
             <rect x="128" y="148" width="320" height="124" rx="14" class="w-card"></rect>
             <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
@@ -308,19 +370,21 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
             <circle class="w-live" cx="144" cy="296" r="3" fill="var(--color-accent-400)"></circle>
             <text x="154" y="300" class="w-card-title" fill="var(--w-text)">Air quality</text>
             <text class="w-kpi" x="400" y="300" fill="var(--w-accent)">AQI 42</text>
-            <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-            {
-              SPARK.map((v, i) => (
-                <circle
-                  class="w-spark-dot"
-                  style={`--i:${i}`}
-                  cx={152 + i * 22}
-                  cy={318 - v * 0.7}
-                  r="2.2"
-                  fill="var(--color-brand-300)"
-                />
-              ))
-            }
+            <g clip-path="url(#w-aq-clip)">
+              <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              {
+                SPARK.map((v, i) => (
+                  <circle
+                    class="w-spark-dot"
+                    style={`--i:${i}`}
+                    cx={sparkX(i)}
+                    cy={sparkY(v)}
+                    r="2.2"
+                    fill="var(--color-brand-300)"
+                  />
+                ))
+              }
+            </g>
           </g>
 
           <g class="w-links">
@@ -329,6 +393,266 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
             <circle class="w-node" cx="448" cy="210" r="3.5"></circle>
             <circle class="w-node" cx="460" cy="188" r="3.5"></circle>
             <circle class="w-node" cx="318" cy="296" r="3.5"></circle>
+          </g>
+          </g>
+
+          <!-- 1 · Trading desk -->
+          <g class="w-board w-board-alt" style={`--i:1`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">BTC-USD</text>
+              <text class="w-kpi" x="360" y="170" fill="var(--w-accent)">EMA 20/50</text>
+              {
+                CANDLES.map((c, i) => (
+                  <g class="w-candle" style={`--i:${i}`}>
+                    <path
+                      d={`M${c.x} ${c.top - 5}V${c.top + c.h + 5}`}
+                      stroke="var(--w-text-4)"
+                      stroke-width="1.2"
+                    />
+                    <rect
+                      x={c.x - 5}
+                      y={c.top}
+                      width="10"
+                      height={c.h}
+                      rx="2"
+                      fill={c.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                      opacity="0.85"
+                    />
+                  </g>
+                ))
+              }
+              <path class="w-sparkline w-ema" d={emaPath} stroke="var(--color-sky-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Order book</text>
+              {
+                BOOK.map((row, i) => (
+                  <g class="w-book-row" style={`--i:${i}`}>
+                    <rect
+                      x={532 - row.bid * 0.55}
+                      y={182 + i * 13}
+                      width={row.bid * 0.55}
+                      height="10"
+                      rx="2"
+                      fill="var(--color-brand-400)"
+                      opacity="0.55"
+                    />
+                    <rect
+                      x="536"
+                      y={182 + i * 13}
+                      width={row.ask * 0.55}
+                      height="10"
+                      rx="2"
+                      fill="var(--color-accent-400)"
+                      opacity="0.5"
+                    />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Funding</text>
+              <text class="w-kpi w-kpi-pulse" x="486" y="328" fill="var(--w-accent)">+0.012%</text>
+              <text x="486" y="348" class="w-note" fill="var(--w-text-4)">1h · open interest</text>
+            </g>
+          </g>
+
+          <!-- 2 · Quake map -->
+          <g class="w-board w-board-alt" style={`--i:2`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Quake map</text>
+              <text class="w-kpi" x="360" y="170" fill="var(--w-accent)">M4+</text>
+              {
+                MAP_DOTS.map((d) => (
+                  <circle cx={d.x} cy={d.y} r="2.2" fill="var(--w-cell)" />
+                ))
+              }
+              {
+                QUAKES.map((q, i) => (
+                  <g class="w-quake" style={`--i:${i}`}>
+                    <circle class="w-quake-ring" cx={q.x} cy={q.y} r={q.r * 2.4} fill="none" stroke="var(--color-brand-400)" stroke-width="1.2" />
+                    <circle cx={q.x} cy={q.y} r={q.r * 0.45} fill="var(--color-brand-300)" />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Magnitude</text>
+              {
+                MAG.map((h, i) => (
+                  <rect
+                    class="w-mag"
+                    style={`--i:${i}`}
+                    x={472 + i * 10}
+                    y={250 - h}
+                    width="7"
+                    height={h}
+                    rx="1.5"
+                    fill="var(--color-brand-400)"
+                    opacity="0.75"
+                  />
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Events</text>
+              <rect class="w-chip" x="472" y="314" width="56" height="14" rx="4" fill="var(--color-brand-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="536" y="314" width="52" height="14" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="336" width="72" height="14" rx="4" fill="var(--color-sky-400)" opacity="0.3"></rect>
+              <text x="478" y="324" class="w-note" fill="var(--w-text)">M4.6</text>
+              <text x="542" y="324" class="w-note" fill="var(--w-text)">M5.1</text>
+              <text x="478" y="346" class="w-note" fill="var(--w-text)">M4.2 · 12m</text>
+            </g>
+          </g>
+
+          <!-- 3 · Markets watchlist -->
+          <g class="w-board w-board-alt" style={`--i:3`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="476" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Watchlist</text>
+              <text class="w-kpi" x="520" y="170" fill="var(--w-accent)">12 tickers</text>
+              {
+                WATCH.map((row, i) => (
+                  <g class="w-watch" style={`--i:${i}`} transform={`translate(144 ${186 + i * 20})`}>
+                    <text class="w-note" y="12" fill="var(--w-text)">{row.label}</text>
+                    <path
+                      class="w-mini-spark"
+                      d={row.spark}
+                      transform="translate(56 0)"
+                      stroke={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                    <text class="w-note" x="420" y="12" fill={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>
+                      {row.up ? '+1.4%' : '−0.8%'}
+                    </text>
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="128" y="280" width="232" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="296" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="154" y="300" class="w-card-title" fill="var(--w-text)">Movers</text>
+              {
+                [72, 54, 88, 40, 64].map((w, i) => (
+                  <rect
+                    class="w-mover"
+                    style={`--i:${i}`}
+                    x="144"
+                    y={316 + i * 8}
+                    width={w}
+                    height="5"
+                    rx="2.5"
+                    fill="var(--color-brand-400)"
+                    opacity={0.4 + i * 0.1}
+                  />
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="372" y="280" width="232" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="388" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="398" y="300" class="w-card-title" fill="var(--w-text)">Earnings</text>
+              <text class="w-kpi" x="520" y="300" fill="var(--w-accent)">4 soon</text>
+              <rect class="w-chip" x="388" y="318" width="64" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.3"></rect>
+              <rect class="w-chip" x="460" y="318" width="56" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.3"></rect>
+              <rect class="w-chip" x="388" y="342" width="72" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.28"></rect>
+              <text x="396" y="330" class="w-note" fill="var(--w-text)">NVDA</text>
+              <text x="468" y="330" class="w-note" fill="var(--w-text)">META</text>
+              <text x="396" y="354" class="w-note" fill="var(--w-text)">TSLA · Tue</text>
+            </g>
+          </g>
+
+          <!-- 4 · News + sentiment -->
+          <g class="w-board w-board-alt" style={`--i:4`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Top stories</text>
+              {
+                [0, 1, 2, 3].map((i) => (
+                  <g class="w-story" style={`--i:${i}`}>
+                    <rect
+                      x="144"
+                      y={188 + i * 40}
+                      width="288"
+                      height="32"
+                      rx="8"
+                      fill="var(--w-cell)"
+                    />
+                    <rect
+                      x="154"
+                      y={196 + i * 40}
+                      width={160 - i * 18}
+                      height="6"
+                      rx="3"
+                      fill="var(--w-text-4)"
+                      opacity="0.55"
+                    />
+                    <rect
+                      x="154"
+                      y={208 + i * 40}
+                      width={100 - i * 10}
+                      height="5"
+                      rx="2.5"
+                      fill="var(--w-text-4)"
+                      opacity="0.3"
+                    />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Keywords</text>
+              <rect class="w-chip" x="472" y="188" width="52" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.4"></rect>
+              <rect class="w-chip" x="532" y="188" width="56" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="212" width="64" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="236" width="48" height="16" rx="4" fill="var(--color-brand-300)" opacity="0.35"></rect>
+              <text x="478" y="200" class="w-note" fill="var(--w-text)">markets</text>
+              <text x="538" y="200" class="w-note" fill="var(--w-text)">energy</text>
+              <text x="478" y="224" class="w-note" fill="var(--w-text)">policy</text>
+              <text x="478" y="248" class="w-note" fill="var(--w-text)">AI</text>
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Sentiment</text>
+              <path
+                class="w-donut"
+                d="M532 344 a22 22 0 1 1 0.01 0"
+                stroke="var(--w-cell)"
+                stroke-width="8"
+                fill="none"
+              ></path>
+              <path
+                class="w-donut w-donut-fill"
+                d="M532 344 a22 22 0 1 1 0.01 0"
+                stroke="var(--color-brand-400)"
+                stroke-width="8"
+                stroke-dasharray="90 140"
+                stroke-linecap="round"
+                fill="none"
+              ></path>
+              <text class="w-kpi" x="522" y="348" fill="var(--w-accent)">62%</text>
+            </g>
+          </g>
           </g>
 
           <g class="w-pointer">
@@ -434,7 +758,9 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     width: 100%;
     container-type: inline-size;
     --w-cycle: 16s;
-    --w-step: 1.6s;
+    --w-step: 1.2s;
+    --w-board-step: 2.1s;
+    --w-board-cycle: calc(var(--w-board-step) * 5);
     --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
     --w-add-flash: var(--color-brand-100);
     --w-add-flash-text: var(--color-brand-600);
@@ -798,7 +1124,19 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
   .w-spark-dot,
   .w-pointer,
   .w-live,
-  .w-streak-n {
+  .w-streak-n,
+  .w-board,
+  .w-candle,
+  .w-book-row,
+  .w-quake,
+  .w-quake-ring,
+  .w-mag,
+  .w-watch,
+  .w-mover,
+  .w-story,
+  .w-chip,
+  .w-donut-fill,
+  .w-kpi-pulse {
     transform-box: fill-box;
     transform-origin: center;
   }
@@ -814,6 +1152,32 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
   .w-sparkline {
     transform-origin: left center;
     fill: none;
+  }
+
+  .w-boards {
+    transform-box: fill-box;
+  }
+
+  .w-board-alt {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .w-board-home {
+    opacity: 1;
+  }
+
+  .w-mini-spark {
+    fill: none;
+  }
+
+  .w-donut {
+    transform-origin: center;
+  }
+
+  .w-quake-ring {
+    opacity: 0.55;
   }
 
   .w-mood-pick {
@@ -965,6 +1329,67 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
 
     .w-click {
       animation: w-click var(--w-cycle) ease-out infinite;
+    }
+
+    .w-candle {
+      transform-origin: center bottom;
+      animation: w-candle-pop 2.4s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.06s);
+    }
+
+    .w-book-row {
+      animation: w-book 2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.08s);
+    }
+
+    .w-quake-ring {
+      animation: w-quake-ring 2.2s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.45s);
+    }
+
+    .w-mag {
+      transform-origin: center bottom;
+      animation: w-mag 2.6s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .w-watch {
+      animation: w-watch-in 2.8s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.12s);
+    }
+
+    .w-mini-spark {
+      stroke-dasharray: 320;
+      animation: w-draw-fast 2.8s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.12s);
+    }
+
+    .w-mover {
+      transform-origin: left center;
+      animation: w-mover 2.4s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.1s);
+    }
+
+    .w-story {
+      animation: w-story 3s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.14s);
+    }
+
+    .w-chip {
+      animation: w-chip 2.6s ease-in-out infinite;
+    }
+
+    .w-donut-fill {
+      animation: w-donut 3s var(--w-e) infinite;
+    }
+
+    .w-kpi-pulse {
+      animation: w-kpi-pulse 1.8s ease-in-out infinite;
+    }
+
+    .w-ema {
+      stroke-dasharray: 320;
+      animation: w-draw-fast 3s var(--w-e) infinite;
     }
   }
 
@@ -1417,6 +1842,182 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     }
   }
 
+  @keyframes w-board-life {
+    0% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px) scale(0.97);
+    }
+    3% {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    17% {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    20%,
+    100% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px) scale(0.98);
+    }
+  }
+
+  @keyframes w-candle-pop {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleY(0.85);
+    }
+    40%,
+    70% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes w-book {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleX(0.92);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes w-quake-ring {
+    0% {
+      opacity: 0.7;
+      transform: scale(0.55);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes w-mag {
+    0%,
+    100% {
+      transform: scaleY(0.45);
+      opacity: 0.4;
+    }
+    45%,
+    70% {
+      transform: scaleY(1);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes w-watch-in {
+    0%,
+    8% {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    18%,
+    82% {
+      opacity: 1;
+      transform: none;
+    }
+    92%,
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes w-draw-fast {
+    0%,
+    10% {
+      stroke-dashoffset: 320;
+    }
+    35%,
+    80% {
+      stroke-dashoffset: 0;
+    }
+    95%,
+    100% {
+      stroke-dashoffset: 320;
+    }
+  }
+
+  @keyframes w-mover {
+    0%,
+    15% {
+      transform: scaleX(0.2);
+      opacity: 0.3;
+    }
+    40%,
+    75% {
+      transform: scaleX(1);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scaleX(0.55);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes w-story {
+    0%,
+    12% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    22%,
+    78% {
+      opacity: 1;
+      transform: none;
+    }
+    90%,
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes w-chip {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes w-donut {
+    0%,
+    20% {
+      stroke-dasharray: 0 140;
+    }
+    45%,
+    80% {
+      stroke-dasharray: 90 140;
+    }
+    100% {
+      stroke-dasharray: 0 140;
+    }
+  }
+
+  @keyframes w-kpi-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .w-type-mask,
     .w-caret,
@@ -1444,7 +2045,20 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     .w-spark-dot,
     .w-kpi,
     .w-pointer,
-    .w-click {
+    .w-click,
+    .w-board,
+    .w-candle,
+    .w-book-row,
+    .w-quake-ring,
+    .w-mag,
+    .w-watch,
+    .w-mini-spark,
+    .w-mover,
+    .w-story,
+    .w-chip,
+    .w-donut-fill,
+    .w-kpi-pulse,
+    .w-ema {
       animation: none !important;
     }
 
@@ -1453,6 +2067,16 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     .w-mood-pick,
     .w-heat-today {
       opacity: 0;
+    }
+
+    .w-board-alt {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .w-board-home {
+      opacity: 1;
+      visibility: visible;
     }
 
     .w-mem-face {
@@ -1524,12 +2148,16 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
   }
 
   .w-mosaic,
-  .w-mosaic-label,
+  .w-mosaic-label {
+    opacity: 0;
+  }
+
   .w-links {
     opacity: 0;
   }
 
-  /* 02 — same nodes, parked and wired. --arr is written by the script. */
+  /* 02 — same nodes, parked and wired. --arr is written by the script.
+     Boards cycle through layouts (personal → trading → map → markets → news). */
   .w-scene.is-arrange {
     --arr: var(--arr, 1);
   }
@@ -1543,17 +2171,35 @@ const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${152 + i * 22} ${318 - v
     animation: none !important;
   }
 
-  .w-scene.is-arrange .w-type-mask,
+  .w-scene.is-arrange .w-type-mask {
+    animation: none !important;
+  }
+
   .w-scene.is-arrange .w-widget {
     animation: none !important;
     opacity: 1;
     transform: none;
   }
 
+  .w-scene.is-arrange .w-board-alt {
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .w-scene.is-arrange .w-board {
+      animation: w-board-life var(--w-board-cycle, 10.5s) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-board-step, 2.1s));
+    }
+  }
+
   .w-scene.is-arrange .w-mosaic,
-  .w-scene.is-arrange .w-mosaic-label,
-  .w-scene.is-arrange .w-links {
+  .w-scene.is-arrange .w-mosaic-label {
     opacity: var(--arr, 1);
+  }
+
+  /* Links only on the personal board — fade with that board's opacity. */
+  .w-scene.is-arrange .w-board-home .w-links {
+    opacity: 1;
   }
 
   .w-scene.is-arrange .w-screen-tag {
