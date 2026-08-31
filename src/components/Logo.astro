@@ -1,5 +1,6 @@
 ---
 import { SITE, type Lang } from '../i18n/config';
+import { useContent } from '../i18n/content';
 import { localizePath } from '../i18n/utils';
 
 interface Props {
@@ -10,15 +11,27 @@ interface Props {
    */
   tone?: 'dark' | 'light' | 'auto';
   class?: string;
+  /**
+   * Digit that jumps home from the keyboard. Header uses `0`; the footer
+   * wordmark omits it so it stays a link, not a shortcut target.
+   */
+  shortcut?: string;
 }
-const { lang, tone = 'auto', class: className = 'h-8' } = Astro.props;
+const { lang, tone = 'auto', class: className = 'h-8', shortcut } = Astro.props;
 const home = localizePath('/', lang);
+const homeLabel = useContent(lang).nav.home ?? 'Home';
 const imgClass = ['w-auto select-none', className];
 ---
 
 {/* `shrink-0`: as a flex item in the header bar the wordmark would otherwise be
     the first thing squeezed, and long-locale navs collapsed it to zero width. */}
-<a href={home} class="inline-flex shrink-0 items-center" aria-label={`${SITE.name} — home`}>
+<a
+  href={home}
+  class="inline-flex shrink-0 items-center"
+  aria-label={`${SITE.name} — ${homeLabel}`}
+  aria-keyshortcuts={shortcut}
+  data-nav-key={shortcut}
+>
   {
     tone === 'auto' ? (
       <>

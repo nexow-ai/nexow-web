@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SITE, SOCIALS, defaultLang, languages } from '../../../src/i18n/config';
+import { SITE, SOCIALS, defaultLang, languages, resolveSocialUrl } from '../../../src/i18n/config';
 import { ICON_PATHS } from '../../../src/components/icon-paths';
 import { LANGS, PREFIXED_LANGS } from '../../helpers/locales';
 
@@ -68,6 +68,23 @@ describe('SITE', () => {
   });
 });
 
+describe('resolveSocialUrl', () => {
+  it('keeps a non-empty configured URL', () => {
+    expect(resolveSocialUrl(' https://x.com/nexow ', 'https://example.test')).toBe(
+      'https://x.com/nexow',
+    );
+  });
+
+  it('falls back when the env value is missing or blank', () => {
+    expect(resolveSocialUrl(undefined, 'https://example.test/fallback')).toBe(
+      'https://example.test/fallback',
+    );
+    expect(resolveSocialUrl('   ', 'https://example.test/fallback')).toBe(
+      'https://example.test/fallback',
+    );
+  });
+});
+
 describe('SOCIALS', () => {
   it('links every social profile over https', () => {
     for (const social of SOCIALS) {
@@ -76,7 +93,17 @@ describe('SOCIALS', () => {
   });
 
   it('uses icon names Icon.astro can resolve', () => {
-    const filled = new Set(['youtube', 'tiktok', 'x-logo', 'instagram', 'linkedin', 'github']);
+    const filled = new Set([
+      'youtube',
+      'tiktok',
+      'x-logo',
+      'instagram',
+      'linkedin',
+      'github',
+      'telegram',
+      'discord',
+      'skool',
+    ]);
     for (const social of SOCIALS) {
       const known = social.icon in ICON_PATHS || filled.has(social.icon);
       expect(known, `${social.label} → unknown icon "${social.icon}"`).toBe(true);
@@ -86,5 +113,19 @@ describe('SOCIALS', () => {
   it('has unique labels and hrefs', () => {
     expect(new Set(SOCIALS.map((s) => s.label)).size).toBe(SOCIALS.length);
     expect(new Set(SOCIALS.map((s) => s.href)).size).toBe(SOCIALS.length);
+  });
+
+  it('publishes the eight community profiles plus GitHub', () => {
+    expect(SOCIALS.map((s) => s.label)).toEqual([
+      'X',
+      'Discord',
+      'Telegram',
+      'TikTok',
+      'Instagram',
+      'LinkedIn',
+      'YouTube',
+      'Skool',
+      'GitHub',
+    ]);
   });
 });

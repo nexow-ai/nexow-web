@@ -1,0 +1,52 @@
+---
+/**
+ * One act of the home page's scroll story.
+ *
+ * A tall section wrapping a single sticky stage. `ScrollMotion` writes `--ps`
+ * onto the section because of `data-stages`, and `global.css` turns that into
+ * the `--k0…--k3` ramps each scene keys its beats off.
+ *
+ * `data-world-scene` is what tells `WorldField` this is a beat of the story:
+ * the field reads those elements in document order and gives scene *i* the
+ * matter's formation *i*. The hero carries the same attribute and is scene 0.
+ *
+ * `data-stages` is used *without* `data-motion` on purpose: that combination
+ * gets the progress variables written but no composed transform and no
+ * `will-change`, so the act itself never moves — only what the scene does with
+ * the ramps moves. Reading stays comfortable because the copy holds still.
+ */
+interface Props {
+  /** Anchor id. Some of these are linked from other pages — check before renaming. */
+  id: string;
+  /** Number of beats. Also exposed as `data-stage` for anything that wants discrete steps. */
+  stages?: number;
+  /** Act travel while pinned. Longer = slower scrub. Ignored below 768px, where acts do not pin. */
+  height?: string;
+  /** Id of the heading that names this section. */
+  labelledBy: string;
+  class?: string;
+}
+
+const {
+  id,
+  stages = 4,
+  height = '220vh',
+  labelledBy,
+  class: className = '',
+} = Astro.props;
+---
+
+<section
+  id={id}
+  class={`act relative ${className}`}
+  data-world-scene
+  data-stages={stages}
+  style={`--act-h:${height}`}
+  aria-labelledby={labelledBy}
+>
+  <div class="act-stage flex items-center">
+    <div class="container-page w-full">
+      <slot />
+    </div>
+  </div>
+</section>

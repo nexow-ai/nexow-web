@@ -53,14 +53,77 @@ export const SITE = {
   x: '@nexowofficial',
   /** Chain NXW mints on — linked from the DAO / tokenomics sections. */
   solanaUrl: 'https://solana.com',
+  /** Wallet used for Solana payments / holdings — linked beside Solana in DAO sections. */
+  phantomUrl: 'https://phantom.app',
 } as const;
 
-/** Footer + schema social links (icon names match `Icon.astro`). */
+/**
+ * Prefer the env value when it is a non-empty string; otherwise keep the
+ * published fallback so the site still builds without a `.env`.
+ */
+export function resolveSocialUrl(configured: string | undefined, fallback: string): string {
+  const value = configured?.trim();
+  return value ? value : fallback;
+}
+
+/** Env lookup safe when `import.meta.env` is missing (e.g. Playwright collection). */
+function socialEnv(name: string): string | undefined {
+  const env = import.meta.env as Record<string, string | undefined> | undefined;
+  return env?.[name];
+}
+
+/**
+ * Footer + hero + schema social links (icon names match `Icon.astro`).
+ *
+ * Read through `import.meta.env`, never `process.env`: this module rides in
+ * the client bundle too (the page-slide direction reads the locale list from
+ * it), and there is no `process` in the browser — one throw here and every
+ * script importing `i18n/*` dies at load.
+ */
 export const SOCIALS = [
-  { label: 'X', href: 'https://x.com/nexowofficial', icon: 'x-logo' },
-  { label: 'TikTok', href: 'https://tiktok.com/nexow-ai', icon: 'tiktok' },
-  { label: 'Instagram', href: 'https://instagram.com/nexow-ai', icon: 'instagram' },
-  { label: 'YouTube', href: 'https://youtube.com/nexow-ai', icon: 'youtube' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/nexow-ai', icon: 'linkedin' },
-  { label: 'GitHub', href: 'https://github.com/nexow-ai', icon: 'github' },
+  {
+    label: 'X',
+    href: resolveSocialUrl(socialEnv('X_URL'), 'https://x.com/nexowofficial'),
+    icon: 'x-logo',
+  },
+  {
+    label: 'Discord',
+    href: resolveSocialUrl(socialEnv('DISCORD_URL'), 'https://discord.gg/nexow'),
+    icon: 'discord',
+  },
+  {
+    label: 'Telegram',
+    href: resolveSocialUrl(socialEnv('TELEGRAM_URL'), 'https://t.me/nexowofficial'),
+    icon: 'telegram',
+  },
+  {
+    label: 'TikTok',
+    href: resolveSocialUrl(socialEnv('TIKTOK_URL'), 'https://tiktok.com/nexow-ai'),
+    icon: 'tiktok',
+  },
+  {
+    label: 'Instagram',
+    href: resolveSocialUrl(socialEnv('INSTAGRAM_URL'), 'https://instagram.com/nexow-ai'),
+    icon: 'instagram',
+  },
+  {
+    label: 'LinkedIn',
+    href: resolveSocialUrl(socialEnv('LINKEDIN_URL'), 'https://linkedin.com/company/nexow-ai'),
+    icon: 'linkedin',
+  },
+  {
+    label: 'YouTube',
+    href: resolveSocialUrl(socialEnv('YOUTUBE_URL'), 'https://youtube.com/nexow-ai'),
+    icon: 'youtube',
+  },
+  {
+    label: 'Skool',
+    href: resolveSocialUrl(socialEnv('SKOOL_URL'), 'https://www.skool.com/nexow'),
+    icon: 'skool',
+  },
+  {
+    label: 'GitHub',
+    href: resolveSocialUrl(socialEnv('GITHUB_URL'), 'https://github.com/nexow-ai'),
+    icon: 'github',
+  },
 ] as const;

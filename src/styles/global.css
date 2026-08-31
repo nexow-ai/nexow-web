@@ -13,7 +13,30 @@
 @plugin '@tailwindcss/typography';
 
 /* Class-based dark mode: sections opt in with `.dark`, the whole doc can too. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* `dark:` is an exclusive-or, not a class check. It applies inside `.dark`
+ * *unless* the element sits in an `.tone-invert` wrapper, and it applies inside an
+ * `.tone-invert` wrapper on a page that is not dark. That is what lets one wrapper
+ * mean "the opposite of the page": a dark band on the light theme, a light
+ * band on the dark one, with every `dark:` utility inside it flipping for
+ * free and no JavaScript needing to know which theme is on.
+ *
+ * `.chrome-invert` means the same thing for the fixed chrome, which is not in
+ * any band but floats over them: `components/ChromeTone.astro` stamps it on
+ * the header bar, the tour transport and the corner arrows for as long as the
+ * band behind them is the opposite tone. */
+@custom-variant dark {
+  &:where(.dark, .dark *):not(
+      :where(.tone-invert, .tone-invert *, .chrome-invert, .chrome-invert *)
+    ) {
+    @slot;
+  }
+  &:where(
+      html:not(.dark) :is(.tone-invert, .chrome-invert),
+      html:not(.dark) :is(.tone-invert, .chrome-invert) *
+    ) {
+    @slot;
+  }
+}
 
 @theme {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
@@ -259,6 +282,14 @@
   --text-muted: var(--color-ink-500);
   --glyph: var(--color-brand-700);
 
+  /* Scrollbar — accent-tinted; follows the per-page `data-accent` remap.
+   * Track stays transparent in light (page white shows through). Dark needs
+   * an explicit ink fill: browsers paint the gutter from `color-scheme`, and
+   * a transparent track on a light scheme stays a white strip. */
+  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-600) 55%, transparent);
+  --scrollbar-thumb-hover: var(--color-brand-600);
+  --scrollbar-track: transparent;
+
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
    * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
   --grad-a: var(--color-brand-600);
@@ -283,7 +314,9 @@
   --aurora-mesh-opacity: 0.85;
 }
 
-.dark {
+.dark,
+html:not(.dark) .tone-invert,
+html:not(.dark) .chrome-invert {
   --surface: color-mix(in oklab, white 4%, transparent);
   --surface-sunk: color-mix(in oklab, white 2%, transparent);
   --surface-line: color-mix(in oklab, white 11%, transparent);
@@ -292,6 +325,10 @@
   --text-body: var(--color-ink-300);
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-300);
+
+  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
+  --scrollbar-thumb-hover: var(--color-brand-400);
+  --scrollbar-track: var(--color-ink-950);
 
   /* Cold nebula — teal / indigo / sky, no magenta. Saturated cores read as
    * coloured light on ink instead of the grey haze pale tints turn into, and
@@ -311,6 +348,56 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Inverted sections.
+ *
+ * Named `tone-invert`, not `invert`: `invert` is a Tailwind filter utility
+ * (`filter: invert(100%)`), and a wrapper called that had its whole band
+ * pixel-inverted straight back to the page theme.
+ *
+ * Wrap a section in `.tone-invert` and it paints in the opposite theme to the
+ * page, tokens and `dark:` utilities both (see the variant at the top). The
+ * wrapper carries the opaque ground, because the sections themselves only
+ * tint what is behind them.
+ * ------------------------------------------------------------------ */
+.tone-invert {
+  /* Above the world. `.world` is a positioned `z-index: 0` stacking context,
+   * which paints over the backgrounds of non-positioned blocks that follow it
+   * in the DOM — so an unpositioned wrapper had the world's fixed canvas
+   * drawing straight through its ground. Positioning it puts the band on top,
+   * where a later sibling belongs. */
+  position: relative;
+  z-index: 1;
+}
+
+html.dark .tone-invert,
+html.dark .chrome-invert {
+  --surface: #ffffff;
+  --surface-sunk: #f7fbfb;
+  --surface-line: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  --surface-line-soft: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+  --text-strong: var(--color-ink-950);
+  --text-body: var(--color-ink-600);
+  --text-muted: var(--color-ink-500);
+  --glyph: var(--color-brand-700);
+  --scrollbar-track: transparent;
+}
+
+/* The ground, which only a band carries: chrome floats over the band's own
+   ink, and a `.chrome-invert` header painting a surface would be a slab
+   across the top of the page. */
+html.dark .tone-invert {
+  background-color: #ffffff;
+  color: var(--color-ink-950);
+  color-scheme: light;
+}
+
+html:not(.dark) .tone-invert {
+  background-color: var(--color-ink-950);
+  color: #ffffff;
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------ *
  * Base
  * ------------------------------------------------------------------ */
 @layer base {
@@ -318,6 +405,12 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem; /* clear the sticky header on anchor jumps */
+    scroll-padding-bottom: 5.5rem; /* clear the tour dock and corner arrows */
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -345,6 +438,16 @@
   .dark body {
     background-color: var(--color-ink-950);
     color: var(--color-ink-200);
+  }
+
+  /* Home world owns the page through the footer — don't flash the marketing
+   * white under a transparent canvas at the bottom of the document. */
+  html[data-world] body {
+    background-color: #ffffff !important;
+  }
+
+  html[data-world].dark body {
+    background-color: #000000;
   }
 
   /*
@@ -389,6 +492,38 @@
     outline-offset: 2px;
     border-radius: 2px;
   }
+
+  /* Scrollbars — slim, accent-tinted. Track is transparent in light and ink
+   * in dark (see `--scrollbar-track`). Standard properties inherit, so
+   * setting them on <html> reaches every nested scroller; the WebKit
+   * pseudo-elements are unscoped for the same reason. */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Transparent border keeps the grab target at 8px while the visible bar
+     * reads as 4px. */
+    background-color: var(--scrollbar-thumb);
+    background-clip: content-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -400,11 +535,11 @@
     width: 100%;
     max-width: 80rem; /* 1280px */
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    padding-inline: max(1.25rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   }
   @media (min-width: 640px) {
     .container-page {
-      padding-inline: 2rem;
+      padding-inline: max(2rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
     }
   }
 
@@ -614,9 +749,12 @@
  * ------------------------------------------------------------------ */
 :root {
   --page-slide: 1;
+  /* Inline direction for scroll-driven travel; see `.act`. */
+  --dir: 1;
 }
 [dir='rtl'] {
   --page-slide: -1;
+  --dir: -1;
 }
 
 @keyframes nexow-page-out-start {
@@ -630,6 +768,27 @@
 }
 @keyframes nexow-page-in-start {
   from { transform: translate3d(calc(-100% * var(--page-slide)), 0, 0); }
+}
+
+/*
+ * Vertical legs, for a language switch: the picker lists locales top to
+ * bottom, so the page travels the same axis. A viewport height rather than
+ * `100%`: `<main>` is as tall as the whole page, and a page-height jump would
+ * be over before it read as motion. The arriving snapshot paints over the
+ * leaving one where the two overlap, so the seam between them is the edge
+ * of the new page.
+ */
+@keyframes nexow-page-out-top {
+  to { transform: translate3d(0, -100vh, 0); }
+}
+@keyframes nexow-page-in-bottom {
+  from { transform: translate3d(0, 100vh, 0); }
+}
+@keyframes nexow-page-out-bottom {
+  to { transform: translate3d(0, 100vh, 0); }
+}
+@keyframes nexow-page-in-top {
+  from { transform: translate3d(0, -100vh, 0); }
 }
 
 /*
@@ -805,6 +964,8 @@ html.is-theme-transition [data-astro-transition-scope] {
  *
  *   rise / sink      drift against the scroll        (--pc)
  *   slide-l/-r       the same, horizontally          (--pc)
+ *   lead / lag       two-up columns drift apart      (--pc)
+ *   fan              a grid of cards, each deeper    (--pc, --i)
  *   breathe          expand mid-screen, contract     (--pb)
  *   tilt / turn      lean in 3D as it travels        (--pc)
  *   depth            push away from the camera       (--pb)
@@ -834,6 +995,53 @@ html.is-theme-transition [data-astro-transition-scope] {
   .js [data-motion~='slide-l'] { --m-slide: -24px; }
   .js [data-motion~='slide-r'] { --m-slide: 24px; }
 
+  /* Neighbour parallax — drifts that only make sense once things sit side by
+   * side. Every one of these moves an element relative to the element *next to*
+   * it, so stacked into one column they stop describing depth and start eating
+   * the gap between rows. Above `lg` is where all of these layouts split.
+   *
+   * `lead`/`lag`: a two-up band, where the copy runs ahead of the scroll and
+   * the art beside it trails, so the pair drifts apart and back together as the
+   * section passes. Bigger than `rise`/`sink` because the effect has to read
+   * across a gap rather than within one card.
+   *
+   * `fan`: a row of cards, each one travelling further than the card before it,
+   * so the row rakes as it passes instead of arriving as one flat plate. The
+   * call site sets `--i` to the card's index and `mod` wraps it every fourth
+   * card, so a gallery keeps raking row after row rather than building one
+   * runaway offset. (`%` is not a calc operator. Written that way it silently
+   * invalidates the whole composed transform, which is how the use-case grid
+   * lost its drift entirely.) The rake alone reads as a row of cards that
+   * failed to line up, so it carries a depth push too: every card starts held
+   * back from the camera and reaches its true size at mid-screen, which is what
+   * makes the row arrive rather than merely slide.
+   *
+   * All of them stay inside a section's own vertical padding, so no card bleeds
+   * into the band above or below. */
+  @media (min-width: 64rem) {
+    .js [data-motion~='lead'] { --m-shift: -56px; }
+    .js [data-motion~='lag'] { --m-shift: 56px; }
+    .js [data-motion~='fan'] {
+      --m-shift: calc(-12px - mod(var(--i, 0), 4) * 20px);
+      --m-depth: -120px;
+    }
+  }
+
+  /* Cards on a 3D stage own their transform already (the pointer lean below),
+   * so they cannot also be the element the scroll writes to. This is the
+   * wrapper that drifts on their behalf: position only, and `preserve-3d` so
+   * the card inside keeps the stage's shared camera instead of being flattened
+   * into its own — which is also what projects the depth push here, since the
+   * wrapper deliberately sets no perspective of its own. */
+  .js .card-drift[data-motion] {
+    transform: translate3d(
+      0,
+      calc(var(--pc, 0) * var(--m-shift, 0px)),
+      calc((1 - var(--pb, 1)) * var(--m-depth, 0px))
+    );
+    transform-style: preserve-3d;
+  }
+
   .js [data-motion~='breathe'] { --m-base: 0.958; --m-zoom: 0.042; }
   .js [data-motion~='breathe-lg'] { --m-base: 0.918; --m-zoom: 0.082; }
 
@@ -856,6 +1064,238 @@ html.is-theme-transition [data-astro-transition-scope] {
    * under the section's overflow clip. */
   @media (max-width: 63.999rem) {
     .js [data-motion] { --m-slide: 0px; }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * The scroll tour's play button.
+ *
+ * On every route, and on by default: the button is part of the header, not
+ * something a script grants. The one thing the script may do is take it away
+ * — `data-short`, set by `Header.astro` on a page with nowhere to scroll —
+ * so a script that never runs leaves the button where it is rather than
+ * emptying it out of every header on the site.
+ * ------------------------------------------------------------------ */
+/* The light/dark button's own glyph — moon on a light page, sun on a dark one.
+ * Keyed on the document, never on `dark:`: the toggle sits in chrome that
+ * flips with the band behind it (`lib/chrome-tone`), and the one thing in
+ * there that must keep reporting the page is this pair. */
+.theme-glyph-light {
+  display: none;
+}
+
+html.dark .theme-glyph-dark {
+  display: none;
+}
+
+html.dark .theme-glyph-light {
+  display: block;
+}
+
+/* Shared hit box for the header's round controls (play, theme, menu).
+ * 44px on a coarse pointer / phone; 40px on a mouse so the pill stays tight. */
+.chrome-hit {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .chrome-hit {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+.tour-toggle {
+  display: inline-flex;
+}
+
+.tour-toggle[data-short] {
+  display: none;
+}
+
+/* Home only: "Play Me" beside the icon. Wider than the round chrome-hit box. */
+.tour-toggle.tour-toggle--labeled {
+  width: auto;
+  gap: 0.4rem;
+  padding-inline: 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .tour-toggle.tour-toggle--labeled {
+    padding-inline: 0.85rem;
+  }
+}
+
+.tour-toggle__label {
+  line-height: 1;
+}
+
+/* One glyph at a time: play while idle, pause while the tour is running. */
+.tour-toggle .tour-toggle__stop,
+.tour-toggle[aria-pressed='true'] .tour-toggle__play,
+.tour-toggle[aria-pressed='true'] .tour-toggle__label {
+  display: none;
+}
+
+.tour-toggle[aria-pressed='true'] .tour-toggle__stop {
+  display: block;
+}
+
+/* Icon-only again while the tour is running. */
+.tour-toggle.tour-toggle--labeled[aria-pressed='true'] {
+  width: 2.5rem;
+  padding-inline: 0;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .tour-toggle.tour-toggle--labeled[aria-pressed='true'] {
+    width: 2.75rem;
+  }
+}
+
+.tour-toggle[aria-pressed='true'] {
+  color: var(--color-brand-500);
+}
+
+/* Plain CSS, so no `:global()` — that is Astro's scoping syntax, and inside
+ * this file it made the selector invalid and the browser dropped the rule. */
+.dark .tour-toggle[aria-pressed='true'] {
+  color: var(--color-brand-300);
+}
+
+/* A tour is motion the visitor did not ask for by scrolling, so it is not
+ * offered at all to someone who asked for less of it. */
+@media (prefers-reduced-motion: reduce) {
+  .tour-toggle {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Header over the world.
+ *
+ * `/` opens straight into `components/world/World.astro`. The world follows
+ * the page theme, so the header's own light and dark chrome are already right
+ * over it; the only case left is a page with no JavaScript, below.
+ * ------------------------------------------------------------------ */
+/* No backdrop blur over the world. A blur re-samples whatever is behind it on
+ * every frame that backdrop changes, and the canvas changes every frame — so
+ * the header pill was a full-width blur pass per frame for the length of the
+ * story. The pill is 92–95% opaque; the blur was never visible through it.
+ * Unlayered, so it beats the `backdrop-blur-md` utility the header toggles. */
+html[data-world] #site-nav {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Without JavaScript there is no `.is-scrolled` to switch on, so the header can
+ * never know which surface it is over. Give it its solid pill from the start
+ * instead: legible over the world at the top and over the page at the bottom,
+ * which the transparent state cannot be at both ends. */
+html[data-world]:not(.js) #site-nav {
+  border-color: color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+html[data-world]:not(.js).dark #site-nav {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: color-mix(in oklab, var(--color-ink-900) 92%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
+ * Acts — the home page's scroll stages.
+ *
+ * An act is a tall section holding one `position: sticky` stage, so the scene
+ * holds still while the reader scrolls "through" it. `ScrollMotion` writes
+ * `--ps` (0 → 1 across the act's travel) because the act carries `data-stages`;
+ * the act turns that into four overlapping ramps its scene keys off.
+ *
+ * The base state below is a plain, complete section. That is deliberately what
+ * renders with no JavaScript, for crawlers, and under reduced motion — the act
+ * simply becomes an ordinary block with its scene at rest, still legible and
+ * still teaching the same thing. Only inside the `no-preference` + `.js` gate
+ * does it become tall and sticky, which is also why it can never shift layout
+ * after paint: the height only ever changes before the first frame.
+ * ------------------------------------------------------------------ */
+.act-stage {
+  position: static;
+  min-height: min(100svh, 46rem);
+  padding-block: 4rem;
+}
+
+@media (min-width: 640px) {
+  .act-stage {
+    padding-block: 5rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* Copy stacks above the scene. A full-viewport min-height here is just
+   * empty thumb travel between two blocks that already have their own pad.
+   * Extra foot room so a title is not sitting under the tour dock. */
+  .act-stage {
+    min-height: 0;
+    padding-block: 2.75rem 4.5rem;
+    align-items: flex-start;
+  }
+
+  .act {
+    overflow-x: clip;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Pointer parallax for the act scenes. `World.astro` writes `--mx`/`--my`
+   * (-1…1, damped) onto the world as the cursor moves; shifting
+   * `perspective-origin` is what turns that into looking *around* the scene,
+   * and it is the one property that cannot collide with the transforms the
+   * scroll ramps already compose on the elements inside. The small translate
+   * is what sells it — origin alone is too subtle to notice.
+   *
+   * Beats the acts' own scoped `perspective-origin` on specificity: a scoped
+   * rule compiles to `.w-scene:where(.astro-cid-…)`, and `:where()` is free. */
+  @media (min-width: 768px) {
+    .js .act-scene {
+      perspective-origin: calc(50% + var(--mx, 0) * 14%) calc(44% + var(--my, 0) * -12%);
+      transform: translate3d(calc(var(--mx, 0) * 10px), calc(var(--my, 0) * -7px), 0);
+    }
+  }
+
+  /* Pinning is a desktop affordance. A phone has no room to hold a scene still
+   * beside its own copy, and a tall act there only means more thumb work for a
+   * frame that never fits — so below this width an act stays an ordinary
+   * section with its scene fully assembled. The ramps are scoped in here too,
+   * so outside this range they fall back to their `var(--kN, 1)` defaults and
+   * every beat renders lit rather than invisible. */
+  @media (min-width: 768px) {
+    .js .act {
+      height: var(--act-h, 220vh);
+      /* ×5, not ×4, so each beat completes about three-quarters of the way
+       * through its quarter and the reader gets a moment to read it. */
+      --k0: clamp(0, calc(var(--ps, 0) * 5), 1);
+      --k1: clamp(0, calc((var(--ps, 0) - 0.25) * 5), 1);
+      --k2: clamp(0, calc((var(--ps, 0) - 0.5) * 5), 1);
+      --k3: clamp(0, calc((var(--ps, 0) - 0.75) * 5), 1);
+      /* Fifth beat is optional — acts with four ignore it. Starts late so
+         the existing quarter ramps keep their timing. */
+      --k4: clamp(0, calc((var(--ps, 0) - 0.82) * 6), 1);
+      /* Sixth beat is optional — acts with fewer ignore it. */
+      --k5: clamp(0, calc((var(--ps, 0) - 0.90) * 8), 1);
+      /* Centred scrub, for parallax that reads in both directions. */
+      --psc: calc(var(--ps, 0) * 2 - 1);
+    }
+
+    .js .act-stage {
+      position: sticky;
+      /* Clears the fixed header, matching `scroll-padding-top`. */
+      top: 5rem;
+    }
   }
 }
 

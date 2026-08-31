@@ -29,7 +29,7 @@ export function collectUrls(
   }
 
   for (const [, label, url] of configSource.matchAll(
-    /label:\s*'([^']+)',\s*href:\s*'(https:[^']+)'/g,
+    /label:\s*'([^']+)',\s*href:\s*(?:resolveSocialUrl\([^,]+,\s*)?'(https:[^']+)'/g,
   )) {
     urls.set(url, `social:${label}`);
   }

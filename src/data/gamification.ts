@@ -5,15 +5,16 @@
  * so the marketing site can never drift from what the product actually does:
  *
  *   app/utils/reputation.ts        badges, thresholds, point weights, level bands
- *   app/billing/pricing.ts         the credit ⇄ token ⇄ dollar engine (margin 480 %)
+ *   app/billing/pricing.ts         the credit ⇄ token ⇄ dollar engine (margin 50 %)
  *   app/billing/plans.ts           subscription prices, credit packs, signup bonus
  *   app/components/account/plans.ts  per-plan accent, quotas and feature order
  *   app/composables/settings/useAppearance.ts  which appearance options are premium
  *
- * The PLANNED half — `REWARD_LADDER` and the DAO token allocation — is a designed
- * reward schedule that ships with the DAO; it has no counterpart in the app yet and
- * every surface that renders it must carry the "planned" chip (see `rewards.planned`
- * in the locales). Keep it honest: numbers here are a published commitment.
+ * Badge CREDIT payouts are LIVE — they mirror `TIER_REWARD_CREDITS` /
+ * `RARE_REWARD_CREDITS` / `LEGENDARY_REWARD_CREDITS` in the app and land in the
+ * prepaid ledger the moment a tier is claimed. NXW amounts and level-up bonuses
+ * remain PLANNED (they ship with the DAO) and every surface that renders those
+ * must carry the "planned" chip.
  *
  * Copy lives in `src/i18n/locales/*.ts`; this file holds only keys, icons and numbers.
  */
@@ -24,20 +25,21 @@ import { CONNECTOR_COUNT } from './connectors';
  * Credit economics — mirrors app/billing/pricing.ts
  * ------------------------------------------------------------------ */
 
-/** Anthropic list price in cents per 1M output tokens for the peg model (Sonnet).
- *  1 credit ≡ one Sonnet output token of real provider cost. */
-export const PEG_CENTS = 1500;
+/** Anthropic list price in cents per 1M output tokens for the peg model (Sonnet 5).
+ *  1 credit ≡ one Sonnet output token of real provider cost ($10 / 1M). */
+export const PEG_CENTS = 1000;
 
 /** What one credit COSTS the operator, in USD cents (PEG_CENTS / 1e6). */
 export const CREDIT_COST_CENTS = PEG_CENTS / 1_000_000;
 
-/** The operator's margin over cost, in percent (NUXT_PUBLIC_CREDIT_MARGIN_PCT). */
-export const CREDIT_MARGIN_PCT = 480;
+/** The operator's margin over cost, in percent (NUXT_PUBLIC_CREDIT_MARGIN_PCT).
+ *  Thin on purpose: credits should feel like provider cost, not a 5× markup. */
+export const CREDIT_MARGIN_PCT = 50;
 
 /** What one credit SELLS for, in USD cents: cost × (1 + margin). */
 export const CREDIT_SALE_CENTS = CREDIT_COST_CENTS * (1 + CREDIT_MARGIN_PCT / 100);
 
-/** Headline rate: USD per 1,000,000 credits ($87.00 at the shipped margin). */
+/** Headline rate: USD per 1,000,000 credits ($15.00 at the shipped margin). */
 export const USD_PER_MILLION_CREDITS = (CREDIT_SALE_CENTS * 1_000_000) / 100;
 
 /** USD value of a credit balance, at list price. */
@@ -47,10 +49,10 @@ export function creditsToUsd(credits: number): number {
 
 /** How many tokens one credit buys, per model (PEG_CENTS / output rate). */
 export const TOKENS_PER_CREDIT = [
-  { model: 'Haiku 4.5', tokens: 3 },
+  { model: 'Haiku 4.5', tokens: 2 },
   { model: 'Sonnet 5', tokens: 1 },
-  { model: 'Opus 4.8', tokens: 0.6 },
-  { model: 'Fable 5', tokens: 0.3 },
+  { model: 'Opus 5', tokens: 0.4 },
+  { model: 'Fable 5', tokens: 0.2 },
 ] as const;
 
 /* ------------------------------------------------------------------ *
@@ -123,7 +125,7 @@ export const PLANS: PlanSpec[] = [
     accent: '#b072ff',
     accentInk: '#7c3aed',
     monthly: 9.99,
-    monthlyCredits: planCredits(9.99), // 115,000
+    monthlyCredits: planCredits(9.99), // 670,000
     bots: '30',
     agents: '10',
     inherits: 'free',
@@ -136,7 +138,7 @@ export const PLANS: PlanSpec[] = [
     accent: '#22c55e',
     accentInk: '#15803d',
     monthly: 69.99,
-    monthlyCredits: planCredits(69.99), // 800,000
+    monthlyCredits: planCredits(69.99), // 4,675,000
     bots: '300',
     agents: '100',
     featured: true,
@@ -179,7 +181,7 @@ export function yearlyPerMonth(plan: PlanSpec): number | null {
  *
  * A cell is a boolean (✓ / —) or an object: `t` is an i18n leaf resolved against
  * `plansPage.matrix.values`, `n` is a literal that needs no translation (a
- * number, a quota, "∞"). Both together render as "115,000 / month".
+ * number, a quota, "∞"). Both together render as "670,000 / month".
  * ------------------------------------------------------------------ */
 
 export type MatrixCell = boolean | {
@@ -297,7 +299,7 @@ export const MATRIX: MatrixGroup[] = [
       { key: 'feed', cells: yes },
       { key: 'reputation', cells: yes },
       { key: 'marketplace', cells: yes },
-      { key: 'rewards', cells: yes, soon: true },
+      { key: 'rewards', cells: yes },
       { key: 'dao', cells: yes, soon: true },
     ],
   },
@@ -380,7 +382,7 @@ export type StatKey =
   | 'commentsReceived'
   | 'followers'
   | 'following'
-  | 'contacts'
+  | 'friends'
   | 'widgetsBuilt'
   | 'assetsPublished'
   | 'installsReceived'
@@ -389,11 +391,23 @@ export type StatKey =
   | 'reportsFiled'
   | 'likesGiven'
   | 'reactionsGiven'
+  | 'buildLikesGiven'
+  | 'buildReportsFiled'
   | 'nightPosts'
-  | 'dmThreads';
+  | 'dmThreads'
+  | 'closeTags'
+  | 'familyTags'
+  | 'workTags'
+  | 'teamTags'
+  | 'schoolTags'
+  | 'mentorTags'
+  | 'favoriteTags'
+  | 'partnerTags'
+  | 'loveTags'
+  | 'tagKindsUsed';
 
-/** Points awarded per unit of raw activity (POINT_WEIGHTS). `nightPosts` is
- *  badge-only — it is a subset of `posts` and carries no separate weight. */
+/** Points awarded per unit of raw activity (POINT_WEIGHTS). `nightPosts` and
+ *  friend-tag counts are badge-only — they carry no per-unit weight. */
 export const POINT_WEIGHTS: Partial<Record<StatKey, number>> = {
   posts: 5,
   likesReceived: 2,
@@ -401,7 +415,7 @@ export const POINT_WEIGHTS: Partial<Record<StatKey, number>> = {
   commentsWritten: 1,
   followers: 3,
   following: 1,
-  contacts: 2,
+  friends: 2,
   widgetsBuilt: 5,
   assetsPublished: 25,
   installsReceived: 10,
@@ -410,6 +424,8 @@ export const POINT_WEIGHTS: Partial<Record<StatKey, number>> = {
   likesGiven: 1,
   reactionsGiven: 1,
   reportsFiled: 10,
+  buildLikesGiven: 2,
+  buildReportsFiled: 10,
   dmThreads: 5,
 };
 
@@ -428,56 +444,112 @@ export interface BadgeSpec {
   rarity: Rarity;
   /** Bronze / silver / gold thresholds (tiered), or a single hard bar (rare / legendary). */
   thresholds: number[];
+  /** Friend-tag badges pay the smaller tag credit ladder. */
+  schedule?: 'tag';
 }
 
-/** The 18 tiered achievements: bronze → silver → gold on one stat.
- *  Curves are steep on purpose — bronze is a real habit, gold is a grind. */
+/** Credits paid per tier (bronze / silver / gold) for a regular badge — LIVE. */
+export const TIER_REWARD_CREDITS = [2_500, 10_000, 40_000] as const;
+
+/** Credits per tier for a friend-tag badge — LIVE, smaller because a tag is free. */
+export const TAG_TIER_REWARD_CREDITS = [500, 2_000, 5_000] as const;
+
+/** Credits for a rare medal — LIVE. */
+export const RARE_REWARD_CREDITS = 100_000;
+
+/** Credits for a legendary medal — LIVE. */
+export const LEGENDARY_REWARD_CREDITS = 250_000;
+
+/** Credits for tag-based rare medals (partner / love / rolodex) — LIVE. */
+export const TAG_PRESTIGE_REWARD_CREDITS = 5_000;
+
+/** Planned NXW per regular tier (bronze / silver / gold). Ships with the DAO. */
+export const TIER_REWARD_TOKENS = [10, 25, 90] as const;
+export const RARE_REWARD_TOKENS = 250;
+export const LEGENDARY_REWARD_TOKENS = 1_000;
+
+/** The 27 tiered achievements: bronze → silver → gold on one stat. */
 export const TIERED_BADGES: BadgeSpec[] = [
-  { id: 'pioneer', icon: 'history', stat: 'accountAgeDays', rarity: 'tiered', thresholds: [30, 180, 730] },
-  { id: 'storyteller', icon: 'pen', stat: 'posts', rarity: 'tiered', thresholds: [10, 100, 1_000] },
-  { id: 'crowdPleaser', icon: 'heart', stat: 'likesReceived', rarity: 'tiered', thresholds: [100, 2_500, 25_000] },
-  { id: 'conversationalist', icon: 'chat', stat: 'commentsWritten', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
-  { id: 'hypeTrain', icon: 'megaphone', stat: 'commentsReceived', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
-  { id: 'magnet', icon: 'users', stat: 'followers', rarity: 'tiered', thresholds: [25, 250, 2_500] },
-  { id: 'socialButterfly', icon: 'sparkles', stat: 'following', rarity: 'tiered', thresholds: [50, 500, 2_500] },
-  { id: 'innerCircle', icon: 'handshake', stat: 'contacts', rarity: 'tiered', thresholds: [10, 50, 250] },
-  { id: 'architect', icon: 'layers', stat: 'widgetsBuilt', rarity: 'tiered', thresholds: [5, 50, 500] },
-  { id: 'shipwright', icon: 'store', stat: 'assetsPublished', rarity: 'tiered', thresholds: [3, 25, 150] },
-  { id: 'sensation', icon: 'flame', stat: 'installsReceived', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
-  { id: 'curator', icon: 'grid', stat: 'boards', rarity: 'tiered', thresholds: [3, 25, 100] },
-  { id: 'automator', icon: 'bot', stat: 'bots', rarity: 'tiered', thresholds: [3, 15, 75] },
-  { id: 'bugHunter', icon: 'bug', stat: 'reportsFiled', rarity: 'tiered', thresholds: [5, 50, 250] },
-  { id: 'cheerleader', icon: 'gift', stat: 'likesGiven', rarity: 'tiered', thresholds: [100, 2_500, 25_000] },
-  { id: 'emojiSommelier', icon: 'smile', stat: 'reactionsGiven', rarity: 'tiered', thresholds: [50, 1_000, 10_000] },
-  { id: 'nightOwl', icon: 'moon', stat: 'nightPosts', rarity: 'tiered', thresholds: [10, 100, 1_000] },
-  { id: 'penPal', icon: 'mail', stat: 'dmThreads', rarity: 'tiered', thresholds: [5, 50, 500] },
+  { id: 'pioneer', icon: 'rocket', stat: 'accountAgeDays', rarity: 'tiered', thresholds: [1, 30, 365] },
+  { id: 'storyteller', icon: 'pen', stat: 'posts', rarity: 'tiered', thresholds: [1, 10, 50] },
+  { id: 'crowdPleaser', icon: 'heart', stat: 'likesReceived', rarity: 'tiered', thresholds: [10, 100, 1_000] },
+  { id: 'conversationalist', icon: 'chat', stat: 'commentsWritten', rarity: 'tiered', thresholds: [10, 100, 500] },
+  { id: 'hypeTrain', icon: 'megaphone', stat: 'commentsReceived', rarity: 'tiered', thresholds: [10, 100, 500] },
+  { id: 'magnet', icon: 'users', stat: 'followers', rarity: 'tiered', thresholds: [5, 25, 100] },
+  { id: 'socialButterfly', icon: 'sparkles', stat: 'following', rarity: 'tiered', thresholds: [10, 50, 200] },
+  { id: 'innerCircle', icon: 'handshake', stat: 'friends', rarity: 'tiered', thresholds: [3, 10, 25] },
+  { id: 'architect', icon: 'layers', stat: 'widgetsBuilt', rarity: 'tiered', thresholds: [1, 10, 50] },
+  { id: 'shipwright', icon: 'store', stat: 'assetsPublished', rarity: 'tiered', thresholds: [1, 5, 20] },
+  { id: 'sensation', icon: 'flame', stat: 'installsReceived', rarity: 'tiered', thresholds: [10, 100, 1_000] },
+  { id: 'curator', icon: 'grid', stat: 'boards', rarity: 'tiered', thresholds: [1, 5, 15] },
+  { id: 'automator', icon: 'bot', stat: 'bots', rarity: 'tiered', thresholds: [1, 3, 10] },
+  { id: 'bugHunter', icon: 'bug', stat: 'reportsFiled', rarity: 'tiered', thresholds: [1, 5, 25] },
+  { id: 'cheerleader', icon: 'gift', stat: 'likesGiven', rarity: 'tiered', thresholds: [25, 250, 1_000] },
+  { id: 'emojiSommelier', icon: 'smile', stat: 'reactionsGiven', rarity: 'tiered', thresholds: [10, 100, 500] },
+  { id: 'greenLight', icon: 'thumbsUp', stat: 'buildLikesGiven', rarity: 'tiered', thresholds: [1, 10, 50] },
+  { id: 'buildFlagger', icon: 'flag', stat: 'buildReportsFiled', rarity: 'tiered', thresholds: [1, 5, 25] },
+  { id: 'nightOwl', icon: 'moon', stat: 'nightPosts', rarity: 'tiered', thresholds: [1, 15, 75] },
+  { id: 'penPal', icon: 'mail', stat: 'dmThreads', rarity: 'tiered', thresholds: [1, 10, 40] },
+  { id: 'tagClose', icon: 'users', stat: 'closeTags', rarity: 'tiered', thresholds: [1, 10, 30], schedule: 'tag' },
+  { id: 'tagFamily', icon: 'heart', stat: 'familyTags', rarity: 'tiered', thresholds: [1, 5, 15], schedule: 'tag' },
+  { id: 'tagWork', icon: 'sliders', stat: 'workTags', rarity: 'tiered', thresholds: [1, 10, 30], schedule: 'tag' },
+  { id: 'tagTeam', icon: 'users', stat: 'teamTags', rarity: 'tiered', thresholds: [1, 8, 25], schedule: 'tag' },
+  { id: 'tagSchool', icon: 'bookOpen', stat: 'schoolTags', rarity: 'tiered', thresholds: [1, 5, 20], schedule: 'tag' },
+  { id: 'tagMentor', icon: 'lightbulb', stat: 'mentorTags', rarity: 'tiered', thresholds: [1, 3, 10], schedule: 'tag' },
+  { id: 'tagFavorite', icon: 'star', stat: 'favoriteTags', rarity: 'tiered', thresholds: [1, 5, 15], schedule: 'tag' },
 ];
 
-/** The 10 rare medals: one-shot bars past gold — months of work, not a weekend. */
+/** Rare medals: one-shot bars. Tag prestige medals pay the smaller tag purse. */
 export const RARE_BADGES: BadgeSpec[] = [
-  { id: 'oracle', icon: 'scroll', stat: 'posts', rarity: 'rare', thresholds: [5_000] },
-  { id: 'agora', icon: 'chat', stat: 'commentsWritten', rarity: 'rare', thresholds: [50_000] },
-  { id: 'catalyst', icon: 'bolt', stat: 'commentsReceived', rarity: 'rare', thresholds: [50_000] },
-  { id: 'foundry', icon: 'factory', stat: 'assetsPublished', rarity: 'rare', thresholds: [500] },
-  { id: 'pantheon', icon: 'landmark', stat: 'boards', rarity: 'rare', thresholds: [500] },
-  { id: 'dynasty', icon: 'gem', stat: 'contacts', rarity: 'rare', thresholds: [1_000] },
-  { id: 'warden', icon: 'shield', stat: 'reportsFiled', rarity: 'rare', thresholds: [1_000] },
-  { id: 'benefactor', icon: 'gift', stat: 'likesGiven', rarity: 'rare', thresholds: [100_000] },
-  { id: 'midnightSun', icon: 'moon', stat: 'nightPosts', rarity: 'rare', thresholds: [5_000] },
-  { id: 'nexus', icon: 'signal', stat: 'dmThreads', rarity: 'rare', thresholds: [2_500] },
+  { id: 'oracle', icon: 'scroll', stat: 'posts', rarity: 'rare', thresholds: [500] },
+  { id: 'agora', icon: 'chat', stat: 'commentsWritten', rarity: 'rare', thresholds: [5_000] },
+  { id: 'catalyst', icon: 'bolt', stat: 'commentsReceived', rarity: 'rare', thresholds: [5_000] },
+  { id: 'foundry', icon: 'factory', stat: 'assetsPublished', rarity: 'rare', thresholds: [100] },
+  { id: 'pantheon', icon: 'landmark', stat: 'boards', rarity: 'rare', thresholds: [75] },
+  { id: 'dynasty', icon: 'gem', stat: 'friends', rarity: 'rare', thresholds: [100] },
+  { id: 'warden', icon: 'shield', stat: 'reportsFiled', rarity: 'rare', thresholds: [100] },
+  { id: 'benefactor', icon: 'gift', stat: 'likesGiven', rarity: 'rare', thresholds: [10_000] },
+  { id: 'midnightSun', icon: 'moon', stat: 'nightPosts', rarity: 'rare', thresholds: [500] },
+  { id: 'nexus', icon: 'signal', stat: 'dmThreads', rarity: 'rare', thresholds: [200] },
+  { id: 'tagPartner', icon: 'handshake', stat: 'partnerTags', rarity: 'rare', thresholds: [1], schedule: 'tag' },
+  { id: 'tagLove', icon: 'heart', stat: 'loveTags', rarity: 'rare', thresholds: [1], schedule: 'tag' },
+  { id: 'rolodex', icon: 'users', stat: 'tagKindsUsed', rarity: 'rare', thresholds: [8], schedule: 'tag' },
 ];
 
-/** The 6 legendary medals: a single, absurd bar almost nobody should clear. */
+/** The 6 legendary medals: a single hard bar almost nobody should clear. */
 export const LEGENDARY_BADGES: BadgeSpec[] = [
-  { id: 'immortal', icon: 'hourglass', stat: 'accountAgeDays', rarity: 'legendary', thresholds: [1_825] },
-  { id: 'folkHero', icon: 'crown', stat: 'likesReceived', rarity: 'legendary', thresholds: [100_000] },
-  { id: 'luminary', icon: 'sun', stat: 'followers', rarity: 'legendary', thresholds: [25_000] },
-  { id: 'blockbuster', icon: 'trophy', stat: 'installsReceived', rarity: 'legendary', thresholds: [100_000] },
-  { id: 'grandArchitect', icon: 'castle', stat: 'widgetsBuilt', rarity: 'legendary', thresholds: [2_500] },
-  { id: 'overmind', icon: 'cpu', stat: 'bots', rarity: 'legendary', thresholds: [500] },
+  { id: 'immortal', icon: 'hourglass', stat: 'accountAgeDays', rarity: 'legendary', thresholds: [1_000] },
+  { id: 'folkHero', icon: 'crown', stat: 'likesReceived', rarity: 'legendary', thresholds: [10_000] },
+  { id: 'luminary', icon: 'sun', stat: 'followers', rarity: 'legendary', thresholds: [1_000] },
+  { id: 'blockbuster', icon: 'trophy', stat: 'installsReceived', rarity: 'legendary', thresholds: [10_000] },
+  { id: 'grandArchitect', icon: 'castle', stat: 'widgetsBuilt', rarity: 'legendary', thresholds: [250] },
+  { id: 'overmind', icon: 'cpu', stat: 'bots', rarity: 'legendary', thresholds: [50] },
 ];
 
 export const ALL_BADGES: BadgeSpec[] = [...TIERED_BADGES, ...RARE_BADGES, ...LEGENDARY_BADGES];
+
+export const REGULAR_TIERED_BADGES = TIERED_BADGES.filter((b) => b.schedule !== 'tag');
+export const TAG_TIERED_BADGES = TIERED_BADGES.filter((b) => b.schedule === 'tag');
+export const REGULAR_RARE_BADGES = RARE_BADGES.filter((b) => b.schedule !== 'tag');
+export const TAG_RARE_BADGES = RARE_BADGES.filter((b) => b.schedule === 'tag');
+
+/** Live credit amounts for each of a badge's thresholds. */
+export function badgeCreditRewards(badge: BadgeSpec): number[] {
+  if (badge.schedule === 'tag') {
+    return badge.rarity === 'tiered' ? [...TAG_TIER_REWARD_CREDITS] : [TAG_PRESTIGE_REWARD_CREDITS];
+  }
+  if (badge.rarity === 'rare') return [RARE_REWARD_CREDITS];
+  if (badge.rarity === 'legendary') return [LEGENDARY_REWARD_CREDITS];
+  return [...TIER_REWARD_CREDITS];
+}
+
+/** Planned NXW amounts for each of a badge's thresholds. Tag badges have none. */
+export function badgeTokenRewards(badge: BadgeSpec): number[] {
+  if (badge.schedule === 'tag') return badge.thresholds.map(() => 0);
+  if (badge.rarity === 'rare') return [RARE_REWARD_TOKENS];
+  if (badge.rarity === 'legendary') return [LEGENDARY_REWARD_TOKENS];
+  return [...TIER_REWARD_TOKENS];
+}
 
 /** Rarity palette — the app's hex medallion gradients. */
 export const RARITY_COLORS: Record<Rarity | 'bronze' | 'silver' | 'gold', { from: string; to: string }> = {
@@ -496,19 +568,17 @@ export const RARITY_POINTS: Record<Rarity, number> = {
   legendary: LEGENDARY_BONUS,
 };
 
-/** Every point available from badges alone: 18 × 3 tiers, 10 rare, 6 legendary. */
+/** Every point available from badges alone. */
 export const MAX_BADGE_POINTS =
   TIERED_BADGES.length * 3 * TIER_BONUS + RARE_BADGES.length * RARE_BONUS + LEGENDARY_BADGES.length * LEGENDARY_BONUS;
 
 /* ------------------------------------------------------------------ *
- * Reward ladder — PLANNED. Ships with the DAO; every surface must label it.
+ * Reward ladder — credits are LIVE (app pays them into the balance).
+ * NXW amounts and LEVEL_REWARDS stay PLANNED and ship with the DAO.
  *
  * Two currencies, one ladder:
- *   • CREDITS  — spendable AI generation, priced at the same $87 / 1M as a pack.
+ *   • CREDITS  — spendable AI generation, priced at the same $15 / 1M as a pack.
  *   • NXW     — the DAO's Solana governance token, from the community allocation.
- *
- * Totals are exact by construction: 1,600,000 credits and 25,000 NXW for a
- * complete set. Change a row and the totals below move with it.
  * ------------------------------------------------------------------ */
 
 export interface RewardRow {
@@ -532,37 +602,73 @@ export const REWARD_LADDER: RewardRow[] = [
     key: 'bronze',
     icon: 'award',
     ...RARITY_COLORS.bronze,
-    count: TIERED_BADGES.length,
+    count: REGULAR_TIERED_BADGES.length,
     points: TIER_BONUS,
-    credits: 500,
-    tokens: 10,
+    credits: TIER_REWARD_CREDITS[0],
+    tokens: TIER_REWARD_TOKENS[0],
   },
   {
     key: 'silver',
     icon: 'award',
     ...RARITY_COLORS.silver,
-    count: TIERED_BADGES.length,
+    count: REGULAR_TIERED_BADGES.length,
     points: TIER_BONUS,
-    credits: 1_500,
-    tokens: 25,
+    credits: TIER_REWARD_CREDITS[1],
+    tokens: TIER_REWARD_TOKENS[1],
   },
   {
     key: 'gold',
     icon: 'award',
     ...RARITY_COLORS.gold,
-    count: TIERED_BADGES.length,
+    count: REGULAR_TIERED_BADGES.length,
     points: TIER_BONUS,
-    credits: 5_000,
-    tokens: 90,
+    credits: TIER_REWARD_CREDITS[2],
+    tokens: TIER_REWARD_TOKENS[2],
+  },
+  {
+    key: 'tagBronze',
+    icon: 'users',
+    ...RARITY_COLORS.bronze,
+    count: TAG_TIERED_BADGES.length,
+    points: TIER_BONUS,
+    credits: TAG_TIER_REWARD_CREDITS[0],
+    tokens: 0,
+  },
+  {
+    key: 'tagSilver',
+    icon: 'users',
+    ...RARITY_COLORS.silver,
+    count: TAG_TIERED_BADGES.length,
+    points: TIER_BONUS,
+    credits: TAG_TIER_REWARD_CREDITS[1],
+    tokens: 0,
+  },
+  {
+    key: 'tagGold',
+    icon: 'users',
+    ...RARITY_COLORS.gold,
+    count: TAG_TIERED_BADGES.length,
+    points: TIER_BONUS,
+    credits: TAG_TIER_REWARD_CREDITS[2],
+    tokens: 0,
   },
   {
     key: 'rare',
     icon: 'gem',
     ...RARITY_COLORS.rare,
-    count: RARE_BADGES.length,
+    count: REGULAR_RARE_BADGES.length,
     points: RARE_BONUS,
-    credits: 25_000,
-    tokens: 250,
+    credits: RARE_REWARD_CREDITS,
+    tokens: RARE_REWARD_TOKENS,
+  },
+  {
+    key: 'tagRare',
+    icon: 'handshake',
+    ...RARITY_COLORS.rare,
+    count: TAG_RARE_BADGES.length,
+    points: RARE_BONUS,
+    credits: TAG_PRESTIGE_REWARD_CREDITS,
+    tokens: 0,
   },
   {
     key: 'legendary',
@@ -570,8 +676,8 @@ export const REWARD_LADDER: RewardRow[] = [
     ...RARITY_COLORS.legendary,
     count: LEGENDARY_BADGES.length,
     points: LEGENDARY_BONUS,
-    credits: 100_000,
-    tokens: 1_000,
+    credits: LEGENDARY_REWARD_CREDITS,
+    tokens: LEGENDARY_REWARD_TOKENS,
   },
 ];
 
@@ -592,18 +698,18 @@ export const LEVEL_REWARDS: LevelReward[] = [
 
 const sum = (ns: number[]) => ns.reduce((a, b) => a + b, 0);
 
-/** Every credit on the ladder: 1,600,000 for a complete set. */
-export const TOTAL_REWARD_CREDITS =
-  sum(REWARD_LADDER.map((r) => r.credits * r.count)) + sum(LEVEL_REWARDS.map((r) => r.credits));
+/** Live credits paid by badges today. Level-up credits stay planned and are
+ *  not folded in — they are not granted by the app yet. */
+export const TOTAL_REWARD_CREDITS = sum(REWARD_LADDER.map((r) => r.credits * r.count));
 
-/** Every NXW on the ladder: 25,000 for a complete set. */
+/** Planned NXW on the ladder, including level-up bonuses. */
 export const TOTAL_REWARD_TOKENS =
   sum(REWARD_LADDER.map((r) => r.tokens * r.count)) + sum(LEVEL_REWARDS.map((r) => r.tokens));
 
-/** What the full credit haul is worth at list price (≈ $139). */
+/** What the live credit haul is worth at list price. */
 export const TOTAL_REWARD_USD = creditsToUsd(TOTAL_REWARD_CREDITS);
 
-/** Months of Sponsor-grade generation the full haul covers (1.6M ÷ 800K = 2). */
+/** Months of Elite-grade generation the live haul covers. */
 export const TOTAL_REWARD_SPONSOR_MONTHS = Math.round(TOTAL_REWARD_CREDITS / planCredits(69.99));
 
 /** Dry-mint day — NXW goes live on Solana (UTC calendar date). */
@@ -652,6 +758,6 @@ export const SIM_ACTIONS: SimAction[] = [
   { stat: 'likesReceived', icon: 'heart', points: weight('likesReceived'), step: 1 },
   { stat: 'dmThreads', icon: 'mail', points: weight('dmThreads'), step: 1 },
   { stat: 'reportsFiled', icon: 'bug', points: weight('reportsFiled'), step: 1 },
-  { stat: 'contacts', icon: 'handshake', points: weight('contacts'), step: 1 },
+  { stat: 'friends', icon: 'handshake', points: weight('friends'), step: 1 },
   { stat: 'commentsWritten', icon: 'chat', points: weight('commentsWritten'), step: 1 },
 ];

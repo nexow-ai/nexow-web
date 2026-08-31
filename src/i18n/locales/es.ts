@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { es as legal } from '../legal/es';
 
 export const es: SiteContent = {
   nav: {
@@ -18,6 +19,16 @@ export const es: SiteContent = {
     home: 'Inicio',
     prevPage: 'Página anterior',
     nextPage: 'Página siguiente',
+    tourPlay: 'Reproducir el tour',
+    tourStop: 'Detener el tour',
+    tourTrack: 'Reproducir otra canción',
+    tourLeft: 'Tiempo restante',
+    tourControls: 'Controles del tour',
+    switchLang: 'Cambiar idioma',
+    primaryNav: 'Principal',
+    mobileNav: 'Móvil',
+    onThisPage: 'En esta página',
+    skipToContent: 'Saltar al contenido',
   },
   footer: {
     tagline: 'Describe lo que necesitas. Nexow lo convierte en widgets sobre un lienzo.',
@@ -83,10 +94,8 @@ export const es: SiteContent = {
     },
     hero: {
       badge: 'Acceso anticipado',
-      titleLead: 'Descríbelo.',
-      titleGradient: 'Nexow lo crea.',
-      titleTail: 'Opéralo.',
-      titleKicker: 'En segundos, no en semanas ni meses.',
+      title: 'Construye cualquier cosa. Vigílalo todo.',
+      titleKicker: 'Dashboards en tiempo real en segundos — no en semanas, ni en trimestres.',
       subtitle:
         'Describe lo que necesitas y Nexow lo construye: widgets reales que funcionan, conectados a datos en vivo y colocados en un lienzo que tú controlas. Terremotos, calidad del aire, indicadores mundiales, feeds de mercado o tu propia base de datos: visualízalo, vigílalo y actúa.',
       ctaPrimary: 'Abrir la app',
@@ -184,7 +193,7 @@ export const es: SiteContent = {
     stats: [
       { n: 90, label: 'conectores en vivo para datos, wallets, redes sociales y mercados' },
       { n: 6, label: 'clases de activos en un solo lienzo' },
-      { n: 10, suffix: 'K', label: 'créditos de IA reservados al registrarte' },
+      { n: 100, suffix: 'K', label: 'créditos de IA reservados al registrarte' },
       { n: 30, prefix: '<', suffix: 's', label: 'de una frase a un widget funcionando' },
     ],
     showcase: {
@@ -509,7 +518,7 @@ export const es: SiteContent = {
         {
           icon: 'trophy',
           title: 'Reputación y medallas',
-          body: 'Cada widget, bot y publicación da reputación — puntos, logros escalonados, medallas raras y niveles en tu perfil público. Convertirlos en créditos de recompensa es lo siguiente.',
+          body: 'Cada widget, bot y publicación da reputación — puntos, logros escalonados, medallas raras y niveles en tu perfil público. Cada nivel de insignia paga créditos gratis en tu saldo.',
           status: 'live',
         },
       ],
@@ -562,7 +571,7 @@ export const es: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Publica e instala widgets, temas, pantallas y bots — con un linaje que da crédito a cada remake.' },
         { status: 'shipped', title: 'Reputación y medallas', body: 'Puntos, logros escalonados, medallas raras y niveles por lo que construyes y compartes.' },
         { status: 'soon', title: 'Widgets premium y señales', body: 'Publica widgets premium y señales de estrategia, deja que otros se suscriban y gana con lo que ejecutas.' },
-        { status: 'soon', title: 'Planes de pago y créditos de recompensa', body: 'Checkout de Supporter y Sponsor, créditos de plataforma y conversión de reputación en créditos de recompensa.' },
+        { status: 'soon', title: 'Planes de pago', body: 'Checkout de Lite y Elite: recargas mensuales de créditos, más bots y agentes, y apariencia premium.' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const es: SiteContent = {
         },
         {
           q: "¿Cuánto cuesta?",
-          a: "Free incluye el lienzo completo de widgets, biblioteca, sync en la nube, 10 bots, 3 agentes, acceso a la comunidad y 100.000 créditos de IA al registrarte. Supporter y Sponsor suman créditos mensuales, más automatización y apariencia premium — el pago llega pronto. Consulta Planes para la comparación completa.",
+          a: "Free incluye el lienzo completo de widgets, biblioteca, sync en la nube, 10 bots, 3 agentes, acceso a la comunidad y 100.000 créditos de IA al registrarte. Lite y Elite suman créditos mensuales, más automatización y apariencia premium — el pago llega pronto. Consulta Planes para la comparación completa.",
         },
       ],
     },
@@ -1328,7 +1337,7 @@ export const es: SiteContent = {
           { icon: 'users', title: 'Comunidad', body: 'Sigue a makers, da like y comenta en un feed social para constructores, explora tableros y comparte widgets que otros pueden añadir directo a su biblioteca — con perfiles públicos de maker.' },
           { icon: 'mail', title: 'Chats en tiempo real', body: 'Mensajes en vivo con amigos y contactos desde Cuenta o el Dock — DMs 1:1 y en grupo con presencia, reacciones, seguidores/siguiendo y bandeja de contactos.' },
           { icon: 'store', title: 'Marketplace', body: 'Publica e instala widgets, temas, pantallas, bots y agentes — con un linaje que da crédito a cada remake. Comprar y vender es lo siguiente.' },
-          { icon: 'trophy', title: 'Reputación y medallas', body: 'Gana puntos de reputación por construir y compartir, desbloquea logros por niveles y medallas raras — disponible hoy. Los créditos de recompensa llegan después.' },
+          { icon: 'trophy', title: 'Reputación y medallas', body: 'Gana puntos de reputación por construir y compartir, desbloquea logros por niveles y medallas raras — disponible hoy. Cada nivel de insignia paga créditos gratis en tu saldo.' },
         ],
       },
       {
@@ -1348,7 +1357,7 @@ export const es: SiteContent = {
     meta: {
       title: 'Planes — Nexow',
       description:
-        'Construye gratis para siempre — en local con tu propia clave, o con 100.000 créditos de IA reservados en una cuenta gratis. Compara Free, Supporter, Sponsor y Partner por créditos, bots, agentes y personalización.',
+        'Construye gratis para siempre — en local con tu propia clave, o con 100.000 créditos de IA reservados en una cuenta gratis. Compara Free, Lite, Elite y Partner por créditos, bots, agentes y personalización.',
     },
     hero: {
       badge: 'Planes',
@@ -1357,7 +1366,7 @@ export const es: SiteContent = {
         'Construye gratis — en local con tu propia clave, o regístrate y reserva 100.000 créditos de IA. Sube de plan cuando necesites más capacidad, automatización y acabado.',
     },
     comingSoon:
-      'El pago de Supporter y Sponsor llega pronto, y los créditos de la plataforma se activan con él. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
+      'El pago de Lite y Elite llega pronto, y los créditos de la plataforma se activan con él. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra.',
     highlights: {
       title: 'Qué escala con tu plan',
       items: [
@@ -1411,18 +1420,18 @@ export const es: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'Para makers que quieren más espacio.',
         priceMonthly: '9,99 €',
         priceYearly: '8,33 €',
         billedYearly: '99,90 € al año',
         cadence: '/mes',
-        stats: ['115K créditos/mes', '30 bots', '10 agentes'],
+        stats: ['670K créditos/mes', '30 bots', '10 agentes'],
         note: 'Todo lo de Free, y además:',
-        cta: 'Hazte Supporter',
+        cta: 'Hazte Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115.000 créditos cada mes',
+          '670.000 créditos cada mes',
           'Hasta 30 bots y 10 agentes',
           'Segundo color de acento (degradados)',
           'Ocho patrones de lienzo, superficies de widget y cristal de panel más',
@@ -1431,20 +1440,20 @@ export const es: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'Para power users que van en serio.',
         priceMonthly: '69,99 €',
         priceYearly: '58,33 €',
         billedYearly: '699,90 € al año',
         cadence: '/mes',
         badge: 'Mejor relación',
-        stats: ['800K créditos/mes', '300 bots', '100 agentes'],
-        note: 'Todo lo de Supporter, y además:',
-        cta: 'Hazte Sponsor',
+        stats: ['4.7M créditos/mes', '300 bots', '100 agentes'],
+        note: 'Todo lo de Lite, y además:',
+        cta: 'Hazte Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800.000 créditos cada mes',
+          '4.675.000 créditos cada mes',
           'Hasta 300 bots y 100 agentes',
           'Dos patrones de lienzo y cargadores más, además de ajuste de aurora',
           'Soporte prioritario para configuraciones complejas',
@@ -1460,7 +1469,7 @@ export const es: SiteContent = {
         priceYearly: 'A medida',
         cadence: '',
         stats: ['Infra privada', 'A tu lado', 'SLA'],
-        note: 'Todo lo de Sponsor, y además:',
+        note: 'Todo lo de Elite, y además:',
         cta: 'Contáctanos',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1552,15 +1561,15 @@ export const es: SiteContent = {
       },
       {
         q: "¿Qué son los créditos?",
-        a: "Los créditos miden el uso de IA: generar widgets, editarlos por conversación, crear links y usar Copilot. Un crédito equivale a un token de salida de Sonnet en coste de proveedor, así que el precio no depende del modelo que elijas — Haiku estira un crédito a unos 3 tokens; Opus lo usa en unos 0,6. Free reserva 100.000 al registrarte; Supporter da 115.000 al mes; Sponsor 800.000 — y puedes comprar packs en cualquier momento.",
+        a: "Los créditos miden el uso de IA: generar widgets, editarlos por conversación, crear links y usar Copilot. Un crédito equivale a un token de salida de Sonnet en coste de proveedor, así que el precio no depende del modelo que elijas — Haiku estira un crédito a unos 2 tokens; Opus lo usa en unos 0,4. Free reserva 100.000 al registrarte; Lite da 670.000 al mes; Elite 4.675.000 — y puedes comprar packs en cualquier momento.",
       },
       {
         q: "¿Cuándo salen los planes de pago?",
-        a: "Supporter y Sponsor ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra la facturación.",
+        a: "Lite y Elite ya están definidos y se muestran en la app, pero el pago llega pronto. Hoy todos están en Free — crea una cuenta para ser de los primeros cuando se abra la facturación.",
       },
       {
         q: "¿Puedo pagar anual?",
-        a: "Sí. La facturación anual te da dos meses gratis frente al pago mensual — 99,90 $ al año en Supporter, 699,90 $ en Sponsor. Puedes cambiar entre mensual y anual cuando quieras.",
+        a: "Sí. La facturación anual te da dos meses gratis frente al pago mensual — 99,90 $ al año en Lite, 699,90 $ en Elite. Puedes cambiar entre mensual y anual cuando quieras.",
       },
       {
         q: "¿Cómo se calcula la reputación?",
@@ -1568,7 +1577,7 @@ export const es: SiteContent = {
       },
       {
         q: "¿Las insignias dependen del plan?",
-        a: "No. Las 34 insignias, cinco niveles y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta Free puede llegar a Leyenda.",
+        a: "No. Todas las insignias, cinco niveles y toda la capa social están en Free. Los planes compran capacidad y apariencia, nunca estatus — una cuenta Free puede llegar a Leyenda.",
       },
       {
         q: "¿Cuándo llegan las recompensas en créditos y tokens?",
@@ -1582,7 +1591,7 @@ export const es: SiteContent = {
     subtitle: 'Cada post, widget, bot y publicación alimenta una misma puntuación. La puntuación desbloquea insignias, las insignias desbloquean niveles — y cuando abra la DAO, ambas pagan en créditos y tokens de gobernanza.',
     live: 'Activo en la app',
     planned: 'Planeado',
-    plannedNote: 'Los puntos, las insignias y los niveles ya funcionan en la app. Los pagos en créditos y NXW llegan con la Nexow DAO — la tabla de abajo es la propuesta que irá a la primera votación.',
+    plannedNote: 'Los puntos, las insignias, los niveles y las recompensas en créditos ya funcionan en la app. Los pagos en NXW y los bonus de nivel llegan con la Nexow DAO — NXW hace dry mint el 14 de agosto de 2026.',
     teaser: {
       badges: 'Medallas por lo que construyes y publicas',
       levels: 'Rangos que desbloqueas con reputación',
@@ -1620,7 +1629,7 @@ export const es: SiteContent = {
     },
     badges: {
       title: 'La cámara de insignias',
-      body: '34 insignias en tres rarezas. Dieciocho vienen en bronce, plata y oro; diez medallas raras están más allá del oro; seis medallas legendarias piden algo absurdo. Gira cualquier tarjeta para ver qué mide.',
+      body: 'Insignias en tres rarezas. Las clásicas vienen en bronce, plata y oro; las medallas raras y legendarias son umbrales únicos. Gira cualquier tarjeta para ver qué mide — y qué créditos paga cada nivel.',
       filters: {
         all: 'Todas',
         tiered: 'Por niveles',
@@ -1656,7 +1665,7 @@ export const es: SiteContent = {
         commentsReceived: 'Comentarios recibidos',
         followers: 'Seguidores',
         following: 'Personas que sigues',
-        contacts: 'Contactos mutuos',
+        friends: 'Contactos mutuos',
         widgetsBuilt: 'Widgets creados',
         assetsPublished: 'Recursos publicados',
         installsReceived: 'Instalaciones de tu trabajo',
@@ -1666,6 +1675,18 @@ export const es: SiteContent = {
         likesGiven: 'Likes dados',
         reactionsGiven: 'Reacciones dadas',
         nightPosts: 'Posts entre las 00:00 y las 05:00',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'Hilos de DM abiertos',
       },
       names: {
@@ -1687,6 +1708,15 @@ export const es: SiteContent = {
         emojiSommelier: 'Sumiller de emojis',
         nightOwl: 'Búho nocturno',
         penPal: 'Amigo por carta',
+        greenLight: 'Luz verde',
+        buildFlagger: 'Informante de builds',
+        tagClose: 'Amigo',
+        tagFamily: 'Familia',
+        tagWork: 'Colega',
+        tagTeam: 'Compañero',
+        tagSchool: 'Compañero de clase',
+        tagMentor: 'Mentor',
+        tagFavorite: 'Favoritos',
         oracle: 'Oráculo',
         agora: 'Ágora',
         catalyst: 'Catalizador',
@@ -1697,6 +1727,9 @@ export const es: SiteContent = {
         benefactor: 'Benefactor',
         midnightSun: 'Sol de medianoche',
         nexus: 'Nexo',
+        tagPartner: 'Pareja',
+        tagLove: 'Enamorado',
+        rolodex: 'Agenda',
         immortal: 'Inmortal',
         folkHero: 'Héroe popular',
         luminary: 'Luminaria',
@@ -1712,7 +1745,7 @@ export const es: SiteContent = {
         commentsReceived: 'Recibe comentarios en tus posts.',
         followers: 'Gana seguidores en tu perfil.',
         following: 'Sigue a otras personas en Nexow.',
-        contacts: 'Suma contactos mutuos — personas a las que sigues y que te siguen.',
+        friends: 'Suma contactos mutuos — personas a las que sigues y que te siguen.',
         widgetsBuilt: 'Crea widgets en tu lienzo.',
         assetsPublished: 'Publica recursos en el marketplace.',
         installsReceived: 'Consigue instalaciones de tus widgets, bots o temas publicados.',
@@ -1721,7 +1754,7 @@ export const es: SiteContent = {
         reportsFiled: 'Envía reportes de moderación que ayuden a mantener limpia la comunidad.',
         likesGiven: 'Da like a los posts de otras personas.',
         reactionsGiven: 'Reacciona a los posts con emoji.',
-        nightPosts: 'Publica posts entre las 00:00 y las 05:00 hora local.',
+        nightPosts: 'Publica posts entre las 00:00 y las 04:59 UTC.',
         dmThreads: 'Abre conversaciones por mensaje directo con otras personas.',
       },
     },
@@ -1739,7 +1772,11 @@ export const es: SiteContent = {
         bronze: 'Nivel bronce',
         silver: 'Nivel plata',
         gold: 'Nivel oro',
+        tagBronze: 'Amigo · bronze',
+        tagSilver: 'Amigo · silver',
+        tagGold: 'Amigo · gold',
         rare: 'Medalla rara',
+        tagRare: 'Amigo · rare',
         legendary: 'Medalla legendaria',
       },
       levelRow: 'Llegar a {level}',
@@ -1748,7 +1785,7 @@ export const es: SiteContent = {
       creditsLabel: 'créditos',
       tokensLabel: 'NXW',
       worth: '≈ {usd} de generación de IA a precio de lista',
-      months: '= {n} meses de generación al nivel Sponsor, ganados',
+      months: '= {n} meses de generación al nivel Elite, ganados',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'Un token. Cinco funciones. Veinte millones como máximo.',
@@ -1986,7 +2023,7 @@ export const es: SiteContent = {
   waitlist: {
     eyebrow: 'Lista de espera de facturación',
     title: 'El checkout está a punto de llegar',
-    subtitle: 'La facturación de Supporter y Sponsor llegará pronto. Déjanos tu email y te avisaremos el día que se abra el checkout — sin spam.',
+    subtitle: 'La facturación de Lite y Elite llegará pronto. Déjanos tu email y te avisaremos el día que se abra el checkout — sin spam.',
     placeholder: 'tu@email.com',
     submit: 'Únete a la lista',
     submitting: 'Uniéndote…',
@@ -2304,4 +2341,9 @@ export const es: SiteContent = {
       ctaSecondary: 'Unirse a la comunidad',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

@@ -6,30 +6,41 @@
  * with `--dir`). Either side is omitted at the ends of the tour, and routes
  * outside the tour render nothing at all.
  *
+ * Home is the one exception: its next arrow (into Features) waits at the foot
+ * of the page. A floating "next page" over the hero and the world would step
+ * on the story; it only appears once the scroll has nowhere left to go. Other
+ * tour pages keep both arrows in view the whole way.
+ *
  * The final stop swaps its next arrow for a brand-filled launch button — the
  * tour ends in the product rather than a dead corner.
  */
 import { SITE } from '../i18n/config';
 import { useContent } from '../i18n/content';
 import { getLangFromUrl, getRouteFromUrl } from '../i18n/utils';
-import { getPageNeighbours } from '../i18n/page-order';
+import { getPageNeighbours, normalizeRoute } from '../i18n/page-order';
 import Icon from './Icon.astro';
 
 const lang = getLangFromUrl(Astro.url);
+const route = normalizeRoute(getRouteFromUrl(Astro.url));
 const t = useContent(lang);
-const { prev, next } = getPageNeighbours(getRouteFromUrl(Astro.url), lang, t);
+const { prev, next } = getPageNeighbours(route, lang, t);
 
 const prevLabel = t.nav.prevPage ?? 'Previous page';
 const nextLabel = t.nav.nextPage ?? 'Next page';
 const launchLabel = t.nav.launch;
 /** Last stop on the tour — it has somewhere to come from but nowhere to go. */
 const atEnd = !!prev && !next;
+/** Home's next arrow is a destination, not chrome for the scroll. */
+const endOnly = route === '/';
 ---
 
 {
   (prev || next) && (
     <nav
-      class="page-nav pointer-events-none fixed inset-x-0 bottom-0 z-30"
+      class:list={[
+        'page-nav pointer-events-none fixed inset-x-0 bottom-0 z-30',
+        endOnly && 'page-nav--end-only',
+      ]}
       aria-label={`${prevLabel} / ${nextLabel}`}
       transition:animate="none"
     >
@@ -37,7 +48,7 @@ const atEnd = !!prev && !next;
         <a
           href={prev.href}
           rel="prev"
-          class="page-nav__btn page-nav__btn--prev pointer-events-auto absolute bottom-4 start-4 sm:bottom-6 sm:start-6"
+          class="page-nav__btn page-nav__btn--prev pointer-events-auto absolute"
           aria-label={`${prevLabel}: ${prev.label}`}
         >
           <Icon name="arrow" class="page-nav__icon size-5" />
@@ -51,8 +62,10 @@ const atEnd = !!prev && !next;
         <a
           href={next.href}
           rel="next"
-          class="page-nav__btn page-nav__btn--next pointer-events-auto absolute bottom-4 end-4 sm:bottom-6 sm:end-6"
+          class="page-nav__btn page-nav__btn--next pointer-events-auto absolute"
           aria-label={`${nextLabel}: ${next.label}`}
+          aria-hidden={endOnly ? 'true' : undefined}
+          inert={endOnly}
         >
           <Icon name="arrow" class="page-nav__icon size-5" />
           <span class="page-nav__tip" aria-hidden="true">
@@ -66,7 +79,7 @@ const atEnd = !!prev && !next;
           href={SITE.appUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="page-nav__btn page-nav__btn--launch pointer-events-auto absolute bottom-4 end-4 sm:bottom-6 sm:end-6"
+          class="page-nav__btn page-nav__btn--launch pointer-events-auto absolute"
           aria-label={launchLabel}
         >
           <Icon name="rocket" class="page-nav__icon size-5" />
@@ -86,6 +99,48 @@ const atEnd = !!prev && !next;
   }
   :global([dir='rtl']) .page-nav {
     --dir: -1;
+  }
+
+  /* Home, with JS: the Features arrow stays off-stage until the page end.
+     Without JS the button stays put — a hidden destination is worse than an
+     early one. `.is-at-end` is stamped by the scroll listener below. */
+  :global(.js) .page-nav--end-only:not(.is-at-end) .page-nav__btn--next {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px);
+  }
+
+  /* Corners clear the home indicator and any notch. While the tour is
+     running the transport occupies this band, so the arrows step aside. */
+  .page-nav__btn--prev {
+    bottom: max(1rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
+    inset-inline-start: max(1rem, calc(0.75rem + env(safe-area-inset-left, 0px)));
+  }
+
+  .page-nav__btn--next,
+  .page-nav__btn--launch {
+    bottom: max(1rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
+    inset-inline-end: max(1rem, calc(0.75rem + env(safe-area-inset-right, 0px)));
+  }
+
+  @media (min-width: 640px) {
+    .page-nav__btn--prev {
+      bottom: max(1.5rem, calc(1rem + env(safe-area-inset-bottom, 0px)));
+      inset-inline-start: max(1.5rem, calc(1rem + env(safe-area-inset-left, 0px)));
+    }
+
+    .page-nav__btn--next,
+    .page-nav__btn--launch {
+      bottom: max(1.5rem, calc(1rem + env(safe-area-inset-bottom, 0px)));
+      inset-inline-end: max(1.5rem, calc(1rem + env(safe-area-inset-right, 0px)));
+    }
+  }
+
+  :global(html:has(#tour-hud[data-playing='true'])) .page-nav {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .page-nav__btn {
@@ -112,6 +167,9 @@ const atEnd = !!prev && !next;
       inset 0 -8px 14px -10px rgb(255 255 255 / 0.7);
     transition:
       transform 0.4s var(--ease-out-expo),
+      opacity 0.4s ease,
+      visibility 0.4s ease,
+      background 0.3s ease,
       box-shadow 0.4s ease,
       border-color 0.4s ease,
       color 0.3s ease;
@@ -160,7 +218,22 @@ const atEnd = !!prev && !next;
     transition: background-position 0.75s ease;
   }
 
-  .page-nav__btn:hover,
+  @media (hover: hover) and (pointer: fine) {
+    .page-nav__btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      border-color: color-mix(in oklab, var(--color-brand-400) 65%, white);
+      box-shadow:
+        0 18px 36px -10px rgb(0 0 0 / 0.34),
+        0 0 0 4px color-mix(in oklab, var(--color-brand-400) 18%, transparent),
+        inset 0 1px 0 rgb(255 255 255 / 0.95),
+        inset 0 -8px 14px -10px rgb(255 255 255 / 0.8);
+    }
+
+    .page-nav__btn:hover::after {
+      background-position: -40% 0;
+    }
+  }
+
   .page-nav__btn:focus-visible {
     transform: translateY(-3px) scale(1.05);
     border-color: color-mix(in oklab, var(--color-brand-400) 65%, white);
@@ -171,7 +244,6 @@ const atEnd = !!prev && !next;
       inset 0 -8px 14px -10px rgb(255 255 255 / 0.8);
   }
 
-  .page-nav__btn:hover::after,
   .page-nav__btn:focus-visible::after {
     background-position: -40% 0;
   }
@@ -185,8 +257,12 @@ const atEnd = !!prev && !next;
     outline-offset: 3px;
   }
 
-  /* Dark surfaces: less white fill, brighter rim — glass over ink, not frost. */
-  :global(.dark) .page-nav__btn {
+  /* Dark surfaces: less white fill, brighter rim — glass over ink, not frost.
+     "Dark" is the page theme, or a band of the opposite tone sitting under the
+     corner: the arrows are fixed, and the home page's last bands alternate
+     beneath them (`components/ChromeTone.astro` stamps `.chrome-invert`). */
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn {
     color: white;
     border-color: rgb(255 255 255 / 0.2);
     background: linear-gradient(150deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
@@ -195,7 +271,8 @@ const atEnd = !!prev && !next;
       inset 0 1px 0 rgb(255 255 255 / 0.3),
       inset 0 -8px 14px -10px rgb(255 255 255 / 0.22);
   }
-  :global(.dark) .page-nav__btn::before {
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn::before,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn::before {
     background:
       radial-gradient(110% 85% at 26% 10%, rgb(255 255 255 / 0.35), transparent 58%),
       radial-gradient(
@@ -204,7 +281,8 @@ const atEnd = !!prev && !next;
         transparent 62%
       );
   }
-  :global(.dark) .page-nav__btn::after {
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn::after,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn::after {
     background: linear-gradient(
       115deg,
       transparent 42%,
@@ -212,8 +290,10 @@ const atEnd = !!prev && !next;
       transparent 58%
     );
   }
-  :global(.dark) .page-nav__btn:hover,
-  :global(.dark) .page-nav__btn:focus-visible {
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn:hover,
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn:focus-visible,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn:hover,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn:focus-visible {
     border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
     box-shadow:
       0 20px 44px -12px rgb(0 0 0 / 0.8),
@@ -224,10 +304,12 @@ const atEnd = !!prev && !next;
 
   /* Final stop: the same glass shell, filled with brand so it reads as the
      tour's payoff rather than one more step. Both themes get the identical
-     treatment, and the rules sit after the dark block because `.dark
-     .page-nav__btn` outranks a lone modifier class. */
-  .page-nav__btn--launch,
-  :global(.dark) .page-nav__btn--launch {
+     treatment, and every branch of the tone rules above is answered here,
+     one for one: those select on the surface behind the button, which
+     outranks a lone modifier class. */
+  .page-nav .page-nav__btn--launch,
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn--launch,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn--launch {
     color: white;
     border-color: color-mix(in oklab, var(--color-brand-300) 70%, white);
     background: linear-gradient(150deg, var(--color-brand-400), var(--color-brand-600));
@@ -237,14 +319,17 @@ const atEnd = !!prev && !next;
       inset 0 1px 0 rgb(255 255 255 / 0.45),
       inset 0 -8px 14px -10px rgb(255 255 255 / 0.4);
   }
-  .page-nav__btn--launch::before,
-  :global(.dark) .page-nav__btn--launch::before {
+  .page-nav .page-nav__btn--launch::before,
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn--launch::before,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn--launch::before {
     background: radial-gradient(110% 85% at 26% 10%, rgb(255 255 255 / 0.5), transparent 58%);
   }
-  .page-nav__btn--launch:hover,
-  .page-nav__btn--launch:focus-visible,
-  :global(.dark) .page-nav__btn--launch:hover,
-  :global(.dark) .page-nav__btn--launch:focus-visible {
+  .page-nav .page-nav__btn--launch:hover,
+  .page-nav .page-nav__btn--launch:focus-visible,
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn--launch:hover,
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__btn--launch:focus-visible,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn--launch:hover,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__btn--launch:focus-visible {
     border-color: white;
     box-shadow:
       0 20px 40px -10px color-mix(in oklab, var(--color-brand-500) 70%, transparent),
@@ -322,7 +407,8 @@ const atEnd = !!prev && !next;
     opacity: 1;
     transform: translateY(-50%) translateX(0);
   }
-  :global(.dark) .page-nav__tip {
+  :global(html.dark) .page-nav:not(.chrome-invert) .page-nav__tip,
+  :global(html:not(.dark)) .page-nav.chrome-invert .page-nav__tip {
     color: white;
     border-color: rgb(255 255 255 / 0.16);
     background: color-mix(in oklab, var(--color-ink-900) 72%, transparent);
@@ -346,7 +432,8 @@ const atEnd = !!prev && !next;
     }
     .page-nav__btn:hover,
     .page-nav__btn:focus-visible,
-    .page-nav__btn:active {
+    .page-nav__btn:active,
+    :global(.js) .page-nav--end-only:not(.is-at-end) .page-nav__btn--next {
       transform: none;
     }
     .page-nav__btn::after {
@@ -360,3 +447,53 @@ const atEnd = !!prev && !next;
     }
   }
 </style>
+
+<script>
+  /**
+   * Home's next arrow waits until the viewport is sitting on the last stretch
+   * of the document. The world can still be growing the page under the tour,
+   * so this re-reads scrollHeight on scroll, resize, and document resize.
+   */
+  let pageNavAbort: AbortController | undefined;
+  let pageNavRo: ResizeObserver | undefined;
+
+  /** How close to the document end counts as "there". */
+  const END_SLACK = 160;
+
+  function initPageNav() {
+    pageNavAbort?.abort();
+    pageNavRo?.disconnect();
+    pageNavRo = undefined;
+    pageNavAbort = new AbortController();
+    const { signal } = pageNavAbort;
+
+    const nav = document.querySelector<HTMLElement>('.page-nav--end-only');
+    const next = nav?.querySelector<HTMLElement>('.page-nav__btn--next');
+    if (!nav || !next) return;
+
+    const atEnd = () =>
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - END_SLACK;
+
+    const sync = () => {
+      const on = atEnd();
+      nav.classList.toggle('is-at-end', on);
+      next.toggleAttribute('inert', !on);
+      next.setAttribute('aria-hidden', on ? 'false' : 'true');
+    };
+
+    window.addEventListener('scroll', sync, { passive: true, signal });
+    window.addEventListener('resize', sync, { signal });
+    if (typeof ResizeObserver !== 'undefined') {
+      pageNavRo = new ResizeObserver(sync);
+      pageNavRo.observe(document.documentElement);
+    }
+    sync();
+  }
+
+  document.addEventListener('astro:page-load', initPageNav);
+  document.addEventListener('astro:before-swap', () => {
+    pageNavAbort?.abort();
+    pageNavRo?.disconnect();
+    pageNavRo = undefined;
+  });
+</script>

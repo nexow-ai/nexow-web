@@ -1,0 +1,36 @@
+---
+/**
+ * Act II — copy only. Carries `app-showcase` because `/for/*` links here.
+ * The playground SVG is the same instance pinned by `PlaygroundSpan`.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import Act from './Act.astro';
+import ActCopyBlock from './ActCopyBlock.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const copy = useContent(lang).home.acts!.canvas;
+---
+
+<Act id="app-showcase" labelledBy="act-canvas-title" height="210vh">
+  <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
+    <ActCopyBlock copy={copy} headingId="act-canvas-title" />
+    <div class="act-scene pg-slot" aria-hidden="true"></div>
+  </div>
+</Act>
+
+<style>
+  .pg-slot {
+    aspect-ratio: 640 / 400;
+    width: 100%;
+  }
+
+  @media (max-width: 767.98px) {
+    .pg-slot {
+      display: none;
+    }
+  }
+</style>

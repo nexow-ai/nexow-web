@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ko as legal } from '../legal/ko';
 
 export const ko: SiteContent = {
   nav: {
@@ -18,6 +19,16 @@ export const ko: SiteContent = {
     home: '홈',
     prevPage: '이전 페이지',
     nextPage: '다음 페이지',
+    tourPlay: '투어 재생',
+    tourStop: '투어 중지',
+    tourTrack: '다른 곡 재생',
+    tourLeft: '남은 시간',
+    tourControls: '투어 조작',
+    switchLang: '언어 변경',
+    primaryNav: '기본',
+    mobileNav: '모바일',
+    onThisPage: '이 페이지에서',
+    skipToContent: '본문으로 건너뛰기',
   },
   footer: {
     tagline: '필요한 것을 설명하면 Nexow가 캔버스 위의 위젯으로 만들어 줍니다.',
@@ -83,10 +94,8 @@ export const ko: SiteContent = {
     },
     hero: {
       badge: '얼리 액세스',
-      titleLead: '설명하세요.',
-      titleGradient: 'Nexow가 만듭니다.',
-      titleTail: '거래하세요.',
-      titleKicker: '몇 주나 몇 달이 아니라, 몇 초 만에.',
+      title: '무엇이든 만들어. 모든 것을 봐라.',
+      titleKicker: '실시간 대시보드를 몇 초 만에 — 몇 주나 분기가 아니라.',
       subtitle:
         '필요한 것을 설명하면 Nexow가 만들어 줍니다. 실제로 동작하는 위젯이 라이브 데이터에 연결되어, 여러분이 통제하는 캔버스에 배치됩니다. 지진, 대기질, 세계 지표, 마켓 피드 또는 자체 데이터베이스 — 시각화하고, 지켜보고, 실행하세요.',
       ctaPrimary: '앱 실행',
@@ -184,7 +193,7 @@ export const ko: SiteContent = {
     stats: [
       { n: 90, label: '데이터, 지갑, 소셜 및 마켓을 위한 라이브 커넥터' },
       { n: 6, label: '하나의 캔버스에서 자산 클래스' },
-      { n: 10, suffix: 'K', label: '가입 시 무료 AI 크레딧 예약' },
+      { n: 100, suffix: 'K', label: '가입 시 무료 AI 크레딧 예약' },
       { n: 30, prefix: '<', suffix: 's', label: '문장에서 실행 중인 위젯까지' },
     ],
     showcase: {
@@ -509,7 +518,7 @@ export const ko: SiteContent = {
         {
           icon: 'trophy',
           title: '평판 & 메달',
-          body: '모든 위젯, 봇 및 공유가 평판을 얻습니다 — 공개 프로필의 포인트, 단계별 성취, 희귀 메달 및 레벨. 보상 크레딧으로의 전환은 다음에 옵니다.',
+          body: '모든 위젯, 봇 및 공유가 평판을 얻습니다 — 공개 프로필의 포인트, 단계별 성취, 희귀 메달 및 레벨. 배지 티어마다 잔액에 무료 크레딧이 지급됩니다.',
           status: 'live',
         },
       ],
@@ -562,7 +571,7 @@ export const ko: SiteContent = {
         { status: 'shipped', title: '마켓플레이스', body: '위젯, 테마, 스크린 및 봇을 게시 및 설치 — 모든 리메이크에 원작자를 표시하는 계보 포함.' },
         { status: 'shipped', title: '평판 & 메달', body: '구축하고 공유하는 것에 대한 포인트, 단계별 성취, 희귀 메달 및 레벨.' },
         { status: 'soon', title: '프리미엄 위젯 & 신호', body: '프리미엄 위젯과 전략 신호를 게시하고, 다른 사람이 구독하게 하고, 실행하는 것에 대해 수익을 올리세요.' },
-        { status: 'soon', title: '유료 요금제 & 보상 크레딧', body: 'Supporter 및 Sponsor 결제, 플랫폼 크레딧, 그리고 평판을 보상 크레딧으로 전환.' },
+        { status: 'soon', title: '유료 요금제', body: 'Lite 및 Elite 결제 — 월간 크레딧 충전, 더 많은 봇과 에이전트, 프리미엄 외관.' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const ko: SiteContent = {
         },
         {
           q: "비용은 얼마인가요?",
-          a: "Free에는 전체 위젯 캔버스, 라이브러리, 클라우드 동기화, 봇 10개, 에이전트 3개, 커뮤니티 접근, 가입 시 100,000 AI 크레딧이 포함됩니다. Supporter와 Sponsor는 월간 크레딧, 더 높은 자동화 한도, 프리미엄 외관을 추가합니다 — 결제는 곧 출시. 전체 비교는 요금제를 보세요.",
+          a: "Free에는 전체 위젯 캔버스, 라이브러리, 클라우드 동기화, 봇 10개, 에이전트 3개, 커뮤니티 접근, 가입 시 100,000 AI 크레딧이 포함됩니다. Lite와 Elite는 월간 크레딧, 더 높은 자동화 한도, 프리미엄 외관을 추가합니다 — 결제는 곧 출시. 전체 비교는 요금제를 보세요.",
         },
       ],
     },
@@ -1326,7 +1335,7 @@ export const ko: SiteContent = {
           { icon: 'users', title: '커뮤니티', body: '메이커 팔로우, 빌더용 소셜 피드에서 좋아요·댓글, 보드 탐색, 다른 사람이 라이브러리에 바로 추가할 수 있는 위젯 공유 — 공개 메이커 프로필.' },
           { icon: 'mail', title: '실시간 채팅', body: '계정 또는 Dock에서 친구·연락처와 라이브 메시지 — 1:1 및 그룹 DM, 프레즌스, 반응, 팔로워/팔로잉, 연락처 받은편지함.' },
           { icon: 'store', title: '마켓플레이스', body: '위젯, 테마, 스크린, 봇, 에이전트 게시·설치 — 계보 포함. 구매·판매는 다음에.' },
-          { icon: 'trophy', title: '평판 및 메달', body: '구축·공유로 평판 포인트, 단계별 업적, 희귀 메달 획득 — 오늘 라이브. 보상 크레딧은 다음에.' },
+          { icon: 'trophy', title: '평판 및 메달', body: '구축·공유로 평판 포인트, 단계별 업적, 희귀 메달 획득 — 오늘 라이브. 배지 티어마다 잔액에 무료 크레딧이 지급됩니다.' },
         ],
       },
       {
@@ -1346,7 +1355,7 @@ export const ko: SiteContent = {
     meta: {
       title: '요금제 — Nexow',
       description:
-        '무료로 영원히 구축 — 자신의 키로 로컬에서 또는 자신의 계정에서 100,000 AI 크레딧이 예약되어 있습니다. 무료, Supporter, Sponsor 및 Partner를 크레딧, 봇, 에이전트 및 커스터마이제이션과 비교하세요.',
+        '무료로 영원히 구축 — 자신의 키로 로컬에서 또는 자신의 계정에서 100,000 AI 크레딧이 예약되어 있습니다. 무료, Lite, Elite 및 Partner를 크레딧, 봇, 에이전트 및 커스터마이제이션과 비교하세요.',
     },
     hero: {
       badge: '요금제',
@@ -1355,7 +1364,7 @@ export const ko: SiteContent = {
         '무료로 구축하세요 — 자신의 키로 로컬에서 실행하거나 100,000 AI 크레딧을 예약하기 위해 가입하세요. 더 많은 용량, 자동화 및 폴리시가 필요할 때 업그레이드하세요.',
     },
     comingSoon:
-      'Supporter & Sponsor 결제는 곧 출시되고, 플랫폼 크레딧은 함께 출시됩니다. 모두 무료 입니다 — 결제 개시 시 첫 번째가 되려면 계정을 만드세요.',
+      'Lite & Elite 결제는 곧 출시되고, 플랫폼 크레딧은 함께 출시됩니다. 모두 무료 입니다 — 결제 개시 시 첫 번째가 되려면 계정을 만드세요.',
     highlights: {
       title: '요금제로 확장되는 것',
       items: [
@@ -1409,18 +1418,18 @@ export const ko: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: '더 많은 여유를 원하는 메이커용.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
         billedYearly: '연간 $99.90 청구',
         cadence: '/월',
-        stats: ['115K 크레딧/월', '30개의 봇', '10개의 에이전트'],
+        stats: ['670K 크레딧/월', '30개의 봇', '10개의 에이전트'],
         note: '무료의 모든 것, 더하기:',
-        cta: 'Supporter 되기',
+        cta: 'Lite 되기',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '매달 115,000 크레딧',
+          '매달 670,000 크레딧',
           '최대 30개 봇과 10개 에이전트',
           '두 번째 강조 색상(그라데이션)',
           '캔버스 패턴, 위젯 표면, 패널 글래스 8종 추가',
@@ -1429,20 +1438,20 @@ export const ko: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: '전문가가 되려는 파워 사용자용.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
         billedYearly: '연간 $699.90 청구',
         cadence: '/월',
         badge: '최고의 수익',
-        stats: ['800K 크레딧/월', '300개의 봇', '100개의 에이전트'],
-        note: 'Supporter의 모든 것, 더하기:',
-        cta: 'Sponsor 되기',
+        stats: ['4.7M 크레딧/월', '300개의 봇', '100개의 에이전트'],
+        note: 'Lite의 모든 것, 더하기:',
+        cta: 'Elite 되기',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '매달 800,000 크레딧',
+          '매달 4,675,000 크레딧',
           '최대 300개 봇과 100개 에이전트',
           '캔버스 패턴과 부트 로더 2종 추가, 오로라 튜닝 포함',
           '복잡한 설정을 위한 우선 지원',
@@ -1458,7 +1467,7 @@ export const ko: SiteContent = {
         priceYearly: '맞춤',
         cadence: '',
         stats: ['개인 인프라', '화이트 글로브', 'SLA'],
-        note: 'Sponsor의 모든 것, 더하기:',
+        note: 'Elite의 모든 것, 더하기:',
         cta: '문의하기',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1550,15 +1559,15 @@ export const ko: SiteContent = {
       },
       {
         q: "크레딧이란 무엇인가요?",
-        a: "크레딧은 AI 사용량을 측정합니다. 위젯 생성, 대화로 편집, 링크 생성, Copilot 사용. 1 크레딧은 공급자 비용 기준 Sonnet 출력 토큰 1개이므로 선택한 모델과 무관합니다 — Haiku는 약 3토큰, Opus는 약 0.6으로 1크레딧. Free는 가입 시 100,000 예약, Supporter는 월 115,000, Sponsor는 800,000 — 팩은 언제든 구매할 수 있습니다.",
+        a: "크레딧은 AI 사용량을 측정합니다. 위젯 생성, 대화로 편집, 링크 생성, Copilot 사용. 1 크레딧은 공급자 비용 기준 Sonnet 출력 토큰 1개이므로 선택한 모델과 무관합니다 — Haiku는 약 2토큰, Opus는 약 0.4으로 1크레딧. Free는 가입 시 100,000 예약, Lite는 월 670,000, Elite는 4,675,000 — 팩은 언제든 구매할 수 있습니다.",
       },
       {
         q: "유료 요금제는 언제 출시되나요?",
-        a: "Supporter와 Sponsor는 정의되어 앱에 표시되지만, 유료 결제는 곧 출시됩니다. 오늘은 모두 Free입니다 — 결제 오픈 시 앞에 서려면 계정을 만드세요.",
+        a: "Lite와 Elite는 정의되어 앱에 표시되지만, 유료 결제는 곧 출시됩니다. 오늘은 모두 Free입니다 — 결제 오픈 시 앞에 서려면 계정을 만드세요.",
       },
       {
         q: "연간 결제가 가능한가요?",
-        a: "예. 연간 결제는 월간 대비 두 달 무료입니다 — Supporter 연 $99.90, Sponsor 연 $699.90. 월간과 연간은 언제든 전환할 수 있습니다.",
+        a: "예. 연간 결제는 월간 대비 두 달 무료입니다 — Lite 연 $99.90, Elite 연 $699.90. 월간과 연간은 언제든 전환할 수 있습니다.",
       },
       {
         q: "평판은 어떻게 계산되나요?",
@@ -1580,7 +1589,7 @@ export const ko: SiteContent = {
     subtitle: '게시물, 위젯, 봇, 게시 — 모두가 하나의 점수로 모입니다. 점수는 배지를, 배지는 등급을 열고, DAO가 열리면 둘 다 크레딧과 거버넌스 토큰으로 지급됩니다.',
     live: '앱에서 사용 중',
     planned: '예정',
-    plannedNote: '포인트 · 배지 · 등급은 이미 앱에서 동작합니다. 크레딧과 NXW 지급은 Nexow DAO와 함께 시작되며, 아래 표는 첫 투표에 올릴 제안입니다.',
+    plannedNote: '포인트 · 배지 · 등급과 무료 크레딧 보상은 이미 앱에서 동작합니다. NXW 지급과 레벨 보너스는 Nexow DAO와 함께 시작됩니다. NXW는 2026년 8월 14일 dry mint합니다.',
     teaser: {
       badges: '만들고 배포한 결과에 대한 메달',
       levels: '평판 포인트로 여는 등급',
@@ -1654,7 +1663,7 @@ export const ko: SiteContent = {
         commentsReceived: '받은 댓글',
         followers: '팔로워',
         following: '내가 팔로우한 사람',
-        contacts: '맞팔 연락처',
+        friends: '맞팔 연락처',
         widgetsBuilt: '만든 위젯',
         assetsPublished: '게시한 자산',
         installsReceived: '내 작업 설치 수',
@@ -1664,6 +1673,18 @@ export const ko: SiteContent = {
         likesGiven: '누른 좋아요',
         reactionsGiven: '남긴 반응',
         nightPosts: '00:00~05:00 사이 게시물',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: '연 DM 대화',
       },
       names: {
@@ -1685,6 +1706,15 @@ export const ko: SiteContent = {
         emojiSommelier: '이모지 소믈리에',
         nightOwl: '올빼미',
         penPal: '펜팔',
+        greenLight: '그린 라이트',
+        buildFlagger: '빌드 신고',
+        tagClose: '친구',
+        tagFamily: '가족',
+        tagWork: '동료',
+        tagTeam: '팀원',
+        tagSchool: '학우',
+        tagMentor: '멘토',
+        tagFavorite: '즐겨찾기',
         oracle: '오라클',
         agora: '아고라',
         catalyst: '촉매',
@@ -1695,6 +1725,9 @@ export const ko: SiteContent = {
         benefactor: '후원자',
         midnightSun: '한밤의 태양',
         nexus: '넥서스',
+        tagPartner: '파트너',
+        tagLove: '사랑에 빠짐',
+        rolodex: '롤로덱스',
         immortal: '불멸자',
         folkHero: '민중 영웅',
         luminary: '등불',
@@ -1710,7 +1743,7 @@ export const ko: SiteContent = {
         commentsReceived: '내 게시글에 댓글을 받으세요.',
         followers: '프로필에서 팔로워를 늘리세요.',
         following: 'Nexow에서 다른 사람을 팔로우하세요.',
-        contacts: '맞팔 연락처를 늘리세요 — 서로 팔로우하는 사람들.',
+        friends: '맞팔 연락처를 늘리세요 — 서로 팔로우하는 사람들.',
         widgetsBuilt: '캔버스에서 위젯을 만드세요.',
         assetsPublished: '마켓플레이스에 애셋을 게시하세요.',
         installsReceived: '공개한 위젯, 봇, 테마가 설치되도록 하세요.',
@@ -1737,7 +1770,11 @@ export const ko: SiteContent = {
         bronze: '브론즈 단계',
         silver: '실버 단계',
         gold: '골드 단계',
+        tagBronze: '친구 · bronze',
+        tagSilver: '친구 · silver',
+        tagGold: '친구 · gold',
         rare: '희귀 메달',
+        tagRare: '친구 · rare',
         legendary: '전설 메달',
       },
       levelRow: '{level} 달성',
@@ -1746,7 +1783,7 @@ export const ko: SiteContent = {
       creditsLabel: '크레딧',
       tokensLabel: 'NXW',
       worth: '≈ 정가 기준 {usd}어치 AI 생성',
-      months: '= Sponsor 수준 생성 {n}개월치를 직접 벌어들이는 셈',
+      months: '= Elite 수준 생성 {n}개월치를 직접 벌어들이는 셈',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: '토큰 하나. 다섯 가지 역할. 최대 2천만 개.',
@@ -1984,7 +2021,7 @@ export const ko: SiteContent = {
   waitlist: {
     eyebrow: '결제 대기자 명단',
     title: '결제가 곧 열립니다',
-    subtitle: 'Supporter와 Sponsor 결제가 곧 시작됩니다. 이메일을 남겨주시면 결제가 열리는 날 알려드립니다 — 스팸은 없습니다.',
+    subtitle: 'Lite와 Elite 결제가 곧 시작됩니다. 이메일을 남겨주시면 결제가 열리는 날 알려드립니다 — 스팸은 없습니다.',
     placeholder: 'you@email.com',
     submit: '대기자 명단 참여',
     submitting: '참여 중…',
@@ -2302,4 +2339,9 @@ export const ko: SiteContent = {
       ctaSecondary: '커뮤니티 참여',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

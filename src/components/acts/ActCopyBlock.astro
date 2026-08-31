@@ -1,0 +1,167 @@
+---
+/**
+ * The still half of an act.
+ *
+ * Deliberately motionless: the scene beside it travels, the words do not, which
+ * is what keeps a scroll-driven page readable rather than exhausting. The only
+ * thing that changes here is which beat is lit, and that is a pure opacity ramp
+ * off the act's `--k0…--k5` — so with no JavaScript, or under reduced motion,
+ * every beat sits at full strength and the whole act still reads.
+ *
+ * The title is the one exception: it forms out of particles once the act has
+ * pinned (`data-text-appear="scroll"`, see `TextAppear.astro`) — the hero's
+ * entrance, replayed once per section, at the moment the section is the screen.
+ */
+import type { ActCopy } from '../../i18n/content';
+
+interface Props {
+  copy: ActCopy;
+  headingId: string;
+}
+
+const { copy, headingId } = Astro.props;
+const RAMPS = ['--k0', '--k1', '--k2', '--k3', '--k4', '--k5'];
+---
+
+<div class="act-copy">
+  <p class="act-copy__eyebrow">
+    <span class="act-copy__step">{copy.step}</span>
+    <span class="act-copy__rule" aria-hidden="true"></span>
+    {copy.eyebrow}
+  </p>
+
+  <h2 id={headingId} class="act-copy__title" data-text-appear="scroll">
+    {copy.title}
+  </h2>
+
+  <p class="act-copy__body">{copy.body}</p>
+
+  {
+    copy.beats.length > 0 && (
+      <ul class="act-copy__beats">
+        {copy.beats.map((beat, i) => (
+          <li class="act-copy__beat" style={`--lit: var(${RAMPS[Math.min(i, RAMPS.length - 1)]}, 1)`}>
+            <span class="act-copy__beat-label">{beat.label}</span>
+            <span class="act-copy__beat-detail">{beat.detail}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>
+
+<style>
+  .act-copy {
+    position: relative;
+    isolation: isolate;
+    max-width: 34rem;
+  }
+
+  /* A soft well of the page surface behind the copy, so the world can sit
+   * centred on the screen — solids and all — without a lit screen edge ever
+   * crossing a line of type. Theme-aware through the world's own token. The
+   * ellipse reaches well past the block so its edge is never seen. */
+  .act-copy::before {
+    content: '';
+    position: absolute;
+    inset: -3rem -7rem -3rem -5rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 62% 58% at 42% 50%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 82%, transparent) 46%,
+      transparent 78%
+    );
+  }
+
+  .act-copy__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--w-accent);
+  }
+
+  .act-copy__step {
+    color: var(--w-accent-2);
+  }
+
+  .act-copy__rule {
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-brand-400), transparent);
+  }
+
+  .act-copy__title {
+    margin-top: 1.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    color: var(--w-text);
+  }
+
+  .act-copy__body {
+    margin-top: 1.1rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    /* ink-200 on ink-950 measures well clear of AA; the muted token does not. */
+    color: var(--w-text-2);
+  }
+
+  .act-copy__beats {
+    margin-top: 2rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .act-copy__beat {
+    display: grid;
+    gap: 0.15rem;
+    padding-inline-start: 0.9rem;
+    border-inline-start: 2px solid
+      color-mix(in oklab, var(--color-brand-400) calc(var(--lit, 1) * 100%), var(--w-line));
+    /* Never fades below 0.55: an unlit beat is dimmer, never unreadable. */
+    opacity: calc(0.55 + 0.45 * var(--lit, 1));
+    transition: opacity 0.35s var(--ease-out-expo);
+  }
+
+  .act-copy__beat-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--w-accent);
+  }
+
+  .act-copy__beat-detail {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--w-text-2);
+  }
+
+  @media (max-width: 767.98px) {
+    .act-copy {
+      max-width: none;
+    }
+
+    .act-copy::before {
+      inset: -1.25rem -0.75rem -1.75rem;
+      background: radial-gradient(
+        ellipse 92% 72% at 50% 38%,
+        var(--w-surface, var(--color-ink-950)) 0%,
+        color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 90%, transparent) 54%,
+        transparent 82%
+      );
+    }
+
+    .act-copy__title {
+      font-size: clamp(1.7rem, 1.15rem + 4.6vw, 2.35rem);
+    }
+  }
+</style>

@@ -1,0 +1,2269 @@
+---
+/**
+ * The one playground for acts 01 and 02.
+ *
+ * Chrome is HTML — screens and workspaces open and close on a real width /
+ * height the way the Features playground does. The stage stays SVG: type,
+ * generate, live widgets. As #app-showcase takes the pin the generate loop
+ * parks, a mosaic bound draws, and Links wire the same widgets. Boards then
+ * cycle fast through layouts (personal, trading desk, quake map, watchlist,
+ * news) with chart / order-book / map animations. Chrome keeps cycling
+ * through both acts.
+ */
+import { ICON_PATHS } from '../icon-paths';
+
+interface Props {
+  prompt: string;
+}
+const { prompt } = Astro.props;
+
+/** Four weeks of streak intensities — a monthly heatmap, not a fortnight. */
+const CELLS = [
+  2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 3, 1, 2, 0, 3, 2, 0, 1, 3, 2, 3, 1, 2, 2, 0, 3,
+  1, 3, 2, 1,
+];
+
+/** Active screen stays put; the rest open and close on `--w-step`. `--w` is
+ *  the label width in `ch` so the keyframes animate a real width. Cycle is
+ *  one step per name, so a longer list rotates through more screens without
+ *  packing the header. */
+const activeTab = 'Playground';
+const loopTabs = [
+  'Games',
+  'Work',
+  'Markets',
+  'Research',
+  'Invest',
+  'Study',
+  'Economy',
+  'Habits',
+  'Health',
+  'Studio',
+  'News',
+  'Crypto',
+];
+const PARKED_TABS = 3;
+
+const TINTS = [
+  'var(--color-brand-400)',
+  'var(--color-accent-400)',
+  'var(--color-sky-400)',
+  'var(--color-plasma-400, var(--color-accent-400))',
+  'var(--color-brand-300)',
+  'var(--color-sky-300, var(--color-sky-400))',
+  'var(--color-accent-300, var(--color-accent-400))',
+];
+
+const activeWorkspace = { label: 'Personal', tint: TINTS[0] };
+/** Keep labels short enough to clear the rail — about eight characters. */
+const loopWorkspaceLabels = [
+  'Games',
+  'Work',
+  'Markets',
+  'Research',
+  'Invest',
+  'Study',
+  'Economy',
+  'Trading',
+  'Health',
+  'Studio',
+  'News',
+  'Crypto',
+  'Sports',
+  'Design',
+  'Code',
+  'Data',
+  'Media',
+  'Focus',
+  'Travel',
+  'Music',
+  'Labs',
+  'Team',
+  'Home',
+  'Bank',
+];
+const loopWorkspaces = loopWorkspaceLabels.map((label, i) => ({
+  label,
+  tint: TINTS[i % TINTS.length],
+}));
+const PARKED_WORKSPACES = 4;
+
+const profiles = [
+  { handle: '@quanta', initial: 'Q', tint: 'var(--color-brand-500)' },
+  { handle: '@nova.eth', initial: 'N', tint: 'var(--color-accent-500)' },
+  { handle: '@mira_dev', initial: 'M', tint: 'var(--color-sky-500)' },
+  { handle: '@0xkaito', initial: 'K', tint: 'var(--color-plasma-500, var(--color-accent-500))' },
+  { handle: '@lunaris', initial: 'L', tint: 'var(--color-brand-400)' },
+  { handle: '@vega-01', initial: 'V', tint: 'var(--color-accent-400)' },
+];
+
+const MOOD = [
+  { x: 144, y: 176, w: 148, h: 72, fill: 'var(--w-mood-1)' },
+  { x: 300, y: 176, w: 68, h: 40, fill: 'var(--w-mood-2)' },
+  { x: 376, y: 176, w: 56, h: 40, fill: 'var(--w-mood-3)' },
+  { x: 300, y: 224, w: 132, h: 24, fill: 'var(--w-mood-4)' },
+];
+
+const SWATCHES = [
+  { x: 144, fill: 'var(--color-brand-400)' },
+  { x: 166, fill: 'var(--color-accent-400)' },
+  { x: 188, fill: 'var(--color-sky-400)' },
+  { x: 210, fill: 'var(--color-brand-300)' },
+];
+
+/** Eight memory cards in 4×2. `pair` is which two flip together. */
+const MEMORY = [
+  { col: 0, row: 0, pair: 0 },
+  { col: 1, row: 0, pair: 1 },
+  { col: 2, row: 0, pair: 0 },
+  { col: 3, row: 0, pair: 2 },
+  { col: 0, row: 1, pair: 1 },
+  { col: 1, row: 1, pair: 3 },
+  { col: 2, row: 1, pair: 2 },
+  { col: 3, row: 1, pair: 3 },
+];
+
+const PAIR_FILL = [
+  'var(--color-brand-400)',
+  'var(--color-accent-400)',
+  'var(--color-sky-400)',
+  'var(--color-brand-300)',
+];
+
+/** Air-quality spark — kept inside the card (title ~y 300, floor ~y 356). */
+const SPARK = [28, 36, 32, 44, 50, 41, 56, 62, 54, 68, 74, 70];
+const sparkLo = Math.min(...SPARK);
+const sparkHi = Math.max(...SPARK);
+const sparkX = (i: number) => 144 + i * 24;
+const sparkY = (v: number) => 352 - ((v - sparkLo) / (sparkHi - sparkLo || 1)) * 40;
+const sparkPath = SPARK.map((v, i) => `${i ? 'L' : 'M'}${sparkX(i)} ${sparkY(v)}`).join(' ');
+
+/** Candle closes for the trading board. */
+const CLOSES = [42, 48, 45, 58, 64, 55, 70, 76, 68, 82, 88, 84];
+const candleY = (v: number) => 328 - (v - 38) * 1.55;
+const CANDLES = CLOSES.map((c, i) => {
+  const prev = i === 0 ? c - 5 : CLOSES[i - 1];
+  const top = candleY(Math.max(c, prev));
+  const bottom = candleY(Math.min(c, prev));
+  return { x: 148 + i * 24, top, h: Math.max(6, bottom - top + 5), up: c >= prev };
+});
+const emaPath = CLOSES.map((c, i) => `${i ? 'L' : 'M'}${148 + i * 24} ${candleY(c)}`).join(' ');
+
+/** Order-book depth rows (bid left / ask right). */
+const BOOK = [
+  { bid: 88, ask: 72 },
+  { bid: 70, ask: 64 },
+  { bid: 54, ask: 50 },
+  { bid: 40, ask: 42 },
+  { bid: 28, ask: 34 },
+  { bid: 16, ask: 22 },
+];
+
+/** Coarse landmass for the quake map. */
+const MAP_ROWS = [
+  '..####....###...',
+  '.######..#####..',
+  '..#####...####..',
+  '...###.....###..',
+  '...###......##..',
+  '....#.......#...',
+];
+const MAP_DOTS = MAP_ROWS.flatMap((row, r) =>
+  row.split('').flatMap((cell, c) => (cell === '#' ? [{ x: 148 + c * 18, y: 178 + r * 22 }] : [])),
+);
+const QUAKES = [
+  { x: 196, y: 210, r: 7 },
+  { x: 320, y: 196, r: 10 },
+  { x: 268, y: 248, r: 6 },
+];
+const MAG = [18, 12, 26, 14, 22, 10, 28, 16, 24, 12, 20, 26];
+
+/** Watchlist spark paths (local 0..90 × 0..18). */
+const WATCH = [
+  { spark: 'M0 14L18 10L36 12L54 6L72 9L90 3', up: true, label: 'BTC' },
+  { spark: 'M0 4L18 9L36 7L54 13L72 11L90 16', up: false, label: 'ETH' },
+  { spark: 'M0 11L18 8L36 10L54 5L72 4L90 7', up: true, label: 'SOL' },
+  { spark: 'M0 8L18 5L36 11L54 9L72 14L90 12', up: false, label: 'AAPL' },
+];
+---
+
+<div class="act-scene w-scene" data-playground-art aria-hidden="true">
+      <div class="w-slab"></div>
+      <div class="w-frame">
+      <svg
+        class="w-art"
+        viewBox="0 0 640 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        role="presentation"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern id="w-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.7" fill="var(--w-dot)"></circle>
+          </pattern>
+          <clipPath id="w-frame-clip">
+            <rect x="16" y="16" width="608" height="368" rx="18"></rect>
+          </clipPath>
+          <clipPath id="w-type-clip">
+            <rect class="w-type-mask" x="180" y="80" width="400" height="36"></rect>
+          </clipPath>
+          <clipPath id="w-aq-clip">
+            <rect x="136" y="308" width="304" height="48" rx="4"></rect>
+          </clipPath>
+          <clipPath id="w-stage-clip">
+            <rect x="120" y="140" width="492" height="228" rx="8"></rect>
+          </clipPath>
+          <linearGradient id="w-glow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="var(--color-brand-400)" stop-opacity="0.22"></stop>
+            <stop offset="100%" stop-color="var(--color-sky-400)" stop-opacity="0.08"></stop>
+          </linearGradient>
+          <filter id="w-soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="10"></feGaussianBlur>
+          </filter>
+        </defs>
+
+        <g clip-path="url(#w-frame-clip)">
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="var(--w-panel)"></rect>
+          <rect x="16" y="16" width="608" height="368" rx="18" fill="url(#w-dots)" opacity="0.55"></rect>
+          <rect x="16" y="16" width="608" height="40" fill="var(--w-panel-2)"></rect>
+          <rect x="16" y="56" width="96" height="328" fill="var(--w-rail-bg)"></rect>
+
+          <rect
+            class="w-mosaic"
+            x="120"
+            y="140"
+            width="492"
+            height="224"
+            rx="16"
+            stroke="var(--color-brand-400)"
+            stroke-dasharray="5 4"
+          ></rect>
+          <text class="w-mosaic-label" x="132" y="156" fill="var(--w-accent)">MOSAIC</text>
+
+          <!-- Prompt — types on the shared loop, not on scroll. -->
+          <g class="w-prompt-g">
+            <ellipse class="w-glow" cx="360" cy="100" rx="180" ry="46" fill="url(#w-glow)" filter="url(#w-soft)"></ellipse>
+            <rect x="128" y="70" width="476" height="56" rx="14" class="w-card"></rect>
+            <rect x="140" y="82" width="32" height="32" rx="8" fill="var(--w-icon-bg)"></rect>
+            <g class="w-spark" transform="translate(146 88) scale(0.85)" stroke="var(--color-brand-400)" stroke-width="1.7" fill="none">
+              <path d={ICON_PATHS.sparkles}></path>
+            </g>
+            <g clip-path="url(#w-type-clip)">
+              <foreignObject x="180" y="82" width="400" height="36">
+                <div class="w-prompt">{prompt}</div>
+              </foreignObject>
+            </g>
+            <g class="w-caret">
+              <rect class="w-caret-bar" x="180" y="86" width="2" height="18" rx="1" fill="var(--color-brand-400)"></rect>
+            </g>
+          </g>
+
+          <g class="w-source">
+            <text x="136" y="148" class="w-tiny" fill="var(--w-accent)">GENERATING</text>
+            {[0, 1, 2, 3].map((i) => (
+              <rect
+                class="w-src-bar"
+                style={`--i:${i}`}
+                x="128"
+                y={156 + i * 10}
+                width={80 + i * 52}
+                height="5"
+                rx="2.5"
+                fill="var(--w-src)"
+              />
+            ))}
+          </g>
+
+          <g class="w-boards" clip-path="url(#w-stage-clip)">
+          <!-- 0 · Personal — generate loop lands here -->
+          <g class="w-board w-board-home" style={`--i:0`}>
+          <g class="w-widget" style="--i:0">
+            <rect x="128" y="148" width="320" height="124" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+            <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Moodboard</text>
+            <rect x="392" y="158" width="40" height="8" rx="4" fill="var(--color-brand-400)" opacity="0.85"></rect>
+            {
+              MOOD.map((tile, i) => (
+                <rect
+                  class="w-mood-tile"
+                  style={`--i:${i}`}
+                  x={tile.x}
+                  y={tile.y}
+                  width={tile.w}
+                  height={tile.h}
+                  rx="8"
+                  fill={tile.fill}
+                />
+              ))
+            }
+            <rect class="w-mood-pick" x="144" y="176" width="148" height="72" rx="10"></rect>
+            {
+              SWATCHES.map((s, i) => (
+                <rect
+                  class="w-swatch"
+                  style={`--i:${i}`}
+                  x={s.x}
+                  y="254"
+                  width="16"
+                  height="8"
+                  rx="2"
+                  fill={s.fill}
+                />
+              ))
+            }
+            <text x="240" y="261" class="w-note" fill="var(--w-text-4)">calm · clear</text>
+          </g>
+
+          <g class="w-widget" style="--i:1">
+            <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+            <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Habits</text>
+            <g class="w-streak">
+              <text class="w-streak-n" style="--i:0" x="572" y="170" fill="var(--w-accent)">3/8</text>
+              <text class="w-streak-n" style="--i:1" x="572" y="170" fill="var(--w-accent)">5/8</text>
+              <text class="w-streak-n" style="--i:2" x="572" y="170" fill="var(--w-accent)">6/8</text>
+            </g>
+            {
+              CELLS.slice(0, 28).map((v, i) => (
+                <rect
+                  class="w-heat"
+                  style={`--i:${i};--heat:${0.12 + v * 0.26}`}
+                  x={472 + (i % 7) * 16}
+                  y={180 + Math.floor(i / 7) * 16}
+                  width="13"
+                  height="13"
+                  rx="2.5"
+                  fill="var(--color-brand-400)"
+                />
+              ))
+            }
+            <rect class="w-heat-today" x={472 + 6 * 16} y={180 + 3 * 16} width="13" height="13" rx="2.5"></rect>
+          </g>
+
+          <g class="w-widget" style="--i:2">
+            <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+            <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Memory</text>
+            <text class="w-pairs" x="568" y="300" fill="var(--w-accent)">2 pairs</text>
+            {
+              MEMORY.map((card, i) => {
+                const x = 472 + card.col * 30;
+                const y = 310 + card.row * 22;
+                return (
+                  <g class="w-mem" style={`--i:${i};--p:${card.pair}`} transform={`translate(${x} ${y})`}>
+                    <rect class="w-mem-back" x="0" y="0" width="26" height="18" rx="4" fill="var(--w-cell)"></rect>
+                    <rect
+                      class="w-mem-face"
+                      x="0"
+                      y="0"
+                      width="26"
+                      height="18"
+                      rx="4"
+                      fill={PAIR_FILL[card.pair]}
+                    ></rect>
+                  </g>
+                );
+              })
+            }
+          </g>
+
+          <g class="w-widget" style="--i:3">
+            <rect x="128" y="280" width="320" height="84" rx="14" class="w-card"></rect>
+            <circle class="w-live" cx="144" cy="296" r="3" fill="var(--color-accent-400)"></circle>
+            <text x="154" y="300" class="w-card-title" fill="var(--w-text)">Air quality</text>
+            <text class="w-kpi" x="400" y="300" fill="var(--w-accent)">AQI 42</text>
+            <g clip-path="url(#w-aq-clip)">
+              <path class="w-sparkline" d={sparkPath} stroke="var(--color-brand-400)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              {
+                SPARK.map((v, i) => (
+                  <circle
+                    class="w-spark-dot"
+                    style={`--i:${i}`}
+                    cx={sparkX(i)}
+                    cy={sparkY(v)}
+                    r="2.2"
+                    fill="var(--color-brand-300)"
+                  />
+                ))
+              }
+            </g>
+          </g>
+
+          <g class="w-links">
+            <path class="w-link" d="M448 210 C 460 210, 460 188, 460 188"></path>
+            <path class="w-link" d="M288 272 C 288 286, 318 296, 318 296"></path>
+            <circle class="w-node" cx="448" cy="210" r="3.5"></circle>
+            <circle class="w-node" cx="460" cy="188" r="3.5"></circle>
+            <circle class="w-node" cx="318" cy="296" r="3.5"></circle>
+          </g>
+          </g>
+
+          <!-- 1 · Trading desk -->
+          <g class="w-board w-board-alt" style={`--i:1`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">BTC-USD</text>
+              <text class="w-kpi" x="360" y="170" fill="var(--w-accent)">EMA 20/50</text>
+              {
+                CANDLES.map((c, i) => (
+                  <g class="w-candle" style={`--i:${i}`}>
+                    <path
+                      d={`M${c.x} ${c.top - 5}V${c.top + c.h + 5}`}
+                      stroke="var(--w-text-4)"
+                      stroke-width="1.2"
+                    />
+                    <rect
+                      x={c.x - 5}
+                      y={c.top}
+                      width="10"
+                      height={c.h}
+                      rx="2"
+                      fill={c.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                      opacity="0.85"
+                    />
+                  </g>
+                ))
+              }
+              <path class="w-sparkline w-ema" d={emaPath} stroke="var(--color-sky-400)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Order book</text>
+              {
+                BOOK.map((row, i) => (
+                  <g class="w-book-row" style={`--i:${i}`}>
+                    <rect
+                      x={532 - row.bid * 0.55}
+                      y={182 + i * 13}
+                      width={row.bid * 0.55}
+                      height="10"
+                      rx="2"
+                      fill="var(--color-brand-400)"
+                      opacity="0.55"
+                    />
+                    <rect
+                      x="536"
+                      y={182 + i * 13}
+                      width={row.ask * 0.55}
+                      height="10"
+                      rx="2"
+                      fill="var(--color-accent-400)"
+                      opacity="0.5"
+                    />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Funding</text>
+              <text class="w-kpi w-kpi-pulse" x="486" y="328" fill="var(--w-accent)">+0.012%</text>
+              <text x="486" y="348" class="w-note" fill="var(--w-text-4)">1h · open interest</text>
+            </g>
+          </g>
+
+          <!-- 2 · Quake map -->
+          <g class="w-board w-board-alt" style={`--i:2`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Quake map</text>
+              <text class="w-kpi" x="360" y="170" fill="var(--w-accent)">M4+</text>
+              {
+                MAP_DOTS.map((d) => (
+                  <circle cx={d.x} cy={d.y} r="2.2" fill="var(--w-cell)" />
+                ))
+              }
+              {
+                QUAKES.map((q, i) => (
+                  <g class="w-quake" style={`--i:${i}`}>
+                    <circle class="w-quake-ring" cx={q.x} cy={q.y} r={q.r * 2.4} fill="none" stroke="var(--color-brand-400)" stroke-width="1.2" />
+                    <circle cx={q.x} cy={q.y} r={q.r * 0.45} fill="var(--color-brand-300)" />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Magnitude</text>
+              {
+                MAG.map((h, i) => (
+                  <rect
+                    class="w-mag"
+                    style={`--i:${i}`}
+                    x={472 + i * 10}
+                    y={250 - h}
+                    width="7"
+                    height={h}
+                    rx="1.5"
+                    fill="var(--color-brand-400)"
+                    opacity="0.75"
+                  />
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Events</text>
+              <rect class="w-chip" x="472" y="314" width="56" height="14" rx="4" fill="var(--color-brand-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="536" y="314" width="52" height="14" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="336" width="72" height="14" rx="4" fill="var(--color-sky-400)" opacity="0.3"></rect>
+              <text x="478" y="324" class="w-note" fill="var(--w-text)">M4.6</text>
+              <text x="542" y="324" class="w-note" fill="var(--w-text)">M5.1</text>
+              <text x="478" y="346" class="w-note" fill="var(--w-text)">M4.2 · 12m</text>
+            </g>
+          </g>
+
+          <!-- 3 · Markets watchlist -->
+          <g class="w-board w-board-alt" style={`--i:3`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="476" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Watchlist</text>
+              <text class="w-kpi" x="520" y="170" fill="var(--w-accent)">12 tickers</text>
+              {
+                WATCH.map((row, i) => (
+                  <g class="w-watch" style={`--i:${i}`} transform={`translate(144 ${186 + i * 20})`}>
+                    <text class="w-note" y="12" fill="var(--w-text)">{row.label}</text>
+                    <path
+                      class="w-mini-spark"
+                      d={row.spark}
+                      transform="translate(56 0)"
+                      stroke={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}
+                      stroke-width="1.5"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                    <text class="w-note" x="420" y="12" fill={row.up ? 'var(--color-brand-400)' : 'var(--color-accent-400)'}>
+                      {row.up ? '+1.4%' : '−0.8%'}
+                    </text>
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="128" y="280" width="232" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="296" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="154" y="300" class="w-card-title" fill="var(--w-text)">Movers</text>
+              {
+                [72, 54, 88, 40, 64].map((w, i) => (
+                  <rect
+                    class="w-mover"
+                    style={`--i:${i}`}
+                    x="144"
+                    y={316 + i * 8}
+                    width={w}
+                    height="5"
+                    rx="2.5"
+                    fill="var(--color-brand-400)"
+                    opacity={0.4 + i * 0.1}
+                  />
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="372" y="280" width="232" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="388" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="398" y="300" class="w-card-title" fill="var(--w-text)">Earnings</text>
+              <text class="w-kpi" x="520" y="300" fill="var(--w-accent)">4 soon</text>
+              <rect class="w-chip" x="388" y="318" width="64" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.3"></rect>
+              <rect class="w-chip" x="460" y="318" width="56" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.3"></rect>
+              <rect class="w-chip" x="388" y="342" width="72" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.28"></rect>
+              <text x="396" y="330" class="w-note" fill="var(--w-text)">NVDA</text>
+              <text x="468" y="330" class="w-note" fill="var(--w-text)">META</text>
+              <text x="396" y="354" class="w-note" fill="var(--w-text)">TSLA · Tue</text>
+            </g>
+          </g>
+
+          <!-- 4 · News + sentiment -->
+          <g class="w-board w-board-alt" style={`--i:4`}>
+            <g class="w-widget w-widget-static" style="--i:0">
+              <rect x="128" y="148" width="320" height="216" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="144" cy="166" r="3" fill="var(--color-brand-400)"></circle>
+              <text x="154" y="170" class="w-card-title" fill="var(--w-text)">Top stories</text>
+              {
+                [0, 1, 2, 3].map((i) => (
+                  <g class="w-story" style={`--i:${i}`}>
+                    <rect
+                      x="144"
+                      y={188 + i * 40}
+                      width="288"
+                      height="32"
+                      rx="8"
+                      fill="var(--w-cell)"
+                    />
+                    <rect
+                      x="154"
+                      y={196 + i * 40}
+                      width={160 - i * 18}
+                      height="6"
+                      rx="3"
+                      fill="var(--w-text-4)"
+                      opacity="0.55"
+                    />
+                    <rect
+                      x="154"
+                      y={208 + i * 40}
+                      width={100 - i * 10}
+                      height="5"
+                      rx="2.5"
+                      fill="var(--w-text-4)"
+                      opacity="0.3"
+                    />
+                  </g>
+                ))
+              }
+            </g>
+            <g class="w-widget w-widget-static" style="--i:1">
+              <rect x="460" y="148" width="144" height="124" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="166" r="3" fill="var(--color-accent-400)"></circle>
+              <text x="486" y="170" class="w-card-title" fill="var(--w-text)">Keywords</text>
+              <rect class="w-chip" x="472" y="188" width="52" height="16" rx="4" fill="var(--color-brand-400)" opacity="0.4"></rect>
+              <rect class="w-chip" x="532" y="188" width="56" height="16" rx="4" fill="var(--color-sky-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="212" width="64" height="16" rx="4" fill="var(--color-accent-400)" opacity="0.35"></rect>
+              <rect class="w-chip" x="472" y="236" width="48" height="16" rx="4" fill="var(--color-brand-300)" opacity="0.35"></rect>
+              <text x="478" y="200" class="w-note" fill="var(--w-text)">markets</text>
+              <text x="538" y="200" class="w-note" fill="var(--w-text)">energy</text>
+              <text x="478" y="224" class="w-note" fill="var(--w-text)">policy</text>
+              <text x="478" y="248" class="w-note" fill="var(--w-text)">AI</text>
+            </g>
+            <g class="w-widget w-widget-static" style="--i:2">
+              <rect x="460" y="280" width="144" height="84" rx="14" class="w-card"></rect>
+              <circle class="w-live" cx="476" cy="296" r="3" fill="var(--color-sky-400)"></circle>
+              <text x="486" y="300" class="w-card-title" fill="var(--w-text)">Sentiment</text>
+              <path
+                class="w-donut"
+                d="M532 344 a22 22 0 1 1 0.01 0"
+                stroke="var(--w-cell)"
+                stroke-width="8"
+                fill="none"
+              ></path>
+              <path
+                class="w-donut w-donut-fill"
+                d="M532 344 a22 22 0 1 1 0.01 0"
+                stroke="var(--color-brand-400)"
+                stroke-width="8"
+                stroke-dasharray="90 140"
+                stroke-linecap="round"
+                fill="none"
+              ></path>
+              <text class="w-kpi" x="522" y="348" fill="var(--w-accent)">62%</text>
+            </g>
+          </g>
+          </g>
+
+          <g class="w-pointer">
+            <path d="M0 0l11 9-4.4 1.2 2.2 6.4-3.2 1.2-2.2-6.4L0 14Z" fill="var(--w-text)" stroke="var(--w-panel)" stroke-width="1"></path>
+            <circle class="w-click" cx="2" cy="2" r="10"></circle>
+          </g>
+        </g>
+
+        <rect
+          x="16"
+          y="16"
+          width="608"
+          height="368"
+          rx="18"
+          fill="none"
+          stroke="var(--w-chrome)"
+          stroke-width="1.4"
+        ></rect>
+      </svg>
+
+      <div class="w-chrome">
+        <div class="w-head">
+          <img class="w-mark" src="/favicon.png" alt="" width="16" height="16" />
+          <div class="w-tabs" style={`--w-tab-cycle:calc(var(--w-step) * ${loopTabs.length})`}>
+            <span class="w-tab w-tab-active">{activeTab}</span>
+            {loopTabs.map((label, i) => (
+              <span
+                class:list={['w-tab', 'w-tab-loop', i >= PARKED_TABS && 'w-tab-extra']}
+                style={`--i:${i};--w:${label.length}ch`}
+              >
+                {label}
+              </span>
+            ))}
+            <span class="w-tab-add">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 2.5v7M2.5 6h7"></path>
+              </svg>
+            </span>
+          </div>
+          <span class="w-screen-tag">SCREEN · 01</span>
+          <span class="w-switcher">
+            <span class="w-switcher-stack">
+              {profiles.map((profile, i) => (
+                <span class="w-profile" style={`--i:${i}`}>
+                  <span class="w-avatar" style={`background:${profile.tint}`}>{profile.initial}</span>
+                  <span class="w-handle">{profile.handle}</span>
+                </span>
+              ))}
+            </span>
+            <svg class="w-chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 4.5 6 7.5 9 4.5"></path>
+            </svg>
+          </span>
+        </div>
+        <aside class="w-rail" style={`--w-ws-cycle:calc(var(--w-step) * ${loopWorkspaces.length})`}>
+          <p class="w-rail-label">Workspaces</p>
+          <span class="w-ws w-ws-active">
+            <span class="w-ws-dot" style={`background:${activeWorkspace.tint}`}></span>
+            {activeWorkspace.label}
+          </span>
+          {loopWorkspaces.map((workspace, i) => (
+            <span
+              class:list={['w-ws', 'w-ws-loop', i >= PARKED_WORKSPACES && 'w-ws-extra']}
+              style={`--i:${i}`}
+            >
+              <span class="w-ws-dot" style={`background:${workspace.tint}`}></span>
+              {workspace.label}
+            </span>
+          ))}
+          <span class="w-ws-add">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 2.5v7M2.5 6h7"></path>
+            </svg>
+          </span>
+        </aside>
+      </div>
+      </div>
+    </div>
+
+<style>
+  .w-scene {
+    position: relative;
+    perspective: 880px;
+    perspective-origin: 50% 42%;
+  }
+
+  .w-slab {
+    position: absolute;
+    inset: auto 8% -8% 8%;
+    height: 42%;
+    border-radius: 1.25rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-brand-400) 28%, transparent),
+      transparent 70%
+    );
+    filter: blur(18px);
+    pointer-events: none;
+  }
+
+  .w-frame {
+    position: relative;
+    width: 100%;
+    container-type: inline-size;
+    --w-cycle: 16s;
+    --w-step: 1.2s;
+    --w-board-step: 1.65s;
+    --w-board-cycle: calc(var(--w-board-step) * 5);
+    --w-e: var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+    --w-add-flash: var(--color-brand-100);
+    --w-add-flash-text: var(--color-brand-600);
+    /* Daylight playground: ink on mist, solid pigment — not a 38% wash
+       of the 400s (pastel) and not a dark island on a light page. */
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    --w-panel: #fff;
+    --w-panel-2: color-mix(in oklab, var(--color-brand-100) 50%, #fff);
+    --w-dot: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-tab: color-mix(in oklab, var(--color-ink-900) 5%, transparent);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-200) 72%, #fff);
+    --w-rail-bg: color-mix(in oklab, var(--color-brand-50) 70%, transparent);
+    --w-icon-bg: var(--color-brand-100);
+    --w-src: var(--color-brand-400);
+    --w-cell: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    --w-chrome: var(--color-brand-400);
+    --w-mood-1: var(--color-brand-200);
+    --w-mood-2: var(--color-accent-200);
+    --w-mood-3: var(--color-sky-200);
+    --w-mood-4: var(--color-brand-100);
+    --w-shadow: rgba(15, 23, 42, 0.16);
+  }
+
+  .w-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem;
+    filter: drop-shadow(0 28px 60px var(--w-shadow));
+  }
+
+  /* Night chrome: page is dark *or* this band is inverted on a light page.
+   * `:global(.dark) .w-frame` alone would keep a dark mock on the white invert. */
+  :global(.dark) .w-frame,
+  :global(html:not(.dark) .tone-invert) .w-frame {
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-panel: rgba(9, 12, 20, 0.94);
+    --w-panel-2: rgba(255, 255, 255, 0.05);
+    --w-dot: rgba(255, 255, 255, 0.14);
+    --w-tab: rgba(255, 255, 255, 0.06);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-400) 32%, transparent);
+    --w-rail-bg: rgba(255, 255, 255, 0.035);
+    --w-icon-bg: color-mix(in oklab, var(--color-brand-400) 22%, transparent);
+    --w-src: color-mix(in oklab, var(--color-brand-400) 45%, var(--color-accent-500));
+    --w-cell: rgba(255, 255, 255, 0.08);
+    --w-chrome: color-mix(in oklab, var(--color-brand-400) 70%, rgba(255, 255, 255, 0.16));
+    --w-mood-1: color-mix(in oklab, var(--color-brand-400) 48%, transparent);
+    --w-mood-2: color-mix(in oklab, var(--color-accent-400) 52%, transparent);
+    --w-mood-3: color-mix(in oklab, var(--color-sky-400) 46%, transparent);
+    --w-mood-4: color-mix(in oklab, var(--color-brand-300) 28%, transparent);
+    --w-add-flash: color-mix(in oklab, var(--color-brand-400) 20%, transparent);
+    --w-add-flash-text: var(--color-brand-200);
+  }
+
+  :global(.dark .tone-invert) .w-frame {
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    --w-panel: #fff;
+    --w-panel-2: color-mix(in oklab, var(--color-brand-100) 50%, #fff);
+    --w-dot: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-tab: color-mix(in oklab, var(--color-ink-900) 5%, transparent);
+    --w-tab-on: color-mix(in oklab, var(--color-brand-200) 72%, #fff);
+    --w-rail-bg: color-mix(in oklab, var(--color-brand-50) 70%, transparent);
+    --w-icon-bg: var(--color-brand-100);
+    --w-src: var(--color-brand-400);
+    --w-cell: color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    --w-chrome: var(--color-brand-400);
+    --w-mood-1: var(--color-brand-200);
+    --w-mood-2: var(--color-accent-200);
+    --w-mood-3: var(--color-sky-200);
+    --w-mood-4: var(--color-brand-100);
+    --w-shadow: rgba(15, 23, 42, 0.16);
+  }
+
+  .w-card {
+    fill: var(--w-panel-2);
+    stroke: var(--w-line);
+    stroke-width: 1;
+  }
+
+  /* HTML chrome — same open/close life as Features PlaygroundMock. Sized in
+     cqi so tabs and the rail stay locked to the SVG as the pin scales. */
+  .w-chrome {
+    position: absolute;
+    inset: 4% 2.5%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2.8cqi;
+    pointer-events: none;
+  }
+
+  .w-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.8cqi;
+    height: 10.87%;
+    padding: 0 1.8cqi;
+    background: var(--w-panel-2);
+    border-bottom: 1px solid var(--w-line);
+  }
+
+  .w-mark {
+    width: 2.5cqi;
+    height: 2.5cqi;
+    margin-bottom: 1.2cqi;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .w-tabs {
+    display: flex;
+    align-items: flex-end;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, black calc(100% - 2cqi), transparent);
+  }
+
+  .w-tab {
+    display: flex;
+    height: 3.75cqi;
+    flex-shrink: 0;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.7cqi 0.7cqi 0 0;
+    padding-inline: 1.15cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.4cqi;
+    color: var(--w-text-4);
+  }
+
+  .w-tab-active {
+    background: var(--w-tab-on);
+    color: var(--w-accent);
+  }
+
+  .w-tab-loop {
+    width: 0;
+    margin-inline-start: 0;
+    padding-inline: 0;
+    background: var(--w-tab);
+  }
+
+  .w-tab-add,
+  .w-ws-add {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    color: var(--w-text-4);
+  }
+
+  .w-tab-add {
+    height: 3.75cqi;
+    width: 3.75cqi;
+    margin-inline-start: 0.4cqi;
+    border-radius: 0.7cqi 0.7cqi 0 0;
+    border: 1px dashed var(--w-line);
+  }
+
+  .w-tab-add svg,
+  .w-ws-add svg {
+    width: 1.6cqi;
+    height: 1.6cqi;
+  }
+
+  .w-screen-tag {
+    display: none;
+    margin-bottom: 1.1cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.15cqi;
+    letter-spacing: 0.12em;
+    color: var(--w-accent);
+    white-space: nowrap;
+  }
+
+  .w-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.45cqi;
+    margin-bottom: 1cqi;
+    flex-shrink: 0;
+    padding: 0.35cqi 0.7cqi 0.35cqi 0.35cqi;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-brand-400) 12%, transparent);
+  }
+
+  .w-switcher-stack {
+    display: grid;
+  }
+
+  .w-profile {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.55cqi;
+    opacity: 0;
+  }
+
+  .w-avatar {
+    display: flex;
+    width: 1.9cqi;
+    height: 1.9cqi;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-family: var(--font-display, ui-sans-serif);
+    font-size: 0.95cqi;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .w-handle {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.2cqi;
+    color: var(--w-accent);
+    white-space: nowrap;
+  }
+
+  .w-chevron {
+    width: 1.5cqi;
+    height: 1.5cqi;
+    color: color-mix(in oklab, var(--w-accent) 60%, transparent);
+  }
+
+  .w-rail {
+    position: absolute;
+    left: 0;
+    top: 10.87%;
+    bottom: 0;
+    width: 15.79%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 1.5cqi 0 1.5cqi 1.2cqi;
+    background: var(--w-rail-bg);
+    border-right: 1px solid var(--w-line);
+  }
+
+  .w-rail-label {
+    margin: 0 0 0.6cqi 0.4cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.05cqi;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--w-text-4);
+  }
+
+  .w-ws {
+    display: flex;
+    height: 3.5cqi;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.7cqi;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0.7cqi 0 0 0.7cqi;
+    padding-inline: 0.85cqi;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 1.35cqi;
+    color: var(--w-text-4);
+  }
+
+  .w-ws-active {
+    background: var(--w-tab-on);
+    color: var(--w-accent);
+  }
+
+  .w-ws-loop {
+    height: 0;
+    margin-block-start: 0;
+    background: var(--w-tab);
+  }
+
+  .w-ws-dot {
+    width: 0.85cqi;
+    height: 0.85cqi;
+    flex-shrink: 0;
+    border-radius: 999px;
+  }
+
+  .w-ws-add {
+    height: 3.5cqi;
+    margin-block-start: 0.5cqi;
+    border-radius: 0.7cqi 0 0 0.7cqi;
+    border: 1px dashed var(--w-line);
+    border-inline-end: 0;
+    padding-inline: 0.85cqi;
+    justify-content: flex-start;
+  }
+
+  .w-card-title,
+  .w-tiny,
+  .w-note,
+  .w-streak-n,
+  .w-pairs,
+  .w-kpi {
+    font-family: var(--font-mono, ui-monospace, monospace);
+  }
+
+  .w-card-title {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .w-tiny,
+  .w-streak-n,
+  .w-pairs,
+  .w-kpi {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .w-note {
+    font-size: 9px;
+  }
+
+  .w-prompt {
+    margin: 0;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 11px;
+    line-height: 32px;
+    white-space: nowrap;
+    color: var(--w-text-3);
+  }
+
+  .w-type-mask,
+  .w-caret,
+  .w-widget,
+  .w-source,
+  .w-glow,
+  .w-spark,
+  .w-mood-tile,
+  .w-mood-pick,
+  .w-swatch,
+  .w-heat,
+  .w-heat-today,
+  .w-mem,
+  .w-mem-back,
+  .w-mem-face,
+  .w-sparkline,
+  .w-spark-dot,
+  .w-pointer,
+  .w-live,
+  .w-streak-n,
+  .w-board,
+  .w-candle,
+  .w-book-row,
+  .w-quake,
+  .w-quake-ring,
+  .w-mag,
+  .w-watch,
+  .w-mover,
+  .w-story,
+  .w-chip,
+  .w-donut-fill,
+  .w-kpi-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .w-type-mask {
+    transform-origin: left center;
+  }
+
+  .w-caret {
+    transform-origin: left center;
+  }
+
+  .w-sparkline {
+    transform-origin: left center;
+    fill: none;
+  }
+
+  .w-boards {
+    transform-box: fill-box;
+  }
+
+  .w-board-alt {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .w-board-home {
+    opacity: 1;
+  }
+
+  .w-mini-spark {
+    fill: none;
+  }
+
+  .w-donut {
+    transform-origin: center;
+  }
+
+  .w-quake-ring {
+    opacity: 0.55;
+  }
+
+  .w-mood-pick {
+    fill: none;
+    stroke: var(--color-brand-300);
+    stroke-width: 1.4;
+    opacity: 0;
+  }
+
+  .w-heat-today {
+    fill: none;
+    stroke: var(--color-brand-200, var(--color-brand-300));
+    stroke-width: 1.3;
+  }
+
+  .w-mem-face {
+    opacity: 0;
+  }
+
+  .w-pointer {
+    offset-path: none;
+    pointer-events: none;
+  }
+
+  .w-click {
+    fill: none;
+    stroke: var(--color-brand-300);
+    stroke-width: 1.2;
+    opacity: 0;
+  }
+
+  /* At rest — finished playground. The loop below only runs when motion is allowed. */
+  @media (prefers-reduced-motion: no-preference) {
+    .w-type-mask {
+      animation: w-type var(--w-cycle) steps(26, end) infinite;
+    }
+
+    .w-caret {
+      animation: w-caret-move var(--w-cycle) steps(26, end) infinite;
+    }
+
+    .w-caret-bar {
+      animation: w-blink 0.9s steps(2, start) infinite;
+    }
+
+    .w-source {
+      animation: w-source var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-src-bar {
+      transform-box: fill-box;
+      transform-origin: left center;
+      animation: w-src-bar var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.08s);
+    }
+
+    .w-widget {
+      animation: w-widget var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.14s);
+    }
+
+    .w-tab-loop {
+      animation: w-tab-life var(--w-tab-cycle, calc(var(--w-step) * 12)) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-step));
+    }
+
+    .w-ws-loop {
+      animation: w-ws-life var(--w-ws-cycle, calc(var(--w-step) * 24)) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-step) + var(--w-step) / 2);
+    }
+
+    .w-tab-add,
+    .w-ws-add {
+      animation: w-add-flash var(--w-step) ease-out infinite;
+    }
+
+    .w-profile {
+      animation: w-profile-roll calc(6 * 3s) var(--w-e) infinite backwards;
+      animation-delay: calc(var(--i) * 3s);
+    }
+
+    .w-glow {
+      animation: w-glow var(--w-cycle) ease-in-out infinite;
+    }
+
+    .w-spark {
+      animation: w-spark 2.4s ease-in-out infinite;
+    }
+
+    .w-live {
+      animation: w-live 1.6s ease-in-out infinite;
+    }
+
+    .w-mood-tile {
+      animation: w-mood-breathe 3.2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.35s);
+    }
+
+    .w-mood-pick {
+      animation: w-mood-pick var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-swatch {
+      animation: w-swatch var(--w-cycle) ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.7s);
+    }
+
+    .w-heat {
+      animation: w-heat var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.035s);
+    }
+
+    .w-heat-today {
+      animation: w-today var(--w-cycle) ease-in-out infinite;
+    }
+
+    .w-streak-n {
+      animation: w-streak var(--w-cycle) steps(1, end) infinite;
+      animation-delay: calc(var(--i) * 1.8s);
+    }
+
+    .w-mem-back {
+      animation: w-mem-back var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--p) * 0.7s);
+    }
+
+    .w-mem-face {
+      animation: w-mem-face var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--p) * 0.7s);
+    }
+
+    .w-sparkline {
+      stroke-dasharray: 280;
+      animation: w-draw var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-spark-dot {
+      animation: w-spark-dot var(--w-cycle) var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .w-kpi {
+      animation: w-kpi var(--w-cycle) steps(1, end) infinite;
+    }
+
+    .w-pointer {
+      animation: w-pointer var(--w-cycle) var(--w-e) infinite;
+    }
+
+    .w-click {
+      animation: w-click var(--w-cycle) ease-out infinite;
+    }
+
+    .w-candle {
+      transform-origin: center bottom;
+      animation: w-candle-pop 2.4s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.06s);
+    }
+
+    .w-book-row {
+      animation: w-book 2s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.08s);
+    }
+
+    .w-quake-ring {
+      animation: w-quake-ring 2.2s ease-out infinite;
+      animation-delay: calc(var(--i) * 0.45s);
+    }
+
+    .w-mag {
+      transform-origin: center bottom;
+      animation: w-mag 2.6s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.05s);
+    }
+
+    .w-watch {
+      animation: w-watch-in 2.8s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.12s);
+    }
+
+    .w-mini-spark {
+      stroke-dasharray: 320;
+      animation: w-draw-fast 2.8s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.12s);
+    }
+
+    .w-mover {
+      transform-origin: left center;
+      animation: w-mover 2.4s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.1s);
+    }
+
+    .w-story {
+      animation: w-story 3s var(--w-e) infinite;
+      animation-delay: calc(var(--i) * 0.14s);
+    }
+
+    .w-chip {
+      animation: w-chip 2.6s ease-in-out infinite;
+    }
+
+    .w-donut-fill {
+      animation: w-donut 3s var(--w-e) infinite;
+    }
+
+    .w-kpi-pulse {
+      animation: w-kpi-pulse 1.8s ease-in-out infinite;
+    }
+
+    .w-ema {
+      stroke-dasharray: 320;
+      animation: w-draw-fast 3s var(--w-e) infinite;
+    }
+  }
+
+  /* Type 0–18%, generate 20–30%, land 32–40%, live through 88%, wipe 92–100%. */
+  @keyframes w-type {
+    0% {
+      transform: scaleX(0.02);
+    }
+    18%,
+    90% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(0.02);
+    }
+  }
+
+  @keyframes w-caret-move {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    18% {
+      transform: translateX(380px);
+      opacity: 1;
+    }
+    20%,
+    90% {
+      transform: translateX(380px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-source {
+    0%,
+    16% {
+      opacity: 0;
+    }
+    20%,
+    28% {
+      opacity: 1;
+    }
+    34%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-src-bar {
+    0%,
+    18% {
+      transform: scaleX(0.08);
+    }
+    24%,
+    30% {
+      transform: scaleX(1);
+    }
+    36%,
+    100% {
+      transform: scaleX(0.08);
+    }
+  }
+
+  @keyframes w-widget {
+    0%,
+    30% {
+      opacity: 0;
+      transform: translateY(16px) scale(0.95);
+    }
+    38%,
+    88% {
+      opacity: 1;
+      transform: none;
+    }
+    96%,
+    100% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  @keyframes w-tab-life {
+    0% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
+      opacity: 0;
+      transform: translateY(0.5cqi);
+    }
+    4% {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
+      opacity: 1;
+      transform: none;
+    }
+    22% {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
+      opacity: 1;
+      transform: none;
+    }
+    27%,
+    100% {
+      width: 0;
+      margin-inline-start: 0;
+      padding-inline: 0;
+      opacity: 0;
+      transform: translateY(0.5cqi);
+    }
+  }
+
+  @keyframes w-ws-life {
+    0% {
+      height: 0;
+      margin-block-start: 0;
+      opacity: 0;
+      transform: translateX(-0.7cqi);
+    }
+    4% {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
+      opacity: 1;
+      transform: none;
+    }
+    22% {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
+      opacity: 1;
+      transform: none;
+    }
+    27%,
+    100% {
+      height: 0;
+      margin-block-start: 0;
+      opacity: 0;
+      transform: translateX(-0.7cqi);
+    }
+  }
+
+  @keyframes w-add-flash {
+    0% {
+      background: var(--w-add-flash);
+      color: var(--w-add-flash-text);
+    }
+    30%,
+    100% {
+      background: transparent;
+      color: var(--w-text-4);
+    }
+  }
+
+  @keyframes w-profile-roll {
+    0% {
+      opacity: 0;
+      transform: translateY(0.7cqi);
+    }
+    3%,
+    13.6% {
+      opacity: 1;
+      transform: none;
+    }
+    16.667%,
+    100% {
+      opacity: 0;
+      transform: translateY(-0.7cqi);
+    }
+  }
+
+  @keyframes w-glow {
+    0%,
+    14% {
+      opacity: 0.35;
+    }
+    22%,
+    72% {
+      opacity: 1;
+    }
+    90%,
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes w-spark {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-live {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-mood-breathe {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.03);
+    }
+  }
+
+  @keyframes w-mood-pick {
+    0%,
+    40% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    46%,
+    54% {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+    60%,
+    68% {
+      opacity: 1;
+      transform: translate(156px, 0) scaleX(0.46);
+    }
+    74%,
+    84% {
+      opacity: 1;
+      transform: translate(156px, 48px) scale(0.9, 0.34);
+    }
+    90%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-swatch {
+    0%,
+    40%,
+    100% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.25);
+      opacity: 1;
+    }
+  }
+
+  @keyframes w-heat {
+    0%,
+    36% {
+      opacity: 0.08;
+    }
+    48%,
+    88% {
+      opacity: var(--heat, 0.6);
+    }
+    96%,
+    100% {
+      opacity: 0.08;
+    }
+  }
+
+  @keyframes w-today {
+    0%,
+    50% {
+      opacity: 0;
+    }
+    58%,
+    86% {
+      opacity: 1;
+    }
+    94%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-streak {
+    0%,
+    44% {
+      opacity: 0;
+    }
+    46%,
+    58% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-mem-back {
+    0%,
+    42% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+    48%,
+    86% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    94%,
+    100% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes w-mem-face {
+    0%,
+    42% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    50%,
+    86% {
+      opacity: 0.85;
+      transform: scaleX(1);
+    }
+    94%,
+    100% {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes w-draw {
+    0%,
+    36% {
+      stroke-dashoffset: 280;
+    }
+    48%,
+    88% {
+      stroke-dashoffset: 0;
+    }
+    96%,
+    100% {
+      stroke-dashoffset: 280;
+    }
+  }
+
+  @keyframes w-spark-dot {
+    0%,
+    40% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    50%,
+    88% {
+      opacity: 1;
+      transform: none;
+    }
+    96%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes w-kpi {
+    0%,
+    48% {
+      opacity: 0.4;
+    }
+    50%,
+    88% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes w-pointer {
+    0%,
+    40% {
+      opacity: 0;
+      transform: translate(220px, 190px);
+    }
+    46% {
+      opacity: 1;
+      transform: translate(200px, 204px);
+    }
+    54% {
+      opacity: 1;
+      transform: translate(330px, 196px);
+    }
+    64% {
+      opacity: 1;
+      transform: translate(500px, 210px);
+    }
+    74% {
+      opacity: 1;
+      transform: translate(508px, 322px);
+    }
+    84% {
+      opacity: 1;
+      transform: translate(220px, 318px);
+    }
+    92%,
+    100% {
+      opacity: 0;
+      transform: translate(220px, 318px);
+    }
+  }
+
+  @keyframes w-click {
+    0%,
+    48%,
+    56%,
+    66%,
+    76%,
+    86%,
+    100% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    50%,
+    68%,
+    78% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    53%,
+    71%,
+    81% {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  @keyframes w-board-life {
+    0% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px) scale(0.97);
+    }
+    2% {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    18% {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+    22% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-5px) scale(0.98);
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-5px) scale(0.98);
+    }
+  }
+
+  @keyframes w-candle-pop {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleY(0.85);
+    }
+    40%,
+    70% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes w-book {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scaleX(0.92);
+    }
+    50% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes w-quake-ring {
+    0% {
+      opacity: 0.7;
+      transform: scale(0.55);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes w-mag {
+    0%,
+    100% {
+      transform: scaleY(0.45);
+      opacity: 0.4;
+    }
+    45%,
+    70% {
+      transform: scaleY(1);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes w-watch-in {
+    0%,
+    8% {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    18%,
+    82% {
+      opacity: 1;
+      transform: none;
+    }
+    92%,
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @keyframes w-draw-fast {
+    0%,
+    10% {
+      stroke-dashoffset: 320;
+    }
+    35%,
+    80% {
+      stroke-dashoffset: 0;
+    }
+    95%,
+    100% {
+      stroke-dashoffset: 320;
+    }
+  }
+
+  @keyframes w-mover {
+    0%,
+    15% {
+      transform: scaleX(0.2);
+      opacity: 0.3;
+    }
+    40%,
+    75% {
+      transform: scaleX(1);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scaleX(0.55);
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes w-story {
+    0%,
+    12% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    22%,
+    78% {
+      opacity: 1;
+      transform: none;
+    }
+    90%,
+    100% {
+      opacity: 0.4;
+    }
+  }
+
+  @keyframes w-chip {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes w-donut {
+    0%,
+    20% {
+      stroke-dasharray: 0 140;
+    }
+    45%,
+    80% {
+      stroke-dasharray: 90 140;
+    }
+    100% {
+      stroke-dasharray: 0 140;
+    }
+  }
+
+  @keyframes w-kpi-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w-type-mask,
+    .w-caret,
+    .w-caret-bar,
+    .w-source,
+    .w-src-bar,
+    .w-widget,
+    .w-tab-loop,
+    .w-ws-loop,
+    .w-tab-add,
+    .w-ws-add,
+    .w-profile,
+    .w-glow,
+    .w-spark,
+    .w-live,
+    .w-mood-tile,
+    .w-mood-pick,
+    .w-swatch,
+    .w-heat,
+    .w-heat-today,
+    .w-streak-n,
+    .w-mem-back,
+    .w-mem-face,
+    .w-sparkline,
+    .w-spark-dot,
+    .w-kpi,
+    .w-pointer,
+    .w-click,
+    .w-board,
+    .w-candle,
+    .w-book-row,
+    .w-quake-ring,
+    .w-mag,
+    .w-watch,
+    .w-mini-spark,
+    .w-mover,
+    .w-story,
+    .w-chip,
+    .w-donut-fill,
+    .w-kpi-pulse,
+    .w-ema {
+      animation: none !important;
+    }
+
+    .w-source,
+    .w-pointer,
+    .w-mood-pick,
+    .w-heat-today {
+      opacity: 0;
+    }
+
+    .w-board-alt {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .w-board-home {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .w-mem-face {
+      opacity: 0.85;
+    }
+
+    .w-mem-back {
+      opacity: 0;
+    }
+
+    .w-heat {
+      opacity: var(--heat, 0.6);
+    }
+
+    .w-streak-n {
+      opacity: 0;
+    }
+
+    .w-streak-n:last-child {
+      opacity: 1;
+    }
+
+    .w-tab-loop {
+      width: calc(var(--w) + 2.3cqi);
+      margin-inline-start: 0.45cqi;
+      padding-inline: 1.15cqi;
+    }
+
+    .w-ws-loop {
+      height: 3.5cqi;
+      margin-block-start: 0.5cqi;
+    }
+
+    .w-tab-extra,
+    .w-ws-extra {
+      display: none;
+    }
+
+    .w-profile {
+      opacity: 0;
+    }
+
+    .w-profile:first-child {
+      opacity: 1;
+    }
+  }
+
+  .w-mosaic-label {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .w-mosaic {
+    fill: color-mix(in oklab, var(--color-brand-400) 6%, transparent);
+  }
+
+  .w-link {
+    stroke: var(--color-brand-400);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    fill: none;
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+  }
+
+  .w-node {
+    fill: var(--color-brand-300);
+  }
+
+  .w-mosaic,
+  .w-mosaic-label {
+    opacity: 0;
+  }
+
+  .w-links {
+    opacity: 0;
+  }
+
+  /* 02 — same nodes, parked and wired. --arr is written by the script.
+     Boards cycle through layouts (personal → trading → map → markets → news). */
+  .w-scene.is-arrange {
+    --arr: var(--arr, 1);
+  }
+
+  .w-scene.is-arrange .w-prompt-g,
+  .w-scene.is-arrange .w-caret,
+  .w-scene.is-arrange .w-glow,
+  .w-scene.is-arrange .w-pointer,
+  .w-scene.is-arrange .w-source {
+    opacity: calc(1 - var(--arr, 1));
+    animation: none !important;
+  }
+
+  .w-scene.is-arrange .w-type-mask {
+    animation: none !important;
+  }
+
+  .w-scene.is-arrange .w-widget {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Keep chart ink fully drawn while boards swap — the generate-loop
+     stroke-dash hide would otherwise blank the spark mid-cycle. */
+  .w-scene.is-arrange .w-sparkline,
+  .w-scene.is-arrange .w-ema,
+  .w-scene.is-arrange .w-mini-spark {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+
+  .w-scene.is-arrange .w-spark-dot {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .w-scene.is-arrange .w-board-alt {
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .w-scene.is-arrange .w-board {
+      animation: w-board-life var(--w-board-cycle, 8.25s) var(--w-e) infinite both;
+      animation-delay: calc(var(--i) * var(--w-board-step, 1.65s));
+    }
+  }
+
+  .w-scene.is-arrange .w-mosaic,
+  .w-scene.is-arrange .w-mosaic-label {
+    opacity: var(--arr, 1);
+  }
+
+  /* Links only on the personal board — fade with that board's opacity. */
+  .w-scene.is-arrange .w-board-home .w-links {
+    opacity: 1;
+  }
+
+  .w-scene.is-arrange .w-screen-tag {
+    display: flex;
+    opacity: var(--arr, 1);
+  }
+
+  .w-scene.is-arrange .w-link {
+    stroke-dashoffset: calc(160 - var(--arr, 1) * 160);
+  }
+
+  .w-scene.is-arrange .w-node {
+    opacity: var(--arr, 1);
+  }
+</style>
+
+<script>
+  function bind(root: HTMLElement) {
+    const canvas = () => document.getElementById('app-showcase');
+    let raf = 0;
+
+    const tick = () => {
+      raf = 0;
+      const el = canvas();
+      if (!el) return;
+      const ps = parseFloat(getComputedStyle(el).getPropertyValue('--ps') || '0') || 0;
+      const top = el.getBoundingClientRect().top;
+      const vh = window.innerHeight || 1;
+      const approach = top < vh * 0.78 ? Math.min(1, (vh * 0.78 - top) / (vh * 0.45)) : 0;
+      const arr = Math.max(ps, approach);
+      root.style.setProperty('--arr', arr.toFixed(3));
+      root.classList.toggle('is-arrange', arr > 0.06);
+    };
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    tick();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-playground-art]').forEach(bind);
+</script>

@@ -2,9 +2,8 @@
 /**
  * The reward ladder — what each unlock pays in credits and NXW.
  *
- * PLANNED, not live: badges and points ship in the app today, but turning them
- * into payouts arrives with the Nexow DAO. The panel wears the "planned" chip
- * throughout and says so in `plannedNote`; do not quietly promote it.
+ * Badge credits are LIVE (the app pays them into the prepaid ledger). NXW
+ * amounts and level-up bonuses remain planned and wear the "planned" chip.
  *
  * Every number is computed from `REWARD_LADDER` / `LEVEL_REWARDS`, so the totals
  * can never drift from the rows above them. NXW supply / mint facts live in
@@ -103,10 +102,16 @@ const uses = tok?.uses ?? c.dao.cards;
   <div class="container-page relative">
     <div class="reveal flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div class="max-w-xl">
-        <span class="badge-status" data-status="soon">
-          <span class="size-1.5 rounded-full bg-accent-400"></span>
-          {c.planned}
-        </span>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="badge-status" data-status="live">
+            <span class="size-1.5 animate-pulse rounded-full bg-brand-400"></span>
+            {c.live}
+          </span>
+          <span class="badge-status" data-status="soon">
+            <span class="size-1.5 rounded-full bg-accent-400"></span>
+            {c.planned}
+          </span>
+        </div>
         <h3 class="mt-4 font-display text-2xl font-semibold text-white sm:text-3xl">{t.title}</h3>
         <p class="mt-3 text-sm leading-relaxed text-ink-300">{t.body}</p>
       </div>

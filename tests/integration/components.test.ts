@@ -10,15 +10,18 @@ import FeatureCard from '../../src/components/FeatureCard.astro';
 import FeatureMap from '../../src/components/FeatureMap.astro';
 import Footer from '../../src/components/Footer.astro';
 import Header from '../../src/components/Header.astro';
+import Hero from '../../src/components/sections/Hero.astro';
+import SocialLinks from '../../src/components/SocialLinks.astro';
 import Hex from '../../src/components/Hex.astro';
 import Icon from '../../src/components/Icon.astro';
 import Logo from '../../src/components/Logo.astro';
 import PageHero from '../../src/components/PageHero.astro';
+import PageNav from '../../src/components/PageNav.astro';
 import SectionHeading from '../../src/components/SectionHeading.astro';
 import ThemeToggle from '../../src/components/ThemeToggle.astro';
 import { ICON_PATHS } from '../../src/components/icon-paths';
 import { CONNECTORS } from '../../src/data/connectors';
-import { SITE, languages } from '../../src/i18n/config';
+import { SITE, SOCIALS, languages } from '../../src/i18n/config';
 import { useContent } from '../../src/i18n/content';
 import { localizePath } from '../../src/i18n/utils';
 import { resolveFeatureMapGroups } from '../../src/lib/featureMap';
@@ -43,7 +46,7 @@ describe('Icon', () => {
   });
 
   it('renders the filled brand marks with a fill, not a stroke', async () => {
-    for (const name of ['youtube', 'tiktok']) {
+    for (const name of ['youtube', 'tiktok', 'telegram', 'discord']) {
       const html = await render(Icon, '/', { props: { name } });
       expect(html, name).toContain('fill="currentColor"');
     }
@@ -194,6 +197,23 @@ describe('Header', () => {
     expect(html).toContain('href="/features"');
     expect(html).toContain('aria-current="page"');
   });
+
+  it('numbers inactive nav links and skips the current page’s kbd', async () => {
+    const home = await render(Header, '/', { props: { lang: 'en', route: '/' } });
+    const t = useContent('en');
+    t.nav.links.forEach((link, i) => {
+      const key = String(i + 1);
+      expect(home, `${link.label} kbd`).toContain(`data-nav-key="${key}"`);
+      expect(home, `${link.label} kbd`).toMatch(new RegExp(`<kbd[^>]*>${key}</kbd>`));
+    });
+    expect(home).toContain('data-nav-key="0"');
+    expect(home).not.toMatch(/<kbd[^>]*>0<\/kbd>/);
+
+    const features = await render(Header, '/features', { props: { lang: 'en', route: '/features' } });
+    expect(features).not.toMatch(/<kbd[^>]*>1<\/kbd>/);
+    expect(features).toMatch(/<kbd[^>]*>2<\/kbd>/);
+    expect(features).toMatch(/<kbd[^>]*>6<\/kbd>/);
+  });
 });
 
 describe('Footer', () => {
@@ -207,10 +227,11 @@ describe('Footer', () => {
 
   it('links every social profile with rel=noopener', async () => {
     const html = await render(Footer, '/', { props: { lang: 'en', route: '/' } });
-    for (const social of SOCIAL_HREFS) {
-      expect(html, social).toContain(social);
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(social.href);
     }
     expect(html).toContain('noopener');
+    expect(html).toContain('is-grid');
   });
 
   it('shows the legal entity and the current year', async () => {
@@ -220,7 +241,69 @@ describe('Footer', () => {
   });
 });
 
-const SOCIAL_HREFS = ['https://x.com/nexowofficial', 'https://github.com/nexow-ai'];
+describe('PageNav', () => {
+  it('holds the home next-page arrow for the foot of the page', async () => {
+    const home = await render(PageNav, '/');
+    expect(home).toContain('page-nav--end-only');
+    expect(home).toMatch(/page-nav__btn--next[^>]*aria-hidden="true"/);
+    expect(home).toMatch(/page-nav__btn--next[^>]*\binert\b/);
+    expect(home).toContain('href="/features"');
+
+    const es = await render(PageNav, '/es');
+    expect(es).toContain('page-nav--end-only');
+    expect(es).toContain('href="/es/features"');
+  });
+
+  it('leaves other tour pages with the arrows in view', async () => {
+    const features = await render(PageNav, '/features');
+    expect(features).toContain('page-nav__btn--prev');
+    expect(features).toContain('page-nav__btn--next');
+    expect(features).not.toContain('page-nav--end-only');
+    expect(features).not.toMatch(/page-nav__btn--next[^>]*aria-hidden="true"/);
+    expect(features).not.toMatch(/page-nav__btn--next[^>]*\binert\b/);
+  });
+});
+
+describe('SocialLinks', () => {
+  it('renders every profile as a branded outbound link', async () => {
+    const html = await render(SocialLinks, '/');
+    expect(html).toContain('aria-label="Social"');
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(`href="${social.href}"`);
+      expect(html, social.label).toContain(`aria-label="${social.label}"`);
+    }
+    expect(html).toContain('noopener');
+  });
+
+  it('can sit start-aligned in the footer', async () => {
+    const html = await render(SocialLinks, '/', { props: { align: 'start' } });
+    expect(html).toContain('is-start');
+  });
+
+  it('can lay out as a 3×3 grid', async () => {
+    const html = await render(SocialLinks, '/', { props: { layout: 'grid' } });
+    expect(html).toContain('is-grid');
+  });
+
+  it('drops the nav landmark when it is a second copy of the same links', async () => {
+    const html = await render(SocialLinks, '/', {
+      props: { landmark: false, label: 'Follow Nexow' },
+    });
+    expect(html).not.toContain('<nav');
+    expect(html).toContain('role="group"');
+    expect(html).toContain('aria-label="Follow Nexow"');
+  });
+});
+
+describe('Hero', () => {
+  it('includes the social row with every profile', async () => {
+    const html = await render(Hero, '/', { props: { lang: 'en' } });
+    expect(html).toContain('hero__socials');
+    for (const social of SOCIALS) {
+      expect(html, social.label).toContain(social.href);
+    }
+  });
+});
 
 describe('Logo and BrandMark', () => {
   it.each(['auto', 'light', 'dark'] as const)('renders the %s logo tone', async (tone) => {

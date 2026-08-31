@@ -20,6 +20,21 @@ export interface Step {
   body: string;
 }
 
+/**
+ * One act of the home page's scroll story.
+ *
+ * `beats` are the things the act teaches, revealed one per scroll beat.
+ * They are copy, not configuration — the scene decides how to draw each one.
+ */
+export interface ActCopy {
+  /** Two-digit step marker, e.g. "01". */
+  step: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  beats: { label: string; detail: string }[];
+}
+
 export interface Faq {
   q: string;
   a: string;
@@ -287,7 +302,7 @@ export interface RewardsContent {
      * Optional so partial locales compile; `useContent` merges English at runtime.
      */
     how?: Record<string, string>;
-    /** One name per badge id (18 tiered + 10 rare + 6 legendary). */
+    /** One name per badge id. */
     names: Record<string, string>;
   };
   ledger: {
@@ -300,7 +315,7 @@ export interface RewardsContent {
     colPoints: string;
     colCredits: string;
     colTokens: string;
-    rows: Record<'bronze' | 'silver' | 'gold' | 'rare' | 'legendary', string>;
+    rows: Record<string, string>;
     /** "Reach {level}" for the level-up rows. */
     levelRow: string;
     totalTitle: string;
@@ -383,6 +398,30 @@ export interface SiteContent {
     /** Aria labels for the fixed corner page arrows (see `PageNav.astro`). */
     prevPage?: string;
     nextPage?: string;
+    /** Aria labels for the hands-free scroll tour (see `Header.astro`). */
+    tourPlay?: string;
+    tourStop?: string;
+    /** Visible "Play Me" label beside the tour icon on the home page only. */
+    tourPlayMe?: string;
+    /** Labels for the tour's transport (see `TourHud.astro`). */
+    tourTrack?: string;
+    /** One-time hint beside the track button until the visitor uses it once. */
+    tourTrackHint?: string;
+    tourLeft?: string;
+    tourControls?: string;
+    tourPace?: string;
+    /** One-time hint beside the pace button until the visitor uses it once. */
+    tourPaceHint?: string;
+    /** Language switcher summary (see `Header.astro`). */
+    switchLang?: string;
+    /** Landmark name for the desktop header nav. */
+    primaryNav?: string;
+    /** Landmark name for the mobile drawer nav. */
+    mobileNav?: string;
+    /** Landmark name for the in-page section rail. */
+    onThisPage?: string;
+    /** Skip link in `Layout.astro`. */
+    skipToContent?: string;
   };
   footer: {
     tagline: string;
@@ -411,13 +450,10 @@ export interface SiteContent {
     meta: { title: string; description: string };
     hero: {
       badge: string;
-      titleLead: string;
-      titleGradient: string;
-      titleTail: string;
+      title: string;
       /**
-       * Optional fourth beat under the three-line headline ("In seconds — not
-       * weeks or months."). Set apart typographically because four equal lines
-       * stop reading as a slogan. Locales without it just show three.
+       * One supporting line under the headline. Optional so a locale can
+       * ship the title alone and fall back to English via `useContent`.
        */
       titleKicker?: string;
       subtitle: string;
@@ -485,6 +521,20 @@ export interface SiteContent {
       title: string;
       subtitle: string;
       steps: Step[];
+    };
+    /**
+     * The home page's scroll story. Optional so a locale that has not been
+     * translated yet falls back to English through the `useContent` merge
+     * rather than shipping a half-empty page.
+     */
+    acts?: {
+      widget: ActCopy;
+      canvas: ActCopy;
+      connectors: ActCopy;
+      bots: ActCopy;
+      agents: ActCopy;
+      dao: ActCopy;
+      useCases: ActCopy;
     };
     automate: {
       eyebrow: string;
@@ -605,6 +655,27 @@ export interface SiteContent {
       primary: string;
       secondary: string;
     };
+    /**
+     * Right-rail stops on the home page. Short chrome names (Hero, Dao,
+     * Footer…), not the act headlines — those already live in the scene.
+     * Optional so locales fall back to English through `useContent`.
+     */
+    rail?: {
+      hero: string;
+      widget: string;
+      canvas: string;
+      connectors: string;
+      bots: string;
+      agents: string;
+      dao: string;
+      useCases: string;
+      features: string;
+      privacy: string;
+      plans: string;
+      rewards: string;
+      faq: string;
+      footer: string;
+    };
   };
   features: {
     meta: { title: string; description: string };
@@ -691,8 +762,9 @@ export interface SiteContent {
     countCatalog: string;
   };
   /**
-   * Standalone legal documents. English is the source of truth; other locales
-   * may omit these and LegalDocPage falls back to English (governing language).
+   * Standalone legal documents. English is the governing text; every locale
+   * ships a full translation for convenience. LegalDocPage falls back to
+   * English only if a locale omits a document.
    */
   privacyPage?: LegalPageContent;
   termsPage?: LegalPageContent;

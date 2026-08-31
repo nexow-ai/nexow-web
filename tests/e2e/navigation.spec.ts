@@ -67,6 +67,43 @@ test.describe('header navigation', () => {
     await skip.press('Enter');
     await expect(page).toHaveURL(/#main$/);
   });
+
+  test('shows a numbered kbd on inactive links and an icon on the current page', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await expect(page.locator('#site-nav kbd').first()).toHaveText('1');
+    await expect(page.locator('#site-nav a[href="/community"] kbd')).toHaveText('2');
+    await expect(page.locator('#site-nav kbd', { hasText: '0' })).toHaveCount(0);
+
+    await page.goto('/features');
+    await expect(page.locator('#site-nav a[href="/features"][aria-current="page"] svg')).toBeVisible();
+    await expect(page.locator('#site-nav a[href="/features"] kbd')).toHaveCount(0);
+    await expect(page.locator('#site-nav a[href="/community"] kbd')).toHaveText('2');
+  });
+
+  test('number keys switch pages and 0 returns home', async ({ page }) => {
+    await page.goto('/');
+    // The home composer autofocuses; shortcuts must not fire while typing.
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await page.keyboard.press('1');
+    await expect(page).toHaveURL(/\/features\/?$/);
+
+    await page.keyboard.press('4');
+    await expect(page).toHaveURL(/\/plans\/?$/);
+
+    await page.keyboard.press('0');
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test('does not steal digits typed into a field', async ({ page }) => {
+    await page.goto('/contact');
+    const field = page.locator('#contact-name');
+    await field.click();
+    await page.keyboard.type('1');
+    await expect(page).toHaveURL(/\/contact\/?$/);
+    await expect(field).toHaveValue('1');
+  });
 });
 
 test.describe('mobile menu', () => {
@@ -109,6 +146,29 @@ test.describe('mobile menu', () => {
 
     await toggle.click();
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('scrolls when the sheet is taller than the screen', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.goto('/');
+    await page.locator('#menu-toggle').click();
+
+    const menu = page.locator('#mobile-menu');
+    await expect(menu).toBeVisible();
+
+    const canScroll = await menu.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return (
+        (cs.overflowY === 'auto' || cs.overflowY === 'scroll') &&
+        el.scrollHeight > el.clientHeight + 8
+      );
+    });
+    expect(canScroll).toBe(true);
+
+    const chip = menu.locator('.mobile-lang').first();
+    await expect(chip).toBeVisible();
+    const box = await chip.boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
   });
 });
 
@@ -162,18 +222,37 @@ test.describe('page-to-page slide', () => {
   }
 
   test('runs backwards to the previous page and forwards to the next', async ({ page }) => {
-    await gotoReady(page, '/features');
+    // Start mid-tour so both arrows stay in view. Home hides its next arrow
+    // until the page end, which is a different contract (see the test below).
+    await gotoReady(page, '/community');
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
-    await expect(page).toHaveURL(/localhost:\d+\/$/, SWAP);
+    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
 
     await page.locator('.page-nav__btn--next').click();
-    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
+    await expect(page).toHaveURL(/\/community\/?$/, SWAP);
 
     // Each navigation reports twice: the event's direction, then the attribute
     // the router put on <html> for the animation to key off.
     expect(await directions()).toEqual(['back', 'back', 'forward', 'forward']);
+  });
+
+  test('holds the home next-page arrow until the foot of the page', async ({ page }) => {
+    await page.goto('/');
+    const next = page.locator('.page-nav__btn--next');
+    await expect(next).toBeHidden();
+
+    // The world can still be growing the document; keep landing on the real bottom.
+    await page.waitForFunction(() => {
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      return document.querySelector('.page-nav')?.classList.contains('is-at-end');
+    });
+    await expect(next).toBeVisible();
+    await expect(next).toHaveAttribute('aria-label', /Features/);
+
+    await page.goto('/features');
+    await expect(page.locator('.page-nav__btn--next')).toBeVisible();
   });
 
   test.describe('from the header', () => {

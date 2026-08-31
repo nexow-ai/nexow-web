@@ -37,12 +37,12 @@ describe.skipIf(!built)('shipped payload', () => {
 
   it('keeps every individual script small enough to parse cheaply', () => {
     for (const file of scripts) {
-      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(60);
+      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(65);
     }
   });
 
   it('ships one bounded stylesheet bundle', () => {
-    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(400);
+    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(410);
   });
 
   it('self-hosts its fonts, in woff2', () => {

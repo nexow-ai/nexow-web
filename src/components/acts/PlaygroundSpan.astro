@@ -1,0 +1,102 @@
+---
+/**
+ * Holds acts 01 and 02 and the single playground SVG that belongs to both.
+ *
+ * The pin is sticky for the combined height of the two acts, so the art never
+ * swaps. Copy still lives in each act (two world scenes, two rail stops).
+ * Below 768px the pin sits in flow between the two copy blocks and scales to
+ * the screen. A phone has no room to hold the mock beside the copy.
+ *
+ * Both acts follow the page theme. The pin sits above both copy blocks
+ * so the same mock stays on the lens through the pair.
+ */
+import type { Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import ActWidget from './ActWidget.astro';
+import ActCanvas from './ActCanvas.astro';
+import PlaygroundArt from './PlaygroundArt.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const prompt = useContent(lang).home.hero.promptExample;
+---
+
+<div class="pg-span">
+  <div class="pg-pin">
+    <div class="container-page pg-pin__in">
+      <div class="pg-pin__grid">
+        <div class="pg-pin__gap"></div>
+        <PlaygroundArt prompt={prompt} />
+      </div>
+    </div>
+  </div>
+  <ActWidget lang={lang} />
+  <ActCanvas lang={lang} />
+</div>
+
+<style>
+  .pg-span {
+    position: relative;
+  }
+
+  .pg-pin__gap {
+    display: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .pg-span {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Copy, then the mock, then the next copy. Sized to the screen so the
+     * playground is a beat of the story, not a cropped strip. */
+    .pg-pin {
+      order: 2;
+      padding-block: 0.25rem 1.75rem;
+    }
+
+    .pg-pin :global(.w-scene) {
+      width: min(100%, 22rem);
+      margin-inline: auto;
+    }
+
+    :global(#widget) {
+      order: 1;
+    }
+
+    :global(#app-showcase) {
+      order: 3;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pg-pin {
+      position: sticky;
+      top: 5rem;
+      height: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .pg-pin__in {
+      display: flex;
+      align-items: center;
+      min-height: min(calc(100vh - 5rem), 46rem);
+    }
+
+    .pg-pin__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 4rem;
+      width: 100%;
+      align-items: center;
+    }
+
+    .pg-pin__gap {
+      display: block;
+    }
+  }
+</style>

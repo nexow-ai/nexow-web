@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { he as legal } from '../legal/he';
 
 export const he: SiteContent = {
   nav: {
@@ -18,6 +19,16 @@ export const he: SiteContent = {
     home: 'דף הבית',
     prevPage: 'העמוד הקודם',
     nextPage: 'העמוד הבא',
+    tourPlay: 'הפעלת הסיור',
+    tourStop: 'עצירת הסיור',
+    tourTrack: 'ניגון שיר אחר',
+    tourLeft: 'זמן שנותר',
+    tourControls: 'בקרי הסיור',
+    switchLang: 'החלפת שפה',
+    primaryNav: 'ראשי',
+    mobileNav: 'נייד',
+    onThisPage: 'בעמוד זה',
+    skipToContent: 'דילוג לתוכן',
   },
   footer: {
     tagline: 'תארו מה אתם צריכים, ו-Nexow יהפוך את זה לווידג׳טים על קנבס.',
@@ -83,10 +94,8 @@ export const he: SiteContent = {
     },
     hero: {
       badge: 'גישה מוקדמת',
-      titleLead: 'תארו זאת.',
-      titleGradient: 'Nexow בונה זאת.',
-      titleTail: 'סחרו בזה.',
-      titleKicker: 'תוך שניות — לא שבועות או חודשים.',
+      title: 'תבנו הכל. תעקבו אחרי הכל.',
+      titleKicker: 'דשבורדים חיים בזמן אמת תוך שניות — לא שבועות, ולא רבעונים.',
       subtitle:
         'תארו מה אתם צריכים ו-Nexow יבנה את זה: ווידג׳טים אמיתיים שעובדים, מחוברים לנתונים חיים, מסודרים על קנבס שבשליטתכם. רעידות אדמה, איכות אוויר, מדדים עולמיים, פידים של שווקים או מסד הנתונים שלכם — להמחיש, לעקוב ולפעול.',
       ctaPrimary: 'הפעלת האפליקציה',
@@ -184,7 +193,7 @@ export const he: SiteContent = {
     stats: [
       { n: 90, label: 'מחברים חיים לנתונים, ארנקים, חברתיות ושווקים' },
       { n: 6, label: 'סוגי נכסים בקנבס אחד' },
-      { n: 10, suffix: 'K', label: 'אשראים בינה מלאכותית חופשיים שמורים בהרשמה' },
+      { n: 100, suffix: 'K', label: 'אשראים בינה מלאכותית חופשיים שמורים בהרשמה' },
       { n: 30, prefix: '<', suffix: 's', label: 'מהמשפט לווידג׳ט פעיל' },
     ],
     showcase: {
@@ -509,7 +518,7 @@ export const he: SiteContent = {
         {
           icon: 'trophy',
           title: 'מוניטין ומדליות',
-          body: 'כל ווידג׳ט, בוט ושיתוף מרוויחים מוניטין — נקודות, הישגים מדורגים, מדליות נדירות ורמות בפרופיל הציבורי שלכם. המרתם לאשראי פרסים מגיעה בהמשך.',
+          body: 'כל ווידג׳ט, בוט ושיתוף מרוויחים מוניטין — נקודות, הישגים מדורגים, מדליות נדירות ורמות בפרופיל הציבורי שלכם. כל דרגת תג משלמת אשראי חינמי ליתרה.',
           status: 'live',
         },
       ],
@@ -562,7 +571,7 @@ export const he: SiteContent = {
         { status: 'shipped', title: 'חנות', body: 'פרסמו והתקינו ווידג׳טים, ערכות נושא, מסכים ובוטים — עם שושלת שמעניקה קרדיט לכל רימייק.' },
         { status: 'shipped', title: 'מוניטין ומדליות', body: 'נקודות, הישגים מדורגים, מדליות נדירות ורמות עבור מה שאתם בונים ומשתפים.' },
         { status: 'soon', title: 'ווידג׳טים פרימיום ואותות', body: 'פרסמו ווידג׳טים פרימיום ואותות אסטרטגיה, תנו לאחרים להירשם כמנויים, והרוויחו על מה שאתם מריצים.' },
-        { status: 'soon', title: 'תוכניות בתשלום ואשראי פרסים', body: 'תשלום Supporter ו-Sponsor, אשראי פלטפורמה, והמרת מוניטין לאשראי פרסים.' },
+        { status: 'soon', title: 'תוכניות בתשלום ואשראי פרסים', body: 'תשלום Lite ו-Elite, אשראי פלטפורמה, והמרת מוניטין לאשראי פרסים.' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const he: SiteContent = {
         },
         {
           q: "כמה זה עולה?",
-          a: "Free כולל את קנבס הווידג׳טים המלא, ספרייה, סנכרון ענן, 10 בוטים, 3 סוכנים, גישה לקהילה ו-100,000 קרדיטי AI בהרשמה. Supporter ו-Sponsor מוסיפים קרדיטים חודשיים, מכסות אוטומציה גבוהות יותר ומראה פרימיום — התשלום בקרוב. ראו תוכניות להשוואה מלאה.",
+          a: "Free כולל את קנבס הווידג׳טים המלא, ספרייה, סנכרון ענן, 10 בוטים, 3 סוכנים, גישה לקהילה ו-100,000 קרדיטי AI בהרשמה. Lite ו-Elite מוסיפים קרדיטים חודשיים, מכסות אוטומציה גבוהות יותר ומראה פרימיום — התשלום בקרוב. ראו תוכניות להשוואה מלאה.",
         },
       ],
     },
@@ -1326,7 +1335,7 @@ export const he: SiteContent = {
           { icon: 'users', title: 'קהילה', body: 'עקבו אחרי makers, לייק ותגובה בפיד חברתי לבונים, חקרו boards, ושתפו widgets שאחרים מוסיפים לספרייה — עם פרופילי makers ציבוריים.' },
           { icon: 'mail', title: "צ'אטים בזמן אמת", body: 'הודעות חיות מחשבון או Dock — DM אישי וקבוצתי עם presence, reactions, followers/following ו-inbox אנשי קשר.' },
           { icon: 'store', title: 'Marketplace', body: 'פרסמו והתקינו widgets, ערכות, מסכים, Bots ו-Agents — עם lineage שמייחס כל remake. קנייה ומכירה בהמשך.' },
-          { icon: 'trophy', title: 'מוניטין ומדליות', body: 'צברו נקודות מוניטין על בנייה ושיתוף, פתחו achievements מדורגים ומדליות נדירות — חי היום. reward credits בהמשך.' },
+          { icon: 'trophy', title: 'מוניטין ומדליות', body: 'צברו נקודות מוניטין על בנייה ושיתוף, פתחו achievements מדורגים ומדליות נדירות — חי היום. כל דרגת תג משלמת אשראי חינמי ליתרה.' },
         ],
       },
       {
@@ -1346,7 +1355,7 @@ export const he: SiteContent = {
     meta: {
       title: 'תוכניות — Nexow',
       description:
-        'חופשי לנצח לבנות — מקומי עם המפתח שלכם, או עם 100,000 אשראים בינה מלאכותית שמורים בחשבון חופשי. השווו חופשי, Supporter, Sponsor ו-Partner עבור אשראים, בוטים, סוכנים והגדרה.',
+        'חופשי לנצח לבנות — מקומי עם המפתח שלכם, או עם 100,000 אשראים בינה מלאכותית שמורים בחשבון חופשי. השווו חופשי, Lite, Elite ו-Partner עבור אשראים, בוטים, סוכנים והגדרה.',
     },
     hero: {
       badge: 'תוכניות',
@@ -1355,7 +1364,7 @@ export const he: SiteContent = {
         'בנו בחינם — הריצו מקומי עם המפתח שלכם, או הרשמו כדי להזמין 100,000 אשראי בינה מלאכותית. שדרגו כאשר אתם צריכים יותר קיבולת, אוטומציה וטוב.',
     },
     comingSoon:
-      'Supporter & Sponsor checkout קרוב, ופלטפורמה אשראי משוגרת לצדה. כולם בחופשי כיום — יצרו חשבון להיות ראשון כאשר עיבוד בתשלום נפתח.',
+      'Lite & Elite checkout קרוב, ופלטפורמה אשראי משוגרת לצדה. כולם בחופשי כיום — יצרו חשבון להיות ראשון כאשר עיבוד בתשלום נפתח.',
     highlights: {
       title: 'מה שיעלה עם התוכנית שלכם',
       items: [
@@ -1409,18 +1418,18 @@ export const he: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'עבור יוצרים שרוצים יותר חדר.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
         billedYearly: '$99.90 חויבו שנתי',
         cadence: '/חודש',
-        stats: ['115K אשראים/חודש', '30 בוטים', '10 סוכנים'],
+        stats: ['670K אשראים/חודש', '30 בוטים', '10 סוכנים'],
         note: 'הכל בחופשי, בתוספת:',
-        cta: 'הפכו ל-Supporter',
+        cta: 'הפכו ל-Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115,000 קרדיטים בכל חודש',
+          '670,000 קרדיטים בכל חודש',
           'עד 30 בוטים ו-10 סוכנים',
           'צבע הדגשה שני (גרדיאנטים)',
           'שמונה תבניות קנבס, משטחי ווידג׳ט וזכוכית פאנל נוספים',
@@ -1429,20 +1438,20 @@ export const he: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'עבור משתמשי כוח הולכים לעיסוק.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
         billedYearly: '$699.90 חויבו שנתי',
         cadence: '/חודש',
         badge: 'הרווח הטוב ביותר',
-        stats: ['800K אשראים/חודש', '300 בוטים', '100 סוכנים'],
-        note: 'הכל ב-Supporter, בתוספת:',
-        cta: 'הפכו ל-Sponsor',
+        stats: ['4.7M אשראים/חודש', '300 בוטים', '100 סוכנים'],
+        note: 'הכל ב-Lite, בתוספת:',
+        cta: 'הפכו ל-Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800,000 קרדיטים בכל חודש',
+          '4,675,000 קרדיטים בכל חודש',
           'עד 300 בוטים ו-100 סוכנים',
           'שתי תבניות קנבס ומסכי טעינה נוספים, ועוד כוונון aurora',
           'תמיכה בעדיפות להגדרות מורכבות',
@@ -1458,7 +1467,7 @@ export const he: SiteContent = {
         priceYearly: 'מותאם אישית',
         cadence: '',
         stats: ['תשתיות פרטיות', 'שירות לבן כפפה', 'SLA'],
-        note: 'הכל ב-Sponsor, בתוספת:',
+        note: 'הכל ב-Elite, בתוספת:',
         cta: 'צרו קשר',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1550,15 +1559,15 @@ export const he: SiteContent = {
       },
       {
         q: "מה הם קרדיטים?",
-        a: "קרדיטים מודדים שימוש ב-AI: יצירת ווידג׳טים, עריכה בשיחה, יצירת קישורים ושימוש ב-Copilot. קרדיט אחד שווה טוקן פלט Sonnet אחד של עלות ספק, כך שהמחיר לא תלוי במודל — Haiku מותח קרדיט לכ-3 טוקנים; Opus צורך אותו בכ-0.6. Free שומר 100,000 בהרשמה; Supporter מעניק 115,000 בחודש; Sponsor 800,000 — וניתן לקנות חבילות בכל עת.",
+        a: "קרדיטים מודדים שימוש ב-AI: יצירת ווידג׳טים, עריכה בשיחה, יצירת קישורים ושימוש ב-Copilot. קרדיט אחד שווה טוקן פלט Sonnet אחד של עלות ספק, כך שהמחיר לא תלוי במודל — Haiku מותח קרדיט לכ-2 טוקנים; Opus צורך אותו בכ-0.4. Free שומר 100,000 בהרשמה; Lite מעניק 670,000 בחודש; Elite 4,675,000 — וניתן לקנות חבילות בכל עת.",
       },
       {
         q: "מתי מושקות תוכניות בתשלום?",
-        a: "Supporter ו-Sponsor מוגדרים ומוצגים באפליקציה, אבל תשלום בקרוב. כולם ב-Free היום — צרו חשבון כדי להיות ראשונים כשהחיוב ייפתח.",
+        a: "Lite ו-Elite מוגדרים ומוצגים באפליקציה, אבל תשלום בקרוב. כולם ב-Free היום — צרו חשבון כדי להיות ראשונים כשהחיוב ייפתח.",
       },
       {
         q: "אפשר לשלם שנתי?",
-        a: "כן. חיוב שנתי נותן שני חודשים בחינם מול חודשי — $99.90 לשנה ל-Supporter, $699.90 ל-Sponsor. אפשר לעבור בין חודשי לשנתי בכל עת.",
+        a: "כן. חיוב שנתי נותן שני חודשים בחינם מול חודשי — $99.90 לשנה ל-Lite, $699.90 ל-Elite. אפשר לעבור בין חודשי לשנתי בכל עת.",
       },
       {
         q: "איך מחושב מוניטין?",
@@ -1580,7 +1589,7 @@ export const he: SiteContent = {
     subtitle: 'כל פוסט, ווידג׳ט, בוט ופרסום מזינים ניקוד אחד. הניקוד פותח תגים, התגים פותחים רמות — וכשה-DAO ייפתח, שניהם ישולמו באשראי ובטוקני ממשל.',
     live: 'פעיל באפליקציה',
     planned: 'מתוכנן',
-    plannedNote: 'נקודות, תגים ורמות כבר פעילים באפליקציה. תשלומים באשראי וב-NXW יגיעו עם Nexow DAO — הטבלה שלמטה היא ההצעה שתעלה להצבעה הראשונה.',
+    plannedNote: 'נקודות, תגים, רמות ותגמולי אשראי חינמיים כבר פעילים באפליקציה. תשלומי NXW ובונוסי רמה יגיעו עם Nexow DAO — NXW עושה dry mint ב-14 באוגוסט 2026.',
     teaser: {
       badges: 'מדליות על מה שבונים ומפרסמים',
       levels: 'דרגות שנפתחות בנקודות מוניטין',
@@ -1654,7 +1663,7 @@ export const he: SiteContent = {
         commentsReceived: 'תגובות שהתקבלו',
         followers: 'עוקבים',
         following: 'אנשים שאתם עוקבים אחריהם',
-        contacts: 'אנשי קשר הדדיים',
+        friends: 'אנשי קשר הדדיים',
         widgetsBuilt: 'ווידג׳טים שנבנו',
         assetsPublished: 'נכסים שפורסמו',
         installsReceived: 'התקנות של העבודה שלכם',
@@ -1664,6 +1673,18 @@ export const he: SiteContent = {
         likesGiven: 'לייקים שניתנו',
         reactionsGiven: 'תגובות רגש שניתנו',
         nightPosts: 'פוסטים בין 00:00 ל-05:00',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'שיחות פרטיות שנפתחו',
       },
       names: {
@@ -1685,6 +1706,15 @@ export const he: SiteContent = {
         emojiSommelier: 'סומלייה אימוג׳י',
         nightOwl: 'ינשוף לילה',
         penPal: 'חבר לעט',
+        greenLight: 'אור ירוק',
+        buildFlagger: 'מדווח בנייה',
+        tagClose: 'חבר',
+        tagFamily: 'משפחה',
+        tagWork: 'עמית',
+        tagTeam: 'חבר צוות',
+        tagSchool: 'חבר לכיתה',
+        tagMentor: 'מנטור',
+        tagFavorite: 'מועדפים',
         oracle: 'אורקל',
         agora: 'אגורה',
         catalyst: 'זרז',
@@ -1695,6 +1725,9 @@ export const he: SiteContent = {
         benefactor: 'נדבן',
         midnightSun: 'שמש חצות',
         nexus: 'נקסוס',
+        tagPartner: 'בן/בת זוג',
+        tagLove: 'מאוהב',
+        rolodex: 'רולודקס',
         immortal: 'בן אלמוות',
         folkHero: 'גיבור עממי',
         luminary: 'מאור',
@@ -1710,7 +1743,7 @@ export const he: SiteContent = {
         commentsReceived: 'קבלו תגובות על הפוסטים שלכם.',
         followers: 'צברו עוקבים בפרופיל שלכם.',
         following: 'עקבו אחרי אנשים אחרים ב-Nexow.',
-        contacts: 'הוסיפו אנשי קשר הדדיים — אנשים שאתם עוקבים אחריהם והם אחריכם.',
+        friends: 'הוסיפו אנשי קשר הדדיים — אנשים שאתם עוקבים אחריהם והם אחריכם.',
         widgetsBuilt: 'בנו ווידג׳טים על הקנבס שלכם.',
         assetsPublished: 'פרסמו נכסים בחנות.',
         installsReceived: 'קבלו התקנות לווידג׳טים, לבוטים או לערכות הנושא שפרסמתם.',
@@ -1737,7 +1770,11 @@ export const he: SiteContent = {
         bronze: 'דרגת ארד',
         silver: 'דרגת כסף',
         gold: 'דרגת זהב',
+        tagBronze: 'חבר · bronze',
+        tagSilver: 'חבר · silver',
+        tagGold: 'חבר · gold',
         rare: 'מדליה נדירה',
+        tagRare: 'חבר · rare',
         legendary: 'מדליה אגדית',
       },
       levelRow: 'להגיע ל{level}',
@@ -1746,7 +1783,7 @@ export const he: SiteContent = {
       creditsLabel: 'אשראי',
       tokensLabel: 'NXW',
       worth: 'שווה ערך ל-{usd} של יצירת AI במחירון',
-      months: 'כלומר {n} חודשי יצירה ברמת Sponsor, שהרווחתם',
+      months: 'כלומר {n} חודשי יצירה ברמת Elite, שהרווחתם',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'טוקן אחד. חמישה תפקידים. עשרים מיליון לכל היותר.',
@@ -1984,7 +2021,7 @@ export const he: SiteContent = {
   waitlist: {
     eyebrow: 'רשימת המתנה לחיוב',
     title: 'התשלום כמעט כאן',
-    subtitle: 'החיוב של Supporter ו-Sponsor מגיע בקרוב. השאירו אימייל ונעדכן ביום שהתשלום ייפתח — בלי ספאם.',
+    subtitle: 'החיוב של Lite ו-Elite מגיע בקרוב. השאירו אימייל ונעדכן ביום שהתשלום ייפתח — בלי ספאם.',
     placeholder: 'you@email.com',
     submit: 'הצטרפו לרשימה',
     submitting: 'מצטרפים…',
@@ -2302,4 +2339,9 @@ export const he: SiteContent = {
       ctaSecondary: 'הצטרפו לקהילה',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

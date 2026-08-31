@@ -47,16 +47,25 @@ const otherLangs = (Object.keys(languages) as Lang[])
   }));
 const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
 const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
+/* Optional, English fallback: no locale bundle has to change for this to ship. */
+const tourPlay = t.nav.tourPlay ?? 'Play the tour';
+const tourStop = t.nav.tourStop ?? 'Stop the tour';
+/** Visible label next to the play icon — home only. */
+const tourPlayMe = t.nav.tourPlayMe ?? 'Play Me';
+const isHome = route === '/';
+const switchLang = t.nav.switchLang ?? 'Switch language';
+const primaryNav = t.nav.primaryNav ?? 'Primary';
+const mobileNav = t.nav.mobileNav ?? 'Mobile';
 ---
 
 <header id="site-header" transition:animate="none" class="fixed inset-x-0 top-0 z-50" data-hidden="false">
   <div class="container-page" id="site-header-bar">
     <nav
-      class="mt-3 flex h-16 items-center justify-between rounded-full border border-transparent px-3 pl-4 transition-all duration-300"
+      class="flex h-16 items-center justify-between rounded-full border border-transparent px-2.5 pl-3 transition-all duration-300 sm:px-3 sm:pl-4"
       id="site-nav"
-      aria-label="Primary"
+      aria-label={primaryNav}
     >
-      <Logo lang={lang} class="h-7" />
+      <Logo lang={lang} class="h-7" shortcut="0" />
 
       <!-- Desktop nav — `lg` not `md`: seven links plus the language picker and
            the CTA need ~870px, so at 768px they would run off the right edge.
@@ -64,33 +73,71 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
            (el, ru) still fit at 1024; `xl` restores the roomier spacing. -->
       <ul class="hidden items-center gap-0.5 lg:flex xl:gap-1">
         {
-          links.map((l) => (
-            <li>
-              <a
-                href={l.url}
-                class:list={[
-                  'inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[0.8125rem] font-medium transition-colors xl:px-3.5 xl:text-sm',
-                  l.active
-                    ? 'text-brand-600 dark:text-brand-300'
-                    : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
-                ]}
-                aria-current={l.active ? 'page' : undefined}
-              >
-                {l.active && l.icon && <Icon name={l.icon} class="size-4 shrink-0" />}
-                {l.label}
-              </a>
-            </li>
-          ))
+          links.map((l, i) => {
+            const key = String(i + 1);
+            const icon = l.active ? l.icon : undefined;
+            return (
+              <li>
+                <a
+                  href={l.url}
+                  data-nav-key={key}
+                  aria-keyshortcuts={key}
+                  class:list={[
+                    'inline-flex items-center gap-1.5 rounded-full px-2 py-2 text-[0.8125rem] font-medium transition-colors xl:px-3.5 xl:text-sm',
+                    l.active
+                      ? 'text-brand-600 dark:text-brand-300'
+                      : 'text-ink-600 hover:text-ink-950 dark:text-ink-300 dark:hover:text-white',
+                  ]}
+                  aria-current={l.active ? 'page' : undefined}
+                >
+                  {icon ? (
+                    <Icon name={icon} class="size-4 shrink-0" />
+                  ) : (
+                    <kbd class="nav-kbd" aria-hidden="true">
+                      {key}
+                    </kbd>
+                  )}
+                  {l.label}
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
+        {/* Hands-free scroll, on every route. It only leaves the header on a
+            page with nowhere to scroll — `data-short`; see `global.css`. */}
+        <button
+          type="button"
+          id="tour-toggle"
+          class:list={[
+            'tour-toggle chrome-hit items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10',
+            isHome && 'tour-toggle--labeled',
+          ]}
+          data-tour-control
+          aria-pressed="false"
+          aria-label={tourPlay}
+          data-play-label={tourPlay}
+          data-stop-label={tourStop}
+        >
+          {
+            isHome && (
+              <span class="tour-toggle__label" aria-hidden="true">
+                {tourPlayMe}
+              </span>
+            )
+          }
+          <Icon name="play" class="tour-toggle__play size-4" />
+          <Icon name="pause" class="tour-toggle__stop size-4" />
+        </button>
+
         <ThemeToggle toDarkLabel={themeToDark} toLightLabel={themeToLight} />
 
         <details class="group relative hidden sm:block">
           <summary
             class="flex cursor-pointer list-none items-center gap-1.5 rounded-full px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider text-ink-600 transition-colors hover:text-ink-950 dark:text-ink-300 dark:hover:text-white [&::-webkit-details-marker]:hidden"
-            aria-label="Switch language"
+            aria-label={switchLang}
           >
             <Icon name="globe" class="size-4" />
             {lang}
@@ -126,7 +173,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
         <button
           type="button"
           id="menu-toggle"
-          class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 lg:hidden dark:text-ink-200 dark:hover:bg-white/10"
+          class="chrome-hit inline-flex items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 lg:hidden dark:text-ink-200 dark:hover:bg-white/10"
           aria-expanded="false"
           aria-controls="mobile-menu"
           aria-label={t.nav.menu}
@@ -140,51 +187,58 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 z-40 hidden bg-white/98 backdrop-blur-md lg:hidden dark:bg-ink-950/98"
+    class="mobile-menu fixed inset-0 z-40 hidden bg-white/98 backdrop-blur-md lg:hidden dark:bg-ink-950/98"
     hidden
   >
-    <div class="container-page flex h-16 items-center justify-between pt-3">
-      <Logo lang={lang} class="h-7" />
+    <div class="mobile-menu__bar container-page flex h-16 items-center justify-between">
+      <Logo lang={lang} class="h-7" shortcut="0" />
       <button
         type="button"
         id="menu-close"
-        class="inline-flex size-10 items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
+        class="chrome-hit inline-flex items-center justify-center rounded-full text-ink-800 hover:bg-ink-900/5 dark:text-ink-200 dark:hover:bg-white/10"
         aria-label={t.nav.close}
       >
         <Icon name="x" class="size-6" />
       </button>
     </div>
-    <nav class="container-page mt-8 flex flex-col gap-1" aria-label="Mobile">
+    <nav class="container-page mobile-menu__nav flex flex-col gap-1" aria-label={mobileNav}>
       {
-        links.map((l) => (
-          <a
-            href={l.url}
-            class:list={[
-              'flex items-center gap-3 border-b border-ink-900/5 py-4 font-display text-2xl font-semibold text-ink-900 dark:border-white/10 dark:text-white',
-              l.active && 'text-brand-600 dark:text-brand-300',
-            ]}
-            aria-current={l.active ? 'page' : undefined}
-          >
-            {l.active && l.icon ? (
-              <Icon name={l.icon} class="size-6 shrink-0" />
-            ) : null}
-            {l.label}
-          </a>
-        ))
+        links.map((l, i) => {
+          const key = String(i + 1);
+          const icon = l.active ? l.icon : undefined;
+          return (
+            <a
+              href={l.url}
+              data-nav-key={key}
+              aria-keyshortcuts={key}
+              class:list={[
+                'flex min-h-11 items-center gap-3 border-b border-ink-900/5 py-3.5 font-display text-2xl font-semibold text-ink-900 dark:border-white/10 dark:text-white',
+                l.active && 'text-brand-600 dark:text-brand-300',
+              ]}
+              aria-current={l.active ? 'page' : undefined}
+            >
+              {icon ? (
+                <Icon name={icon} class="size-6 shrink-0" />
+              ) : (
+                <kbd class="nav-kbd nav-kbd--lg" aria-hidden="true">
+                  {key}
+                </kbd>
+              )}
+              {l.label}
+            </a>
+          );
+        })
       }
-      <div class="mt-6 flex flex-col gap-3">
+      <div class="mobile-menu__foot mt-6 flex flex-col gap-4 pb-2">
         <Button href={SITE.appUrl} size="lg" external iconRight="rocket">
           {t.nav.launch}
         </Button>
-        <div class="flex flex-wrap items-center gap-3 py-2">
+        <div class="mobile-langs" role="list">
           {
             otherLangs.map((l) => (
-              <a
-                href={l.url}
-                class="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wider text-ink-600 dark:text-ink-300"
-              >
-                <Icon name="globe" class="size-4" />
-                {l.label}
+              <a href={l.url} class="mobile-lang" lang={l.code} role="listitem" title={l.label}>
+                <span aria-hidden="true">{l.code}</span>
+                <span class="sr-only">{l.label}</span>
               </a>
             ))
           }
@@ -197,10 +251,62 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
 <style>
   /* Only the bar translates — the mobile menu stays a viewport-anchored overlay. */
   #site-header-bar {
+    padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
     transition:
       transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
       opacity 250ms ease;
     will-change: transform;
+  }
+
+  /* Sixteen locales used to print as a wrapping sentence under the CTA — on a
+   * 568px phone that put half of them below the fold with no way to scroll.
+   * The sheet itself scrolls; the bar sticks so close stays in reach. */
+  .mobile-menu {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .mobile-menu__bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgb(255 255 255 / 0.98);
+  }
+
+  :global(.dark) .mobile-menu__bar {
+    background: color-mix(in oklab, var(--color-ink-950) 98%, transparent);
+  }
+
+  .mobile-langs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+    gap: 0.4rem;
+  }
+
+  .mobile-lang {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.7rem;
+    border: 1px solid color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+    background: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink-700);
+  }
+
+  :global(.dark) .mobile-lang {
+    border-color: rgb(255 255 255 / 0.12);
+    background: rgb(255 255 255 / 0.06);
+    color: var(--color-ink-200);
   }
 
   #site-header[data-hidden='true'] #site-header-bar {
@@ -214,11 +320,399 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       transition: none;
     }
   }
+
+  /* Shortcut chip — same 16px box as the active-page icon, so swapping
+     kbd → icon on the current route does not shift the label. */
+  .nav-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    border-radius: 0.28rem;
+    border: 1px solid color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    background: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    box-shadow: 0 1px 0 color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--color-ink-500);
+  }
+
+  .nav-kbd--lg {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  :global(.dark) .nav-kbd {
+    border-color: rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--color-ink-200);
+  }
+
+  a:hover .nav-kbd,
+  a:focus-visible .nav-kbd {
+    border-color: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    color: var(--color-ink-800);
+  }
+
+  :global(.dark) a:hover .nav-kbd,
+  :global(.dark) a:focus-visible .nav-kbd {
+    border-color: rgb(255 255 255 / 0.32);
+    color: white;
+  }
+
+  /* On a band of the opposite tone the bar paints in that tone instead
+     (`components/ChromeTone.astro`), and the chip follows it. */
+  :global(html.dark) #site-nav.chrome-invert .nav-kbd {
+    border-color: color-mix(in oklab, var(--color-ink-900) 14%, transparent);
+    background: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    box-shadow: 0 1px 0 color-mix(in oklab, var(--color-ink-900) 8%, transparent);
+    color: var(--color-ink-500);
+  }
+
+  :global(html:not(.dark)) #site-nav.chrome-invert .nav-kbd {
+    border-color: rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--color-ink-200);
+  }
+
+  :global(html.dark) #site-nav.chrome-invert a:hover .nav-kbd,
+  :global(html.dark) #site-nav.chrome-invert a:focus-visible .nav-kbd {
+    border-color: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    color: var(--color-ink-800);
+  }
+
+  :global(html:not(.dark)) #site-nav.chrome-invert a:hover .nav-kbd,
+  :global(html:not(.dark)) #site-nav.chrome-invert a:focus-visible .nav-kbd {
+    border-color: rgb(255 255 255 / 0.32);
+    color: white;
+  }
+
+  /* Home world: the bar is transparent over ink until the first scroll, so
+     the light-theme chip would sit too dark on the sky. */
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) .nav-kbd {
+    border-color: rgb(255 255 255 / 0.22);
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.1);
+    color: var(--color-ink-300);
+  }
+
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) a:hover .nav-kbd,
+  :global(html[data-world]:not(.dark)) #site-header:not(.is-scrolled) a:focus-visible .nav-kbd {
+    border-color: rgb(255 255 255 / 0.4);
+    color: white;
+  }
 </style>
+
+<script>
+  /**
+   * Hands-free scroll tour, on every page of the site.
+   *
+   * The home page is a scroll-driven story with holds built into it, but the
+   * rest of the site is worth reading through the same way — so the play
+   * button ships with the header everywhere. This advances the scroll at a
+   * real-world speed and gets out of the way the moment the visitor touches
+   * anything.
+   *
+   * The button is in the header from the server, not granted by this script:
+   * the only thing measuring does is take it back off a page with nowhere to
+   * scroll, so a script that fails to run leaves a working button rather than
+   * an empty header on every route.
+   *
+   * The pace lives in `lib/tour`: a base speed in CSS pixels per second, not
+   * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the
+   * same rate — scaled by the transport's rate (`x0.25` … `x2`). Time left is
+   * distance over that speed plus any still-ahead holds, which the
+   * foot-of-screen transport (`TourHud.astro`) counts down.
+   *
+   * On the home close the tour freezes briefly at plans, rewards and FAQ so
+   * those rooms can be read, then lingers at the footer before the music ends.
+   * Durations are written for `x1` and shrink with the rate.
+   */
+  import {
+    holdSecondsAhead,
+    measureSectionHolds,
+    secondsLeft,
+    TOUR_END_HOLD,
+    TOUR_SECTION_HOLDS,
+    TOUR_SPEED,
+    tourRate,
+    worthTouring,
+    type TourHoldMark,
+  } from '../lib/tour';
+
+  let tourAbort: AbortController | undefined;
+  let tourRaf = 0;
+  let tourRo: ResizeObserver | undefined;
+
+  function initTour() {
+    tourAbort?.abort();
+    if (tourRaf) cancelAnimationFrame(tourRaf);
+    tourRaf = 0;
+    tourRo?.disconnect();
+    tourRo = undefined;
+    tourAbort = new AbortController();
+    const { signal } = tourAbort;
+
+    const btn = document.getElementById('tour-toggle');
+    if (!btn) return;
+
+    let playing = false;
+    let last = 0;
+    /** The whole second the countdown last announced. */
+    let shown = -1;
+    /** Section freezes on this page, in document space. */
+    let marks: TourHoldMark[] = [];
+    /** Holds already taken on this run. */
+    let done = new Set<string>();
+    /** Current freeze: remaining time in `x1` seconds. */
+    let holdLeft = 0;
+    /** Whether the end-of-page linger has finished on this run. */
+    let endDone = false;
+    /** True while the end linger is counting down. */
+    let ending = false;
+
+    const maxScroll = () =>
+      Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+    /** The transport stamps `data-rate`; fall back to the module if it is gone. */
+    const paceOf = () => {
+      const stamped = Number(document.querySelector<HTMLElement>('[data-tour-action="pace"]')?.dataset.rate);
+      return stamped > 0 ? stamped : tourRate();
+    };
+
+    /** Where every named hold sits on the page right now. */
+    const remarks = () => {
+      const tops = new Map<string, number>();
+      for (const { id } of TOUR_SECTION_HOLDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        tops.set(id, el.getBoundingClientRect().top + window.scrollY);
+      }
+      marks = measureSectionHolds(tops, window.innerHeight);
+    };
+
+    /** Home close only — other routes keep the abrupt end. */
+    const endHold = () => (marks.length > 0 ? TOUR_END_HOLD : 0);
+
+    /** Skip holds already behind the scroll so a mid-page start does not freeze. */
+    const armHolds = (y: number) => {
+      remarks();
+      done = new Set(marks.filter((m) => m.y <= y).map((m) => m.id));
+      holdLeft = 0;
+      ending = false;
+      endDone = false;
+    };
+
+    /** The countdown, sent on only when the second it shows has changed. */
+    const tell = (y: number, max: number) => {
+      const rate = paceOf();
+      const sectionLeft = ending ? 0 : holdLeft;
+      const footLeft = ending ? holdLeft : endDone ? 0 : endHold();
+      const remaining =
+        secondsLeft(y, max, TOUR_SPEED * rate) +
+        holdSecondsAhead(y, marks, done, sectionLeft, rate, footLeft);
+      const whole = Math.ceil(remaining);
+      if (whole === shown) return;
+      shown = whole;
+      document.dispatchEvent(new CustomEvent('nexow:tourtime', { detail: { remaining } }));
+    };
+
+    const setPlaying = (on: boolean) => {
+      playing = on;
+      btn.setAttribute('aria-pressed', String(on));
+      const label = on ? btn.dataset.stopLabel : btn.dataset.playLabel;
+      if (label) btn.setAttribute('aria-label', label);
+      /* `scroll-behavior: smooth` is on the document for anchor jumps; left on,
+       * it would fight a per-frame scrollBy into a stutter. */
+      document.documentElement.style.scrollBehavior = on ? 'auto' : '';
+      // The deck listens: the soundtrack follows the tour (`TourSound.astro`).
+      document.dispatchEvent(new CustomEvent('nexow:tour', { detail: { playing: on } }));
+    };
+
+    const stop = () => {
+      if (!playing) return;
+      if (tourRaf) cancelAnimationFrame(tourRaf);
+      tourRaf = 0;
+      last = 0;
+      holdLeft = 0;
+      ending = false;
+      setPlaying(false);
+    };
+
+    /* Whether this page has anywhere to travel. Re-read rather than assumed:
+     * a lazy image, a font, a phone rotating or an accordion opening all move
+     * the end of the page, so a route that was too short a moment ago can
+     * become worth touring without a reload. */
+    const measure = () => {
+      const short = !worthTouring(maxScroll());
+      btn.toggleAttribute('data-short', short);
+      // The button just left the header; the tour cannot outlive it.
+      if (short) stop();
+      else if (playing) remarks();
+    };
+
+    /** The tour's own controls: this button and the transport at the foot. */
+    const fromTourControl = (e: Event) =>
+      e.target instanceof Element && !!e.target.closest('[data-tour-control]');
+
+    const step = (now: number) => {
+      tourRaf = 0;
+      if (!playing) return;
+      // Clamped: a background tab or a long task must not teleport the page.
+      const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+      last = now;
+
+      const rate = paceOf();
+      const max = maxScroll();
+
+      /* A freeze ticks in `x1` seconds so a faster rate shortens it. */
+      if (holdLeft > 0) {
+        holdLeft = Math.max(0, holdLeft - dt * rate);
+        if (holdLeft > 0) {
+          tell(window.scrollY, max);
+          tourRaf = requestAnimationFrame(step);
+          return;
+        }
+        if (ending) {
+          endDone = true;
+          ending = false;
+          tell(max, max);
+          stop();
+          return;
+        }
+      }
+
+      // Read every frame: a page that grows under the tour — a lazy image, a
+      // font — moves the end of the story, and the countdown with it.
+      const y = window.scrollY;
+      const next = y + TOUR_SPEED * rate * dt;
+
+      /* Mid-page freezes: cross a mark and park there for its hold. */
+      const hit = marks.find((m) => !done.has(m.id) && y < m.y && next >= m.y);
+      if (hit) {
+        window.scrollTo(0, hit.y);
+        done.add(hit.id);
+        holdLeft = hit.seconds;
+        tell(hit.y, max);
+        tourRaf = requestAnimationFrame(step);
+        return;
+      }
+
+      if (next >= max) {
+        window.scrollTo(0, max);
+        const foot = endHold();
+        if (!endDone && foot > 0) {
+          ending = true;
+          holdLeft = foot;
+          tell(max, max);
+          tourRaf = requestAnimationFrame(step);
+          return;
+        }
+        endDone = true;
+        tell(max, max);
+        stop();
+        return;
+      }
+      window.scrollTo(0, next);
+      tell(next, max);
+      tourRaf = requestAnimationFrame(step);
+    };
+
+    const toggle = () => {
+      if (playing) {
+        stop();
+        return;
+      }
+      // Reached the end already? Start the tour over rather than do nothing.
+      if (window.scrollY >= maxScroll() - 2) window.scrollTo(0, 0);
+      shown = -1;
+      armHolds(window.scrollY);
+      setPlaying(true);
+      tell(window.scrollY, maxScroll());
+      last = 0;
+      tourRaf = requestAnimationFrame(step);
+    };
+
+    btn.addEventListener('click', toggle, { signal });
+    // The transport at the foot of the screen drives the same tour.
+    document.addEventListener('nexow:tourtoggle', toggle, { signal });
+    // Recount at once: speed() reads the transport's data-rate every frame.
+    document.addEventListener(
+      'nexow:tourpace',
+      () => {
+        shown = -1;
+        if (playing) tell(window.scrollY, maxScroll());
+      },
+      { signal },
+    );
+
+    /* Any intent to move the page yourself ends the tour. The tour's own
+     * controls are excluded so their pointerdown does not cancel the click
+     * they are about to make. `wheel` and `touchstart` stay passive, so this
+     * never delays a scroll. */
+    for (const evt of ['wheel', 'touchstart', 'pointerdown'] as const) {
+      window.addEventListener(
+        evt,
+        (e) => {
+          if (fromTourControl(e)) return;
+          stop();
+        },
+        { passive: true, signal },
+      );
+    }
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        // A control's own Enter/Space is a toggle, not an escape.
+        if (fromTourControl(e)) return;
+        stop();
+      },
+      { signal },
+    );
+    // Nothing to watch in a hidden tab.
+    document.addEventListener('visibilitychange', () => document.hidden && stop(), { signal });
+
+    measure();
+    /* The document box covers the page growing; `resize` covers the viewport
+     * getting taller without it, which is the phone-browser chrome sliding
+     * away and is not a box change the observer sees. */
+    if ('ResizeObserver' in window) {
+      tourRo = new ResizeObserver(measure);
+      tourRo.observe(document.documentElement);
+    }
+    window.addEventListener('resize', measure, { passive: true, signal });
+  }
+
+  document.addEventListener('astro:page-load', initTour);
+  /* A module that finishes evaluating after `astro:page-load` has already gone
+   * by would otherwise never wire the button up. Re-running is free: the first
+   * thing `initTour` does is abandon whatever it set up last time. */
+  if (document.readyState !== 'loading') initTour();
+  document.addEventListener('astro:before-swap', () => {
+    if (tourRaf) cancelAnimationFrame(tourRaf);
+    tourRaf = 0;
+    tourAbort?.abort();
+    tourRo?.disconnect();
+    tourRo = undefined;
+    document.documentElement.style.scrollBehavior = '';
+  });
+</script>
 
 <script>
   // Header: solidify on scroll, hide on scroll down / reveal on scroll up,
   // plus mobile menu toggle. Re-inits on view transitions.
+  import { navigate } from 'astro:transitions/client';
+  import { CHROME_TONE_EVENT } from '../lib/chrome-tone';
+
   let headerAbort: AbortController | undefined;
 
   const lightSolid = ['bg-white/95', 'backdrop-blur-md', '!border-ink-900/10', 'shadow-sm'] as const;
@@ -237,9 +731,11 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
   const DELTA = 6;
 
   function initHeader() {
-    headerAbort?.abort();
-    headerAbort = new AbortController();
-    const { signal } = headerAbort;
+    /* Attach the new listeners before aborting the old ones. Aborting first
+     * left a gap during view transitions where digit shortcuts did nothing —
+     * URL already updated, `astro:page-load` still mid-flight. */
+    const next = new AbortController();
+    const { signal } = next;
 
     const header = document.getElementById('site-header');
     const nav = document.getElementById('site-nav');
@@ -256,11 +752,18 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
       header.dataset.hidden = String(hidden);
     };
 
+    /* The pill's tone: the page theme, unless the bar is currently over a band
+     * of the opposite one (`components/ChromeTone.astro`), in which case it
+     * takes that band's — the same flip the `dark:` utilities inside the bar
+     * make on their own. */
+    const overDark = () =>
+      document.documentElement.classList.contains('dark') !== nav.classList.contains('chrome-invert');
+
     const paintSolid = () => {
       const solid = window.scrollY > 8;
       allSolid.forEach((c) => nav.classList.remove(c));
       if (solid) {
-        const classes = document.documentElement.classList.contains('dark') ? darkSolid : lightSolid;
+        const classes = overDark() ? darkSolid : lightSolid;
         classes.forEach((c) => nav.classList.add(c));
       }
       header.classList.toggle('is-scrolled', solid);
@@ -294,6 +797,8 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     update();
     window.addEventListener('scroll', onScroll, { passive: true, signal });
     document.addEventListener('nexow:themechange', paintSolid, { signal });
+    // The band under the bar changed tone; the pill has to follow it.
+    document.addEventListener(CHROME_TONE_EVENT, paintSolid, { signal });
     // Keyboard users tabbing back into the header should never chase a hidden bar.
     header.addEventListener('focusin', () => setHidden(false), { signal });
 
@@ -310,9 +815,39 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
     menu?.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => setMenu(false), { signal }),
     );
+    const typingIn = (el: EventTarget | null) => {
+      if (!(el instanceof HTMLElement)) return false;
+      if (el.isContentEditable) return true;
+      const tag = el.tagName;
+      return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    };
+
+    const samePath = (href: string) => {
+      const there = new URL(href, location.href).pathname.replace(/\/+$/, '') || '/';
+      const here = location.pathname.replace(/\/+$/, '') || '/';
+      return there === here;
+    };
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setMenu(false);
+      if (e.defaultPrevented || e.repeat) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (!/^[0-6]$/.test(e.key)) return;
+      if (typingIn(e.target)) return;
+
+      const link = header.querySelector(`[data-nav-key="${e.key}"]`);
+      if (!(link instanceof HTMLAnchorElement) || samePath(link.href)) return;
+
+      e.preventDefault();
+      setMenu(false);
+      /* `HTMLElement.click()` on the logo after a ClientRouter hop from home
+       * can fire without changing the URL — the transition layer sometimes
+       * drops the synthetic activation. `navigate` is the supported API. */
+      navigate(link.href);
     }, { signal });
+
+    headerAbort?.abort();
+    headerAbort = next;
   }
 
   document.addEventListener('astro:before-preparation', () => {

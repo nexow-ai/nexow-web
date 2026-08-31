@@ -16,22 +16,54 @@ const en = useContent('en').home.features;
 const explore = useContent(lang).nav.links.find((l) => l.href === '/features')?.label ?? 'Features';
 const mapUi = t.map ?? en.map!;
 const groups = resolveFeatureMapGroups(t, en);
+/** One beat of the pinned walkthrough per surface — see the stage below. */
+const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
 ---
 
-<section id="features" class="relative overflow-x-clip bg-[#f7fbfb]/70 py-20 text-ink-950 sm:py-24 dark:bg-white/[0.015] dark:text-white">
+<section id="features" class="relative overflow-x-clip py-20 sm:py-24" data-world-scene>
   <div class="container-page relative">
-    <!-- Plain ink title + solid eyebrow (no gradient text / chip fill) -->
-    <SectionHeading eyebrow={t.eyebrow} title={t.title} subtitle={t.subtitle} />
+    {/* The map holds the page while it introduces itself.
+        A list of sixteen surfaces that you scroll straight past is a list
+        nobody reads: the plate drifted by with whichever node happened to be
+        selected on it. So the section is tall and the plate is pinned inside
+        it, and the scroll spends one beat on each surface — `ScrollMotion`
+        turns the travel into `data-stage`, and `FeatureMap` selects the node
+        of that number. Scrolling through is the demo.
 
-    <div class="mt-10 sm:mt-12">
-      <FeatureMap
-        lang={lang}
-        groups={groups}
-        hint={mapUi.hint}
-        moreLabel={mapUi.moreLabel}
-        openLabel={mapUi.openLabel}
-        closeLabel={mapUi.closeLabel}
-      />
+        Title first, then the lede, then the table. The first beat of `--ps`
+        collapses the lede so the plate rises under the heading; scrolling
+        back opens it again. After that the walk is title and table only.
+
+        Desktop only, and only with motion allowed (the styles below): a phone
+        has no room to hold a plate still beside its own scroll, and a visitor
+        who asked for less motion gets the plain plate with its first surface
+        on it, exactly as before. It also drifts no more — `rise tilt` on a
+        pinned element freezes mid-lean, and the pin is the motion now. */}
+    <div
+      class="fm-stage"
+      style={`--fm-beats:${surfaces};--fm-intro:0.8`}
+      data-stages={surfaces}
+    >
+      <div class="fm-stage__pin">
+        <div class="fm-stage__copy">
+          <div class="world-copy fm-stage__title mx-auto max-w-2xl">
+            <SectionHeading eyebrow={t.eyebrow} title={t.title} appear />
+          </div>
+          <div class="world-copy fm-lede mx-auto max-w-2xl">
+            <p class="text-center text-lg leading-relaxed text-ink-600 dark:text-ink-300">
+              {t.subtitle}
+            </p>
+          </div>
+        </div>
+        <FeatureMap
+          lang={lang}
+          groups={groups}
+          hint={mapUi.hint}
+          moreLabel={mapUi.moreLabel}
+          openLabel={mapUi.openLabel}
+          closeLabel={mapUi.closeLabel}
+        />
+      </div>
     </div>
 
     <div class="reveal mt-12 flex justify-center sm:mt-14">
@@ -41,3 +73,160 @@ const groups = resolveFeatureMapGroups(t, en);
     </div>
   </div>
 </section>
+
+<style>
+  /* Soft well so the headline holds still and readable over the field. */
+  .world-copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .world-copy::before {
+    content: '';
+    position: absolute;
+    inset: -3rem -6rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 70% 62% at 50% 42%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 78%, transparent) 48%,
+      transparent 78%
+    );
+  }
+
+  /* The map is a glass plate in the same room, not a white marketing card. */
+  #features :global(.feature-map > [class*='rounded-2xl']) {
+    background: var(--w-panel);
+    border-color: var(--w-line);
+    box-shadow: 0 18px 48px var(--w-shadow);
+    backdrop-filter: blur(16px);
+  }
+
+  #features :global([data-fm-detail]) {
+    background: var(--w-panel-2);
+  }
+
+  #features :global(.feature-map > p) {
+    color: var(--w-text-4);
+  }
+
+  .fm-lede {
+    overflow: hidden;
+    max-height: 16rem;
+  }
+
+  /* The at-rest plate: an ordinary block, which is what ships without
+     JavaScript, under reduced motion and on a phone. Title, lede, table. */
+  .fm-stage__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .fm-stage__pin {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @media (min-width: 768px) {
+      /* One viewport to hold the heading, the lede and the plate; an intro
+         beat to fold the lede away; then a beat of travel per surface.
+         0.62 of a screen each is about a second and a quarter at the scroll
+         tour's pace — long enough to read a title and its line, short enough
+         that sixteen of them is not a chapter. */
+      :global(html.js) .fm-stage {
+        --fm-travel: calc(var(--fm-intro, 0.8) + var(--fm-beats, 1) * 0.62);
+        --fm-lede: clamp(0, calc(1 - var(--ps, 0) * var(--fm-travel) / var(--fm-intro, 0.8)), 1);
+        height: calc(100vh + var(--fm-travel) * 100vh);
+      }
+
+      /* Clears the fixed header, matching `scroll-padding-top`. The title
+         stays at the top of the pin so the plate can rise into the space
+         the lede leaves — centering would bounce the heading as it folds. */
+      :global(html.js) .fm-stage__pin {
+        position: sticky;
+        top: 5rem;
+        height: calc(100vh - 5rem);
+        justify-content: flex-start;
+        gap: 1.5rem;
+        padding-block: 1.25rem 1.5rem;
+        overflow: hidden;
+      }
+
+      :global(html.js) .fm-stage__copy {
+        flex-shrink: 0;
+        /* Gap dies with the lede so the plate sits under the title, not
+           under an empty row plus two flex gaps. */
+        gap: calc(var(--fm-lede, 1) * 1.25rem);
+      }
+
+      :global(html.js) .fm-stage__title {
+        flex-shrink: 0;
+      }
+
+      /* `--ps` opens at 1 and runs to 0 across the intro beat, then holds.
+         Scrolling back is the same ramp in reverse. `1fr` cannot be multiplied
+         in calc, so the fold is a max-height — roomy enough for long locales. */
+      :global(html.js) .fm-lede {
+        flex-shrink: 0;
+        max-height: calc(var(--fm-lede, 1) * var(--fm-lede-h, 16rem));
+        opacity: var(--fm-lede, 1);
+        pointer-events: none;
+      }
+
+      /* The plate yields before the heading does. On a short window the art
+         is what shrinks — the surface title and its line stay readable. */
+      :global(html.js) .fm-stage__pin :global(.feature-map) {
+        min-height: 0;
+        flex: 1 1 auto;
+      }
+
+      :global(html.js) .fm-stage__pin :global([data-fm-art-stage]) {
+        max-height: min(16rem, 28vh);
+      }
+
+      /* Hint is the table talking. Once the plate is the screen, the title
+         is enough — the chips and the detail carry the rest. */
+      :global(html.js) .fm-stage__pin :global(.feature-map > p) {
+        display: none;
+      }
+    }
+  }
+</style>
+
+<script>
+  /** Size the lede fold to the paragraph itself so the plate rises with the
+   *  fade, instead of waiting until a generous max-height finally clips. */
+  let ledeWatch: ResizeObserver | null = null;
+
+  function measureFeatureLede() {
+    ledeWatch?.disconnect();
+    ledeWatch = null;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const els = document.querySelectorAll<HTMLElement>('.fm-lede');
+    if (!els.length) return;
+    ledeWatch = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const wrap = entry.target.closest<HTMLElement>('.fm-lede');
+        if (wrap) wrap.style.setProperty('--fm-lede-h', `${entry.target.scrollHeight}px`);
+      }
+    });
+    for (const el of els) {
+      const p = el.querySelector('p');
+      if (!p) continue;
+      el.style.setProperty('--fm-lede-h', `${p.scrollHeight}px`);
+      ledeWatch.observe(p);
+    }
+  }
+
+  document.addEventListener('astro:page-load', measureFeatureLede);
+  document.addEventListener('astro:before-swap', () => {
+    ledeWatch?.disconnect();
+    ledeWatch = null;
+  });
+  measureFeatureLede();
+</script>

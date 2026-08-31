@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { tr as legal } from '../legal/tr';
 
 export const tr = {
   nav: {
@@ -18,6 +19,16 @@ export const tr = {
     home: 'Ana sayfa',
     prevPage: 'Önceki sayfa',
     nextPage: 'Sonraki sayfa',
+    tourPlay: 'Turu oynat',
+    tourStop: 'Turu durdur',
+    tourTrack: 'Başka bir parça çal',
+    tourLeft: 'Kalan süre',
+    tourControls: 'Tur kontrolleri',
+    switchLang: 'Dili değiştir',
+    primaryNav: 'Ana',
+    mobileNav: 'Mobil',
+    onThisPage: 'Bu sayfada',
+    skipToContent: 'İçeriğe atla',
   },
   footer: {
     tagline: 'Neye ihtiyacınız olduğunu anlatın. Nexow onu kanvas üzerinde widget’lara dönüştürür.',
@@ -83,10 +94,8 @@ export const tr = {
     },
     hero: {
       badge: 'Erken erişim',
-      titleLead: 'Açıklayın.',
-      titleGradient: 'Nexow kurar.',
-      titleTail: 'Ticaret yapın.',
-      titleKicker: 'Saniyeler içinde — haftalar ya da aylar değil.',
+      title: 'Her şeyi kur. Her şeyi izle.',
+      titleKicker: 'Saniyeler içinde canlı gerçek zamanlı panolar — haftalar veya çeyrekler değil.',
       subtitle:
         'Neye ihtiyacınız olduğunu anlatın, Nexow onu kursun: gerçekten çalışan widget’lar, canlı veriye bağlı, sizin kontrolünüzdeki bir kanvasa yerleşmiş. Depremler, hava kalitesi, dünya göstergeleri, piyasa akışları ya da kendi veritabanınız — görselleştirin, izleyin ve harekete geçin.',
       ctaPrimary: 'Uygulamayı Başlat',
@@ -184,7 +193,7 @@ export const tr = {
     stats: [
       { n: 90, label: 'veri, cüzdanlar, sosyal ortamlar ve piyasalar için canlı bağlantı' },
       { n: 6, label: 'bir tuval üzerinde varlık sınıfı' },
-      { n: 10, suffix: 'K', label: 'kayıt sırasında ayrılmış ücretsiz yapay zeka kredisi' },
+      { n: 100, suffix: 'K', label: 'kayıt sırasında ayrılmış ücretsiz yapay zeka kredisi' },
       { n: 30, prefix: '<', suffix: 's', label: 'cümleden çalışan widgete kadar' },
     ],
     showcase: {
@@ -562,7 +571,7 @@ export const tr = {
         { status: 'shipped', title: 'Pazaryeri', body: 'Widget\'ler, temalar, ekranlar ve botlar yayınlayın ve yükleyin — her yeniden yapımın kaynağını gösteren soy kaydı ile.' },
         { status: 'shipped', title: 'İtibar ve Madalyalar', body: 'Yaptıklarınız ve paylaştıklarınız için puanlar, kademeli başarılar, nadir madalyalar ve seviyeler.' },
         { status: 'soon', title: 'Premium Widget\'ler ve Sinyaller', body: 'Premium widget\'ler ve strateji sinyalleri yayınlayın, başkalarının abone olmasına izin verin ve çalıştırdıklarınızda para kazanın.' },
-        { status: 'soon', title: 'Ücretli Planlar ve Ödül Kredileri', body: 'Supporter ve Sponsor ödemesi, platform kredileri ve itibarı ödül kredilerine dönüştürme.' },
+        { status: 'soon', title: 'Ücretli Planlar ve Ödül Kredileri', body: 'Lite ve Elite ödemesi, platform kredileri ve itibarı ödül kredilerine dönüştürme.' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const tr = {
         },
         {
           q: "Ne kadar tutar?",
-          a: "Free tam widget tuvalini, kütüphaneyi, bulut senkronunu, 10 botu, 3 ajanı, topluluk erişimini ve kayıtta 100.000 AI kredisini içerir. Supporter ve Sponsor aylık kredi, daha yüksek otomasyon kotası ve premium görünüm ekler — ödeme yakında. Tam karşılaştırma için Planlar’a bakın.",
+          a: "Free tam widget tuvalini, kütüphaneyi, bulut senkronunu, 10 botu, 3 ajanı, topluluk erişimini ve kayıtta 100.000 AI kredisini içerir. Lite ve Elite aylık kredi, daha yüksek otomasyon kotası ve premium görünüm ekler — ödeme yakında. Tam karşılaştırma için Planlar’a bakın.",
         },
       ],
     },
@@ -1348,7 +1357,7 @@ export const tr = {
     meta: {
       title: 'Planlar — Nexow',
       description:
-        'Sonsuza dek ücretsiz yapın — kendi anahtarınız ile yerel olarak çalıştırın veya ücretsiz bir hesapta 100.000 yapay zeka kredisi ayırtın. Krediler, botlar, ajanlar ve özelleştirme için Ücretsiz, Supporter, Sponsor ve Partner\'i karşılaştırın.',
+        'Sonsuza dek ücretsiz yapın — kendi anahtarınız ile yerel olarak çalıştırın veya ücretsiz bir hesapta 100.000 yapay zeka kredisi ayırtın. Krediler, botlar, ajanlar ve özelleştirme için Ücretsiz, Lite, Elite ve Partner\'i karşılaştırın.',
     },
     hero: {
       badge: 'Planlar',
@@ -1357,7 +1366,7 @@ export const tr = {
         'Ücretsiz yapın — kendi anahtarınız ile yerel olarak çalıştırın veya 100.000 yapay zeka kredisi ayırtmak için kaydolun. Daha fazla kapasite, otomasyon ve cilaya ihtiyaç duyduğunuzda yükseltin.',
     },
     comingSoon:
-      'Supporter ve Sponsor kasası yakında geliyor ve platform kredileri yanında başlatılıyor. Bugün herkes Ücretsiz\'te — faturalama açıldığında ilk olarak olmak için hesap oluşturun.',
+      'Lite ve Elite kasası yakında geliyor ve platform kredileri yanında başlatılıyor. Bugün herkes Ücretsiz\'te — faturalama açıldığında ilk olarak olmak için hesap oluşturun.',
     highlights: {
       title: 'Planınız ile Ölçeklenen',
       items: [
@@ -1411,18 +1420,18 @@ export const tr = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'Daha Fazla Yer İsteyenler İçin.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
         billedYearly: 'Yıllık $99.90 Faturalandırılır',
         cadence: '/ay',
-        stats: ['50K Kredi/Ay', '30 Bot', '10 Ajan'],
+        stats: ['670K Kredi/Ay', '30 Bot', '10 Ajan'],
         note: 'Ücretsiz İçinde Her Şey, Artı:',
-        cta: 'Supporter Olun',
+        cta: 'Lite Olun',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          'Her ay 115.000 kredi',
+          'Her ay 670.000 kredi',
           '30 bota ve 10 ajana kadar',
           'İkinci vurgu rengi (gradyanlar)',
           'Sekiz kanvas deseni, widget yüzeyi ve panel camı daha',
@@ -1431,20 +1440,20 @@ export const tr = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'Profesyonel Güç Kullanıcıları İçin.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
         billedYearly: 'Yıllık $699.90 Faturalandırılır',
         cadence: '/ay',
         badge: 'En İyi Dönüş',
-        stats: ['800K Kredi/Ay', '300 Bot', '100 Ajan'],
-        note: 'Supporter İçinde Her Şey, Artı:',
-        cta: 'Sponsor Olun',
+        stats: ['4.7M Kredi/Ay', '300 Bot', '100 Ajan'],
+        note: 'Lite İçinde Her Şey, Artı:',
+        cta: 'Elite Olun',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          'Her ay 800.000 kredi',
+          'Her ay 4.675.000 kredi',
           '300 bota ve 100 ajana kadar',
           'İki kanvas deseni ve açılış ekranı daha, ayrıca aurora ince ayarı',
           'Karmaşık kurulumlar için öncelikli destek',
@@ -1460,7 +1469,7 @@ export const tr = {
         priceYearly: 'Özel',
         cadence: '',
         stats: ['Özel Altyapı', 'Beyaz Eldiven', 'SLA'],
-        note: 'Sponsor İçinde Her Şey, Artı:',
+        note: 'Elite İçinde Her Şey, Artı:',
         cta: 'Bize Ulaşın',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1480,15 +1489,15 @@ export const tr = {
       },
       {
         q: "Krediler nedir?",
-        a: "Krediler AI kullanımını ölçer: widget üretmek, konuşmayla düzenlemek, bağlantı oluşturmak ve Copilot kullanmak. Bir kredi, sağlayıcı maliyetinde bir Sonnet çıktı token’ına eşittir; bu yüzden fiyat seçtiğiniz modele bağlı değildir — Haiku bir krediyi yaklaşık 3 tokene uzatır; Opus yaklaşık 0,6’da tüketir. Free kayıtta 100.000 ayırır; Supporter ayda 115.000 verir; Sponsor 800.000 — paketleri istediğiniz zaman alabilirsiniz.",
+        a: "Krediler AI kullanımını ölçer: widget üretmek, konuşmayla düzenlemek, bağlantı oluşturmak ve Copilot kullanmak. Bir kredi, sağlayıcı maliyetinde bir Sonnet çıktı token’ına eşittir; bu yüzden fiyat seçtiğiniz modele bağlı değildir — Haiku bir krediyi yaklaşık 2 tokene uzatır; Opus yaklaşık 0,4’da tüketir. Free kayıtta 100.000 ayırır; Lite ayda 670.000 verir; Elite 4.675.000 — paketleri istediğiniz zaman alabilirsiniz.",
       },
       {
         q: "Ücretli planlar ne zaman başlar?",
-        a: "Supporter ve Sponsor tanımlı ve uygulamada gösteriliyor ama ücretli ödeme yakında. Bugün herkes Free’de — faturalama açıldığında önde olmak için hesap oluşturun.",
+        a: "Lite ve Elite tanımlı ve uygulamada gösteriliyor ama ücretli ödeme yakında. Bugün herkes Free’de — faturalama açıldığında önde olmak için hesap oluşturun.",
       },
       {
         q: "Yıllık ödeyebilir miyim?",
-        a: "Evet. Yıllık faturalama aylığa göre iki ay ücretsiz verir — Supporter için yılda $99,90, Sponsor için $699,90. Aylık ile yıllık arasında istediğiniz zaman geçebilirsiniz.",
+        a: "Evet. Yıllık faturalama aylığa göre iki ay ücretsiz verir — Lite için yılda $99,90, Elite için $699,90. Aylık ile yıllık arasında istediğiniz zaman geçebilirsiniz.",
       },
       {
         q: "İtibar nasıl hesaplanır?",
@@ -1704,7 +1713,7 @@ export const tr = {
   waitlist: {
     eyebrow: 'Faturalandırma bekleme listesi',
     title: 'Ödeme çok yakında',
-    subtitle: 'Supporter ve Sponsor faturalandırması çok yakında geliyor. E-postanızı bırakın, ödeme açıldığı gün haber verelim — spam yok.',
+    subtitle: 'Lite ve Elite faturalandırması çok yakında geliyor. E-postanızı bırakın, ödeme açıldığı gün haber verelim — spam yok.',
     placeholder: 'siz@email.com',
     submit: 'Bekleme listesine katıl',
     submitting: 'Katılıyor…',
@@ -2028,7 +2037,7 @@ export const tr = {
     subtitle: 'Her gönderi, widget, bot ve yayın tek bir puanı besler. Puan rozetleri açar, rozetler seviyeleri açar — ve DAO açıldığında ikisi de kredi ve yönetişim tokenı olarak ödeme yapar.',
     live: 'Uygulamada aktif',
     planned: 'Planlanan',
-    plannedNote: 'Puanlar, rozetler ve seviyeler bugün uygulamada aktif. Kredi ve NXW ödemeleri Nexow DAO ile geliyor — NXW 14 Ağustos 2026’da dry mint yapıyor. Aşağıdaki takvim, ilk oylamaya gidecek öneridir.',
+    plannedNote: 'Puanlar, rozetler, seviyeler ve ücretsiz kredi ödülleri bugün uygulamada aktif. NXW ödemeleri ve seviye bonusları Nexow DAO ile geliyor — NXW 14 Ağustos 2026’da dry mint yapıyor.',
     teaser: {
       badges: 'Ürettikleriniz ve yayınladıklarınız için madalyalar',
       levels: 'İtibar puanlarıyla açılan rütbeler',
@@ -2102,7 +2111,7 @@ export const tr = {
         commentsReceived: 'Alınan yorumlar',
         followers: 'Takipçiler',
         following: 'Takip ettikleriniz',
-        contacts: 'Karşılıklı kişiler',
+        friends: 'Karşılıklı kişiler',
         widgetsBuilt: 'Kurulan widget’lar',
         assetsPublished: 'Yayınlanan varlıklar',
         installsReceived: 'Çalışmalarınızın kurulumları',
@@ -2112,6 +2121,18 @@ export const tr = {
         likesGiven: 'Verilen beğeniler',
         reactionsGiven: 'Verilen tepkiler',
         nightPosts: '00:00 ile 05:00 arası gönderiler',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'Açılan DM konuşmaları',
       },
       how: {
@@ -2122,7 +2143,7 @@ export const tr = {
         commentsReceived: 'Gönderilerinize yorum alın.',
         followers: 'Profilinizde takipçi kazanın.',
         following: 'Nexow’da başkalarını takip edin.',
-        contacts: 'Karşılıklı kişiler ekleyin — takip ettiğiniz ve sizi geri takip edenler.',
+        friends: 'Karşılıklı kişiler ekleyin — takip ettiğiniz ve sizi geri takip edenler.',
         widgetsBuilt: 'Kanvasınızda widget kurun.',
         assetsPublished: 'Pazar yerine varlık yayınlayın.',
         installsReceived: 'Yayınladığınız widget, bot veya temalar kurulsun.',
@@ -2153,6 +2174,15 @@ export const tr = {
         emojiSommelier: 'Emoji somelyesi',
         nightOwl: 'Gece kuşu',
         penPal: 'Mektup arkadaşı',
+        greenLight: 'Yeşil ışık',
+        buildFlagger: 'Derleme bildiren',
+        tagClose: 'Arkadaş',
+        tagFamily: 'Aile',
+        tagWork: 'Meslektaş',
+        tagTeam: 'Takım arkadaşı',
+        tagSchool: 'Sınıf arkadaşı',
+        tagMentor: 'Mentor',
+        tagFavorite: 'Favoriler',
         oracle: 'Kâhin',
         agora: 'Agora',
         catalyst: 'Katalizör',
@@ -2163,6 +2193,9 @@ export const tr = {
         benefactor: 'Hayırsever',
         midnightSun: 'Gece yarısı güneşi',
         nexus: 'Nexus',
+        tagPartner: 'Partner',
+        tagLove: 'Aşık',
+        rolodex: 'Rolodex',
         immortal: 'Ölümsüz',
         folkHero: 'Halk kahramanı',
         luminary: 'Aydınlatıcı',
@@ -2185,7 +2218,11 @@ export const tr = {
         bronze: 'Bronz kademe',
         silver: 'Gümüş kademe',
         gold: 'Altın kademe',
+        tagBronze: 'Arkadaş · bronze',
+        tagSilver: 'Arkadaş · silver',
+        tagGold: 'Arkadaş · gold',
         rare: 'Nadir madalya',
+        tagRare: 'Arkadaş · rare',
         legendary: 'Efsanevi madalya',
       },
       levelRow: '{level} seviyesine ulaş',
@@ -2194,7 +2231,7 @@ export const tr = {
       creditsLabel: 'kredi',
       tokensLabel: 'NXW',
       worth: '≈ liste fiyatıyla {usd} değerinde yapay zekâ üretimi',
-      months: '= kazanılmış {n} aylık Sponsor seviyesinde üretim',
+      months: '= kazanılmış {n} aylık Elite seviyesinde üretim',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'Tek token. Beş görev. En fazla yirmi milyon.',
@@ -2304,4 +2341,9 @@ export const tr = {
       packCta: 'Uygulamayı aç',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 } as unknown as SiteContent;

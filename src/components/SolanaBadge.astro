@@ -2,8 +2,8 @@
 /**
  * Solana chip — official logomark + wordmark, linking out to solana.com.
  * Used wherever the site says NXW settles on Solana (community DAO section,
- * plans tokenomics panel). Styled for the dark sections; pass `class` to
- * tune spacing at the call site.
+ * plans tokenomics panel, home DAO act). Theme-aware via `--w-*` when inside
+ * the home world; falls back to the dark-section look elsewhere.
  */
 import { SITE } from '../i18n/config';
 
@@ -20,14 +20,11 @@ const uid = `solana-${Math.random().toString(36).slice(2, 8)}`;
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Solana"
-  class:list={[
-    'group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-2 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-accent-400/40 hover:bg-white/[0.1]',
-    className,
-  ]}
+  class:list={['chain-badge group', className]}
 >
   <svg
     viewBox="0 0 397.7 311.7"
-    class="h-3 w-auto shrink-0 transition-transform duration-300 group-hover:scale-110"
+    class="chain-badge__mark h-3 w-auto shrink-0 transition-transform duration-300 group-hover:scale-110"
     aria-hidden="true"
   >
     <linearGradient id={uid} gradientUnits="userSpaceOnUse" x1="360.9" y1="-37.5" x2="141.2" y2="383.3">
@@ -47,5 +44,29 @@ const uid = `solana-${Math.random().toString(36).slice(2, 8)}`;
       d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z"
     ></path>
   </svg>
-  <span class="font-display text-sm font-semibold text-white">Solana</span>
+  <span class="chain-badge__label font-display text-sm font-semibold">Solana</span>
 </a>
+
+<style>
+  .chain-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--w-line, rgba(255, 255, 255, 0.15));
+    background: var(--w-panel-2, rgba(255, 255, 255, 0.06));
+    padding: 0.5rem 0.875rem;
+    color: var(--w-text, #fff);
+    backdrop-filter: blur(8px);
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .chain-badge:hover {
+    transform: translateY(-0.125rem);
+    border-color: color-mix(in oklab, var(--color-accent-400) 40%, transparent);
+    background: var(--w-panel, rgba(255, 255, 255, 0.1));
+  }
+</style>

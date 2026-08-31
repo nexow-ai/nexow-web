@@ -1,0 +1,622 @@
+---
+/**
+ * The scroll tour's transport, centred at the foot of the screen.
+ *
+ * It exists only while the tour is running: once the page is scrolling itself,
+ * the header's play button is somewhere above the fold and out of reach, and
+ * the two questions a hands-free visitor has — how long is left, and can I have
+ * a different record — have nowhere else to be answered.
+ *
+ * Five controls, in the order they are wanted: stop, the countdown, the
+ * scroll rate, light/dark, and a new song. Above the pill, the title of
+ * whichever record is on stays visible for the whole tour, marked with
+ * a music glyph. None of them
+ * speaks to the tour directly. The pill dispatches `nexow:tourtoggle`,
+ * `nexow:tracknext` and `nexow:tourpace`, which the tour (`Header.astro`) and
+ * the deck (`TourSound.astro`) answer, and it listens for `nexow:tour`,
+ * `nexow:tourtime` and `nexow:track` coming back. The theme button is the
+ * same control as the header's (`ThemeToggle.astro`): the circular wipe
+ * starts from whichever one was pressed. That keeps the transport a piece
+ * of chrome that can ship on every route while the machinery stays where
+ * it belongs.
+ *
+ * `data-tour-control` is the other half of the contract: any intent to move the
+ * page yourself ends the tour, and these buttons are the exception.
+ */
+import { useContent } from '../i18n/content';
+import { getLangFromUrl } from '../i18n/utils';
+import Icon from './Icon.astro';
+
+const t = useContent(getLangFromUrl(Astro.url));
+/* Optional, English fallback: no locale bundle has to change for this to ship. */
+const tourStop = t.nav.tourStop ?? 'Stop the tour';
+const tourTrack = t.nav.tourTrack ?? 'Play a different song';
+/** One-time label beside the track icon until the visitor uses it once. */
+const tourTrackHint = t.nav.tourTrackHint ?? 'Change Me';
+const tourLeft = t.nav.tourLeft ?? 'Time left';
+const tourControls = t.nav.tourControls ?? 'Tour controls';
+const tourPace = t.nav.tourPace ?? 'Scroll speed';
+/** One-time label beside the pace control — shown after the track hint. */
+const tourPaceHint = t.nav.tourPaceHint ?? 'Go Faster';
+const themeToDark = t.nav.themeToDark ?? 'Switch to dark mode';
+const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
+---
+
+{/* A landmark, not a bare div: the countdown is page content, and content
+    outside every landmark is content a screen reader can only reach by
+    walking the whole page (axe's `region` rule, `accessibility-axe.test.ts`). */}
+<section
+  id="tour-hud"
+  class="tour-hud"
+  aria-label={tourControls}
+  data-playing="false"
+  transition:animate="none"
+>
+  <div class="tour-hud__stack">
+    <p class="tour-hud__now" aria-live="polite" data-has-track="false" hidden>
+      <Icon name="music" class="tour-hud__now-icon size-3" />
+      <span class="tour-hud__now-title"></span>
+      <a
+        class="tour-hud__now-youtube"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open on YouTube"
+        data-tour-control
+        hidden
+      >
+        <Icon name="youtube" class="tour-hud__now-yt-icon size-3" />
+      </a>
+    </p>
+
+    <div class="tour-hud__pill">
+      <button
+        type="button"
+        class="tour-hud__btn"
+        data-tour-control
+        data-tour-action="toggle"
+        aria-label={tourStop}
+      >
+        <Icon name="pause" class="tour-hud__icon size-4" />
+      </button>
+
+      <p class="tour-hud__time" role="timer" aria-live="off">
+        <span class="sr-only">{tourLeft}</span>
+        <span class="tour-hud__clock">0:00</span>
+      </p>
+
+      <button
+        type="button"
+        class="tour-hud__btn tour-hud__btn--pace"
+        data-tour-control
+        data-tour-action="pace"
+        data-rate="1"
+        data-pace-label={tourPace}
+        aria-label={`${tourPace} x1`}
+      >
+        <span class="tour-hud__pace">x1</span>
+        <span class="tour-hud__pace-hint">{tourPaceHint}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tour-hud__btn"
+        data-tour-control
+        data-theme-toggle
+        data-to-dark={themeToDark}
+        data-to-light={themeToLight}
+        aria-label={themeToDark}
+      >
+        <Icon name="moon" class="tour-hud__icon theme-glyph-dark size-4" />
+        <Icon name="sun" class="tour-hud__icon theme-glyph-light size-4" />
+      </button>
+
+      <button
+        type="button"
+        class="tour-hud__btn tour-hud__btn--track"
+        data-tour-control
+        data-tour-action="track"
+        aria-label={tourTrack}
+      >
+        <Icon name="music" class="tour-hud__icon size-4" />
+        <span class="tour-hud__track-hint">{tourTrackHint}</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tour-hud {
+    position: fixed;
+    inset-inline: 0;
+    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px))
+      max(0.75rem, env(safe-area-inset-right, 0px));
+    pointer-events: none;
+    transition:
+      opacity 0.35s ease,
+      transform 0.45s var(--ease-out-expo),
+      visibility 0.35s;
+  }
+
+  @media (min-width: 640px) {
+    .tour-hud {
+      bottom: max(1.5rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)));
+    }
+  }
+
+  /* Gone entirely while the tour is not running: no stray tab stop, nothing
+     for a screen reader to read out, nothing sitting over the page. */
+  .tour-hud[data-playing='false'] {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+
+  .tour-hud[data-playing='true'] .tour-hud__pill {
+    pointer-events: auto;
+  }
+
+  .tour-hud__stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: min(22rem, calc(100vw - 1.5rem));
+  }
+
+  /* Now-playing label sits above the pill for the whole tour — notes + title,
+     so a long guest cut never stretches the dock. */
+  .tour-hud__now {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    max-width: 100%;
+    padding: 0.28rem 0.85rem 0.28rem 0.7rem;
+    border-radius: 9999px;
+    font-family: var(--font-display, var(--font-sans));
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    color: var(--color-ink-800);
+    border: 1px solid color-mix(in oklab, white 62%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, white 62%, transparent),
+      color-mix(in oklab, white 24%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 8px 20px -8px rgb(0 0 0 / 0.22),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+    transition:
+      color 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  .tour-hud__now[hidden] {
+    display: none;
+  }
+
+  .tour-hud__now-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The dock is pointer-events: none; re-enable the credit so the YouTube link works. */
+  .tour-hud[data-playing='true'] .tour-hud__now {
+    pointer-events: auto;
+  }
+
+  .tour-hud__now-youtube {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: #ff0000;
+    line-height: 0;
+    opacity: 0.92;
+    transition: opacity 0.2s ease;
+  }
+
+  .tour-hud__now-youtube:hover,
+  .tour-hud__now-youtube:focus-visible {
+    opacity: 1;
+  }
+
+  .tour-hud__now-youtube[hidden] {
+    display: none;
+  }
+
+  /* `<Icon>` svg is unscoped — paint through :global so the glyph inherits. */
+  .tour-hud__now :global(.tour-hud__now-icon) {
+    flex-shrink: 0;
+    color: inherit;
+  }
+
+  .tour-hud__now :global(.tour-hud__now-yt-icon) {
+    display: block;
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  /* The same crystal glass as the corner arrows (`PageNav.astro`), drawn long. */
+  .tour-hud__pill {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border-radius: 9999px;
+    color: var(--color-ink-800);
+    border: 1px solid color-mix(in oklab, white 62%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in oklab, white 62%, transparent),
+      color-mix(in oklab, white 24%, transparent)
+    );
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow:
+      0 10px 26px -8px rgb(0 0 0 / 0.28),
+      0 2px 6px -2px rgb(0 0 0 / 0.12),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+    /* The pill changes tone under a moving page, at the seam between two
+       bands — a cut there reads as a flicker, a fade as the glass catching
+       the light of the room it has just entered. */
+    transition:
+      color 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .tour-hud__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    color: inherit;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease,
+      transform 0.3s var(--ease-out-expo);
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tour-hud__btn:hover {
+      background: color-mix(in oklab, white 55%, transparent);
+      transform: scale(1.06);
+    }
+  }
+
+  .tour-hud__btn:active {
+    transform: scale(0.96);
+  }
+
+  .tour-hud__btn:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  /* Wide enough for `x0.25` so cycling the rate never grows the pill. */
+  .tour-hud__btn--pace {
+    width: 3.15rem;
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn--pace {
+      width: 2.85rem;
+    }
+  }
+
+  .tour-hud__pace {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .tour-hud__pace-hint {
+    display: none;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .tour-hud__btn--pace-labeled {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: auto;
+    min-width: 3.15rem;
+    padding-inline: 0.55rem 0.75rem;
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn--pace-labeled {
+      min-width: 2.85rem;
+      padding-inline: 0.5rem 0.65rem;
+    }
+  }
+
+  .tour-hud__btn--pace-labeled .tour-hud__pace-hint {
+    display: inline;
+  }
+
+  .tour-hud__btn--pace-seen .tour-hud__pace-hint {
+    display: none;
+  }
+
+  /* Tabular figures, so the seconds ticking down never shift the pill's width. */
+  .tour-hud__time {
+    min-width: 3.25rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-700);
+    transition: color 0.3s ease;
+  }
+
+  /* Glass over ink, not frost — for a dark page, and for a light page whose
+     band under the transport is the dark one. The pill is fixed and the home
+     page's bands alternate tone beneath it, so painting from the page theme
+     alone left the glyphs white on white for half the story;
+     `components/ChromeTone.astro` stamps `.chrome-invert` while the band
+     behind disagrees with the page, and the two selectors are the same rule
+     read from either side. */
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__pill,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__pill,
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__now,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__now {
+    color: white;
+    border-color: rgb(255 255 255 / 0.2);
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05));
+    box-shadow:
+      0 14px 34px -10px rgb(0 0 0 / 0.7),
+      inset 0 1px 0 rgb(255 255 255 / 0.3);
+  }
+
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__btn:hover,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__btn:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  :global(html.dark) .tour-hud:not(.chrome-invert) .tour-hud__time,
+  :global(html:not(.dark)) .tour-hud.chrome-invert .tour-hud__time {
+    color: var(--color-ink-200);
+  }
+
+  /* `<Icon>` renders its <svg> from an expression, so Astro cannot stamp the
+     scope attribute on it — the button carries the scope, the icon goes global. */
+  .tour-hud__btn :global(.tour-hud__icon) {
+    pointer-events: none;
+  }
+
+  /* First time only: "Change Me" after the music icon teaches what the button does. */
+  .tour-hud__btn--track:not(.tour-hud__btn--track-seen) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: auto;
+    min-width: 2.75rem;
+    padding-inline: 0.55rem 0.75rem;
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .tour-hud__btn--track:not(.tour-hud__btn--track-seen) {
+      min-width: 2.25rem;
+      padding-inline: 0.5rem 0.65rem;
+    }
+  }
+
+  .tour-hud__track-hint {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .tour-hud__btn--track-seen .tour-hud__track-hint {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tour-hud,
+    .tour-hud__pill,
+    .tour-hud__now,
+    .tour-hud__time,
+    .tour-hud__btn {
+      transition: none;
+    }
+    .tour-hud__btn:hover,
+    .tour-hud__btn:active {
+      transform: none;
+    }
+  }
+
+  @media print {
+    .tour-hud {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import {
+    clock,
+    cycleTourRate,
+    dismissPaceHint,
+    dismissTrackHint,
+    paceHintDismissed,
+    paceMark,
+    setTourRate,
+    TOUR_RATE_DEFAULT,
+    TOUR_RATE_INTRO,
+    tourRate,
+    trackHintDismissed,
+  } from '../lib/tour';
+
+  let hudAbort: AbortController | undefined;
+
+  function paintTrackHint(btn: HTMLButtonElement | null) {
+    if (!btn) return;
+    btn.classList.toggle('tour-hud__btn--track-seen', trackHintDismissed());
+  }
+
+  function paintPaceHint(btn: HTMLButtonElement | null) {
+    if (!btn) return;
+    const labeled = trackHintDismissed() && !paceHintDismissed();
+    btn.classList.toggle('tour-hud__btn--pace-labeled', labeled);
+    btn.classList.toggle('tour-hud__btn--pace-seen', paceHintDismissed());
+  }
+
+  function hideTrackHint(btn: HTMLButtonElement, paceBtn: HTMLButtonElement | null) {
+    btn.classList.add('tour-hud__btn--track-seen');
+    dismissTrackHint();
+    paintPaceHint(paceBtn);
+  }
+
+  function hidePaceHint(btn: HTMLButtonElement) {
+    btn.classList.remove('tour-hud__btn--pace-labeled');
+    btn.classList.add('tour-hud__btn--pace-seen');
+    dismissPaceHint();
+  }
+
+  function paintPace(btn: HTMLButtonElement) {
+    const current = tourRate();
+    const mark = paceMark(current);
+    btn.dataset.rate = String(current);
+    const face = btn.querySelector('.tour-hud__pace');
+    if (face) face.textContent = mark;
+    const stem = btn.dataset.paceLabel ?? 'Scroll speed';
+    btn.setAttribute('aria-label', `${stem} ${mark}`);
+  }
+
+  function initTourHud() {
+    hudAbort?.abort();
+    hudAbort = new AbortController();
+    const { signal } = hudAbort;
+
+    const hud = document.getElementById('tour-hud');
+    if (!hud) return;
+    const face = hud.querySelector('.tour-hud__clock');
+    const now = hud.querySelector<HTMLElement>('.tour-hud__now');
+    const nowTitle = hud.querySelector('.tour-hud__now-title');
+    const nowYoutube = hud.querySelector<HTMLAnchorElement>('.tour-hud__now-youtube');
+    const paceBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="pace"]');
+    const trackBtn = hud.querySelector<HTMLButtonElement>('[data-tour-action="track"]');
+    if (!paceHintDismissed()) setTourRate(TOUR_RATE_INTRO);
+    if (paceBtn) paintPace(paceBtn);
+    paintPaceHint(paceBtn);
+    paintTrackHint(trackBtn);
+
+    function paintTrack(track: { title: string; youtube?: string } | null) {
+      if (!now || !nowTitle) return;
+      if (!track) {
+        now.hidden = true;
+        now.dataset.hasTrack = 'false';
+        nowTitle.textContent = '';
+        if (nowYoutube) {
+          nowYoutube.hidden = true;
+          nowYoutube.removeAttribute('href');
+        }
+        return;
+      }
+      nowTitle.textContent = track.title;
+      now.dataset.hasTrack = 'true';
+      now.hidden = false;
+      if (nowYoutube) {
+        if (track.youtube) {
+          nowYoutube.href = track.youtube;
+          nowYoutube.hidden = false;
+        } else {
+          nowYoutube.hidden = true;
+          nowYoutube.removeAttribute('href');
+        }
+      }
+    }
+
+    document.addEventListener(
+      'nexow:tour',
+      (event) => {
+        const { playing } = (event as CustomEvent<{ playing: boolean }>).detail;
+        hud.dataset.playing = String(playing);
+        if (!playing) paintTrack(null);
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      'nexow:track',
+      (event) => {
+        const detail = (event as CustomEvent<{ title: string; youtube?: string } | null>).detail;
+        paintTrack(detail);
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      'nexow:tourtime',
+      (event) => {
+        const { remaining } = (event as CustomEvent<{ remaining: number }>).detail;
+        if (face) face.textContent = clock(remaining);
+      },
+      { signal },
+    );
+
+    for (const btn of hud.querySelectorAll<HTMLButtonElement>('[data-tour-action]')) {
+      btn.addEventListener(
+        'click',
+        () => {
+          if (btn.dataset.tourAction === 'pace') {
+            if (btn.classList.contains('tour-hud__btn--pace-labeled')) {
+              hidePaceHint(btn);
+              setTourRate(TOUR_RATE_DEFAULT);
+              paintPace(btn);
+              document.dispatchEvent(new CustomEvent('nexow:tourpace', { detail: { rate: tourRate() } }));
+              return;
+            }
+            cycleTourRate();
+            paintPace(btn);
+            document.dispatchEvent(new CustomEvent('nexow:tourpace', { detail: { rate: tourRate() } }));
+            return;
+          }
+          if (btn.dataset.tourAction === 'track') {
+            hideTrackHint(btn, paceBtn);
+            document.dispatchEvent(new Event('nexow:tracknext'));
+            return;
+          }
+          document.dispatchEvent(new Event('nexow:tourtoggle'));
+        },
+        { signal },
+      );
+    }
+  }
+
+  document.addEventListener('astro:page-load', initTourHud);
+  document.addEventListener('astro:before-swap', () => hudAbort?.abort());
+</script>

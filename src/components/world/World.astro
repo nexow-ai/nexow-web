@@ -1,0 +1,428 @@
+---
+/**
+ * The theatre the home story plays inside — hero, acts, and the rest of the
+ * page through the footer. The camera never cuts; the white band after the
+ * use cases was a false floor and is gone.
+ *
+ * The hero used to sit outside this stage, on the page's own light surface,
+ * with the WebGL world only fading in once the acts began. That put the whole
+ * point of the page one screen below the fold. The hero is now scene 0 of the
+ * same world, and the later sections (surfaces, privacy, plans, rewards, FAQ,
+ * CTA, footer) are later beats of the same room.
+ *
+ * Theme tokens still flip. The field is the same volume in both themes; only
+ * the ink behind it changes. `global.css` repaints the header for the one
+ * case this creates: light-theme chrome floating over the world before the
+ * first scroll.
+ *
+ * Four layers, and the order matters:
+ *   1. .world__bands   solid page-tone / invert boxes (behind the matter).
+ *   2. .world-field    the WebGL screens, clear-alpha, fixed to the viewport.
+ *   3. .world__crown   header fade.
+ *   4. .world__content the story, no opaque ground, always above the matter.
+ *
+ * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
+ * field paints under the content and over the ink instead of over the header.
+ * Nothing here may set `overflow`, which would break the `position: sticky`
+ * every act depends on.
+ *
+ * Every direct child that the camera should treat as a beat carries
+ * `data-world-scene`; `WorldField` reads them in document order and maps scene
+ * *i* to formation *i*. Adding a scene without adding a formation leaves the
+ * matter holding its last shape — safe, but the act will not have its own.
+ */
+import WorldField from './WorldField.astro';
+---
+
+<div class="world">
+  <div class="world__bands" aria-hidden="true"></div>
+  <WorldField />
+  {/* Header band. The header is transparent until 8px of scroll and the world
+      runs to the top of the document, so without this the panels cross the nav
+      labels. Sits on the field's layer and after it, so it darkens the world
+      without touching the content above. */}
+  <div class="world__crown" aria-hidden="true"></div>
+  <div class="world__content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  /**
+   * Pointer parallax for the DOM scenes.
+   *
+   * `WorldField` already moves its camera with the cursor. Without this the six
+   * act scenes stay locked flat to the screen while the world behind them
+   * drifts, and the two layers read as unrelated pictures rather than one
+   * space. This writes `--mx` and `--my` (-1…1, damped) onto the world; each
+   * act scene turns them into a shift of its own `perspective-origin`, which is
+   * the one way to look around a CSS 3D scene without touching the transforms
+   * the scroll ramps already compose.
+   *
+   * The loop is self-terminating: it runs only while the damped value is still
+   * catching up to the cursor, so a still mouse costs nothing.
+   *
+   * Never on coarse pointers (there is no cursor to follow) and never under
+   * reduced motion.
+   */
+  /* The act scenes, written to directly. These used to be written to `.world`
+   * and inherited — one write, but a style invalidation of every element in
+   * the world on every mouse move. Five scene subtrees are a fraction of it. */
+  let targets: HTMLElement[] = [];
+  let raf = 0;
+  let aimX = 0;
+  let aimY = 0;
+  let curX = 0;
+  let curY = 0;
+
+  function tick() {
+    raf = 0;
+    if (!targets.length) return;
+    curX += (aimX - curX) * 0.08;
+    curY += (aimY - curY) * 0.08;
+    const mx = curX.toFixed(4);
+    const my = curY.toFixed(4);
+    for (const el of targets) {
+      el.style.setProperty('--mx', mx);
+      el.style.setProperty('--my', my);
+    }
+    if (Math.abs(aimX - curX) > 0.002 || Math.abs(aimY - curY) > 0.002) {
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  function onPointer(e: PointerEvent) {
+    aimX = (e.clientX / window.innerWidth) * 2 - 1;
+    aimY = 1 - (e.clientY / window.innerHeight) * 2;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  let bandRo: ResizeObserver | null = null;
+
+  /**
+   * One solid box per section, painted *under* the field so the matter keeps
+   * showing on both tones. Page-tone boxes and invert boxes abut — no fade.
+   */
+  function syncBands() {
+    const world = document.querySelector('.world');
+    const content = world?.querySelector('.world__content');
+    const bands = world?.querySelector('.world__bands');
+    if (!(world instanceof HTMLElement)) return;
+    if (!(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
+    /* One box per world scene, not per content wrapper: acts 01 and 02 live
+     * in the same span so the mock can pin across both, but they are still
+     * opposite tones. */
+    const kids = Array.from(world.querySelectorAll<HTMLElement>('[data-world-scene]')).filter(
+      (el) => el.offsetHeight > 0,
+    );
+    while (bands.children.length < kids.length) {
+      bands.appendChild(document.createElement('div'));
+    }
+    while (bands.children.length > kids.length) bands.lastElementChild?.remove();
+    const worldTop = world.getBoundingClientRect().top + window.scrollY;
+    kids.forEach((kid, i) => {
+      const rect = kid.getBoundingClientRect();
+      const band = bands.children[i] as HTMLElement;
+      const invert = kid.classList.contains('tone-invert') || !!kid.closest('.tone-invert');
+      band.className = invert ? 'world__band world__band--invert' : 'world__band';
+      band.style.top = `${Math.round(rect.top + window.scrollY - worldTop)}px`;
+      band.style.height = `${Math.round(rect.height)}px`;
+    });
+  }
+
+  function teardownWorld() {
+    window.removeEventListener('pointermove', onPointer);
+    window.removeEventListener('resize', syncBands);
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    targets = [];
+    bandRo?.disconnect();
+    bandRo = null;
+  }
+
+  function initWorld() {
+    teardownWorld();
+    syncBands();
+    const content = document.querySelector('.world__content');
+    if (content) {
+      bandRo = new ResizeObserver(syncBands);
+      bandRo.observe(content);
+      for (const kid of content.querySelectorAll('[data-world-scene]')) bandRo.observe(kid);
+    }
+    window.addEventListener('resize', syncBands, { passive: true });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+    targets = Array.from(document.querySelectorAll<HTMLElement>('.world .act-scene'));
+    if (!targets.length) return;
+    window.addEventListener('pointermove', onPointer, { passive: true });
+  }
+
+  document.addEventListener('astro:page-load', initWorld);
+  document.addEventListener('astro:before-swap', teardownWorld);
+  if (document.readyState !== 'loading') initWorld();
+</script>
+
+<style>
+  /* The world's own palette, flipping with the page theme. Every act and the
+   * hero paint from these rather than from literal whites and inks, which is
+   * what lets one dark-native design read as a light stage without a second
+   * copy of every rule. Light values are picked for AA on the light surface;
+   * dark values are the ones the stage was built with. */
+  .world {
+    position: relative;
+    z-index: 0;
+    --w-surface: #ffffff;
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-accent-2: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
+    --w-panel: rgba(255, 255, 255, 0.84);
+    --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    --w-shadow: rgba(15, 23, 42, 0.22);
+    --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    /* Wash strength: the colour behind the matter. Quieter on a light page. */
+    --w-wash: 0.45;
+    --w-band: #000000;
+    background: var(--w-surface);
+    color: var(--w-text);
+  }
+
+  :global(.dark) .world {
+    --w-surface: #000000;
+    --w-band: #ffffff;
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-accent-2: var(--color-brand-400);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-line-soft: rgba(255, 255, 255, 0.08);
+    --w-panel: rgba(9, 12, 20, 0.9);
+    --w-panel-2: rgba(255, 255, 255, 0.04);
+    --w-shadow: rgba(0, 0, 0, 0.85);
+    --w-rail: rgba(255, 255, 255, 0.22);
+    --w-wash: 1;
+  }
+
+  /* Studio beats (features onward). A lifted dusk, not a white slab: the
+   * same room, more light in it, so the later copy still reads and the
+   * screens read as product surfaces rather than theatre glass. */
+  :global(.dark) .world.world--day {
+    --w-wash: 0.72;
+    --w-panel: rgba(16, 20, 30, 0.78);
+  }
+
+  :global(html:not(.dark)) .world.world--day {
+    --w-wash: 0.38;
+  }
+
+  /* Opposite of the page theme. Ground is painted on `.world__bands` (under
+   * the field) so the screens stay visible; this wrapper only flips type.
+   * Transparent here beats the opaque `html.dark .tone-invert` in global.css. */
+  :global(html.dark) .world :global(.tone-invert) {
+    --w-surface: #ffffff;
+    --w-text: var(--color-ink-950);
+    --w-text-2: var(--color-ink-600);
+    --w-text-3: var(--color-ink-800);
+    --w-text-4: var(--color-ink-500);
+    --w-accent: var(--color-brand-600);
+    --w-accent-2: var(--color-brand-600);
+    --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
+    --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
+    --w-panel: rgba(255, 255, 255, 0.84);
+    --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
+    --w-shadow: rgba(15, 23, 42, 0.22);
+    --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
+    --w-wash: 0.45;
+    background-color: #ffffff;
+  }
+
+  :global(html.js.dark) .world :global(.tone-invert) {
+    background-color: transparent;
+  }
+
+  :global(html:not(.dark)) .world :global(.tone-invert) {
+    --w-surface: #000000;
+    --w-text: #fff;
+    --w-text-2: var(--color-ink-200);
+    --w-text-3: var(--color-ink-100);
+    --w-text-4: var(--color-ink-300);
+    --w-accent: var(--color-brand-300);
+    --w-accent-2: var(--color-brand-400);
+    --w-line: rgba(255, 255, 255, 0.12);
+    --w-line-soft: rgba(255, 255, 255, 0.08);
+    --w-panel: rgba(9, 12, 20, 0.9);
+    --w-panel-2: rgba(255, 255, 255, 0.04);
+    --w-shadow: rgba(0, 0, 0, 0.85);
+    --w-rail: rgba(255, 255, 255, 0.22);
+    --w-wash: 1;
+    background-color: #000000;
+  }
+
+  :global(html.js:not(.dark)) .world :global(.tone-invert) {
+    background-color: transparent;
+  }
+
+  .world__bands {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Bands are created in JS, so they never get this file's scope hash.
+   * Solid boxes: page tone, then invert, then page tone. */
+  .world :global(.world__band) {
+    position: absolute;
+    inset-inline: 0;
+    background: #ffffff;
+  }
+
+  :global(.dark) .world :global(.world__band) {
+    background: #000000;
+  }
+
+  .world :global(.world__band--invert) {
+    background: #000000;
+  }
+
+  :global(.dark) .world :global(.world__band--invert) {
+    background: #ffffff;
+  }
+
+  /* A wash that sits between the ink and the matter: enough colour that the
+   * world is not a black rectangle before WebGL has painted a frame, and it is
+   * also exactly what a no-WebGL visitor keeps. */
+  .world::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        58% 40% at 18% 6%,
+        color-mix(in oklab, var(--color-brand-500) calc(22% * var(--w-wash)), transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        50% 34% at 86% 2%,
+        color-mix(in oklab, var(--color-accent-600, var(--color-accent-500)) calc(24% * var(--w-wash)), transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        70% 44% at 60% 98%,
+        color-mix(in oklab, var(--color-plasma-500) calc(12% * var(--w-wash)), transparent),
+        transparent 76%
+      );
+  }
+
+  /* Softens the field under the nav. Colour must match the band behind the
+   * header — page surface on page bands, invert surface on invert bands —
+   * otherwise the crown reads as a white/black gradient across a solid stripe.
+   * `.chrome-invert` is stamped by `ChromeTone` while the band under the bar
+   * is the opposite tone. */
+  .world__crown {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 1;
+    height: 8rem;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--w-surface) 14%,
+      color-mix(in oklab, var(--w-surface) 62%, transparent) 52%,
+      transparent
+    );
+  }
+
+  :global(html.dark) .world__crown.chrome-invert {
+    background: linear-gradient(
+      to bottom,
+      #ffffff 14%,
+      color-mix(in oklab, #ffffff 62%, transparent) 52%,
+      transparent
+    );
+  }
+
+  :global(html:not(.dark)) .world__crown.chrome-invert {
+    background: linear-gradient(
+      to bottom,
+      #000000 14%,
+      color-mix(in oklab, #000000 62%, transparent) 52%,
+      transparent
+    );
+  }
+
+  .world__content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Later beats used to be marketing slabs (mint wash, white FAQ plate,
+   * opaque rewards ink, footer night). Inside the world they are glass
+   * holds — the field shows through, type uses the world's tokens. */
+  .world :global(#features),
+  .world :global(#privacy),
+  .world :global(#plans),
+  .world :global(#rewards),
+  .world :global(#faq),
+  .world :global(#cta) {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--w-text);
+  }
+
+  .world :global(#privacy) > .pointer-events-none,
+  .world :global(#plans) > .pointer-events-none,
+  .world :global(#rewards) > .pointer-events-none,
+  .world :global(#cta) > .pointer-events-none,
+  .world :global(#rewards) > .bg-grid,
+  .world :global(#rewards) > .bg-noise,
+  .world :global(#rewards) > .glow-accent {
+    opacity: 0.28;
+  }
+
+  .world :global(footer) {
+    background-color: transparent;
+    border-top-color: var(--w-line-soft);
+    color: var(--w-text-2);
+  }
+
+  .world :global(footer) > .absolute {
+    display: none;
+  }
+
+  .world :global(footer a),
+  .world :global(footer p),
+  .world :global(footer h3) {
+    color: inherit;
+  }
+
+  .world :global(footer a:hover),
+  .world :global(footer .font-display) {
+    color: var(--w-text);
+  }
+
+  .world :global(.tone-invert) :global(footer),
+  .world :global(.tone-invert) :global(footer a),
+  .world :global(.tone-invert) :global(footer p),
+  .world :global(.tone-invert) :global(footer h3) {
+    color: var(--w-text-2);
+  }
+
+  .world :global(.tone-invert) :global(footer) :global(.font-display) {
+    color: var(--w-text);
+  }
+
+  .world :global(#faq .reveal) {
+    background: var(--w-panel);
+    border-color: var(--w-line);
+  }
+</style>

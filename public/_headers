@@ -17,6 +17,10 @@
 /robots.txt
   Cache-Control: public, max-age=3600
 
+# The scroll tour's records — big, fetched only on play, stable by id.
+/audio/*
+  Cache-Control: public, max-age=604800
+
 # Security headers on every response.
 /*
   X-Content-Type-Options: nosniff

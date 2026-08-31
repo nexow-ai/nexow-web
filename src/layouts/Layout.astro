@@ -7,8 +7,12 @@ import DotField from '../components/DotField.astro';
 import TextAppear from '../components/TextAppear.astro';
 import SectionNav from '../components/SectionNav.astro';
 import PageNav from '../components/PageNav.astro';
+import TourHud from '../components/TourHud.astro';
+import TourSound from '../components/TourSound.astro';
+import ChromeTone from '../components/ChromeTone.astro';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/config';
+import { useContent } from '../i18n/content';
 import { getPageAccent } from '../i18n/accent';
 import { dir } from '../i18n/utils';
 import { slidePages } from '../lib/pageTransition';
@@ -27,6 +31,13 @@ interface Props {
    * user theme preference. Omit to honour light/dark mode from the toggle.
    */
   theme?: 'light' | 'dark';
+  /**
+   * Set when the page opens straight into a full-bleed dark world (see
+   * `components/world/World.astro`). The header floats over ink rather than
+   * over the page surface before the first scroll, and `global.css` repaints
+   * light-theme chrome for that one case.
+   */
+  world?: boolean;
   /** In-page section rail (right side, desktop). Omit to hide. */
   sections?: { id: string; label: string }[];
   /** Accessible label for the section rail. */
@@ -39,10 +50,13 @@ interface Props {
   availableLangs?: Lang[];
 }
 
-const { lang, theme, route, sections, sectionNavLabel, ...head } = Astro.props;
+const { lang, theme, route, sections, sectionNavLabel, world, ...head } = Astro.props;
 const { availableLangs } = head;
 const accent = getPageAccent(route);
 const themeLocked = theme === 'light' || theme === 'dark';
+const chrome = useContent(lang).nav;
+const skipLabel = chrome.skipToContent ?? 'Skip to content';
+const railLabel = sectionNavLabel ?? chrome.onThisPage ?? 'On this page';
 
 ---
 
@@ -54,6 +68,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
   data-accent={accent}
   data-theme={theme ?? undefined}
   data-theme-locked={themeLocked ? '' : undefined}
+  data-world={world ? '' : undefined}
 >
   <head>
     <script is:inline>
@@ -85,7 +100,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink-950 focus:px-4 focus:py-2 focus:text-sm focus:text-white"
     >
-      Skip to content
+      {skipLabel}
     </a>
 
     {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
@@ -95,7 +110,7 @@ const themeLocked = theme === 'light' || theme === 'dark';
 
     {
       sections && sections.length > 0 && (
-        <SectionNav sections={sections} label={sectionNavLabel} />
+        <SectionNav sections={sections} label={railLabel} />
       )
     }
 
@@ -103,9 +118,19 @@ const themeLocked = theme === 'light' || theme === 'dark';
       <slot />
     </main>
 
-    <Footer />
+    {/* Home stages the footer as the world's last beat so the 3D never cuts. */}
+    {!world && <Footer />}
 
     <PageNav />
+
+    {/* Only ever on screen while the scroll tour is running (`Header.astro`),
+        and its soundtrack, which is silent — and unfetched — until then. */}
+    <TourHud />
+    <TourSound />
+
+    {/* Keeps the header, the transport and the arrows legible over a page
+        whose bands alternate tone under them. */}
+    <ChromeTone />
 
     <ScrollMotion />
     <TextAppear />
@@ -113,15 +138,12 @@ const themeLocked = theme === 'light' || theme === 'dark';
     <script>
       // Which way the page slides. Astro would use history direction, which
       // sends every link — the "previous page" arrow included — the same way;
-      // position in the tour is what the motion should mirror instead.
-      import { slideDirection } from '../lib/pageTransition';
-      import { getRouteFromUrl } from '../i18n/utils';
+      // position in the tour (or, for a language switch, in the picker) is
+      // what the motion should mirror instead.
+      import { navigationDirection } from '../lib/pageTransition';
 
       document.addEventListener('astro:before-preparation', (event) => {
-        event.direction = slideDirection(
-          getRouteFromUrl(event.from),
-          getRouteFromUrl(event.to),
-        );
+        event.direction = navigationDirection(event.from, event.to);
       });
     </script>
 

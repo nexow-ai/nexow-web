@@ -57,8 +57,12 @@ const subcategoryCatalog = {
   socials: SUBCATEGORIES_BY_CATEGORY.socials.map(labelSub),
 };
 const alphaFilters = [{ key: 'all', label: t.all, min: '', max: '' }, ...ALPHA_BUCKETS];
+/* `min-h-6` is the WCAG 2.2 target-size floor (24px); at this type size the
+   padding alone lands just under it. On a touch screen the chips grow to the
+   44px a thumb needs — the row is a segmented pill, so the whole control
+   grows with them rather than the chips overflowing it. */
 const chipBtnIcon =
-  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex min-h-6 items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 pointer-coarse:px-3.5 pointer-coarse:text-xs aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 
 /** Catalog payload for the client modal (localized labels baked in). */
 const catalog = CONNECTORS.map((c) => ({
@@ -89,10 +93,12 @@ const itemListSchema = {
   })),
 };
 
+/* Same touch sizing as `chipBtnIcon`; `inline-flex` so the label stays centred
+   once a minimum height is doing the sizing instead of the padding. */
 const pillBtn =
-  'rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 const chipBtn =
-  'rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex min-h-6 items-center justify-center rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 pointer-coarse:px-3.5 pointer-coarse:text-xs aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 
 const sections = [
   { id: 'connectors-app', label: t.hero.badge },
@@ -202,7 +208,7 @@ const sections = [
             class="grid transition-[grid-template-rows] duration-300 ease-out data-[open=false]:grid-rows-[0fr] data-[open=true]:grid-rows-[1fr]"
           >
             <div class="min-h-0 overflow-hidden">
-              <div class="flex flex-col gap-2.5 pt-1 lg:pt-0">
+              <div class="flex max-h-[min(70vh,32rem)] flex-col gap-2.5 overflow-y-auto overscroll-contain pt-1 lg:max-h-none lg:overflow-visible lg:pt-0">
                 <div class="flex flex-wrap items-center gap-2 lg:gap-3">
                   <div class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]">
                     {
@@ -248,6 +254,28 @@ const sections = [
                   </div>
                 </div>
 
+                {/* Letter chips above the subcategory wrap — on a phone the wrap
+                    fills the sticky panel, and chips below it were unreachable. */}
+                <div
+                  class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+                  role="group"
+                  aria-label={t.filterAlpha}
+                >
+                  {
+                    alphaFilters.map((f) => (
+                      <button
+                        type="button"
+                        data-filter-alpha={f.key}
+                        data-alpha-min={f.min}
+                        data-alpha-max={f.max}
+                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                        class={chipBtn}
+                      >
+                        {f.label}
+                      </button>
+                    ))
+                  }
+                </div>
                 <div class="flex flex-wrap items-center gap-2 lg:gap-3">
                   <div
                     id="connector-subcategories"
@@ -273,26 +301,6 @@ const sections = [
                           class={chipBtnIcon}
                         >
                           <Icon name={f.icon} class="size-3 shrink-0 opacity-80" />
-                          {f.label}
-                        </button>
-                      ))
-                    }
-                  </div>
-                  <div
-                    class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
-                    role="group"
-                    aria-label={t.filterAlpha}
-                  >
-                    {
-                      alphaFilters.map((f) => (
-                        <button
-                          type="button"
-                          data-filter-alpha={f.key}
-                          data-alpha-min={f.min}
-                          data-alpha-max={f.max}
-                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                          class={chipBtn}
-                        >
                           {f.label}
                         </button>
                       ))

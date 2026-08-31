@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { nl as legal } from '../legal/nl';
 
 export const nl: SiteContent = {
   nav: {
@@ -18,6 +19,16 @@ export const nl: SiteContent = {
     home: 'Home',
     prevPage: 'Vorige pagina',
     nextPage: 'Volgende pagina',
+    tourPlay: 'Tour afspelen',
+    tourStop: 'Tour stoppen',
+    tourTrack: 'Ander nummer afspelen',
+    tourLeft: 'Resterende tijd',
+    tourControls: 'Tourbediening',
+    switchLang: 'Taal wijzigen',
+    primaryNav: 'Hoofdnavigatie',
+    mobileNav: 'Mobiel',
+    onThisPage: 'Op deze pagina',
+    skipToContent: 'Ga naar inhoud',
   },
   footer: {
     tagline: 'Beschrijf wat je nodig hebt. Nexow maakt er widgets op een canvas van.',
@@ -83,10 +94,8 @@ export const nl: SiteContent = {
     },
     hero: {
       badge: 'Vroege toegang',
-      titleLead: 'Beschrijf het.',
-      titleGradient: 'Nexow bouwt het.',
-      titleTail: 'Verhandel het.',
-      titleKicker: 'In seconden — niet in weken of maanden.',
+      title: 'Bouw alles. Bekijk alles.',
+      titleKicker: 'Live realtime dashboards in seconden — niet in weken of kwartalen.',
       subtitle:
         'Beschrijf wat je nodig hebt en Nexow bouwt het: echte werkende widgets, gekoppeld aan live data, neergezet op een canvas dat jij beheert. Aardbevingen, luchtkwaliteit, wereldindicatoren, marktfeeds of je eigen database — visualiseer het, volg het en handel ernaar.',
       ctaPrimary: 'Start de app',
@@ -184,7 +193,7 @@ export const nl: SiteContent = {
     stats: [
       { n: 90, label: 'live connectoren voor gegevens, wallets, sociale media en markten' },
       { n: 6, label: 'activaklassen op één canvas' },
-      { n: 10, suffix: 'K', label: 'gratis AI-credits gereserveerd bij aanmelding' },
+      { n: 100, suffix: 'K', label: 'gratis AI-credits gereserveerd bij aanmelding' },
       { n: 30, prefix: '<', suffix: 's', label: 'van zin tot werkende widget' },
     ],
     showcase: {
@@ -509,7 +518,7 @@ export const nl: SiteContent = {
         {
           icon: 'trophy',
           title: 'Reputatie & medailles',
-          body: 'Elke widget, bot en share verdient reputatie — punten, gelaagde achievements, zeldzame medailles en levels op je openbare profiel. Ze omzetten in beloningscredits komt daarna.',
+          body: 'Elke widget, bot en share verdient reputatie — punten, gelaagde achievements, zeldzame medailles en levels op je openbare profiel. Elke badge-tier stort gratis credits op je saldo.',
           status: 'live',
         },
       ],
@@ -562,7 +571,7 @@ export const nl: SiteContent = {
         { status: 'shipped', title: 'Marketplace', body: 'Publiceer en installeer widgets, thema\'s, schermen en bots — met herkomst die elke remake crediteert.' },
         { status: 'shipped', title: 'Reputatie & medailles', body: 'Punten, gelaagde achievements, zeldzame medailles en levels voor wat je bouwt en deelt.' },
         { status: 'soon', title: 'Premium widgets & signalen', body: 'Publiceer premium widgets en strategische signalen, laat anderen zich abonneren, en verdien aan wat je uitvoert.' },
-        { status: 'soon', title: 'Betaalde plannen & beloningscredits', body: 'Supporter- en Sponsor-checkout, platformcredits, en reputatie omzetten in beloningscredits.' },
+        { status: 'soon', title: 'Betaalde plannen', body: 'Lite- en Elite-checkout — maandelijkse creditvernieuwingen, hogere bot- en agentquota, en premium uiterlijk.' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const nl: SiteContent = {
         },
         {
           q: "Wat kost het?",
-          a: "Free omvat het volledige widget-canvas, bibliotheek, cloud sync, 10 bots, 3 agents, communitytoegang en 100.000 AI-credits bij aanmelding. Supporter en Sponsor voegen maandelijkse credits, hogere automatiseringsquota en premium uiterlijk toe — checkout komt binnenkort. Zie Plans voor de volledige vergelijking.",
+          a: "Free omvat het volledige widget-canvas, bibliotheek, cloud sync, 10 bots, 3 agents, communitytoegang en 100.000 AI-credits bij aanmelding. Lite en Elite voegen maandelijkse credits, hogere automatiseringsquota en premium uiterlijk toe — checkout komt binnenkort. Zie Plans voor de volledige vergelijking.",
         },
       ],
     },
@@ -1348,7 +1357,7 @@ export const nl: SiteContent = {
     meta: {
       title: 'Plannen — Nexow',
       description:
-        'Gratis voor altijd om te bouwen — lokaal met je eigen sleutel, of met 100.000 AI-credits gereserveerd op een gratis account. Vergelijk Gratis, Supporter, Sponsor en Partner voor credits, bots, agenten en aanpassingen.',
+        'Gratis voor altijd om te bouwen — lokaal met je eigen sleutel, of met 100.000 AI-credits gereserveerd op een gratis account. Vergelijk Gratis, Lite, Elite en Partner voor credits, bots, agenten en aanpassingen.',
     },
     hero: {
       badge: 'Plannen',
@@ -1357,7 +1366,7 @@ export const nl: SiteContent = {
         'Bouw gratis — voer lokaal uit met je eigen sleutel, of meld je aan om 100.000 AI-credits te reserveren. Upgrade wanneer je meer capaciteit, automatisering en pooling nodig hebt.',
     },
     comingSoon:
-      'Supporter & Sponsor checkout komt binnenkort, en platformcredits worden ermee gelanceerd. Iedereen is vandaag Gratis — maak een account aan om eerst te zijn wanneer facturering opent.',
+      'Lite & Elite checkout komt binnenkort, en platformcredits worden ermee gelanceerd. Iedereen is vandaag Gratis — maak een account aan om eerst te zijn wanneer facturering opent.',
     highlights: {
       title: 'Wat schaalt met je plan',
       items: [
@@ -1411,18 +1420,18 @@ export const nl: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'Voor makers die meer ruimte willen.',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
         billedYearly: '$99.90 jaarlijks gefactureerd',
         cadence: '/mnd',
-        stats: ['115K credits/mnd', '30 bots', '10 agenten'],
+        stats: ['670K credits/mnd', '30 bots', '10 agenten'],
         note: 'Alles in Gratis, plus:',
-        cta: 'Word Supporter',
+        cta: 'Word Lite',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '115.000 credits per maand',
+          '670.000 credits per maand',
           'Tot 30 bots en 10 agents',
           'Tweede accentkleur (gradiënten)',
           'Acht extra canvaspatronen, widgetoppervlakken en paneelglas',
@@ -1431,20 +1440,20 @@ export const nl: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'Voor power users die pro gaan.',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
         billedYearly: '$699.90 jaarlijks gefactureerd',
         cadence: '/mnd',
         badge: 'Beste rendement',
-        stats: ['800K credits/mnd', '300 bots', '100 agenten'],
-        note: 'Alles in Supporter, plus:',
-        cta: 'Word Sponsor',
+        stats: ['4.7M credits/mnd', '300 bots', '100 agenten'],
+        note: 'Alles in Lite, plus:',
+        cta: 'Word Elite',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '800.000 credits per maand',
+          '4.675.000 credits per maand',
           'Tot 300 bots en 100 agents',
           'Twee extra canvaspatronen en bootloaders, plus aurora-afstemming',
           'Prioriteitssupport voor complexe opstellingen',
@@ -1460,7 +1469,7 @@ export const nl: SiteContent = {
         priceYearly: 'Aangepast',
         cadence: '',
         stats: ['Private infra', 'White-glove', 'SLA'],
-        note: 'Alles in Sponsor, plus:',
+        note: 'Alles in Elite, plus:',
         cta: 'Neem contact op',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1552,15 +1561,15 @@ export const nl: SiteContent = {
       },
       {
         q: "Wat zijn credits?",
-        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 3 tokens; Opus gebruikt hem in ongeveer 0,6. Free reserveert 100.000 bij aanmelding; Supporter geeft 115.000 per maand; Sponsor 800.000 — en je kunt altijd packs kopen.",
+        a: "Credits meten AI-gebruik: widgets genereren, via gesprek bewerken, links maken en Copilot gebruiken. Eén credit is één Sonnet-outputtoken aan providerkosten, dus de prijs hangt niet af van welk model je kiest — Haiku rekt een credit uit tot ongeveer 2 tokens; Opus gebruikt hem in ongeveer 0,4. Free reserveert 100.000 bij aanmelding; Lite geeft 670.000 per maand; Elite 4.675.000 — en je kunt altijd packs kopen.",
       },
       {
         q: "Wanneer starten betaalde plannen?",
-        a: "Supporter en Sponsor zijn gedefinieerd en zichtbaar in de app, maar betaalde checkout komt binnenkort. Iedereen zit vandaag op Free — maak een account om vooraan te staan wanneer facturatie opent.",
+        a: "Lite en Elite zijn gedefinieerd en zichtbaar in de app, maar betaalde checkout komt binnenkort. Iedereen zit vandaag op Free — maak een account om vooraan te staan wanneer facturatie opent.",
       },
       {
         q: "Kan ik jaarlijks betalen?",
-        a: "Ja. Jaarlijkse facturatie geeft je twee maanden gratis ten opzichte van maandelijks — $99,90 per jaar voor Supporter, $699,90 voor Sponsor. Je kunt altijd wisselen tussen maandelijks en jaarlijks.",
+        a: "Ja. Jaarlijkse facturatie geeft je twee maanden gratis ten opzichte van maandelijks — $99,90 per jaar voor Lite, $699,90 voor Elite. Je kunt altijd wisselen tussen maandelijks en jaarlijks.",
       },
       {
         q: "Hoe wordt reputatie berekend?",
@@ -1568,7 +1577,7 @@ export const nl: SiteContent = {
       },
       {
         q: "Hangen badges aan mijn plan?",
-        a: "Nee. Alle 34 badges, vijf levels en de volledige community-laag zijn beschikbaar op Free. Plannen kopen capaciteit en uiterlijk, nooit status — een Free-account kan Legend bereiken.",
+        a: "Nee. Alle badges, vijf levels en de volledige community-laag zijn beschikbaar op Free. Plannen kopen capaciteit en uiterlijk, nooit status — een Free-account kan Legend bereiken.",
       },
       {
         q: "Wanneer landen credit- en tokenbeloningen?",
@@ -1582,7 +1591,7 @@ export const nl: SiteContent = {
     subtitle: 'Elke post, widget, bot en publicatie voedt één score. De score ontgrendelt badges, badges ontgrendelen levels — en zodra de DAO opengaat, keren beide uit in credits en governance-tokens.',
     live: 'Live in de app',
     planned: 'Gepland',
-    plannedNote: 'Punten, badges en levels zijn vandaag al live in de app. Uitkeringen in credits en NXW komen met de Nexow DAO — de tabel hieronder is het voorstel voor de eerste stemming.',
+    plannedNote: 'Punten, badges, levels en creditbeloningen zijn vandaag al live in de app. NXW-uitkeringen en levelbonussen komen met de Nexow DAO — NXW dry-mint op 14 augustus 2026.',
     teaser: {
       badges: 'Medailles voor wat je bouwt en shippt',
       levels: 'Rangen vrijgespeeld met reputatie',
@@ -1620,7 +1629,7 @@ export const nl: SiteContent = {
     },
     badges: {
       title: 'De badgekluis',
-      body: '34 badges in drie zeldzaamheden. Achttien komen in brons, zilver en goud; tien zeldzame medailles liggen voorbij goud; zes legendarische medailles vragen iets absurds. Draai een kaart om te zien wat hij meet.',
+      body: 'Badges in drie zeldzaamheden. Klassieke badges komen in brons, zilver en goud; zeldzame en legendarische medailles zijn enkele drempels. Draai een kaart om te zien wat hij meet — en welke credits elke trede uitkeert.',
       filters: {
         all: 'Alle',
         tiered: 'Getrapt',
@@ -1656,7 +1665,7 @@ export const nl: SiteContent = {
         commentsReceived: 'Ontvangen reacties',
         followers: 'Volgers',
         following: 'Mensen die je volgt',
-        contacts: 'Wederzijdse contacten',
+        friends: 'Wederzijdse contacten',
         widgetsBuilt: 'Gebouwde widgets',
         assetsPublished: 'Gepubliceerde assets',
         installsReceived: 'Installaties van jouw werk',
@@ -1666,6 +1675,18 @@ export const nl: SiteContent = {
         likesGiven: 'Gegeven likes',
         reactionsGiven: 'Gegeven reacties',
         nightPosts: 'Posts tussen 00:00 en 05:00',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: 'Geopende DM-gesprekken',
       },
       names: {
@@ -1687,6 +1708,15 @@ export const nl: SiteContent = {
         emojiSommelier: 'Emoji-sommelier',
         nightOwl: 'Nachtuil',
         penPal: 'Penvriend',
+        greenLight: 'Groen licht',
+        buildFlagger: 'Build-melder',
+        tagClose: 'Vriend',
+        tagFamily: 'Familie',
+        tagWork: 'Collega',
+        tagTeam: 'Teammaat',
+        tagSchool: 'Klasgenoot',
+        tagMentor: 'Mentor',
+        tagFavorite: 'Favorieten',
         oracle: 'Orakel',
         agora: 'Agora',
         catalyst: 'Katalysator',
@@ -1697,6 +1727,9 @@ export const nl: SiteContent = {
         benefactor: 'Weldoener',
         midnightSun: 'Middernachtzon',
         nexus: 'Nexus',
+        tagPartner: 'Partner',
+        tagLove: 'Verliefd',
+        rolodex: 'Rolodex',
         immortal: 'Onsterfelijke',
         folkHero: 'Volksheld',
         luminary: 'Lichtbaken',
@@ -1712,7 +1745,7 @@ export const nl: SiteContent = {
         commentsReceived: 'Ontvang reacties op je berichten.',
         followers: 'Verzamel volgers op je profiel.',
         following: 'Volg andere mensen op Nexow.',
-        contacts: 'Voeg wederzijdse contacten toe — mensen die je volgt en die jou terugvolgen.',
+        friends: 'Voeg wederzijdse contacten toe — mensen die je volgt en die jou terugvolgen.',
         widgetsBuilt: 'Bouw widgets op je canvas.',
         assetsPublished: 'Publiceer assets op de marktplaats.',
         installsReceived: 'Krijg installaties van je gepubliceerde widgets, bots of thema’s.',
@@ -1739,7 +1772,11 @@ export const nl: SiteContent = {
         bronze: 'Bronzen trede',
         silver: 'Zilveren trede',
         gold: 'Gouden trede',
+        tagBronze: 'Vriend · bronze',
+        tagSilver: 'Vriend · silver',
+        tagGold: 'Vriend · gold',
         rare: 'Zeldzame medaille',
+        tagRare: 'Vriend · rare',
         legendary: 'Legendarische medaille',
       },
       levelRow: '{level} bereiken',
@@ -1748,7 +1785,7 @@ export const nl: SiteContent = {
       creditsLabel: 'credits',
       tokensLabel: 'NXW',
       worth: '≈ {usd} aan AI-generatie tegen listprijs',
-      months: '= {n} maanden generatie op Sponsor-niveau, verdiend',
+      months: '= {n} maanden generatie op Elite-niveau, verdiend',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: 'Eén token. Vijf taken. Maximaal twintig miljoen.',
@@ -1986,7 +2023,7 @@ export const nl: SiteContent = {
   waitlist: {
     eyebrow: 'Wachtlijst facturatie',
     title: 'De checkout komt eraan',
-    subtitle: 'Facturatie voor Supporter en Sponsor komt binnenkort. Laat je e-mail achter en we laten het weten zodra de checkout opengaat — geen spam.',
+    subtitle: 'Facturatie voor Lite en Elite komt binnenkort. Laat je e-mail achter en we laten het weten zodra de checkout opengaat — geen spam.',
     placeholder: 'jij@email.com',
     submit: 'Zet me op de wachtlijst',
     submitting: 'Bezig…',
@@ -2304,4 +2341,9 @@ export const nl: SiteContent = {
       ctaSecondary: 'Word lid van de community',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

@@ -9,6 +9,17 @@
  *
  * Mark page-hero titles with `data-text-appear`. Optional
  * `data-text-appear-delay` (seconds) staggers multi-line heroes.
+ *
+ * `data-text-appear="scroll"` holds the clip until the title's section has
+ * *arrived* — it fills the window, its top parked under the header where a
+ * deep link or a rail stop would put it (for the pinned acts, the moment the
+ * stage pins), or, when it is short enough, the whole of it sits inside the
+ * window — and then runs the same reveal. That is how every section title on
+ * the home page gets the hero's entrance: once the reader is on the section,
+ * not as it first peeks over the fold.
+ *
+ * Below 768px the particle wavefront is skipped: acts do not pin, titles wrap,
+ * and the reader has already scrolled past before the dots settle.
  */
 ---
 
@@ -35,6 +46,101 @@
 
   let handles: AppearHandle[] = [];
 
+  /**
+   * Scroll-mode titles waiting for their section. One passive scroll listener
+   * serves all of them, reads batched into a single frame, and it is removed
+   * the moment the last one launches.
+   */
+  interface Pending {
+    section: HTMLElement;
+    stage: HTMLElement;
+    launch: () => void;
+  }
+
+  let pending: Pending[] = [];
+  let pendingFrame = 0;
+  let pendingListening = false;
+
+  /** Where a deep link or a rail stop parks a section: `scroll-padding-top`. */
+  function parkedTop(): number {
+    return parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  }
+
+  /**
+   * Has the title arrived? Three ways in:
+   *
+   *  1. The title itself is in the reading band — below the header, not still
+   *     peeking at the fold. A tall previous section (the feature-map walk)
+   *     can put the next title mid-screen long before that section's top
+   *     parks under the header; waiting for the park left the title clipped
+   *     and the tag sitting on a plate that looked untitled.
+   *  2. The section covers the parked line — its top at the header, or
+   *     already past it. What a deep link or a rail stop does.
+   *  3. The whole section fits inside the window. A short one at the end of
+   *     the page may only ever manage this.
+   *
+   * The parked line carries a little slack — a wheel notch at most. A cold
+   * load on `#plans` jumps before the layout above has settled and comes to
+   * rest a couple of dozen pixels short of the line; without the slack that
+   * title would sit hidden until the reader happened to nudge the page.
+   */
+  function hasArrived({ section, stage }: Pending, vh: number, top: number): boolean {
+    const t = stage.getBoundingClientRect();
+    const inBand = t.bottom > top + 8 && t.top < vh * 0.62 && t.top >= top - 24;
+    if (inBand) return true;
+
+    const s = section.getBoundingClientRect();
+    const slack = Math.min(96, vh * 0.12);
+    const covers = s.top <= top + slack && s.bottom >= top;
+    const fits = s.top >= -1 && s.bottom <= vh + 1;
+    if (!covers && !fits) return false;
+    return t.bottom > 0 && t.top < vh;
+  }
+
+  function checkPending() {
+    pendingFrame = 0;
+    if (!pending.length) return;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const top = parkedTop();
+    // Every read first; a launch writes layout, and must not land between them.
+    const ready = pending.filter((entry) => hasArrived(entry, vh, top));
+    if (!ready.length) return;
+    pending = pending.filter((entry) => !ready.includes(entry));
+    if (!pending.length) stopWatching();
+    for (const entry of ready) entry.launch();
+  }
+
+  function schedulePending() {
+    if (pendingFrame || !pending.length) return;
+    pendingFrame = requestAnimationFrame(checkPending);
+  }
+
+  function stopWatching() {
+    if (pendingFrame) cancelAnimationFrame(pendingFrame);
+    pendingFrame = 0;
+    if (pendingListening) {
+      window.removeEventListener('scroll', schedulePending);
+      window.removeEventListener('resize', schedulePending);
+      pendingListening = false;
+    }
+  }
+
+  function watch(entry: Pending) {
+    pending.push(entry);
+    if (!pendingListening) {
+      window.addEventListener('scroll', schedulePending, { passive: true });
+      window.addEventListener('resize', schedulePending);
+      pendingListening = true;
+    }
+    schedulePending();
+  }
+
+  function unwatch(entry: Pending) {
+    const i = pending.indexOf(entry);
+    if (i !== -1) pending.splice(i, 1);
+    if (!pending.length) stopWatching();
+  }
+
   /** Hard ceiling on the wavefront's travel time, ms. */
   const TRAVEL_MS_MAX = 2600;
   /** Grace after the reveal should have finished before we force the title visible. */
@@ -44,19 +150,36 @@
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  /**
+   * The particle reveal needs a wide line and a hold. On a phone the title
+   * wraps, the section never pins, and the reader has already scrolled past
+   * before the wavefront finishes — so the headline sits as a cloud of dots.
+   * Compact viewports get the real glyphs, same as reduced motion.
+   */
+  function isCompact(): boolean {
+    return window.matchMedia('(max-width: 767.98px)').matches;
+  }
+
   function isRtl(): boolean {
     return document.documentElement.dir === 'rtl';
   }
 
   function cssColor(name: string, fallback: string): string {
+    return cssColorOn(document.body, name, fallback);
+  }
+
+  /** Resolve a custom property from a host so per-line `--ga/--gb/--gc` work. */
+  function cssColorOn(el: Element, name: string, fallback: string): string {
     const probe = document.createElement('span');
     probe.style.color = `var(${name})`;
     probe.style.position = 'absolute';
     probe.style.visibility = 'hidden';
-    document.body.appendChild(probe);
+    el.appendChild(probe);
     const resolved = getComputedStyle(probe).color;
     probe.remove();
-    return resolved && resolved !== 'rgba(0, 0, 0, 0)' ? resolved : fallback;
+    return resolved && resolved !== 'rgba(0, 0, 0, 0)' && resolved !== 'transparent'
+      ? resolved
+      : fallback;
   }
 
   function primaryTextNode(el: HTMLElement): Text | null {
@@ -123,10 +246,15 @@
   }
 
   function placeCanvas(el: HTMLElement, canvas: HTMLCanvasElement) {
-    canvas.style.left = `${el.offsetLeft}px`;
-    canvas.style.top = `${el.offsetTop}px`;
-    canvas.style.width = `${el.offsetWidth}px`;
-    canvas.style.height = `${el.offsetHeight}px`;
+    const parent = canvas.offsetParent as HTMLElement | null;
+    const elRect = el.getBoundingClientRect();
+    const parentRect = parent?.getBoundingClientRect();
+    const left = parentRect ? elRect.left - parentRect.left : el.offsetLeft;
+    const top = parentRect ? elRect.top - parentRect.top : el.offsetTop;
+    canvas.style.left = `${left}px`;
+    canvas.style.top = `${top}px`;
+    canvas.style.width = `${elRect.width}px`;
+    canvas.style.height = `${elRect.height}px`;
   }
 
   /** Reveal the real glyphs up to settleEdge (CSS px). */
@@ -141,6 +269,11 @@
 
   function clearClip(el: HTMLElement) {
     el.style.clipPath = '';
+  }
+
+  /** Fully hidden, whatever the element's width is or becomes while it waits. */
+  function hideClip(el: HTMLElement) {
+    el.style.clipPath = 'inset(0 100% 0 0)';
   }
 
   /** Offscreen paint only to harvest particle targets — never shown as the title. */
@@ -191,13 +324,17 @@
     const gradientHost =
       el.classList.contains('text-gradient') ||
       el.classList.contains('text-gradient-live') ||
-      el.querySelector('.text-gradient, .text-gradient-live');
+      el.classList.contains('hero__grad') ||
+      el.querySelector('.text-gradient, .text-gradient-live, .hero__grad');
 
     if (gradientHost) {
+      const host = gradientHost instanceof Element ? (gradientHost as HTMLElement) : el;
+      const stop = (name: string, fallbackToken: string, fallback: string) =>
+        cssColorOn(host, name, '') || cssColor(fallbackToken, fallback);
       const grad = octx.createLinearGradient(0, 0, cssW, 0);
-      grad.addColorStop(0, cssColor('--color-brand-600', '#0d9488'));
-      grad.addColorStop(0.52, cssColor('--color-sky-500', '#0ea5e9'));
-      grad.addColorStop(1, cssColor('--color-accent-600', '#4f46e5'));
+      grad.addColorStop(0, stop('--ga', '--color-brand-600', '#0d9488'));
+      grad.addColorStop(0.52, stop('--gb', '--color-sky-500', '#0ea5e9'));
+      grad.addColorStop(1, stop('--gc', '--color-accent-600', '#4f46e5'));
       octx.fillStyle = grad;
     } else {
       const color = cs.color;
@@ -253,8 +390,9 @@
     if (el.dataset.textAppearDone === '1') return null;
 
     const delayMs = Math.max(0, parseFloat(el.dataset.textAppearDelay || '0') || 0) * 1000;
+    const onScroll = el.dataset.textAppear === 'scroll';
 
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || (onScroll && isCompact())) {
       el.dataset.textAppearDone = '1';
       el.classList.add('is-text-appear-done');
       return null;
@@ -278,20 +416,25 @@
     parent.insertBefore(stage, el);
     stage.appendChild(el);
     stage.appendChild(canvas);
+    placeCanvas(el, canvas);
 
     // Hide glyphs via clip (layout unchanged) until the wavefront reveals them.
     const rtl = isRtl();
-    setClip(el, el.offsetWidth || 1, 0, rtl);
+    hideClip(el);
     el.classList.add('is-text-appearing');
 
     let cancelled = false;
+    let launched = false;
     let raf = 0;
     let timer = 0;
     let watchdog = 0;
+    let entry: Pending | null = null;
 
     const finish = () => {
       if (cancelled) return;
       cancelled = true;
+      if (entry) unwatch(entry);
+      entry = null;
       if (raf) cancelAnimationFrame(raf);
       if (timer) clearTimeout(timer);
       if (watchdog) clearTimeout(watchdog);
@@ -301,12 +444,6 @@
       el.dataset.textAppearDone = '1';
       canvas.remove();
     };
-
-    /* The clip above hides the real title, and the title is the LCP element on
-       every page that uses this. Nothing downstream — fonts.ready, the canvas
-       harvest, rAF itself — is guaranteed to resolve, so bound the hidden state
-       here rather than trusting the animation to end. */
-    watchdog = window.setTimeout(finish, delayMs + TRAVEL_MS_MAX + WATCHDOG_SLACK_MS);
 
     const begin = () => {
       if (cancelled) return;
@@ -418,12 +555,35 @@
       void ready.then(begin).catch(finish);
     };
 
-    if (delayMs) timer = window.setTimeout(start, delayMs);
-    else start();
+    const launch = () => {
+      if (cancelled || launched) return;
+      launched = true;
+      /* The clip above hides the real title, and on page heroes the title is
+         the LCP element. Nothing downstream — fonts.ready, the canvas harvest,
+         rAF itself — is guaranteed to resolve, so bound the hidden state here
+         rather than trusting the animation to end. Armed from launch, not from
+         setup, so a scroll-mode title never times out while it waits. */
+      watchdog = window.setTimeout(finish, delayMs + TRAVEL_MS_MAX + WATCHDOG_SLACK_MS);
+      if (delayMs) timer = window.setTimeout(start, delayMs);
+      else start();
+    };
+
+    if (onScroll) {
+      /* Scroll mode: hold the clip until the section this title names has
+         arrived (see `hasArrived`), then run the reveal the hero runs on load.
+         The section is what is measured, never the clipped title, and the
+         stage stands in for the title's box. */
+      entry = { section: el.closest<HTMLElement>('section') ?? stage, stage, launch };
+      watch(entry);
+    } else {
+      launch();
+    }
 
     return {
       stop() {
         cancelled = true;
+        if (entry) unwatch(entry);
+        entry = null;
         if (timer) clearTimeout(timer);
         if (watchdog) clearTimeout(watchdog);
         if (raf) cancelAnimationFrame(raf);
@@ -441,16 +601,25 @@
   function teardown() {
     for (const h of handles) h.stop();
     handles = [];
+    pending = [];
+    stopWatching();
   }
 
   function initTextAppear() {
     teardown();
+    const compact = isCompact();
     if (prefersReducedMotion()) {
       document.querySelectorAll<HTMLElement>('[data-text-appear]').forEach((el) => {
         el.dataset.textAppearDone = '1';
         el.classList.add('is-text-appear-done');
       });
       return;
+    }
+    if (compact) {
+      document.querySelectorAll<HTMLElement>('[data-text-appear="scroll"]').forEach((el) => {
+        el.dataset.textAppearDone = '1';
+        el.classList.add('is-text-appear-done');
+      });
     }
 
     const els = document.querySelectorAll<HTMLElement>('[data-text-appear]');

@@ -1,4 +1,5 @@
 import type { SiteContent } from '../content';
+import { ja as legal } from '../legal/ja';
 
 export const ja: SiteContent = {
   nav: {
@@ -18,6 +19,16 @@ export const ja: SiteContent = {
     home: 'ホーム',
     prevPage: '前のページ',
     nextPage: '次のページ',
+    tourPlay: 'ツアーを再生',
+    tourStop: 'ツアーを停止',
+    tourTrack: '別の曲を再生',
+    tourLeft: '残り時間',
+    tourControls: 'ツアー操作',
+    switchLang: '言語を切り替える',
+    primaryNav: 'メイン',
+    mobileNav: 'モバイル',
+    onThisPage: 'このページ内',
+    skipToContent: '本文へスキップ',
   },
   footer: {
     tagline: '必要なものを説明すれば、Nexow がキャンバス上のウィジェットにします。',
@@ -83,10 +94,8 @@ export const ja: SiteContent = {
     },
     hero: {
       badge: '早期アクセス',
-      titleLead: '説明する。',
-      titleGradient: 'Nexow が構築する。',
-      titleTail: '取引する。',
-      titleKicker: '数秒で完成 — 数週間や数か月ではありません。',
+      title: '何でも作れ。すべてを見よ。',
+      titleKicker: 'リアルタイムのダッシュボードを数秒で — 数週間や四半期ではありません。',
       subtitle:
         '必要なものを説明すれば、Nexow がつくります。実際に動くウィジェットを、ライブデータにつなぎ、あなたが管理するキャンバスに配置します。地震、大気質、世界指標、マーケットのフィード、あるいは自分のデータベース — 可視化し、見守り、動く。',
       ctaPrimary: 'アプリを起動',
@@ -184,7 +193,7 @@ export const ja: SiteContent = {
     stats: [
       { n: 90, label: 'データ、ウォレット、ソーシャル、市場のライブコネクタ' },
       { n: 6, label: '1 つのキャンバスに載せられる資産クラス' },
-      { n: 10, suffix: 'K', label: 'サインアップ時に確保される無料 AI クレジット' },
+      { n: 100, suffix: 'K', label: 'サインアップ時に確保される無料 AI クレジット' },
       { n: 30, prefix: '<', suffix: 's', label: '文章から稼働するウィジェットまで' },
     ],
     showcase: {
@@ -509,7 +518,7 @@ export const ja: SiteContent = {
         {
           icon: 'trophy',
           title: '評判とメダル',
-          body: 'すべてのウィジェット、ボット、共有が評判を獲得 — 公開プロフィールに表示されるポイント、段階的なアチーブメント、レアメダル、レベル。報酬クレジットへの変換は次に登場します。',
+          body: 'すべてのウィジェット、ボット、共有が評判を獲得 — 公開プロフィールに表示されるポイント、段階的なアチーブメント、レアメダル、レベル。バッジの各ティアが残高に無料クレジットを支払います。',
           status: 'live',
         },
       ],
@@ -562,7 +571,7 @@ export const ja: SiteContent = {
         { status: 'shipped', title: 'マーケットプレイス', body: 'ウィジェット、テーマ、スクリーン、ボットを公開・インストール — すべてのリメイクに作者をクレジットするリネージ付き。' },
         { status: 'shipped', title: '評判とメダル', body: '構築し共有したものに対するポイント、段階的なアチーブメント、レアメダル、レベル。' },
         { status: 'soon', title: 'プレミアムウィジェットとシグナル', body: 'プレミアムウィジェットや戦略シグナルを公開し、他の人に購読してもらい、運用するもので収益を得ましょう。' },
-        { status: 'soon', title: '有料プランと報酬クレジット', body: 'Supporter と Sponsor のチェックアウト、プラットフォームクレジット、評判の報酬クレジットへの変換。' },
+        { status: 'soon', title: '有料プラン', body: 'Lite と Elite のチェックアウト — 毎月のクレジット更新、より多いボットとエージェント、プレミアム外観。' },
       ],
     },
     faq: {
@@ -600,7 +609,7 @@ export const ja: SiteContent = {
         },
         {
           q: "いくらかかりますか？",
-          a: "Free にはフルのウィジェットキャンバス、ライブラリ、クラウド同期、ボット 10、エージェント 3、コミュニティアクセス、サインアップ時の 100,000 AI クレジットが含まれます。Supporter と Sponsor は月次クレジット、より高い自動化枠、プレミアム見た目を追加——チェックアウトは近日公開。詳細はプラン比較を。",
+          a: "Free にはフルのウィジェットキャンバス、ライブラリ、クラウド同期、ボット 10、エージェント 3、コミュニティアクセス、サインアップ時の 100,000 AI クレジットが含まれます。Lite と Elite は月次クレジット、より高い自動化枠、プレミアム見た目を追加——チェックアウトは近日公開。詳細はプラン比較を。",
         },
       ],
     },
@@ -1328,7 +1337,7 @@ export const ja: SiteContent = {
           { icon: 'users', title: 'コミュニティ', body: 'メイカーをフォローし、ビルダー向けソーシャルフィードでいいね・コメント、ボードを探索、他者がライブラリに直接追加できるウィジェットを共有 — 公開メイカープロフィール付き。' },
           { icon: 'mail', title: 'リアルタイムチャット', body: 'アカウントまたは Dock から友達・連絡先とライブメッセージ — 1 対 1 とグループ DM、プレゼンス、リアクション、フォロワー/フォロー、連絡先受信箱。' },
           { icon: 'store', title: 'マーケットプレイス', body: 'ウィジェット、テーマ、スクリーン、ボット、エージェントを公開・インストール — リネージ付き。売買は次に登場。' },
-          { icon: 'trophy', title: '評判とメダル', body: '構築と共有で評判ポイント、段階的アチーブメント、レアメダルを獲得 — 本日ライブ。報酬クレジットは次に。' },
+          { icon: 'trophy', title: '評判とメダル', body: '構築と共有で評判ポイント、段階的アチーブメント、レアメダルを獲得 — 本日ライブ。バッジの各ティアが残高に無料クレジットを支払います。' },
         ],
       },
       {
@@ -1348,7 +1357,7 @@ export const ja: SiteContent = {
     meta: {
       title: 'プラン — Nexow',
       description:
-        'ずっと無料で構築 — 自分のキーでローカルに、または無料アカウントで確保された 100,000 AI クレジットで。クレジット、ボット、エージェント、カスタマイズについて Free、Supporter、Sponsor、Partner を比較。',
+        'ずっと無料で構築 — 自分のキーでローカルに、または無料アカウントで確保された 100,000 AI クレジットで。クレジット、ボット、エージェント、カスタマイズについて Free、Lite、Elite、Partner を比較。',
     },
     hero: {
       badge: 'プラン',
@@ -1357,7 +1366,7 @@ export const ja: SiteContent = {
         '無料で構築 — 自分のキーでローカルに動かすか、サインアップして 100,000 AI クレジットを確保。より多くの容量、自動化、洗練が必要になったらアップグレードを。',
     },
     comingSoon:
-      'Supporter と Sponsor のチェックアウトは近日公開で、プラットフォームクレジットも同時にローンチします。現在は全員が Free です — アカウントを作成すれば、課金開始時に先頭に立てます。',
+      'Lite と Elite のチェックアウトは近日公開で、プラットフォームクレジットも同時にローンチします。現在は全員が Free です — アカウントを作成すれば、課金開始時に先頭に立てます。',
     highlights: {
       title: 'プランでスケールするもの',
       items: [
@@ -1411,18 +1420,18 @@ export const ja: SiteContent = {
         ],
       },
       {
-        name: 'Supporter',
+        name: 'Lite',
         tagline: 'もっと余地が欲しいメイカーへ。',
         priceMonthly: '$9.99',
         priceYearly: '$8.33',
         billedYearly: '$99.90 年一括請求',
         cadence: '/月',
-        stats: ['115K クレジット/月', '30 ボット', '10 エージェント'],
+        stats: ['670K クレジット/月', '30 ボット', '10 エージェント'],
         note: 'Free のすべてに加えて：',
-        cta: 'Supporter になる',
+        cta: 'Lite になる',
         ctaHref: 'https://x.nexow.ai',
         features: [
-          '毎月 115,000 クレジット',
+          '毎月 670,000 クレジット',
           'ボット最大 30 個、エージェント最大 10 個',
           '2 つ目のアクセントカラー（グラデーション）',
           'キャンバスパターン、ウィジェット表面、パネルガラスをさらに 8 種類',
@@ -1431,20 +1440,20 @@ export const ja: SiteContent = {
         ],
       },
       {
-        name: 'Sponsor',
+        name: 'Elite',
         tagline: 'プロを目指すパワーユーザーへ。',
         priceMonthly: '$69.99',
         priceYearly: '$58.33',
         billedYearly: '$699.90 年一括請求',
         cadence: '/月',
         badge: '最もお得',
-        stats: ['800K クレジット/月', '300 ボット', '100 エージェント'],
-        note: 'Supporter のすべてに加えて：',
-        cta: 'Sponsor になる',
+        stats: ['4.7M クレジット/月', '300 ボット', '100 エージェント'],
+        note: 'Lite のすべてに加えて：',
+        cta: 'Elite になる',
         ctaHref: 'https://x.nexow.ai',
         featured: true,
         features: [
-          '毎月 800,000 クレジット',
+          '毎月 4,675,000 クレジット',
           'ボット最大 300 個、エージェント最大 100 個',
           'キャンバスパターンと起動画面をさらに 2 種類、オーロラ調整も',
           '複雑な構成への優先サポート',
@@ -1460,7 +1469,7 @@ export const ja: SiteContent = {
         priceYearly: 'カスタム',
         cadence: '',
         stats: ['プライベートインフラ', '手厚いサポート', 'SLA'],
-        note: 'Sponsor のすべてに加えて：',
+        note: 'Elite のすべてに加えて：',
         cta: 'お問い合わせ',
         ctaHref: '/contact?type=partnership',
         features: [
@@ -1552,15 +1561,15 @@ export const ja: SiteContent = {
       },
       {
         q: "クレジットとは何ですか？",
-        a: "クレジットは AI 利用を計量します。ウィジェット生成、会話での編集、リンク作成、Copilot 利用。1 クレジットはプロバイダコスト上の Sonnet 出力トークン 1 つに相当するため、選ぶモデルで価格は変わりません——Haiku は約 3 トークン、Opus は約 0.6 で 1 クレジット。Free はサインアップ時に 100,000 を確保、Supporter は月 115,000、Sponsor は 800,000——パックはいつでも購入できます。",
+        a: "クレジットは AI 利用を計量します。ウィジェット生成、会話での編集、リンク作成、Copilot 利用。1 クレジットはプロバイダコスト上の Sonnet 出力トークン 1 つに相当するため、選ぶモデルで価格は変わりません——Haiku は約 2 トークン、Opus は約 0.4 で 1 クレジット。Free はサインアップ時に 100,000 を確保、Lite は月 670,000、Elite は 4,675,000——パックはいつでも購入できます。",
       },
       {
         q: "有料プランはいつ始まりますか？",
-        a: "Supporter と Sponsor は定義済みでアプリに表示されていますが、有料チェックアウトは近日公開です。今日は全員 Free——請求開始時に先頭に立つためにアカウントを作成してください。",
+        a: "Lite と Elite は定義済みでアプリに表示されていますが、有料チェックアウトは近日公開です。今日は全員 Free——請求開始時に先頭に立つためにアカウントを作成してください。",
       },
       {
         q: "年払いはできますか？",
-        a: "はい。年払いは月払いより 2 か月分お得です——Supporter 年 $99.90、Sponsor 年 $699.90。月払いと年払いはいつでも切り替えられます。",
+        a: "はい。年払いは月払いより 2 か月分お得です——Lite 年 $99.90、Elite 年 $699.90。月払いと年払いはいつでも切り替えられます。",
       },
       {
         q: "レピュテーションはどう計算されますか？",
@@ -1582,7 +1591,7 @@ export const ja: SiteContent = {
     subtitle: '投稿もウィジェットもボットも公開も、すべてが 1 つのスコアに流れ込みます。スコアがバッジを、バッジがレベルを解放し——DAO が開けば、その両方がクレジットとガバナンストークンで支払われます。',
     live: 'アプリで稼働中',
     planned: '計画中',
-    plannedNote: 'ポイント・バッジ・レベルは今日すでにアプリで動いています。クレジットと NXW の支払いは Nexow DAO と同時に始まり、下の表は最初の投票にかける提案です。',
+    plannedNote: 'ポイント・バッジ・レベルと無料クレジット報酬は今日すでにアプリで動いています。NXW の支払いとレベルボーナスは Nexow DAO と同時に始まります。NXW は 2026年8月14日に dry mint します。',
     teaser: {
       badges: '作って公開した成果へのメダル',
       levels: '評判ポイントで解禁されるランク',
@@ -1656,7 +1665,7 @@ export const ja: SiteContent = {
         commentsReceived: '受け取ったコメント',
         followers: 'フォロワー',
         following: 'フォロー中の人',
-        contacts: '相互の連絡先',
+        friends: '相互の連絡先',
         widgetsBuilt: '作ったウィジェット',
         assetsPublished: '公開したアセット',
         installsReceived: '自分の作品のインストール数',
@@ -1666,6 +1675,18 @@ export const ja: SiteContent = {
         likesGiven: '送ったいいね',
         reactionsGiven: '送ったリアクション',
         nightPosts: '00:00〜05:00 の投稿',
+        buildLikesGiven: 'Build likes',
+        buildReportsFiled: 'Build reports',
+        closeTags: 'Friend tags',
+        familyTags: 'Family tags',
+        workTags: 'Work tags',
+        teamTags: 'Team tags',
+        schoolTags: 'School tags',
+        mentorTags: 'Mentor tags',
+        favoriteTags: 'Favourite tags',
+        partnerTags: 'Partner tags',
+        loveTags: 'Love tags',
+        tagKindsUsed: 'Friend tag kinds',
         dmThreads: '開いた DM スレッド',
       },
       names: {
@@ -1687,6 +1708,15 @@ export const ja: SiteContent = {
         emojiSommelier: '絵文字ソムリエ',
         nightOwl: '夜ふかし',
         penPal: 'ペンパル',
+        greenLight: 'グリーンライト',
+        buildFlagger: 'ビルド報告',
+        tagClose: 'フレンド',
+        tagFamily: '家族',
+        tagWork: '同僚',
+        tagTeam: 'チームメイト',
+        tagSchool: 'クラスメイト',
+        tagMentor: 'メンター',
+        tagFavorite: 'お気に入り',
         oracle: 'オラクル',
         agora: 'アゴラ',
         catalyst: 'カタリスト',
@@ -1697,6 +1727,9 @@ export const ja: SiteContent = {
         benefactor: 'ベネファクター',
         midnightSun: '真夜中の太陽',
         nexus: 'ネクサス',
+        tagPartner: 'パートナー',
+        tagLove: '恋してる',
+        rolodex: 'ロロデックス',
         immortal: 'イモータル',
         folkHero: 'フォークヒーロー',
         luminary: 'ルミナリー',
@@ -1712,7 +1745,7 @@ export const ja: SiteContent = {
         commentsReceived: '自分の投稿にコメントをもらう。',
         followers: 'プロフィールでフォロワーを増やす。',
         following: 'Nexow で他の人をフォローする。',
-        contacts: '相互のつながりを増やす — フォローし合っている人。',
+        friends: '相互のつながりを増やす — フォローし合っている人。',
         widgetsBuilt: 'キャンバスでウィジェットをつくる。',
         assetsPublished: 'マーケットプレイスにアセットを公開する。',
         installsReceived: '公開したウィジェット・ボット・テーマがインストールされる。',
@@ -1739,7 +1772,11 @@ export const ja: SiteContent = {
         bronze: 'ブロンズ段位',
         silver: 'シルバー段位',
         gold: 'ゴールド段位',
+        tagBronze: 'フレンド · bronze',
+        tagSilver: 'フレンド · silver',
+        tagGold: 'フレンド · gold',
         rare: 'レアメダル',
+        tagRare: 'フレンド · rare',
         legendary: 'レジェンドメダル',
       },
       levelRow: '{level}に到達',
@@ -1748,7 +1785,7 @@ export const ja: SiteContent = {
       creditsLabel: 'クレジット',
       tokensLabel: 'NXW',
       worth: '≈ 定価換算で {usd} 分の AI 生成',
-      months: '= Sponsor 相当の生成 {n} か月分を、稼いで手に入れる計算',
+      months: '= Elite 相当の生成 {n} か月分を、稼いで手に入れる計算',
       tokenomics: {
         eyebrow: 'NXW · Solana',
         title: '1 つのトークン。5 つの役割。上限 2,000 万。',
@@ -1986,7 +2023,7 @@ export const ja: SiteContent = {
   waitlist: {
     eyebrow: '課金ウェイトリスト',
     title: 'チェックアウトはもうすぐです',
-    subtitle: 'Supporter と Sponsor の課金がまもなく開始します。メールアドレスをご登録いただければ、開始当日にお知らせします — スパムはありません。',
+    subtitle: 'Lite と Elite の課金がまもなく開始します。メールアドレスをご登録いただければ、開始当日にお知らせします — スパムはありません。',
     placeholder: 'you@email.com',
     submit: 'ウェイトリストに登録',
     submitting: '登録中…',
@@ -2304,4 +2341,9 @@ export const ja: SiteContent = {
       ctaSecondary: 'コミュニティに参加',
     },
   },
+  privacyPage: legal.privacyPage,
+  termsPage: legal.termsPage,
+  cookiesPage: legal.cookiesPage,
+  legalPage: legal.legalPage,
+  acceptableUsePage: legal.acceptableUsePage,
 };

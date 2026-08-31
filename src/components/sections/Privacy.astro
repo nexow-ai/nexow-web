@@ -14,7 +14,7 @@ const t = useContent(lang).home.privacy;
 const securityHref = localizePath('/security', lang);
 ---
 
-<section id="privacy" class="relative overflow-x-clip border-y border-ink-900/5 bg-[#f7fbfb]/70 py-20 text-ink-950 sm:py-24 dark:border-white/8 dark:bg-white/[0.015] dark:text-white">
+<section id="privacy" class="relative overflow-x-clip py-20 sm:py-24" data-world-scene>
   <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div
       class="aurora-a absolute -left-40 top-1/2 size-[500px] -translate-y-1/2 rounded-full opacity-50 blur-3xl dark:opacity-40"
@@ -27,13 +27,21 @@ const securityHref = localizePath('/security', lang);
   </div>
   <div class="container-page relative">
     <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+      {/*
+        The two columns scroll at different rates (`lead` / `lag` in
+        global.css), so the claim and the diagram that illustrates it separate
+        and re-align as the band passes instead of travelling as one slab.
+      */}
       <!-- Copy -->
-      <div class="reveal min-w-0 max-w-xl">
+      <div class="world-copy reveal min-w-0 max-w-xl" data-motion="lead">
         <span class="eyebrow inline-flex items-center gap-2 text-brand-700 dark:text-brand-300">
           <span class="h-px w-6 bg-brand-500/50"></span>
           {t.eyebrow}
         </span>
-        <h2 class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]">
+        <h2
+          class="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]"
+          data-text-appear="scroll"
+        >
           {t.title}
         </h2>
         <p class="mt-5 text-lg leading-relaxed text-ink-600 dark:text-ink-300">{t.body}</p>
@@ -79,7 +87,7 @@ const securityHref = localizePath('/security', lang);
       </div>
 
       <!-- Visual: animated trust-boundary diagram + workspace panel -->
-      <div class="reveal relative min-w-0">
+      <div class="reveal relative min-w-0" data-motion="lag">
         <SecurityDiagram />
 
         <div
@@ -121,3 +129,24 @@ const securityHref = localizePath('/security', lang);
     </div>
   </div>
 </section>
+
+<style>
+  .world-copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .world-copy::before {
+    content: '';
+    position: absolute;
+    inset: -2.5rem -5rem -2.5rem -3rem;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 64% 58% at 38% 46%,
+      var(--w-surface, var(--color-ink-950)) 0%,
+      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 80%, transparent) 48%,
+      transparent 78%
+    );
+  }
+</style>
