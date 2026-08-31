@@ -621,7 +621,14 @@ const sections = [
             card.classList.add('hidden');
             card.classList.remove('is-entering', 'is-exiting');
             card.style.removeProperty('--conn-stagger');
-          } else if (!card.classList.contains('is-exiting')) {
+          } else {
+            /* Rearm on every apply. A second filter used to bump `applyGen`
+               and abort the first hide timer while `is-exiting` blocked a
+               new one — the card never got `.hidden`. */
+            if (pendingExit !== undefined) {
+              window.clearTimeout(pendingExit);
+              exitTimers.delete(card);
+            }
             card.classList.remove('is-entering');
             card.classList.add('is-exiting');
             const timer = window.setTimeout(() => {
