@@ -1920,8 +1920,8 @@
       vec3 refl = glassEnv(reflect(I, n));
       vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
       vec3 H = normalize(key + V);
-      float spec = pow(max(dot(n, H), 0.0), 96.0);
-      float specWide = pow(max(dot(n, H), 0.0), 18.0);
+      float spec = pow(max(dot(n, H), 0.0), 48.0);
+      float specWide = pow(max(dot(n, H), 0.0), 14.0);
       if (!gl_FrontFacing) {
         spec *= 0.2;
         specWide *= 0.35;
@@ -1938,7 +1938,7 @@
          own edges. */
       vec3 hold = volume * mix(0.32 + 1.05 * facet, 0.08 + 0.22 * facet, uLight);
       body = mix(hold, body, mix(0.48, 0.78, uLight));
-      body += vec3(1.0) * spec * (1.15 - 0.40 * uLight);
+      body += vec3(1.0) * spec * (1.45 - 0.45 * uLight);
       body += volume * specWide * 0.22;
       body += volume * caustic * mix(0.55, 0.20, uLight);
       /* A slow walk of light across the facets — the cheapest way to keep
