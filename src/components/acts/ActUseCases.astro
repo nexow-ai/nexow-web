@@ -46,7 +46,12 @@ const span = Math.max(items.length - 1, 0);
       <ActCopyBlock copy={copy} headingId="act-usecases-title" />
     </div>
 
-    <div class="uc-rail">
+    <div
+      class="uc-rail"
+      tabindex="0"
+      role="region"
+      aria-label={copy.title}
+    >
       <ul class="uc-track" role="list">
         {
           items.map((item, i) => (
