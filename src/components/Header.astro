@@ -434,7 +434,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * foot-of-screen transport (`TourHud.astro`) counts down.
    *
    * On the home close the tour freezes briefly at plans, rewards and FAQ so
-   * those rooms can be read, then lingers at the footer before the music ends.
+   * those rooms can be read — title at the top of the viewport, the rest of
+   * the section in view — then lingers at the footer before the music ends.
    * Durations are written for `x1` and shrink with the rate.
    */
   import {
@@ -442,6 +443,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     measureSectionHolds,
     secondsLeft,
     TOUR_END_HOLD,
+    TOUR_HOLD_INSET,
     TOUR_SECTION_HOLDS,
     TOUR_SPEED,
     tourRate,
@@ -495,9 +497,13 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       for (const { id } of TOUR_SECTION_HOLDS) {
         const el = document.getElementById(id);
         if (!el) continue;
-        tops.set(id, el.getBoundingClientRect().top + window.scrollY);
+        /* Park the title, not the padded section box — otherwise the heading
+         * lands mid-screen and the cards below it fall off the fold. */
+        const heading = el.querySelector<HTMLElement>('[data-tour-hold], h2');
+        const mark = heading ?? el;
+        tops.set(id, mark.getBoundingClientRect().top + window.scrollY);
       }
-      marks = measureSectionHolds(tops, window.innerHeight);
+      marks = measureSectionHolds(tops, TOUR_HOLD_INSET);
     };
 
     /** Home close only — other routes keep the abrupt end. */

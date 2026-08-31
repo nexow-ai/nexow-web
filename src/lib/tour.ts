@@ -13,7 +13,8 @@
  * the HUD countdown follows the rate from the scroll position and the map.
  *
  * Holds are intentional freezes at the close of the home story — plans,
- * rewards, FAQ — and a linger at the foot of the page before the music ends.
+ * rewards, FAQ — parked with the title under the header so the section is
+ * fully in view — and a linger at the foot of the page before the music ends.
  * Their durations are written for `x1` and shrink when the transport runs
  * faster (`left -= dt × rate`).
  */
@@ -30,7 +31,7 @@ export const TOUR_RATE_INTRO: TourRate = 0.5;
 
 /**
  * Mid-page freezes on the home close, in seconds at `x1`. Fired once each when
- * the section's top crosses the hold line.
+ * the section title reaches the hold inset.
  */
 export const TOUR_SECTION_HOLDS = [
   { id: 'plans', seconds: 2.5 },
@@ -42,10 +43,13 @@ export const TOUR_SECTION_HOLDS = [
 export const TOUR_END_HOLD = 5;
 
 /**
- * Fraction of the viewport: a section hold starts when its top reaches this
- * line from the top of the screen, so the copy is already in the reading band.
+ * Pixels from the top of the viewport where a hold parks the section title.
+ * The header has already hidden on the way down, so this is a hairline of
+ * air — not `scroll-padding-top` — so the heading sits at the top and the
+ * rest of the section stays in view. A viewport fraction used to centre
+ * the title and clip the cards below it.
  */
-export const TOUR_HOLD_LINE = 0.28;
+export const TOUR_HOLD_INSET = 16;
 
 /** A hold's trigger, in document space. */
 export type TourHoldMark = {
@@ -57,22 +61,23 @@ export type TourHoldMark = {
 };
 
 /**
- * Map section holds onto the page. Missing ids (every non-home route) are
- * dropped — those pages cruise straight through.
+ * Map section holds onto the page. `tops` are the titles (not the padded
+ * section boxes). Missing ids (every non-home route) are dropped — those
+ * pages cruise straight through.
  */
 export function measureSectionHolds(
   tops: ReadonlyMap<string, number>,
-  vh: number,
+  inset: number = TOUR_HOLD_INSET,
   holds: readonly { id: string; seconds: number }[] = TOUR_SECTION_HOLDS,
-  line = TOUR_HOLD_LINE,
 ): TourHoldMark[] {
   const marks: TourHoldMark[] = [];
+  const pad = Number.isFinite(inset) ? Math.max(0, inset) : TOUR_HOLD_INSET;
   for (const hold of holds) {
     const top = tops.get(hold.id);
     if (top === undefined) continue;
     marks.push({
       id: hold.id,
-      y: Math.max(0, top - vh * line),
+      y: Math.max(0, top - pad),
       seconds: hold.seconds,
     });
   }
