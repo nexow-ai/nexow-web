@@ -151,6 +151,20 @@ const railLabel = sectionNavLabel ?? chrome.onThisPage ?? 'On this page';
       // Scroll-reveal: re-init after client-side navigations (view transitions).
       let revealObserver: IntersectionObserver | null = null;
 
+      function markRevealed(el: Element) {
+        el.classList.add('is-visible');
+      }
+
+      /** True when any pixel overlaps the viewport — including a tall list
+       * whose top has already scrolled off. A 0.1 intersection *ratio* can
+       * never be reached when the target is ~10× the viewport (the changelog
+       * timeline on a phone), so those pages used to stay at opacity 0. */
+      function overlapsViewport(el: Element) {
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        return rect.top < vh && rect.bottom > 0;
+      }
+
       function initScrollReveal() {
         revealObserver?.disconnect();
         revealObserver = null;
@@ -163,19 +177,25 @@ const railLabel = sectionNavLabel ?? chrome.onThisPage ?? 'On this page';
             (entries) => {
               for (const e of entries) {
                 if (e.isIntersecting) {
-                  e.target.classList.add('is-visible');
+                  markRevealed(e.target);
                   revealObserver?.unobserve(e.target);
                 }
               }
             },
-            { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+            // One pixel in the inset viewport is enough. Keep a small bottom
+            // inset so items just peeking under the fold still wait to enter.
+            { rootMargin: '0px 0px -8% 0px', threshold: 0 },
           );
           els.forEach((el) => {
             el.classList.remove('is-visible');
+            if (overlapsViewport(el)) {
+              markRevealed(el);
+              return;
+            }
             revealObserver!.observe(el);
           });
         } else {
-          els.forEach((el) => el.classList.add('is-visible'));
+          els.forEach(markRevealed);
         }
       }
 

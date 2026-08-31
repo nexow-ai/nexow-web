@@ -31,7 +31,7 @@ const titleColor = gradientTitle
 const subColor = tone === 'dark' ? 'text-ink-400' : 'text-ink-600 dark:text-ink-300';
 ---
 
-<div class:list={['flex max-w-2xl flex-col reveal', alignCls, className]}>
+<div class:list={['flex max-w-2xl flex-col reveal', alignCls, className]} data-tour-hold>
   {
     eyebrow && (
       <span class="eyebrow mb-3 inline-flex items-center gap-2 text-brand-600 dark:text-brand-300">

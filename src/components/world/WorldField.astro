@@ -1800,9 +1800,11 @@
    *
    * A real solid at the heart of the world, not another flat quad — the one
    * object with actual volume for the screens to orbit, and the thing that
-   * gives a field of equal rectangles a subject. An icosahedron, flat-shaded:
-   * 20 faces is enough to read as a cut solid and few enough that hardcoding
-   * the mesh costs less than the code to subdivide one.
+   * gives a field of equal rectangles a subject. Cut glass, not a shaded
+   * plastic: each facet is a window (refraction + absorption) and a mirror
+   * (Fresnel + a studio highlight), drawn back-face then front-face so the
+   * volume has an interior. Flat-shaded on purpose — twenty hard faces is
+   * what makes it a cut stone rather than a sphere with a glass shader on.
    * ------------------------------------------------------------------ */
 
   const CORE_VERT = glsl`
@@ -1814,6 +1816,7 @@
     uniform mat4 uView;
     uniform mat4 uModel;
     uniform float uShift;
+    uniform float uLift;
     varying vec3 vN;
     varying vec3 vP;
     varying vec3 vE;
@@ -1828,6 +1831,7 @@
       vON = aNrm;
       vec4 mv = uView * wp;
       mv.x += uShift;
+      mv.y += uLift;
       gl_Position = uProj * mv;
     }
   `;
@@ -1848,51 +1852,115 @@
     varying vec3 vE;
     varying vec3 vObj;
     varying vec3 vON;
+
+    /* A studio, not a skybox. One key, one fill, a horizon slit — enough
+       structure that a refracted ray returns a different picture on every
+       facet, which is the whole of what reads as glass instead of tint. */
+    vec3 glassEnv(vec3 d) {
+      vec3 dir = normalize(d);
+      float up = dir.y * 0.5 + 0.5;
+      /* Floor and zenith have to stay a long way apart or every facet
+         samples the same pale value and the solid reads as a wireframe. */
+      vec3 floorC = mix(mix(uFog, uC1 * 0.35, 0.55), vec3(0.62, 0.70, 0.74), uLight);
+      vec3 zenith = mix(mix(uC3 * 1.25, vec3(0.55, 0.82, 0.96), 0.40),
+                        vec3(0.88, 0.93, 0.97), uLight);
+      vec3 hemi = mix(floorC, zenith, up * up);
+      vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
+      vec3 fill = normalize(vec3(0.72, 0.18, 0.48));
+      float soft = pow(max(dot(dir, key), 0.0), 7.0);
+      float slit = pow(max(dot(dir, key), 0.0), 48.0);
+      float kick = pow(max(dot(dir, fill), 0.0), 14.0);
+      float band = pow(max(1.0 - abs(dir.y - 0.18), 0.0), 28.0)
+                 * smoothstep(-0.2, 0.5, dir.x);
+      return hemi
+        + vec3(1.0) * (soft * 0.55 + slit * 0.85 + band * 0.28)
+        + uC3 * kick * 0.32;
+    }
+
     void main() {
       vec3 n = normalize(vN);
-      vec3 toEye = normalize(uCam - vP);
+      if (!gl_FrontFacing) n = -n;
+      vec3 V = normalize(uCam - vP);
+      vec3 I = -V;
+      float ndv = max(dot(n, V), 0.0);
+
+      /* Schlick, IOR 1.52 — optical glass. F0 sits a hair above the physical
+         0.043 so a facing facet still holds a film; without it the solid
+         vanished into whatever was behind it. */
+      float F0 = 0.055;
+      float fres = F0 + (1.0 - F0) * pow(1.0 - ndv, 5.0);
+
+      vec3 rd = refract(I, n, 0.658);
+      if (dot(rd, rd) < 0.001) {
+        rd = reflect(I, n);
+        fres = 1.0;
+      }
+
+      vec3 trans = glassEnv(rd);
+      /* Dispersion only on the grazing faces, where a real prism splits.
+         Cheap: a rim tint, not three extra environment walks. */
+      float disp = 1.0 - ndv;
+      trans += vec3(0.18, 0.02, -0.14) * disp * disp;
+
+      /* Beer–Lambert through a teal melt. Dark theme keeps a deep crystal
+         body; light theme still drinks a little, or facing facets vanish
+         into the page. */
+      vec3 sigma = mix(vec3(0.72, 0.16, 0.34), vec3(0.72, 0.28, 0.42), uLight);
+      float thick = mix(0.55, 1.35, 1.0 - ndv);
+      if (!gl_FrontFacing) thick += 0.45;
+      trans *= exp(-sigma * thick);
+      vec3 volume = mix(uC1, uC3, 0.28);
+      trans = mix(trans, trans * mix(volume, vec3(1.0), 0.45), 0.38);
+      /* Neighbouring faces must land on different values. Flat shading
+         already gave us the normal; a wide Lambert range on the transmitted
+         colour is what stops twenty facets collapsing into one film. */
+      float facet = 0.42 + 0.58 * max(dot(n, normalize(vec3(-0.35, 0.85, 0.42))), 0.0);
+      trans *= mix(0.62, 1.18, facet);
+
+      vec3 refl = glassEnv(reflect(I, n));
       vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
-      float lam = max(dot(n, key), 0.0);
-      /* Facet edges come free from flat shading; the rim is what stops the
-         unlit side reading as a hole cut in the backdrop. */
-      float rim = pow(1.0 - max(dot(n, toEye), 0.0), 2.2);
-      float spec = pow(max(dot(reflect(-key, n), toEye), 0.0), 40.0);
+      vec3 H = normalize(key + V);
+      float spec = pow(max(dot(n, H), 0.0), 48.0);
+      float specWide = pow(max(dot(n, H), 0.0), 14.0);
+      if (!gl_FrontFacing) {
+        spec *= 0.2;
+        specWide *= 0.35;
+      }
 
-      /* Wide lambert range on purpose. Flat shading only reads as a cut solid
-         if neighbouring faces are clearly different values; a narrow range
-         turned twenty facets into one dark blob. */
-      /* Dark theme: unlit faces sink into the backdrop, lit ones come up in
-         mint. Light theme: the solid is a teal object shading dark to pale, so
-         it keeps its volume on a surface that is already bright. */
-      vec3 dark = mix(uFog, uC1 * 0.95, 0.06 + 0.94 * lam * lam);
-      vec3 light = mix(uC1 * 0.55, mix(uC1, vec3(1.0), 0.55), 0.15 + 0.85 * lam);
-      vec3 body = mix(dark, light, uLight);
-      body = mix(body, uC3, rim * (0.65 - 0.25 * uLight));
-      body += vec3(1.0) * spec * 0.9;
+      /* Light pooling on the far side of the volume — the cheap stand-in
+         for a caustic, and the reason a facing facet is not just empty. */
+      float caustic = pow(max(dot(-n, key), 0.0), 2.4) * (0.25 + 0.75 * ndv);
 
-      /* Machined edges. vE interpolates to the distance, in object units, from
-         this fragment to each of its face's three boundaries — the ones the
-         triangulation invented are held out of range — so a single pair of
-         thresholds gives every face of every solid the same treatment: a wide
-         inset that darkens the face towards its border, and a bright line in
-         the border itself. This is the difference between a low-poly blob and
-         an object that looks fabricated, and it costs one min() and two
-         smoothsteps. */
+      vec3 body = mix(trans, refl, fres);
+      /* A holding film so a facing facet on a dark stage is still a teal
+         pane, not a hole. Most of the colour is still the glass terms;
+         this is only the amount that stops the solid collapsing to its
+         own edges. */
+      vec3 hold = volume * mix(0.32 + 1.05 * facet, 0.08 + 0.22 * facet, uLight);
+      body = mix(hold, body, mix(0.48, 0.78, uLight));
+      body += vec3(1.0) * spec * (1.45 - 0.45 * uLight);
+      body += volume * specWide * 0.22;
+      body += volume * caustic * mix(0.55, 0.20, uLight);
+      /* A slow walk of light across the facets — the cheapest way to keep
+         cut glass from looking like a still render of one. */
+      float walk = pow(max(sin(dot(n, vec3(0.62, 0.28, 0.38)) * 3.2 + uTime * 0.65), 0.0), 14.0);
+      body += vec3(1.0) * walk * mix(0.16, 0.07, uLight);
+
+      /* Machined arrises. Same edge field as before: a wide inset, then a
+         bright hairline. On glass the inset is an internal reflection and
+         the line is the catch that makes a cut stone look cut. */
       float ed = min(min(vE.x, vE.y), vE.z);
-      float inset = 1.0 - smoothstep(0.03, 0.16, ed);
-      float line = 1.0 - smoothstep(0.004, 0.026, ed);
-      /* The face darkens into its own edge on both themes; the line then goes
-         the other way — emissive mint in the dark, near-black in the light,
-         where a glowing hairline on a pale solid reads as a rendering error. */
-      body *= 1.0 - 0.30 * inset;
-      body = mix(body, mix(uC1 * 1.35, uC1 * 0.30, uLight), line * 0.85);
+      float inset = 1.0 - smoothstep(0.025, 0.15, ed);
+      float line = 1.0 - smoothstep(0.003, 0.020, ed);
+      body = mix(body, body * mix(volume, vec3(0.72), 0.45), inset * 0.40);
+      /* Bright catch in the dark, ink hairline in the light — a glowing
+         edge on a pale page is a rendering error, a dark arris is glass. */
+      vec3 arris = mix(mix(vec3(1.0), volume, 0.12), vec3(0.10, 0.12, 0.14), uLight);
+      body += arris * line * mix(0.70 + spec * 1.3, 0.95, uLight);
 
-      /* The token's mark. Only the two flat faces (object normal along Z);
-         the rim stays blank. The stamp is the favicon itself, sampled from
-         a square atlas; the back flips X so the spike reads the right way
-         after a half turn. Ink, not accent: white on a dark body, black on
-         a light one — the two cuts of the tab icon — with a gleam that
-         rides the same key as the rim. */
+      /* The token's mark, as a frosted etch rather than printed ink: scatter
+         the transmission, lift a milky film, keep a wet gleam on the cut.
+         Still only the two flat faces; the rim stays blank glass. */
       vec2 lp = vObj.xy;
       lp.x = mix(-lp.x, lp.x, step(0.0, vObj.z));
       float on = step(0.88, abs(vON.z)) * uStamp;
@@ -1900,25 +1968,33 @@
       float cover = step(0.0, uv.x) * step(uv.x, 1.0) * step(0.0, uv.y) * step(uv.y, 1.0);
       float inkA = texture2D(uMark, uv).a * on * cover;
       float mark = smoothstep(0.18, 0.72, inkA);
-      float core = smoothstep(0.40, 0.92, inkA);
-      float halo = smoothstep(0.02, 0.22, inkA) - mark;
-      float well = max(halo, 0.0);
-      body *= 1.0 - 0.18 * well;
-      float sweep = 0.5 + 0.5 * sin(lp.x * 4.2 + lp.y * 1.4 + toEye.x * 5.0);
+      float etch = smoothstep(0.40, 0.92, inkA);
+      float well = max(smoothstep(0.02, 0.22, inkA) - mark, 0.0);
+      body = mix(body, mix(body, vec3(0.94, 0.97, 1.0), 0.55), mark * 0.62);
+      body *= 1.0 - 0.12 * well;
+      float sweep = 0.5 + 0.5 * sin(lp.x * 4.2 + lp.y * 1.4 + V.x * 5.0);
       float gleam = pow(max(sin(lp.x * 5.5 + lp.y * 2.0 - uTime * 1.35), 0.0), 10.0);
-      float glint = (pow(spec, 0.42) * (0.45 + 0.55 * sweep) + gleam * 0.85) * on;
-      vec3 ink = mix(vec3(0.97, 0.98, 1.0), vec3(0.05, 0.055, 0.06), uLight);
-      vec3 hot = mix(vec3(1.0), vec3(0.12, 0.13, 0.14), uLight);
-      body = mix(body, mix(ink, hot, 0.22 + 0.55 * glint), mark);
-      body = mix(body, hot, core * (0.28 + 0.50 * glint));
-      body += ink * well * (0.10 + 0.22 * glint) * (1.0 - uLight * 0.75);
-      body += hot * mark * glint * 0.45;
+      float glint = (pow(spec, 0.35) * (0.45 + 0.55 * sweep) + gleam * 0.85) * on;
+      vec3 ink = mix(vec3(0.97, 0.98, 1.0), vec3(0.08, 0.09, 0.10), uLight);
+      body = mix(body, mix(ink, body, 0.22), mark * 0.88);
+      body = mix(body, ink, etch * (0.18 + 0.40 * glint));
+      body += ink * (well * 0.12 + mark * glint * 0.55);
 
-      /* Distance still dissolves the solid, but far more slowly than it did:
-         it is drawn in front of the screens now, and a half-fogged object over
-         a field of panels is a surface-coloured ghost rather than a subject. */
+      /* Alpha is the Fresnel story in reverse: facing faces open, edges
+         hold. Fog still retires a distant solid, but into transparency now
+         — mixing the body toward uFog and then blending it again would
+         stain every pane the page colour. */
       float fog = smoothstep(80.0, 6.0, length(uCam - vP));
-      gl_FragColor = vec4(mix(uFog, body, fog * uAlpha), 1.0);
+      /* Dark faces need a film or they disappear into the stage and leave
+         a wireframe; light faces need one or they disappear into the page. */
+      float alpha = mix(mix(0.70, 0.54, uLight), 0.90, fres)
+                  + thick * 0.10 + line * 0.42 + mark * 0.28;
+      if (!gl_FrontFacing) alpha *= 0.55;
+      alpha = clamp(alpha, 0.0, 0.94) * fog * uAlpha;
+      /* Premultiplied. The canvas is too, and the blend below is ONE /
+         ONE_MINUS_SRC_ALPHA, so a facing pane over empty stage is a*body
+         rather than a*a*body. */
+      gl_FragColor = vec4(body * alpha, alpha);
     }
   `;
 
@@ -2130,9 +2206,11 @@
    * `drawCore`), so these are keyframes rather than settings: two entries with
    * the same `mesh` describe one solid that reshapes itself between them.
    */
-  const OBJECTS = [
-    // hero — nothing. The opening is the screens themselves.
-    { mesh: -1, scale: 0, spin: 0, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    const OBJECTS = [
+    /* hero — a cut-glass hub in the carousel hole. The headline sits on
+       top of it (HTML, above the canvas); the crystal is the thing the
+       screens are orbiting, and the first solid the reader meets. */
+    { mesh: 2, scale: 2.05, spin: 0.12, sy: 1, pulse: 0, pos: [0, 0, 0] },
     /* 01 say it — the sentence, as a solid, floating above the card the
        screens are condensing into. Offset because the formation here is a flat
        slab through the origin: left at the centre the block is simply inside
@@ -2300,7 +2378,13 @@
          * depth buffer a nearer screen simply hides the one behind it, which
          * is what makes a crowd of them look like a room rather than a mess. */
         depth: true,
-        premultipliedAlpha: false,
+        /* Premultiplied: the core is a transparent solid drawn over a
+           clear-alpha canvas. Straight alpha plus SRC_ALPHA blending writes
+           a*colour into a pixel whose alpha is also a, and the browser then
+           multiplies by a again — facing facets vanished and only the
+           edges survived, which is a wireframe. Screens stay opaque, so
+           they are unchanged. */
+        premultipliedAlpha: true,
         powerPreference: 'high-performance',
       }) as WebGLRenderingContext | null;
     } catch {
@@ -2428,6 +2512,7 @@
     let cuView: WebGLUniformLocation | null = null;
     let cuModel: WebGLUniformLocation | null = null;
     let cuShift: WebGLUniformLocation | null = null;
+    let cuLift: WebGLUniformLocation | null = null;
     let cuCam: WebGLUniformLocation | null = null;
     let cuC1: WebGLUniformLocation | null = null;
     let cuC3: WebGLUniformLocation | null = null;
@@ -2493,6 +2578,7 @@
         cuView = ctx.getUniformLocation(coreProg, 'uView');
         cuModel = ctx.getUniformLocation(coreProg, 'uModel');
         cuShift = ctx.getUniformLocation(coreProg, 'uShift');
+        cuLift = ctx.getUniformLocation(coreProg, 'uLift');
         cuCam = ctx.getUniformLocation(coreProg, 'uCam');
         cuC1 = ctx.getUniformLocation(coreProg, 'uC1');
         cuC3 = ctx.getUniformLocation(coreProg, 'uC3');
@@ -2524,6 +2610,10 @@
      * rate itself can be interpolated and the object merely speeds up. */
     let coreYaw = 0;
     let coreClock = -1;
+    /* Same view-space slide the screens take, so the crystal sits in the
+     * carousel hole under the headline rather than at the viewport centre. */
+    let coreShift = 0;
+    let coreLift = 0;
 
     /**
      * Draw the core.
@@ -2536,9 +2626,8 @@
      *
      * Everything else — scale, proportion, position, rate, beat — interpolates
      * across the whole morph regardless, so the object travels to its next
-     * staging as one continuous body. It grows out of nothing through the hero,
-     * so the opening frame is the screens alone and the object arrives with the
-     * first act rather than sitting there waiting for it.
+     * staging as one continuous body. The hero already holds the crystal; later
+     * acts reshape it rather than introducing it.
      *
      * `flow` is the reader's own position in the story, sections plus fraction,
      * and it turns the object directly. That is the part the scroll drives: a
@@ -2609,7 +2698,8 @@
       ctx.uniformMatrix4fv(cuProj, false, proj);
       ctx.uniformMatrix4fv(cuView, false, view);
       ctx.uniformMatrix4fv(cuModel, false, coreModel);
-      ctx.uniform1f(cuShift, shiftFull);
+      ctx.uniform1f(cuShift, coreShift);
+      ctx.uniform1f(cuLift, coreLift);
       ctx.uniform3f(cuCam, cam.x, cam.y, cam.z);
       ctx.uniform3fv(cuC1, coreC1);
       ctx.uniform3fv(cuC3, coreC3);
@@ -2620,7 +2710,19 @@
       ctx.uniform1f(cuTime, seconds);
       ctx.activeTexture(ctx.TEXTURE0);
       ctx.bindTexture(ctx.TEXTURE_2D, stampTex);
+      /* Interior first, then the front film. Convex solids sort themselves
+       * this way: every back face is behind every front face, so the volume
+       * composites correctly without a peel. Blend is restored off — the
+       * screens next frame must still occlude, not stain. */
+      ctx.enable(ctx.BLEND);
+      ctx.blendFunc(ctx.ONE, ctx.ONE_MINUS_SRC_ALPHA);
+      ctx.enable(ctx.CULL_FACE);
+      ctx.cullFace(ctx.FRONT);
       ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
+      ctx.cullFace(ctx.BACK);
+      ctx.drawArrays(ctx.TRIANGLES, range.first, range.count);
+      ctx.disable(ctx.CULL_FACE);
+      ctx.disable(ctx.BLEND);
 
       // Hand the screens' attribute state back exactly as they expect it.
       ctx.useProgram(prog);
@@ -2912,8 +3014,10 @@
        * as act 01's formation takes the scene column instead. */
       const hero = a === 0 ? 1 - morph : 0;
       const [hx, hy] = hero > 0 ? headlineOffset(Math.hypot(cam.x, cam.y, cam.z)) : [0, 0];
-      ctx.uniform1f(uShift, hx * hero + shiftFull * (a === 0 ? morph : 1));
-      ctx.uniform1f(uLift, hy * hero);
+      coreShift = hx * hero + shiftFull * (a === 0 ? morph : 1);
+      coreLift = hy * hero;
+      ctx.uniform1f(uShift, coreShift);
+      ctx.uniform1f(uLift, coreLift);
 
       ctx.uniform1f(uFormA, Math.min(a, FORM_LAST));
       ctx.uniform1f(uFormB, Math.min(a + 1, FORM_LAST));
@@ -3062,8 +3166,10 @@
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
       const [sx, sy] = headlineOffset(Math.hypot(-14.6, 3.4, 18.2));
-      ctx.uniform1f(uShift, sx);
-      ctx.uniform1f(uLift, sy);
+      coreShift = sx;
+      coreLift = sy;
+      ctx.uniform1f(uShift, coreShift);
+      ctx.uniform1f(uLift, coreLift);
       ctx.uniform3f(uCam, -14.6, 3.4, 18.2);
       lookAt(view, -14.6, 3.4, 18.2);
       ctx.uniformMatrix4fv(uView, false, view);

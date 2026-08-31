@@ -272,6 +272,22 @@ test.describe('page-to-page slide', () => {
   });
 });
 
+test.describe('changelog', () => {
+  // Short phone chrome: a 24-entry list is ~10× this tall. A 0.1
+  // IntersectionObserver threshold can never fire, so the records used to
+  // stay at opacity 0. Pixel 7 (915px) can mask the bug.
+  test.use({ viewport: { width: 390, height: 700 } });
+
+  test('shows release records on a short phone', async ({ page }) => {
+    await page.goto('/changelog');
+    const first = page.locator('#updates li').first();
+    await expect(first.locator('h2')).not.toBeEmpty();
+    await expect
+      .poll(async () => first.evaluate((el) => getComputedStyle(el).opacity))
+      .toBe('1');
+  });
+});
+
 test.describe('legacy redirects', () => {
   test('/pricing lands on /plans', async ({ page }) => {
     await page.goto('/pricing');

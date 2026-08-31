@@ -4,15 +4,17 @@ import {
   cycleTourRate,
   dismissPaceHint,
   dismissTrackHint,
+  crossesHold,
   holdSecondsAhead,
   measureSectionHolds,
+  parkScrollY,
   nextTourRate,
   paceHintDismissed,
   paceMark,
   secondsLeft,
   setTourRate,
   TOUR_END_HOLD,
-  TOUR_HOLD_LINE,
+  TOUR_HOLD_INSET,
   TOUR_MIN_TRAVEL,
   TOUR_RATE_DEFAULT,
   TOUR_RATE_INTRO,
@@ -61,29 +63,64 @@ describe('secondsLeft', () => {
 });
 
 describe('measureSectionHolds', () => {
-  const vh = 800;
-
   it('drops ids the page does not have', () => {
-    expect(measureSectionHolds(new Map(), vh)).toEqual([]);
+    expect(measureSectionHolds(new Map())).toEqual([]);
   });
 
-  it('pins each hold to the reading line above the section', () => {
+  it('parks each hold so the title sits under the header, not mid-screen', () => {
     const tops = new Map([
       ['plans', 4000],
       ['rewards', 5200],
       ['faq', 6400],
     ]);
-    const marks = measureSectionHolds(tops, vh);
+    const marks = measureSectionHolds(tops);
     expect(marks.map((m) => m.id)).toEqual(['plans', 'rewards', 'faq']);
-    expect(marks[0].y).toBeCloseTo(4000 - vh * TOUR_HOLD_LINE, 6);
+    expect(marks[0].y).toBe(4000 - TOUR_HOLD_INSET);
+    expect(marks[1].y).toBe(5200 - TOUR_HOLD_INSET);
+    expect(marks[2].y).toBe(6400 - TOUR_HOLD_INSET);
     expect(marks[0].seconds).toBe(TOUR_SECTION_HOLDS[0].seconds);
     expect(marks[1].seconds).toBe(2.5);
     expect(marks[2].seconds).toBe(2.5);
+    // 28% of an 800px screen was 224px — that centred the heading and
+    // clipped the section. The inset is a hairline, not a reading band.
+    expect(TOUR_HOLD_INSET).toBe(16);
+    expect(TOUR_HOLD_INSET).toBeLessThan(48);
+  });
+
+  it('takes the caller inset', () => {
+    const marks = measureSectionHolds(new Map([['plans', 4000]]), 64);
+    expect(marks[0].y).toBe(3936);
   });
 
   it('never starts a hold above the top of the page', () => {
-    const marks = measureSectionHolds(new Map([['plans', 40]]), vh);
+    const marks = measureSectionHolds(new Map([['plans', 8]]));
     expect(marks[0].y).toBe(0);
+  });
+});
+
+describe('parkScrollY', () => {
+  it('scrolls so the title lands on the inset', () => {
+    expect(parkScrollY(200, 1000)).toBe(1000 + 200 - TOUR_HOLD_INSET);
+  });
+
+  it('never parks above the top of the page', () => {
+    expect(parkScrollY(8, 0)).toBe(0);
+  });
+});
+
+describe('crossesHold', () => {
+  it('is true when this frame would carry the title onto the inset', () => {
+    expect(crossesHold(40, 30)).toBe(true);
+    expect(crossesHold(16.5, 1)).toBe(true);
+  });
+
+  it('is false while the title is still below the inset', () => {
+    expect(crossesHold(400, 6)).toBe(false);
+  });
+
+  it('is false once the title has already passed the inset', () => {
+    expect(crossesHold(16, 6)).toBe(false);
+    expect(crossesHold(0, 6)).toBe(false);
   });
 });
 
