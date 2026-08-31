@@ -413,7 +413,6 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 </style>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
   /**
    * Hands-free scroll tour, on every page of the site.
    *
@@ -431,10 +430,24 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * The pace lives in `lib/tour`: a base speed in CSS pixels per second, not
    * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the
    * same rate — scaled by the transport's rate (`x0.25` … `x2`). Time left is
-   * distance over that speed, which the foot-of-screen transport
-   * (`TourHud.astro`) counts down.
+   * distance over that speed plus any still-ahead holds, which the
+   * foot-of-screen transport (`TourHud.astro`) counts down.
+   *
+   * On the home close the tour freezes briefly at plans, rewards and FAQ so
+   * those rooms can be read, then lingers at the footer before the music ends.
+   * Durations are written for `x1` and shrink with the rate.
    */
-  import { secondsLeft, TOUR_SPEED, tourRate, worthTouring } from '../lib/tour';
+  import {
+    holdSecondsAhead,
+    measureSectionHolds,
+    secondsLeft,
+    TOUR_END_HOLD,
+    TOUR_SECTION_HOLDS,
+    TOUR_SPEED,
+    tourRate,
+    worthTouring,
+    type TourHoldMark,
+  } from '../lib/tour';
 
   let tourAbort: AbortController | undefined;
   let tourRaf = 0;
@@ -456,6 +469,16 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     let last = 0;
     /** The whole second the countdown last announced. */
     let shown = -1;
+    /** Section freezes on this page, in document space. */
+    let marks: TourHoldMark[] = [];
+    /** Holds already taken on this run. */
+    let done = new Set<string>();
+    /** Current freeze: remaining time in `x1` seconds. */
+    let holdLeft = 0;
+    /** Whether the end-of-page linger has finished on this run. */
+    let endDone = false;
+    /** True while the end linger is counting down. */
+    let ending = false;
 
     const maxScroll = () =>
       Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -465,11 +488,38 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       const stamped = Number(document.querySelector<HTMLElement>('[data-tour-action="pace"]')?.dataset.rate);
       return stamped > 0 ? stamped : tourRate();
     };
-    const speed = () => TOUR_SPEED * paceOf();
+
+    /** Where every named hold sits on the page right now. */
+    const remarks = () => {
+      const tops = new Map<string, number>();
+      for (const { id } of TOUR_SECTION_HOLDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        tops.set(id, el.getBoundingClientRect().top + window.scrollY);
+      }
+      marks = measureSectionHolds(tops, window.innerHeight);
+    };
+
+    /** Home close only — other routes keep the abrupt end. */
+    const endHold = () => (marks.length > 0 ? TOUR_END_HOLD : 0);
+
+    /** Skip holds already behind the scroll so a mid-page start does not freeze. */
+    const armHolds = (y: number) => {
+      remarks();
+      done = new Set(marks.filter((m) => m.y <= y).map((m) => m.id));
+      holdLeft = 0;
+      ending = false;
+      endDone = false;
+    };
 
     /** The countdown, sent on only when the second it shows has changed. */
     const tell = (y: number, max: number) => {
-      const remaining = secondsLeft(y, max, speed());
+      const rate = paceOf();
+      const sectionLeft = ending ? 0 : holdLeft;
+      const footLeft = ending ? holdLeft : endDone ? 0 : endHold();
+      const remaining =
+        secondsLeft(y, max, TOUR_SPEED * rate) +
+        holdSecondsAhead(y, marks, done, sectionLeft, rate, footLeft);
       const whole = Math.ceil(remaining);
       if (whole === shown) return;
       shown = whole;
@@ -493,6 +543,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       if (tourRaf) cancelAnimationFrame(tourRaf);
       tourRaf = 0;
       last = 0;
+      holdLeft = 0;
+      ending = false;
       setPlaying(false);
     };
 
@@ -505,6 +557,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       btn.toggleAttribute('data-short', short);
       // The button just left the header; the tour cannot outlive it.
       if (short) stop();
+      else if (playing) remarks();
     };
 
     /** The tour's own controls: this button and the transport at the foot. */
@@ -518,12 +571,53 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
 
+      const rate = paceOf();
+      const max = maxScroll();
+
+      /* A freeze ticks in `x1` seconds so a faster rate shortens it. */
+      if (holdLeft > 0) {
+        holdLeft = Math.max(0, holdLeft - dt * rate);
+        if (holdLeft > 0) {
+          tell(window.scrollY, max);
+          tourRaf = requestAnimationFrame(step);
+          return;
+        }
+        if (ending) {
+          endDone = true;
+          ending = false;
+          tell(max, max);
+          stop();
+          return;
+        }
+      }
+
       // Read every frame: a page that grows under the tour — a lazy image, a
       // font — moves the end of the story, and the countdown with it.
-      const max = maxScroll();
-      const next = window.scrollY + speed() * dt;
+      const y = window.scrollY;
+      const next = y + TOUR_SPEED * rate * dt;
+
+      /* Mid-page freezes: cross a mark and park there for its hold. */
+      const hit = marks.find((m) => !done.has(m.id) && y < m.y && next >= m.y);
+      if (hit) {
+        window.scrollTo(0, hit.y);
+        done.add(hit.id);
+        holdLeft = hit.seconds;
+        tell(hit.y, max);
+        tourRaf = requestAnimationFrame(step);
+        return;
+      }
+
       if (next >= max) {
         window.scrollTo(0, max);
+        const foot = endHold();
+        if (!endDone && foot > 0) {
+          ending = true;
+          holdLeft = foot;
+          tell(max, max);
+          tourRaf = requestAnimationFrame(step);
+          return;
+        }
+        endDone = true;
         tell(max, max);
         stop();
         return;
@@ -541,6 +635,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       // Reached the end already? Start the tour over rather than do nothing.
       if (window.scrollY >= maxScroll() - 2) window.scrollTo(0, 0);
       shown = -1;
+      armHolds(window.scrollY);
       setPlaying(true);
       tell(window.scrollY, maxScroll());
       last = 0;
@@ -615,6 +710,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 <script>
   // Header: solidify on scroll, hide on scroll down / reveal on scroll up,
   // plus mobile menu toggle. Re-inits on view transitions.
+  import { navigate } from 'astro:transitions/client';
   import { CHROME_TONE_EVENT } from '../lib/chrome-tone';
 
   let headerAbort: AbortController | undefined;

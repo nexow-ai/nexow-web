@@ -9,8 +9,13 @@
  * travel it at the same rate.
  *
  * The rate is a multiplier the transport can step through (`x0.25` … `x2`).
- * Time left is distance over the current speed, so the HUD countdown follows
- * the rate from nothing more than the scroll position.
+ * Time left is distance over the current speed, plus any still-ahead holds, so
+ * the HUD countdown follows the rate from the scroll position and the map.
+ *
+ * Holds are intentional freezes at the close of the home story — plans,
+ * rewards, FAQ — and a linger at the foot of the page before the music ends.
+ * Their durations are written for `x1` and shrink when the transport runs
+ * faster (`left -= dt × rate`).
  */
 
 /** The tour's base pace, in CSS pixels per second — the `x1` rate. */
@@ -22,6 +27,80 @@ export type TourRate = (typeof TOUR_RATES)[number];
 export const TOUR_RATE_DEFAULT: TourRate = 1;
 /** First tour starts slower until the visitor accepts the pace hint. */
 export const TOUR_RATE_INTRO: TourRate = 0.5;
+
+/**
+ * Mid-page freezes on the home close, in seconds at `x1`. Fired once each when
+ * the section's top crosses the hold line.
+ */
+export const TOUR_SECTION_HOLDS = [
+  { id: 'plans', seconds: 2.5 },
+  { id: 'rewards', seconds: 2.5 },
+  { id: 'faq', seconds: 2.5 },
+] as const;
+
+/** Linger at the bottom of the page at `x1` before the tour (and music) end. */
+export const TOUR_END_HOLD = 5;
+
+/**
+ * Fraction of the viewport: a section hold starts when its top reaches this
+ * line from the top of the screen, so the copy is already in the reading band.
+ */
+export const TOUR_HOLD_LINE = 0.28;
+
+/** A hold's trigger, in document space. */
+export type TourHoldMark = {
+  id: string;
+  /** Scroll Y at which the freeze starts. */
+  y: number;
+  /** Duration at `x1`, in seconds. */
+  seconds: number;
+};
+
+/**
+ * Map section holds onto the page. Missing ids (every non-home route) are
+ * dropped — those pages cruise straight through.
+ */
+export function measureSectionHolds(
+  tops: ReadonlyMap<string, number>,
+  vh: number,
+  holds: readonly { id: string; seconds: number }[] = TOUR_SECTION_HOLDS,
+  line = TOUR_HOLD_LINE,
+): TourHoldMark[] {
+  const marks: TourHoldMark[] = [];
+  for (const hold of holds) {
+    const top = tops.get(hold.id);
+    if (top === undefined) continue;
+    marks.push({
+      id: hold.id,
+      y: Math.max(0, top - vh * line),
+      seconds: hold.seconds,
+    });
+  }
+  return marks.sort((a, b) => a.y - b.y);
+}
+
+/**
+ * Seconds of holds still ahead of `y` at the given rate. `activeLeft` is a
+ * mid-page freeze's remaining time in `x1` seconds; `endLeft` is the footer
+ * linger still owed (also in `x1` seconds — pass `0` once it has finished).
+ * `done` are mid-page holds already taken on this run.
+ */
+export function holdSecondsAhead(
+  y: number,
+  marks: readonly TourHoldMark[],
+  done: ReadonlySet<string>,
+  activeLeft = 0,
+  rate = 1,
+  endLeft = TOUR_END_HOLD,
+): number {
+  const pace = rate > 0 ? rate : 1;
+  let x1 = Math.max(0, activeLeft) + Math.max(0, endLeft);
+  for (const mark of marks) {
+    if (done.has(mark.id)) continue;
+    if (mark.y > y) x1 += mark.seconds;
+  }
+  return x1 / pace;
+}
 
 let rate: TourRate = TOUR_RATE_DEFAULT;
 

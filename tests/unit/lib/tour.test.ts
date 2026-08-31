@@ -4,15 +4,20 @@ import {
   cycleTourRate,
   dismissPaceHint,
   dismissTrackHint,
+  holdSecondsAhead,
+  measureSectionHolds,
   nextTourRate,
   paceHintDismissed,
   paceMark,
   secondsLeft,
   setTourRate,
+  TOUR_END_HOLD,
+  TOUR_HOLD_LINE,
   TOUR_MIN_TRAVEL,
   TOUR_RATE_DEFAULT,
   TOUR_RATE_INTRO,
   TOUR_RATES,
+  TOUR_SECTION_HOLDS,
   TOUR_SPEED,
   tourRate,
   trackHintDismissed,
@@ -52,6 +57,67 @@ describe('secondsLeft', () => {
   it('has nothing to time on a page that does not scroll', () => {
     expect(secondsLeft(0, 0)).toBe(0);
     expect(secondsLeft(0, -10)).toBe(0);
+  });
+});
+
+describe('measureSectionHolds', () => {
+  const vh = 800;
+
+  it('drops ids the page does not have', () => {
+    expect(measureSectionHolds(new Map(), vh)).toEqual([]);
+  });
+
+  it('pins each hold to the reading line above the section', () => {
+    const tops = new Map([
+      ['plans', 4000],
+      ['rewards', 5200],
+      ['faq', 6400],
+    ]);
+    const marks = measureSectionHolds(tops, vh);
+    expect(marks.map((m) => m.id)).toEqual(['plans', 'rewards', 'faq']);
+    expect(marks[0].y).toBeCloseTo(4000 - vh * TOUR_HOLD_LINE, 6);
+    expect(marks[0].seconds).toBe(TOUR_SECTION_HOLDS[0].seconds);
+    expect(marks[1].seconds).toBe(2.5);
+    expect(marks[2].seconds).toBe(2.5);
+  });
+
+  it('never starts a hold above the top of the page', () => {
+    const marks = measureSectionHolds(new Map([['plans', 40]]), vh);
+    expect(marks[0].y).toBe(0);
+  });
+});
+
+describe('holdSecondsAhead', () => {
+  const marks = [
+    { id: 'plans', y: 1000, seconds: 2.5 },
+    { id: 'rewards', y: 2000, seconds: 2.5 },
+    { id: 'faq', y: 3000, seconds: 2.5 },
+  ];
+
+  it('counts every hold and the footer linger from the top at x1', () => {
+    expect(holdSecondsAhead(0, marks, new Set())).toBeCloseTo(2.5 * 3 + TOUR_END_HOLD, 6);
+  });
+
+  it('shrinks with the transport rate', () => {
+    expect(holdSecondsAhead(0, marks, new Set(), 0, 2)).toBeCloseTo((2.5 * 3 + TOUR_END_HOLD) / 2, 6);
+  });
+
+  it('drops holds already taken or already passed', () => {
+    expect(holdSecondsAhead(1500, marks, new Set(['plans']), 0, 1, TOUR_END_HOLD)).toBeCloseTo(
+      2.5 + 2.5 + TOUR_END_HOLD,
+      6,
+    );
+  });
+
+  it('adds an active freeze on top of what is still ahead', () => {
+    expect(holdSecondsAhead(1000, marks, new Set(['plans']), 1.2, 1, TOUR_END_HOLD)).toBeCloseTo(
+      1.2 + 2.5 + 2.5 + TOUR_END_HOLD,
+      6,
+    );
+  });
+
+  it('can clear the footer linger once it has finished', () => {
+    expect(holdSecondsAhead(9000, marks, new Set(['plans', 'rewards', 'faq']), 0, 1, 0)).toBe(0);
   });
 });
 
