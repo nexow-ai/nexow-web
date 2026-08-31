@@ -125,8 +125,7 @@ function paintCard(
     light ? '#0d9488' : '#5eead4',
   );
   const dotFill = resolved(dotEl, 'background-color', metaFill);
-  const mono =
-    resolved(titleEl, 'font-family', 'ui-monospace, monospace') || 'ui-monospace, monospace';
+  const mono = resolved(titleEl, 'font-family', 'ui-monospace, monospace');
   const barH = Math.round(h * 0.168);
 
   /* Opaque ground first. The live card is a color-mix against transparent,

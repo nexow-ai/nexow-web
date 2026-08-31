@@ -98,3 +98,22 @@ describe('getPosts', () => {
     expect(posts.map((p) => p.id)).toEqual(['en/newest', 'en/middle', 'en/oldest']);
   });
 });
+
+describe('localesForSlug', () => {
+  it('lists every locale that publishes the slug, in site order', async () => {
+    expect(await blog.localesForSlug('hola')).toEqual(['es']);
+    expect(await blog.localesForSlug('missing')).toEqual([]);
+  });
+
+  it('keeps a draft locale in development and drops it in production', async () => {
+    vi.stubEnv('PROD', false);
+    vi.resetModules();
+    const dev = await import('../../../src/i18n/blog');
+    expect(await dev.localesForSlug('draft-post')).toEqual(['en']);
+
+    vi.stubEnv('PROD', true);
+    vi.resetModules();
+    const prod = await import('../../../src/i18n/blog');
+    expect(await prod.localesForSlug('draft-post')).toEqual([]);
+  });
+});
