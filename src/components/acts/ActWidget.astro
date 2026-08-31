@@ -15,7 +15,7 @@ const { lang } = Astro.props;
 const copy = useContent(lang).home.acts!.widget;
 ---
 
-<Act id="widget" labelledBy="act-widget-title" height="205vh" class="tone-invert">
+<Act id="widget" labelledBy="act-widget-title" height="205vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16">
     <ActCopyBlock copy={copy} headingId="act-widget-title" />
     <div class="act-scene pg-slot" aria-hidden="true"></div>
