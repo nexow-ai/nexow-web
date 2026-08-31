@@ -13,8 +13,9 @@
  * (Stock Music Free License — commercial use, no attribution:
  * https://mixkit.co/license/#musicFree). Guest cuts live beside them as local
  * files with no `source` — drop the mp3 in as `<id>.mp3` and append an entry.
- * One track is the piece `lib/ambient` synthesises in the browser, which ships
- * no bytes at all and is also the fallback when a file will not play.
+ * Guest cuts taken from YouTube carry a `youtube` watch URL for the now-playing
+ * credit link. One track is the piece `lib/ambient` synthesises in the browser,
+ * which ships no bytes at all and is also the fallback when a file will not play.
  *
  * To add a Mixkit record: append an entry with its `source`, run the script,
  * commit the file it writes. To add a guest cut: drop `<id>.mp3` in the folder
