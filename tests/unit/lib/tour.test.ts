@@ -4,8 +4,10 @@ import {
   cycleTourRate,
   dismissPaceHint,
   dismissTrackHint,
+  crossesHold,
   holdSecondsAhead,
   measureSectionHolds,
+  parkScrollY,
   nextTourRate,
   paceHintDismissed,
   paceMark,
@@ -93,6 +95,32 @@ describe('measureSectionHolds', () => {
   it('never starts a hold above the top of the page', () => {
     const marks = measureSectionHolds(new Map([['plans', 8]]));
     expect(marks[0].y).toBe(0);
+  });
+});
+
+describe('parkScrollY', () => {
+  it('scrolls so the title lands on the inset', () => {
+    expect(parkScrollY(200, 1000)).toBe(1000 + 200 - TOUR_HOLD_INSET);
+  });
+
+  it('never parks above the top of the page', () => {
+    expect(parkScrollY(8, 0)).toBe(0);
+  });
+});
+
+describe('crossesHold', () => {
+  it('is true when this frame would carry the title onto the inset', () => {
+    expect(crossesHold(40, 30)).toBe(true);
+    expect(crossesHold(16.5, 1)).toBe(true);
+  });
+
+  it('is false while the title is still below the inset', () => {
+    expect(crossesHold(400, 6)).toBe(false);
+  });
+
+  it('is false once the title has already passed the inset', () => {
+    expect(crossesHold(16, 6)).toBe(false);
+    expect(crossesHold(0, 6)).toBe(false);
   });
 });
 

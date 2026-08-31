@@ -248,7 +248,12 @@ const { sections, label = 'On this page' } = Astro.props;
 
       event.preventDefault();
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      /* Park the title, not the padded section — same target the tour holds. */
+      const heading = target.querySelector<HTMLElement>('h2');
+      (heading ?? target.querySelector<HTMLElement>('[data-tour-hold]') ?? target).scrollIntoView({
+        behavior: reduce ? 'auto' : 'smooth',
+        block: 'start',
+      });
       history.replaceState(null, '', `#${id}`);
       setActive(id);
     };

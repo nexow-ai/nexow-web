@@ -84,6 +84,18 @@ export function measureSectionHolds(
   return marks.sort((a, b) => a.y - b.y);
 }
 
+/** Scroll Y that puts a heading with viewport-top `viewTop` on the hold inset. */
+export function parkScrollY(viewTop: number, scrollY: number, inset = TOUR_HOLD_INSET): number {
+  const pad = Number.isFinite(inset) ? Math.max(0, inset) : TOUR_HOLD_INSET;
+  return Math.max(0, scrollY + viewTop - pad);
+}
+
+/** This frame's travel would carry the heading onto or past the inset. */
+export function crossesHold(viewTop: number, travel: number, inset = TOUR_HOLD_INSET): boolean {
+  const pad = Number.isFinite(inset) ? Math.max(0, inset) : TOUR_HOLD_INSET;
+  return viewTop > pad && viewTop - travel <= pad;
+}
+
 /**
  * Seconds of holds still ahead of `y` at the given rate. `activeLeft` is a
  * mid-page freeze's remaining time in `x1` seconds; `endLeft` is the footer

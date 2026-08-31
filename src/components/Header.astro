@@ -439,8 +439,10 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    * Durations are written for `x1` and shrink with the rate.
    */
   import {
+    crossesHold,
     holdSecondsAhead,
     measureSectionHolds,
+    parkScrollY,
     secondsLeft,
     TOUR_END_HOLD,
     TOUR_HOLD_INSET,
@@ -477,6 +479,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     let done = new Set<string>();
     /** Current freeze: remaining time in `x1` seconds. */
     let holdLeft = 0;
+    /** Section whose title is pinned at the inset for this freeze. */
+    let holdingId = '';
     /** Whether the end-of-page linger has finished on this run. */
     let endDone = false;
     /** True while the end linger is counting down. */
@@ -491,17 +495,28 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       return stamped > 0 ? stamped : tourRate();
     };
 
+    /** The title a hold parks — the h2, not the padded section box. */
+    const titleOf = (section: Element) =>
+      section.querySelector<HTMLElement>('h2') ??
+      section.querySelector<HTMLElement>('[data-tour-hold]') ??
+      (section as HTMLElement);
+
+    /** Pin `id`'s title to the hold inset, following layout that shifts under us. */
+    const pinTitle = (id: string) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      window.scrollTo(0, parkScrollY(titleOf(el).getBoundingClientRect().top, window.scrollY));
+    };
+
     /** Where every named hold sits on the page right now. */
     const remarks = () => {
       const tops = new Map<string, number>();
       for (const { id } of TOUR_SECTION_HOLDS) {
         const el = document.getElementById(id);
         if (!el) continue;
-        /* Park the title, not the padded section box — otherwise the heading
-         * lands mid-screen and the cards below it fall off the fold. */
-        const heading = el.querySelector<HTMLElement>('[data-tour-hold], h2');
-        const mark = heading ?? el;
-        tops.set(id, mark.getBoundingClientRect().top + window.scrollY);
+        /* The h2 itself — not the padded section, not the eyebrow cluster —
+         * so the title sits at the top and the cards stay in view. */
+        tops.set(id, titleOf(el).getBoundingClientRect().top + window.scrollY);
       }
       marks = measureSectionHolds(tops, TOUR_HOLD_INSET);
     };
@@ -514,6 +529,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       remarks();
       done = new Set(marks.filter((m) => m.y <= y).map((m) => m.id));
       holdLeft = 0;
+      holdingId = '';
       ending = false;
       endDone = false;
     };
@@ -550,6 +566,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       tourRaf = 0;
       last = 0;
       holdLeft = 0;
+      holdingId = '';
       ending = false;
       setPlaying(false);
     };
@@ -580,14 +597,18 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       const rate = paceOf();
       const max = maxScroll();
 
-      /* A freeze ticks in `x1` seconds so a faster rate shortens it. */
+      /* A freeze ticks in `x1` seconds so a faster rate shortens it.
+       * Keep the title pinned: Rewards/FAQ sit after Plans, and that
+       * section settling used to leave those titles mid-screen. */
       if (holdLeft > 0) {
+        if (holdingId) pinTitle(holdingId);
         holdLeft = Math.max(0, holdLeft - dt * rate);
         if (holdLeft > 0) {
           tell(window.scrollY, max);
           tourRaf = requestAnimationFrame(step);
           return;
         }
+        holdingId = '';
         if (ending) {
           endDone = true;
           ending = false;
@@ -597,16 +618,28 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
         }
       }
 
-      // Read every frame: a page that grows under the tour — a lazy image, a
-      // font — moves the end of the story, and the countdown with it.
+      remarks();
       const y = window.scrollY;
-      const next = y + TOUR_SPEED * rate * dt;
+      const travel = TOUR_SPEED * rate * dt;
+      const next = y + travel;
 
-      /* Mid-page freezes: cross a mark and park there for its hold. */
-      const hit = marks.find((m) => !done.has(m.id) && y < m.y && next >= m.y);
+      /* Live viewport: park when the title itself crosses the inset, not
+       * when a scroll-Y taken at play is crossed (that mark goes stale
+       * once Plans has grown under the tour). */
+      let hit: TourHoldMark | undefined;
+      for (const hold of TOUR_SECTION_HOLDS) {
+        if (done.has(hold.id)) continue;
+        const el = document.getElementById(hold.id);
+        if (!el) continue;
+        const top = titleOf(el).getBoundingClientRect().top;
+        if (!crossesHold(top, travel)) continue;
+        hit = { id: hold.id, y: parkScrollY(top, y), seconds: hold.seconds };
+        break;
+      }
       if (hit) {
         window.scrollTo(0, hit.y);
         done.add(hit.id);
+        holdingId = hit.id;
         holdLeft = hit.seconds;
         tell(hit.y, max);
         tourRaf = requestAnimationFrame(step);
