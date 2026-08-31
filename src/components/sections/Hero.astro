@@ -19,9 +19,9 @@
  * shockwave through it (`nexow:world-send`), so the one interaction in the hero
  * is also the page's thesis: your words give the material a shape.
  *
- * Follows the page theme. Most of the world does too — only the mid-page
- * breath and the close invert, so the room is mainly one tone with two
- * contrast beats rather than a stripe every other scene.
+ * Follows the page theme. The rest of the world does too: one room, one
+ * tone — white in light mode, black in dark — from the hero through the
+ * footer.
  */
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -38,29 +38,37 @@ const SCENE_BY_ICON: Record<string, string> = {
   cloudSun: 'orbit',
   grid: 'network',
   flame: 'neural',
-  newspaper: 'ai',
+  newspaper: 'news',
   rocket: 'avionics',
   activity: 'signals',
   earth: 'macro',
-  target: 'options',
+  target: 'predict',
   wallet: 'portfolio',
-  play: 'play',
-  music: 'signals',
+  play: 'go',
+  music: 'video',
   databaseZap: 'onchain',
+  database: 'database',
   heart: 'signals',
-  mapPin: 'geo',
+  mapPin: 'flights',
   creditCard: 'portfolio',
   github: 'ai',
-  users: 'network',
-  sun: 'orbit',
-  monitor: 'network',
-  banknote: 'macro',
+  users: 'chat',
+  sun: 'energy',
+  monitor: 'tv',
+  banknote: 'forex',
   hourglass: 'math',
   pen: 'ai',
   signal: 'signals',
-  wheat: 'geo',
-  trophy: 'play',
+  wheat: 'sports',
+  trophy: 'chess',
   layers: 'model3d',
+  gem: 'metals',
+  factory: 'metals',
+  server: 'server',
+  cpu: 'server',
+  bot: 'bots',
+  chat: 'chat',
+  youtube: 'tv',
 };
 
 /** First row of chips; the rest sit behind “more”. */

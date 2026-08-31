@@ -16,15 +16,28 @@ import {
   TOUR_END_HOLD,
   TOUR_HOLD_INSET,
   TOUR_MIN_TRAVEL,
+  TOUR_MOBILE_FACTOR,
   TOUR_RATE_DEFAULT,
   TOUR_RATE_INTRO,
   TOUR_RATES,
   TOUR_SECTION_HOLDS,
   TOUR_SPEED,
   tourRate,
+  tourSpeed,
   trackHintDismissed,
   worthTouring,
 } from '../../../src/lib/tour';
+
+describe('tourSpeed', () => {
+  it('is the base pace on desktop', () => {
+    expect(tourSpeed(false)).toBe(TOUR_SPEED);
+  });
+
+  it('is half the base pace on mobile — x1 there moves like desktop x0.5', () => {
+    expect(TOUR_MOBILE_FACTOR).toBe(0.5);
+    expect(tourSpeed(true)).toBeCloseTo(TOUR_SPEED * 0.5, 6);
+  });
+});
 
 describe('secondsLeft', () => {
   const max = 4800;
@@ -96,6 +109,12 @@ describe('measureSectionHolds', () => {
     const marks = measureSectionHolds(new Map([['plans', 8]]));
     expect(marks[0].y).toBe(0);
   });
+
+  it('ignores a non-finite inset and clamps a negative one', () => {
+    const tops = new Map([['plans', 4000]]);
+    expect(measureSectionHolds(tops, Number.NaN)[0].y).toBe(4000 - TOUR_HOLD_INSET);
+    expect(measureSectionHolds(tops, -20)[0].y).toBe(4000);
+  });
 });
 
 describe('parkScrollY', () => {
@@ -105,6 +124,11 @@ describe('parkScrollY', () => {
 
   it('never parks above the top of the page', () => {
     expect(parkScrollY(8, 0)).toBe(0);
+  });
+
+  it('ignores a non-finite inset and clamps a negative one', () => {
+    expect(parkScrollY(200, 1000, Number.NaN)).toBe(1000 + 200 - TOUR_HOLD_INSET);
+    expect(parkScrollY(200, 1000, -8)).toBe(1200);
   });
 });
 
@@ -121,6 +145,11 @@ describe('crossesHold', () => {
   it('is false once the title has already passed the inset', () => {
     expect(crossesHold(16, 6)).toBe(false);
     expect(crossesHold(0, 6)).toBe(false);
+  });
+
+  it('ignores a non-finite inset and clamps a negative one', () => {
+    expect(crossesHold(40, 30, Number.NaN)).toBe(true);
+    expect(crossesHold(8, 20, -4)).toBe(true);
   });
 });
 
@@ -144,6 +173,7 @@ describe('holdSecondsAhead', () => {
       2.5 + 2.5 + TOUR_END_HOLD,
       6,
     );
+    expect(holdSecondsAhead(2500, marks, new Set(), 0, 1, 0)).toBeCloseTo(2.5, 6);
   });
 
   it('adds an active freeze on top of what is still ahead', () => {
@@ -155,6 +185,14 @@ describe('holdSecondsAhead', () => {
 
   it('can clear the footer linger once it has finished', () => {
     expect(holdSecondsAhead(9000, marks, new Set(['plans', 'rewards', 'faq']), 0, 1, 0)).toBe(0);
+  });
+
+  it('treats a non-positive rate as x1 and ignores negative leftovers', () => {
+    expect(holdSecondsAhead(0, marks, new Set(), -2, 0, -3)).toBeCloseTo(2.5 * 3, 6);
+    expect(holdSecondsAhead(0, marks, new Set(), 0, -1, TOUR_END_HOLD)).toBeCloseTo(
+      2.5 * 3 + TOUR_END_HOLD,
+      6,
+    );
   });
 });
 
@@ -184,6 +222,7 @@ describe('clock', () => {
   it('pads the seconds', () => {
     expect(clock(9)).toBe('0:09');
     expect(clock(69)).toBe('1:09');
+    expect(clock(70)).toBe('1:10');
     expect(clock(600)).toBe('10:00');
   });
 
@@ -280,6 +319,21 @@ describe('pace hint', () => {
     expect(paceHintDismissed()).toBe(false);
     dismissPaceHint();
     expect(paceHintDismissed()).toBe(true);
+  });
+
+  it('treats a blocked store as “not dismissed”', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('blocked');
+      },
+      setItem: () => {
+        throw new Error('blocked');
+      },
+    });
+    expect(trackHintDismissed()).toBe(false);
+    expect(paceHintDismissed()).toBe(false);
+    expect(() => dismissTrackHint()).not.toThrow();
+    expect(() => dismissPaceHint()).not.toThrow();
   });
 
   it('offers a slower intro rate before the hint is dismissed', () => {

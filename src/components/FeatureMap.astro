@@ -550,7 +550,9 @@ function iconPath(icon: string) {
         const scene = root.closest<HTMLElement>('#features');
         const aurora = scene?.querySelector<HTMLElement>('[data-fm-aurora]')
           ?? document.querySelector<HTMLElement>('[data-fm-aurora]');
+        const fill = `radial-gradient(circle at 50% 50%, color-mix(in oklab, ${way.c500} 72%, transparent) 0%, color-mix(in oklab, ${way.c500} 30%, transparent) 40%, transparent 72%)`;
         if (scene) {
+          scene.dataset.fmWay = String(index);
           scene.style.setProperty('--fm-way', way.c500);
           scene.style.setProperty('--fm-way-400', way.c400);
           scene.style.setProperty('--fm-aurora', way.c500);
@@ -561,6 +563,13 @@ function iconPath(icon: string) {
           aurora.style.setProperty('--fm-aurora', way.c500);
           aurora.style.color = way.c500;
         }
+        root.querySelectorAll<HTMLElement>('.fm-aurora__light').forEach((el) => {
+          el.style.background = fill;
+        });
+        document.querySelectorAll<HTMLElement>('[data-fm-aurora] .fm-aurora-field__light').forEach((el) => {
+          el.style.background = fill;
+          el.style.color = way.c500;
+        });
         const art = root.querySelector<HTMLElement>('[data-fm-art-stage]');
         if (art) {
           art.style.setProperty('--fma-brand', way.c500);

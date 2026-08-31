@@ -73,8 +73,8 @@
    * to be. */
   /* A handful, not a crowd: twelve on desktop, eight on a phone. ×1 / ×2 / ×4
      so the wall still has ranks, without the 36-panel fill-rate hitch. */
-  const COUNT_WIDE = 12;
-  const COUNT_NARROW = 8;
+  const COUNT_WIDE = 18;
+  const COUNT_NARROW = 12;
 
   /* How present the screens are against the backdrop. Blending stays off —
    * screens occlude one another, and a see-through field of them reads as
@@ -83,7 +83,7 @@
    * panels hold as objects while still sitting a fifth of the way back into the
    * stage; the same value on both themes, since either surface is what the
    * fifth is made of. */
-  const SCREEN_ALPHA = 0.8;
+  const SCREEN_ALPHA = 1;
 
   /* How each scene is framed: where the lens stands, how high it looks from,
    * and how much of the field it wants.
@@ -125,8 +125,8 @@
     { dist: 24.8, lift: 4.9, calm: 0.48, yaw: 6.08 }, // 11 rewards
     { dist: 17.2, lift: 2.6, calm: 0.36, yaw: 6.52 }, // 12 faq
     { dist: 14.8, lift: 1.5, calm: 0.2, yaw: 6.98 }, // 13 cta
-    { dist: 26.4, lift: 5.3, calm: 0.58, yaw: 7.42 }, // 14 footer
-    { dist: 29.0, lift: 6.4, calm: 0.7, yaw: 7.85 }, //    exit
+    { dist: 16.8, lift: 2.2, calm: 0.14, yaw: 7.42 }, // 14 footer
+    { dist: 18.4, lift: 2.6, calm: 0.18, yaw: 7.85 }, //    exit
   ];
 
   /* How much glass, at rest and at the calmest. Clearing a panel's interface
@@ -138,8 +138,8 @@
    *
    * The floor is not zero. A bank of screens where some are live and some
    * are dark is a bank of screens; ninety-six all live is a video wall. */
-  const GLASS_BASE = 0.18;
-  const GLASS_CALM = 0.62;
+  const GLASS_BASE = 0.04;
+  const GLASS_CALM = 0.18;
 
   /* Phones see the same staging at 86% of the distance and two thirds of the
    * height — a tall frustum loses a wide shot off the sides, and a lens 6
@@ -234,7 +234,7 @@
         /* Two shells, two ranks. At 36 the third row was a leftover of the
            160-panel wall and just stacked screens on top of each other. */
         float R = 12.0 + band * 4.2;
-        float spin = t * 0.22 + uMorph * 3.6;
+        float spin = t * 0.48 + uMorph * 4.2;
         float th = (idx / per) * 6.2831 + spin + band * 3.1416 / per;
 
         float rows = 2.0;
@@ -447,14 +447,21 @@
         float r = 6.4 + 3.2 * h.x;
         return vec3(cos(th) * r, sin(th) * r * 0.7, -3.6 + h.y * 6.2);
       }
-      /* 14 — FOOT: the last quiet horizon. The room does not cut; it thins. */
-      float th = a * 6.2831 * 3.0 + t * 0.04;
-      float r = 8.0 + 11.0 * h.x;
-      return vec3(
-        cos(th) * r,
-        (h.y - 0.5) * 4.2,
-        sin(th) * r * 0.48 - 3.0
-      );
+      /* 14 — FOOT: a near wall, two ranks. The old horizon flung twelve
+         screens out to r=19, and from the footer lens they read as empty
+         grey chips — or nothing. This holds them in the frame. */
+      float bands = 2.0;
+      float band = mod(i, bands);
+      float idx = floor(i / bands);
+      float per = ceil(n / bands);
+      float rows = 2.0;
+      float row = mod(idx, rows);
+      float col = floor(idx / rows);
+      float perRow = max(1.0, ceil(per / rows));
+      float spread = (col - (perRow - 1.0) * 0.5) * 5.2;
+      float y = (row - 0.5) * 3.6;
+      float z = 2.4 - band * 3.8;
+      return vec3(spread, y, z);
     }
 
     void main() {
@@ -465,7 +472,7 @@
          common feature, ×4 the rare one that anchors a corner. Its own
          hash, not aSeed, which already owns the fly-by and the tone. */
       float roll = hash3(aId + 57.3).x;
-      float scale = roll < 0.62 ? 1.0 : roll < 0.90 ? 2.0 : 4.0;
+      float scale = roll < 0.38 ? 1.0 : roll < 0.78 ? 2.0 : 4.0;
 
       /* Stagger the morph per instance so the change reads as matter flowing
          rather than every point cutting on the same frame. */
@@ -484,7 +491,7 @@
          feel on the way out. */
       float bloom = sin(m * 3.14159265);
       float way = mix(-1.0, 1.0, step(0.5, aSeed));
-      float swing = bloom * way * 2.45;
+      float swing = bloom * way * 3.15;
       float cs = cos(swing);
       float ss = sin(swing);
       float ox = p.x;
@@ -492,7 +499,7 @@
       p.x = ox * cs - oz * ss;
       p.z = ox * ss + oz * cs;
       /* Expand off the window so the braid goes around the copy, not through it. */
-      float expand = 1.0 + bloom * 0.46;
+      float expand = 1.0 + bloom * 0.72;
       p.x *= expand;
       p.z *= expand;
       p.y += bloom * (fract(aSeed * 5.73) - 0.5) * 5.2;
@@ -507,9 +514,9 @@
       float flyby = step(0.72, aSeed) * (1.0 - step(3.5, scale)) * max(1.0 - uThin * 0.7, 0.5);
       float side = step(0.40, aSeed) * (1.0 - step(0.72, aSeed));
       float over = step(0.16, aSeed) * (1.0 - step(0.40, aSeed));
-      p += toEyeM * bloom * flyby * toCamL * 0.78;
-      p += sideDir * bloom * side * way * 7.6;
-      p.y += bloom * over * way * 6.4;
+      p += toEyeM * bloom * flyby * toCamL * 0.92;
+      p += sideDir * bloom * side * way * 9.2;
+      p.y += bloom * over * way * 8.0;
 
       /* The hero's one interaction: what you type charges the matter. It winds
          up and tightens as the composer fills, and the send throws a shockwave
@@ -538,7 +545,7 @@
          them readable as panels while still letting them tumble. */
       vec3 toEye = normalize(uCam - p);
       vec3 ho = hash3(aId + 91.7);
-      float yaw = ho.x * 6.2831 + uTime * (0.05 + aSeed * 0.10) + bloom * way * 1.05;
+      float yaw = ho.x * 6.2831 + uTime * (0.14 + aSeed * 0.18) + bloom * way * 1.45;
       float pitch = (ho.y - 0.5) * 1.15 + bloom * (ho.z - 0.5) * 0.85;
       vec3 nrm = vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
       /* Heavily biased to the eye. At 0.55 the panels tumbled freely and the
@@ -571,7 +578,7 @@
       /* Density, per scene. uThin retires a share of them, chosen by a hash
          that never changes, so the same screens leave and come back. */
       float vis = smoothstep(uThin, uThin + 0.16, ho.z + 0.16);
-      float unit = 1.35;
+      float unit = 1.9;
       float sz = unit * scale * vis * (1.0 + k * 0.08 + burst * 0.12);
       /* ×4s sit a little toward the eye so they occupy their own plane
          instead of slicing through the ×1s. */
@@ -641,14 +648,10 @@
          ground colour, so distance falloff costs one smoothstep and buys the
          whole sense of depth. */
       float dist = -mv.z;
-      vGlow = smoothstep(48.0, 2.0, dist);
-      /* Near fade. A mote that drifted close was a bright speck; a *panel*
-         that drifts close is a wall across the headline. Scaled by the panel's
-         own size, because what has to stay under a threshold is the share of
-         the frame it covers, not its distance: the smallest size keeps roughly
-         the old ~5-unit soft near-plane, the largest is gone by 9. This is the
-         only reason the hero stays readable. */
-      vGlow *= smoothstep(sz * 1.3, 3.4 + sz * 2.6, dist);
+      vGlow = smoothstep(72.0, 4.0, dist);
+      /* Near fade. Soft enough that a ×4 still reads when it sweeps the lens
+         — the old curve put large screens out before they arrived. */
+      vGlow *= smoothstep(sz * 0.4, 1.1 + sz * 0.85, dist);
       /* Then flare on the approach, before that fade takes over, so a panel
          sweeping the lens still reads as an object going past rather than one
          quietly winking out. */
@@ -904,12 +907,7 @@
          coloured frame. Until the atlas lands the panels stay bare glass. */
       float kind = floor(vKind * 16.0);
       if (uBoardsOn > 0.005) {
-        /* Staggered power-on: uBoardsOn ramps 0→1 once the atlas lands and
-           each screen tunes in as the ramp passes its own threshold, so the
-           wall lights up scattered rather than as one hard cut. The 1.25
-           headroom lands the last screens at full ink by the top of the
-           ramp. */
-        float on = clamp((uBoardsOn * 1.25 - fract(s * 9.73)) * 5.0, 0.0, 1.0);
+        float on = uBoardsOn;
         vec2 tuv = mix(
           vec2((uv.x - 0.04) / 0.92, (0.795 - uv.y) / 0.755),
           vec2(uv.x, 1.0 - uv.y),
@@ -1004,7 +1002,7 @@
          theme dissolves far less: there the backdrop is near-white and the
          glass is white, so a fifth of the page mixed into every panel took
          away the little separation the panel had. */
-      gl_FragColor = vec4(mix(uFog, col, glow * mix(uAlpha, 1.0, 0.7 * uLight)), 1.0);
+      gl_FragColor = vec4(mix(uFog, col, max(glow * mix(uAlpha, 1.0, 0.85 * uLight), 0.62)), 1.0);
     }
   `;
 
@@ -2109,7 +2107,13 @@
      * during a hold — where by design nothing else moves — it was the only
      * thing that could answer them.
      */
-    function drawCore(seconds: number, scene: number, morph: number, flow = scene + morph) {
+    function drawCore(
+      seconds: number,
+      scene: number,
+      morph: number,
+      flow = scene + morph,
+      accentC1: [number, number, number] = coreC1,
+    ) {
       if (!coreReady) return;
 
       const m = Math.min(1, Math.max(0, morph));
@@ -2193,7 +2197,7 @@
       ctx.uniform1f(cuShift, coreShift);
       ctx.uniform1f(cuLift, coreLift);
       ctx.uniform3f(cuCam, cam.x, cam.y, cam.z);
-      ctx.uniform3fv(cuC1, coreC1);
+      ctx.uniform3fv(cuC1, accentC1);
       ctx.uniform3fv(cuC3, coreC3);
       ctx.uniform3fv(cuFog, coreFog);
       ctx.uniform1f(cuLight, coreLight);
@@ -2525,7 +2529,7 @@
       // The rest is the travel — screens going around the window on their
       // way to the next formation. 62% of still was a page that only moved
       // in the last beat of every act, which is why the scroll felt empty.
-      const morph = Math.min(1, Math.max(0, (local - 0.38) / 0.62));
+      const morph = Math.min(1, Math.max(0, (local - 0.12) / 0.88));
 
       /* One clock for the whole page, not two.
        *
@@ -2554,7 +2558,7 @@
        * instead — the copy block's own scrim does the rest. */
       ctx.uniform1f(
         uDim,
-        compact ? (a === 0 ? 0.86 : 0.7) : a === 0 ? 0.88 - 0.83 * morph : 0.05,
+        compact ? (a === 0 ? 1 : 0.82) : a === 0 ? 1 : a >= 14 ? 0.92 : 0.55,
       );
 
       /* The hero centres its headline, so the world stays centred under it and
@@ -2587,10 +2591,20 @@
       const sweep = Math.sin(beat * Math.PI);
 
       /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
-         view switches too — that is how a single section shows every family. */
+         view switches too — that is how a single section shows every family.
+         A clicked surface writes `data-fm-way` so the field (the green
+         panels around the plate) follows the tab, not only the scroll. */
       const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');
       const stage = Number(stageEl?.dataset.stage) || 0;
-      ctx.uniform1f(uWay, a + stage);
+      const onFeatures = scenes[a]?.id === 'features';
+      const rawFm = onFeatures ? Number(scenes[a].dataset.fmWay) : NaN;
+      const tabWay = Number.isFinite(rawFm)
+        ? ((rawFm % WAY_COUNT) + WAY_COUNT) % WAY_COUNT
+        : stage;
+      ctx.uniform1f(uWay, onFeatures ? tabWay : a + stage);
+      const pal = coreLight < 0.5 ? WAY_RGB400 : WAY_RGB600;
+      const frameC1 = onFeatures ? (pal[tabWay] ?? coreC1) : coreC1;
+      ctx.uniform3fv(uC1, frameC1);
       const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
       ctx.uniform1f(uStudio, studio);
 
@@ -2604,24 +2618,19 @@
        * takes away the little separation it had (see FRAG). The second half of
        * the page has to get its quiet from there being fewer screens, which is
        * why studio buys thinning rather than more fog. */
-      ctx.uniform1f(uAlpha, SCREEN_ALPHA * (1 - 0.34 * calm));
-      ctx.uniform1f(
-        uThin,
-        Math.min(0.62, calm * (compact ? 0.56 : 0.48) + studio * 0.12),
-      );
-      /* And the survivors run their interfaces only where the scene is staged
-       * for them to be looked at. Everywhere else they are glass. */
-      ctx.uniform1f(uGlass, Math.min(0.92, GLASS_BASE + calm * GLASS_CALM));
+      ctx.uniform1f(uAlpha, SCREEN_ALPHA);
+      ctx.uniform1f(uThin, 0);
+      ctx.uniform1f(uGlass, Math.min(0.16, GLASS_BASE + calm * GLASS_CALM));
       const nextDay = studio > 0.45;
       if (nextDay !== dayOn) {
         dayOn = nextDay;
         world!.classList.toggle('world--day', dayOn);
         paintTheme();
       }
-      if (dayOn) world!.style.setProperty('--w-way', String(a + stage));
+      if (dayOn) world!.style.setProperty('--w-way', String(onFeatures ? tabWay : a + stage));
       /* Later copy sits in the middle; hold the screens back a little more
          than the acts, so a FeatureMap title is not struck through. */
-      if (a >= 8) ctx.uniform1f(uDim, compact ? 0.72 : 0.16);
+      if (a >= 8) ctx.uniform1f(uDim, compact ? 0.82 : a >= 14 ? 0.92 : 0.62);
 
       /* Fog and glass snap to the box under the lens: pale screens on a
        * white box, dark screens on a black one. Last, so a `world--day`
@@ -2657,11 +2666,11 @@
        * During the beat the lens dollies in and yaws with the screens as they
        * go around the window, then settles for the hold. Pointer parallax is
        * added to the *aim*, not to the camera, so it inherits the same inertia. */
-      const ang = shotYaw + sweep * 0.72 + ptrX * 0.22;
+      const ang = shotYaw + sweep * 1.05 + ptrX * 0.22;
       const dist =
-        shotDist * (compact ? LENS_COMPACT_DIST : 1) +
-        Math.sin(seconds * 0.22) * 0.6 -
-        sweep * 3.6;
+        shotDist * (compact ? LENS_COMPACT_DIST : 1) * 0.82 +
+        Math.sin(seconds * 0.28) * 0.9 -
+        sweep * 4.8;
       const aimX = Math.sin(ang) * dist;
       const aimY = shotLift * (compact ? LENS_COMPACT_LIFT : 1) + ptrY * 2.4 + sweep * 1.85;
       const aimZ = Math.cos(ang) * dist;
@@ -2697,7 +2706,7 @@
       }
       if (count > 0) instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
       ctx.clear(ctx.DEPTH_BUFFER_BIT);
-      drawCore(seconds, a, morph, a + local);
+      drawCore(seconds, a, morph, a + local, frameC1);
       frame = requestAnimationFrame(draw);
     }
 
