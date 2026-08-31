@@ -284,26 +284,29 @@ const sections = [
                       ))
                     }
                   </div>
-                  <div
-                    class="inline-flex items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
-                    role="group"
-                    aria-label={t.filterAlpha}
-                  >
-                    {
-                      alphaFilters.map((f) => (
-                        <button
-                          type="button"
-                          data-filter-alpha={f.key}
-                          data-alpha-min={f.min}
-                          data-alpha-max={f.max}
-                          aria-pressed={f.key === 'all' ? 'true' : 'false'}
-                          class={chipBtn}
-                        >
-                          {f.label}
-                        </button>
-                      ))
-                    }
-                  </div>
+                </div>
+                {/* Own row: beside the subcategory wrap the letter chips sit past
+                    the clip of the collapsing panel on a phone, so Playwright
+                    (and a thumb) cannot reach them. */}
+                <div
+                  class="inline-flex flex-wrap items-center gap-1 rounded-full border border-ink-900/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/[0.04]"
+                  role="group"
+                  aria-label={t.filterAlpha}
+                >
+                  {
+                    alphaFilters.map((f) => (
+                      <button
+                        type="button"
+                        data-filter-alpha={f.key}
+                        data-alpha-min={f.min}
+                        data-alpha-max={f.max}
+                        aria-pressed={f.key === 'all' ? 'true' : 'false'}
+                        class={chipBtn}
+                      >
+                        {f.label}
+                      </button>
+                    ))
+                  }
                 </div>
               </div>
             </div>
