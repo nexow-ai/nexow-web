@@ -1,0 +1,57 @@
+---
+/**
+ * Phantom chip — official logomark + wordmark, linking out to phantom.app.
+ * Paired with SolanaBadge in DAO sections. Theme-aware via `--w-*` when inside
+ * the home world; falls back to the dark-section look elsewhere.
+ */
+import { SITE } from '../i18n/config';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<a
+  href={SITE.phantomUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Phantom"
+  class:list={['chain-badge group', className]}
+>
+  <svg
+    viewBox="0 0 512 512"
+    class="chain-badge__mark h-4 w-4 shrink-0 transition-transform duration-300 group-hover:scale-110"
+    aria-hidden="true"
+  >
+    <path
+      fill="#AB9FF2"
+      d="M9 402.313C9 458.146 37.7123 471 67.5731 471C130.74 471 178.211 413.56 206.541 368.171C203.095 378.212 201.181 388.254 201.181 397.895C201.181 424.405 215.729 443.284 244.441 443.284C283.872 443.284 325.984 407.133 347.805 368.171C346.274 373.794 345.508 379.016 345.508 383.836C345.508 402.313 355.462 413.962 375.752 413.962C439.684 413.962 504 295.467 504 191.834C504 111.097 464.951 40 366.947 40C194.673 40 9 260.119 9 402.313ZM307.608 182.997C307.608 162.913 318.327 148.855 334.023 148.855C349.336 148.855 360.056 162.913 360.056 182.997C360.056 203.081 349.336 217.541 334.023 217.541C318.327 217.541 307.608 203.081 307.608 182.997ZM389.534 182.997C389.534 162.913 400.253 148.855 415.949 148.855C431.262 148.855 441.981 162.913 441.981 182.997C441.981 203.081 431.262 217.541 415.949 217.541C400.253 217.541 389.534 203.081 389.534 182.997Z"
+    ></path>
+  </svg>
+  <span class="chain-badge__label font-display text-sm font-semibold">Phantom</span>
+</a>
+
+<style>
+  .chain-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--w-line, rgba(255, 255, 255, 0.15));
+    background: var(--w-panel-2, rgba(255, 255, 255, 0.06));
+    padding: 0.5rem 0.875rem;
+    color: var(--w-text, #fff);
+    backdrop-filter: blur(8px);
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .chain-badge:hover {
+    transform: translateY(-0.125rem);
+    border-color: color-mix(in oklab, var(--color-accent-400) 40%, transparent);
+    background: var(--w-panel, rgba(255, 255, 255, 0.1));
+  }
+</style>

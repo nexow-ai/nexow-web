@@ -27,6 +27,8 @@
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
+import PhantomBadge from '../PhantomBadge.astro';
+import SolanaBadge from '../SolanaBadge.astro';
 import Act from './Act.astro';
 import ActCopyBlock from './ActCopyBlock.astro';
 
@@ -80,7 +82,13 @@ const WEEKS = [
 
 <Act id="dao" labelledBy="act-dao-title" height="225vh">
   <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
-    <ActCopyBlock copy={copy} headingId="act-dao-title" />
+    <div>
+      <ActCopyBlock copy={copy} headingId="act-dao-title" />
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <SolanaBadge />
+        <PhantomBadge />
+      </div>
+    </div>
 
     <div class="act-scene d-scene" aria-hidden="true">
       <div class="d-orb">

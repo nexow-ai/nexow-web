@@ -53,6 +53,8 @@ export const SITE = {
   x: '@nexowofficial',
   /** Chain NXW mints on — linked from the DAO / tokenomics sections. */
   solanaUrl: 'https://solana.com',
+  /** Wallet used for Solana payments / holdings — linked beside Solana in DAO sections. */
+  phantomUrl: 'https://phantom.app',
 } as const;
 
 /**
