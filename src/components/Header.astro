@@ -413,6 +413,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 </style>
 
 <script>
+  import { navigate } from 'astro:transitions/client';
   /**
    * Hands-free scroll tour, on every page of the site.
    *
@@ -743,7 +744,10 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 
       e.preventDefault();
       setMenu(false);
-      link.click();
+      /* `HTMLElement.click()` on the logo after a ClientRouter hop from home
+       * can fire without changing the URL — the transition layer sometimes
+       * drops the synthetic activation. `navigate` is the supported API. */
+      navigate(link.href);
     }, { signal });
 
     headerAbort?.abort();
