@@ -7,9 +7,9 @@
  * count is read from the same place for the same reason — copy never hardcodes it.
  *
  * Six groups match the six copy beats: Finance, Wallets, Services, Socials,
- * APIs, Databases. APIs and Databases both come from the catalogue `data`
- * category, split by kind so market-data/analytics stay with APIs and
- * SQL / NoSQL / warehouse / vector venues get their own row.
+ * Databases, APIs. Databases and APIs both come from the catalogue `data`
+ * category, split by kind so SQL / NoSQL / warehouse / vector venues dock
+ * before market-data/analytics APIs.
  */
 import type { Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
@@ -51,8 +51,8 @@ const GROUPS: {
   { category: 'wallets', k: '--k1', items: pick('wallets', { soon: true }) },
   { category: 'services', k: '--k2', items: pick('services') },
   { category: 'socials', k: '--k3', items: pick('socials') },
-  { category: 'data', k: '--k4', items: pick('data', { kinds: API_KINDS }) },
-  { category: 'data', k: '--k5', items: pick('data', { kinds: DATABASE_KINDS }) },
+  { category: 'data', k: '--k4', items: pick('data', { kinds: DATABASE_KINDS }) },
+  { category: 'data', k: '--k5', items: pick('data', { kinds: API_KINDS }) },
 ];
 ---
 
@@ -152,8 +152,8 @@ const GROUPS: {
       grid-template-areas:
         'finance finance'
         'wallets socials'
-        'services apis'
-        'databases databases';
+        'services databases'
+        'services apis';
       gap: 0.55rem 0.75rem;
     }
 
@@ -161,8 +161,8 @@ const GROUPS: {
     .k-group:nth-child(2) { grid-area: wallets; }
     .k-group:nth-child(3) { grid-area: services; }
     .k-group:nth-child(4) { grid-area: socials; }
-    .k-group:nth-child(5) { grid-area: apis; }
-    .k-group:nth-child(6) { grid-area: databases; }
+    .k-group:nth-child(5) { grid-area: databases; }
+    .k-group:nth-child(6) { grid-area: apis; }
   }
 
   .k-group {
