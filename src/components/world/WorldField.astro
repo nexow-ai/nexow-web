@@ -2972,7 +2972,7 @@
         scenes[a]?.classList.contains('tone-invert') || scenes[a]?.closest('.tone-invert')
       );
       applyGround(invert ? 1 : 0);
-      world.querySelector('.pg-pin')?.classList.toggle('tone-invert', invert);
+      world!.querySelector('.pg-pin')?.classList.toggle('tone-invert', invert);
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -3101,7 +3101,7 @@
       if (ground === stillGround) return;
       stillGround = ground;
       applyGround(ground);
-      world.querySelector('.pg-pin')?.classList.toggle('tone-invert', ground === 1);
+      world!.querySelector('.pg-pin')?.classList.toggle('tone-invert', ground === 1);
       drawStill();
     }
 
