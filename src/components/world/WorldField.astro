@@ -85,11 +85,11 @@
   /* How present the screens are against the backdrop. Blending stays off —
    * screens occlude one another, and a see-through field of them reads as
    * smear — so this dissolves each panel into the world's own surface instead,
-   * which is what the same opacity over that backdrop looks like. At 0.56 the
-   * pane is still an object (a rim, a sheen, a glint) without claiming a fifth
-   * of the frame as a solid card; the same value on both themes, since either
-   * surface is what the dissolve is made of. */
-  const SCREEN_ALPHA = 0.56;
+   * which is what the same opacity over that backdrop looks like. At 0.8 the
+   * panels hold as objects while still sitting a fifth of the way back into the
+   * stage; the same value on both themes, since either surface is what the
+   * fifth is made of. */
+  const SCREEN_ALPHA = 0.8;
 
   /* How each scene is framed: where the lens stands, how high it looks from,
    * and how much of the field it wants.
@@ -141,12 +141,12 @@
    * it what the reader is meant to be reading. Clearing it leaves the object:
    * a tinted pane with a sheen, a rim and a glint that sweeps as it turns.
    *
-   * The floor is high on purpose. A third of the wall gone to glass still
-   * left a video wall; most of it gone leaves a suggestion of screens, and
-   * the close scenes keep just enough chrome that the ones you are meant to
-   * look at still read as screens rather than empty cards. */
-  const GLASS_BASE = 0.74;
-  const GLASS_CALM = 0.24;
+   * The floor is not zero. Even the sections staged to show the field off look
+   * better with a third of the wall gone to glass than with every panel
+   * running something — a bank of screens where some are live and some are
+   * dark is a bank of screens; ninety-six all live is a video wall. */
+  const GLASS_BASE = 0.34;
+  const GLASS_CALM = 0.62;
 
   /* Phones see the same staging at 86% of the distance and two thirds of the
    * height — a tall frustum loses a wide shot off the sides, and a lens 6
@@ -911,7 +911,7 @@
          Held back as the glass clears: a pane with nothing running on it has
          no interface to be themed, and a blank rectangle in a saturated family
          colour is a swatch, not a screen. */
-      float wear = mix(0.28, 0.52, uStudio) * (1.0 - 0.88 * uGlass);
+      float wear = mix(0.28, 0.52, uStudio) * (1.0 - 0.55 * uGlass);
       glassDark = mix(glassDark, mix(glassDark, accent, 0.42), wear);
       glassLite = mix(glassLite, mix(glassLite, accent, 0.28), wear);
 
@@ -938,11 +938,6 @@
          that survives having nothing drawn on them. The light theme needs none
          of this — there the pane is already brighter than the page. */
       bare += lightest * (0.05 + 0.12 * vLight) * uGlass * (1.0 - uLight);
-      /* Sit the cleared pane into the page. Without this a glassy field is
-         still a field of tinted cards — near-black slabs on the dark theme,
-         pastel ones on the day sections — which is louder than the interfaces
-         they replaced. The sheen and the glint stay; the fill does not. */
-      bare = mix(bare, uFog, uGlass * mix(0.28, 0.55, uLight));
 
       /* ---- chrome: title, subtitle, live dot, hairline ---- */
       float pulse = 0.65 + 0.35 * sin(t * 2.2);
@@ -1760,7 +1755,7 @@
          there is a pane there at all, and a clear panel with no highlight on
          it is a hole. */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
-      col += lightest * sheen * sheen * (0.026 + 0.10 * uGlass);
+      col += lightest * sheen * sheen * (0.026 + 0.070 * uGlass);
 
       /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ----
          Dark theme: near-black plastic, which is what gives a bright display
@@ -1782,23 +1777,20 @@
          boxes, which is louder than the interfaces were. Never to nothing —
          the hairline at the rim is the panel's only silhouette once its
          content is gone. */
-      col = mix(col, frame, bezel * (1.0 - 0.68 * uGlass));
+      col = mix(col, frame, bezel * (1.0 - 0.45 * uGlass));
 
-      col += accent * vFres * (0.13 + 0.10 * uGlass);
+      col += accent * vFres * 0.13;
       /* Toned down on the light theme: white added to near-white just clips.
          Stronger on a cleared pane, where the glint sweeping across as the
          panel turns is the whole of what reads as glass. */
-      col += lightest * vSpec * (0.30 - 0.24 * uLight) * (1.0 + 1.4 * uGlass);
+      col += lightest * vSpec * (0.30 - 0.24 * uLight) * (1.0 + 1.1 * uGlass);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. The light
-         theme used to dissolve far less — white glass on a white page has
-         almost no separation — which is why a glassy field still read as a
-         wall of cards on the day sections. Glass now spends that hold-back:
-         a running screen on a pale page still sits forward; a cleared pane
-         is allowed to sit into the page the way it does on the dark one. */
-      float hold = mix(uAlpha, 1.0, 0.7 * uLight * (1.0 - uGlass));
-      gl_FragColor = vec4(mix(uFog, col, glow * hold), 1.0);
+         theme dissolves far less: there the backdrop is near-white and the
+         glass is white, so a fifth of the page mixed into every panel took
+         away the little separation the panel had. */
+      gl_FragColor = vec4(mix(uFog, col, glow * mix(uAlpha, 1.0, 0.7 * uLight)), 1.0);
     }
   `;
 
