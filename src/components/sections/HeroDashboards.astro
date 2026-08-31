@@ -859,6 +859,262 @@ const NEWS = [
             <text class="lbl dim xs" x="184" y="151">VAR 2.4% · MARGIN 18% · A+</text>
           </g>
           )}
+          {board.id === 'forex' && (
+          <g>
+            <text class="lbl em" x="8" y="10">EURUSD  1.0874</text>
+            <text class="lbl up" x="92" y="10">+0.18%</text>
+            <text class="lbl dim xs" x="132" y="10">DXY 104.2 · TOK  LON  NY</text>
+            <path class="stroke-br draw" d={FX_EUR} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-ac draw" d={FX_GBP} pathLength="100" style="--d:0.28s" />
+            <path class="ln dash thin" d="M8 32H130M8 46H130" />
+            <text class="lbl dim xs" x="8" y="60">EUR  GBP overlay · 4h</text>
+            {FX_PAIRS.map((p, pi) => (
+              <g class="fade" style={`--d:${(0.06 + pi * 0.04).toFixed(2)}s`}>
+                <text class="lbl xs" x={8 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.n}</text>
+                <text class:list={['lbl xs', p.up ? 'up' : 'dn']} x={44 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.ch}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="126">SESS LON 61%  NY 22%</text>
+            <rect class="track" x="8" y="130" width="130" height="5" rx="1" />
+            <rect class="f-br" x="8" y="130" width="79" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="148">PIP 1.8 · SWAP −4.2</text>
+            <text class="lbl dim xs" x="154" y="10">CORR  20D</text>
+            {FX_AX.map((a, i) => (
+              <text class="lbl dim xs" x={168 + i * 20} y="22">{a}</text>
+            ))}
+            {FX_CORR.map((row, ri) => (
+              <g>
+                <text class="lbl dim xs" x="154" y={36 + ri * 18}>{FX_AX[ri]}</text>
+                {row.map((v, ci) => (
+                  <rect
+                    class={v > 0.35 ? 'f-br' : v < -0.2 ? 'f-ac' : 'f-soft'}
+                    x={168 + ci * 20}
+                    y={28 + ri * 18}
+                    width="16"
+                    height="14"
+                    rx="1"
+                    style={`opacity:${0.25 + Math.abs(v) * 0.7}`}
+                  />
+                ))}
+              </g>
+            ))}
+            <text class="lbl dim xs" x="154" y="132">EUR/GBP 0.82</text>
+            <text class="lbl dim xs" x="154" y="146">JPY risk-off</text>
+          </g>
+          )}
+          {board.id === 'metals' && (
+          <g>
+            <text class="lbl em" x="8" y="10">XAU  2,418.4</text>
+            <text class="lbl up" x="86" y="10">+0.64%</text>
+            <text class="lbl dim xs" x="128" y="10">COMEX · AUG</text>
+            {METALS.map((m, mi) => (
+              <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + mi * 16}>{m.n}</text>
+                <text class="lbl xs" x="44" y={28 + mi * 16}>{m.px}</text>
+                <text class:list={['lbl xs', m.ch.startsWith('+') ? 'up' : 'dn']} x="86" y={28 + mi * 16}>{m.ch}</text>
+                <text class="lbl dim xs" x="118" y={28 + mi * 16}>{m.u}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="134">AU/OIL  30.8 oz</text>
+            <text class="lbl dim xs" x="8" y="148">INV −2.1% w/w</text>
+            <text class="lbl dim xs" x="148" y="16">GOLD  OIL</text>
+            <path class="stroke-br draw" d={METAL_GOLD} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-ac draw" d={METAL_OIL} pathLength="100" style="--d:0.3s" />
+            <path class="ln dash thin" d="M148 32H272M148 48H272" />
+            <text class="lbl dim xs" x="148" y="90">WTI 78.40  BRT 82.15</text>
+            <text class="lbl dim xs" x="148" y="104">CRACK 18.4</text>
+            <text class="lbl dim xs" x="148" y="120">HH 2.18  EUA 71.2</text>
+            <text class="lbl dim xs" x="148" y="136">CU INV  184kt</text>
+            <text class="lbl dim xs" x="148" y="150">LME  COMEX  SHFE</text>
+          </g>
+          )}
+          {board.id === 'chat' && (
+          <g>
+            <text class="lbl dim xs" x="8" y="10">ROOMS</text>
+            {['#risk', '#desk', '#infra', '#bots', '#news'].map((r, ri) => (
+              <g>
+                <rect class={ri === 0 ? 'f-br' : 'f-soft'} x="8" y={16 + ri * 16} width="54" height="13" rx="2" />
+                <text class="lbl xs" x="12" y={25 + ri * 16}>{r}</text>
+                <text class="lbl dim xs" x="50" y={25 + ri * 16}>{[3, 1, 0, 2, 8][ri]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="110">UNREAD 14</text>
+            <text class="lbl dim xs" x="8" y="124">PAGED  2</text>
+            <text class="lbl up xs" x="8" y="140">VAR · live</text>
+            <text class="lbl dim xs" x="8" y="152">SLACK  TG  IRC</text>
+            <text class="lbl dim xs" x="76" y="10">#risk · 18 online</text>
+            {CHAT_MSGS.map((m, mi) => (
+              <g class="fade" style={`--d:${(0.08 + mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="76" y={26 + mi * 20}>{m.t}  {m.r}</text>
+                <text class="lbl xs" x="76" y={36 + mi * 20}>{m.w}</text>
+              </g>
+            ))}
+            <path class="ln dash thin" d="M76 128H272" />
+            <text class="lbl dim xs" x="76" y="140">nexow-bot is typing…</text>
+            <rect class="track" x="76" y="146" width="160" height="6" rx="1" />
+            <rect class="f-br grow-x" x="76" y="146" width="72" height="6" rx="1" style="--d:0.4s" />
+          </g>
+          )}
+          {board.id === 'server' && (
+          <g>
+            <text class="lbl em" x="8" y="10">48 NODES</text>
+            <text class="lbl up" x="68" y="10">99.98%</text>
+            <text class="lbl dim xs" x="110" y="10">EU-1 · 12ms</text>
+            {SERVERS.map((s, si) => (
+              <g class="fade" style={`--d:${(si * 0.05).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + si * 16}>{s.n}</text>
+                <rect class="track" x="52" y={22 + si * 16} width="70" height="5" rx="1" />
+                <rect class={s.st === 'hot' ? 'f-ac' : 'f-br'} x="52" y={22 + si * 16} width={s.cpu * 0.7} height="5" rx="1" />
+                <text class="lbl dim xs" x="126" y={28 + si * 16}>{s.cpu}%</text>
+                <text class:list={['lbl xs', s.st === 'hot' && 'dn']} x="148" y={28 + si * 16}>{s.st}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="120">P99  42ms · ERR 0.04%</text>
+            <text class="lbl dim xs" x="8" y="134">DISK  61% · NET 4.2Gb</text>
+            <text class="lbl dim xs" x="8" y="150">K8S  214 PODS</text>
+            <text class="lbl dim xs" x="168" y="16">RPS  18.4k</text>
+            <path class="stroke-br draw" d={SRV_RPS} pathLength="100" style="--d:0.22s" />
+            <path class="ln dash thin" d="M168 48H272M168 70H272" />
+            <text class="lbl dim xs" x="168" y="96">SAT  FRA  AMS</text>
+            <text class="lbl dim xs" x="168" y="112">GPU 94%  H100</text>
+            <text class="lbl dim xs" x="168" y="128">DEPLOY  14:02</text>
+            <text class="lbl dim xs" x="168" y="144">ALERTS  2 WARN</text>
+          </g>
+          )}
+          {board.id === 'database' && (
+          <g>
+            <text class="lbl em" x="8" y="10">12,418 QPS</text>
+            <text class="lbl up" x="80" y="10">HIT 98.4%</text>
+            <text class="lbl dim xs" x="136" y="10">PG 16 · A</text>
+            <text class="lbl dim xs" x="8" y="26">CONN  184 / 300</text>
+            <rect class="track" x="8" y="30" width="140" height="5" rx="1" />
+            <rect class="f-br" x="8" y="30" width="86" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="48">SLOW  1s+</text>
+            {DB_SLOW.map((q, qi) => (
+              <g class="fade" style={`--d:${(0.08 + qi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={64 + qi * 14}>{q[0]}</text>
+                <text class="lbl xs" x="48" y={64 + qi * 14}>{q[1]}</text>
+                <text class:list={['lbl xs', q[2].startsWith('4') && 'dn']} x="92" y={64 + qi * 14}>{q[2]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="128">WAL  2.1 GB</text>
+            <text class="lbl dim xs" x="8" y="142">BLOAT  idx_fills</text>
+            <text class="lbl dim xs" x="8" y="154">VACUUM  02:10</text>
+            <text class="lbl dim xs" x="168" y="16">REPL LAG</text>
+            <path class="stroke-br draw" d={DB_LAG} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash thin" d="M168 36H272M168 52H272" />
+            <text class="lbl dim xs" x="168" y="80">LAG  18ms</text>
+            <text class="lbl dim xs" x="168" y="96">SLOTS  3</text>
+            <text class="lbl dim xs" x="168" y="112">READS  9.1k</text>
+            <text class="lbl dim xs" x="168" y="128">WRITES  3.3k</text>
+            <text class="lbl dim xs" x="168" y="144">LOCKS  2</text>
+          </g>
+          )}
+          {board.id === 'bots' && (
+          <g>
+            <text class="lbl em" x="8" y="10">36 LIVE</text>
+            <text class="lbl dim xs" x="56" y="10">TICK 80ms · KILL ARMED</text>
+            {BOTS.map((b, bi) => (
+              <g class="fade" style={`--d:${(bi * 0.05).toFixed(2)}s`}>
+                <circle class={b.st === 'run' ? 'f-brand' : 'f-accent'} cx="12" cy={26 + bi * 16} r="2.4" />
+                <text class="lbl xs" x="22" y={29 + bi * 16}>{b.n}</text>
+                <text class:list={['lbl xs', b.pnl.startsWith('+') && 'up', b.pnl.startsWith('−') && 'dn']} x="72" y={29 + bi * 16}>{b.pnl}</text>
+                <text class="lbl dim xs" x="112" y={29 + bi * 16}>{b.st}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="118">PNL +2.45k  24h</text>
+            <text class="lbl dim xs" x="8" y="132">QUEUE  14</text>
+            <text class="lbl dim xs" x="8" y="146">TG  1.2k msg/m</text>
+            <text class="lbl dim xs" x="160" y="16">LAST TICK</text>
+            {['mm-07  BTC +2', 'arb-3  ETH 0', 'liq-9  SOL −1', 'tg-ops  ping', 'scan-4  news'].map((t, ti) => (
+              <text class="lbl dim xs" x="160" y={32 + ti * 14}>{t}</text>
+            ))}
+            <text class="lbl dim xs" x="160" y="112">EXCH  BIN  CME</text>
+            <text class="lbl dim xs" x="160" y="128">RISK  18% used</text>
+            <rect class="track" x="160" y="134" width="100" height="5" rx="1" />
+            <rect class="f-br" x="160" y="134" width="18" height="5" rx="1" />
+            <text class="lbl dim xs" x="160" y="152">HALT  twap-1</text>
+          </g>
+          )}
+          {board.id === 'tv' && (
+          <g>
+            <text class="lbl em" x="8" y="10">ON AIR  · PGM A</text>
+            <text class="lbl up" x="108" y="10">TALLY</text>
+            {TV_CH.map((c, ci) => {
+              const x = 8 + (ci % 2) * 80;
+              const y = 18 + Math.floor(ci / 2) * 52;
+              return (
+                <g>
+                  <rect class={ci === 0 ? 'frame' : 'ln'} x={x} y={y} width="72" height="42" rx="2" />
+                  {Array.from({ length: 5 }, (_, li) => (
+                    <path class="ln thin" d={`M${x + 4} ${y + 8 + li * 6}h${64}`} />
+                  ))}
+                  <text class="lbl tag" x={x + 4} y={y + 10}>{c.n}</text>
+                  <text class="lbl xs" x={x + 16} y={y + 10}>{c.t}</text>
+                  <text class="lbl dim xs" x={x + 4} y={y + 38}>{c.v}</text>
+                </g>
+              );
+            })}
+            <text class="lbl dim xs" x="8" y="130">PVW  B  · NEXT  14:05</text>
+            <text class="lbl dim xs" x="8" y="144">CC  ON  · LOUD −23</text>
+            <text class="lbl dim xs" x="172" y="16">RUNDOWN</text>
+            {['OPEN  0:40', 'MKT  4:00', 'WX   1:20', 'BRK  LIVE'].map((r, ri) => (
+              <text class="lbl dim xs" x="172" y={32 + ri * 14}>{r}</text>
+            ))}
+            <text class="lbl dim xs" x="172" y="96">VIEW  4.8M</text>
+            <text class="lbl dim xs" x="172" y="112">SAT  2 UP</text>
+            <text class="lbl dim xs" x="172" y="128">ISO  CAM-3</text>
+            <text class="lbl dim xs" x="172" y="144">DVE  WIPE</text>
+          </g>
+          )}
+          {board.id === 'video' && (
+          <g>
+            <text class="lbl em" x="8" y="10">6,214 LIVE</text>
+            <text class="lbl up" x="80" y="10">1080p60</text>
+            <text class="lbl dim xs" x="128" y="10">H264  8.4 Mbps</text>
+            <path class="stroke-br draw" d={VID_BIT} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash thin" d="M8 32H136M8 48H136" />
+            <text class="lbl dim xs" x="8" y="64">BITRATE  DROP 0.2%</text>
+            <text class="lbl dim xs" x="8" y="80">KEY  2s · GOP 60</text>
+            <text class="lbl dim xs" x="8" y="96">AUDIO  −16 LUFS</text>
+            <rect class="track" x="8" y="102" width="128" height="5" rx="1" />
+            <rect class="f-br" x="8" y="102" width="86" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="122">CHAT  184/m</text>
+            <text class="lbl dim xs" x="8" y="136">CLIP  0:14:22</text>
+            <text class="lbl dim xs" x="8" y="150">REC  ISO + PGM</text>
+            <text class="lbl dim xs" x="152" y="16">SCENES</text>
+            {['CAM A', 'OVERLAY', 'CHART', 'GUEST'].map((s, si) => (
+              <g>
+                <rect class={si === 0 ? 'f-br' : 'panel'} x={152 + (si % 2) * 60} y={22 + Math.floor(si / 2) * 36} width="54" height="30" rx="2" />
+                <text class="lbl xs" x={158 + (si % 2) * 60} y={40 + Math.floor(si / 2) * 36}>{s}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="152" y="106">CDN  CF  FASTLY</text>
+            <text class="lbl dim xs" x="152" y="122">HLS  4.1s</text>
+            <text class="lbl dim xs" x="152" y="138">ERR  401  2</text>
+            <text class="lbl dim xs" x="152" y="152">NEXT  Q&A</text>
+          </g>
+          )}
+          {board.id === 'news' && (
+          <g>
+            <rect class="f-ac" x="8" y="6" width="44" height="10" rx="1" />
+            <text class="lbl tag" x="12" y="13">BREAK</text>
+            <text class="lbl em" x="58" y="14">FOMC  14:00 ET</text>
+            {NEWS.map((n, ni) => (
+              <g class="fade" style={`--d:${(0.06 + ni * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={32 + ni * 18}>{n[0]}</text>
+                <text class="lbl xs" x="36" y={32 + ni * 18}>{n[1]}</text>
+                <text class="lbl xs" x="64" y={32 + ni * 18}>{n[2]}</text>
+              </g>
+            ))}
+            <path class="ln dash thin" d="M8 124H272" />
+            <text class="lbl dim xs" x="8" y="136">REUT  BB  AFP  HN</text>
+            <text class="lbl dim xs" x="8" y="150">SENT +0.12  ·  84 items/h</text>
+            <text class="lbl dim xs" x="176" y="136">MACRO  41%</text>
+            <rect class="track" x="176" y="140" width="88" height="5" rx="1" />
+            <rect class="f-br" x="176" y="140" width="36" height="5" rx="1" />
+          </g>
+          )}
           {board.id === 'chess' && (
           <g>
             {Array.from({ length: 64 }, (_, i) => {
