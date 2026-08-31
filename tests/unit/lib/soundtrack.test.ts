@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { GENERATIVE, INTRO_TRACK_ID, TRACKS, TRACK_DIR, TOUR_FIRST_PLAY_KEY, introTrack, markTourPlayed, pickTrack, pickTourTrack, tourPlayedBefore, type Track } from '../../../src/lib/soundtrack';
 
@@ -36,6 +36,15 @@ describe('TRACKS', () => {
   it('ships every file it points at', () => {
     for (const track of TRACKS.filter((t) => t.src)) {
       expect(existsSync(path.join(PUBLIC, track.src!)), `${track.src} is missing — run scripts/fetch-tour-music.mjs`).toBe(true);
+    }
+  });
+
+  it('keeps every tour file under the Cloudflare Pages 25 MiB limit', () => {
+    const limit = 25 * 1024 * 1024;
+    for (const track of TRACKS.filter((t) => t.src)) {
+      const file = path.join(PUBLIC, track.src!);
+      if (!existsSync(file)) continue;
+      expect(statSync(file).size, `${track.src} is over 25 MiB — Pages will reject the deploy`).toBeLessThanOrEqual(limit);
     }
   });
 
