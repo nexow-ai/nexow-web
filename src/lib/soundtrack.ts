@@ -4,20 +4,20 @@
  * Every press of play pulls one track from here at random — never the one
  * just played — so the tour has a different soundtrack each time: one visit
  * gets a deep-house piece, the next a string quartet, the next a hard-techno
- * record, the next the synthesised ambient in D. The crate is a mood board
- * more than a playlist, with a small techno run for nights that want to go
- * harder.
+ * record, the next a guest cut from the crate, the next the synthesised ambient
+ * in D. The crate is a mood board more than a playlist.
  *
- * Thirteen are files under `public/audio/tour`, fetched the moment play is
- * pressed and never before. They come from Mixkit under its Stock Music Free License —
- * commercial use, no attribution (https://mixkit.co/license/#musicFree) — and
- * are re-encoded and loudness-matched to −18 LUFS by
- * `scripts/fetch-tour-music.mjs`, so a random pick never jumps in level. The
- * eleventh is the piece `lib/ambient` synthesises in the browser, which ships
+ * Mixkit stock cuts under `public/audio/tour` ship with a `source` URL and are
+ * re-encoded and loudness-matched to −18 LUFS by `scripts/fetch-tour-music.mjs`
+ * (Stock Music Free License — commercial use, no attribution:
+ * https://mixkit.co/license/#musicFree). Guest cuts live beside them as local
+ * files with no `source` — drop the mp3 in as `<id>.mp3` and append an entry.
+ * One track is the piece `lib/ambient` synthesises in the browser, which ships
  * no bytes at all and is also the fallback when a file will not play.
  *
- * To add a record: append an entry with its `source`, run the script, commit
- * the file it writes.
+ * To add a Mixkit record: append an entry with its `source`, run the script,
+ * commit the file it writes. To add a guest cut: drop `<id>.mp3` in the folder
+ * and append an entry without `source`.
  */
 
 export interface Track {
@@ -168,6 +168,286 @@ export const TRACKS: readonly Track[] = [
     seconds: 91,
     src: file('infected-vibes'),
     source: mixkit(157),
+  },
+  {
+    id: 'acho-pr',
+    title: 'ACHO PR',
+    artist: 'ACHO',
+    style: 'latin trap',
+    seconds: 359,
+    src: file('acho-pr'),
+  },
+  {
+    id: 'asimetria',
+    title: 'Asimetría',
+    artist: 'Zeballos',
+    style: 'argentina trap',
+    seconds: 178,
+    src: file('asimetria'),
+  },
+  {
+    id: 'beautiful-things',
+    title: 'Beautiful Things',
+    artist: 'Benson Boone',
+    style: 'indie pop',
+    seconds: 192,
+    src: file('beautiful-things'),
+  },
+  {
+    id: 'the-animals',
+    title: 'The Animals',
+    artist: 'Cecilio G.',
+    style: 'spanish rap',
+    seconds: 227,
+    src: file('the-animals'),
+  },
+  {
+    id: 'road-to-zion',
+    title: 'Road To Zion',
+    artist: 'Damian Marley (EFIX & XKAEM)',
+    style: 'reggae cover',
+    seconds: 352,
+    src: file('road-to-zion'),
+  },
+  {
+    id: 'gfy',
+    title: 'GFY',
+    artist: 'Dennis Lloyd',
+    style: 'indie electronic',
+    seconds: 224,
+    src: file('gfy'),
+  },
+  {
+    id: 'last-supper',
+    title: 'Last Supper',
+    artist: 'D Smoke',
+    style: 'conscious hip hop',
+    seconds: 225,
+    src: file('last-supper'),
+  },
+  {
+    id: 'branzino',
+    title: 'Branzino',
+    artist: 'Eladio Carrión, Big Sean',
+    style: 'latin urban',
+    seconds: 262,
+    src: file('branzino'),
+  },
+  {
+    id: 'que-cojones',
+    title: 'Que Cojones',
+    artist: 'Eladio Carrión',
+    style: 'reggaeton',
+    seconds: 158,
+    src: file('que-cojones'),
+  },
+  {
+    id: 'si-lo-puedes-sonar',
+    title: 'Si Lo Puedes Soñar',
+    artist: 'Eladio Carrión',
+    style: 'latin anthem',
+    seconds: 197,
+    src: file('si-lo-puedes-sonar'),
+  },
+  {
+    id: 'mockingbird',
+    title: 'Mockingbird',
+    artist: 'Eminem',
+    style: 'storytelling rap',
+    seconds: 257,
+    src: file('mockingbird'),
+  },
+  {
+    id: 'dont-tell-your-dreams',
+    title: "Don't Tell Your Dreams",
+    artist: 'LOVIXX, STOSLIV',
+    style: 'dream pop',
+    seconds: 141,
+    src: file('dont-tell-your-dreams'),
+  },
+  {
+    id: 'bittersweet-symphony',
+    title: 'Bittersweet Symphony',
+    artist: 'Ren',
+    style: 'alt cover',
+    seconds: 164,
+    src: file('bittersweet-symphony'),
+  },
+  {
+    id: 'territory',
+    title: 'Territory',
+    artist: 'The Blaze',
+    style: 'french electronic',
+    seconds: 337,
+    src: file('territory'),
+  },
+  {
+    id: 'another-love',
+    title: 'Another Love',
+    artist: 'Tom Odell (Zwette Edit)',
+    style: 'indie remix',
+    seconds: 393,
+    src: file('another-love'),
+  },
+  {
+    id: 'habits',
+    title: 'Habits (Stay High)',
+    artist: 'Tove Lo (Hippie Sabotage Remix)',
+    style: 'electropop remix',
+    seconds: 263,
+    src: file('habits'),
+  },
+  {
+    id: 'bzrp-5966',
+    title: 'BZRP Music Sessions #59',
+    artist: 'Natanael Cano',
+    style: 'corridos tumbados',
+    seconds: 339,
+    src: file('bzrp-5966'),
+  },
+  {
+    id: 'adentro',
+    title: 'Adentro',
+    artist: 'Unknown',
+    style: 'deep latin',
+    seconds: 292,
+    src: file('adentro'),
+  },
+  {
+    id: 'a-million-on-my-soul',
+    title: 'A Million on My Soul',
+    artist: 'Alexiane',
+    style: 'cinematic soul',
+    seconds: 180,
+    src: file('a-million-on-my-soul'),
+  },
+  {
+    id: 'cancion-de-volteo',
+    title: 'Canción de Volteo',
+    artist: 'Unknown',
+    style: 'latin folk',
+    seconds: 203,
+    src: file('cancion-de-volteo'),
+  },
+  {
+    id: 'daylight',
+    title: 'Daylight',
+    artist: 'David Kushner',
+    style: 'folk pop',
+    seconds: 229,
+    src: file('daylight'),
+  },
+  {
+    id: 'help-me-lose-my-mind',
+    title: 'Help Me Lose My Mind',
+    artist: 'Disclosure (Mazde Remix)',
+    style: 'UK garage remix',
+    seconds: 236,
+    src: file('help-me-lose-my-mind'),
+  },
+  {
+    id: 'dream-big',
+    title: 'Dream Big',
+    artist: 'Unknown',
+    style: 'motivational ambient',
+    seconds: 96,
+    src: file('dream-big'),
+  },
+  {
+    id: 'grim-reaper',
+    title: 'Grim Reaper',
+    artist: 'Unknown',
+    style: 'dark hip hop',
+    seconds: 125,
+    src: file('grim-reaper'),
+  },
+  {
+    id: 'interstellar-variations',
+    title: 'Interstellar Variations',
+    artist: "Jacob's Piano",
+    style: 'piano cinematic',
+    seconds: 288,
+    src: file('interstellar-variations'),
+  },
+  {
+    id: 'a-yo',
+    title: 'A-YO',
+    artist: 'Method Man, Redman',
+    style: 'east coast rap',
+    seconds: 271,
+    src: file('a-yo'),
+  },
+  {
+    id: 'malo-muchacho',
+    title: 'Malo Muchacho',
+    artist: 'Mucho Muchacho',
+    style: 'spanish hip hop',
+    seconds: 213,
+    src: file('malo-muchacho'),
+  },
+  {
+    id: 'my-life-is-real',
+    title: 'My Life Is Real',
+    artist: 'Unknown',
+    style: 'melodic trap',
+    seconds: 159,
+    src: file('my-life-is-real'),
+  },
+  {
+    id: 'patience',
+    title: 'Patience',
+    artist: 'Unknown',
+    style: 'soft rock',
+    seconds: 345,
+    src: file('patience'),
+  },
+  {
+    id: 'sen-emne-4ort',
+    title: 'SEN EMNE 4ORT',
+    artist: 'Unknown',
+    style: 'underground rap',
+    seconds: 152,
+    src: file('sen-emne-4ort'),
+  },
+  {
+    id: 'south-side-312',
+    title: 'South Side 312',
+    artist: 'Unknown',
+    style: 'chicago drill',
+    seconds: 166,
+    src: file('south-side-312'),
+  },
+  {
+    id: 'posterity',
+    title: 'Posterity',
+    artist: 'Ludwig Göransson',
+    style: 'orchestral score',
+    seconds: 762,
+    src: file('posterity'),
+  },
+  {
+    id: 'rockstar',
+    title: 'rockstar',
+    artist: 'Unknown',
+    style: 'pop rap',
+    seconds: 218,
+    src: file('rockstar'),
+  },
+  {
+    id: 'que-carajos-quieres',
+    title: '¿Qué Carajos Quieres Tú Ahora?',
+    artist: 'Unknown',
+    style: 'latin rock',
+    seconds: 155,
+    src: file('que-carajos-quieres'),
+  },
+  {
+    id: 'bumerang',
+    title: 'Бумеранг',
+    artist: 'Unknown',
+    style: 'russian pop',
+    seconds: 149,
+    src: file('bumerang'),
   },
 ];
 
