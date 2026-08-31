@@ -20,6 +20,8 @@ export const TOUR_SPEED = 380;
 export const TOUR_RATES = [0.25, 0.5, 1, 2] as const;
 export type TourRate = (typeof TOUR_RATES)[number];
 export const TOUR_RATE_DEFAULT: TourRate = 1;
+/** First tour starts slower until the visitor accepts the pace hint. */
+export const TOUR_RATE_INTRO: TourRate = 0.5;
 
 let rate: TourRate = TOUR_RATE_DEFAULT;
 
@@ -75,4 +77,42 @@ export function clock(seconds: number): string {
   const whole = Math.max(0, Math.ceil(seconds));
   const rest = whole % 60;
   return `${Math.floor(whole / 60)}:${rest < 10 ? '0' : ''}${rest}`;
+}
+
+/** Set when the visitor has used the tour transport's track button once. */
+export const TOUR_TRACK_HINT_KEY = 'nexow-tour-track-hint';
+
+export function trackHintDismissed(): boolean {
+  try {
+    return localStorage.getItem(TOUR_TRACK_HINT_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function dismissTrackHint(): void {
+  try {
+    localStorage.setItem(TOUR_TRACK_HINT_KEY, '1');
+  } catch {
+    /* Storage blocked — the button still drops the label for this session. */
+  }
+}
+
+/** Set when the visitor has used the tour transport's pace hint once. */
+export const TOUR_PACE_HINT_KEY = 'nexow-tour-pace-hint';
+
+export function paceHintDismissed(): boolean {
+  try {
+    return localStorage.getItem(TOUR_PACE_HINT_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function dismissPaceHint(): void {
+  try {
+    localStorage.setItem(TOUR_PACE_HINT_KEY, '1');
+  } catch {
+    /* Storage blocked — the button still drops the label for this session. */
+  }
 }

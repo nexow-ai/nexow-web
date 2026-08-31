@@ -1,16 +1,23 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   clock,
   cycleTourRate,
+  dismissPaceHint,
+  dismissTrackHint,
   nextTourRate,
+  paceHintDismissed,
   paceMark,
   secondsLeft,
   setTourRate,
   TOUR_MIN_TRAVEL,
+  TOUR_PACE_HINT_KEY,
   TOUR_RATE_DEFAULT,
+  TOUR_RATE_INTRO,
   TOUR_RATES,
   TOUR_SPEED,
+  TOUR_TRACK_HINT_KEY,
   tourRate,
+  trackHintDismissed,
   worthTouring,
 } from '../../../src/lib/tour';
 
@@ -126,5 +133,56 @@ describe('tour rate', () => {
   it('falls back to x1 when pinned to something it does not know', () => {
     expect(setTourRate(8)).toBe(1);
     expect(tourRate()).toBe(1);
+  });
+});
+
+describe('track hint', () => {
+  const store = new Map<string, string>();
+
+  beforeEach(() => {
+    store.clear();
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        store.set(key, value);
+      },
+      removeItem: (key: string) => {
+        store.delete(key);
+      },
+    });
+  });
+
+  it('starts visible until the visitor uses the track button', () => {
+    expect(trackHintDismissed()).toBe(false);
+    dismissTrackHint();
+    expect(trackHintDismissed()).toBe(true);
+  });
+});
+
+describe('pace hint', () => {
+  const store = new Map<string, string>();
+
+  beforeEach(() => {
+    store.clear();
+    vi.stubGlobal('localStorage', {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        store.set(key, value);
+      },
+      removeItem: (key: string) => {
+        store.delete(key);
+      },
+    });
+  });
+
+  it('starts visible until the visitor uses the pace hint', () => {
+    expect(paceHintDismissed()).toBe(false);
+    dismissPaceHint();
+    expect(paceHintDismissed()).toBe(true);
+  });
+
+  it('offers a slower intro rate before the hint is dismissed', () => {
+    expect(TOUR_RATE_INTRO).toBe(0.5);
+    expect(TOUR_RATE_INTRO).toBeLessThan(TOUR_RATE_DEFAULT);
   });
 });

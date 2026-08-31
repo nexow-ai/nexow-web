@@ -405,9 +405,13 @@ export interface SiteContent {
     tourPlayMe?: string;
     /** Labels for the tour's transport (see `TourHud.astro`). */
     tourTrack?: string;
+    /** One-time hint beside the track button until the visitor uses it once. */
+    tourTrackHint?: string;
     tourLeft?: string;
     tourControls?: string;
     tourPace?: string;
+    /** One-time hint beside the pace button until the visitor uses it once. */
+    tourPaceHint?: string;
     /** Language switcher summary (see `Header.astro`). */
     switchLang?: string;
     /** Landmark name for the desktop header nav. */
