@@ -57,8 +57,12 @@ const subcategoryCatalog = {
   socials: SUBCATEGORIES_BY_CATEGORY.socials.map(labelSub),
 };
 const alphaFilters = [{ key: 'all', label: t.all, min: '', max: '' }, ...ALPHA_BUCKETS];
+/* `min-h-6` is the WCAG 2.2 target-size floor (24px); at this type size the
+   padding alone lands just under it. On a touch screen the chips grow to the
+   44px a thumb needs — the row is a segmented pill, so the whole control
+   grows with them rather than the chips overflowing it. */
 const chipBtnIcon =
-  'inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex min-h-6 items-center gap-1 rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 pointer-coarse:px-3.5 pointer-coarse:text-xs aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 
 /** Catalog payload for the client modal (localized labels baked in). */
 const catalog = CONNECTORS.map((c) => ({
@@ -89,10 +93,12 @@ const itemListSchema = {
   })),
 };
 
+/* Same touch sizing as `chipBtnIcon`; `inline-flex` so the label stays centred
+   once a minimum height is doing the sizing instead of the padding. */
 const pillBtn =
-  'rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-sm font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 const chipBtn =
-  'rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
+  'inline-flex min-h-6 items-center justify-center rounded-full px-2.5 py-1 font-mono text-[0.65rem] font-medium text-ink-500 transition-colors pointer-coarse:min-h-11 pointer-coarse:px-3.5 pointer-coarse:text-xs aria-[pressed=true]:bg-ink-950 aria-[pressed=true]:text-white dark:text-ink-400 dark:aria-[pressed=true]:bg-white dark:aria-[pressed=true]:text-ink-950';
 
 const sections = [
   { id: 'connectors-app', label: t.hero.badge },

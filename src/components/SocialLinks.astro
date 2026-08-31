@@ -166,20 +166,33 @@ const Tag = landmark ? 'nav' : 'div';
 
   .socials.is-grid {
     display: grid;
-    grid-template-columns: repeat(3, 2.25rem);
+    grid-template-columns: repeat(3, 2.75rem);
     width: max-content;
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .socials.is-grid {
+      grid-template-columns: repeat(3, 2.25rem);
+    }
   }
 
   .socials__link {
     display: inline-flex;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border-radius: 0.55rem;
     overflow: hidden;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
     transition:
       transform 0.2s var(--ease-out-expo),
       box-shadow 0.2s var(--ease-out-expo);
+  }
+
+  @media (min-width: 640px) and (pointer: fine) {
+    .socials__link {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
   }
 
   .socials__link.is-telegram,

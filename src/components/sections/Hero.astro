@@ -332,7 +332,8 @@ const D = {
     }
     .hero__send {
       justify-content: center;
-      padding-block: 0.7rem;
+      min-height: 2.75rem;
+      padding-block: 0.75rem;
     }
   }
 
@@ -349,8 +350,9 @@ const D = {
   .hero__chip {
     display: inline-flex;
     align-items: center;
+    min-height: 2.75rem;
     gap: 0.4rem;
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 0.9rem;
     border: 1px solid var(--w-line);
     border-radius: 999px;
     background: var(--w-panel-2);
@@ -463,25 +465,58 @@ const D = {
 
   @media (max-width: 767.98px) {
     .hero {
-      padding-block: 7.25rem max(5.5rem, calc(4.25rem + env(safe-area-inset-bottom, 0px)));
+      justify-content: flex-start;
+      padding-block: 6.5rem max(3.25rem, calc(2.25rem + env(safe-area-inset-bottom, 0px)));
     }
 
     .hero__forge {
-      margin-top: 1.85rem;
+      margin-top: 1.6rem;
     }
 
     .hero__kicker {
+      margin-top: 1.1rem;
+    }
+
+    /* In flow, not pinned over the socials — on a phone the cue used to land
+       on the last row of marks. */
+    .hero__cue {
+      position: static;
+      margin-top: 1.75rem;
+    }
+
+    .hero__cue-rail {
+      height: 1.85rem;
+    }
+
+    .hero__socials {
+      margin-top: 1.1rem;
+    }
+
+    .hero__note {
       margin-top: 1.25rem;
+    }
+  }
+
+  @media (min-width: 768px) and (pointer: fine) {
+    .hero__chip {
+      min-height: 0;
+      padding: 0.4rem 0.8rem;
     }
   }
 
   /* Short viewports (landscape phones) cannot afford a full-height opening.
      Drop the cue and let the hero be as tall as its content. */
-  @media (max-height: 34rem) {
+  @media (max-height: 40rem) {
     .hero {
       min-height: 0;
-      padding-block: 7rem 3rem;
+      padding-block: 6.5rem 2.5rem;
     }
+    .hero__cue-rail {
+      display: none;
+    }
+  }
+
+  @media (max-height: 34rem) {
     .hero__cue {
       display: none;
     }
