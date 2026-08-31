@@ -852,7 +852,12 @@ const FANS = [
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    @media (min-width: 768px) {
+    /* Tied to the `lg:` grid above, not to a tablet breakpoint: the tilt swings
+       the near edge of the art wider than its layout box, which only has room
+       to spare once the scene shares the row with the copy. While the grid is
+       still one column the scene is the full container, so the same swing
+       reaches past the viewport and the whole document scrolls sideways. */
+    @media (min-width: 1024px) {
       :global(html.js) .b-art {
         transform: rotateX(calc(var(--psc, 0) * -8deg)) rotateY(calc(var(--psc, 0) * 11deg * var(--dir, 1)))
           translate3d(0, calc(var(--psc, 0) * -0.6rem), 0);
