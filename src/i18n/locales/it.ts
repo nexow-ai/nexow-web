@@ -186,6 +186,71 @@ export const it: SiteContent = {
           label: 'Diario di allenamento',
           prompt: 'Mostra le mie corse Strava di questo mese con trend del ritmo, volume settimanale e tabella dei record.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Crea un moodboard morbido, un tracker di streak e un mini gioco di memoria.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Tabellone voli',
+          prompt: 'Crea un tabellone voli live: arrivi, ritardi, mappa delle rotte e feed dei cambi gate.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Spese',
+          prompt: 'Fai un tracker spese con donut per categoria, burn giornaliero e lista degli addebiti ricorrenti.',
+        },
+        {
+          icon: 'github',
+          label: 'Desk di ship',
+          prompt: 'Mostra la mia settimana GitHub: PR aperte, frequenza dei deploy, fallimenti CI e checklist di release.',
+        },
+        {
+          icon: 'users',
+          label: 'Hub social',
+          prompt: 'Crea un hub social: post salvati, risposte da dare e digest di chi seguo.',
+        },
+        {
+          icon: 'sun',
+          label: 'Desk energia',
+          prompt: 'Crea un desk energia: resa solare, prezzo della rete, stato batteria e carico sulle 24 ore.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Analytics sito',
+          prompt: 'Fai una dashboard analytics: visitatori live, pagine top, calo del funnel e sparkline del traffico.',
+        },
+        {
+          icon: 'banknote',
+          label: 'Desk FX',
+          prompt: 'Crea un desk FX: candele EURUSD, griglia delle major, orologio di sessione e nastro notizie.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Planner settimanale',
+          prompt: 'Crea un planner settimanale con blocchi orari, timer di focus e una to-do list rotante.',
+        },
+        {
+          icon: 'pen',
+          label: 'Studio contenuti',
+          prompt: 'Fai uno studio contenuti: bacheca idee, calendario di pubblicazione, stati bozza e lista hook.',
+        },
+        {
+          icon: 'signal',
+          label: 'Mappa transit',
+          prompt: 'Mappa il transit live: prossimi arrivi, linee in ritardo, schema della rete e feed disservizi.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Bacheca cucina',
+          prompt: 'Crea una bacheca cucina: menu della settimana, lista della spesa, avanzi in dispensa e striscia timer.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Match center',
+          prompt: 'Fai un match center: score live, shot chart, classifica e feed play-by-play.',
+        },
       ],
     },
     ticker: { label: 'Connettori attivi' },

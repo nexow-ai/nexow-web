@@ -2,17 +2,25 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: Pages branch to deploy
+        type: choice
+        options: [main, dev]
+        default: main
 
-# Only one production deploy at a time; newer pushes cancel in-flight ones.
+# One in-flight deploy per target branch; newer pushes cancel the older one.
 concurrency:
-  group: deploy-main
+  group: deploy-${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   deploy:
     name: Cloudflare Pages
+    env:
+      PAGES_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -36,9 +44,30 @@ jobs:
       - name: Build
         run: bun run build
 
+      - name: Reject files Pages will not upload
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, sys
+          limit = 25 * 1024 * 1024
+          bad = []
+          for root, _, files in os.walk("dist"):
+              for name in files:
+                  path = os.path.join(root, name)
+                  size = os.path.getsize(path)
+                  if size > limit:
+                      bad.append((size, path))
+          if bad:
+              print("Cloudflare Pages rejects files over 25 MiB:", file=sys.stderr)
+              for size, path in sorted(bad, reverse=True):
+                  print(f"  {size / 1024 / 1024:.1f} MiB  {path}", file=sys.stderr)
+              raise SystemExit(1)
+          print("All dist files are within the 25 MiB Pages limit.")
+          PY
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=nexow-web --branch=main
+          command: pages deploy dist --project-name=nexow-web --branch=${{ env.PAGES_BRANCH }} --commit-dirty=true

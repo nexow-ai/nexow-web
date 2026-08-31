@@ -186,6 +186,71 @@ export const zh: SiteContent = {
           label: '训练记录',
           prompt: '显示我本月的 Strava 跑步记录，带配速趋势、每周里程和个人最佳表格。',
         },
+        {
+          icon: 'layers',
+          label: '情绪板',
+          prompt: '做一块柔和的情绪板、一个习惯连续打卡和一个小型记忆翻牌游戏。',
+        },
+        {
+          icon: 'mapPin',
+          label: '航班看板',
+          prompt: '做一个实时航班看板：到达、延误、航线图和登机口变更信息流。',
+        },
+        {
+          icon: 'creditCard',
+          label: '支出追踪',
+          prompt: '做一个支出追踪：分类环形图、每日消耗和周期性账单列表。',
+        },
+        {
+          icon: 'github',
+          label: '发布台',
+          prompt: '展示我本周的 GitHub：打开的 PR、部署频率、CI 失败和发布清单。',
+        },
+        {
+          icon: 'users',
+          label: '社交中心',
+          prompt: '做一个社交中心：收藏帖、待回复和关注摘要。',
+        },
+        {
+          icon: 'sun',
+          label: '能源台',
+          prompt: '做一个家庭能源台：光伏产量、电网价格、电池状态和 24 小时负荷图。',
+        },
+        {
+          icon: 'monitor',
+          label: '网站分析',
+          prompt: '做一个网站分析板：实时访客、热门页面、漏斗流失和流量折线。',
+        },
+        {
+          icon: 'banknote',
+          label: '外汇台',
+          prompt: '做一个外汇台：EURUSD K 线、主要货币对网格、交易时段时钟和新闻条。',
+        },
+        {
+          icon: 'hourglass',
+          label: '周计划',
+          prompt: '做一个周计划：时间块、专注计时器和滚动待办。',
+        },
+        {
+          icon: 'pen',
+          label: '内容工作室',
+          prompt: '做一个内容工作室：灵感板、发布日历、草稿状态和钩子列表。',
+        },
+        {
+          icon: 'signal',
+          label: '公交地图',
+          prompt: '绘制实时公交：下一班到达、延误线路、线网示意和故障信息流。',
+        },
+        {
+          icon: 'wheat',
+          label: '厨房看板',
+          prompt: '做一个厨房看板：一周食谱、购物清单、剩余食材和计时条。',
+        },
+        {
+          icon: 'trophy',
+          label: '比赛中心',
+          prompt: '做一个比赛中心：实时比分、投篮热图、积分榜和逐回合直播。',
+        },
       ],
     },
     ticker: { label: '实时连接器' },

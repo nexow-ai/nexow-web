@@ -186,6 +186,71 @@ export const ms = {
           label: 'Log latihan',
           prompt: 'Tunjukkan larian Strava saya bulan ini dengan trend pace, jumlah mingguan dan jadual rekod peribadi.',
         },
+        {
+          icon: 'layers',
+          label: 'Papan mood',
+          prompt: 'Buat papan mood lembut, penjejak streak tabiat dan permainan ingatan kecil.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Papan penerbangan',
+          prompt: 'Bina papan penerbangan langsung: ketibaan, kelewatan, peta laluan dan suapan tukar pintu.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Penjejak belanja',
+          prompt: 'Buat penjejak belanja dengan donut kategori, bakar harian dan senarai bil berulang.',
+        },
+        {
+          icon: 'github',
+          label: 'Meja hantar',
+          prompt: 'Tunjukkan minggu GitHub saya: PR terbuka, kekerapan deploy, kegagalan CI dan senarai semak keluaran.',
+        },
+        {
+          icon: 'users',
+          label: 'Hab sosial',
+          prompt: 'Cipta hab sosial: siaran disimpan, balasan menunggu dan ringkasan mengikuti.',
+        },
+        {
+          icon: 'sun',
+          label: 'Meja tenaga',
+          prompt: 'Bina meja tenaga rumah: hasil solar, harga grid, keadaan bateri dan carta beban 24 jam.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Analitik laman',
+          prompt: 'Buat papan analitik: pelawat langsung, halaman teratas, jatuh corong dan sparkline trafik.',
+        },
+        {
+          icon: 'banknote',
+          label: 'Meja FX',
+          prompt: 'Bina meja FX: lilin EURUSD, grid pasangan utama, jam sesi dan pita berita.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Perancang minggu',
+          prompt: 'Cipta perancang minggu dengan blok masa, pemasa fokus dan senarai tugasan bergolek.',
+        },
+        {
+          icon: 'pen',
+          label: 'Studio kandungan',
+          prompt: 'Buat studio kandungan: papan idea, kalendar terbitan, status draf dan senarai hook.',
+        },
+        {
+          icon: 'signal',
+          label: 'Peta transit',
+          prompt: 'Petakan transit langsung: ketibaan seterusnya, laluan tertunda, skema rangkaian dan suapan gangguan.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Papan dapur',
+          prompt: 'Bina papan dapur: rancang hidangan, senarai beli-belah, sisa pantry dan jalur pemasa.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Pusat perlawanan',
+          prompt: 'Buat pusat perlawanan: skor langsung, carta cubaan, kedudukan dan suapan main demi main.',
+        },
       ],
     },
     ticker: { label: 'Penyambung langsung' },

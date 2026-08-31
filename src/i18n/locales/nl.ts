@@ -186,6 +186,71 @@ export const nl: SiteContent = {
           label: 'Trainingslog',
           prompt: 'Toon mijn Strava-runs van deze maand met pace-trend, weekvolume en een tabel met persoonlijke records.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Maak een zacht moodboard, een streak-tracker en een klein memoryspel.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Vluchtbord',
+          prompt: 'Bouw een live vluchtbord: aankomsten, vertragingen, routekaart en een gate-wijzigingenfeed.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Uitgaven',
+          prompt: 'Maak een uitgaventracker met categoriedonut, dagelijkse burn en een lijst van terugkerende rekeningen.',
+        },
+        {
+          icon: 'github',
+          label: 'Ship-desk',
+          prompt: 'Toon mijn GitHub-week: open PRs, deployfrequentie, CI-fouten en een releasechecklist.',
+        },
+        {
+          icon: 'users',
+          label: 'Social hub',
+          prompt: 'Maak een social hub: opgeslagen posts, openstaande replies en een following-digest.',
+        },
+        {
+          icon: 'sun',
+          label: 'Energie-desk',
+          prompt: 'Bouw een energie-desk: zonopbrengst, netprijs, batterijstatus en een 24-uurs lastgrafiek.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Site-analytics',
+          prompt: 'Maak een analytics-board: live bezoekers, toppagina’s, funnel-afval en een traffic-sparkline.',
+        },
+        {
+          icon: 'banknote',
+          label: 'FX-desk',
+          prompt: 'Bouw een FX-desk: EURUSD-kaarsen, major-parengrid, sessieklok en een nieuws-tape.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Weekplanner',
+          prompt: 'Maak een weekplanner met tijdblokken, een focustimer en een rollende to-dolijst.',
+        },
+        {
+          icon: 'pen',
+          label: 'Contentstudio',
+          prompt: 'Maak een contentstudio: ideeënbord, publicatiekalender, draftstatussen en een hooklijst.',
+        },
+        {
+          icon: 'signal',
+          label: 'Transitkaart',
+          prompt: 'Kaart live transit: volgende aankomsten, vertraagde lijnen, netwerkschema en een storingenfeed.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Keukenbord',
+          prompt: 'Bouw een keukenbord: weekmenu, boodschappenlijst, voorraadresten en een timerstrook.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Wedstrijdcentrum',
+          prompt: 'Maak een wedstrijdcentrum: livescores, shotchart, stand en een play-by-play-feed.',
+        },
       ],
     },
     ticker: { label: 'Live connectoren' },

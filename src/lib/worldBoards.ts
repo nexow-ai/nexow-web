@@ -1,0 +1,248 @@
+/**
+ * Rasterises the hero dashboards (HeroDashboards.astro) from the live
+ * DOM into a 2048×1024 atlas of sixteen 512×256 cells, uploaded for the world's
+ * screens to sample — the whole channel table in WorldField's fragment shader:
+ * the wall runs the same instruments the cards around the composer do, and is
+ * bare glass until this atlas lands.
+ *
+ * Each cell is the full card, not the SVG alone: panel ground, title bar,
+ * live mark, then the instrument. The 3D screens used to dress a transparent
+ * plot in a thick family-tinted bezel, which is why the wall read as toy
+ * tablets. Painting the real card means the wall and the composer cards are
+ * the same object.
+ *
+ * The SVGs are cloned with their computed styles inlined, because an <img>
+ * renders SVG in a blank document: the scoped classes, the custom properties
+ * and every color-mix() only resolve here, in the page. All but four of the
+ * boards are display:none at any moment and never start their entrance
+ * animations, so the states those animations land on are forced — drawn
+ * strokes on, entrance transforms cleared — while the looping states (EQ
+ * bars, blips, packets) are taken as they are, which scatters each build a
+ * little and costs nothing.
+ *
+ * Dynamically imported by WorldField: this runs once, seconds after load (and
+ * again on a theme flip), and has no business in that script's parse cost.
+ */
+
+const STYLE_PROPS = [
+  'fill',
+  'stroke',
+  'stroke-width',
+  'stroke-dasharray',
+  'stroke-dashoffset',
+  'stroke-linecap',
+  'stroke-linejoin',
+  'opacity',
+  'font-family',
+  'font-size',
+  'font-weight',
+  'letter-spacing',
+  'transform',
+  'transform-origin',
+  'transform-box',
+  'clip-path',
+];
+
+export interface BoardAtlasState {
+  /** Bumped by the owner to abandon an in-flight build (teardown, re-theme). */
+  gen: number;
+  tex: WebGLTexture | null;
+}
+
+export interface BoardAtlasTarget {
+  ctx: WebGLRenderingContext;
+  prog: WebGLProgram;
+  uBoardsOn: WebGLUniformLocation | null;
+  uBoardLight: WebGLUniformLocation | null;
+  state: BoardAtlasState;
+}
+
+function snapshotBoard(svg: SVGSVGElement): string {
+  const clone = svg.cloneNode(true) as SVGSVGElement;
+  const srcEls = [svg as SVGElement, ...svg.querySelectorAll<SVGElement>('*')];
+  const dstEls = [clone as SVGElement, ...clone.querySelectorAll<SVGElement>('*')];
+  for (let i = 0; i < srcEls.length; i++) {
+    const cs = getComputedStyle(srcEls[i]);
+    const st = dstEls[i].style;
+    for (const p of STYLE_PROPS) st.setProperty(p, cs.getPropertyValue(p));
+  }
+  /* Riders position themselves with offset-path, which a detached SVG cannot
+     honour — gone rather than parked at the origin. */
+  for (const el of clone.querySelectorAll('.path-rider')) el.remove();
+  /* Entrance animations land on visible; force that landing. Transforms too —
+     a bar caught mid-grow inlined a squashed matrix above. */
+  for (const el of clone.querySelectorAll<SVGElement>('.fade, .slide, .pop, .grow-y, .grow-x')) {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+  }
+  for (const el of clone.querySelectorAll<SVGElement>('.draw, .draw-loop, .caret')) {
+    el.style.strokeDashoffset = '0';
+    el.style.opacity = '1';
+  }
+  clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  clone.setAttribute('width', '496');
+  clone.setAttribute('height', '200');
+  clone.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  clone.removeAttribute('class');
+  return new XMLSerializer().serializeToString(clone);
+}
+
+function resolved(el: Element | null, prop: string, fallback: string): string {
+  if (!el) return fallback;
+  const v = getComputedStyle(el).getPropertyValue(prop).trim();
+  return v || fallback;
+}
+
+function paintCard(
+  g2: CanvasRenderingContext2D,
+  board: HTMLElement,
+  img: HTMLImageElement | null,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  light: boolean,
+): void {
+  /* Hidden boards still own their title copy; chrome colours come from a
+     shown card so display:none never hands back a transparent panel. */
+  const sample =
+    (board.classList.contains('is-shown')
+      ? board
+      : document.querySelector<HTMLElement>('[data-hero-board].is-shown')) ?? board;
+  const titleEl = board.querySelector('.hero-board__title');
+  const metaEl = board.querySelector('.hero-board__live');
+  const dotEl = sample.querySelector('.hero-board__live-dot');
+  const panel = resolved(sample, 'background-color', light ? '#f4f6f8' : '#10141c');
+  const line = resolved(sample, 'border-color', light ? 'rgba(15,18,24,0.12)' : 'rgba(255,255,255,0.12)');
+  const titleFill = resolved(
+    sample.querySelector('.hero-board__title') ?? titleEl,
+    'color',
+    light ? '#334155' : '#c8d2de',
+  );
+  const metaFill = resolved(
+    sample.querySelector('.hero-board__live') ?? metaEl,
+    'color',
+    light ? '#0d9488' : '#5eead4',
+  );
+  const dotFill = resolved(dotEl, 'background-color', metaFill);
+  const mono =
+    resolved(titleEl, 'font-family', 'ui-monospace, monospace') || 'ui-monospace, monospace';
+  const barH = Math.round(h * 0.168);
+
+  /* Opaque ground first. The live card is a color-mix against transparent,
+     and that alpha in the atlas is what let the world's pastel glass show
+     through — empty coloured tiles instead of instruments. */
+  g2.fillStyle = light ? '#f4f6f8' : '#10141c';
+  g2.fillRect(x, y, w, h);
+  if (panel && panel !== 'rgba(0, 0, 0, 0)' && panel !== 'transparent') {
+    g2.fillStyle = panel;
+    g2.fillRect(x, y, w, h);
+  }
+  g2.fillStyle = line;
+  g2.fillRect(x, y + barH, w, 1);
+
+  const cy = y + barH * 0.5;
+  g2.beginPath();
+  g2.fillStyle = dotFill;
+  g2.arc(x + 16, cy, 3.4, 0, Math.PI * 2);
+  g2.fill();
+
+  g2.textBaseline = 'middle';
+  g2.font = `600 ${Math.round(h * 0.05)}px ${mono}`;
+  g2.fillStyle = titleFill;
+  g2.fillText((titleEl?.textContent ?? '').trim(), x + 28, cy, w * 0.62);
+
+  g2.textAlign = 'right';
+  g2.font = `500 ${Math.round(h * 0.042)}px ${mono}`;
+  g2.fillStyle = metaFill;
+  g2.fillText((metaEl?.textContent ?? '').trim(), x + w - 12, cy, w * 0.28);
+  g2.textAlign = 'left';
+
+  if (img) g2.drawImage(img, x + 4, y + barH + 3, w - 8, h - barH - 6);
+}
+
+function revealHidden(boards: HTMLElement[]): () => void {
+  const hidden = boards.filter((b) => !b.classList.contains('is-shown'));
+  const prev = hidden.map((b) => b.getAttribute('style'));
+  for (const b of hidden) {
+    b.style.setProperty('display', 'block', 'important');
+    b.style.setProperty('position', 'fixed');
+    b.style.setProperty('left', '-200vw');
+    b.style.setProperty('top', '0');
+    b.style.setProperty('opacity', '0');
+    b.style.setProperty('pointer-events', 'none');
+  }
+  void hidden[0]?.offsetHeight;
+  return () => {
+    hidden.forEach((b, i) => {
+      if (prev[i] == null) b.removeAttribute('style');
+      else b.setAttribute('style', prev[i]!);
+    });
+  };
+}
+
+export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
+  const { ctx, state } = t;
+  const boards = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-board]')).slice(
+    0,
+    16,
+  );
+  if (!boards.length) return;
+  const gen = ++state.gen;
+  /* A webfont that never settles used to stall this forever, and the wall
+     stayed on the toy tablets. Four hundred milliseconds is enough for the
+     faces that are already in memory; the rest can miss a cell. */
+  await Promise.race([
+    document.fonts.ready.catch(() => undefined),
+    new Promise<void>((resolve) => setTimeout(resolve, 400)),
+  ]);
+  if (gen !== state.gen) return;
+  const restore = revealHidden(boards);
+  const atlas = document.createElement('canvas');
+  atlas.width = 2048;
+  atlas.height = 1024;
+  const g2 = atlas.getContext('2d');
+  if (!g2) {
+    restore();
+    return;
+  }
+  const light = !document.documentElement.classList.contains('dark');
+  try {
+    for (let i = 0; i < boards.length; i++) {
+      const svg = boards[i].querySelector<SVGSVGElement>('svg');
+      const img = svg
+        ? await new Promise<HTMLImageElement | null>((res) => {
+            const el = new Image();
+            el.onload = () => res(el);
+            el.onerror = () => res(null);
+            el.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(snapshotBoard(svg))}`;
+          })
+        : null;
+      if (gen !== state.gen) return;
+      /* Full cell. An 8px gutter sampled edge-to-edge was a dark rim around
+         every screen — the border the wall was asked to lose. No mip chain,
+         so neighbours cannot bleed. */
+      paintCard(g2, boards[i], img, (i % 4) * 512, Math.floor(i / 4) * 256, 512, 256, light);
+      // One board per macrotask — sixteen style walks in one frame is a hitch.
+      await new Promise((res) => setTimeout(res, 0));
+      if (gen !== state.gen) return;
+    }
+  } finally {
+    restore();
+  }
+  if (!state.tex) state.tex = ctx.createTexture();
+  if (!state.tex) return;
+  ctx.activeTexture(ctx.TEXTURE1);
+  ctx.bindTexture(ctx.TEXTURE_2D, state.tex);
+  ctx.texImage2D(ctx.TEXTURE_2D, 0, ctx.RGBA, ctx.RGBA, ctx.UNSIGNED_BYTE, atlas);
+  /* No mip chain. Hairline ink averages to fog two levels down, and a
+     screen mid-orbit is exactly when that fog reads as an empty tile. */
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MIN_FILTER, ctx.LINEAR);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_MAG_FILTER, ctx.LINEAR);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_S, ctx.CLAMP_TO_EDGE);
+  ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_T, ctx.CLAMP_TO_EDGE);
+  ctx.activeTexture(ctx.TEXTURE0);
+  ctx.useProgram(t.prog);
+  ctx.uniform1f(t.uBoardsOn, 1);
+  ctx.uniform1f(t.uBoardLight, light ? 1 : 0);
+}
