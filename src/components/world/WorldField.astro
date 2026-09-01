@@ -1893,7 +1893,6 @@
     const sceneInvert = scenes.map(
       (el) => el.classList.contains('tone-invert') || !!el.closest('.tone-invert'),
     );
-    const bands = scenes.filter((_, i) => sceneInvert[i]);
     /* Answered once at setup rather than re-queried per frame: the DOM these
      * point at is static for the life of the page. */
     const sceneStage = scenes.map((el) =>
