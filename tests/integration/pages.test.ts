@@ -129,6 +129,11 @@ describe.each(SAMPLE_LANGS)('home page in %s', (lang) => {
       expect(html, `${lang} → ${other}`).toContain(languages[other]);
     }
   });
+
+  it('stays on the page theme with no invert bands', async () => {
+    const html = await render(pageFor('/', lang) as never, localizePath('/', lang));
+    expect(html).not.toMatch(/class="[^"]*tone-invert/);
+  });
 });
 
 describe('404 page', () => {
