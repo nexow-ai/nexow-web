@@ -47,8 +47,13 @@ describe.skipIf(!built)('shipped payload', () => {
   it('ships one bounded stylesheet bundle', () => {
     /* 410 → 430: the hero dashboards (HeroDashboards.astro) grew from four
        sketches to twelve instrument panels, and the playground art picked up
-       weight alongside. */
-    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(430);
+       weight alongside.
+       430 → 440: those panels stopped being screenshots. The shared loop
+       vocabulary — value cyclers, print flashes, rolling plots, meters,
+       sweeps — is ~3 KB of keyframes and rules that dresses every board, and
+       is why the boards themselves grew markup without growing CSS per
+       board. */
+    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(440);
   });
 
   it('self-hosts its fonts, in woff2', () => {
@@ -63,7 +68,10 @@ describe.skipIf(!built)('shipped payload', () => {
        ~600 KB when the hero stopped rendering sixteen of its dashboards and
        started rendering all thirty-seven, which is also the world's channel
        table (src/lib/worldBoards.ts rasterises them into the atlas the 3D
-       screens sample). ~85 KB of headroom left; another board costs ~5 KB. */
+       screens sample), and to ~860 KB when the boards started running —
+       ticking readouts are several copies of one number, and a plot that
+       scrolls draws its series twice. ~38 KB of headroom left; another board
+       costs ~5 KB. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
       .filter((f) => fs.statSync(f).size > 900 * 1024)

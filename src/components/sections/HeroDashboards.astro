@@ -962,7 +962,7 @@ const NEWS = [
                 ))}
               </g>
             </g>
-            <g class="bob" style="--y0:1.5px;--y1:-3.5px;--t:5.5s">
+            <g class="bob" style="--y0:0px;--y1:-5px;--t:5.5s">
               <path class="ln dash acc dash-flow" d="M6 39.2H158" />
               <rect class="f-accent" x="158" y="34.8" width="21" height="9" rx="1" />
               <text class="lbl tag" x="160.5" y="41.5">67241</text>
@@ -1019,7 +1019,9 @@ const NEWS = [
                 <text class="lbl up" x="92" y="10">{q.ch}</text>
               </g>
             ))}
-            <text class="lbl dim xs" x="132" y="10">DXY 104.2 · TOK  LON  NY</text>
+            {['DXY 104.2', 'DXY 104.3'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="124" y="10" style={`--t:6.8s;--d:${(vi * 3.4).toFixed(1)}s`}>{v}</text>
+            ))}
             <clipPath id="fx-clip">
               <rect x="8" y="20" width="117" height="38" />
             </clipPath>
@@ -1056,7 +1058,7 @@ const NEWS = [
             <rect class="track" x="8" y="130" width="130" height="5" rx="1" />
             <rect class="f-br pulse-x" x="8" y="130" width="79" height="5" rx="1" style="--s:0.74;--t:6.4s" />
             <text class="lbl dim xs" x="8" y="148">PIP 1.8 · SWAP −4.2</text>
-            <text class="lbl dim xs" x="154" y="10">CORR  20D</text>
+            <text class="lbl dim xs" x="176" y="10">CORR  20D</text>
             {FX_AX.map((a, i) => (
               <text class="lbl dim xs" x={168 + i * 20} y="22">{a}</text>
             ))}
@@ -1402,9 +1404,9 @@ const NEWS = [
               <rect
                 class="f-br eq-bar"
                 x={bar.x}
-                y="92"
+                y="93"
                 width="4.4"
-                height="12"
+                height="8"
                 rx="0.4"
                 style={`--s:${bar.s};--t:${bar.t}s;--d:${bar.d}s`}
               />
@@ -1426,15 +1428,18 @@ const NEWS = [
               <rect x="6" y="20" width="266" height="90" />
             </clipPath>
             <g clip-path="url(#news-clip)">
-              <g class="tape-roll" style="--sh:-90px;--t:14s">
-                {NEWS.concat(NEWS).map((n, ni) => (
-                  <g>
-                    <rect class="f-br flash" x="6" y={22 + ni * 18} width="266" height="13" rx="1" style={`--t:14s;--d:${(ni * 2.8).toFixed(1)}s`} />
-                    <text class="lbl dim xs" x="8" y={32 + ni * 18}>{n[0]}</text>
-                    <text class="lbl xs" x="36" y={32 + ni * 18}>{n[1]}</text>
-                    <text class="lbl xs" x="64" y={32 + ni * 18}>{n[2]}</text>
-                  </g>
-                ))}
+              <g class="tape-roll" style="--sh:90px;--t:14s">
+                {NEWS.concat(NEWS).map((n, ni) => {
+                  const y = 32 + ni * 18 - 90;
+                  return (
+                    <g>
+                      <rect class="f-br flash" x="6" y={y - 10} width="266" height="13" rx="1" style={`--t:14s;--d:${(ni * 2.8).toFixed(1)}s`} />
+                      <text class="lbl dim xs" x="8" y={y}>{n[0]}</text>
+                      <text class="lbl xs" x="36" y={y}>{n[1]}</text>
+                      <text class="lbl xs" x="64" y={y}>{n[2]}</text>
+                    </g>
+                  );
+                })}
               </g>
             </g>
             <path class="ln dash thin" d="M8 124H272" />
@@ -2867,7 +2872,7 @@ const NEWS = [
     width: min(21rem, 36vw);
     margin: 0;
     overflow: hidden;
-    border: 1px solid color-mix(in oklab, var(--w-text) 38%, transparent);
+    border: 1px solid color-mix(in oklab, var(--w-text) 12%, transparent);
     border-radius: 0.4rem;
     background: color-mix(in oklab, var(--w-panel) 88%, transparent);
     box-shadow: 0 16px 36px -24px var(--w-shadow);
@@ -2880,6 +2885,10 @@ const NEWS = [
       opacity 0.7s var(--ease-out-expo),
       filter 0.7s var(--ease-out-expo),
       transform 0.7s var(--ease-out-expo);
+  }
+
+  :global(html.dark) .hero-board {
+    border-color: color-mix(in oklab, var(--w-text) 38%, transparent);
   }
 
   .hero-board.is-shown {
@@ -4005,25 +4014,17 @@ const NEWS = [
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hero-board,
-    .hero-board.is-shown,
-    .hero-board.is-shown::after,
-    .hero-board__live-dot,
-    .hero-board__live,
+  /* Instruments at rest.
+   *
+   * Two cases want the loops stopped: someone who asked for less motion, and
+   * a phone, where the stage is two cards at 0.28 opacity behind a 2px blur —
+   * texture, not instruments, and forty running loops apiece buy nothing but
+   * battery. Both need the same thing afterwards: the states the animations
+   * were carrying have to be spelled out, or a stopped board is a board with
+   * no lines and no readouts on it. */
+  @media (prefers-reduced-motion: reduce), (max-width: 767.98px) {
     .hero-board__svg * {
       animation: none !important;
-    }
-    .hero-board.is-shown::after {
-      opacity: 0;
-    }
-    .hero-board.is-shown {
-      opacity: 0.45;
-      filter: blur(0.6px);
-    }
-    .hero-board.is-current {
-      opacity: 0.75;
-      filter: none;
     }
     .draw,
     .draw-loop {
@@ -4058,6 +4059,27 @@ const NEWS = [
     }
     .sweep .f-brand {
       opacity: 0.04;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-board,
+    .hero-board.is-shown,
+    .hero-board.is-shown::after,
+    .hero-board__live-dot,
+    .hero-board__live {
+      animation: none !important;
+    }
+    .hero-board.is-shown::after {
+      opacity: 0;
+    }
+    .hero-board.is-shown {
+      opacity: 0.45;
+      filter: blur(0.6px);
+    }
+    .hero-board.is-current {
+      opacity: 0.75;
+      filter: none;
     }
   }
 </style>
