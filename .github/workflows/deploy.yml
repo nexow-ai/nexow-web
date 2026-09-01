@@ -23,6 +23,9 @@ jobs:
       PAGES_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    permissions:
+      contents: read
+      deployments: write
 
     steps:
       - uses: actions/checkout@v4
@@ -66,8 +69,10 @@ jobs:
           PY
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: bun
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: pages deploy dist --project-name=nexow-web --branch=${{ env.PAGES_BRANCH }} --commit-dirty=true
