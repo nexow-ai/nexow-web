@@ -70,11 +70,20 @@ describe.skipIf(!built)('shipped payload', () => {
        table (src/lib/worldBoards.ts rasterises them into the atlas the 3D
        screens sample), and to ~860 KB when the boards started running —
        ticking readouts are several copies of one number, and a plot that
-       scrolls draws its series twice. ~38 KB of headroom left; another board
-       costs ~5 KB. */
+       scrolls draws its series twice.
+
+       900 → 1060: the twelve chart desks (×1/×2/×4/×8 grids of live plots
+       across stocks, commodities, indices, FX, crypto and macro) took the
+       list to forty-nine and the biggest page to ~1020 KB. Most of that is
+       mechanical rather than authored — an eight-up sheet is ~250 SVG nodes
+       and every one of them carries Astro's 24-byte scoped-style attribute,
+       which is a third of the board. It compresses to ~139 KB gzipped, which
+       is what actually crosses the wire. ~40 KB of headroom; another eight-up
+       sheet costs ~20 KB, so the next one wants the byte budget looked at
+       rather than the cap raised again. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
-      .filter((f) => fs.statSync(f).size > 900 * 1024)
+      .filter((f) => fs.statSync(f).size > 1060 * 1024)
       .map((f) => `${path.relative(DIST, f)} (${kb(fs.statSync(f).size)} KB)`);
     expect(oversized).toEqual([]);
   });

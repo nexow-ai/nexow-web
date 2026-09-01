@@ -24,6 +24,18 @@ interface Board {
 
 const BOARDS: Board[] = [
   { id: 'trading', title: 'DERIV DESK · BTC-PERP', meta: '1h · live' },
+  { id: 'eqdesk', title: 'EQUITY DESK · NVDA', meta: 'nasdaq · 1m' },
+  { id: 'idx2', title: 'INDEX PAIR · US CASH', meta: 'rth · live' },
+  { id: 'eq4', title: 'EQUITY GRID · MEGA CAP', meta: '4-up · live' },
+  { id: 'idx8', title: 'INDEX WALL · WORLD 8', meta: '8-up · gmt' },
+  { id: 'wticrude', title: 'COMMOD DESK · WTI', meta: 'nymex · 1m' },
+  { id: 'fx2', title: 'FX PAIR · EUR & JPY', meta: 'ldn · live' },
+  { id: 'cmd4', title: 'COMMOD GRID · ENERGY', meta: '4-up · globex' },
+  { id: 'fx8', title: 'FX WALL · G10 SPOT', meta: '8-up · ny' },
+  { id: 'btcusd', title: 'CRYPTO DESK · BTC/USD', meta: 'agg · 5m' },
+  { id: 'macro2', title: 'MACRO PAIR · CPI & JOBS', meta: 'monthly' },
+  { id: 'cx4', title: 'CRYPTO GRID · MAJORS', meta: '4-up · 24/7' },
+  { id: 'macro8', title: 'MACRO WALL · GLOBAL 8', meta: '8-up · est' },
   { id: 'forex', title: 'FX DESK · G10 SPOT', meta: 'ny · live' },
   { id: 'metals', title: 'COMMOD · METALS+E', meta: 'comex' },
   { id: 'chat', title: 'OPS CHAT · BRIDGE', meta: '14 rooms' },
@@ -886,6 +898,459 @@ const NEWS = [
   ['13:22', 'BOJ', 'Yen intervention watch'],
   ['13:08', 'GEOP', 'Strait traffic −11%'],
 ];
+
+/* ---- chart desks: twelve boards of ×1 / ×2 / ×4 / ×8 live plots ----
+ *
+ * One instrument, twelve dressings — stocks, commodities, indices, forex,
+ * crypto and macro — laid out as a single plot, a pair, a quad or an eight-up
+ * wall. Every panel is the same object: a rolling tape of price with its
+ * moving average, a volume histogram under it and a readout ticking over it.
+ * That is why this is a spec table and one loop rather than twelve hand-drawn
+ * scenes, and why the markup below grows without the stylesheet growing with
+ * it — the panels borrow the shared loop vocabulary and carry their series
+ * colour in an inherited `--sc`, so one rule paints six palettes.
+ *
+ * The trace is a closed walk (see `cgWalk`): drawn once, `<use>`d one set to
+ * the right, and translated exactly one set per loop, so the tape is endless
+ * and the second copy costs a tag instead of a second path.
+ */
+
+/** A closed pink-noise walk. 1/k harmonics whose periods all divide the
+ * window, so sample n lands on sample 0 and two copies run as one tape. Nine
+ * terms is what makes it read as a price rather than a sine: the first two
+ * carry the swing, the fine ones the jitter a real print has. */
+const cgWalk = (seed: number, n: number, harm = 9) =>
+  Array.from({ length: n + 1 }, (_, i) => {
+    const a = ((i % n) / n) * Math.PI * 2;
+    let s = 0;
+    for (let k = 1; k <= harm; k++) s += Math.sin(k * a + seed * (k * 0.61 + 1.7)) / k;
+    return s;
+  });
+
+/** Circular moving average — periodic in, periodic out, so the average wraps
+ * with the trace it smooths instead of tearing at the seam. */
+const cgMean = (v: number[], n: number, win: number) =>
+  Array.from({ length: n + 1 }, (_, i) => {
+    let s = 0;
+    for (let j = -win; j <= win; j++) s += v[(((i + j) % n) + n) % n];
+    return s / (win * 2 + 1);
+  });
+
+interface CGPanel {
+  sym: string;
+  /** Venue, tenor or unit — the second line a real ticker carries. */
+  sub: string;
+  /** Prints the readout steps through, newest first. */
+  px: string[];
+  ch: string[];
+  up: boolean;
+  /** Series colour, 1..6 (see `--pg-s1`…`--pg-s6`). */
+  c: number;
+  /** Area under the trace, or a bare line. */
+  fill: boolean;
+  seed: number;
+  /** ×2 only: the line under the quote. A book on a market, the revision that
+      matters on a print. */
+  note?: string;
+}
+
+interface CGSpec {
+  id: string;
+  size: 1 | 2 | 4 | 8;
+  /** Left of the strip over the grid. */
+  head: string;
+  /** The strip's own ticking readout. */
+  heads: string[];
+  /** Right of the strip: session, venue, clock. */
+  meta: string;
+  panels: CGPanel[];
+  /** ×1 only: the stat rail beside the plot. */
+  rail: [string, string][];
+  /** ×1 only: the price axis, top rule down. */
+  axis?: string[];
+  /** ×1 only: what the volume pane says about itself. */
+  volNote?: string;
+}
+
+/* Panel box per layout, and the plot inside it. `cw` is always `n × dx` and
+ * `vn × vdx` — the roll travels exactly one set, so those have to agree or the
+ * tape steps at the wrap. Offsets are from the panel's own origin. */
+const CG_GEO: Record<number, {
+  n: number;
+  dx: number;
+  cox: number;
+  coy: number;
+  cw: number;
+  chh: number;
+  vy: number;
+  vh: number;
+  vn: number;
+  vdx: number;
+  vw: number;
+  rows: number;
+}> = {
+  1: { n: 50, dx: 4, cox: 5, coy: 2, cw: 200, chh: 74, vy: 84, vh: 15, vn: 25, vdx: 8, vw: 6, rows: 4 },
+  2: { n: 40, dx: 4, cox: 73, coy: 5, cw: 160, chh: 42, vy: 50, vh: 13, vn: 40, vdx: 4, vw: 2.6, rows: 3 },
+  4: { n: 21, dx: 6, cox: 3, coy: 26, cw: 126, chh: 30, vy: 58, vh: 7, vn: 21, vdx: 6, vw: 4, rows: 2 },
+  8: { n: 15, dx: 4, cox: 2, coy: 26, cw: 60, chh: 32, vy: 60, vh: 5, vn: 15, vdx: 4, vw: 3, rows: 1 },
+};
+
+/** A panel's readout period. Its own, so a wall of eight quotes never ticks
+ * in unison — the thing that makes a grid read as eight feeds rather than one
+ * feed drawn eight times.
+ *
+ * The steps are chosen so every period divides by its own `n` at one decimal
+ * (0.4 for halves, 0.6 for thirds). A period that does not — 3.4 + i×0.42 —
+ * rounds to a different number than its own share does, and the two prints
+ * are both lit for the tens of milliseconds that gap is wide. Rare enough to
+ * pass a glance and certain enough to land in a screenshot. */
+const cgT = (n: number, i: number) => f1(n > 2 ? 4.2 + i * 0.6 : 3.6 + i * 0.4);
+
+/** Phase for one print in a stacked readout: sibling `i` of `n` holds the slot
+ * for its own nth of the period, so exactly one is lit at any moment. It has
+ * to be `i * t / n` — a fixed step (1.3s against a 3.4s cyc2) overlaps the two
+ * prints for part of the cycle and then leaves the slot empty for the rest,
+ * which is a quote that double-prints and then blinks out.
+ *
+ * `skew` staggers a whole stack against its neighbours and is subtracted, not
+ * added: a negative delay starts the loop part-way in, so the `lead` variant
+ * is still the lit one at t=0 — which is the frame the world atlas snapshots
+ * (src/lib/worldBoards.ts) and the frame reduced motion freezes. */
+const cycD = (i: number, n: number, t: number, skew = 0) =>
+  Number(((i * t) / n - skew).toFixed(2));
+
+/* Where the panels sit on the 280×158 face. ×1 keeps 40px on the right for
+ * its stat rail; the rest fill the width. */
+const CG_GRID: Record<number, { cols: number; x0: number; gx: number; w: number; y0: number; gy: number; h: number }> = {
+  1: { cols: 1, x0: 5, gx: 0, w: 210, y0: 18, gy: 0, h: 136 },
+  2: { cols: 1, x0: 5, gx: 0, w: 270, y0: 16, gy: 71, h: 68 },
+  4: { cols: 2, x0: 5, gx: 137, w: 133, y0: 16, gy: 71, h: 68 },
+  8: { cols: 4, x0: 3, gx: 69, w: 64, y0: 16, gy: 71, h: 68 },
+};
+
+/** How long one set takes to cross. Bigger panels hold more session, so they
+ * travel slower; the jitter keeps eight plots off one metronome. */
+const CG_ROLL: Record<number, number> = { 1: 46, 2: 40, 4: 34, 8: 28 };
+
+interface CGCell extends CGPanel {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  cx: number;
+  cy: number;
+  cw: number;
+  chh: number;
+  line: string;
+  area: string;
+  ma: string;
+  vol: string;
+  grid: string;
+  vy: number;
+  vh: number;
+  vw: number;
+  hiY: number;
+  loY: number;
+  midY: number;
+  lastY: number;
+  /** Left edge of the last-price tag. Inside the plot on a ×1, where the stat
+      rail owns the gutter; out in the gutter everywhere else. */
+  tagX: number;
+  t: string;
+  d: string;
+}
+
+function cgCells(spec: CGSpec): CGCell[] {
+  const g = CG_GEO[spec.size];
+  const L = CG_GRID[spec.size];
+  return spec.panels.map((p, i) => {
+    const x = L.x0 + (i % L.cols) * L.gx;
+    const y = L.y0 + Math.floor(i / L.cols) * L.gy;
+    const cx = x + g.cox;
+    const cy = y + g.coy;
+    const raw = cgWalk(p.seed, g.n);
+    const lo = Math.min(...raw);
+    const hi = Math.max(...raw);
+    const k = hi - lo || 1;
+    /* Breathing room top and bottom: a trace that touches its own frame reads
+       as a clipped plot, not a scaled one. */
+    const top = cy + g.chh * 0.09;
+    const span = g.chh * 0.82;
+    const yOf = (v: number) => f1(top + span - ((v - lo) / k) * span);
+    const path = (vals: number[]) =>
+      vals.map((v, j) => `${j ? 'L' : 'M'}${f1(cx + j * g.dx)} ${yOf(v)}`).join('');
+    const line = path(raw);
+    const foot = f1(cy + g.chh);
+    /* Volume follows the bar it belongs to — big prints under big moves is
+       the correlation an eye checks first. One stroked path, not a rect per
+       bar: the histogram is the densest thing on an eight-up wall, and a
+       hundred and twenty elements per board is most of the page it costs. */
+    const vFoot = f1(y + g.vy + g.vh);
+    const vol = Array.from({ length: g.vn }, (_, j) => {
+      const at = Math.round((j * g.n) / g.vn);
+      const move = Math.abs(raw[Math.min(at + 1, g.n)] - raw[at]) / (k || 1);
+      const bh = g.vh * (0.16 + Math.min(1, move * 5.5) * 0.56 + rnd(p.seed * 37 + j) * 0.26);
+      return `M${f1(cx + j * g.vdx + g.vw / 2)} ${vFoot}V${f1(vFoot - bh)}`;
+    }).join('');
+    return {
+      ...p,
+      x,
+      y,
+      w: L.w,
+      h: L.h,
+      cx,
+      cy,
+      cw: g.cw,
+      chh: g.chh,
+      line,
+      area: `${line}L${f1(cx + g.cw)} ${foot}L${cx} ${foot}Z`,
+      ma: path(cgMean(raw, g.n, spec.size === 8 ? 2 : 3)),
+      vol,
+      vy: y + g.vy,
+      vh: g.vh,
+      vw: g.vw,
+      grid: Array.from(
+        { length: g.rows },
+        (_, r) => `M${cx} ${f1(cy + (g.chh * (r + 1)) / (g.rows + 1))}H${f1(cx + g.cw)}`,
+      ).join(''),
+      hiY: yOf(hi),
+      loY: yOf(lo),
+      midY: f1(cy + g.chh * 0.5),
+      lastY: yOf(raw[g.n]),
+      tagX: f1(spec.size === 1 ? cx + g.cw - 32 : cx + g.cw + 2),
+      t: `${f1(CG_ROLL[spec.size] + i * 2.4)}s`,
+      d: `${f1(i * 0.07)}s`,
+    };
+  });
+}
+
+const CG_SPECS: CGSpec[] = [
+  /* ---- ×1: one instrument, fully dressed ---- */
+  {
+    id: 'eqdesk',
+    size: 1,
+    volNote: 'AVG 198.2M',
+    axis: ['185.5', '184.5', '183.5', '182.5'],
+    head: 'NVDA',
+    heads: ['184.62', '184.91', '184.38'],
+    meta: '+2.41%',
+    rail: [
+      ['OPEN', '181.20'],
+      ['HIGH', '185.44'],
+      ['LOW', '180.66'],
+      ['VWAP', '183.71'],
+      ['VOL', '214.8M'],
+      ['MCAP', '4.51T'],
+      ['P/E', '48.2'],
+      ['BETA', '1.72'],
+    ],
+    panels: [{ sym: 'NVDA', sub: 'NASDAQ · 1m', px: ['184.62'], ch: ['+4.34'], up: true, c: 1, fill: true, seed: 1.7 }],
+  },
+  {
+    id: 'wticrude',
+    size: 1,
+    volNote: 'AVG 1.12M lots',
+    axis: ['72.8', '72.4', '72.0', '71.6'],
+    head: 'CL1',
+    heads: ['71.84', '71.92', '71.71'],
+    meta: '−0.94%',
+    rail: [
+      ['OPEN', '72.52'],
+      ['HIGH', '72.80'],
+      ['LOW', '71.44'],
+      ['SETL', '72.52'],
+      ['OI', '1.84M'],
+      ['SPRD', 'M2 −0.34'],
+      ['BASIS', 'CONT'],
+      ['DAYS', '31'],
+    ],
+    panels: [{ sym: 'WTI', sub: 'NYMEX · FRONT', px: ['71.84'], ch: ['−0.68'], up: false, c: 4, fill: true, seed: 4.1 }],
+  },
+  {
+    id: 'btcusd',
+    size: 1,
+    volNote: 'AVG 31.2B',
+    axis: ['105.4k', '104.6k', '103.8k', '103.0k'],
+    head: 'BTC/USD',
+    heads: ['104,218', '104,377', '104,061'],
+    meta: '+3.18%',
+    rail: [
+      ['24H H', '105,410'],
+      ['24H L', '100,882'],
+      ['VOL', '38.4B'],
+      ['DOM', '54.2%'],
+      ['FUND', '+0.011%'],
+      ['OI', '24.1B'],
+      ['L/S', '1.24'],
+      ['MCAP', '2.06T'],
+    ],
+    panels: [{ sym: 'BTC', sub: 'AGG · 5m', px: ['104,218'], ch: ['+3,212'], up: true, c: 3, fill: true, seed: 2.9 }],
+  },
+
+  /* ---- ×2: a pair that has to be read together ---- */
+  {
+    id: 'idx2',
+    size: 2,
+    head: 'US CASH',
+    heads: ['SPX 6,148.2 · NDX 22,417', 'SPX 6,151.7 · NDX 22,449'],
+    meta: 'breadth 3:1',
+    rail: [],
+    panels: [
+      { sym: 'SPX', sub: 'S&P 500', px: ['6,148.2', '6,151.7', '6,144.9'], ch: ['+0.42%', '+0.48%', '+0.36%'], up: true, c: 1, fill: true, seed: 1.2, note: 'BREADTH 68%' },
+      { sym: 'NDX', sub: 'NASDAQ 100', px: ['22,417', '22,449', '22,388'], ch: ['+0.71%', '+0.85%', '+0.58%'], up: true, c: 2, fill: true, seed: 5.6, note: 'BREADTH 71%' },
+    ],
+  },
+  {
+    id: 'fx2',
+    size: 2,
+    head: 'SPOT G3',
+    heads: ['EUR 1.0842 · JPY 154.28', 'EUR 1.0839 · JPY 154.36'],
+    meta: 'fix 16:00',
+    rail: [],
+    panels: [
+      { sym: 'EUR/USD', sub: 'SPOT · 5m', px: ['1.0842', '1.0839', '1.0846'], ch: ['+0.12%', '+0.09%', '+0.16%'], up: true, c: 6, fill: false, seed: 3.3, note: 'SPRD 0.2 PIP' },
+      { sym: 'USD/JPY', sub: 'SPOT · 5m', px: ['154.28', '154.36', '154.19'], ch: ['−0.21%', '−0.15%', '−0.28%'], up: false, c: 5, fill: false, seed: 6.8, note: 'SPRD 0.3 PIP' },
+    ],
+  },
+  {
+    id: 'macro2',
+    size: 2,
+    head: 'US PRINTS',
+    heads: ['CPI 3.1% · U3 4.2%', 'CPI 3.0% · U3 4.1%'],
+    meta: 'next 12 sep',
+    rail: [],
+    panels: [
+      { sym: 'CPI y/y', sub: 'BLS · SA', px: ['3.1%', '3.0%'], ch: ['m/m +0.2%', 'm/m +0.1%'], up: true, c: 4, fill: true, seed: 7.4, note: 'CORE 3.3% y/y' },
+      { sym: 'U-3', sub: 'HOUSEHOLD', px: ['4.2%', '4.1%'], ch: ['−0.1pp', '−0.2pp'], up: false, c: 2, fill: true, seed: 8.1, note: 'PART 62.7%' },
+    ],
+  },
+
+  /* ---- ×4: a desk's worth of one asset class ---- */
+  {
+    id: 'eq4',
+    size: 4,
+    head: 'MEGA CAP',
+    heads: ['BASKET +0.78%', 'BASKET +0.91%', 'BASKET +0.64%'],
+    meta: 'adv 3 / dec 1',
+    rail: [],
+    panels: [
+      { sym: 'AAPL', sub: 'HARDWARE', px: ['241.86', '242.10', '241.62'], ch: ['+0.64%', '+0.74%', '+0.55%'], up: true, c: 1, fill: true, seed: 1.1 },
+      { sym: 'MSFT', sub: 'SOFTWARE', px: ['468.12', '468.60', '467.74'], ch: ['+0.38%', '+0.46%', '+0.30%'], up: true, c: 2, fill: true, seed: 2.2 },
+      { sym: 'NVDA', sub: 'SEMIS', px: ['184.62', '184.91', '184.38'], ch: ['+2.41%', '+2.57%', '+2.28%'], up: true, c: 3, fill: true, seed: 3.4 },
+      { sym: 'AMZN', sub: 'RETAIL', px: ['228.44', '228.19', '228.66'], ch: ['−0.31%', '−0.42%', '−0.22%'], up: false, c: 5, fill: true, seed: 4.7 },
+    ],
+  },
+  {
+    id: 'cmd4',
+    size: 4,
+    head: 'ENERGY + METALS',
+    heads: ['BCOM 104.2 +0.41%', 'BCOM 104.6 +0.79%', 'BCOM 103.9 +0.12%'],
+    meta: 'roll t−3',
+    rail: [],
+    panels: [
+      { sym: 'XAU', sub: 'GOLD · $/oz', px: ['2,418.40', '2,419.10', '2,417.60'], ch: ['+0.52%', '+0.58%', '+0.46%'], up: true, c: 4, fill: true, seed: 5.2 },
+      { sym: 'WTI', sub: 'CRUDE · $/bbl', px: ['71.84', '71.92', '71.71'], ch: ['−0.94%', '−0.81%', '−1.08%'], up: false, c: 5, fill: true, seed: 6.3 },
+      { sym: 'NG', sub: 'HENRY HUB', px: ['3.184', '3.201', '3.166'], ch: ['+2.16%', '+2.68%', '+1.62%'], up: true, c: 2, fill: true, seed: 7.9 },
+      { sym: 'HG', sub: 'COPPER · $/lb', px: ['4.412', '4.418', '4.404'], ch: ['+0.28%', '+0.42%', '+0.12%'], up: true, c: 1, fill: true, seed: 8.6 },
+    ],
+  },
+  {
+    id: 'cx4',
+    size: 4,
+    head: 'MAJORS',
+    heads: ['TOTAL 3.42T +2.71%', 'TOTAL 3.44T +3.12%', 'TOTAL 3.40T +2.24%'],
+    meta: 'fear 62',
+    rail: [],
+    panels: [
+      { sym: 'BTC', sub: 'DOM 54.2%', px: ['104,218', '104,377', '104,061'], ch: ['+3.18%', '+3.31%', '+3.02%'], up: true, c: 4, fill: true, seed: 2.9 },
+      { sym: 'ETH', sub: 'GAS 24 GWEI', px: ['3,842.6', '3,848.1', '3,836.4'], ch: ['+2.04%', '+2.18%', '+1.88%'], up: true, c: 6, fill: true, seed: 3.8 },
+      { sym: 'SOL', sub: 'TPS 3.4k', px: ['214.38', '215.02', '213.71'], ch: ['+5.62%', '+5.94%', '+5.28%'], up: true, c: 3, fill: true, seed: 4.4 },
+      { sym: 'LINK', sub: 'TVL 1.2B', px: ['24.86', '24.79', '24.92'], ch: ['−1.12%', '−1.40%', '−0.86%'], up: false, c: 5, fill: true, seed: 9.1 },
+    ],
+  },
+
+  /* ---- ×8: the wall, one glance ---- */
+  {
+    id: 'idx8',
+    size: 8,
+    head: 'WORLD INDICES',
+    heads: ['ACWI 842.4 +0.36%', 'ACWI 843.1 +0.44%'],
+    meta: 'adv 5 / dec 3',
+    rail: [],
+    panels: [
+      { sym: 'SPX', sub: '6,148', px: ['6,148', '6,152'], ch: ['+0.42%', '+0.48%'], up: true, c: 1, fill: true, seed: 1.2 },
+      { sym: 'NDX', sub: '22,417', px: ['22,417', '22,449'], ch: ['+0.71%', '+0.85%'], up: true, c: 2, fill: true, seed: 5.6 },
+      { sym: 'DJIA', sub: '44,182', px: ['44,182', '44,206'], ch: ['+0.18%', '+0.24%'], up: true, c: 3, fill: true, seed: 2.4 },
+      { sym: 'DAX', sub: '19,884', px: ['19,884', '19,902'], ch: ['+0.36%', '+0.44%'], up: true, c: 6, fill: true, seed: 3.6 },
+      { sym: 'FTSE', sub: '8,412', px: ['8,412', '8,406'], ch: ['−0.12%', '−0.19%'], up: false, c: 5, fill: true, seed: 4.8 },
+      { sym: 'N225', sub: '39,644', px: ['39,644', '39,712'], ch: ['+1.04%', '+1.21%'], up: true, c: 4, fill: true, seed: 6.1 },
+      { sym: 'HSI', sub: '18,264', px: ['18,264', '18,238'], ch: ['−0.44%', '−0.58%'], up: false, c: 5, fill: true, seed: 7.3 },
+      { sym: 'SX5E', sub: '4,982', px: ['4,982', '4,988'], ch: ['+0.29%', '+0.36%'], up: true, c: 2, fill: true, seed: 8.5 },
+    ],
+  },
+  {
+    id: 'fx8',
+    size: 8,
+    head: 'G10 SPOT',
+    heads: ['DXY 104.62 −0.14%', 'DXY 104.58 −0.18%'],
+    meta: 'carry +2.4%',
+    rail: [],
+    panels: [
+      { sym: 'EURUSD', sub: '1.0842', px: ['1.0842', '1.0839'], ch: ['+0.12%', '+0.09%'], up: true, c: 6, fill: false, seed: 3.3 },
+      { sym: 'USDJPY', sub: '154.28', px: ['154.28', '154.36'], ch: ['−0.21%', '−0.15%'], up: false, c: 5, fill: false, seed: 6.8 },
+      { sym: 'GBPUSD', sub: '1.2914', px: ['1.2914', '1.2921'], ch: ['+0.24%', '+0.31%'], up: true, c: 1, fill: false, seed: 2.1 },
+      { sym: 'USDCHF', sub: '0.8846', px: ['0.8846', '0.8842'], ch: ['−0.08%', '−0.12%'], up: false, c: 5, fill: false, seed: 4.2 },
+      { sym: 'AUDUSD', sub: '0.6612', px: ['0.6612', '0.6618'], ch: ['+0.31%', '+0.38%'], up: true, c: 2, fill: false, seed: 5.4 },
+      { sym: 'USDCAD', sub: '1.3684', px: ['1.3684', '1.3679'], ch: ['−0.06%', '−0.10%'], up: false, c: 4, fill: false, seed: 7.6 },
+      { sym: 'NZDUSD', sub: '0.6048', px: ['0.6048', '0.6052'], ch: ['+0.18%', '+0.24%'], up: true, c: 3, fill: false, seed: 8.8 },
+      { sym: 'EURJPY', sub: '167.28', px: ['167.28', '167.19'], ch: ['−0.09%', '−0.14%'], up: false, c: 5, fill: false, seed: 9.4 },
+    ],
+  },
+  {
+    id: 'macro8',
+    size: 8,
+    head: 'GLOBAL DASH',
+    heads: ['NOWCAST 2.2% · FCI 99.4', 'NOWCAST 2.3% · FCI 99.2'],
+    meta: 'rev 4 of 8',
+    rail: [],
+    panels: [
+      { sym: 'CPI', sub: 'US y/y', px: ['3.1%', '3.0%'], ch: ['−0.1pp', '−0.2pp'], up: false, c: 4, fill: true, seed: 7.4 },
+      { sym: 'GDP', sub: 'US q/q sa', px: ['2.4%', '2.5%'], ch: ['+0.2pp', '+0.3pp'], up: true, c: 1, fill: true, seed: 1.9 },
+      { sym: 'U-3', sub: 'US rate', px: ['4.2%', '4.1%'], ch: ['−0.1pp', '−0.2pp'], up: false, c: 2, fill: true, seed: 8.1 },
+      { sym: 'PMI', sub: 'ISM mfg', px: ['51.8', '52.1'], ch: ['+0.6', '+0.9'], up: true, c: 3, fill: true, seed: 2.6 },
+      { sym: 'US10Y', sub: 'yield', px: ['4.18%', '4.21%'], ch: ['+3bp', '+6bp'], up: true, c: 6, fill: false, seed: 3.7 },
+      { sym: 'DXY', sub: 'index', px: ['104.62', '104.58'], ch: ['−0.14%', '−0.18%'], up: false, c: 5, fill: false, seed: 4.9 },
+      { sym: 'M2', sub: 'US $tn', px: ['21.4', '21.5'], ch: ['+0.4%', '+0.5%'], up: true, c: 2, fill: true, seed: 6.2 },
+      { sym: 'PPI', sub: 'US y/y', px: ['2.6%', '2.5%'], ch: ['−0.1pp', '−0.2pp'], up: false, c: 4, fill: true, seed: 9.7 },
+    ],
+  },
+];
+
+/** ×1 boards run a second trace under the plot — the oscillator every desk
+ * keeps in the bottom pane. Its own walk, its own seam, the same roll. */
+const CG_OSC = (seed: number) => {
+  const n = 50;
+  const raw = cgWalk(seed, n, 5);
+  const lo = Math.min(...raw);
+  const k = (Math.max(...raw) - lo) || 1;
+  return Array.from({ length: n + 1 }, (_, i) =>
+    `${i ? 'L' : 'M'}${f1(10 + i * 4)} ${f1(150 - ((raw[i] - lo) / k) * 20)}`,
+  ).join('');
+};
+
+const CG_BOARDS = CG_SPECS.map((spec) => {
+  const cells = cgCells(spec);
+  return {
+    spec,
+    cells,
+    /* Every panel's rules in one path. They are the same hairline in the same
+       ink whichever panel they cross, so drawing them per panel bought
+       nothing but elements. */
+    grid: cells.map((c) => c.grid).join(''),
+    osc: spec.size === 1 ? CG_OSC(spec.panels[0].seed + 4.3) : '',
+  };
+});
+const CG_BY_ID = new Map(CG_BOARDS.map((b) => [b.spec.id, b]));
 ---
 
 <div class="hero-stage" data-hero-stage aria-hidden="true">
@@ -898,7 +1363,9 @@ const NEWS = [
        wall reads as many instruments rather than a few on repeat, and they
        cost nothing until the atlas build reveals them offscreen for one
        snapshot each. */
-    BOARDS.map((board, i) => (
+    BOARDS.map((board, i) => {
+      const cg = CG_BY_ID.get(board.id);
+      return (
       <figure
         class:list={['hero-board', i < 4 && 'is-shown', i === 0 && 'is-current']}
         data-hero-board={board.id}
@@ -2851,9 +3318,233 @@ const NEWS = [
             <text class="lbl dim xs" x="192" y="152">OOS 1.71 · DECAY 12%</text>
           </g>
           )}
+          {cg && (
+          <g>
+            {/* The strip over the grid: what the board is, what it reads now,
+                and where the print came from. On a ×1 the readout is the
+                instrument's own — there is only one thing on the face. */}
+            <text class:list={['lbl em', cg.spec.size === 1 && 'cg-big']} x="6" y={cg.spec.size === 1 ? 12 : 9}>{cg.spec.head}</text>
+            {cg.spec.heads.map((h, hi) => (
+              <text
+                class:list={[
+                  cg.spec.heads.length > 2 ? 'cyc3' : 'cyc2',
+                  hi === 0 && 'lead',
+                  cg.spec.size === 1 ? 'lbl em cg-big' : 'lbl dim xs',
+                ]}
+                x={cg.spec.size === 1 ? 62 : 84}
+                y={cg.spec.size === 1 ? 12 : 9}
+                style={`--t:${cg.spec.heads.length > 2 ? 4.8 : 3.6}s;--d:${cycD(hi, cg.spec.heads.length, cg.spec.heads.length > 2 ? 4.8 : 3.6)}s`}
+              >{h}</text>
+            ))}
+            <text
+              class:list={['lbl xs', cg.spec.size === 1 ? (cg.cells[0].up ? 'up' : 'neg') : 'dim']}
+              x="274"
+              y={cg.spec.size === 1 ? 12 : 9}
+              text-anchor="end"
+            >{cg.spec.meta}</text>
+            <path class="ln thin" d={`M6 ${cg.spec.size === 1 ? 15.5 : 12.5}H274`} />
+            <path class="ln dash thin" d={cg.grid} />
+
+            {cg.cells.map((c, ci) => (
+              <g class="fade" style={`--sc:var(--pg-s${c.c});--d:${c.d}`}>
+                <rect class="cg-cell" x={c.x} y={c.y} width={c.w} height={c.h} rx="2.5" />
+                {/* A print lands on the panel: the whole cell lights, then
+                    decays. Phased per panel so the wall never blinks at once. */}
+                <rect
+                  class="cg-print flash"
+                  x={c.x}
+                  y={c.y}
+                  width={c.w}
+                  height={c.h}
+                  rx="2.5"
+                  style={`--t:${(3.4 + ci * 0.62).toFixed(2)}s;--d:${(ci * 0.47).toFixed(2)}s`}
+                />
+                {c.fill && cg.spec.size <= 2 && (
+                  <linearGradient id={`cgg-${cg.spec.id}-${ci}`} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" class="cg-g0" />
+                    <stop offset="1" class="cg-g1" />
+                  </linearGradient>
+                )}
+                <clipPath id={`cgc-${cg.spec.id}-${ci}`}>
+                  <rect x={c.cx} y={c.cy} width={c.cw} height={f1(c.vy + c.vh - c.cy)} />
+                </clipPath>
+                {/* The tape: one set of prints, `use`d a set to the right, the
+                    pair translated exactly one set per loop. The trace closes
+                    on itself, so the wrap lands on identical pixels and the
+                    session never restarts. */}
+                <g clip-path={`url(#cgc-${cg.spec.id}-${ci})`}>
+                  <g class="roll-x" style={`--sx:-${c.cw}px;--t:${c.t}`}>
+                    <g id={`cgp-${cg.spec.id}-${ci}`}>
+                      {c.fill && (
+                        <path
+                          class="cg-ar"
+                          d={c.area}
+                          style={cg.spec.size <= 2 ? `fill:url(#cgg-${cg.spec.id}-${ci})` : undefined}
+                        />
+                      )}
+                      {cg.spec.size !== 8 && <path class="cg-ma" d={c.ma} />}
+                      <path class:list={['cg-ln', cg.spec.size === 8 && 'thin']} d={c.line} />
+                      <path class="cg-vol" stroke-width={c.vw} d={c.vol} />
+                    </g>
+                    <use href={`#cgp-${cg.spec.id}-${ci}`} x={c.cw} />
+                  </g>
+                  {cg.spec.size <= 2 && (
+                    <path
+                      class="cg-scan scan"
+                      d={`M${c.cx} ${c.cy}V${f1(c.vy + c.vh)}`}
+                      style={`--sx:${c.cw}px;--t:${(9 + ci * 1.7).toFixed(1)}s;--d:${(ci * 2.1).toFixed(1)}s`}
+                    />
+                  )}
+                </g>
+
+                {/* Extremes of the visible session, tagged where a desk tags
+                    them: on the level, not in a table. */}
+                {cg.spec.size <= 2 && (
+                  <g>
+                    <path class="ln dash thin" d={`M${c.cx} ${c.hiY}H${f1(c.cx + c.cw)}`} />
+                    {cg.spec.size === 2 && (
+                      <g>
+                        <text class="lbl dim xs" x={f1(c.cx + 2)} y={f1(c.hiY - 2)}>H</text>
+                        <text class="lbl dim xs" x={f1(c.cx + 2)} y={f1(c.loY + 5)}>L</text>
+                      </g>
+                    )}
+                  </g>
+                )}
+
+                {/* Last print, held on a rule that drifts with it. */}
+                <g class="bob" style={`--y0:0px;--y1:-${cg.spec.size === 8 ? 2 : 3.5}px;--t:${(5.4 + ci * 0.8).toFixed(1)}s`}>
+                  <path class="cg-last" d={`M${c.cx} ${c.lastY}H${f1(c.cx + c.cw)}`} />
+                  {cg.spec.size <= 2 ? (
+                    <g>
+                      <rect class="cg-tag" x={c.tagX} y={f1(c.lastY - 4.4)} width="30" height="8.8" rx="1" />
+                      <text class="lbl tag" x={f1(c.tagX + 2.5)} y={f1(c.lastY + 2)}>{c.px[0]}</text>
+                    </g>
+                  ) : (
+                    <circle class="cg-dot" cx={f1(c.cx + c.cw)} cy={c.lastY} r="1.5" />
+                  )}
+                  <circle
+                    class="ping-ring cg-ring"
+                    cx={f1(c.cx + c.cw)}
+                    cy={c.lastY}
+                    r="1.6"
+                    style={`--d:${(ci * 0.4).toFixed(1)}s`}
+                  />
+                </g>
+
+                {/* Readouts. Two or three prints share one slot and exactly one
+                    is lit, so the quote ticks instead of sitting there. */}
+                {/* No live mark up here: the change readout is end-anchored on
+                    this same line, and a six-character print (−0.18%) reaches
+                    back past x+58 and paints straight over a dot placed there.
+                    The panel already says it is live — the last print on the
+                    trace carries the ping. */}
+                {cg.spec.size === 8 && (
+                  <text class="lbl em xs" x={c.x + 4} y={c.y + 10}>{c.sym}</text>
+                )}
+                {cg.spec.size === 4 && (
+                  <g>
+                    <text class="lbl em" x={c.x + 5} y={c.y + 11}>{c.sym}</text>
+                    <text class="lbl dim xs" x={c.x + 5} y={c.y + 20}>{c.sub}</text>
+                  </g>
+                )}
+                {cg.spec.size === 2 && (
+                  <g>
+                    <text class="lbl em" x={c.x + 6} y={c.y + 14}>{c.sym}</text>
+                    <text class="lbl dim xs" x={c.x + 6} y={c.y + 24}>{c.sub}</text>
+                    <path class="ln thin" d={`M${c.x + 6} ${c.y + 30}H${c.x + 66}`} />
+                    <text class="lbl dim xs" x={c.x + 6} y={c.y + 62}>{c.note}</text>
+                    <rect class="track" x={c.x + 6} y={c.y + 65} width="60" height="2" rx="1" />
+                    <rect
+                      class="cg-dot pulse-x"
+                      x={c.x + 6}
+                      y={c.y + 65}
+                      width={c.up ? 33 : 26}
+                      height="2"
+                      rx="1"
+                      style={`--s:0.62;--t:${(4.2 + ci * 0.9).toFixed(1)}s`}
+                    />
+                  </g>
+                )}
+                {cg.spec.size !== 1 &&
+                  c.px.map((v, vi) => (
+                    <g
+                      class:list={[c.px.length > 2 ? 'cyc3' : 'cyc2', vi === 0 && 'lead']}
+                      style={`--t:${cgT(c.px.length, ci)}s;--d:${cycD(vi, c.px.length, cgT(c.px.length, ci), ci * 0.3)}s`}
+                    >
+                      {cg.spec.size === 8 && (
+                        <g>
+                          <text class="lbl em" x={c.x + 4} y={c.y + 21}>{v}</text>
+                          <text class:list={['lbl xs', c.up ? 'up' : 'neg']} x={c.x + 60} y={c.y + 10} text-anchor="end">{c.ch[vi]}</text>
+                        </g>
+                      )}
+                      {cg.spec.size === 4 && (
+                        <g>
+                          <text class="lbl em" x={c.x + 128} y={c.y + 12} text-anchor="end">{v}</text>
+                          <text class:list={['lbl xs', c.up ? 'up' : 'neg']} x={c.x + 128} y={c.y + 21} text-anchor="end">{c.ch[vi]}</text>
+                        </g>
+                      )}
+                      {cg.spec.size === 2 && (
+                        <g>
+                          <text class="lbl em cg-quote" x={c.x + 6} y={c.y + 44}>{v}</text>
+                          <text class:list={['lbl', c.up ? 'up' : 'neg']} x={c.x + 6} y={c.y + 54}>{c.ch[vi]}</text>
+                        </g>
+                      )}
+                    </g>
+                  ))}
+              </g>
+            ))}
+
+            {/* ×1 carries the rest of the instrument: the price axis down the
+                plot, a volume pane, an oscillator under that, and the session's
+                numbers on a rail of their own. The oscillator takes the next
+                colour round rather than the price's — two series in one ink is
+                one series as far as an eye at this size is concerned. */}
+            {cg.spec.size === 1 && (
+            <g style={`--sc:var(--pg-s${(cg.cells[0].c % 6) + 1})`}>
+              {(cg.spec.axis ?? []).map((v, gi) => (
+                <text class="lbl dim xs" x="12" y={f1(cg.cells[0].cy + (74 * (gi + 1)) / 5 - 2)}>{v}</text>
+              ))}
+              <text class="lbl dim xs" x="10" y="100">VOL</text>
+              <text class="lbl dim xs" x="210" y="100" text-anchor="end">{cg.spec.volNote}</text>
+              <path class="ln thin" d="M10 119H210" />
+              <text class="lbl dim xs" x="10" y="127">OSC(14)</text>
+              <path class="ln dash thin" d="M10 140H210" />
+              <clipPath id={`cgo-${cg.spec.id}`}>
+                <rect x="10" y="128" width="200" height="24" />
+              </clipPath>
+              <g clip-path={`url(#cgo-${cg.spec.id})`}>
+                <g class="roll-x" style={`--sx:-200px;--t:${cg.cells[0].t}`}>
+                  <path class="cg-osc" id={`cgq-${cg.spec.id}`} d={cg.osc} />
+                  <use href={`#cgq-${cg.spec.id}`} x="200" />
+                </g>
+              </g>
+              <path class="ln thin" d="M218 20V152" />
+              {cg.spec.rail.map(([k, v], ri) => (
+                <g class="slide" style={`--d:${(0.2 + ri * 0.05).toFixed(2)}s`}>
+                  <rect
+                    class="cg-print flash"
+                    x="220"
+                    y={20 + ri * 15}
+                    width="56"
+                    height="9"
+                    rx="1"
+                    style={`--t:${(4.6 + ri * 0.4).toFixed(1)}s;--d:${(ri * 0.55).toFixed(2)}s`}
+                  />
+                  <text class="lbl dim xs" x="222" y={26 + ri * 15}>{k}</text>
+                  <text class="lbl em xs" x="275" y={26 + ri * 15} text-anchor="end">{v}</text>
+                </g>
+              ))}
+              <text class="lbl dim xs" x="222" y="148">SEQ</text>
+              <rect class="track" x="240" y="145" width="35" height="3" rx="1.5" />
+              <rect class="cg-dot fill-loop" x="240" y="145" width="35" height="3" rx="1.5" style="--t:7s" />
+            </g>
+            )}
+          </g>
+          )}
         </svg>
       </figure>
-    ))
+      );
+    })
   }
 </div>
 
@@ -2887,8 +3578,16 @@ const NEWS = [
       transform 0.7s var(--ease-out-expo);
   }
 
+  /* Dark mode: instruments on a black stage. At the world palette's
+     rgba(9, 12, 20, 0.9) the cards sat over a lit field and read as slate
+     rectangles — the ink on them was not the brightest thing on the card.
+     Near-black and near-opaque, so the traces are what the eye lands on, and
+     `--w-panel` is reset locally so every ground inside the SVG (panels,
+     nodes, tags) follows the face rather than the stage. */
   :global(html.dark) .hero-board {
-    border-color: color-mix(in oklab, var(--w-text) 38%, transparent);
+    --w-panel: rgba(3, 5, 9, 0.97);
+    background: var(--w-panel);
+    border-color: color-mix(in oklab, var(--w-text) 32%, transparent);
   }
 
   .hero-board.is-shown {
@@ -3661,6 +4360,116 @@ const NEWS = [
     100% {
       opacity: 1;
     }
+  }
+
+  /* ---- chart desks ----
+   *
+   * Six series colours, so a grid of plots reads as a grid of instruments
+   * rather than one instrument repeated. A panel carries its own in an
+   * inherited `--sc`, which is why the trace, its area, its volume, its tag
+   * and its ring are five rules instead of thirty.
+   */
+
+  .hero-board__svg {
+    --pg-s1: var(--color-brand-600);
+    --pg-s2: var(--color-sky-600);
+    --pg-s3: var(--color-violet-600);
+    --pg-s4: var(--color-amber-600);
+    --pg-s5: var(--color-rose-600);
+    --pg-s6: var(--color-accent-600);
+  }
+  :global(.dark) .hero-board__svg {
+    --pg-s1: var(--color-brand-400);
+    --pg-s2: var(--color-sky-400);
+    --pg-s3: var(--color-violet-400);
+    --pg-s4: var(--color-amber-400);
+    --pg-s5: var(--color-rose-400);
+    --pg-s6: var(--color-accent-400);
+  }
+
+  .cg-cell {
+    fill: color-mix(in oklab, var(--w-text) 3%, transparent);
+    stroke: var(--pg-line);
+    stroke-width: 0.6;
+  }
+  /* A print lands on the panel and decays. Kept faint at source: the atlas
+     snapshots looping states as it finds them, and a full-cell wash caught at
+     its peak would be a coloured slab on the world's wall. */
+  .cg-print {
+    fill: color-mix(in oklab, var(--sc, var(--pg-br)) 10%, transparent);
+  }
+  .cg-ar {
+    fill: color-mix(in oklab, var(--sc, var(--pg-br)) 17%, transparent);
+  }
+  /* The gradient lives inside the panel group rather than in a shared defs
+     block, so its stops inherit that panel's `--sc` — one markup shape, six
+     washes. */
+  .cg-g0 {
+    stop-color: var(--sc, var(--pg-br));
+    stop-opacity: 0.3;
+  }
+  .cg-g1 {
+    stop-color: var(--sc, var(--pg-br));
+    stop-opacity: 0;
+  }
+  .cg-ln {
+    fill: none;
+    stroke: var(--sc, var(--pg-br));
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cg-ln.thin {
+    stroke-width: 0.95;
+  }
+  .cg-ma {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 34%, transparent);
+    stroke-width: 0.7;
+    stroke-dasharray: 3.5 2.5;
+  }
+  /* One path, one bar per subpath, drawn as a butt-capped stroke — the width
+     rides on the element so a ×8 panel and a ×1 pane share the rule. */
+  .cg-vol {
+    fill: none;
+    stroke: color-mix(in oklab, var(--sc, var(--pg-br)) 42%, transparent);
+    stroke-linecap: butt;
+  }
+  .cg-osc {
+    fill: none;
+    stroke: color-mix(in oklab, var(--sc, var(--pg-br)) 78%, transparent);
+    stroke-width: 0.9;
+    stroke-linejoin: round;
+  }
+  .cg-last {
+    fill: none;
+    stroke: color-mix(in oklab, var(--sc, var(--pg-br)) 62%, transparent);
+    stroke-width: 0.7;
+    stroke-dasharray: 2.5 2.5;
+  }
+  .cg-dot,
+  .cg-tag {
+    fill: var(--sc, var(--pg-br));
+  }
+  .cg-ring {
+    stroke: var(--sc, var(--pg-br));
+  }
+  .cg-scan {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 38%, transparent);
+    stroke-width: 0.6;
+  }
+  .cg-big {
+    font-size: 9.5px;
+    letter-spacing: 0.01em;
+  }
+  .cg-quote {
+    font-size: 9px;
+  }
+  /* A real down move is red, not the indigo `.dn` the non-price panels use
+     for their second series. */
+  .lbl.neg {
+    fill: var(--pg-s5);
   }
 
   /* ---- shared entrances & loops ---- */
