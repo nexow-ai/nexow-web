@@ -186,6 +186,71 @@ export const es: SiteContent = {
           label: 'Registro de entrenos',
           prompt: 'Muestra mis carreras de Strava de este mes con tendencia de ritmo, volumen semanal y tabla de récords personales.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Crea un moodboard suave, un tracker de rachas y un mini juego de memoria.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Panel de vuelos',
+          prompt: 'Crea un panel de vuelos en vivo: llegadas, retrasos, mapa de rutas y un feed de cambios de puerta.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Gastos',
+          prompt: 'Haz un tracker de gastos con donut por categoría, quema diaria y lista de recibos recurrentes.',
+        },
+        {
+          icon: 'github',
+          label: 'Desk de ship',
+          prompt: 'Muestra mi semana en GitHub: PRs abiertas, frecuencia de deploys, fallos de CI y checklist de release.',
+        },
+        {
+          icon: 'users',
+          label: 'Hub social',
+          prompt: 'Crea un hub social: posts guardados, respuestas pendientes y un digest de a quién sigo.',
+        },
+        {
+          icon: 'sun',
+          label: 'Energía',
+          prompt: 'Crea un desk de energía: producción solar, precio de red, estado de batería y carga de 24 horas.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Analítica web',
+          prompt: 'Haz un panel de analítica: visitantes en vivo, páginas top, caída del funnel y sparkline de tráfico.',
+        },
+        {
+          icon: 'banknote',
+          label: 'Desk FX',
+          prompt: 'Crea un desk FX: velas EURUSD, parrilla de pares mayores, reloj de sesión y cinta de noticias.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Planner semanal',
+          prompt: 'Crea un planner semanal con bloques de tiempo, temporizador de foco y una lista de tareas continua.',
+        },
+        {
+          icon: 'pen',
+          label: 'Estudio de contenido',
+          prompt: 'Haz un estudio de contenido: tablero de ideas, calendario de publicación, estados de borradores y lista de hooks.',
+        },
+        {
+          icon: 'signal',
+          label: 'Mapa de tránsito',
+          prompt: 'Mapea el tránsito en vivo: próximas llegadas, líneas con retraso, esquema de red y feed de incidencias.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Tabla de cocina',
+          prompt: 'Crea una tabla de cocina: menú semanal, lista de la compra, nevera restante y una tira de temporizadores.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Centro de partido',
+          prompt: 'Haz un centro de partido: marcadores en vivo, mapa de tiros, clasificación y feed jugada a jugada.',
+        },
       ],
     },
     ticker: { label: 'Conectores en vivo' },

@@ -522,6 +522,42 @@ export const TRACKS: readonly Track[] = [
     src: file('ni-de-oro-ni-de-goldfield'),
     youtube: youtube('SJVL1JTZXjQ'),
   },
+  {
+    id: 'arcoiris',
+    title: 'arcoíris',
+    artist: 'Young Miko',
+    style: 'perreo',
+    seconds: 162,
+    src: file('arcoiris'),
+    youtube: youtube('EFAgLUgmWYo'),
+  },
+  {
+    id: 'denial-is-a-river',
+    title: 'DENIAL IS A RIVER',
+    artist: 'Doechii',
+    style: 'narrative rap',
+    seconds: 160,
+    src: file('denial-is-a-river'),
+    youtube: youtube('F0cdbR5ognY'),
+  },
+  {
+    id: 'catfish',
+    title: 'CATFISH',
+    artist: 'Doechii',
+    style: 'swamp rap',
+    seconds: 90,
+    src: file('catfish'),
+    youtube: youtube('AfgNiEJwGWo'),
+  },
+  {
+    id: 'when-i-die',
+    title: 'WHEN I DIE',
+    artist: 'Eminem, NF (Davinci Remix)',
+    style: 'rap remix',
+    seconds: 176,
+    src: file('when-i-die'),
+    youtube: youtube('iAEfDAiNotQ'),
+  },
 ];
 
 /** The first-play record; must stay in the crate. */

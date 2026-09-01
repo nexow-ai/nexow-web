@@ -186,6 +186,71 @@ export const fr: SiteContent = {
           label: 'Carnet d’entraînement',
           prompt: 'Montre mes sorties Strava du mois avec tendance d’allure, volume hebdomadaire et tableau des records.',
         },
+        {
+          icon: 'layers',
+          label: 'Moodboard',
+          prompt: 'Crée un moodboard doux, un suivi de streaks et un mini-jeu de mémoire.',
+        },
+        {
+          icon: 'mapPin',
+          label: 'Tableau des vols',
+          prompt: 'Crée un tableau des vols en direct : arrivées, retards, carte des routes et fil des changements de porte.',
+        },
+        {
+          icon: 'creditCard',
+          label: 'Suivi des dépenses',
+          prompt: 'Fais un suivi des dépenses avec donut par catégorie, burn quotidien et liste des prélèvements.',
+        },
+        {
+          icon: 'github',
+          label: 'Desk de ship',
+          prompt: 'Montre ma semaine GitHub : PR ouvertes, fréquence des deploys, échecs CI et checklist de release.',
+        },
+        {
+          icon: 'users',
+          label: 'Hub social',
+          prompt: 'Crée un hub social : posts sauvegardés, réponses à donner et digest des comptes suivis.',
+        },
+        {
+          icon: 'sun',
+          label: 'Desk énergie',
+          prompt: 'Crée un desk énergie maison : production solaire, prix du réseau, état de la batterie et charge sur 24 h.',
+        },
+        {
+          icon: 'monitor',
+          label: 'Analytics site',
+          prompt: 'Fais un tableau analytics : visiteurs live, pages top, pertes du funnel et sparkline de trafic.',
+        },
+        {
+          icon: 'banknote',
+          label: 'Desk FX',
+          prompt: 'Crée un desk FX : chandeliers EURUSD, grille des paires majeures, horloge de session et bandeau d’actus.',
+        },
+        {
+          icon: 'hourglass',
+          label: 'Planner de semaine',
+          prompt: 'Crée un planner de semaine avec blocs horaires, minuteur de focus et liste de tâches roulante.',
+        },
+        {
+          icon: 'pen',
+          label: 'Studio contenu',
+          prompt: 'Fais un studio de contenu : tableau d’idées, calendrier de publication, statuts de brouillons et liste de hooks.',
+        },
+        {
+          icon: 'signal',
+          label: 'Carte transit',
+          prompt: 'Cartographie le transit live : prochains passages, lignes en retard, schéma du réseau et fil des perturbations.',
+        },
+        {
+          icon: 'wheat',
+          label: 'Tableau cuisine',
+          prompt: 'Crée un tableau cuisine : menu de la semaine, liste de courses, restes du placard et bandeau de minuteurs.',
+        },
+        {
+          icon: 'trophy',
+          label: 'Centre match',
+          prompt: 'Fais un centre match : scores live, carte des tirs, classement et fil play-by-play.',
+        },
       ],
     },
     ticker: { label: 'Ce que les gens construisent' },

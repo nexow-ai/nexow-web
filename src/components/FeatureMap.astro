@@ -59,6 +59,12 @@ function iconPath(icon: string) {
   <div
     class="fm-plate overflow-hidden rounded-2xl border border-ink-900/10 dark:border-white/10 bg-white dark:bg-white/[0.04] shadow-sm shadow-ink-950/[0.03] dark:shadow-black/40"
   >
+    <div class="fm-aurora" aria-hidden="true">
+      <span class="fm-aurora__light fm-aurora__light--tl"></span>
+      <span class="fm-aurora__light fm-aurora__light--tr"></span>
+      <span class="fm-aurora__light fm-aurora__light--bl"></span>
+      <span class="fm-aurora__light fm-aurora__light--br"></span>
+    </div>
     <div class="fm-picker" data-fm-picker>
       <div class="fm-groups">
         {
@@ -191,18 +197,122 @@ function iconPath(icon: string) {
 </div>
 
 <style>
+  @property --fm-way {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #14b8a6;
+  }
+
+  .feature-map {
+    transition: --fm-way 0.55s ease;
+  }
+
   .fm-plate {
     --fm-detail-bg: #f7fbfb;
+    position: relative;
+    isolation: isolate;
     display: grid;
     grid-template-areas:
       'picker'
       'art'
       'copy'
       'actions';
+    box-shadow: 0 18px 48px color-mix(in oklab, var(--color-ink-950) 4%, transparent);
   }
 
   :global(.dark) .fm-plate {
     --fm-detail-bg: rgb(255 255 255 / 0.02);
+    box-shadow: 0 18px 48px rgb(0 0 0 / 0.4);
+  }
+
+  .fm-aurora {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .fm-aurora__light {
+    position: absolute;
+    width: clamp(11rem, 32vw, 18rem);
+    height: clamp(11rem, 32vw, 18rem);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in oklab, var(--fm-way) 58%, transparent) 0%,
+      color-mix(in oklab, var(--fm-way) 22%, transparent) 42%,
+      transparent 72%
+    );
+    filter: blur(28px);
+    opacity: 0.55;
+    will-change: transform, opacity;
+    transition: background 0.55s ease, opacity 0.55s ease;
+  }
+
+  :global(.dark) .fm-aurora__light {
+    opacity: 0.7;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in oklab, var(--fm-way) 70%, transparent) 0%,
+      color-mix(in oklab, var(--fm-way) 28%, transparent) 44%,
+      transparent 72%
+    );
+  }
+
+  .fm-aurora__light--tl {
+    top: -28%;
+    left: -16%;
+    animation: aurora-a 18s ease-in-out infinite;
+  }
+
+  .fm-aurora__light--tr {
+    top: -30%;
+    right: -16%;
+    animation: aurora-b 22s ease-in-out infinite;
+  }
+
+  .fm-aurora__light--bl {
+    bottom: -30%;
+    left: -18%;
+    animation: aurora-c 26s ease-in-out infinite;
+  }
+
+  .fm-aurora__light--br {
+    bottom: -28%;
+    right: -14%;
+    animation: fm-aurora-br 20s ease-in-out infinite;
+  }
+
+  @keyframes fm-aurora-br {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    40% {
+      transform: translate(-6%, -5%) scale(1.1);
+    }
+    72% {
+      transform: translate(5%, 6%) scale(0.92);
+    }
+  }
+
+  :global(.is-offscreen) .fm-aurora__light {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fm-aurora__light {
+      animation: none;
+    }
+  }
+
+  .fm-picker,
+  .fm-art,
+  .fm-copy,
+  .fm-actions {
+    position: relative;
+    z-index: 1;
   }
 
   .fm-picker {
@@ -437,6 +547,29 @@ function iconPath(icon: string) {
         root.style.setProperty('--fm-way-400', way.c400);
         root.style.setProperty('--fm-way-600', way.c600);
         root.style.setProperty('--fm-pair', pair.c500);
+        const scene = root.closest<HTMLElement>('#features');
+        const aurora = scene?.querySelector<HTMLElement>('[data-fm-aurora]')
+          ?? document.querySelector<HTMLElement>('[data-fm-aurora]');
+        const fill = `radial-gradient(circle at 50% 50%, color-mix(in oklab, ${way.c500} 72%, transparent) 0%, color-mix(in oklab, ${way.c500} 30%, transparent) 40%, transparent 72%)`;
+        if (scene) {
+          scene.dataset.fmWay = String(index);
+          scene.style.setProperty('--fm-way', way.c500);
+          scene.style.setProperty('--fm-way-400', way.c400);
+          scene.style.setProperty('--fm-aurora', way.c500);
+          scene.style.setProperty('--fm-pair', pair.c500);
+        }
+        if (aurora) {
+          aurora.style.setProperty('--fm-way', way.c500);
+          aurora.style.setProperty('--fm-aurora', way.c500);
+          aurora.style.color = way.c500;
+        }
+        root.querySelectorAll<HTMLElement>('.fm-aurora__light').forEach((el) => {
+          el.style.background = fill;
+        });
+        document.querySelectorAll<HTMLElement>('[data-fm-aurora] .fm-aurora-field__light').forEach((el) => {
+          el.style.background = fill;
+          el.style.color = way.c500;
+        });
         const art = root.querySelector<HTMLElement>('[data-fm-art-stage]');
         if (art) {
           art.style.setProperty('--fma-brand', way.c500);

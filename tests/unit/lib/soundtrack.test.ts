@@ -168,4 +168,21 @@ describe('pickTourTrack', () => {
     expect(introTrack().id).toBe(INTRO_TRACK_ID);
     expect(TRACKS.some((t) => t.id === INTRO_TRACK_ID)).toBe(true);
   });
+
+  it('refuses a crate that dropped the intro track', () => {
+    expect(() => introTrack([])).toThrow(/Posterity|missing/i);
+  });
+
+  it('treats a blocked store as a first play', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('blocked');
+      },
+      setItem: () => {
+        throw new Error('blocked');
+      },
+    });
+    expect(tourPlayedBefore()).toBe(false);
+    expect(() => markTourPlayed()).not.toThrow();
+  });
 });

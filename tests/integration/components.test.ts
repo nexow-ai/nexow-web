@@ -303,6 +303,32 @@ describe('Hero', () => {
       expect(html, social.label).toContain(social.href);
     }
   });
+
+  it('renders starter chips, a more control, and animated dashboard boards', async () => {
+    const html = await render(Hero, '/', { props: { lang: 'en' } });
+    expect(html).toContain('data-prompt-example');
+    expect(html).toContain('data-hero-more');
+    expect(html).toContain('data-hero-board="trading"');
+    expect(html).toContain('data-hero-scene="trading"');
+    expect((html.match(/data-prompt-example/g) ?? []).length).toBeGreaterThan(16);
+  });
+
+  it('renders hero boards and routes chips to the desk scenes', async () => {
+    const html = await render(Hero, '/', { props: { lang: 'en' } });
+    expect(html).toContain('data-hero-board="trading"');
+    expect(html).toContain('data-hero-board="forex"');
+    expect(html).toContain('data-hero-board="metals"');
+    expect(html).toContain('data-hero-board="chat"');
+    expect(html).toContain('data-hero-board="server"');
+    expect(html).toContain('data-hero-board="database"');
+    expect(html).toContain('data-hero-board="bots"');
+    expect(html).toContain('data-hero-board="tv"');
+    expect(html).toContain('data-hero-scene="portfolio"');
+    expect(html).toContain('data-hero-scene="macro"');
+    expect(html).toContain('data-hero-scene="onchain"');
+    expect(html).toContain('data-hero-scene="forex"');
+    expect((html.match(/data-hero-board="/g) ?? []).length).toBe(16);
+  });
 });
 
 describe('Logo and BrandMark', () => {

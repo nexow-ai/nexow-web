@@ -429,7 +429,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
    *
    * The pace lives in `lib/tour`: a base speed in CSS pixels per second, not
    * per frame, so a 120Hz laptop and a 60Hz monitor travel the page at the
-   * same rate — scaled by the transport's rate (`x0.25` … `x2`). Time left is
+   * same rate — scaled by the transport's rate (`x0.25` … `x2`). Phones get
+   * half the base speed (`x1` there moves like desktop `x0.5`). Time left is
    * distance over that speed plus any still-ahead holds, which the
    * foot-of-screen transport (`TourHud.astro`) counts down.
    *
@@ -447,8 +448,8 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
     TOUR_END_HOLD,
     TOUR_HOLD_INSET,
     TOUR_SECTION_HOLDS,
-    TOUR_SPEED,
     tourRate,
+    tourSpeed,
     worthTouring,
     type TourHoldMark,
   } from '../lib/tour';
@@ -488,6 +489,11 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 
     const maxScroll = () =>
       Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+
+    /* Phones ride at half the desktop pace — read live so a rotation or a
+     * resized window changes the speed mid-tour, not on the next play. */
+    const compact = window.matchMedia('(max-width: 767.98px)');
+    const baseSpeed = () => tourSpeed(compact.matches);
 
     /** The transport stamps `data-rate`; fall back to the module if it is gone. */
     const paceOf = () => {
@@ -540,7 +546,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
       const sectionLeft = ending ? 0 : holdLeft;
       const footLeft = ending ? holdLeft : endDone ? 0 : endHold();
       const remaining =
-        secondsLeft(y, max, TOUR_SPEED * rate) +
+        secondsLeft(y, max, baseSpeed() * rate) +
         holdSecondsAhead(y, marks, done, sectionLeft, rate, footLeft);
       const whole = Math.ceil(remaining);
       if (whole === shown) return;
@@ -620,7 +626,7 @@ const mobileNav = t.nav.mobileNav ?? 'Mobile';
 
       remarks();
       const y = window.scrollY;
-      const travel = TOUR_SPEED * rate * dt;
+      const travel = baseSpeed() * rate * dt;
       const next = y + travel;
 
       /* Live viewport: park when the title itself crosses the inset, not

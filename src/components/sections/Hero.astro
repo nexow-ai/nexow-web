@@ -8,24 +8,71 @@
  * eleven things competing for one screen, and none of them won.
  *
  * What is left is what the reader actually needs before they scroll: the
- * headline, the promise, one thing to type into, four examples of what to type,
- * and a way down. Everything cut is still on the page — the product is shown
- * six times over in the acts below, which is where showing it belongs.
+ * headline, the promise, one thing to type into, a ring of live SVG
+ * dashboards, a row of starter chips, and a way down. The composer cycles
+ * through those examples so the opening screen keeps showing what “anything”
+ * looks like. Everything else is still on the page — the product is shown
+ * six times over in the acts below.
  *
  * The composer is not decoration. Typing into it charges the matter behind the
  * headline (`data-world-charge`, read by `WorldField`), and sending throws a
  * shockwave through it (`nexow:world-send`), so the one interaction in the hero
  * is also the page's thesis: your words give the material a shape.
  *
- * Follows the page theme. Most of the world does too — only the mid-page
- * breath and the close invert, so the room is mainly one tone with two
- * contrast beats rather than a stripe every other scene.
+ * Follows the page theme. The rest of the world does too: one room, one
+ * tone — white in light mode, black in dark — from the hero through the
+ * footer.
  */
 import { SITE, type Lang } from '../../i18n/config';
 import { useContent } from '../../i18n/content';
 import { promptAppUrl } from '../../lib/appDeepLinks';
 import Icon from '../Icon.astro';
 import SocialLinks from '../SocialLinks.astro';
+import HeroDashboards from './HeroDashboards.astro';
+
+/** Icon → dashboard scene in HeroDashboards. Locale-agnostic. */
+const SCENE_BY_ICON: Record<string, string> = {
+  candlestick: 'trading',
+  lineChart: 'portfolio',
+  radar: 'geo',
+  cloudSun: 'orbit',
+  grid: 'network',
+  flame: 'neural',
+  newspaper: 'news',
+  rocket: 'avionics',
+  activity: 'signals',
+  earth: 'macro',
+  target: 'predict',
+  wallet: 'portfolio',
+  play: 'go',
+  music: 'video',
+  databaseZap: 'onchain',
+  database: 'database',
+  heart: 'signals',
+  mapPin: 'flights',
+  creditCard: 'portfolio',
+  github: 'ai',
+  users: 'chat',
+  sun: 'energy',
+  monitor: 'tv',
+  banknote: 'forex',
+  hourglass: 'math',
+  pen: 'ai',
+  signal: 'signals',
+  wheat: 'sports',
+  trophy: 'chess',
+  layers: 'model3d',
+  gem: 'metals',
+  factory: 'metals',
+  server: 'server',
+  cpu: 'server',
+  bot: 'bots',
+  chat: 'chat',
+  youtube: 'tv',
+};
+
+/** First row of chips; the rest sit behind “more”. */
+const HERO_EXAMPLES_VISIBLE = 10;
 
 interface Props {
   lang: Lang;
@@ -38,8 +85,8 @@ const title = t.title.includes('\n')
   ? t.title
   : t.title.replace(/^(.+?[.!?。．])\s+/, '$1\n');
 
-/** Four starter prompts, not twelve. A wall of chips is a menu, not an example. */
-const examples = (t.promptExamples ?? []).slice(0, 4);
+const examples = t.promptExamples ?? [];
+const extraCount = Math.max(0, examples.length - HERO_EXAMPLES_VISIBLE);
 
 /** Entrance order. The headline leads, everything else follows it up. */
 const D = {
@@ -58,6 +105,7 @@ const D = {
       at full strength; without this the brightest instances cross the glyphs
       and the first line of the page becomes the least readable thing on it. */}
   <div class="hero__veil" aria-hidden="true"></div>
+  <HeroDashboards />
 
   <div class="container-page hero__inner">
     <h1
@@ -114,19 +162,31 @@ const D = {
           role="group"
           aria-label={t.promptExamplesLabel ?? t.promptPlaceholder}
         >
-          {examples.map((example) => (
+          {examples.map((example, i) => (
             <button
               type="button"
               data-prompt-example
               data-prompt={example.prompt}
+              data-hero-scene={SCENE_BY_ICON[example.icon] ?? 'ai'}
               aria-pressed="false"
               title={example.prompt}
-              class="hero__chip"
+              class:list={['hero__chip', i >= HERO_EXAMPLES_VISIBLE && 'hero__chip--extra']}
             >
               <Icon name={example.icon} />
               {example.label}
             </button>
           ))}
+          {extraCount > 0 && (
+            <button
+              type="button"
+              class="hero__more"
+              data-hero-more
+              aria-expanded="false"
+            >
+              {t.promptExamplesMore ?? 'More examples'}
+              <span class="hero__more-count">+{extraCount}</span>
+            </button>
+          )}
         </div>
       )
     }
@@ -154,6 +214,8 @@ const D = {
      * the screen, which pushes the scroll cue below the fold on the one screen
      * where it has a job to do. */
     min-height: 100svh;
+    overflow-x: clip;
+    overflow-y: visible;
     padding-block: 9rem max(7rem, calc(5.5rem + env(safe-area-inset-bottom, 0px)));
     color: var(--w-text);
   }
@@ -187,6 +249,7 @@ const D = {
 
   .hero__inner {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -267,7 +330,9 @@ const D = {
   .hero__input {
     flex: 1 1 auto;
     min-width: 0;
-    /* Grown by script to fit its content; one line is the resting state. */
+    /* Two lines reserved so cycling prompts of different lengths do not
+       shove the chips. Script still grows past this up to max-height. */
+    min-height: 2.85rem;
     max-height: 7.5rem;
     padding-block: 0.55rem;
     border: 0;
@@ -278,6 +343,16 @@ const D = {
     text-align: start;
     resize: none;
     overflow-y: auto;
+    transition:
+      opacity 0.38s var(--ease-out-expo),
+      filter 0.38s var(--ease-out-expo),
+      transform 0.38s var(--ease-out-expo);
+  }
+
+  .hero__input.is-swap {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(5px);
   }
 
   .hero__input::placeholder {
@@ -345,6 +420,15 @@ const D = {
     justify-content: center;
     gap: 0.5rem;
     margin-top: 1.1rem;
+    max-width: 48rem;
+  }
+
+  .hero__examples:not(.is-open) .hero__chip--extra {
+    display: none;
+  }
+
+  .hero__examples.is-open .hero__more {
+    display: none;
   }
 
   .hero__chip {
@@ -384,6 +468,35 @@ const D = {
     color: var(--w-accent);
   }
 
+  .hero__more {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    gap: 0.4rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px dashed color-mix(in oklab, var(--color-brand-400) 45%, var(--w-line));
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-brand-400) 8%, var(--w-panel-2));
+    color: var(--w-text-2);
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition:
+      border-color 0.2s var(--ease-out-expo),
+      color 0.2s var(--ease-out-expo),
+      transform 0.2s var(--ease-out-expo);
+  }
+
+  .hero__more:hover {
+    transform: translateY(-2px);
+    color: var(--w-text);
+  }
+
+  .hero__more-count {
+    color: var(--w-accent);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
   .hero__note {
     margin-top: 1.75rem;
     font-family: var(--font-mono);
@@ -401,6 +514,7 @@ const D = {
 
   .hero__cue {
     position: absolute;
+    z-index: 1;
     inset-inline: 0;
     bottom: max(2rem, calc(1.15rem + env(safe-area-inset-bottom, 0px)));
     display: flex;
@@ -498,9 +612,20 @@ const D = {
   }
 
   @media (min-width: 768px) and (pointer: fine) {
-    .hero__chip {
+    .hero__chip,
+    .hero__more {
       min-height: 0;
       padding: 0.4rem 0.8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__input,
+    .hero__input.is-swap {
+      transition: none;
+      filter: none;
+      transform: none;
+      opacity: 1;
     }
   }
 
@@ -556,41 +681,136 @@ const D = {
       form.action = promptUrl(input.value.trim());
     };
 
-    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-prompt-example]'));
+    const chips = Array.from(form.parentElement?.querySelectorAll<HTMLButtonElement>('[data-prompt-example]') ?? []);
+    const examplesRoot = form.parentElement?.querySelector<HTMLElement>('.hero__examples');
+    const more = examplesRoot?.querySelector<HTMLButtonElement>('[data-hero-more]');
+    const boards = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-board]'));
+    const boardIds = boards.map((board) => board.dataset.heroBoard ?? '').filter(Boolean);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const markActive = (active: HTMLButtonElement | null) => {
       chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip === active)));
     };
 
-    chips.forEach((chip) => {
+    const applyBoards = (scene: string) => {
+      if (!boards.length || !boardIds.length) return;
+      const current = boardIds.includes(scene) ? scene : boardIds[0];
+      const start = boardIds.indexOf(current);
+      const shown = [0, 1, 2, 3].map((offset) => boardIds[(start + offset) % boardIds.length]);
+      boards.forEach((board) => {
+        const id = board.dataset.heroBoard ?? '';
+        const slot = shown.indexOf(id);
+        const on = slot !== -1;
+        board.classList.toggle('is-shown', on);
+        board.classList.toggle('is-current', id === current);
+        if (on) board.dataset.slot = String(slot);
+        else board.removeAttribute('data-slot');
+      });
+    };
+
+    const applyPrompt = (prompt: string, scene: string, chip: HTMLButtonElement | null) => {
+      input.value = prompt;
+      markActive(chip);
+      applyBoards(scene);
+      syncLinks();
+      autosize();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    };
+
+    more?.addEventListener('click', () => {
+      examplesRoot?.classList.add('is-open');
+      more.setAttribute('aria-expanded', 'true');
+    });
+
+    let cycleTimer = 0;
+    let swapping = false;
+    let paused = false;
+    let dirty = false;
+    /** Start before chip 0 so the first tick lands on the first visible example. */
+    let index = -1;
+
+    const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
+
+    const showChip = async (next: number, animate: boolean) => {
+      const chip = chips[next];
+      if (!chip || swapping) return;
+      index = next;
+      const prompt = chip.dataset.prompt ?? '';
+      const scene = chip.dataset.heroScene ?? 'ai';
+      if (animate && !reduced) {
+        swapping = true;
+        input.classList.add('is-swap');
+        await wait(280);
+        applyPrompt(prompt, scene, chip);
+        input.classList.remove('is-swap');
+        swapping = false;
+      } else {
+        applyPrompt(prompt, scene, chip);
+      }
+    };
+
+    const armCycle = () => {
+      window.clearTimeout(cycleTimer);
+      if (reduced || paused || dirty || document.hidden || !chips.length) return;
+      cycleTimer = window.setTimeout(() => {
+        void showChip((index + 1) % chips.length, true).then(armCycle);
+      }, 3200 + Math.random() * 1800);
+    };
+
+    chips.forEach((chip, i) => {
       chip.addEventListener('click', () => {
-        const prompt = chip.dataset.prompt ?? '';
-        input.value = prompt;
-        markActive(chip);
-        syncLinks();
-        autosize();
-        // Let the world hear it: `WorldField` charges the matter off `input`.
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-        input.focus({ preventScroll: true });
-        input.setSelectionRange(prompt.length, prompt.length);
+        dirty = false;
+        paused = true;
+        window.clearTimeout(cycleTimer);
+        void showChip(i, true).then(() => {
+          input.focus({ preventScroll: true });
+          const prompt = chip.dataset.prompt ?? '';
+          input.setSelectionRange(prompt.length, prompt.length);
+        });
       });
     });
 
+    input.addEventListener('focus', () => {
+      paused = true;
+      window.clearTimeout(cycleTimer);
+    });
+
+    input.addEventListener('blur', () => {
+      paused = false;
+      if (!dirty) armCycle();
+    });
+
     input.addEventListener('input', () => {
+      if (swapping) return;
       const value = input.value.trim();
-      markActive(chips.find((chip) => chip.dataset.prompt === value) ?? null);
+      const match = chips.find((chip) => chip.dataset.prompt === value) ?? null;
+      dirty = !match;
+      markActive(match);
+      if (match) {
+        index = chips.indexOf(match);
+        applyBoards(match.dataset.heroScene ?? 'ai');
+      }
       syncLinks();
       autosize();
     });
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      // The shockwave fires whether or not the popup is allowed through.
       document.dispatchEvent(new CustomEvent('nexow:world-send'));
       window.open(promptUrl(input.value.trim()), '_blank', 'noopener,noreferrer');
     });
 
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) window.clearTimeout(cycleTimer);
+      else if (!paused && !dirty) armCycle();
+    });
+
+    const seed = chips.find((chip) => chip.dataset.prompt === input.value.trim());
+    applyBoards(seed?.dataset.heroScene ?? 'ai');
+    markActive(seed ?? null);
     autosize();
     window.addEventListener('resize', autosize);
+    armCycle();
   }
 
   document.addEventListener('astro:page-load', initHeroForge);

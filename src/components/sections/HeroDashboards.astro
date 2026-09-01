@@ -1,0 +1,3252 @@
+---
+/**
+ * Constellation of live SVG dashboards around the hero composer.
+ *
+ * Decorative only (`aria-hidden`). Hero.astro assigns four of these to the
+ * corner slots and marks the one that matches the cycling prompt. Sixteen live
+ * in the DOM so the world atlas is a full unique set.
+ *
+ * Every screen is drawn to read as a real instrument, not an illustration:
+ * the world map is a coastline landmask rendered as dotted strokes, the mesh
+ * viewer projects an actual subdivided icosahedron, the math lab integrates
+ * the Lorenz system at build time, the radar sweep lights each contact as it
+ * passes its bearing. All geometry is computed in the frontmatter so the
+ * client ships only static SVG plus CSS keyframes — no runtime JS.
+ *
+ * Colours come from the world surface tokens, so the boards follow the page
+ * theme without per-scene overrides.
+ */
+interface Board {
+  id: string;
+  title: string;
+  meta: string;
+}
+
+const BOARDS: Board[] = [
+  { id: 'trading', title: 'DERIV DESK · BTC-PERP', meta: '1h · live' },
+  { id: 'forex', title: 'FX DESK · G10 SPOT', meta: 'ny · live' },
+  { id: 'metals', title: 'COMMOD · METALS+E', meta: 'comex' },
+  { id: 'chat', title: 'OPS CHAT · BRIDGE', meta: '14 rooms' },
+  { id: 'server', title: 'FLEET · PROD EU-1', meta: '48 nodes' },
+  { id: 'database', title: 'PG · PRIMARY A', meta: '12.4k qps' },
+  { id: 'bots', title: 'BOT FARM · 36 LIVE', meta: 'tick 80ms' },
+  { id: 'tv', title: 'MASTER · CONTROL', meta: 'on air' },
+  { id: 'video', title: 'LIVE · ENCODER 4', meta: '6.2k view' },
+  { id: 'news', title: 'WIRE · REUTERS+', meta: 'breaking' },
+  { id: 'chess', title: 'CHESS · LICHESS BLITZ', meta: '3+2 · live' },
+  { id: 'predict', title: 'PREDICT · POLYMARKET', meta: '24h vol' },
+  { id: 'energy', title: 'GRID · ENTSO-E', meta: 'gw live' },
+  { id: 'go', title: 'GO · TYGEM 19', meta: 'move 147' },
+  { id: 'sports', title: 'MATCH · EPL LIVE', meta: '67′' },
+  { id: 'flights', title: 'ATC · FIR LIVE', meta: '847 airborne' },
+  { id: 'orderflow', title: 'ORDERFLOW · CME ES', meta: 'mbo · live' },
+  { id: 'radar', title: 'AIR PICTURE · SCT-4', meta: '12 rpm' },
+  { id: 'poker', title: 'POKER · NLH 6-MAX', meta: 'pot 84bb' },
+  { id: 'shipping', title: 'AIS · GLOBAL FLEET', meta: '12.4k' },
+  { id: 'esports', title: 'ESPORTS · DPC', meta: 'game 2' },
+  { id: 'portfolio', title: 'PORTFOLIO · NAV 24.8M', meta: 'ytd +24%' },
+  { id: 'orbit', title: 'ORBITAL OPS · LEO', meta: '6 birds' },
+  { id: 'options', title: 'VOL DESK · SPX 0DTE', meta: 'iv 13.8' },
+  { id: 'geo', title: 'GLOBAL NET · UPLINK', meta: 'utc' },
+  { id: 'macro', title: 'MACRO · RATES', meta: 'fomc −6d' },
+  { id: 'avionics', title: 'NX-042 · PFD', meta: 'ils 27R' },
+  { id: 'onchain', title: 'ON-CHAIN · ETH L1', meta: '24 gwei' },
+  { id: 'model3d', title: 'MESH LAB · ICO-42', meta: '80 tris' },
+  { id: 'risk', title: 'RISK ENGINE · EOD', meta: 'var 2.1%' },
+  { id: 'signals', title: 'SIGINT · WIDEBAND', meta: 'fft 4096' },
+  { id: 'backtest', title: 'BACKTEST · ALPHA-7', meta: '10y oos' },
+  { id: 'ai', title: 'AGENT RUN · nexow-1', meta: '182 tok/s' },
+  { id: 'math', title: 'NONLINEAR LAB', meta: 'ρ = 28' },
+  { id: 'neural', title: 'TRAINING · RUN 47', meta: 'ep 47' },
+  { id: 'network', title: 'NOC · EDGE MESH', meta: '99.98%' },
+  { id: 'play', title: 'TACSIM · WAVE 07', meta: '12,480' },
+];
+
+const f1 = (n: number) => Number(n.toFixed(1));
+/** Deterministic 0..1 noise so every build renders the same pixels. */
+const rnd = (i: number) => {
+  const s = Math.sin(i * 127.1 + 311.7) * 43758.5453;
+  return s - Math.floor(s);
+};
+
+/* ---- world landmask (equirectangular, 46×19, lat 84°N..51°S) ----
+ * Rendered as one dotted stroke per land run: `stroke-dasharray: 0 <pitch>`
+ * with round caps turns each horizontal run into a row of dots, which keeps
+ * ~700 map dots down to ~60 path elements. */
+const WORLD = [
+  '........####......###.........#####.###.......',
+  '......########...####........#########.##.....',
+  '.....#########..#####..##..#############......',
+  '....##########...###....##..##############....',
+  '.....#########..........###.##############....',
+  '......#######...........####.#############....',
+  '......#######...........###..####.#######.....',
+  '.......######.........######.###.#######......',
+  '.........####..........#####.###.###..###.....',
+  '...........##...........#####..##..##.##......',
+  '...........###..........####...#...#..###.....',
+  '.............#####......####........#####.....',
+  '.............######.....####.........###......',
+  '.............#####......####..........##......',
+  '..............####.......###.........#####....',
+  '..............##.........##..........######...',
+  '..............##........................##...#',
+  '..............#.............................#.',
+  '..............#...............................',
+];
+const worldRuns = (x0: number, y0: number, cw: number, rh: number) => {
+  const runs: string[] = [];
+  WORLD.forEach((row, r) => {
+    const y = f1(y0 + r * rh);
+    let c = 0;
+    while (c < row.length) {
+      if (row[c] === '#') {
+        let e = c;
+        while (e + 1 < row.length && row[e + 1] === '#') e++;
+        runs.push(
+          e === c
+            ? `M${f1(x0 + c * cw)} ${y}h.01`
+            : `M${f1(x0 + c * cw)} ${y}H${f1(x0 + e * cw)}`,
+        );
+        c = e + 1;
+      } else c++;
+    }
+  });
+  return runs;
+};
+const GEO_MAP = worldRuns(6, 12, 3.55, 5.2);
+const ORBIT_MAP = worldRuns(104, 18, 3.13, 3.2);
+
+/* ---- geo: hubs, great-circle links, aggregate traffic ---- */
+const HUBS = [
+  { x: 54.1, y: 42, n: 'NYC' },
+  { x: 87.6, y: 34.5, n: 'LON' },
+  { x: 112.7, y: 52.8, n: 'DXB' },
+  { x: 134.7, y: 69.3, n: 'SIN' },
+  { x: 151, y: 45.5, n: 'TYO' },
+  { x: 66.5, y: 86.5, n: 'GRU' },
+  { x: 156.2, y: 93.7, n: 'SYD' },
+];
+const ARCS = [
+  'M54.1 42Q70 22 87.6 34.5',
+  'M87.6 34.5Q101 38 112.7 52.8',
+  'M112.7 52.8Q124 58 134.7 69.3',
+  'M134.7 69.3Q146 56 151 45.5',
+  'M54.1 42Q52 66 66.5 86.5',
+  'M134.7 69.3Q149 82 156.2 93.7',
+];
+const GEO_PINGS = [0, 2, 4, 5];
+const GEO_LINKS = [
+  ['NYC-LON', '72ms', 52],
+  ['LON-DXB', '96ms', 40],
+  ['DXB-SIN', '58ms', 64],
+  ['SIN-TYO', '68ms', 46],
+];
+const TRAFFIC = [22, 26, 24, 30, 28, 34, 31, 38, 35, 30, 33, 37, 40, 36];
+const trafficLine = TRAFFIC.map(
+  (v, i) => `${i ? 'L' : 'M'}${f1(6 + i * 12.3)} ${f1(150 - v * 0.82)}`,
+).join('');
+
+/* ---- radar: contacts placed by bearing/range from scope centre (76,82);
+ * `--d` syncs each blip to the moment the 5s sweep passes its bearing. ---- */
+const CONTACTS = [
+  { x: 101.7, y: 51.4, kind: 'hos', id: 'H-041', alt: 'FL320', d: -4.44, vx: 7, vy: 6 },
+  { x: 130.1, y: 67.5, kind: 'hos', id: 'H-052', alt: 'FL280', d: -3.96, vx: -8, vy: 4 },
+  { x: 93, y: 111.4, kind: 'frd', id: 'F-117', alt: 'FL240', d: -2.92, vx: -6, vy: -7 },
+  { x: 52, y: 123.6, kind: 'frd', id: 'F-203', alt: 'FL180', d: -2.08, vx: 8, vy: -5 },
+  { x: 25.8, y: 68.5, kind: 'unk', id: 'U-330', alt: '—', d: -1.04, vx: 9, vy: 2 },
+  { x: 65, y: 58.4, kind: 'frd', id: 'F-115', alt: 'FL300', d: -0.35, vx: 3, vy: 9 },
+];
+const TRACK_TABLE = [
+  ['H-041', '040', '40', '320', '480'],
+  ['H-052', '075', '56', '280', '520'],
+  ['F-117', '150', '34', '240', '410'],
+  ['U-330', '285', '52', '—', '120'],
+];
+
+/* ---- orbit: sinusoidal ground tracks over the small map ---- */
+const groundTrack = (phase: number, amp: number) => {
+  const pts: string[] = [];
+  for (let i = 0; i <= 24; i++) {
+    pts.push(
+      `${i ? 'L' : 'M'}${f1(104 + i * 6)} ${f1(46 - amp * Math.sin((i / 24) * Math.PI * 2 + phase))}`,
+    );
+  }
+  return pts.join('');
+};
+const GT1 = groundTrack(0.4, 20);
+const GT2 = groundTrack(2.6, 13);
+
+/* ---- avionics: pitch ladder + tape values ---- */
+const PITCH = [-20, -10, 10, 20];
+const SPEED_TAPE = [190, 180, 170, 160, 150, 140];
+const ALT_TAPE = ['12,400', '12,300', '12,200', '12,100', '12,000', '11,900'];
+const HDG_TAPE = [
+  { x: 40, v: '23' },
+  { x: 64, v: '24' },
+  { x: 88, v: '25' },
+  { x: 112, v: '26' },
+];
+
+/* ---- model3d: icosahedron subdivided once (42 verts / 120 edges / 80 tris),
+ * rotated, orthographically projected, edges binned by depth. ---- */
+const PHI = (1 + Math.sqrt(5)) / 2;
+const vnorm = (v: number[]) => {
+  const l = Math.hypot(v[0], v[1], v[2]);
+  return [v[0] / l, v[1] / l, v[2] / l];
+};
+const icoVerts = [
+  [-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0],
+  [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI],
+  [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1],
+].map(vnorm);
+const icoFaces = [
+  [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+  [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+  [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+  [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
+];
+const midCache = new Map<string, number>();
+const midpoint = (a: number, b: number) => {
+  const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+  let i = midCache.get(key);
+  if (i === undefined) {
+    i = icoVerts.length;
+    icoVerts.push(
+      vnorm([
+        (icoVerts[a][0] + icoVerts[b][0]) / 2,
+        (icoVerts[a][1] + icoVerts[b][1]) / 2,
+        (icoVerts[a][2] + icoVerts[b][2]) / 2,
+      ]),
+    );
+    midCache.set(key, i);
+  }
+  return i;
+};
+const subFaces: number[][] = [];
+for (const [a, b, c] of icoFaces) {
+  const ab = midpoint(a, b);
+  const bc = midpoint(b, c);
+  const ca = midpoint(c, a);
+  subFaces.push([a, ab, ca], [b, bc, ab], [c, ca, bc], [ab, bc, ca]);
+}
+const edgeSet = new Set<string>();
+for (const face of subFaces) {
+  for (let i = 0; i < 3; i++) {
+    const a = face[i];
+    const b = face[(i + 1) % 3];
+    edgeSet.add(a < b ? `${a}-${b}` : `${b}-${a}`);
+  }
+}
+const AX = 0.42;
+const AY = -0.58;
+const cax = Math.cos(AX), sax = Math.sin(AX), cay = Math.cos(AY), say = Math.sin(AY);
+const project = ([x, y, z]: number[], s: number, cx: number, cy: number) => {
+  const x1 = x * cay + z * say;
+  const z1 = -x * say + z * cay;
+  const y2 = y * cax - z1 * sax;
+  const z2 = y * sax + z1 * cax;
+  return { X: f1(cx + x1 * s), Y: f1(cy - y2 * s), z: z2 };
+};
+const meshProj = icoVerts.map((v) => project(v, 38, 88, 80));
+const meshPaths = ['', '', ''];
+for (const e of edgeSet) {
+  const [a, b] = e.split('-').map(Number);
+  const z = (meshProj[a].z + meshProj[b].z) / 2;
+  const bin = z > 0.3 ? 0 : z > -0.3 ? 1 : 2;
+  meshPaths[bin] += `M${meshProj[a].X} ${meshProj[a].Y}L${meshProj[b].X} ${meshProj[b].Y}`;
+}
+const meshVerts = meshProj.filter((p) => p.z > 0.4);
+let bboxPath = '';
+for (const sx of [-1, 1]) {
+  for (const sy of [-1, 1]) {
+    const a = project([sx, sy, -1], 38, 88, 80);
+    const b = project([sx, sy, 1], 38, 88, 80);
+    const c = project([sx, -1, sy], 38, 88, 80);
+    const d = project([sx, 1, sy], 38, 88, 80);
+    const e = project([-1, sx, sy], 38, 88, 80);
+    const g = project([1, sx, sy], 38, 88, 80);
+    bboxPath +=
+      `M${a.X} ${a.Y}L${b.X} ${b.Y}` +
+      `M${c.X} ${c.Y}L${d.X} ${d.Y}` +
+      `M${e.X} ${e.Y}L${g.X} ${g.Y}`;
+  }
+}
+/** Rotation matrix rows shown in the panel — the real values used above. */
+const MTX = [
+  [cay, 0, say],
+  [sax * say, cax, -sax * cay],
+  [-cax * say, sax, cax * cay],
+].map((row) => row.map((v) => (v < 0 ? '' : '+') + v.toFixed(2)));
+
+/* ---- signals: FFT bars with two carriers, waterfall, QPSK constellation ---- */
+const FFT = Array.from({ length: 39 }, (_, i) => {
+  const peaks = 30 * Math.exp(-((i - 14) ** 2) / 7) + 24 * Math.exp(-((i - 28) ** 2) / 5);
+  return f1(Math.min(54, 5 + 11 * rnd(i) + peaks));
+});
+const fftHold = FFT.map((h, i) => `${i ? 'L' : 'M'}${f1(13.5 + i * 4)} ${f1(69 - h)}`).join('');
+const WF: { x: number; y: number; k: number; r: number }[] = [];
+for (let r = 0; r < 8; r++) {
+  for (let c = 0; c < 20; c++) {
+    const boost = c === 7 || c === 14 ? 0.5 : c === 6 || c === 8 || c === 13 || c === 15 ? 0.22 : 0;
+    const v = rnd(r * 37 + c * 3) * 0.72 + boost;
+    WF.push({ x: f1(8 + c * 8.1), y: 82 + r * 8, k: Math.min(3, Math.floor(v * 3.4)), r });
+  }
+}
+const QPSK = [-11, 11].flatMap((qx) =>
+  [-11, 11].flatMap((qy) =>
+    [0, 1, 2, 3].map((j) => ({
+      x: f1(204 + qx + (rnd(qx * 7 + qy * 3 + j) - 0.5) * 6),
+      y: f1(36 + qy + (rnd(qx * 3 + qy * 11 + j) - 0.5) * 6),
+    })),
+  ),
+);
+
+/* ---- math: Lorenz attractor integrated here, projected x–z ---- */
+const lorenzPath = (() => {
+  let x = 1, y = 1, z = 20;
+  const dt = 0.006;
+  const pts: string[] = [];
+  for (let i = 0; i < 4400; i++) {
+    const dx = 10 * (y - x);
+    const dy = x * (28 - z) - y;
+    const dz = x * y - (8 / 3) * z;
+    x += dx * dt;
+    y += dy * dt;
+    z += dz * dt;
+    if (i > 200 && i % 12 === 0) pts.push(`${pts.length ? 'L' : 'M'}${f1(88 + x * 4.1)} ${f1(152 - z * 3)}`);
+  }
+  return pts.join('');
+})();
+const XHIST = [4, 9, 14, 17, 12, 6, 5, 11, 16, 18, 10, 5];
+
+/* ---- neural: layer graph + loss curves + GPU utilisation ---- */
+const NLAYERS = [
+  { x: 18, ys: [25, 42, 59, 76] },
+  { x: 48, ys: [18, 31, 45, 58, 72, 85] },
+  { x: 78, ys: [18, 31, 45, 58, 72, 85] },
+  { x: 108, ys: [36, 53, 70] },
+];
+const NEDGES = NLAYERS.slice(0, -1).map((a, i) => {
+  const b = NLAYERS[i + 1];
+  let d = '';
+  for (const ya of a.ys) for (const yb of b.ys) d += `M${a.x} ${ya}L${b.x} ${yb}`;
+  return d;
+});
+const LOSS = Array.from(
+  { length: 36 },
+  (_, i) => 1.9 * Math.exp(-i / 9) + 0.16 + (rnd(i + 50) - 0.5) * (i < 4 ? 0.04 : 0.1),
+);
+const lossPts = LOSS.map((v, i) => `${i ? 'L' : 'M'}${f1(132 + i * 3.8)} ${f1(80 - v * 30)}`).join('');
+const valPts = LOSS.map(
+  (v, i) => `${i ? 'L' : 'M'}${f1(132 + i * 3.8)} ${f1(80 - (v * 1.08 + 0.03) * 30)}`,
+).join('');
+const GPUS = [24, 29, 27, 31, 22, 28, 31, 26];
+
+/* ---- network: topology, packet motion vectors, latency heatmap ---- */
+const NODES = [
+  { x: 84, y: 20, w: 14, n: 'core-1' },
+  { x: 44, y: 52, w: 12, n: 'agg-a' },
+  { x: 124, y: 52, w: 12, n: 'agg-b' },
+  { x: 20, y: 88, w: 10, n: 'e01' },
+  { x: 62, y: 88, w: 10, n: 'e02' },
+  { x: 106, y: 88, w: 10, n: 'e03' },
+  { x: 148, y: 88, w: 10, n: 'e04' },
+];
+const LINKS = [
+  [0, 1], [0, 2], [1, 3], [1, 4], [2, 5], [2, 6],
+];
+const PKTS = LINKS.map(([a, b], i) => ({
+  x: NODES[a].x,
+  y: NODES[a].y + 4,
+  tx: f1(NODES[b].x - NODES[a].x),
+  ty: f1(NODES[b].y - NODES[a].y),
+  t: f1(1.3 + rnd(i) * 1.2),
+  d: f1(rnd(i + 3) * 1.5),
+}));
+const HEAT: { x: number; y: number; k: number }[] = [];
+for (let r = 0; r < 4; r++) {
+  for (let c = 0; c < 8; c++) {
+    HEAT.push({
+      x: 182 + c * 11.5,
+      y: 16 + r * 11,
+      k: Math.min(3, Math.floor(rnd(r * 19 + c * 5) * 3.4 + (r === 1 && c === 6 ? 1.4 : 0))),
+    });
+  }
+}
+const NET_IN = [18, 22, 20, 26, 24, 31, 27, 34, 30, 26, 29, 34, 31, 37, 34, 39];
+const netLine = (vals: number[], k: number) =>
+  vals.map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 17.6)} ${f1(148 - v * k)}`).join('');
+const netInArea = `${netLine(NET_IN, 1)}L272 148L8 148Z`;
+const netOutArea = `${netLine(NET_IN.map((v) => f1(v * 0.45)), 1)}L272 148L8 148Z`;
+
+/* ---- trading: candles + EMA/VWAP + volume + RSI + book + positions ---- */
+const CANDLES = [38, 42, 40, 48, 55, 51, 58, 62, 57, 66, 70, 64, 74, 80, 76, 88, 94, 90];
+const candleY = (v: number) => 86 - v * 0.52;
+const candleBodies = CANDLES.map((c, i) => {
+  const prev = i === 0 ? c - 7 : CANDLES[i - 1];
+  const top = candleY(Math.max(c, prev));
+  const h = Math.max(5, candleY(Math.min(c, prev)) - top + 4);
+  return { x: 8 + i * 8.8, top, h, up: c >= prev };
+});
+const ema = CANDLES.map((c, i) => `${i ? 'L' : 'M'}${f1(8 + i * 8.8)} ${f1(candleY(c))}`).join(' ');
+let cum = 0;
+const vwap = CANDLES.map((c, i) => {
+  cum += c;
+  return `${i ? 'L' : 'M'}${f1(8 + i * 8.8)} ${f1(candleY(cum / (i + 1)))}`;
+}).join(' ');
+const VOL = [10, 16, 8, 20, 14, 11, 22, 13, 9, 18, 15, 12, 21, 14, 10, 17, 24, 16];
+const RSI = [44, 48, 52, 47, 55, 58, 54, 61, 57, 63, 66, 60, 67, 71, 64, 69, 74, 68];
+const rsiPts = RSI.map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 9.4)} ${f1(150 - (v - 20) * 0.63)}`).join('');
+const BOOK = [
+  { px: '67,248', bid: 1.4, ask: 0.8 },
+  { px: '67,244', bid: 1.1, ask: 1.0 },
+  { px: '67,240', bid: 0.8, ask: 0.7 },
+  { px: '67,236', bid: 0.5, ask: 0.5 },
+  { px: '67,232', bid: 0.3, ask: 0.3 },
+];
+
+/* ---- ai: throughput spark + latency histogram ---- */
+const SPARK = Array.from(
+  { length: 13 },
+  (_, i) => `${i ? 'L' : 'M'}${186 + i * 7} ${f1(34 - 12 * rnd(i + 9))}`,
+).join('');
+const LAT_HIST = [14, 9, 5, 3, 2];
+const TOOL_ROWS = [
+  ['search.markets()', '240ms ✓'],
+  ['stream.subscribe(14)', '112ms ✓'],
+  ['stats.zscore(σ=2)', 'live ●'],
+];
+
+/* ---- portfolio: allocation donut, NAV vs benchmark, drawdown, holdings ----
+ * Donut segments are circles with pathLength=100; the dasharray IS the
+ * allocation percentage, so the sweep-in animation only has to start each
+ * segment from `0 100` and let it settle on its own attribute. */
+const ALLOC = [
+  { n: 'EQ 44% · 10.9M', pct: 44, cls: 'stroke-br', sw: 'f-brand' },
+  { n: 'BOND 22% · 5.5M', pct: 22, cls: 'stroke-ac', sw: 'f-accent' },
+  { n: 'ALT 18% · 4.5M', pct: 18, cls: 'stroke-ink', sw: 'f-ink' },
+  { n: 'CASH 16% · 4.0M', pct: 16, cls: 'stroke-dim', sw: 'f-soft' },
+];
+let segStart = 0;
+const ALLOC_SEGS = ALLOC.map((a) => {
+  const off = f1(25 - segStart);
+  segStart += a.pct;
+  return { ...a, off };
+});
+const NAV_SERIES = Array.from({ length: 30 }, (_, i) => {
+  const dip = i > 16 && i < 21 ? (i - 16) * 2.4 : i >= 21 ? Math.max(0, 9.6 - (i - 21) * 3.2) : 0;
+  return 15 + i * 1.78 + (rnd(i + 70) - 0.5) * 5 - dip;
+});
+const navLine = NAV_SERIES.map(
+  (v, i) => `${i ? 'L' : 'M'}${f1(98 + i * 6)} ${f1(72 - v * 0.68)}`,
+).join('');
+const benchLine = Array.from({ length: 30 }, (_, i) => 15 + i * 1.04 + (rnd(i + 130) - 0.5) * 4)
+  .map((v, i) => `${i ? 'L' : 'M'}${f1(98 + i * 6)} ${f1(72 - v * 0.68)}`)
+  .join('');
+let navPeak = 0;
+const ddLine = NAV_SERIES.map((v, i) => {
+  navPeak = Math.max(navPeak, v);
+  return `${i ? 'L' : 'M'}${f1(98 + i * 6)} ${f1(84 + (navPeak - v) * 0.85)}`;
+}).join('');
+const HOLDINGS = [
+  { s: 'NVDA', w: 8.4, pl: '+2.41%', up: true },
+  { s: 'MSFT', w: 6.2, pl: '+0.84%', up: true },
+  { s: 'BTC', w: 4.8, pl: '−1.22%', up: false },
+  { s: 'TLT', w: 3.9, pl: '+0.31%', up: true },
+];
+
+/* ---- options: gamma exposure by strike, IV smile, greeks, P/C gauge ---- */
+const GEX = Array.from({ length: 16 }, (_, i) =>
+  f1(
+    34 * Math.exp(-((i - 9.6) ** 2) / 7) -
+      24 * Math.exp(-((i - 3.4) ** 2) / 5) +
+      (rnd(i + 210) - 0.5) * 4,
+  ),
+);
+const smileLine = Array.from({ length: 25 }, (_, i) => {
+  const m = (i - 15) / 9;
+  return `${i ? 'L' : 'M'}${f1(10 + i * 6.4)} ${f1(112 - (11 + 7 * m * m + Math.max(0, -m) * 6))}`;
+}).join('');
+const termLine = [9.8, 12.4, 14.6, 15.8, 16.4]
+  .map((v, i) => `${i ? 'L' : 'M'}${f1(14 + i * 35)} ${f1(150 - (v - 8) * 2.6)}`)
+  .join('');
+const GREEKS = [
+  { g: 'Δ', v: '+0.42', w: 34, neg: false },
+  { g: 'Γ', v: '0.081', w: 15, neg: false },
+  { g: 'Θ', v: '−412', w: 27, neg: true },
+  { g: 'ν', v: '+1.2k', w: 21, neg: false },
+];
+
+/* ---- macro: yield curve now vs −1y, CPI path, policy rates, odds ---- */
+const CURVE_X = [14, 26, 40, 60, 86, 114, 144];
+const MACRO_NOW = [5.38, 5.3, 4.98, 4.4, 4.12, 4.18, 4.36];
+const MACRO_AGO = [4.52, 4.6, 4.66, 4.44, 4.08, 3.92, 4.02];
+const curveLine = (vals: number[]) =>
+  vals.map((v, i) => `${i ? 'L' : 'M'}${CURVE_X[i]} ${f1(84 - (v - 3.6) * 32)}`).join('');
+const CPI_PATH = [9.1, 8.2, 7.6, 6.9, 6.4, 5.8, 5.2, 4.6, 4.1, 3.8, 3.5, 3.2];
+const CB_ROWS = [
+  ['FED', '5.50', 'HOLD'],
+  ['ECB', '4.00', '−25bp'],
+  ['BOE', '5.25', 'HOLD'],
+  ['BOJ', '0.10', '+10bp'],
+];
+const dxySpark = Array.from(
+  { length: 10 },
+  (_, i) => `${i ? 'L' : 'M'}${f1(210 + i * 6.8)} ${f1(74 - 9 * rnd(i + 310))}`,
+).join('');
+
+/* ---- orderflow: rolling tape, DOM heat ladder, CVD, per-bar delta ----
+ * The tape is 8 prints rendered twice inside a clip; the loop translates one
+ * full set, so the wrap lands on identical pixels and never pops. */
+const TAPE = [
+  { t: '.412', px: '5214.50', sz: '412', up: true, big: true },
+  { t: '.448', px: '5214.25', sz: '12', up: false, big: false },
+  { t: '.501', px: '5214.50', sz: '38', up: true, big: false },
+  { t: '.544', px: '5214.25', sz: '7', up: false, big: false },
+  { t: '.590', px: '5214.00', sz: '184', up: false, big: true },
+  { t: '.612', px: '5214.25', sz: '21', up: true, big: false },
+  { t: '.688', px: '5214.50', sz: '64', up: true, big: false },
+  { t: '.702', px: '5214.75', sz: '96', up: true, big: false },
+];
+const TAPE_ROWS = TAPE.concat(TAPE);
+const DOM_ROWS = Array.from({ length: 8 }, (_, r) => ({
+  px: (5215.25 - r * 0.25).toFixed(2),
+  bid: Math.min(3, Math.floor(rnd(r + 500) * 3.2 + (r > 3 ? 0.9 : 0))),
+  ask: Math.min(3, Math.floor(rnd(r + 520) * 3.2 + (r <= 3 ? 0.9 : 0))),
+}));
+const CVD = [2, 3.4, 3.1, 4.6, 5.8, 5.2, 6.9, 8.4, 7.8, 9.6, 11.2, 10.4, 12.8, 14.2];
+const cvdLine = CVD.map(
+  (v, i) => `${i ? 'L' : 'M'}${f1(204 + i * 5.2)} ${f1(56 - v * 2.9)}`,
+).join('');
+const BAR_DELTA = [4, -2, 6, 3, -5, 8, 2, -3, 7, 5];
+
+/* ---- onchain: gas gauge, block cadence, mempool, whale feed, TVL ---- */
+const MEMPOOL = Array.from({ length: 10 }, (_, i) => f1(8 + 30 * rnd(i + 610)));
+const WHALES = [
+  { a: '12,400 ETH', to: '→ CEX', warn: true },
+  { a: '8.4M USDC', to: '→ 0x4f…a2', warn: false },
+  { a: '642 WBTC', to: 'MINT', warn: false },
+  { a: '3,200 ETH', to: 'UNSTAKE', warn: false },
+];
+const TVL = [58, 60, 59, 63, 66, 64, 69, 72, 70, 76, 79, 84];
+const tvlLine = TVL.map(
+  (v, i) => `${i ? 'L' : 'M'}${f1(192 + i * 7.2)} ${f1(118 - (v - 50) * 0.95)}`,
+).join('');
+
+/* ---- risk: P&L distribution with VaR tail, factor betas, corr, stress ---- */
+const DIST = Array.from({ length: 19 }, (_, i) =>
+  f1(
+    4 +
+      42 * Math.exp(-((i - 11) ** 2) / 13) +
+      7 * Math.exp(-((i - 2) ** 2) / 2.4) +
+      rnd(i + 710) * 3,
+  ),
+);
+const FACTORS = [
+  { n: 'MKT', v: 0.82 },
+  { n: 'RATES', v: -0.34 },
+  { n: 'FX', v: 0.12 },
+  { n: 'CROWD', v: 0.44 },
+];
+const CORR_ASSETS = ['ES', 'NQ', 'ZB', 'GC', 'BT'];
+const CORR = Array.from({ length: 25 }, (_, i) => {
+  const r = Math.floor(i / 5);
+  const c = i % 5;
+  return {
+    x: 174 + c * 12,
+    y: f1(14 + r * 10.4),
+    k: r === c ? 2 : (c === 4 && r === 1) || (c === 1 && r === 4) ? 3 : Math.floor(rnd(i + 730) * 2.6),
+  };
+});
+const STRESS = [
+  { n: 'GFC REPLAY', v: '−18.4%', w: 42 },
+  { n: 'COVID GAP', v: '−12.1%', w: 28 },
+  { n: 'RATES +200', v: '−6.2%', w: 14 },
+];
+
+/* ---- backtest: log-equity walk, underwater curve, monthly heat, WFO ----
+ * Ordinary steps never lose money so the log plot stays inside its frame;
+ * the two scripted dip episodes are what the underwater curve plots (≈−9%
+ * and −2.4%), matching the MAXDD readout. */
+const btEq: number[] = [];
+const btBench: number[] = [];
+let btV = 20;
+let btB = 20;
+for (let i = 0; i < 40; i++) {
+  const step =
+    i >= 20 && i < 23 ? 0.968 : i >= 31 && i < 33 ? 0.988 : 1 + 0.052 + (rnd(i + 810) - 0.5) * 0.085;
+  btV *= step;
+  btB *= 1 + 0.02 + (rnd(i + 850) - 0.5) * 0.05;
+  btEq.push(btV);
+  btBench.push(btB);
+}
+const btY = (v: number) => f1(92 - (Math.log(v / 20) / Math.log(10)) * 68);
+const btLine = btEq.map((v, i) => `${i ? 'L' : 'M'}${f1(10 + i * 4.4)} ${btY(v)}`).join('');
+const btBenchLine = btBench
+  .map((v, i) => `${i ? 'L' : 'M'}${f1(10 + i * 4.4)} ${btY(v)}`)
+  .join('');
+let btPeak = 0;
+const btDDArea =
+  btEq
+    .map((v, i) => {
+      btPeak = Math.max(btPeak, v);
+      return `${i ? 'L' : 'M'}${f1(10 + i * 4.4)} ${f1(106 + (Math.log(btPeak / v) / Math.log(10)) * 380)}`;
+    })
+    .join('') + 'L181.6 106L10 106Z';
+const TRADE_MARKS = [6, 14, 22, 31, 37];
+const BT_STATS = [
+  ['SHARPE', '2.14'],
+  ['SORTINO', '3.02'],
+  ['WIN', '61%'],
+  ['P.FACTOR', '1.84'],
+  ['TRADES', '1,284'],
+  ['EDGE', '+0.21%'],
+];
+const MONTHS = Array.from({ length: 36 }, (_, i) => {
+  const v = rnd(i + 910);
+  return {
+    x: f1(192 + (i % 12) * 6.6),
+    y: f1(96 + Math.floor(i / 12) * 7.4),
+    k: v < 0.2 ? 3 : v < 0.45 ? 0 : v < 0.8 ? 1 : 2,
+  };
+});
+
+const CHESS_SQ = 16.2;
+const CHESS_X0 = 8;
+const CHESS_Y0 = 10;
+const CHESS_PIECES: { c: number; r: number; p: string; dark: boolean }[] = [
+  { c: 0, r: 0, p: '♜', dark: true },
+  { c: 3, r: 0, p: '♛', dark: true },
+  { c: 4, r: 0, p: '♚', dark: true },
+  { c: 5, r: 0, p: '♝', dark: true },
+  { c: 7, r: 0, p: '♜', dark: true },
+  { c: 0, r: 1, p: '♟', dark: true },
+  { c: 1, r: 1, p: '♟', dark: true },
+  { c: 2, r: 1, p: '♞', dark: true },
+  { c: 5, r: 1, p: '♟', dark: true },
+  { c: 6, r: 1, p: '♟', dark: true },
+  { c: 7, r: 1, p: '♟', dark: true },
+  { c: 3, r: 3, p: '♟', dark: true },
+  { c: 4, r: 3, p: '♝', dark: true },
+  { c: 2, r: 4, p: '♙', dark: false },
+  { c: 4, r: 4, p: '♘', dark: false },
+  { c: 6, r: 4, p: '♙', dark: false },
+  { c: 3, r: 5, p: '♗', dark: false },
+  { c: 0, r: 6, p: '♙', dark: false },
+  { c: 1, r: 6, p: '♙', dark: false },
+  { c: 5, r: 6, p: '♙', dark: false },
+  { c: 7, r: 6, p: '♙', dark: false },
+  { c: 0, r: 7, p: '♖', dark: false },
+  { c: 3, r: 7, p: '♕', dark: false },
+  { c: 4, r: 7, p: '♔', dark: false },
+  { c: 7, r: 7, p: '♖', dark: false },
+];
+const CHESS_MOVES = [
+  ['12.', '…Nf6', 'Be3'],
+  ['13.', 'd5', 'exd5'],
+  ['14.', 'Nxd5', 'Nxd5'],
+  ['15.', 'Bxd5', 'c6'],
+];
+const GO_N = 13;
+const GO_S = 10.2;
+const GO_X0 = 8;
+const GO_Y0 = 12;
+const GO_STONES = Array.from({ length: 52 }, (_, i) => {
+  const c = Math.floor(rnd(i + 40) * GO_N);
+  const r = Math.floor(rnd(i + 90) * GO_N);
+  return { c, r, black: i % 2 === 0 };
+}).filter((s, i, a) => a.findIndex((o) => o.c === s.c && o.r === s.r) === i);
+const PREDICT = [
+  { n: 'FED CUT SEP', p: 72, vol: '4.2M' },
+  { n: 'BTC > 80K', p: 41, vol: '2.8M' },
+  { n: 'US REC. 2026', p: 18, vol: '1.1M' },
+  { n: 'GPT-5 THIS YR', p: 63, vol: '890k' },
+  { n: 'LAL WIN TITLE', p: 29, vol: '640k' },
+];
+const PREDICT_LINE = Array.from({ length: 24 }, (_, i) => 58 + i * 0.7 + (rnd(i + 200) - 0.5) * 8)
+  .map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 7.4)} ${f1(48 - (v - 50) * 0.7)}`)
+  .join('');
+const SPORTS_EVENTS = [
+  ['12′', 'SALAH', '1–0'],
+  ['31′', 'DIAZ', '2–0'],
+  ['54′', 'HAALAND', '2–1'],
+  ['67′', '—', 'live'],
+];
+const ENERGY_MIX = [
+  { n: 'WIND', pct: 34, cls: 'stroke-br' },
+  { n: 'NUC', pct: 22, cls: 'stroke-ac' },
+  { n: 'SOLAR', pct: 18, cls: 'stroke-ink' },
+  { n: 'GAS', pct: 16, cls: 'stroke-dim' },
+  { n: 'HYDRO', pct: 10, cls: 'stroke-br' },
+];
+const ENERGY_LOAD = Array.from({ length: 20 }, (_, i) => 38 + Math.sin(i * 0.45) * 14 + rnd(i + 300) * 6)
+  .map((v, i) => `${i ? 'L' : 'M'}${f1(148 + i * 6.2)} ${f1(70 - v * 0.55)}`)
+  .join('');
+const FLIGHTS = [
+  ['BA112', 'LHR', 'JFK', 'on'],
+  ['EK202', 'DXB', 'SFO', 'delay'],
+  ['SQ26', 'SIN', 'LAX', 'on'],
+  ['AF83', 'CDG', 'ORD', 'hold'],
+  ['LH400', 'FRA', 'EWR', 'on'],
+];
+const SHIPS = [
+  ['EVER GIVEN', 'SUEZ', '14.2kn'],
+  ['HMM OSLO', 'PAC', '18.4kn'],
+  ['MSC IRINA', 'MAL', '16.1kn'],
+  ['CMA CGM', 'ATL', '19.0kn'],
+];
+const POKER_BOARD = ['A♠', 'K♠', 'T♥', '7♦'];
+const POKER_SEATS = [
+  { n: 'BTN', stack: '84', act: false },
+  { n: 'SB', stack: '62', act: false },
+  { n: 'BB', stack: '110', act: true },
+  { n: 'UTG', stack: '48', act: false },
+  { n: 'HJ', stack: '96', act: false },
+  { n: 'CO', stack: '71', act: false },
+];
+const ESPORTS = [
+  { n: 'TEAM SPIRIT', k: 18, d: 9, gold: '24.1k' },
+  { n: 'G2', k: 11, d: 18, gold: '19.4k' },
+];
+const spark = (seed: number, n: number, x0: number, y0: number, dx: number, amp: number) =>
+  Array.from({ length: n }, (_, i) => {
+    const y = y0 - (rnd(seed + i) * amp + Math.sin(i * 0.55 + seed) * amp * 0.45);
+    return `${i ? 'L' : 'M'}${f1(x0 + i * dx)} ${f1(y)}`;
+  }).join('');
+const FX_PAIRS = [
+  { n: 'EURUSD', px: '1.0874', ch: '+0.18', up: true },
+  { n: 'GBPUSD', px: '1.2712', ch: '+0.09', up: true },
+  { n: 'USDJPY', px: '149.82', ch: '−0.22', up: false },
+  { n: 'USDCHF', px: '0.8614', ch: '−0.06', up: false },
+  { n: 'AUDUSD', px: '0.6621', ch: '+0.31', up: true },
+  { n: 'USDCAD', px: '1.3588', ch: '+0.04', up: true },
+];
+const FX_CORR = [
+  [1, 0.82, -0.41, 0.71, -0.22],
+  [0.82, 1, -0.33, 0.64, -0.18],
+  [-0.41, -0.33, 1, -0.28, 0.44],
+  [0.71, 0.64, -0.28, 1, -0.12],
+  [-0.22, -0.18, 0.44, -0.12, 1],
+];
+const FX_AX = ['EUR', 'GBP', 'JPY', 'AUD', 'CAD'];
+const FX_EUR = spark(11, 22, 8, 46, 5.6, 14);
+const FX_GBP = spark(19, 22, 8, 46, 5.6, 10);
+const METALS = [
+  { n: 'XAU', px: '2,418', ch: '+0.64', u: 'oz' },
+  { n: 'XAG', px: '31.42', ch: '+1.12', u: 'oz' },
+  { n: 'HG', px: '4.62', ch: '−0.38', u: 'lb' },
+  { n: 'WTI', px: '78.40', ch: '+0.91', u: 'bbl' },
+  { n: 'BRENT', px: '82.15', ch: '+0.74', u: 'bbl' },
+  { n: 'HH', px: '2.18', ch: '−1.40', u: 'mm' },
+];
+const METAL_GOLD = spark(7, 20, 148, 48, 6.1, 16);
+const METAL_OIL = spark(23, 20, 148, 48, 6.1, 11);
+const CHAT_MSGS = [
+  { r: '#risk', w: 'VAR breach 2.4% on ES', t: '0:12' },
+  { r: '#desk', w: 'EURUSD spike into 1.0880', t: '0:18' },
+  { r: '#infra', w: 'pg-a lag 42ms → 18ms', t: '0:21' },
+  { r: '#bots', w: 'mm-07 flattened BTC', t: '0:29' },
+  { r: '#news', w: 'FOMC speaker 14:00', t: '0:33' },
+];
+const SERVERS = [
+  { n: 'web-04', cpu: 42, mem: 61, st: 'ok' },
+  { n: 'web-11', cpu: 88, mem: 74, st: 'hot' },
+  { n: 'api-02', cpu: 31, mem: 48, st: 'ok' },
+  { n: 'wrk-09', cpu: 67, mem: 82, st: 'ok' },
+  { n: 'gpu-01', cpu: 94, mem: 71, st: 'hot' },
+];
+const SRV_RPS = spark(31, 18, 168, 70, 5.6, 22);
+const DB_SLOW = [
+  ['SELECT', 'fills', '182ms'],
+  ['UPDATE', 'pos', '94ms'],
+  ['COPY', 'ticks', '410ms'],
+  ['JOIN', 'nav', '67ms'],
+];
+const DB_LAG = spark(41, 16, 168, 52, 6.2, 14);
+const BOTS = [
+  { n: 'mm-07', pnl: '+1.2k', st: 'run' },
+  { n: 'arb-3', pnl: '+418', st: 'run' },
+  { n: 'twap-1', pnl: '−62', st: 'halt' },
+  { n: 'tg-ops', pnl: '—', st: 'run' },
+  { n: 'liq-9', pnl: '+890', st: 'run' },
+];
+const TV_CH = [
+  { n: 'A', t: 'CNBC', v: '1.2M' },
+  { n: 'B', t: 'BLOOM', v: '840k' },
+  { n: 'C', t: 'ESPN', v: '2.1M' },
+  { n: 'D', t: 'NHK', v: '610k' },
+];
+const VID_BIT = spark(53, 20, 8, 48, 6.4, 12);
+const NEWS = [
+  ['14:02', 'FED', 'Williams: cuts remain data-dependent'],
+  ['13:51', 'OPEC', 'Output hold through Q4'],
+  ['13:40', 'ECB', 'HICP flash 2.4% y/y'],
+  ['13:22', 'BOJ', 'Yen intervention watch'],
+  ['13:08', 'GEOP', 'Strait traffic −11%'],
+];
+---
+
+<div class="hero-stage" data-hero-stage aria-hidden="true">
+  {
+    BOARDS.slice(0, 16).map((board, i) => (
+      <figure
+        class:list={['hero-board', i < 4 && 'is-shown', i === 0 && 'is-current']}
+        data-hero-board={board.id}
+        data-slot={i < 4 ? String(i) : undefined}
+      >
+        <div class="hero-board__bar">
+          <span class="hero-board__live-dot" />
+          <span class="hero-board__title">{board.title}</span>
+          <span class="hero-board__live">{board.meta}</span>
+        </div>
+
+        <svg viewBox="0 0 280 158" fill="none" class="hero-board__svg" aria-hidden="true">
+          {board.id === 'trading' && (
+          <g>
+            <text class="lbl em" x="8" y="9">67,241.2</text>
+            <text class="lbl up" x="46" y="9">+2.41%</text>
+            <text class="lbl dim xs" x="78" y="9">MARK 67,241.0 · 1H</text>
+            {['68.2', '66.1', '64.0'].map((px, gi) => (
+              <g>
+                <path class="ln dash thin" d={`M6 ${25.5 + gi * 22}H176`} />
+                <text class="lbl dim xs" x="166" y={23 + gi * 22}>{px}</text>
+              </g>
+            ))}
+            {['09', '12', '15', '18'].map((hr, hi) => (
+              <text class="lbl dim xs" x={10 + hi * 44} y="96">{hr}:00</text>
+            ))}
+            {candleBodies.map((c, ci) => (
+              <g class="grow-y" style={`--d:${(ci * 0.03).toFixed(2)}s`}>
+                <path class="wick" d={`M${c.x} ${c.top - 4}V${c.top + c.h + 4}`} />
+                <rect class:list={['body', c.up && 'up']} x={c.x - 2.6} y={c.top} width="5.2" height={c.h} rx="0.4" />
+              </g>
+            ))}
+            <path class="stroke-dim draw" d={vwap} pathLength="100" style="--d:0.3s" />
+            <path class="stroke-ac draw" d={ema} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash acc" d="M6 39.2H158" />
+            <rect class="f-accent" x="158" y="34.8" width="21" height="9" rx="1" />
+            <text class="lbl tag" x="160.5" y="41.5">67241</text>
+            {VOL.map((h, vi) => (
+              <rect
+                class:list={['grow-y', candleBodies[vi].up ? 'f-br' : 'f-ac']}
+                x={6.2 + vi * 8.8}
+                y={90 - h * 0.4}
+                width="5"
+                height={h * 0.4}
+                rx="0.3"
+                style={`--d:${(0.15 + vi * 0.02).toFixed(2)}s`}
+              />
+            ))}
+            <text class="lbl dim xs" x="8" y="106">RSI(14) 61.4 · ATR 842 · L/S 1.24</text>
+            <path class="ln dash thin" d="M8 116H176M8 144H176" />
+            <path class="stroke-br draw" d={rsiPts} pathLength="100" style="--d:0.35s" />
+            <text class="lbl dim" x="184" y="9">BOOK</text>
+            {BOOK.map((row, bi) => (
+              <g class="fade" style={`--d:${(0.2 + bi * 0.05).toFixed(2)}s`}>
+                <rect class="f-br" x={248 - row.bid * 28} y={14 + bi * 13} width={row.bid * 28} height="10" rx="1" />
+                <rect class="f-ac" x="250" y={14 + bi * 13} width={row.ask * 28} height="10" rx="1" />
+                <text class="lbl" x="186" y={22 + bi * 13}>{row.px}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="184" y="88">SPREAD 4.2 · DEPTH 84%</text>
+            <text class="lbl dim" x="184" y="102">POS</text>
+            <text class="lbl" x="184" y="114">BTC-PERP 0.42</text>
+            <text class="lbl up" x="250" y="114">+1.84k</text>
+            <text class="lbl" x="184" y="126">ETH-PERP 2.10</text>
+            <text class="lbl dn" x="250" y="126">−418</text>
+            <text class="lbl dim xs" x="184" y="140">FUND +0.0124% · 8h · OI 24.18B</text>
+            <text class="lbl dim xs" x="184" y="151">VAR 2.4% · MARGIN 18% · A+</text>
+          </g>
+          )}
+          {board.id === 'forex' && (
+          <g>
+            <text class="lbl em" x="8" y="10">EURUSD  1.0874</text>
+            <text class="lbl up" x="92" y="10">+0.18%</text>
+            <text class="lbl dim xs" x="132" y="10">DXY 104.2 · TOK  LON  NY</text>
+            <path class="stroke-br draw" d={FX_EUR} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-ac draw" d={FX_GBP} pathLength="100" style="--d:0.28s" />
+            <path class="ln dash thin" d="M8 32H130M8 46H130" />
+            <text class="lbl dim xs" x="8" y="60">EUR  GBP overlay · 4h</text>
+            {FX_PAIRS.map((p, pi) => (
+              <g class="fade" style={`--d:${(0.06 + pi * 0.04).toFixed(2)}s`}>
+                <text class="lbl xs" x={8 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.n}</text>
+                <text class:list={['lbl xs', p.up ? 'up' : 'dn']} x={44 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.ch}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="126">SESS LON 61%  NY 22%</text>
+            <rect class="track" x="8" y="130" width="130" height="5" rx="1" />
+            <rect class="f-br" x="8" y="130" width="79" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="148">PIP 1.8 · SWAP −4.2</text>
+            <text class="lbl dim xs" x="154" y="10">CORR  20D</text>
+            {FX_AX.map((a, i) => (
+              <text class="lbl dim xs" x={168 + i * 20} y="22">{a}</text>
+            ))}
+            {FX_CORR.map((row, ri) => (
+              <g>
+                <text class="lbl dim xs" x="154" y={36 + ri * 18}>{FX_AX[ri]}</text>
+                {row.map((v, ci) => (
+                  <rect
+                    class={v > 0.35 ? 'f-br' : v < -0.2 ? 'f-ac' : 'f-soft'}
+                    x={168 + ci * 20}
+                    y={28 + ri * 18}
+                    width="16"
+                    height="14"
+                    rx="1"
+                    style={`opacity:${0.25 + Math.abs(v) * 0.7}`}
+                  />
+                ))}
+              </g>
+            ))}
+            <text class="lbl dim xs" x="154" y="132">EUR/GBP 0.82</text>
+            <text class="lbl dim xs" x="154" y="146">JPY risk-off</text>
+          </g>
+          )}
+          {board.id === 'metals' && (
+          <g>
+            <text class="lbl em" x="8" y="10">XAU  2,418.4</text>
+            <text class="lbl up" x="86" y="10">+0.64%</text>
+            <text class="lbl dim xs" x="128" y="10">COMEX · AUG</text>
+            {METALS.map((m, mi) => (
+              <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + mi * 16}>{m.n}</text>
+                <text class="lbl xs" x="44" y={28 + mi * 16}>{m.px}</text>
+                <text class:list={['lbl xs', m.ch.startsWith('+') ? 'up' : 'dn']} x="86" y={28 + mi * 16}>{m.ch}</text>
+                <text class="lbl dim xs" x="118" y={28 + mi * 16}>{m.u}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="134">AU/OIL  30.8 oz</text>
+            <text class="lbl dim xs" x="8" y="148">INV −2.1% w/w</text>
+            <text class="lbl dim xs" x="148" y="16">GOLD  OIL</text>
+            <path class="stroke-br draw" d={METAL_GOLD} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-ac draw" d={METAL_OIL} pathLength="100" style="--d:0.3s" />
+            <path class="ln dash thin" d="M148 32H272M148 48H272" />
+            <text class="lbl dim xs" x="148" y="90">WTI 78.40  BRT 82.15</text>
+            <text class="lbl dim xs" x="148" y="104">CRACK 18.4</text>
+            <text class="lbl dim xs" x="148" y="120">HH 2.18  EUA 71.2</text>
+            <text class="lbl dim xs" x="148" y="136">CU INV  184kt</text>
+            <text class="lbl dim xs" x="148" y="150">LME  COMEX  SHFE</text>
+          </g>
+          )}
+          {board.id === 'chat' && (
+          <g>
+            <text class="lbl dim xs" x="8" y="10">ROOMS</text>
+            {['#risk', '#desk', '#infra', '#bots', '#news'].map((r, ri) => (
+              <g>
+                <rect class={ri === 0 ? 'f-br' : 'f-soft'} x="8" y={16 + ri * 16} width="54" height="13" rx="2" />
+                <text class="lbl xs" x="12" y={25 + ri * 16}>{r}</text>
+                <text class="lbl dim xs" x="50" y={25 + ri * 16}>{[3, 1, 0, 2, 8][ri]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="110">UNREAD 14</text>
+            <text class="lbl dim xs" x="8" y="124">PAGED  2</text>
+            <text class="lbl up xs" x="8" y="140">VAR · live</text>
+            <text class="lbl dim xs" x="8" y="152">SLACK  TG  IRC</text>
+            <text class="lbl dim xs" x="76" y="10">#risk · 18 online</text>
+            {CHAT_MSGS.map((m, mi) => (
+              <g class="fade" style={`--d:${(0.08 + mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="76" y={26 + mi * 20}>{m.t}  {m.r}</text>
+                <text class="lbl xs" x="76" y={36 + mi * 20}>{m.w}</text>
+              </g>
+            ))}
+            <path class="ln dash thin" d="M76 128H272" />
+            <text class="lbl dim xs" x="76" y="140">nexow-bot is typing…</text>
+            <rect class="track" x="76" y="146" width="160" height="6" rx="1" />
+            <rect class="f-br grow-x" x="76" y="146" width="72" height="6" rx="1" style="--d:0.4s" />
+          </g>
+          )}
+          {board.id === 'server' && (
+          <g>
+            <text class="lbl em" x="8" y="10">48 NODES</text>
+            <text class="lbl up" x="68" y="10">99.98%</text>
+            <text class="lbl dim xs" x="110" y="10">EU-1 · 12ms</text>
+            {SERVERS.map((s, si) => (
+              <g class="fade" style={`--d:${(si * 0.05).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + si * 16}>{s.n}</text>
+                <rect class="track" x="52" y={22 + si * 16} width="70" height="5" rx="1" />
+                <rect class={s.st === 'hot' ? 'f-ac' : 'f-br'} x="52" y={22 + si * 16} width={s.cpu * 0.7} height="5" rx="1" />
+                <text class="lbl dim xs" x="126" y={28 + si * 16}>{s.cpu}%</text>
+                <text class:list={['lbl xs', s.st === 'hot' && 'dn']} x="148" y={28 + si * 16}>{s.st}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="120">P99  42ms · ERR 0.04%</text>
+            <text class="lbl dim xs" x="8" y="134">DISK  61% · NET 4.2Gb</text>
+            <text class="lbl dim xs" x="8" y="150">K8S  214 PODS</text>
+            <text class="lbl dim xs" x="168" y="16">RPS  18.4k</text>
+            <path class="stroke-br draw" d={SRV_RPS} pathLength="100" style="--d:0.22s" />
+            <path class="ln dash thin" d="M168 48H272M168 70H272" />
+            <text class="lbl dim xs" x="168" y="96">SAT  FRA  AMS</text>
+            <text class="lbl dim xs" x="168" y="112">GPU 94%  H100</text>
+            <text class="lbl dim xs" x="168" y="128">DEPLOY  14:02</text>
+            <text class="lbl dim xs" x="168" y="144">ALERTS  2 WARN</text>
+          </g>
+          )}
+          {board.id === 'database' && (
+          <g>
+            <text class="lbl em" x="8" y="10">12,418 QPS</text>
+            <text class="lbl up" x="80" y="10">HIT 98.4%</text>
+            <text class="lbl dim xs" x="136" y="10">PG 16 · A</text>
+            <text class="lbl dim xs" x="8" y="26">CONN  184 / 300</text>
+            <rect class="track" x="8" y="30" width="140" height="5" rx="1" />
+            <rect class="f-br" x="8" y="30" width="86" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="48">SLOW  1s+</text>
+            {DB_SLOW.map((q, qi) => (
+              <g class="fade" style={`--d:${(0.08 + qi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={64 + qi * 14}>{q[0]}</text>
+                <text class="lbl xs" x="48" y={64 + qi * 14}>{q[1]}</text>
+                <text class:list={['lbl xs', q[2].startsWith('4') && 'dn']} x="92" y={64 + qi * 14}>{q[2]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="128">WAL  2.1 GB</text>
+            <text class="lbl dim xs" x="8" y="142">BLOAT  idx_fills</text>
+            <text class="lbl dim xs" x="8" y="154">VACUUM  02:10</text>
+            <text class="lbl dim xs" x="168" y="16">REPL LAG</text>
+            <path class="stroke-br draw" d={DB_LAG} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash thin" d="M168 36H272M168 52H272" />
+            <text class="lbl dim xs" x="168" y="80">LAG  18ms</text>
+            <text class="lbl dim xs" x="168" y="96">SLOTS  3</text>
+            <text class="lbl dim xs" x="168" y="112">READS  9.1k</text>
+            <text class="lbl dim xs" x="168" y="128">WRITES  3.3k</text>
+            <text class="lbl dim xs" x="168" y="144">LOCKS  2</text>
+          </g>
+          )}
+          {board.id === 'bots' && (
+          <g>
+            <text class="lbl em" x="8" y="10">36 LIVE</text>
+            <text class="lbl dim xs" x="56" y="10">TICK 80ms · KILL ARMED</text>
+            {BOTS.map((b, bi) => (
+              <g class="fade" style={`--d:${(bi * 0.05).toFixed(2)}s`}>
+                <circle class={b.st === 'run' ? 'f-brand' : 'f-accent'} cx="12" cy={26 + bi * 16} r="2.4" />
+                <text class="lbl xs" x="22" y={29 + bi * 16}>{b.n}</text>
+                <text class:list={['lbl xs', b.pnl.startsWith('+') && 'up', b.pnl.startsWith('−') && 'dn']} x="72" y={29 + bi * 16}>{b.pnl}</text>
+                <text class="lbl dim xs" x="112" y={29 + bi * 16}>{b.st}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="118">PNL +2.45k  24h</text>
+            <text class="lbl dim xs" x="8" y="132">QUEUE  14</text>
+            <text class="lbl dim xs" x="8" y="146">TG  1.2k msg/m</text>
+            <text class="lbl dim xs" x="160" y="16">LAST TICK</text>
+            {['mm-07  BTC +2', 'arb-3  ETH 0', 'liq-9  SOL −1', 'tg-ops  ping', 'scan-4  news'].map((t, ti) => (
+              <text class="lbl dim xs" x="160" y={32 + ti * 14}>{t}</text>
+            ))}
+            <text class="lbl dim xs" x="160" y="112">EXCH  BIN  CME</text>
+            <text class="lbl dim xs" x="160" y="128">RISK  18% used</text>
+            <rect class="track" x="160" y="134" width="100" height="5" rx="1" />
+            <rect class="f-br" x="160" y="134" width="18" height="5" rx="1" />
+            <text class="lbl dim xs" x="160" y="152">HALT  twap-1</text>
+          </g>
+          )}
+          {board.id === 'tv' && (
+          <g>
+            <text class="lbl em" x="8" y="10">ON AIR  · PGM A</text>
+            <text class="lbl up" x="108" y="10">TALLY</text>
+            {TV_CH.map((c, ci) => {
+              const x = 8 + (ci % 2) * 80;
+              const y = 18 + Math.floor(ci / 2) * 52;
+              return (
+                <g>
+                  <rect class={ci === 0 ? 'frame' : 'ln'} x={x} y={y} width="72" height="42" rx="2" />
+                  {Array.from({ length: 5 }, (_, li) => (
+                    <path class="ln thin" d={`M${x + 4} ${y + 8 + li * 6}h${64}`} />
+                  ))}
+                  <text class="lbl tag" x={x + 4} y={y + 10}>{c.n}</text>
+                  <text class="lbl xs" x={x + 16} y={y + 10}>{c.t}</text>
+                  <text class="lbl dim xs" x={x + 4} y={y + 38}>{c.v}</text>
+                </g>
+              );
+            })}
+            <text class="lbl dim xs" x="8" y="130">PVW  B  · NEXT  14:05</text>
+            <text class="lbl dim xs" x="8" y="144">CC  ON  · LOUD −23</text>
+            <text class="lbl dim xs" x="172" y="16">RUNDOWN</text>
+            {['OPEN  0:40', 'MKT  4:00', 'WX   1:20', 'BRK  LIVE'].map((r, ri) => (
+              <text class="lbl dim xs" x="172" y={32 + ri * 14}>{r}</text>
+            ))}
+            <text class="lbl dim xs" x="172" y="96">VIEW  4.8M</text>
+            <text class="lbl dim xs" x="172" y="112">SAT  2 UP</text>
+            <text class="lbl dim xs" x="172" y="128">ISO  CAM-3</text>
+            <text class="lbl dim xs" x="172" y="144">DVE  WIPE</text>
+          </g>
+          )}
+          {board.id === 'video' && (
+          <g>
+            <text class="lbl em" x="8" y="10">6,214 LIVE</text>
+            <text class="lbl up" x="80" y="10">1080p60</text>
+            <text class="lbl dim xs" x="128" y="10">H264  8.4 Mbps</text>
+            <path class="stroke-br draw" d={VID_BIT} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash thin" d="M8 32H136M8 48H136" />
+            <text class="lbl dim xs" x="8" y="64">BITRATE  DROP 0.2%</text>
+            <text class="lbl dim xs" x="8" y="80">KEY  2s · GOP 60</text>
+            <text class="lbl dim xs" x="8" y="96">AUDIO  −16 LUFS</text>
+            <rect class="track" x="8" y="102" width="128" height="5" rx="1" />
+            <rect class="f-br" x="8" y="102" width="86" height="5" rx="1" />
+            <text class="lbl dim xs" x="8" y="122">CHAT  184/m</text>
+            <text class="lbl dim xs" x="8" y="136">CLIP  0:14:22</text>
+            <text class="lbl dim xs" x="8" y="150">REC  ISO + PGM</text>
+            <text class="lbl dim xs" x="152" y="16">SCENES</text>
+            {['CAM A', 'OVERLAY', 'CHART', 'GUEST'].map((s, si) => (
+              <g>
+                <rect class={si === 0 ? 'f-br' : 'panel'} x={152 + (si % 2) * 60} y={22 + Math.floor(si / 2) * 36} width="54" height="30" rx="2" />
+                <text class="lbl xs" x={158 + (si % 2) * 60} y={40 + Math.floor(si / 2) * 36}>{s}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="152" y="106">CDN  CF  FASTLY</text>
+            <text class="lbl dim xs" x="152" y="122">HLS  4.1s</text>
+            <text class="lbl dim xs" x="152" y="138">ERR  401  2</text>
+            <text class="lbl dim xs" x="152" y="152">NEXT  Q&A</text>
+          </g>
+          )}
+          {board.id === 'news' && (
+          <g>
+            <rect class="f-ac" x="8" y="6" width="44" height="10" rx="1" />
+            <text class="lbl tag" x="12" y="13">BREAK</text>
+            <text class="lbl em" x="58" y="14">FOMC  14:00 ET</text>
+            {NEWS.map((n, ni) => (
+              <g class="fade" style={`--d:${(0.06 + ni * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={32 + ni * 18}>{n[0]}</text>
+                <text class="lbl xs" x="36" y={32 + ni * 18}>{n[1]}</text>
+                <text class="lbl xs" x="64" y={32 + ni * 18}>{n[2]}</text>
+              </g>
+            ))}
+            <path class="ln dash thin" d="M8 124H272" />
+            <text class="lbl dim xs" x="8" y="136">REUT  BB  AFP  HN</text>
+            <text class="lbl dim xs" x="8" y="150">SENT +0.12  ·  84 items/h</text>
+            <text class="lbl dim xs" x="176" y="136">MACRO  41%</text>
+            <rect class="track" x="176" y="140" width="88" height="5" rx="1" />
+            <rect class="f-br" x="176" y="140" width="36" height="5" rx="1" />
+          </g>
+          )}
+          {board.id === 'chess' && (
+          <g>
+            {Array.from({ length: 64 }, (_, i) => {
+              const c = i % 8;
+              const r = Math.floor(i / 8);
+              return (
+                <rect
+                  class={(c + r) % 2 ? 'f-soft' : 'f-br'}
+                  x={f1(CHESS_X0 + c * CHESS_SQ)}
+                  y={f1(CHESS_Y0 + r * CHESS_SQ)}
+                  width={CHESS_SQ}
+                  height={CHESS_SQ}
+                />
+              );
+            })}
+            <rect class="frame" x={CHESS_X0} y={CHESS_Y0} width={CHESS_SQ * 8} height={CHESS_SQ * 8} />
+            {CHESS_PIECES.map((pc) => (
+              <text
+                class:list={['lbl em', pc.dark && 'dn']}
+                x={f1(CHESS_X0 + pc.c * CHESS_SQ + 3.2)}
+                y={f1(CHESS_Y0 + pc.r * CHESS_SQ + 12.2)}
+                style="font-size:11px"
+              >{pc.p}</text>
+            ))}
+            <rect class="f-accent" x={f1(CHESS_X0 + 4 * CHESS_SQ)} y={f1(CHESS_Y0 + 4 * CHESS_SQ)} width="2.2" height={CHESS_SQ} opacity="0.55" />
+            <text class="lbl dim xs" x="148" y="16">W  2:14</text>
+            <text class="lbl em" x="148" y="32">B  0:47</text>
+            <text class="lbl dim xs" x="148" y="46">EVAL</text>
+            <rect class="track" x="148" y="50" width="10" height="88" rx="1" />
+            <rect class="f-ink" x="148" y="50" width="10" height="38" rx="1" />
+            <rect class="f-br" x="148" y="88" width="10" height="50" rx="1" />
+            <text class="lbl xs" x="162" y="96">+0.8</text>
+            <text class="lbl dim xs" x="176" y="16">MOVES</text>
+            {CHESS_MOVES.map((m, mi) => (
+              <g class="fade" style={`--d:${(0.1 + mi * 0.06).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="176" y={30 + mi * 14}>{m[0]}</text>
+                <text class="lbl xs" x="196" y={30 + mi * 14}>{m[1]}</text>
+                <text class="lbl xs" x="232" y={30 + mi * 14}>{m[2]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="176" y="96">Nxd5 was best</text>
+            <text class="lbl dim xs" x="176" y="110">ACCURACY 94 · 91</text>
+            <text class="lbl dim xs" x="176" y="124">BLITZ 3+2 · RATED</text>
+            <text class="lbl up xs" x="176" y="140">W 2147  B 2091</text>
+            <text class="lbl dim xs" x="176" y="152">#GAMES 18,402</text>
+          </g>
+          )}
+          {board.id === 'go' && (
+          <g>
+            {Array.from({ length: GO_N }, (_, i) => (
+              <g>
+                <path class="ln thin" d={`M${f1(GO_X0)} ${f1(GO_Y0 + i * GO_S)}H${f1(GO_X0 + (GO_N - 1) * GO_S)}`} />
+                <path class="ln thin" d={`M${f1(GO_X0 + i * GO_S)} ${f1(GO_Y0)}V${f1(GO_Y0 + (GO_N - 1) * GO_S)}`} />
+              </g>
+            ))}
+            {[3, 6, 9].flatMap((c) => [3, 6, 9].map((r) => ({ c, r }))).map((h) => (
+              <circle class="f-ink" cx={f1(GO_X0 + h.c * GO_S)} cy={f1(GO_Y0 + h.r * GO_S)} r="1.1" />
+            ))}
+            {GO_STONES.map((s, si) => (
+              <circle
+                class={s.black ? 'f-ink' : 'f-br'}
+                cx={f1(GO_X0 + s.c * GO_S)}
+                cy={f1(GO_Y0 + s.r * GO_S)}
+                r="4.1"
+                style={`opacity:${s.black ? 0.88 : 0.95}`}
+              />
+            ))}
+            <text class="lbl dim xs" x="150" y="16">MOVE 147 · B</text>
+            <text class="lbl" x="150" y="30">B 142  W 138</text>
+            <text class="lbl dim xs" x="150" y="44">CAPT B 4 · W 7</text>
+            <text class="lbl dim xs" x="150" y="58">KOMI 6.5</text>
+            <text class="lbl dim xs" x="150" y="74">TERRITORY</text>
+            <rect class="track" x="150" y="78" width="118" height="6" rx="1" />
+            <rect class="f-ink" x="150" y="78" width="64" height="6" rx="1" />
+            <text class="lbl dim xs" x="150" y="98">WIN B 61%</text>
+            <rect class="track" x="150" y="102" width="118" height="5" rx="1" />
+            <rect class="f-br grow-x" x="150" y="102" width="72" height="5" rx="1" style="--d:0.3s" />
+            <text class="lbl dim xs" x="150" y="122">BYOYOMI 3×30s</text>
+            <text class="lbl em xs" x="150" y="136">B 0:28</text>
+            <text class="lbl dim xs" x="150" y="150">9D · FOX · RATED</text>
+          </g>
+          )}
+          {board.id === 'predict' && (
+          <g>
+            <text class="lbl em" x="8" y="10">FED CUT SEP</text>
+            <text class="lbl up" x="86" y="10">72¢</text>
+            <text class="lbl dim xs" x="118" y="10">VOL 4.2M</text>
+            <path class="stroke-br draw" d={PREDICT_LINE} pathLength="100" style="--d:0.2s" />
+            <path class="ln dash thin" d="M8 34H180" />
+            <text class="lbl dim xs" x="8" y="56">YES 72  NO 28 · SPREAD 1.4</text>
+            {PREDICT.map((m, mi) => (
+              <g class="fade" style={`--d:${(0.08 + mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={72 + mi * 16}>{m.n}</text>
+                <rect class="track" x="108" y={66 + mi * 16} width="90" height="5" rx="1" />
+                <rect class="f-br" x="108" y={66 + mi * 16} width={m.p * 0.9} height="5" rx="1" />
+                <text class="lbl xs" x="204" y={72 + mi * 16}>{m.p}¢</text>
+                <text class="lbl dim xs" x="232" y={72 + mi * 16}>{m.vol}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="154">POLY  Kalshi  METACULUS</text>
+          </g>
+          )}
+          {board.id === 'sports' && (
+          <g>
+            <text class="lbl dim xs" x="8" y="12">EPL · ANFIELD · 67′</text>
+            <text class="lbl em" x="8" y="32">LIV  2</text>
+            <text class="lbl em" x="86" y="32">MCI  1</text>
+            <text class="lbl dim xs" x="8" y="46">xG 1.84 – 1.12 · SHOTS 12–8</text>
+            <path class="frame" d="M8 54H168V150H8Z" />
+            <path class="ln dash thin" d="M88 54V150M8 102H168" />
+            <ellipse class="ln thin" cx="88" cy="102" rx="18" ry="12" />
+            <circle class="f-brand" cx="62" cy="78" r="2.2" />
+            <circle class="f-accent" cx="118" cy="96" r="2.2" />
+            <circle class="f-brand" cx="74" cy="120" r="2.2" />
+            <path class="stroke-br" d="M40 88L62 78L80 110" />
+            <text class="lbl dim xs" x="176" y="16">EVENTS</text>
+            {SPORTS_EVENTS.map((e, ei) => (
+              <g class="fade" style={`--d:${(0.1 + ei * 0.06).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="176" y={32 + ei * 16}>{e[0]}</text>
+                <text class="lbl xs" x="200" y={32 + ei * 16}>{e[1]}</text>
+                <text class="lbl em xs" x="248" y={32 + ei * 16}>{e[2]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="176" y="108">POSS 58–42</text>
+            <rect class="track" x="176" y="112" width="92" height="5" rx="1" />
+            <rect class="f-br" x="176" y="112" width="53" height="5" rx="1" />
+            <text class="lbl dim xs" x="176" y="132">CORNERS 6–3</text>
+            <text class="lbl dim xs" x="176" y="146">NEXT xG 0.18</text>
+          </g>
+          )}
+          {board.id === 'energy' && (
+          <g>
+            <text class="lbl em" x="8" y="10">EU LOAD 312 GW</text>
+            <text class="lbl up" x="108" y="10">−4.2%</text>
+            {ENERGY_MIX.map((m, mi) => (
+              <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="8" y={28 + mi * 16}>{m.n}</text>
+                <rect class="track" x="48" y={22 + mi * 16} width="86" height="5" rx="1" />
+                <rect class="f-br" x="48" y={22 + mi * 16} width={m.pct * 0.86} height="5" rx="1" />
+                <text class="lbl xs" x="140" y={28 + mi * 16}>{m.pct}%</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="120">PRICE 42 €/MWH</text>
+            <text class="lbl dim xs" x="8" y="134">CO₂ 184 g/kWh</text>
+            <text class="lbl dim xs" x="8" y="148">RESERVE 11.4 GW</text>
+            <text class="lbl dim xs" x="148" y="16">24H LOAD</text>
+            <path class="stroke-br draw" d={ENERGY_LOAD} pathLength="100" style="--d:0.25s" />
+            <path class="ln dash thin" d="M148 48H272M148 70H272" />
+            <text class="lbl dim xs" x="148" y="90">PEAK 348 · 19:10</text>
+            <text class="lbl dim xs" x="148" y="104">WIND 106 GW</text>
+            <text class="lbl dim xs" x="148" y="118">SOLAR 56 GW</text>
+            <text class="lbl dim xs" x="148" y="134">FR  DE  ES  NL</text>
+            <text class="lbl dim xs" x="148" y="150">X-BORDER 28 GW</text>
+          </g>
+          )}
+          {board.id === 'flights' && (
+          <g>
+            <text class="lbl em" x="8" y="10">847 AIRBORNE</text>
+            <text class="lbl dim xs" x="96" y="10">DELAY 11%</text>
+            {FLIGHTS.map((f, fi) => (
+              <g class="fade" style={`--d:${(0.08 + fi * 0.05).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + fi * 16}>{f[0]}</text>
+                <text class="lbl dim xs" x="52" y={28 + fi * 16}>{f[1]}→{f[2]}</text>
+                <text class:list={['lbl xs', f[3] === 'on' && 'up', f[3] !== 'on' && 'dn']} x="124" y={28 + fi * 16}>{f[3]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="120">GATES 12 OPEN</text>
+            <text class="lbl dim xs" x="8" y="134">HOLD 4 · TAXI 18</text>
+            <text class="lbl dim xs" x="8" y="150">WX IMC · RWY 27L</text>
+            <text class="lbl dim xs" x="168" y="16">ROUTES</text>
+            <path class="ln thin" d="M176 36Q210 24 248 40" />
+            <path class="ln thin" d="M176 52Q220 70 252 48" />
+            <path class="stroke-br" d="M176 64Q200 88 246 72" />
+            <circle class="f-brand" cx="176" cy="36" r="2" />
+            <circle class="f-brand" cx="248" cy="40" r="2" />
+            <circle class="f-accent" cx="246" cy="72" r="2" />
+            <text class="lbl dim xs" x="168" y="104">JFK  LHR  DXB</text>
+            <text class="lbl dim xs" x="168" y="120">ETA SLIP +6m</text>
+            <text class="lbl dim xs" x="168" y="136">FUEL +2.1t</text>
+            <text class="lbl dim xs" x="168" y="150">ADS-B  2.4s</text>
+          </g>
+          )}
+          {board.id === 'poker' && (
+          <g>
+            <ellipse class="frame" cx="88" cy="78" rx="78" ry="46" />
+            <ellipse class="ln thin" cx="88" cy="78" rx="58" ry="32" />
+            <text class="lbl dim xs" x="70" y="54">POT 84bb</text>
+            {POKER_BOARD.map((c, ci) => (
+              <g>
+                <rect class="panel" x={48 + ci * 22} y="64" width="18" height="24" rx="2" />
+                <text class:list={['lbl xs', (c.includes('♥') || c.includes('♦')) && 'dn']} x={51 + ci * 22} y="80">{c}</text>
+              </g>
+            ))}
+            <rect class="panel lit" x="70" y="96" width="18" height="24" rx="2" />
+            <text class="lbl xs" x="73" y="112">??</text>
+            {POKER_SEATS.map((s, si) => {
+              const a = (si / 6) * Math.PI * 2 - Math.PI / 2;
+              const x = 88 + Math.cos(a) * 72;
+              const y = 78 + Math.sin(a) * 42;
+              return (
+                <g>
+                  <circle class={s.act ? 'f-brand' : 'f-soft'} cx={f1(x)} cy={f1(y)} r="5" />
+                  <text class="lbl dim xs" x={f1(x - 10)} y={f1(y + 14)}>{s.n}</text>
+                </g>
+              );
+            })}
+            <text class="lbl dim xs" x="176" y="16">NLH 6-MAX</text>
+            <text class="lbl" x="176" y="32">HERO  A♣ Q♣</text>
+            <text class="lbl dim xs" x="176" y="46">EQ 61% · SPR 4.2</text>
+            <text class="lbl dim xs" x="176" y="62">ACTION</text>
+            {['UTG fold', 'HJ 2.5x', 'CO fold', 'BTN call', 'BB check'].map((a, ai) => (
+              <text class="lbl dim xs" x="176" y={76 + ai * 12}>{a}</text>
+            ))}
+            <text class="lbl dim xs" x="176" y="144">BB 2/4 · 6 LEFT</text>
+          </g>
+          )}
+          {board.id === 'shipping' && (
+          <g>
+            <text class="lbl em" x="8" y="10">12,418 TRACKED</text>
+            <text class="lbl dim xs" x="108" y="10">AIS  4s</text>
+            {SHIPS.map((s, si) => (
+              <g class="fade" style={`--d:${(si * 0.06).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={28 + si * 16}>{s[0]}</text>
+                <text class="lbl dim xs" x="92" y={28 + si * 16}>{s[1]}</text>
+                <text class="lbl xs" x="128" y={28 + si * 16}>{s[2]}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="104">SUEZ WAIT 18h</text>
+            <text class="lbl dim xs" x="8" y="118">MALACCA 214</text>
+            <text class="lbl dim xs" x="8" y="132">PANAMA 41</text>
+            <text class="lbl dim xs" x="8" y="148">BUNKER 612 $/t</text>
+            <text class="lbl dim xs" x="176" y="16">LANES</text>
+            <path class="ln thin" d="M180 36Q210 28 260 44" />
+            <path class="stroke-br" d="M180 52Q230 70 258 50" />
+            <path class="ln thin" d="M184 80Q220 92 256 78" />
+            <circle class="f-brand" cx="198" cy="40" r="2" />
+            <circle class="f-accent" cx="236" cy="64" r="2" />
+            <circle class="f-brand" cx="248" cy="82" r="2" />
+            <text class="lbl dim xs" x="176" y="110">TEU  24.1M</text>
+            <text class="lbl dim xs" x="176" y="124">DELAY +1.4d</text>
+            <text class="lbl dim xs" x="176" y="138">SC  38 vessels</text>
+            <text class="lbl dim xs" x="176" y="152">STORM  CAT-2</text>
+          </g>
+          )}
+          {board.id === 'esports' && (
+          <g>
+            <text class="lbl dim xs" x="8" y="12">DPC · GAME 2 · 28:14</text>
+            {ESPORTS.map((t, ti) => (
+              <g>
+                <text class="lbl em" x="8" y={32 + ti * 28}>{t.n}</text>
+                <text class="lbl xs" x="120" y={32 + ti * 28}>{t.k}/{t.d}</text>
+                <text class="lbl dim xs" x="168" y={32 + ti * 28}>{t.gold}</text>
+                <rect class="track" x="8" y={38 + ti * 28} width="160" height="5" rx="1" />
+                <rect class={ti === 0 ? 'f-br' : 'f-ac'} x="8" y={38 + ti * 28} width={ti === 0 ? 110 : 78} height="5" rx="1" />
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="96">ROS  AEG  TOR  SWP</text>
+            <rect class="f-br" x="8" y="102" width="22" height="8" rx="1" />
+            <rect class="f-soft" x="34" y="102" width="22" height="8" rx="1" />
+            <rect class="f-br" x="60" y="102" width="22" height="8" rx="1" />
+            <rect class="f-ac" x="86" y="102" width="22" height="8" rx="1" />
+            <text class="lbl dim xs" x="8" y="126">NET WORTH +4.7k</text>
+            <text class="lbl dim xs" x="8" y="140">TOWERS 6–3</text>
+            <text class="lbl dim xs" x="8" y="152">NEXT ROSHAN 2:40</text>
+            <text class="lbl dim xs" x="188" y="16">DRAFT</text>
+            {['AM', 'ES', 'SD', 'TIDE', 'CM'].map((h, hi) => (
+              <rect class="panel" x={188 + (hi % 3) * 28} y={24 + Math.floor(hi / 3) * 22} width="24" height="18" rx="2" />
+            ))}
+            {['AM', 'ES', 'SD', 'TIDE', 'CM'].map((h, hi) => (
+              <text class="lbl dim xs" x={192 + (hi % 3) * 28} y={36 + Math.floor(hi / 3) * 22}>{h}</text>
+            ))}
+            <text class="lbl dim xs" x="188" y="84">VS  TA  LINA  AXE</text>
+            <text class="lbl dim xs" x="188" y="100">OD  WR</text>
+            <text class="lbl dim xs" x="188" y="120">VIEW 184k</text>
+            <text class="lbl dim xs" x="188" y="136">ODDS 1.42</text>
+            <text class="lbl dim xs" x="188" y="152">BO3  1–0</text>
+          </g>
+          )}
+          {board.id === 'radar' && (
+          <g>
+            <circle class="ln thin" cx="76" cy="82" r="21" />
+            <circle class="ln thin" cx="76" cy="82" r="42" />
+            <circle class="ln" cx="76" cy="82" r="64" />
+            <circle class="tickring" cx="76" cy="82" r="64" stroke-dasharray="1.2 9.97" />
+            <path class="ln dash thin" d="M76 18V146M12 82H140" />
+            <text class="lbl dim xs" x="72" y="14">000</text>
+            <text class="lbl dim xs" x="132" y="80">090</text>
+            <text class="lbl dim xs" x="70" y="154">180</text>
+            <text class="lbl dim xs" x="6" y="80">270</text>
+            <text class="lbl dim xs" x="79" y="63">40</text>
+            <text class="lbl dim xs" x="79" y="42">80</text>
+            <text class="lbl dim xs" x="79" y="21">120</text>
+            <g class="sweep">
+              <path class="f-brand" opacity="0.05" d="M76 82L23.6 45.3A64 64 0 0 1 76 18Z" />
+              <path class="f-brand" opacity="0.13" d="M76 82L44 26.6A64 64 0 0 1 76 18Z" />
+              <path class="stroke-br" stroke-width="1.4" d="M76 82L76 18" />
+            </g>
+            {CONTACTS.map((c) => (
+              <g class="blip" style={`--d:${c.d}s`}>
+                <path class="vec" d={`M${c.x} ${c.y}l${c.vx} ${c.vy}`} />
+                {c.kind === 'hos' && (
+                  <rect class="ctc-hos" x={c.x - 2.6} y={c.y - 2.6} width="5.2" height="5.2" transform={`rotate(45 ${c.x} ${c.y})`} />
+                )}
+                {c.kind === 'frd' && <circle class="ctc-frd" cx={c.x} cy={c.y} r="2.8" />}
+                {c.kind === 'unk' && (
+                  <path class="ctc-unk" d={`M${c.x} ${c.y - 3.2}L${c.x + 3} ${c.y + 2.4}H${c.x - 3}Z`} />
+                )}
+                <text class:list={['lbl', 'xs', c.kind === 'hos' ? 'dn' : 'dim']} x={c.x + 4.5} y={c.y - 4}>{c.id}</text>
+                <text class="lbl dim xs" x={c.x + 4.5} y={c.y + 2.5}>{c.alt}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="150" y="12">TRK BRG RNG FL SPD</text>
+            {TRACK_TABLE.map((row, ri) => (
+              <g class="slide" style={`--d:${(ri * 0.07).toFixed(2)}s`}>
+                <text class:list={['lbl', 'xs', ri < 2 ? 'dn' : 'em']} x="150" y={24 + ri * 12}>{row[0]}</text>
+                <text class="lbl xs" x="182" y={24 + ri * 12}>{row[1]}°</text>
+                <text class="lbl xs" x="206" y={24 + ri * 12}>{row[2]}</text>
+                <text class="lbl xs" x="228" y={24 + ri * 12}>{row[3]}</text>
+                <text class="lbl xs" x="252" y={24 + ri * 12}>{row[4]}</text>
+              </g>
+            ))}
+            <path class="ln thin" d="M150 76H272" />
+            <text class="lbl dim xs" x="150" y="88">IFF MODE 5 · 2 NO-SQK</text>
+            <text class="lbl dim xs" x="150" y="100">EW BAND X</text>
+            {[8, 13, 6, 16, 10].map((h, ei) => (
+              <rect class:list={['grow-y', ei === 3 ? 'f-accent' : 'f-ink']} x={198 + ei * 8} y={102 - h} width="5" height={h} style={`--d:${(0.3 + ei * 0.06).toFixed(2)}s`} />
+            ))}
+            <text class="lbl dim xs" x="150" y="116">THREAT</text>
+            <rect class="track" x="182" y="110" width="88" height="5" rx="1" />
+            <rect class="f-accent grow-x" x="182" y="110" width="52" height="5" rx="1" style="--d:0.4s" />
+            <text class="lbl dim xs" x="150" y="132">EMCON A · SCAN 12 RPM · R14</text>
+            <text class="lbl dim xs" x="150" y="144">LINK-16 ✓ · JAM NIL · GPS P(Y)</text>
+          </g>
+          )}
+          {board.id === 'orbit' && (
+          <g>
+            <circle class="ln" cx="48" cy="84" r="34" />
+            <ellipse class="ln thin" cx="48" cy="84" rx="12" ry="34" />
+            <ellipse class="ln thin" cx="48" cy="84" rx="26" ry="34" />
+            <path class="ln thin" d="M14 84H82M18 70A34 12 0 0 1 78 70M18 98A34 12 0 0 0 78 98" />
+            <path class="f-soft" d="M48 50A34 34 0 0 1 48 118A12 34 0 0 0 48 50Z" />
+            <g class="orb-plane" style="transform-origin:48px 84px;transform:rotate(-24deg) scaleY(0.34)">
+              <circle class="ln dash thin" cx="48" cy="84" r="46" />
+              <g class="spin-var" style="--t:14s;transform-origin:48px 84px">
+                <circle class="f-brand" cx="94" cy="84" r="2" />
+              </g>
+            </g>
+            <g class="orb-plane" style="transform-origin:48px 84px;transform:rotate(32deg) scaleY(0.52)">
+              <circle class="ln dash thin" cx="48" cy="84" r="42" />
+              <g class="spin-var rev" style="--t:22s;transform-origin:48px 84px">
+                <circle class="f-accent" cx="90" cy="84" r="2.2" />
+              </g>
+            </g>
+            <text class="lbl xs" x="76" y="38">NX-3 · 547 KM</text>
+            <text class="lbl dim xs" x="72" y="124">REL-2 · 1,150 KM</text>
+            {ORBIT_MAP.map((d) => (
+              <path class="land land--sm" d={d} />
+            ))}
+            <path class="stroke-br draw" d={GT1} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-ac dash-flow" d={GT2} />
+            <circle class="path-rider f-brand" r="2" style={`offset-path: path('${GT1}')`} />
+            <path class="ctc-frd" d="M176 34l-3 5h6Z" />
+            <text class="lbl dim xs" x="182" y="38">GS-1</text>
+            <path class="ln dash thin" d="M104 46H248" opacity="0.4" />
+            <text class="lbl dim xs" x="104" y="14">GROUND TRACK · 2 REV</text>
+            <text class="lbl dim xs" x="104" y="86">EQ XING 14:38:04Z · ASC</text>
+            <text class="lbl em xs" x="8" y="132">NX-3 · NORAD 51044</text>
+            <text class="lbl dim xs" x="8" y="142">INC 53.2° · ALT 547 KM · ECC .0011</text>
+            <text class="lbl dim xs" x="8" y="152">VEL 7.61 KM/S · PERIOD 95.4 MIN</text>
+            <text class="lbl dim xs" x="130" y="132">AOS 14:41:22Z</text>
+            <text class="lbl dim xs" x="130" y="142">LOS 14:52:48Z</text>
+            <text class="lbl dim xs" x="130" y="152">DLINK 8.4 GHz ✓</text>
+            <circle class="ln thin" cx="243" cy="126" r="22" />
+            <circle class="ln thin" cx="243" cy="126" r="11" />
+            <path class="ln thin" d="M243 104V148M221 126H265" />
+            <path class="stroke-ac draw" d="M228 140Q243 96 259 134" pathLength="100" style="--d:0.4s" />
+            <circle class="f-accent" cx="243" cy="107.5" r="1.8" />
+            <text class="lbl dim xs" x="230" y="156">MAX EL 64°</text>
+          </g>
+          )}
+          {board.id === 'geo' && (
+          <g>
+            {GEO_MAP.map((d) => (
+              <path class="land" d={d} />
+            ))}
+            {ARCS.map((d, ai) => (
+              <path class="arc" d={d} style={`--d:${(ai * 0.2).toFixed(1)}s`} />
+            ))}
+            {HUBS.map((h) => (
+              <g>
+                <rect class="f-brand" x={h.x - 1.3} y={h.y - 1.3} width="2.6" height="2.6" />
+                <text class="lbl xs" x={h.x + 3} y={h.y - 2}>{h.n}</text>
+              </g>
+            ))}
+            {GEO_PINGS.map((pi, k) => (
+              <circle class="ping-ring" cx={HUBS[pi].x} cy={HUBS[pi].y} r="6" style={`--d:${(k * 0.7).toFixed(1)}s`} />
+            ))}
+            <text class="lbl dim xs" x="174" y="12">LINK · RTT · LOAD</text>
+            {GEO_LINKS.map((row, li) => (
+              <g class="slide" style={`--d:${(li * 0.07).toFixed(2)}s`}>
+                <text class="lbl xs" x="174" y={24 + li * 12}>{row[0]}</text>
+                <text class="lbl dim xs" x="212" y={24 + li * 12}>{row[1]}</text>
+                <rect class="track" x="236" y={19.5 + li * 12} width="36" height="4" rx="1" />
+                <rect class="f-br" x="236" y={19.5 + li * 12} width={row[2] as number} height="4" rx="1" />
+              </g>
+            ))}
+            <path class="ln thin" d="M174 76H272" />
+            <text class="lbl dim xs" x="174" y="88">SAT REL 99.97%</text>
+            <text class="lbl dim xs" x="174" y="99">PKT LOSS 0.02%</text>
+            <text class="lbl dim xs" x="174" y="110">JITTER 1.8 ms</text>
+            <text class="lbl em" x="174" y="128">UTC 14:32:08</text>
+            <text class="lbl dim xs" x="174" y="140">NYC 09:32 · TYO 23:32</text>
+            <text class="lbl dim xs" x="174" y="151">SYD 00:32 · LON 15:32</text>
+            <text class="lbl dim xs" x="6" y="118">AGG 4.2 Gb/s · 14 LINKS UP</text>
+            <path class="area fade" d={`${trafficLine}L166 152L6 152Z`} style="--d:0.4s" />
+            <path class="stroke-br draw" d={trafficLine} pathLength="100" style="--d:0.2s" />
+          </g>
+          )}
+          {board.id === 'avionics' && (
+          <g>
+            <text class="lbl xs em" x="44" y="15">SPD</text>
+            <text class="lbl xs em" x="66" y="15">LNAV</text>
+            <text class="lbl xs em" x="92" y="15">VNAV</text>
+            <text class="lbl xs up" x="118" y="15">AP1</text>
+            <path class="ln thin" d="M62 9V16M86 9V16M112 9V16" />
+            <clipPath id="att-clip">
+              <rect x="36" y="22" width="98" height="104" rx="3" />
+            </clipPath>
+            <g clip-path="url(#att-clip)">
+              <g class="horizon" style="transform-origin:85px 74px">
+                <rect class="sky" x="16" y="-60" width="138" height="134" />
+                <rect class="gnd" x="16" y="74" width="138" height="140" />
+                <path class="stroke-ink" stroke-width="1.4" d="M16 74H154" />
+                {PITCH.map((p) => (
+                  <g>
+                    <path class="stroke-ink" d={`M${85 - (p % 20 === 0 ? 14 : 8)} ${74 - p * 1.3}H${85 + (p % 20 === 0 ? 14 : 8)}`} />
+                    <text class="lbl xs" x={85 + (p % 20 === 0 ? 17 : 11)} y={76.5 - p * 1.3}>{Math.abs(p)}</text>
+                  </g>
+                ))}
+              </g>
+            </g>
+            <path class="ln" d="M53 38A38 38 0 0 1 117 38" />
+            {[-30, -20, -10, 0, 10, 20, 30].map((a) => (
+              <path
+                class="stroke-ink"
+                d={a === 0 ? 'M85 30V24' : 'M85 31V26'}
+                transform={`rotate(${a} 85 74)`}
+              />
+            ))}
+            <path class="f-ink" d="M85 33l-3.4 6h6.8Z" />
+            <path class="fd" d="M73 74H97M85 63V85" />
+            <path class="stroke-ink" stroke-width="2.4" d="M62 74h10v4M108 74H98v4" />
+            <circle class="f-ink" cx="85" cy="74" r="1.6" />
+            <rect class="frame" x="36" y="22" width="98" height="104" rx="3" />
+            <rect class="panel" x="8" y="22" width="24" height="104" rx="2" />
+            <g class="tape">
+              {SPEED_TAPE.map((v, si) => (
+                <g>
+                  <text class="lbl xs" x="12" y={33 + si * 16}>{v}</text>
+                  <path class="ln thin" d={`M28 ${30.5 + si * 16}h4`} />
+                </g>
+              ))}
+            </g>
+            <rect class="panel lit" x="8" y="66" width="26" height="15" />
+            <text class="lbl em" x="12" y="76.5">168</text>
+            <rect class="panel" x="138" y="22" width="30" height="104" rx="2" />
+            <g class="tape rev-tape">
+              {ALT_TAPE.map((v, ai2) => (
+                <g>
+                  <text class="lbl xs" x="143" y={33 + ai2 * 16}>{v}</text>
+                  <path class="ln thin" d={`M138 ${30.5 + ai2 * 16}h3`} />
+                </g>
+              ))}
+            </g>
+            <rect class="panel lit" x="136" y="66" width="33" height="15" />
+            <text class="lbl em" x="140" y="76.5">12,140</text>
+            <g class="hdg">
+              {HDG_TAPE.map((h) => (
+                <g>
+                  <text class="lbl xs" x={h.x} y="140">{h.v}</text>
+                  <path class="ln thin" d={`M${h.x + 3.5} 130v4`} />
+                  <path class="ln thin" d={`M${h.x + 15.5} 132v2`} />
+                </g>
+              ))}
+            </g>
+            <rect class="panel lit" x="74" y="128" width="22" height="14" />
+            <text class="lbl em" x="79" y="138">257</text>
+            <text class="lbl dim xs" x="36" y="152">ILS 27R · GS ◆ LOC ◆ · DH 200</text>
+            {[
+              { cx: 196, v: '94.2', egt: '612' },
+              { cx: 242, v: '94.0', egt: '608' },
+            ].map((g2, gi2) => (
+              <g class="fade" style={`--d:${(0.2 + gi2 * 0.1).toFixed(1)}s`}>
+                <path class="ln" d={`M${g2.cx - 13} 44A13 13 0 1 1 ${g2.cx + 13} 44`} transform={`rotate(35 ${g2.cx} 40)`} />
+                <path class="stroke-br" stroke-width="2" d={`M${g2.cx - 12} 45A13 13 0 0 1 ${g2.cx + 9} 30`} />
+                <path class="stroke-ink" stroke-width="1.4" d={`M${g2.cx} 40L${g2.cx + 9} 31`} />
+                <text class="lbl em" x={g2.cx - 8} y="58">{g2.v}</text>
+                <text class="lbl dim xs" x={g2.cx - 10} y="68">EGT {g2.egt}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="178" y="30">N1 %</text>
+            <text class="lbl dim xs" x="178" y="82">FUEL 8,420 KG</text>
+            {[0, 1, 2].map((t3) => (
+              <g>
+                <rect class="track" x={178 + t3 * 32} y="86" width="26" height="4" rx="1" />
+                <rect class="f-br" x={178 + t3 * 32} y="86" width={[20, 24, 19][t3]} height="4" rx="1" />
+              </g>
+            ))}
+            <circle class="ln thin" cx="223" cy="120" r="24" />
+            <circle class="tickring thin" cx="223" cy="120" r="24" stroke-dasharray="1 5.28" />
+            <path class="stroke-ac" stroke-width="1.2" d="M223 142V128L232 106" />
+            <path class="f-brand" d="M223 116l-3.4 7h6.8Z" />
+            <text class="lbl dim xs" x="236" y="102">DEXTA</text>
+            <text class="lbl dim xs" x="178" y="150">GS 342 · TAS 361 · WPT 10 NM</text>
+          </g>
+          )}
+          {board.id === 'model3d' && (
+          <g>
+            <ellipse class="ln dash thin" cx="88" cy="134" rx="54" ry="7" />
+            <g class="wobble" style="transform-origin:88px 80px">
+              <path class="bbox" d={bboxPath} />
+              <path class="mesh-b draw" d={meshPaths[2]} pathLength="100" style="--d:0.1s" />
+              <path class="mesh-m draw" d={meshPaths[1]} pathLength="100" style="--d:0.3s" />
+              <path class="mesh-f draw" d={meshPaths[0]} pathLength="100" style="--d:0.5s" />
+              {meshVerts.map((v) => (
+                <circle class="f-brand pop" cx={v.X} cy={v.Y} r="1.1" style="--d:0.9s" />
+              ))}
+            </g>
+            <path class="stroke-br" d="M22 140h16M22 140v-15M22 140l-8 7" />
+            <text class="lbl xs up" x="40" y="143">x</text>
+            <text class="lbl xs up" x="24" y="123">y</text>
+            <text class="lbl xs up" x="10" y="152">z</text>
+            <path class="dim-line" d="M50 150H126M50 147v6M126 147v6" />
+            <text class="lbl dim xs" x="78" y="147">Ø 76.0</text>
+            <text class="lbl em xs" x="178" y="14">ico_r1.stl · mm</text>
+            <text class="lbl dim xs" x="178" y="28">VERTS 42</text>
+            <text class="lbl dim xs" x="228" y="28">TRIS 80</text>
+            <text class="lbl dim xs" x="178" y="39">EDGES 120</text>
+            <text class="lbl dim xs" x="228" y="39">GENUS 0</text>
+            <path class="ln thin" d="M178 46H272" />
+            <text class="lbl dim xs" x="178" y="58">ROT MATRIX</text>
+            {MTX.map((row, mi) => (
+              <g class="fade" style={`--d:${(0.2 + mi * 0.08).toFixed(2)}s`}>
+                {row.map((v, vi) => (
+                  <text class="lbl xs" x={178 + vi * 32} y={70 + mi * 11}>{v}</text>
+                ))}
+              </g>
+            ))}
+            <path class="ln thin" d="M178 102H272" />
+            <text class="lbl dim xs" x="178" y="114">NORMALS ✓ · MANIFOLD ✓</text>
+            <text class="lbl dim xs" x="178" y="126">DECIMATE 38%</text>
+            <rect class="track" x="178" y="130" width="94" height="4" rx="1" />
+            <rect class="f-brand grow-x" x="178" y="130" width="36" height="4" rx="1" style="--d:0.5s" />
+            <text class="lbl dim xs" x="178" y="146">AREA 12.41 · VOL 3.92</text>
+            <text class="lbl dim xs" x="178" y="156">ISO 10303 · ORTHO</text>
+          </g>
+          )}
+          {board.id === 'signals' && (
+          <g>
+            <rect class="frame" x="8" y="10" width="162" height="62" rx="2" />
+            <path class="ln dash thin" d="M8 26H170M8 42H170M8 58H170" />
+            <text class="lbl dim xs" x="11" y="24">-20</text>
+            <text class="lbl dim xs" x="11" y="40">-40</text>
+            <text class="lbl dim xs" x="11" y="56">-60</text>
+            {FFT.map((h, fi) => (
+              <rect
+                class:list={['eq-bar', fi === 14 || fi === 28 ? 'f-brand' : 'f-br']}
+                x={12 + fi * 4}
+                y={70 - h}
+                width="3"
+                height={h}
+                style={`--d:${((fi % 7) * 0.11).toFixed(2)}s;--t:${(0.8 + (fi % 5) * 0.13).toFixed(2)}s;--s:0.82`}
+              />
+            ))}
+            <path class="stroke-dim" d={fftHold} />
+            <path class="ln dash acc" d="M68 12V70M124 12V70" />
+            <text class="lbl xs dn" x="52" y="8">14.230M</text>
+            <text class="lbl xs dn" x="110" y="8">18.062M</text>
+            {WF.map((c) => (
+              <rect class:list={['wf-row', `w${c.k}`]} x={c.x} y={c.y} width="7.4" height="7.2" style={`--d:${(c.r * 0.24).toFixed(2)}s`} />
+            ))}
+            <text class="lbl dim xs" x="8" y="152">WATERFALL 8s · RBW 23 Hz · AVG 8</text>
+            <rect class="frame" x="178" y="10" width="52" height="52" rx="2" />
+            <path class="ln thin" d="M204 10V62M178 36H230" />
+            {QPSK.map((q) => (
+              <circle class="f-brand" opacity="0.85" cx={q.x} cy={q.y} r="1.2" />
+            ))}
+            <text class="lbl dim xs" x="238" y="20">SNR 21.4</text>
+            <text class="lbl dim xs" x="238" y="32">EVM 3.1%</text>
+            <text class="lbl dim xs" x="238" y="44">CFO +12Hz</text>
+            <text class="lbl dim xs" x="238" y="56">FEC 7/8</text>
+            <text class="lbl xs" x="178" y="74">QPSK 2.4 MSYM · SYNC ✓</text>
+            <text class="lbl dim xs" x="178" y="88">BER 2.4e-6 · AGC −18 dB</text>
+            <rect class="track" x="178" y="93" width="94" height="4" rx="1" />
+            <rect class="f-br grow-x" x="178" y="93" width="61" height="4" rx="1" style="--d:0.4s" />
+            <text class="lbl dim xs" x="178" y="110">DF BRG 214° ±3°</text>
+            <circle class="ln thin" cx="252" cy="128" r="16" />
+            <path class="stroke-ac" stroke-width="1.2" d="M252 128L243 115" />
+            <circle class="f-accent" cx="243" cy="115" r="1.6" />
+            <text class="lbl dim xs" x="178" y="126">SCAN 2–30 MHz</text>
+            <text class="lbl dim xs" x="178" y="138">HITS 14 · NEW 2</text>
+            <text class="lbl dim xs" x="178" y="152">REC ● 96 kHz IQ</text>
+          </g>
+          )}
+          {board.id === 'ai' && (
+          <g>
+            <circle class="f-brand" cx="10" cy="8" r="2" />
+            <text class="lbl dim xs" x="16" y="10">nexow-1 · ctx 128k/200k · temp 0.2 · stream</text>
+            <rect class="panel lit" x="64" y="16" width="114" height="24" rx="4" />
+            <text class="lbl xs" x="70" y="26">scan 14 markets, alert on</text>
+            <text class="lbl xs" x="70" y="35">2σ moves within 60s</text>
+            {TOOL_ROWS.map((row, ti) => (
+              <g class="slide" style={`--d:${(0.15 + ti * 0.14).toFixed(2)}s`}>
+                <rect class="panel" x="8" y={46 + ti * 15} width="140" height="12" rx="2" />
+                <circle class:list={[ti === 2 ? 'f-accent' : 'f-brand']} cx="15" cy={52 + ti * 15} r="1.7" />
+                <text class="lbl xs" x="21" y={54.5 + ti * 15}>{row[0]}</text>
+                <text class="lbl dim xs" x="112" y={54.5 + ti * 15}>{row[1]}</text>
+              </g>
+            ))}
+            <text class="lbl xs" x="8" y="102">Watching 14 tickers on a 60s</text>
+            <text class="lbl xs" x="8" y="112">window · 2 alerts armed:</text>
+            <text class="lbl xs up" x="8" y="124">▸ NVDA vol spike +2.3σ</text>
+            <text class="lbl xs dn" x="8" y="134">▸ BTC funding flip −2.1σ</text>
+            <rect class="caret f-brand" x="96" y="128" width="3.5" height="7" />
+            <rect class="panel" x="8" y="142" width="170" height="13" rx="3" />
+            <text class="lbl dim xs" x="14" y="151">reply…</text>
+            <path class="f-brand" d="M170 145l6 3.5-6 3.5Z" />
+            <text class="lbl dim xs" x="186" y="12">TOK/S</text>
+            <text class="lbl em" x="246" y="12">182</text>
+            <path class="stroke-br draw" d={SPARK} pathLength="100" style="--d:0.2s" />
+            <text class="lbl dim xs" x="186" y="48">LAT p50 320ms</text>
+            {LAT_HIST.map((h, li2) => (
+              <rect class="f-br grow-y" x={252 + li2 * 4.5} y={50 - h} width="3" height={h} style={`--d:${(0.3 + li2 * 0.05).toFixed(2)}s`} />
+            ))}
+            <path class="ln thin" d="M186 56H272" />
+            <text class="lbl dim xs" x="186" y="68">CALLS 7 · TOOLS 3</text>
+            <text class="lbl dim xs" x="186" y="80">TOKENS 4,182</text>
+            <text class="lbl dim xs" x="186" y="92">COST $0.0041</text>
+            <text class="lbl dim xs" x="186" y="104">CACHE HIT 82%</text>
+            <path class="ln thin" d="M186 110H272" />
+            <text class="lbl dim xs" x="186" y="122">GUARDRAILS ✓</text>
+            <text class="lbl dim xs" x="186" y="134">MEM 12 FACTS</text>
+            <text class="lbl dim xs" x="186" y="146">TRACE #a41f92</text>
+          </g>
+          )}
+          {board.id === 'math' && (
+          <g>
+            <rect class="frame" x="8" y="8" width="160" height="144" rx="2" />
+            <path class="ln dash thin" d="M8 44H168M8 80H168M8 116H168M48 8V152M88 8V152M128 8V152" />
+            <path class="stroke-br draw-loop" d={lorenzPath} pathLength="100" />
+            <text class="lbl dim xs" x="12" y="149">x–z PHASE SPACE · RK4 dt=5e-3</text>
+            <text class="lbl em" x="176" y="16">ẋ = σ(y − x)</text>
+            <text class="lbl em" x="176" y="30">ẏ = x(ρ − z) − y</text>
+            <text class="lbl em" x="176" y="44">ż = xy − βz</text>
+            <text class="lbl dim xs" x="176" y="57">σ=10 · ρ=28 · β=8/3</text>
+            <path class="ln thin" d="M176 63H272" />
+            <text class="lbl xs up" x="176" y="75">λ₁ +0.906</text>
+            <text class="lbl dim xs" x="228" y="75">t +41.2s</text>
+            <text class="lbl dim xs" x="176" y="87">λ₂ 0.000 · λ₃ −14.57</text>
+            <text class="lbl dim xs" x="176" y="99">D_KY 2.062 · CHAOTIC</text>
+            <path class="ln thin" d="M176 105H272" />
+            {XHIST.map((h, xi) => (
+              <rect class:list={['grow-y', xi === 3 || xi === 9 ? 'f-brand' : 'f-br']} x={176 + xi * 8} y={138 - h} width="6" height={h} style={`--d:${(0.2 + xi * 0.04).toFixed(2)}s`} />
+            ))}
+            <path class="ln thin" d="M176 139H272" />
+            <text class="lbl dim xs" x="176" y="150">P(x) BIMODAL · N=4,200</text>
+          </g>
+          )}
+          {board.id === 'neural' && (
+          <g>
+            {NEDGES.map((d) => (
+              <path class="nedge" d={d} />
+            ))}
+            {NEDGES.map((d, ni) => (
+              <path class="nedge pulse" d={d} style={`--d:${(ni * 0.55).toFixed(2)}s`} />
+            ))}
+            {NLAYERS.map((layer) => layer.ys.map((y) => <circle class="node" cx={layer.x} cy={y} r="2.6" />))}
+            <text class="lbl dim xs" x="14" y="96">in</text>
+            <text class="lbl dim xs" x="44" y="96">h1</text>
+            <text class="lbl dim xs" x="74" y="96">h2</text>
+            <text class="lbl dim xs" x="102" y="96">out</text>
+            <rect class="frame" x="128" y="10" width="144" height="74" rx="2" />
+            <path class="ln dash thin" d="M128 34H272M128 58H272" />
+            <text class="lbl dim xs" x="131" y="20">2.0</text>
+            <text class="lbl dim xs" x="131" y="44">1.0</text>
+            <text class="lbl dim xs" x="131" y="68">0.3</text>
+            <path class="stroke-dim draw" d={valPts} pathLength="100" style="--d:0.3s" />
+            <path class="stroke-br draw" d={lossPts} pathLength="100" style="--d:0.15s" />
+            <text class="lbl em xs" x="216" y="20">EPOCH 47/100</text>
+            <text class="lbl xs up" x="216" y="30">loss 0.0182</text>
+            <text class="lbl dim xs" x="216" y="40">val 0.0231</text>
+            <text class="lbl dim xs" x="8" y="112">BATCH 512 · BF16 · ZeRO-3</text>
+            <text class="lbl dim xs" x="8" y="124">GRAD 1.24 · CLIP 1.0</text>
+            <text class="lbl dim xs" x="8" y="136">TOK/S 412k · MFU 48%</text>
+            <text class="lbl dim xs" x="8" y="148">CKPT 18.4k ✓ · EMA ON</text>
+            <rect class="track" x="128" y="90" width="144" height="4" rx="1" />
+            <rect class="f-brand grow-x" x="128" y="90" width="66" height="4" rx="1" style="--d:0.4s" />
+            {GPUS.map((h, ui) => (
+              <g>
+                <rect class="f-br grow-y" x={128 + ui * 12} y={134 - h} width="8" height={h} style={`--d:${(0.2 + ui * 0.05).toFixed(2)}s`} />
+                <text class="lbl dim xs" x={130 + ui * 12} y="142">{ui}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="128" y="152">GPU 92% · MEM 71/80G · 8×</text>
+            <text class="lbl dim xs" x="226" y="142">LR 2.4e-4</text>
+            <text class="lbl dim xs" x="226" y="152">COS · WD 0.1</text>
+          </g>
+          )}
+          {board.id === 'network' && (
+          <g>
+            {LINKS.map(([a, b]) => (
+              <path class="ln" d={`M${NODES[a].x} ${NODES[a].y + 4}L${NODES[b].x} ${NODES[b].y - 4}`} />
+            ))}
+            <path class="ln dash thin" d="M50 52H118" />
+            {PKTS.map((p) => (
+              <circle class="pkt f-brand" cx={p.x} cy={p.y} r="1.6" style={`--tx:${p.tx}px;--ty:${p.ty - 8}px;--t:${p.t}s;--d:${p.d}s`} />
+            ))}
+            {NODES.map((n, ni2) => (
+              <g>
+                <rect class="panel" x={n.x - n.w / 2} y={n.y - 4} width={n.w} height="8" rx="1.5" />
+                <circle class:list={['led', ni2 === 6 ? 'f-accent' : 'f-brand']} cx={n.x + n.w / 2 - 2.5} cy={n.y} r="1.2" style={`--d:${(ni2 * 0.3).toFixed(1)}s`} />
+                <text class="lbl dim xs" x={n.x - n.w / 2} y={n.y - 7}>{n.n}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="178" y="12">P99 MATRIX · ms</text>
+            {HEAT.map((c) => (
+              <rect class:list={['pop', `w${c.k}`]} x={c.x} y={c.y} width="10" height="9.5" rx="1" style="--d:0.2s" />
+            ))}
+            {['us', 'eu', 'ap', 'sa'].map((rg, ri2) => (
+              <text class="lbl dim xs" x="170" y={23 + ri2 * 11}>{rg}</text>
+            ))}
+            <text class="lbl xs dn" x="178" y="72">▲ e-04 p99 84ms · reroute</text>
+            <text class="lbl dim xs" x="178" y="84">BGP 4/4 · OSPF ✓ · MTU OK</text>
+            <text class="lbl dim xs" x="178" y="96">FAILOVER ARMED · N+1</text>
+            <text class="lbl dim xs" x="8" y="112">IN 4.2 Gb/s · OUT 1.8 Gb/s · DROP 0.00%</text>
+            <path class="area fade" d={netInArea} style="--d:0.3s" />
+            <path class="area-ac fade" d={netOutArea} style="--d:0.45s" />
+            <path class="ln thin" d="M8 148H272" />
+          </g>
+          )}
+          {board.id === 'play' && (
+          <g>
+            <rect class="frame" x="8" y="8" width="188" height="142" rx="2" />
+            <path class="corner" d="M12 18v-6h6M192 18v-6h-6M12 140v6h6M192 140v6h-6" />
+            <path class="ln dash thin" d="M8 44H196M8 80H196M8 116H196M50 8V150M92 8V150M134 8V150M176 8V150" />
+            <path class="contour" d="M34 44C52 26 84 30 94 46S74 74 52 68 20 60 34 44Z" />
+            <path class="contour" d="M128 108C142 96 168 100 176 114S160 138 140 132 116 120 128 108Z" />
+            <text class="lbl dim xs" x="12" y="18">GRID QJ-42</text>
+            <path class="stroke-ink" d="M186 22v-8m0 0l-3 3m3-3l3 3" />
+            <text class="lbl dim xs" x="180" y="30">N</text>
+            <path class="wp" d="M40 110L76 92L108 78L138 58" />
+            <g class="patrol">
+              <path class="ctc-frd" d="M40 105.5l-3.8 7h7.6Z" />
+            </g>
+            <path class="ctc-frd" d="M58 120.5l-3.8 7h7.6Z" />
+            <path class="ctc-frd" d="M30 124.5l-3.8 7h7.6Z" />
+            <path class="sensor-cone" d="M58 124L108 60L128 84Z" />
+            {[
+              [120, 60], [140, 84], [102, 44], [162, 70],
+            ].map(([ex, ey], ei2) => (
+              <g class="blip" style={`--d:${(-ei2 * 1.2).toFixed(1)}s`}>
+                <rect class="ctc-hos" x={ex - 2.4} y={ey - 2.4} width="4.8" height="4.8" transform={`rotate(45 ${ex} ${ey})`} />
+              </g>
+            ))}
+            <path class="ctc-obj" d="M150 33l3.5 6-3.5 6-3.5-6Z" transform="translate(0 1)" />
+            <circle class="ping-ring" cx="150" cy="40" r="7" style="--d:0.4s" />
+            <text class="lbl xs dn" x="156" y="38">OBJ-2</text>
+            <text class="lbl dim xs" x="204" y="16">SQUAD</text>
+            {[
+              ['A1', 74],
+              ['A2', 52],
+              ['B1', 82],
+            ].map((row, si2) => (
+              <g class="slide" style={`--d:${(si2 * 0.08).toFixed(2)}s`}>
+                <text class="lbl xs" x="204" y={30 + si2 * 12}>{row[0]}</text>
+                <rect class="track" x="218" y={25 + si2 * 12} width="54" height="4" rx="1" />
+                <rect class="f-br" x="218" y={25 + si2 * 12} width={((row[1] as number) * 54) / 100} height="4" rx="1" />
+              </g>
+            ))}
+            <path class="ln thin" d="M204 62H272" />
+            <text class="lbl dim xs" x="204" y="74">OBJ 2/3 · ENY 4</text>
+            <text class="lbl dim xs" x="204" y="86">THREAT</text>
+            <rect class="track" x="234" y="81" width="38" height="4" rx="1" />
+            <rect class="f-accent" x="234" y="81" width="21" height="4" rx="1" />
+            <text class="lbl dim xs" x="204" y="98">AMMO 124 · NADE 2</text>
+            {[0, 1, 2, 3].map((ci2) => (
+              <g>
+                <rect class="panel" x={204 + ci2 * 14} y="104" width="11" height="11" rx="1.5" />
+                {ci2 === 1 && (
+                  <circle class="cool" cx={209.5 + ci2 * 14} cy="109.5" r="4" pathLength="100" stroke-dasharray="100" transform={`rotate(-90 ${209.5 + ci2 * 14} 109.5)`} />
+                )}
+              </g>
+            ))}
+            <rect class="frame" x="204" y="122" width="68" height="28" rx="1.5" />
+            <rect class="f-soft" x="208" y="126" width="14" height="8" />
+            <rect class="f-soft" x="244" y="136" width="18" height="9" />
+            <circle class="f-brand" cx="216" cy="142" r="1.2" />
+            <circle class="f-brand" cx="222" cy="139" r="1.2" />
+            <circle class="f-accent" cx="248" cy="130" r="1.2" />
+            <circle class="f-accent" cx="256" cy="133" r="1.2" />
+            <rect class="ln thin" x="230" y="128" width="16" height="12" />
+          </g>
+          )}
+          {board.id === 'portfolio' && (
+          <g>
+            <text class="lbl em" x="8" y="9">NAV 24.81M</text>
+            <text class="lbl up" x="60" y="9">+212k D</text>
+            <circle class="ln thin" cx="46" cy="60" r="25" />
+            {ALLOC_SEGS.map((a, si) => (
+              <circle
+                class:list={['seg', a.cls]}
+                cx="46"
+                cy="60"
+                r="25"
+                pathLength="100"
+                stroke-dasharray={`${a.pct} ${100 - a.pct}`}
+                stroke-dashoffset={a.off}
+                transform="rotate(-90 46 60)"
+                style={`--d:${(0.15 + si * 0.16).toFixed(2)}s`}
+              />
+            ))}
+            <text class="lbl em xs" x="37" y="59">EQ 44%</text>
+            <text class="lbl dim xs" x="36" y="67">β 0.84</text>
+            {ALLOC.map((a, li) => (
+              <g class="slide" style={`--d:${(0.3 + li * 0.07).toFixed(2)}s`}>
+                <rect class={a.sw} x="8" y={100 + li * 10} width="4" height="4" rx="0.8" />
+                <text class="lbl xs" x="16" y={104.5 + li * 10}>{a.n}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="8" y="150">DRIFT 1.8% · REBAL OK</text>
+            <rect class="frame" x="96" y="10" width="176" height="66" rx="2" />
+            <path class="ln dash thin" d="M96 26H272M96 42H272M96 58H272" />
+            <path class="area fade" d={`${navLine}L272 76L98 76Z`} style="--d:0.45s" />
+            <path class="stroke-dim draw" d={benchLine} pathLength="100" style="--d:0.3s" />
+            <path class="stroke-br draw" d={navLine} pathLength="100" style="--d:0.15s" />
+            <rect class="f-accent" x="246" y="18" width="24" height="9" rx="1" />
+            <text class="lbl tag" x="248.5" y="25">+24.1%</text>
+            <text class="lbl dim xs" x="98" y="22">NAV vs BENCH · 30D</text>
+            <path class="ln thin" d="M96 84H272" />
+            <path class="area-ac fade" d={`${ddLine}L272 84L98 84Z`} style="--d:0.55s" />
+            <text class="lbl dim xs" x="98" y="100">DD −8.4% MAX</text>
+            <text class="lbl dim xs" x="168" y="100">TE 4.1% · IR 1.9 · SHARPE 2.1</text>
+            <text class="lbl dim xs" x="98" y="112">POS · WEIGHT · P&L</text>
+            {HOLDINGS.map((h, hi) => (
+              <g class="slide" style={`--d:${(0.2 + hi * 0.07).toFixed(2)}s`}>
+                <text class="lbl xs" x="98" y={124 + hi * 10}>{h.s}</text>
+                <rect class="track" x="126" y={119.8 + hi * 10} width="56" height="4" rx="1" />
+                <rect class="f-br" x="126" y={119.8 + hi * 10} width={f1(h.w * 6.2)} height="4" rx="1" />
+                <text class="lbl dim xs" x="188" y={124 + hi * 10}>{h.w}%</text>
+                <text class:list={['lbl', 'xs', h.up ? 'up' : 'dn']} x="224" y={124 + hi * 10}>{h.pl}</text>
+              </g>
+            ))}
+          </g>
+          )}
+          {board.id === 'options' && (
+          <g>
+            <rect class="f-accent" x="8" y="6" width="38" height="9" rx="1" />
+            <text class="lbl tag" x="10.5" y="13">GEX −1.2B</text>
+            <text class="lbl dim xs" x="98" y="12">SPOT 5,214</text>
+            <path class="ln thin" d="M8 44H164" />
+            <path class="ln dash acc" d="M98 14V114" />
+            {GEX.map((g3, gi3) => (
+              <rect
+                class:list={['grow-y', g3 >= 0 ? 'f-br' : 'f-ac']}
+                x={12 + gi3 * 9.4}
+                y={g3 >= 0 ? f1(44 - g3 * 0.75) : 44}
+                width="6"
+                height={f1(Math.abs(g3) * 0.75)}
+                rx="0.4"
+                style={`--d:${(gi3 * 0.04).toFixed(2)}s`}
+              />
+            ))}
+            <path class="ln dash thin" d="M44 16V66" />
+            <text class="lbl dim xs" x="12" y="72">FLIP 5,180 · PIN 5,200</text>
+            <path class="stroke-br draw" d={smileLine} pathLength="100" style="--d:0.3s" />
+            <circle class="f-brand pop" cx="106" cy="101" r="1.6" style="--d:0.9s" />
+            <text class="lbl dim xs" x="12" y="86">IV SMILE · RR25 −2.4 · FLY 0.8</text>
+            <path class="stroke-ac draw" d={termLine} pathLength="100" style="--d:0.5s" />
+            {['0D', '1M', '3M', '6M', '1Y'].map((tl, tli) => (
+              <text class="lbl dim xs" x={11 + tli * 35} y="156">{tl}</text>
+            ))}
+            <text class="lbl dim xs" x="12" y="124">TERM STRUCTURE · CONTANGO</text>
+            <text class="lbl dim xs" x="176" y="10">GREEKS · NET</text>
+            {GREEKS.map((row, gr) => (
+              <g class="slide" style={`--d:${(gr * 0.07).toFixed(2)}s`}>
+                <text class="lbl em" x="176" y={24 + gr * 12}>{row.g}</text>
+                <text class="lbl xs" x="188" y={24 + gr * 12}>{row.v}</text>
+                <rect class="track" x="224" y={19.6 + gr * 12} width="48" height="4" rx="1" />
+                <rect
+                  class:list={['grow-x', row.neg ? 'f-ac' : 'f-br']}
+                  x="224"
+                  y={19.6 + gr * 12}
+                  width={row.w}
+                  height="4"
+                  rx="1"
+                  style={`--d:${(0.2 + gr * 0.07).toFixed(2)}s`}
+                />
+              </g>
+            ))}
+            <path class="ln thin" d="M176 74H272" />
+            <text class="lbl dim xs" x="176" y="86">IVR 62 · VIX 13.8</text>
+            <path class="ln" d="M199 124A25 25 0 0 1 249 124" />
+            <path class="tickring thin" d="M199 124A25 25 0 0 1 249 124" stroke-dasharray="1 5.1" />
+            <path class="stroke-br" stroke-width="2.4" d="M199 124A25 25 0 0 1 224 99" />
+            <path class="needle stroke-ac" stroke-width="1.4" d="M224 124L224 103" style="transform-origin:224px 124px;--a0:-34deg;--a1:22deg;--t:8s" />
+            <circle class="f-ink" cx="224" cy="124" r="1.8" />
+            <text class="lbl em" x="208" y="136">P/C 1.38</text>
+            <text class="lbl dim xs" x="176" y="147">MAX PAIN 5,200</text>
+            <text class="lbl dim xs" x="176" y="156">OI 2.4M · 0DTE 46%</text>
+          </g>
+          )}
+          {board.id === 'macro' && (
+          <g>
+            <rect class="frame" x="8" y="12" width="140" height="76" rx="2" />
+            <path class="ln dash thin" d="M8 30H148M8 52H148M8 74H148" />
+            <text class="lbl dim xs" x="136" y="28">5.2</text>
+            <text class="lbl dim xs" x="136" y="50">4.6</text>
+            <text class="lbl dim xs" x="136" y="72">3.9</text>
+            <path class="stroke-dim draw" d={curveLine(MACRO_AGO)} pathLength="100" style="--d:0.35s" />
+            <path class="stroke-br draw" d={curveLine(MACRO_NOW)} pathLength="100" style="--d:0.15s" />
+            {CURVE_X.map((cx2, ci3) => (
+              <circle class="f-brand pop" cx={cx2} cy={f1(84 - (MACRO_NOW[ci3] - 3.6) * 32)} r="1.3" style={`--d:${(0.6 + ci3 * 0.05).toFixed(2)}s`} />
+            ))}
+            {[['3M', 12], ['1Y', 37], ['5Y', 82], ['10Y', 108], ['30Y', 138]].map(([tn, tx]) => (
+              <text class="lbl dim xs" x={tx} y="96">{tn}</text>
+            ))}
+            <text class="lbl xs dn" x="8" y="108">2s10s −24bp · INV 412d</text>
+            {CPI_PATH.map((v, cpi) => (
+              <rect
+                class:list={['grow-y', v > 4 ? 'f-ac' : 'f-br']}
+                x={8 + cpi * 8.4}
+                y={f1(146 - v * 3.6)}
+                width="5.6"
+                height={f1(v * 3.6)}
+                rx="0.4"
+                style={`--d:${(0.15 + cpi * 0.04).toFixed(2)}s`}
+              />
+            ))}
+            <path class="ln dash acc" d="M8 138.8H110" />
+            <text class="lbl dim xs" x="8" y="155">CPI YoY 3.2% ← PEAK 9.1 · TGT 2.0</text>
+            <text class="lbl dim xs" x="154" y="10">POLICY RATES</text>
+            {CB_ROWS.map((row, cb) => (
+              <g class="slide" style={`--d:${(cb * 0.07).toFixed(2)}s`}>
+                <text class="lbl xs" x="154" y={21 + cb * 11}>{row[0]}</text>
+                <text class="lbl em xs" x="180" y={21 + cb * 11}>{row[1]}</text>
+                <text class:list={['lbl', 'xs', row[2] === 'HOLD' ? 'dim' : row[2].startsWith('−') ? 'dn' : 'up']} x="206" y={21 + cb * 11}>{row[2]}</text>
+              </g>
+            ))}
+            <path class="ln thin" d="M154 60H272" />
+            <text class="lbl em" x="154" y="74">DXY 104.2</text>
+            <path class="stroke-br draw" d={dxySpark} pathLength="100" style="--d:0.4s" />
+            <text class="lbl dim xs" x="154" y="88">US10Y 4.18 · BUND 2.42</text>
+            <text class="lbl dim xs" x="154" y="99">OIL 82.4 · GOLD 2,412</text>
+            <path class="ln thin" d="M154 106H272" />
+            <text class="lbl dim xs" x="154" y="117">P(RECESSION 12M)</text>
+            <text class="lbl em" x="246" y="117">32%</text>
+            <rect class="track" x="154" y="121" width="118" height="4" rx="1" />
+            <rect class="f-ac grow-x" x="154" y="121" width="38" height="4" rx="1" style="--d:0.4s" />
+            <text class="lbl dim xs" x="154" y="137">NOWCAST GDP +2.1%</text>
+            <text class="lbl dim xs" x="154" y="148">FOMC −6d · NFP FRI · CPI −12d</text>
+          </g>
+          )}
+          {board.id === 'orderflow' && (
+          <g>
+            <text class="lbl dim xs" x="8" y="8">TIME&SALES · ES</text>
+            <rect class="frame" x="8" y="12" width="110" height="104" rx="2" />
+            <clipPath id="tape-clip">
+              <rect x="9" y="13" width="108" height="102" />
+            </clipPath>
+            <g clip-path="url(#tape-clip)">
+              <g class="tape-roll" style="--sh:-104px;--t:7s">
+                {TAPE_ROWS.map((row, tr) => (
+                  <g>
+                    {row.big && <rect class="f-br hot" x="10" y={14 + tr * 13} width="106" height="11" rx="1" style={`--d:${((tr % 8) * 0.3).toFixed(1)}s`} />}
+                    <text class="lbl dim xs" x="13" y={22 + tr * 13}>{row.t}</text>
+                    <text class:list={['lbl', 'xs', row.up ? 'up' : 'dn']} x="38" y={22 + tr * 13}>{row.px}</text>
+                    <text class="lbl xs" x="96" y={22 + tr * 13}>{row.sz}</text>
+                  </g>
+                ))}
+              </g>
+            </g>
+            <text class="lbl xs up" x="8" y="128">▲ SWEEP 412 @ 5214.50</text>
+            <text class="lbl dim xs" x="8" y="140">ICEBERG 5212.00 ×4</text>
+            <text class="lbl dim xs" x="8" y="152">TAPE 84 PRT/S · P/S 1.4</text>
+            <text class="lbl dim xs" x="128" y="8">DOM · HEAT</text>
+            {DOM_ROWS.map((row, dr) => (
+              <g>
+                <rect class:list={['wf-row', `w${row.bid}`]} x="128" y={14 + dr * 11} width="22" height="9" rx="1" style={`--d:${(dr * 0.24).toFixed(2)}s`} />
+                <rect class:list={['wf-row', `w${row.ask}`]} x="174" y={14 + dr * 11} width="22" height="9" rx="1" style={`--d:${(dr * 0.24 + 0.9).toFixed(2)}s`} />
+                <text class="lbl dim xs" x="152" y={21 + dr * 11}>{row.px}</text>
+              </g>
+            ))}
+            <path class="ln dash acc" d="M128 57.5H196" />
+            <text class="lbl dim xs" x="128" y="112">IMB 64% BID</text>
+            <rect class="track" x="128" y="116" width="68" height="4" rx="1" />
+            <rect class="f-br grow-x" x="128" y="116" width="43" height="4" rx="1" style="--d:0.35s" />
+            <text class="lbl dim xs" x="128" y="132">VPOC 5212.75</text>
+            <text class="lbl dim xs" x="128" y="143">VAH 5218.25</text>
+            <text class="lbl dim xs" x="128" y="154">VAL 5206.50</text>
+            <text class="lbl em" x="204" y="8">CVD +14.2k</text>
+            <rect class="frame" x="204" y="12" width="68" height="46" rx="2" />
+            <path class="stroke-br draw" d={cvdLine} pathLength="100" style="--d:0.2s" />
+            <circle class="ping-ring" cx="240.4" cy="31.6" r="5" style="--d:0.6s" />
+            <text class="lbl xs dn" x="246" y="30">LIQ 2.4M</text>
+            <text class="lbl dim xs" x="204" y="68">Δ / BAR</text>
+            {BAR_DELTA.map((v, bd) => (
+              <rect
+                class:list={['grow-y', v >= 0 ? 'f-br' : 'f-ac']}
+                x={204 + bd * 7}
+                y={v >= 0 ? f1(94 - v * 2.2) : 94}
+                width="4.6"
+                height={f1(Math.abs(v) * 2.2)}
+                rx="0.4"
+                style={`--d:${(0.2 + bd * 0.05).toFixed(2)}s`}
+              />
+            ))}
+            <path class="ln thin" d="M204 94H272" />
+            <text class="lbl xs up" x="204" y="122">DELTA +842</text>
+            <text class="lbl dim xs" x="204" y="134">VOL 128k · OI +2.4k</text>
+            <text class="lbl dim xs" x="204" y="145">BOOK FLIP 5,212 ▲</text>
+            <text class="lbl dim xs" x="204" y="155">CME · MBO FEED</text>
+          </g>
+          )}
+          {board.id === 'onchain' && (
+          <g>
+            <path class="ln" d="M24 62A28 28 0 0 1 80 62" />
+            <path class="tickring thin" d="M24 62A28 28 0 0 1 80 62" stroke-dasharray="1 5.9" />
+            <path class="stroke-br" stroke-width="3.5" pathLength="100" stroke-dasharray="34 100" d="M24 62A28 28 0 0 1 80 62" />
+            <g transform="rotate(-32 52 62)">
+              <path class="needle stroke-ac" stroke-width="1.4" d="M52 62L52 39" style="transform-origin:52px 62px;--a0:-10deg;--a1:14deg;--t:5s" />
+            </g>
+            <circle class="f-ink" cx="52" cy="62" r="2" />
+            <text class="lbl dim xs" x="16" y="72">0</text>
+            <text class="lbl dim xs" x="80" y="72">200</text>
+            <text class="lbl em" x="30" y="82">GAS 24 GWEI</text>
+            <text class="lbl dim xs" x="26" y="92">BASE 18 · PRIO 2</text>
+            <text class="lbl em xs" x="8" y="104">BLOCK 19,412,882</text>
+            <rect class="track" x="8" y="108" width="86" height="4" rx="1" />
+            <rect class="f-br fill-loop" x="8" y="108" width="86" height="4" rx="1" style="--t:12s" />
+            <text class="lbl dim xs" x="8" y="122">NEXT ~12s · 214 TX</text>
+            <text class="lbl dim xs" x="8" y="134">EPOCH 262 · FINAL ✓</text>
+            <text class="lbl dim xs" x="8" y="146">PEERS 84 · SYNC 100%</text>
+            <text class="lbl dim xs" x="104" y="10">MEMPOOL 142k TX</text>
+            {MEMPOOL.map((h, mi2) => (
+              <rect
+                class="eq-bar f-br"
+                x={104 + mi2 * 8}
+                y={f1(54 - h)}
+                width="5"
+                height={h}
+                rx="0.4"
+                style={`--d:${((mi2 % 5) * 0.13).toFixed(2)}s;--t:${(0.9 + (mi2 % 4) * 0.17).toFixed(2)}s;--s:0.7`}
+              />
+            ))}
+            <path class="ln thin" d="M104 54H184" />
+            <text class="lbl dim xs" x="104" y="66">TPS 14.2 · P50 $0.42</text>
+            <path class="ln thin" d="M104 72H184" />
+            <text class="lbl dim xs" x="104" y="84">STAKED 28.4M ETH</text>
+            <text class="lbl dim xs" x="104" y="95">APR 3.1% · QUEUE 412</text>
+            <text class="lbl dim xs" x="104" y="107">VALIDATORS 894,214</text>
+            <rect class="track" x="104" y="111" width="80" height="4" rx="1" />
+            <rect class="f-br grow-x" x="104" y="111" width="58" height="4" rx="1" style="--d:0.4s" />
+            <text class="lbl dim xs" x="104" y="125">CHURN 8/EPOCH</text>
+            <text class="lbl dim xs" x="104" y="137">L2 SHARE 62%</text>
+            <text class="lbl dim xs" x="104" y="148">BLOB FEE 0.84 GWEI</text>
+            <text class="lbl dim xs" x="192" y="10">WHALE ALERTS</text>
+            <circle class="led f-accent" cx="268" cy="7.5" r="1.5" />
+            {WHALES.map((w, wi) => (
+              <g class="slide" style={`--d:${(wi * 0.09).toFixed(2)}s`}>
+                <circle class={w.warn ? 'f-accent' : 'f-brand'} cx="194" cy={18.5 + wi * 12} r="1.4" />
+                <text class:list={['lbl', 'xs', w.warn ? 'dn' : 'em']} x="199" y={21 + wi * 12}>{w.a}</text>
+                <text class="lbl dim xs" x="241" y={21 + wi * 12}>{w.to}</text>
+              </g>
+            ))}
+            <path class="ln thin" d="M192 68H272" />
+            <text class="lbl dim xs" x="192" y="80">DEFI TVL 84.2B</text>
+            <path class="area fade" d={`${tvlLine}L271.2 118L192 118Z`} style="--d:0.5s" />
+            <path class="stroke-br draw" d={tvlLine} pathLength="100" style="--d:0.3s" />
+            <text class="lbl dim xs" x="192" y="130">DEX 24H 4.2B</text>
+            <text class="lbl dim xs" x="192" y="141">STABLES 168B</text>
+            <text class="lbl dim xs" x="192" y="152">MEV 412 ETH · BLDR 8</text>
+          </g>
+          )}
+          {board.id === 'risk' && (
+          <g>
+            <rect class="f-accent" x="26" y="8" width="32" height="9" rx="1" />
+            <text class="lbl tag" x="28.5" y="15">VaR −2.1%</text>
+            <text class="lbl dim xs" x="100" y="12">1D P&L DIST</text>
+            {DIST.map((h, di) => (
+              <rect
+                class:list={['grow-y', di < 5 ? 'f-ac' : 'f-br']}
+                x={8 + di * 7.6}
+                y={f1(88 - h)}
+                width="5.5"
+                height={h}
+                rx="0.4"
+                style={`--d:${(di * 0.035).toFixed(2)}s`}
+              />
+            ))}
+            <path class="ln dash acc" d="M41 18V88" />
+            <path class="ln thin" d="M8 88H150" />
+            <text class="lbl dim xs" x="8" y="98">ES97.5 −3.4% · SKEW −0.8 · KURT 4.2</text>
+            <path class="ln thin" d="M76 104V148" />
+            {FACTORS.map((fct, fi2) => (
+              <g class="fade" style={`--d:${(0.2 + fi2 * 0.08).toFixed(2)}s`}>
+                <text class="lbl xs" x="8" y={113 + fi2 * 11}>{fct.n}</text>
+                <rect
+                  class={fct.v >= 0 ? 'f-br' : 'f-ac'}
+                  x={fct.v >= 0 ? 76 : f1(76 - Math.abs(fct.v) * 46)}
+                  y={108.6 + fi2 * 11}
+                  width={f1(Math.abs(fct.v) * 46)}
+                  height="4.5"
+                  rx="1"
+                />
+                <text class="lbl dim xs" x="126" y={113 + fi2 * 11}>{(fct.v >= 0 ? '+' : '−') + Math.abs(fct.v).toFixed(2)}</text>
+              </g>
+            ))}
+            {CORR_ASSETS.map((ca, cai) => (
+              <g>
+                <text class="lbl dim xs" x="160" y={21.5 + cai * 10.4}>{ca}</text>
+                <text class="lbl dim xs" x={175 + cai * 12} y="11">{ca}</text>
+              </g>
+            ))}
+            {CORR.map((c, ci4) => (
+              <rect class:list={['pop', `w${c.k}`]} x={c.x} y={c.y} width="10.4" height="8.8" rx="1" style={`--d:${(0.1 + ci4 * 0.02).toFixed(2)}s`} />
+            ))}
+            <text class="lbl dim xs" x="160" y="76">CORR AVG ρ 0.34 · MAX 0.92 ▲</text>
+            <text class="lbl dim xs" x="160" y="90">STRESS</text>
+            {STRESS.map((row, sri) => (
+              <g class="slide" style={`--d:${(0.15 + sri * 0.08).toFixed(2)}s`}>
+                <text class="lbl xs" x="160" y={101 + sri * 11}>{row.n}</text>
+                <rect class="track" x="204" y={96.6 + sri * 11} width="42" height="4" rx="1" />
+                <rect class="f-ac" x="204" y={96.6 + sri * 11} width={row.w} height="4" rx="1" />
+                <text class="lbl xs dn" x="250" y={101 + sri * 11}>{row.v}</text>
+              </g>
+            ))}
+            <text class="lbl dim xs" x="160" y="137">MARGIN 62% · GROSS 4.2x</text>
+            <rect class="track" x="160" y="140" width="112" height="4" rx="1" />
+            <rect class="f-br grow-x" x="160" y="140" width="69" height="4" rx="1" style="--d:0.45s" />
+            {[0, 1, 2, 3].map((li3) => (
+              <circle class:list={['led', li3 === 3 ? 'f-accent' : 'f-brand']} cx={163 + li3 * 9} cy="152" r="1.8" style={`--d:${(li3 * 0.4).toFixed(1)}s`} />
+            ))}
+            <text class="lbl dim xs" x="200" y="154">LIMITS 3/4 · BREACH 0</text>
+          </g>
+          )}
+          {board.id === 'backtest' && (
+          <g>
+            <rect class="frame" x="8" y="10" width="176" height="82" rx="2" />
+            <path class="ln dash thin" d="M8 34H184M8 58H184M52 10V92M96 10V92M140 10V92" />
+            <path class="stroke-dim draw" d={btBenchLine} pathLength="100" style="--d:0.35s" />
+            <path class="stroke-br draw" d={btLine} pathLength="100" style="--d:0.15s" />
+            {TRADE_MARKS.map((ti2, tmi) => (
+              <circle
+                class:list={['pop', tmi === 2 ? 'f-accent' : 'f-brand']}
+                cx={f1(10 + ti2 * 4.4)}
+                cy={btY(btEq[ti2])}
+                r="1.4"
+                style={`--d:${(0.8 + tmi * 0.08).toFixed(2)}s`}
+              />
+            ))}
+            {['2016', '2018', '2020', '2022', '2024'].map((yr, yi) => (
+              <text class="lbl dim xs" x={10 + yi * 35.2} y="100">{yr}</text>
+            ))}
+            <path class="ln thin" d="M8 106H184" />
+            <path class="area-ac fade" d={btDDArea} style="--d:0.5s" />
+            <text class="lbl dim xs" x="8" y="128">UNDERWATER · MAXDD −8.4% · 41d</text>
+            <text class="lbl dim xs" x="8" y="140">CAGR 24.1% vs 9.4% · VOL 12.2%</text>
+            <text class="lbl dim xs" x="8" y="152">SLIPPAGE 0.8bp · FEES IN</text>
+            {BT_STATS.map((row, bi2) => (
+              <g class="fade" style={`--d:${(bi2 * 0.07).toFixed(2)}s`}>
+                <text class="lbl dim xs" x="192" y={16 + bi2 * 12}>{row[0]}</text>
+                <text class="lbl em xs" x="244" y={16 + bi2 * 12}>{row[1]}</text>
+              </g>
+            ))}
+            <path class="ln thin" d="M192 82H272" />
+            <text class="lbl dim xs" x="192" y="92">MONTHLY P&L · 3Y</text>
+            {MONTHS.map((m, mi3) => (
+              <rect class:list={['pop', `w${m.k}`]} x={m.x} y={m.y} width="5.8" height="6.4" rx="0.8" style={`--d:${(0.2 + mi3 * 0.015).toFixed(3)}s`} />
+            ))}
+            <text class="lbl dim xs" x="192" y="132">WFO 4/5 WINDOWS</text>
+            {[0, 1, 2, 3, 4].map((s2) => (
+              <rect
+                class:list={[s2 < 3 ? 'f-br' : s2 === 3 ? 'f-br grow-x' : 'track']}
+                x={192 + s2 * 16.6}
+                y="136"
+                width="14"
+                height="5"
+                rx="1"
+                style={s2 === 3 ? '--d:0.5s' : undefined}
+              />
+            ))}
+            <text class="lbl dim xs" x="192" y="152">OOS 1.71 · DECAY 12%</text>
+          </g>
+          )}
+        </svg>
+      </figure>
+    ))
+  }
+</div>
+
+<style>
+  .hero-stage {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 0;
+  }
+
+  .hero-board {
+    position: absolute;
+    display: none;
+    width: min(21rem, 36vw);
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--w-line);
+    border-radius: 0.4rem;
+    background: color-mix(in oklab, var(--w-panel) 88%, transparent);
+    box-shadow: 0 16px 36px -24px var(--w-shadow);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    filter: blur(0.4px);
+    transform-origin: center;
+    transition:
+      opacity 0.7s var(--ease-out-expo),
+      filter 0.7s var(--ease-out-expo),
+      transform 0.7s var(--ease-out-expo);
+  }
+
+  .hero-board.is-shown {
+    display: block;
+    opacity: 0.76;
+    animation: hero-board-float 8s ease-in-out infinite alternate;
+  }
+
+  .hero-board.is-current {
+    opacity: 0.97;
+    filter: blur(0);
+    z-index: 1;
+  }
+
+  .hero-board[data-slot='0'] {
+    top: 10%;
+    left: max(0.75rem, calc(50% - 40rem));
+    transform: rotate(-2.5deg);
+    animation-delay: 0s;
+  }
+
+  .hero-board[data-slot='1'] {
+    top: 7%;
+    right: max(0.75rem, calc(50% - 39rem));
+    left: auto;
+    transform: rotate(2deg) scale(0.94);
+    animation-delay: -2.2s;
+  }
+
+  .hero-board[data-slot='2'] {
+    bottom: 16%;
+    left: max(1rem, calc(50% - 38rem));
+    transform: rotate(2deg) scale(1.35);
+    transform-origin: bottom left;
+    animation-delay: -4.1s;
+  }
+
+  .hero-board[data-slot='3'] {
+    bottom: 14%;
+    right: max(0.6rem, calc(50% - 40rem));
+    left: auto;
+    transform: rotate(-2deg) scale(1.44);
+    transform-origin: bottom right;
+    animation-delay: -1.1s;
+  }
+
+  .hero-board.is-current[data-slot='0'] {
+    transform: rotate(-1.5deg) scale(1.03);
+  }
+  .hero-board.is-current[data-slot='1'] {
+    transform: rotate(1.2deg) scale(1);
+  }
+  .hero-board.is-current[data-slot='2'] {
+    transform: rotate(1.2deg) scale(1.44);
+  }
+  .hero-board.is-current[data-slot='3'] {
+    transform: rotate(-1.2deg) scale(1.52);
+  }
+
+  @keyframes hero-board-float {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: 0 -6px;
+    }
+  }
+
+  .hero-board__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.65rem;
+    border-bottom: 1px solid var(--w-line);
+  }
+
+  .hero-board__live-dot {
+    display: block;
+    width: 0.32rem;
+    height: 0.32rem;
+    border-radius: 50%;
+    background: var(--color-brand-400);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-brand-400) 22%, transparent);
+  }
+
+  .hero-board__title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--w-text-2);
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hero-board__live {
+    color: var(--w-accent);
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-board__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 0.28rem 0.4rem 0.4rem;
+    --pg-line: var(--w-line);
+    --pg-ink: color-mix(in oklab, var(--w-text) 14%, transparent);
+    --pg-ink-dim: color-mix(in oklab, var(--w-text) 8%, transparent);
+    --pg-br: var(--color-brand-500);
+    --pg-br-soft: color-mix(in oklab, var(--color-brand-500) 22%, transparent);
+    --pg-ac: var(--color-accent-500);
+    --pg-ac-soft: color-mix(in oklab, var(--color-accent-500) 24%, transparent);
+  }
+
+  :global(.dark) .hero-board__svg {
+    --pg-br: var(--color-brand-400);
+    --pg-ac: var(--color-accent-400);
+  }
+
+  /* ---- fills & strokes ---- */
+
+  .f-brand {
+    fill: var(--pg-br);
+  }
+  .f-accent {
+    fill: var(--pg-ac);
+  }
+  .f-ink {
+    fill: color-mix(in oklab, var(--w-text) 45%, transparent);
+  }
+  .f-br {
+    fill: var(--pg-br-soft);
+  }
+  .f-ac {
+    fill: var(--pg-ac-soft);
+  }
+  .f-soft {
+    fill: var(--pg-ink-dim);
+  }
+  .track {
+    fill: var(--pg-ink-dim);
+  }
+  .panel {
+    fill: color-mix(in oklab, var(--w-panel) 70%, transparent);
+    stroke: var(--pg-line);
+    stroke-width: 1;
+  }
+  .panel.lit {
+    stroke: color-mix(in oklab, var(--pg-br) 65%, transparent);
+  }
+  .frame {
+    fill: none;
+    stroke: var(--pg-line);
+    stroke-width: 1;
+  }
+  .ln {
+    fill: none;
+    stroke: var(--pg-line);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+  }
+  .ln.thin {
+    stroke-width: 0.7;
+  }
+  .ln.dash {
+    stroke-dasharray: 3 4;
+  }
+  .ln.dash.thin {
+    stroke-width: 0.6;
+    stroke-dasharray: 2 4;
+  }
+  .ln.dash.acc {
+    stroke: color-mix(in oklab, var(--pg-ac) 60%, transparent);
+    stroke-width: 0.8;
+    stroke-dasharray: 3 3;
+  }
+  .stroke-br,
+  .stroke-ac,
+  .stroke-ink,
+  .stroke-dim {
+    fill: none;
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .stroke-br {
+    stroke: var(--pg-br);
+  }
+  .stroke-ac {
+    stroke: var(--pg-ac);
+  }
+  .stroke-ink {
+    stroke: color-mix(in oklab, var(--w-text) 55%, transparent);
+    stroke-width: 1;
+  }
+  .stroke-dim {
+    stroke: color-mix(in oklab, var(--w-text) 26%, transparent);
+    stroke-width: 0.9;
+  }
+  .area {
+    fill: color-mix(in oklab, var(--color-brand-500) 14%, transparent);
+  }
+  .area-ac {
+    fill: color-mix(in oklab, var(--color-accent-500) 14%, transparent);
+  }
+
+  .lbl {
+    fill: var(--w-text-2);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 7px;
+    letter-spacing: 0.02em;
+  }
+  .lbl.xs {
+    font-size: 5.6px;
+    letter-spacing: 0.03em;
+  }
+  .lbl.em {
+    fill: var(--w-text);
+    font-weight: 600;
+  }
+  .lbl.dim {
+    fill: var(--w-text-4);
+  }
+  .lbl.up {
+    fill: var(--pg-br);
+  }
+  .lbl.dn {
+    fill: var(--pg-ac);
+  }
+  .lbl.tag {
+    fill: var(--w-surface);
+    font-size: 5.6px;
+    font-weight: 700;
+  }
+
+  /* ---- world map & links ---- */
+
+  .land {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 36%, transparent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 0 3.55;
+  }
+  .land.land--sm {
+    stroke-width: 1.15;
+    stroke-dasharray: 0 3.13;
+    stroke: color-mix(in oklab, var(--w-text) 26%, transparent);
+  }
+  .arc {
+    fill: none;
+    stroke: color-mix(in oklab, var(--pg-br) 75%, transparent);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-dasharray: 3 4;
+    animation: hb-dash-flow 0.9s linear var(--d, 0s) infinite;
+  }
+  .dash-flow {
+    stroke-dasharray: 3 4;
+    animation: hb-dash-flow 0.9s linear infinite;
+  }
+  @keyframes hb-dash-flow {
+    to {
+      stroke-dashoffset: -7;
+    }
+  }
+  .ping-ring {
+    fill: none;
+    stroke: var(--pg-br);
+    stroke-width: 1.4;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hb-ping-ring 2.6s ease-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes hb-ping-ring {
+    0% {
+      opacity: 0.9;
+      transform: scale(0.35);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(2.1);
+    }
+  }
+  /* Riders follow their path via offset-path; hidden where unsupported so the
+     dot never parks at the SVG origin. */
+  .path-rider {
+    display: none;
+  }
+  @supports (offset-distance: 0%) {
+    .path-rider {
+      display: initial;
+      offset-rotate: 0deg;
+      animation: hb-offset 16s linear infinite;
+    }
+  }
+  @keyframes hb-offset {
+    from {
+      offset-distance: 0%;
+    }
+    to {
+      offset-distance: 100%;
+    }
+  }
+
+  /* ---- radar ---- */
+
+  .tickring {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 30%, transparent);
+    stroke-width: 4;
+  }
+  .tickring.thin {
+    stroke-width: 3;
+  }
+  .sweep {
+    transform-origin: 76px 82px;
+    animation: hb-spin 5s linear infinite;
+  }
+  .spin-var {
+    animation: hb-spin var(--t, 10s) linear infinite;
+  }
+  .spin-var.rev {
+    animation-direction: reverse;
+  }
+  @keyframes hb-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .blip {
+    animation: hb-blip 5s linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-blip {
+    0% {
+      opacity: 1;
+    }
+    45%,
+    96% {
+      opacity: 0.38;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  .ctc-hos {
+    fill: var(--pg-ac-soft);
+    stroke: var(--pg-ac);
+    stroke-width: 1.1;
+  }
+  .ctc-frd {
+    fill: var(--pg-br-soft);
+    stroke: var(--pg-br);
+    stroke-width: 1.1;
+  }
+  .ctc-unk {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 60%, transparent);
+    stroke-width: 1.1;
+  }
+  .ctc-obj {
+    fill: none;
+    stroke: var(--pg-ac);
+    stroke-width: 1.2;
+  }
+  .vec {
+    stroke: color-mix(in oklab, var(--w-text) 40%, transparent);
+    stroke-width: 0.8;
+    stroke-linecap: round;
+  }
+
+  /* ---- avionics ---- */
+
+  .sky {
+    fill: color-mix(in oklab, var(--color-accent-500) 16%, transparent);
+  }
+  .gnd {
+    fill: color-mix(in oklab, var(--w-text) 12%, transparent);
+  }
+  .horizon {
+    animation: hb-horizon 11s ease-in-out infinite alternate;
+  }
+  @keyframes hb-horizon {
+    from {
+      transform: rotate(-4deg) translateY(-2px);
+    }
+    to {
+      transform: rotate(3deg) translateY(2.5px);
+    }
+  }
+  .fd {
+    fill: none;
+    stroke: var(--pg-ac);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+  .tape {
+    animation: hb-tape 7s ease-in-out infinite alternate;
+  }
+  .tape.rev-tape {
+    animation-direction: alternate-reverse;
+  }
+  @keyframes hb-tape {
+    from {
+      transform: translateY(-5px);
+    }
+    to {
+      transform: translateY(4px);
+    }
+  }
+  .hdg {
+    animation: hb-hdg 9s ease-in-out infinite alternate;
+  }
+  @keyframes hb-hdg {
+    from {
+      transform: translateX(-6px);
+    }
+    to {
+      transform: translateX(5px);
+    }
+  }
+
+  /* ---- 3d mesh ---- */
+
+  .mesh-f,
+  .mesh-m,
+  .mesh-b {
+    fill: none;
+    stroke-linecap: round;
+  }
+  .mesh-f {
+    stroke: var(--pg-br);
+    stroke-width: 0.8;
+  }
+  .mesh-m {
+    stroke: color-mix(in oklab, var(--pg-br) 55%, transparent);
+    stroke-width: 0.6;
+  }
+  .mesh-b {
+    stroke: color-mix(in oklab, var(--w-text) 16%, transparent);
+    stroke-width: 0.5;
+  }
+  .bbox {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 22%, transparent);
+    stroke-width: 0.5;
+    stroke-dasharray: 2 3;
+  }
+  .wobble {
+    animation: hb-wobble 12s ease-in-out infinite alternate;
+  }
+  @keyframes hb-wobble {
+    from {
+      transform: rotate(-6deg);
+    }
+    to {
+      transform: rotate(6deg);
+    }
+  }
+  .dim-line {
+    stroke: color-mix(in oklab, var(--w-text) 35%, transparent);
+    stroke-width: 0.6;
+  }
+
+  /* ---- signals ---- */
+
+  .w0 {
+    fill: color-mix(in oklab, var(--w-text) 5%, transparent);
+  }
+  .w1 {
+    fill: color-mix(in oklab, var(--color-brand-500) 16%, transparent);
+  }
+  .w2 {
+    fill: color-mix(in oklab, var(--color-brand-500) 38%, transparent);
+  }
+  .w3 {
+    fill: color-mix(in oklab, var(--color-accent-500) 55%, transparent);
+  }
+  .wf-row {
+    animation: hb-wf 1.9s linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-wf {
+    0% {
+      opacity: 0.25;
+    }
+    14% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.25;
+    }
+  }
+
+  /* ---- neural ---- */
+
+  .nedge {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 12%, transparent);
+    stroke-width: 0.45;
+  }
+  .nedge.pulse {
+    stroke: var(--pg-br);
+    stroke-width: 0.6;
+    opacity: 0;
+    animation: hb-pulse 2.6s linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-pulse {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.85;
+    }
+    28%,
+    100% {
+      opacity: 0;
+    }
+  }
+  .node {
+    fill: var(--w-panel);
+    stroke: var(--pg-br);
+    stroke-width: 1;
+  }
+
+  /* ---- network ---- */
+
+  .pkt {
+    animation: hb-pkt var(--t, 1.8s) linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-pkt {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    14% {
+      opacity: 1;
+    }
+    86% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--tx, 0px), var(--ty, 0px));
+    }
+  }
+  .led {
+    animation: hb-led 2.4s linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-led {
+    0%,
+    72% {
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.25;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* ---- tacsim ---- */
+
+  .corner {
+    fill: none;
+    stroke: var(--pg-br);
+    stroke-width: 1.2;
+  }
+  .contour {
+    fill: none;
+    stroke: color-mix(in oklab, var(--w-text) 18%, transparent);
+    stroke-width: 0.7;
+    stroke-dasharray: 5 3;
+  }
+  .wp {
+    fill: none;
+    stroke: color-mix(in oklab, var(--pg-br) 60%, transparent);
+    stroke-width: 0.8;
+    stroke-dasharray: 3 3;
+  }
+  .sensor-cone {
+    fill: color-mix(in oklab, var(--color-brand-500) 8%, transparent);
+  }
+  .patrol {
+    animation: hb-patrol 9s linear infinite;
+  }
+  @keyframes hb-patrol {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    5% {
+      opacity: 1;
+    }
+    34% {
+      transform: translate(36px, -18px);
+    }
+    66% {
+      transform: translate(68px, -32px);
+    }
+    92% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(98px, -52px);
+    }
+  }
+  .cool {
+    fill: none;
+    stroke: var(--pg-br);
+    stroke-width: 2.4;
+    animation: hb-cool 3.2s linear infinite;
+  }
+  @keyframes hb-cool {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ---- investment desks ---- */
+
+  /* Donut segments: the keyframe only supplies `from`, so each circle animates
+     to its own dasharray attribute — one rule serves every allocation. */
+  .seg {
+    fill: none;
+    stroke-width: 8;
+    /* Round caps (inherited from the stroke classes) put a blob at every
+       segment boundary at this width. */
+    stroke-linecap: butt;
+    animation: hb-seg 1s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-seg {
+    from {
+      stroke-dasharray: 0 100;
+    }
+  }
+  .needle {
+    animation: hb-needle var(--t, 6s) ease-in-out infinite alternate;
+  }
+  @keyframes hb-needle {
+    from {
+      transform: rotate(var(--a0, -16deg));
+    }
+    to {
+      transform: rotate(var(--a1, 16deg));
+    }
+  }
+  /* Tape prints are rendered twice; one full set of travel per loop lands the
+     wrap on identical pixels. */
+  .tape-roll {
+    animation: hb-roll var(--t, 7s) linear infinite;
+  }
+  @keyframes hb-roll {
+    to {
+      transform: translateY(var(--sh, -104px));
+    }
+  }
+  .fill-loop {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: hb-fill-loop var(--t, 12s) linear infinite;
+  }
+  @keyframes hb-fill-loop {
+    from {
+      transform: scaleX(0.02);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .hot {
+    animation: hb-hot 2.8s linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-hot {
+    0%,
+    8% {
+      opacity: 1;
+    }
+    16% {
+      opacity: 0.3;
+    }
+    24%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* ---- shared entrances & loops ---- */
+
+  .fade {
+    animation: hb-fade 0.5s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .slide {
+    animation: hb-slide 0.55s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-slide {
+    from {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: hb-pop 0.48s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.55);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .grow-y {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: hb-grow-y 0.6s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-grow-y {
+    from {
+      opacity: 0.3;
+      transform: scaleY(0.06);
+    }
+    to {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+  .grow-x {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: hb-grow-x 0.7s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-grow-x {
+    from {
+      transform: scaleX(0.04);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .draw {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: hb-draw 1.35s var(--ease-out-expo) var(--d, 0s) both;
+  }
+  @keyframes hb-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .draw-loop {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: hb-plot 9s linear infinite;
+  }
+  @keyframes hb-plot {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    72%,
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  .caret {
+    animation: hb-caret 1.1s linear infinite;
+  }
+  @keyframes hb-caret {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  .eq-bar {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: hb-eq var(--t, 1.2s) ease-in-out infinite alternate;
+    animation-delay: var(--d, 0s);
+  }
+  @keyframes hb-eq {
+    from {
+      transform: scaleY(var(--s, 0.22));
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  .wick {
+    stroke: color-mix(in oklab, var(--w-text) 28%, transparent);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+  .body {
+    fill: color-mix(in oklab, var(--w-text) 12%, transparent);
+    stroke: color-mix(in oklab, var(--w-text) 22%, transparent);
+    stroke-width: 1;
+  }
+  .body.up {
+    fill: var(--pg-br-soft);
+    stroke: var(--pg-br);
+  }
+
+  @media (max-width: 1099.98px) {
+    .hero-board[data-slot='2'],
+    .hero-board[data-slot='3'] {
+      display: none;
+    }
+    .hero-board {
+      width: min(17.5rem, 40vw);
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .hero-board {
+      width: min(13.5rem, 46vw);
+      opacity: 0.28;
+      filter: blur(2px);
+    }
+    .hero-board[data-slot='0'] {
+      top: 5.5rem;
+      left: -2.25rem;
+    }
+    .hero-board[data-slot='1'] {
+      top: 5.25rem;
+      right: -2.5rem;
+    }
+    .hero-board.is-current {
+      opacity: 0.4;
+    }
+  }
+
+  @media (max-width: 479.98px), (max-height: 40rem) {
+    .hero-stage {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-board,
+    .hero-board.is-shown,
+    .hero-board__svg * {
+      animation: none !important;
+    }
+    .hero-board.is-shown {
+      opacity: 0.45;
+      filter: blur(0.6px);
+    }
+    .hero-board.is-current {
+      opacity: 0.75;
+      filter: none;
+    }
+    .draw,
+    .draw-loop {
+      stroke-dashoffset: 0;
+    }
+    .cool {
+      stroke-dashoffset: 40;
+    }
+    .ping-ring {
+      opacity: 0.45;
+    }
+    .nedge.pulse,
+    .pkt,
+    .path-rider,
+    .caret {
+      opacity: 0;
+    }
+    .sweep .f-brand {
+      opacity: 0.04;
+    }
+  }
+</style>

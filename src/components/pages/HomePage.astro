@@ -102,9 +102,9 @@ const sections = [
   world
 >
   {/*
-    One continuous interior, opening on the hero and never leaving the room.
-    The scenes run without a heading cadence or a band between them on purpose.
-    Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
+    One continuous interior, one tone. The page theme holds from the hero
+    through the footer — white in light mode, black in dark — with no invert
+    band. Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
   */}
   <World>
     <Hero lang={lang} />
@@ -113,23 +113,15 @@ const sections = [
     <ActBots lang={lang} />
     <ActAgents lang={lang} />
     <ActDao lang={lang} />
-    {/* Two opposite-tone rooms, not a stripe every other scene. The page
-        theme holds from the hero through the ledger; this invert is the
-        mid-page breath (the horizon, then the atelier). Privacy through
-        FAQ comes back to the page, then the close inverts again. */}
-    <div class="tone-invert">
-      <ActUseCases lang={lang} />
-      <Features lang={lang} />
-    </div>
+    <ActUseCases lang={lang} />
+    <Features lang={lang} />
     <Privacy lang={lang} />
     <Plans lang={lang} />
     <RewardsTeaser lang={lang} />
     <Faq lang={lang} group="home-faq" appear />
-    <div class="tone-invert">
-      <CtaBand lang={lang} appear />
-      <div data-world-scene class="world-close">
-        <Footer />
-      </div>
+    <CtaBand lang={lang} appear />
+    <div data-world-scene class="world-close">
+      <Footer followTheme />
     </div>
   </World>
 </Layout>
