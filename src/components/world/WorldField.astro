@@ -111,22 +111,22 @@
    * only while a scene is handing over and is still while its copy is read.
    * The last row is the exit, past the footer. */
   const LENS = [
-    { dist: 19.4, lift: 4.4, calm: 0.22, yaw: -1.12 }, // 0  hero
-    { dist: 24.8, lift: 3.6, calm: 0.44, yaw: -0.28 }, // 1  widget
-    { dist: 17.4, lift: 2.1, calm: 0.2, yaw: 0.62 }, // 2  canvas
-    { dist: 25.2, lift: 5.1, calm: 0.5, yaw: 1.28 }, // 3  connectors
-    { dist: 16.2, lift: 2.7, calm: 0.16, yaw: 2.02 }, // 4  bots
-    { dist: 23.6, lift: 5.5, calm: 0.46, yaw: 2.68 }, // 5  agents
-    { dist: 16.8, lift: 1.9, calm: 0.22, yaw: 3.32 }, // 6  dao
-    { dist: 26.2, lift: 6.1, calm: 0.54, yaw: 3.88 }, // 7  use cases
-    { dist: 16.6, lift: 3.7, calm: 0.26, yaw: 4.52 }, // 8  features
-    { dist: 24.2, lift: 2.5, calm: 0.5, yaw: 5.08 }, // 9  privacy
-    { dist: 18.0, lift: 1.7, calm: 0.3, yaw: 5.62 }, // 10 plans
-    { dist: 24.8, lift: 4.9, calm: 0.48, yaw: 6.08 }, // 11 rewards
-    { dist: 17.2, lift: 2.6, calm: 0.36, yaw: 6.52 }, // 12 faq
-    { dist: 14.8, lift: 1.5, calm: 0.2, yaw: 6.98 }, // 13 cta
-    { dist: 16.8, lift: 2.2, calm: 0.14, yaw: 7.42 }, // 14 footer
-    { dist: 18.4, lift: 2.6, calm: 0.18, yaw: 7.85 }, //    exit
+    { dist: 24.8, lift: 4.6, calm: 0.22, yaw: -1.12 }, // 0  hero
+    { dist: 28.6, lift: 3.8, calm: 0.44, yaw: -0.28 }, // 1  widget
+    { dist: 23.4, lift: 2.3, calm: 0.2, yaw: 0.62 }, // 2  canvas
+    { dist: 29.0, lift: 5.2, calm: 0.5, yaw: 1.28 }, // 3  connectors
+    { dist: 22.8, lift: 2.9, calm: 0.16, yaw: 2.02 }, // 4  bots
+    { dist: 27.4, lift: 5.6, calm: 0.46, yaw: 2.68 }, // 5  agents
+    { dist: 23.0, lift: 2.1, calm: 0.22, yaw: 3.32 }, // 6  dao
+    { dist: 29.6, lift: 6.2, calm: 0.54, yaw: 3.88 }, // 7  use cases
+    { dist: 23.2, lift: 3.8, calm: 0.26, yaw: 4.52 }, // 8  features
+    { dist: 27.8, lift: 2.7, calm: 0.5, yaw: 5.08 }, // 9  privacy
+    { dist: 24.0, lift: 1.9, calm: 0.3, yaw: 5.62 }, // 10 plans
+    { dist: 28.4, lift: 5.0, calm: 0.48, yaw: 6.08 }, // 11 rewards
+    { dist: 23.6, lift: 2.8, calm: 0.36, yaw: 6.52 }, // 12 faq
+    { dist: 22.2, lift: 1.7, calm: 0.2, yaw: 6.98 }, // 13 cta
+    { dist: 23.4, lift: 2.4, calm: 0.14, yaw: 7.42 }, // 14 footer
+    { dist: 24.2, lift: 2.8, calm: 0.18, yaw: 7.85 }, //    exit
   ];
 
   /* How much glass, at rest and at the calmest. Clearing a panel's interface
@@ -138,8 +138,8 @@
    *
    * The floor is not zero. A bank of screens where some are live and some
    * are dark is a bank of screens; ninety-six all live is a video wall. */
-  const GLASS_BASE = 0.04;
-  const GLASS_CALM = 0.18;
+  const GLASS_BASE = 0.22;
+  const GLASS_CALM = 0.28;
 
   /* Phones see the same staging at 86% of the distance and two thirds of the
    * height — a tall frustum loses a wide shot off the sides, and a lens 6
@@ -578,11 +578,11 @@
       /* Density, per scene. uThin retires a share of them, chosen by a hash
          that never changes, so the same screens leave and come back. */
       float vis = smoothstep(uThin, uThin + 0.16, ho.z + 0.16);
-      float unit = 1.9;
+      float unit = 1.32;
       float sz = unit * scale * vis * (1.0 + k * 0.08 + burst * 0.12);
       /* ×4s sit a little toward the eye so they occupy their own plane
          instead of slicing through the ×1s. */
-      vec3 world = p + toEye * step(3.5, scale) * 1.15 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
+      vec3 world = p + toEye * step(3.5, scale) * 0.7 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
       /* Slide the world into the scene column so it frames the copy rather
@@ -784,12 +784,30 @@
       return 1.0 - aastep(r, length((p - c) * vec2(1.0, 0.62)));
     }
 
+    float sdSeg(vec2 p, vec2 a, vec2 b) {
+      vec2 pa = p - a;
+      vec2 ba = b - a;
+      float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-5), 0.0, 1.0);
+      return length(pa - ba * h);
+    }
+
+    vec3 loadRx(vec3 p, float a) {
+      float c = cos(a);
+      float si = sin(a);
+      return vec3(p.x, c * p.y - si * p.z, si * p.y + c * p.z);
+    }
+
+    vec3 loadRy(vec3 p, float a) {
+      float c = cos(a);
+      float si = sin(a);
+      return vec3(c * p.x + si * p.z, p.y, -si * p.x + c * p.z);
+    }
+
     void main() {
-      /* Toy tablets were rr 0.11 / bezel 0.060 — a thick family-tinted pill.
-         Once the hero cards are on the wall, the silhouette has to match them:
-         a shallow card radius and a hairline housing. Mixed so the power-on
-         ramp actually changes the object, not just the picture on it. */
-      float rr = mix(0.11, 0.014, uBoardsOn);
+      /* Shallow card, always. The thick family-tinted pill was the toy
+         tablet; glass cards share the composer's radius whether the atlas
+         has landed or the loader is still spinning. */
+      float rr = 0.016;
       vec2 cd = abs(vUv) - (0.5 - rr);
       float sd = length(max(cd, 0.0)) + min(max(cd.x, cd.y), 0.0) - rr;
       if (sd > 0.0) discard;
@@ -807,12 +825,8 @@
       if (glow < 0.04) discard;
 
       float toy = 1.0 - uBoardsOn;
-      /* No housing once the cards are up — the atlas is the card. A bezel
-         around a real instrument is the border the wall was asked to lose. */
-      float bz = 0.060 * toy;
-      float bezel = aastep(-bz, sd) * toy;
-      float inner = 1.0 - bezel;
-      float inset = (1.0 - smoothstep(-max(bz, 0.001), -bz - 0.075, sd)) * toy;
+      float inner = 1.0;
+      float inset = (1.0 - smoothstep(0.0, -0.055, sd));
 
       /* ---- the cut ----
          A channel change, done the way a CRT does it: the picture collapses to
@@ -846,24 +860,14 @@
          both, which is what the sheen and the glint are made of. */
       vec3 paper = mix(vec3(0.74, 0.79, 0.88), vec3(0.07, 0.10, 0.16), uLight);
       vec3 lightest = mix(paper, vec3(1.0), uLight);
-      /* Dark theme: near-black glass. Light theme: a family-tinted card, not
-         a white slab — white glass plus a *0.62 accent was what washed the
-         wall into pastel. The 600s are already uploaded for daylight. */
-      vec3 glassDark = mix(mix(uFog, vec3(0.040, 0.058, 0.090), 0.75),
-                           mix(mix(uFog, vec3(1.0), 0.58), accent * (1.0 - uBoardsOn), 0.24), uLight);
-      vec3 glassLite = mix(mix(glassDark, accent * 0.16 * (1.0 - uBoardsOn), 0.28),
-                           mix(glassDark, vec3(1.0), 0.28), uLight);
-      /* Every screen wears its family a little; studio beats wear it as
-         product chrome so the wall reads as customised widgets, not mint.
-         Held back as the glass clears: a pane with nothing running on it has
-         no interface to be themed, and a blank rectangle in a saturated family
-         colour is a swatch, not a screen. */
-      /* Off entirely once the dashboards are up. A rose or amber wash under
-         a real instrument is the colour cast that made the wall look like
-         toy tablets; the boards already carry their own palette. */
-      float wear = mix(0.28, 0.52, uStudio) * (1.0 - 0.55 * uGlass) * (1.0 - uBoardsOn);
-      glassDark = mix(glassDark, mix(glassDark, accent, 0.42), wear);
-      glassLite = mix(glassLite, mix(glassLite, accent, 0.28), wear);
+      /* Neutral ice glass. Family tint on an empty pane was the rose / amber
+         / lime wall — a swatch, not a screen. Cool film on both themes, so
+         a waiting panel is a pane, not a coloured tile. */
+      vec3 glassDark = mix(mix(uFog, vec3(0.048, 0.068, 0.098), 0.78),
+                           mix(uFog, vec3(0.90, 0.94, 0.97), 0.72), uLight);
+      vec3 glassLite = mix(glassDark,
+                           mix(vec3(0.42, 0.62, 0.78), vec3(1.0), uLight),
+                           0.22);
 
       /* Display: lit from above, shadowed under the bezel. The shadow is
          lighter on the light theme, where a dark ring inside the edge reads as
@@ -875,7 +879,7 @@
          it is the single thing that makes it read as a matte box instead of a
          pane: it draws a second border where there is no longer a frame to
          cast one. */
-      col *= 1.0 - inset * (0.38 - 0.20 * uLight) * (1.0 - 0.60 * uGlass);
+      col *= 1.0 - inset * (0.16 - 0.08 * uLight) * (1.0 - 0.75 * uGlass);
       /* The pane with nothing on it, kept so the content can be mixed back out
          of it below. One register against re-deriving the gradient after all
          thirty-six branches, and the only way to fade an interface out without
@@ -889,17 +893,106 @@
          of this — there the pane is already brighter than the page. */
       bare += lightest * (0.05 + 0.12 * vLight) * uGlass * (1.0 - uLight);
 
-      /* ---- chrome: title, subtitle, live dot, hairline ----
-         Gated off once the atlas is the card itself — those blobs were the
-         traffic-light chrome on the toy tablets. Bare glass still needs them
-         so an unpowered wall is not a field of empty rectangles. */
-      float pulse = 0.65 + 0.35 * sin(t * 2.2);
-      col = mix(col, paper, rect(uv, vec2(0.20, 0.905), vec2(0.12, 0.024), 0.014) * 0.55 * toy);
-      col = mix(col, paper, rect(uv, vec2(0.41, 0.905), vec2(0.055, 0.018), 0.011) * 0.26 * toy);
-      col = mix(col, paper, (1.0 - aastep(0.005, abs(uv.y - 0.815))) * 0.10 * toy);
-      float dEnd0 = length((uv - vec2(0.905, 0.905)) * vec2(1.0, 0.62));
-      col = mix(col, accent, (1.0 - aastep(0.06, dEnd0)) * 0.32 * pulse * toy);
-      col = mix(col, mix(accent, paper, 0.4), disc(uv, vec2(0.905, 0.905), 0.019) * pulse * toy);
+      /* ---- glassy loaders ----
+         Per-panel pick from the instance seed: gyroscope, a tumbling cube,
+         or a 2D rounded progress. Same ice material, three silhouettes,
+         so the wall is one glass coming on — not eighteen copies. */
+      {
+        vec2 lp = (uv - 0.5) * vec2(1.0, 1.61);
+        float a0 = t * 1.18 + s * 6.2832;
+        float a1 = t * 0.74 + s * 2.1 + 1.05;
+        float c0 = cos(a0);
+        float s0 = sin(a0);
+        float c1 = cos(a1);
+        float s1 = sin(a1);
+        vec3 ice = mix(vec3(0.62, 0.82, 0.94), vec3(0.16, 0.28, 0.40), 1.0 - uLight);
+        vec3 hi = mix(vec3(1.0), vec3(0.10, 0.13, 0.18), uLight);
+        vec3 load = vec3(0.0);
+        float pick = floor(fract(s * 7.13) * 3.0);
+
+        if (pick < 0.5) {
+          vec2 r0 = vec2(c0 * lp.x - s0 * lp.y, s0 * lp.x + c0 * lp.y);
+          vec2 r1 = vec2(c1 * lp.x - s1 * lp.y, s1 * lp.x + c1 * lp.y);
+          float eq = 1.0 - aastep(0.0065, abs(length(lp) - 0.168));
+          float gy = 1.0 - aastep(0.0055, abs(length(r0 * vec2(1.0, 2.45)) - 0.168));
+          float gx = 1.0 - aastep(0.0055, abs(length(r1 * vec2(2.25, 1.0)) - 0.168));
+          float spin = atan(lp.y, lp.x);
+          float glint = pow(max(sin(spin - a0 * 2.2), 0.0), 16.0);
+          vec2 coreP = r0;
+          float dia = abs(coreP.x) + abs(coreP.y) * 0.70;
+          float core = 1.0 - aastep(0.050, dia);
+          float facet = mix(0.42, 1.0, aastep(0.0, coreP.x));
+          load = ice * (eq * 0.55 + gy * 0.38 + gx * 0.38);
+          load += hi * glint * (eq * 0.85 + gy * 0.35);
+          load += ice * core * (0.28 + 0.50 * facet);
+          load += hi * core * pow(max(1.0 - dia / 0.050, 0.0), 2.2) * 0.55;
+          float orbit = 1.0 - aastep(0.014, length(lp - vec2(c0, s0) * 0.168));
+          load += hi * orbit * 0.75;
+        } else if (pick < 1.5) {
+          float pitch = 0.52 + s * 0.35;
+          vec3 q0 = loadRy(loadRx(vec3(-1.0, -1.0, -1.0) * 0.10, pitch), a0);
+          vec3 q1 = loadRy(loadRx(vec3( 1.0, -1.0, -1.0) * 0.10, pitch), a0);
+          vec3 q2 = loadRy(loadRx(vec3(-1.0,  1.0, -1.0) * 0.10, pitch), a0);
+          vec3 q3 = loadRy(loadRx(vec3( 1.0,  1.0, -1.0) * 0.10, pitch), a0);
+          vec3 q4 = loadRy(loadRx(vec3(-1.0, -1.0,  1.0) * 0.10, pitch), a0);
+          vec3 q5 = loadRy(loadRx(vec3( 1.0, -1.0,  1.0) * 0.10, pitch), a0);
+          vec3 q6 = loadRy(loadRx(vec3(-1.0,  1.0,  1.0) * 0.10, pitch), a0);
+          vec3 q7 = loadRy(loadRx(vec3( 1.0,  1.0,  1.0) * 0.10, pitch), a0);
+          vec2 p0 = vec2(q0.x, q0.y * 0.72 + q0.z * 0.22);
+          vec2 p1 = vec2(q1.x, q1.y * 0.72 + q1.z * 0.22);
+          vec2 p2 = vec2(q2.x, q2.y * 0.72 + q2.z * 0.22);
+          vec2 p3 = vec2(q3.x, q3.y * 0.72 + q3.z * 0.22);
+          vec2 p4 = vec2(q4.x, q4.y * 0.72 + q4.z * 0.22);
+          vec2 p5 = vec2(q5.x, q5.y * 0.72 + q5.z * 0.22);
+          vec2 p6 = vec2(q6.x, q6.y * 0.72 + q6.z * 0.22);
+          vec2 p7 = vec2(q7.x, q7.y * 0.72 + q7.z * 0.22);
+          float d = sdSeg(lp, p0, p1);
+          d = min(d, sdSeg(lp, p2, p3));
+          d = min(d, sdSeg(lp, p4, p5));
+          d = min(d, sdSeg(lp, p6, p7));
+          d = min(d, sdSeg(lp, p0, p2));
+          d = min(d, sdSeg(lp, p1, p3));
+          d = min(d, sdSeg(lp, p4, p6));
+          d = min(d, sdSeg(lp, p5, p7));
+          d = min(d, sdSeg(lp, p0, p4));
+          d = min(d, sdSeg(lp, p1, p5));
+          d = min(d, sdSeg(lp, p2, p6));
+          d = min(d, sdSeg(lp, p3, p7));
+          float wire = 1.0 - aastep(0.0075, d);
+          float hull = 1.0 - aastep(0.11, max(abs(lp.x), abs(lp.y) / 0.72) * (1.15 - 0.12 * c0));
+          load = ice * (wire * 0.85 + hull * 0.08);
+          load += hi * wire * (0.45 + 0.40 * pow(max(c0, 0.0), 4.0));
+          load += hi * (1.0 - aastep(0.013, length(p7))) * 0.55;
+        } else {
+          float rad = 0.155;
+          float track = 1.0 - aastep(0.013, abs(length(lp) - rad));
+          float ang = atan(lp.y, lp.x);
+          float sweep = 0.55 + 5.2 * (0.5 + 0.5 * sin(t * 0.85 + s * 4.0));
+          float from = -1.5707963;
+          float aN = mod(ang - from + 6.2831853, 6.2831853);
+          float onArc = aastep(0.0, aN) * (1.0 - aastep(sweep, aN));
+          float arc = track * onArc;
+          vec2 head = vec2(cos(from + sweep), sin(from + sweep)) * rad;
+          vec2 tail = vec2(cos(from), sin(from)) * rad;
+          float caps = (1.0 - aastep(0.015, length(lp - head)))
+                     + (1.0 - aastep(0.015, length(lp - tail)));
+          float tickR = 1.0 - aastep(0.006, abs(length(lp) - 0.188));
+          float tick = tickR * (
+            aaband(-0.04, 0.04, ang)
+            + aaband(-0.04, 0.04, ang - 1.5708)
+            + aaband(-0.04, 0.04, ang + 1.5708)
+            + aaband(-0.04, 0.04, abs(ang) - 3.1416)
+          );
+          load = ice * (track * 0.18 + arc * 0.72 + caps * 0.55 + tick * 0.22);
+          load += hi * (arc * 0.25 + caps * 0.65);
+          float bar = abs(lp.y + 0.22) / 0.62;
+          float rail = (1.0 - aastep(0.016, bar)) * aaband(-0.16, 0.16, lp.x);
+          float fill = aaband(-0.16, -0.16 + 0.32 * (0.22 + 0.78 * fract(t * 0.16 + s)), lp.x);
+          load += ice * rail * 0.20;
+          load += hi * rail * fill * 0.70;
+        }
+        col += load * toy * inner;
+      }
 
       /* ---- the screens: the hero's cards, full-face from the atlas ----
          Each cell is the whole instrument — ground, title bar, plot — so the
@@ -955,47 +1048,22 @@
          After the cut, so a channel change is damped along with everything
          else: a flash is the loudest thing a screen can do.
 
-         Held off the live cards: 35% of a pastel pane mixed over a real
-         instrument is how the wall turned back into empty coloured tiles. */
-      col = mix(col, bare, uGlass * (1.0 - 0.92 * uBoardsOn));
+         A light ice film stays over the live cards so the wall is glass,
+         not a sheet of printed paper. */
+      col = mix(col, bare, uGlass * mix(0.38, 0.16, uBoardsOn));
 
-      /* ---- glass over the display: a soft diagonal sheen, the rim, the glint ----
-         Lifted as the display clears. On a running screen the sheen is a
-         suggestion over the picture; on an empty pane it is most of what says
-         there is a pane there at all, and a clear panel with no highlight on
-         it is a hole. */
+      /* ---- glass over the display: sheen, rim, glint — always on ----
+         The old sheen died with the toy tablets. A pane without a highlight
+         is a hole; a card without a rim is a sticker. */
       float sheen = clamp(1.0 - abs((uv.x * 0.7 + uv.y) - 1.05) * 1.8, 0.0, 1.0);
-      col += lightest * sheen * sheen * (0.026 + 0.070 * uGlass) * toy;
-
-      /* ---- bezel: a solid frame, lit from above, with a hairline on its edge ----
-         Dark theme: near-black plastic, which is what gives a bright display
-         its housing. Light theme: the same frame in mid-grey drew a hard rule
-         around all 160 panels and the field read as a sheet of empty boxes, so
-         there the bezel is a shade under the glass and the edge is a hairline
-         of ink at the very rim — a card, not a border. White on white was the
-         other extreme: on a near-white page the panel had no outline at all. */
-      float topLight = smoothstep(-0.5, 0.5, vUv.y);
-      /* Family tint on the housing is what painted the wall rose / amber /
-         lime. Neutral hairline once the cards are up, same as the composer. */
-      vec3 frameBase = mix(mix(uFog, vec3(0.075, 0.095, 0.135), 0.9) + accent * 0.22 * toy,
-                           mix(vec3(0.955), accent * toy, 0.10), uLight);
-      vec3 frameLite = mix(frameBase, lightest, 0.12 + 0.18 * vLight);
-      vec3 frame = mix(frameBase, frameLite, topLight * (0.5 + 0.5 * vLight));
-      float rim = 1.0 - aastep(0.010, abs(sd + 0.004));
-      frame = mix(frame, mix(lightest, mix(frameBase, paper, 0.38), uLight),
-                  rim * mix(topLight * 0.35, 0.85, uLight));
-      /* Thinned in its weight, not in its width, as the glass clears: a field
-         of cleared panels still wearing full housings is a sheet of empty
-         boxes, which is louder than the interfaces were. Never to nothing —
-         the hairline at the rim is the panel's only silhouette once its
-         content is gone. */
-      col = mix(col, frame, bezel * (1.0 - 0.45 * uGlass) * toy);
-
-      col += accent * vFres * 0.13 * toy;
+      col += lightest * sheen * sheen * (0.055 + 0.10 * uGlass);
+      float rim = 1.0 - aastep(0.007, abs(sd));
+      col += lightest * rim * (0.10 + 0.16 * vLight) * (0.55 + 0.45 * uGlass);
+      col += lightest * vFres * (0.10 + 0.08 * uGlass);
       /* Toned down on the light theme: white added to near-white just clips.
          Stronger on a cleared pane, where the glint sweeping across as the
          panel turns is the whole of what reads as glass. */
-      col += lightest * vSpec * (0.30 - 0.24 * uLight) * (1.0 + 1.1 * uGlass);
+      col += lightest * vSpec * (0.36 - 0.22 * uLight) * (1.0 + 0.85 * uGlass);
 
       /* Distance dissolves the screen into the backdrop rather than fading it
          out, so it stays a solid object all the way to the horizon. The light
@@ -2620,7 +2688,7 @@
        * why studio buys thinning rather than more fog. */
       ctx.uniform1f(uAlpha, SCREEN_ALPHA);
       ctx.uniform1f(uThin, 0);
-      ctx.uniform1f(uGlass, Math.min(0.16, GLASS_BASE + calm * GLASS_CALM));
+      ctx.uniform1f(uGlass, Math.min(0.42, GLASS_BASE + calm * GLASS_CALM));
       const nextDay = studio > 0.45;
       if (nextDay !== dayOn) {
         dayOn = nextDay;
@@ -2668,9 +2736,9 @@
        * added to the *aim*, not to the camera, so it inherits the same inertia. */
       const ang = shotYaw + sweep * 1.05 + ptrX * 0.22;
       const dist =
-        shotDist * (compact ? LENS_COMPACT_DIST : 1) * 0.82 +
+        shotDist * (compact ? LENS_COMPACT_DIST : 1) * 1.04 +
         Math.sin(seconds * 0.28) * 0.9 -
-        sweep * 4.8;
+        sweep * 1.4;
       const aimX = Math.sin(ang) * dist;
       const aimY = shotLift * (compact ? LENS_COMPACT_LIFT : 1) + ptrY * 2.4 + sweep * 1.85;
       const aimZ = Math.cos(ang) * dist;
@@ -2725,13 +2793,13 @@
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
-      const [sx, sy] = headlineOffset(Math.hypot(-14.6, 3.4, 18.2));
+      const [sx, sy] = headlineOffset(Math.hypot(-16.8, 3.8, 20.6));
       coreShift = sx;
       coreLift = sy;
       ctx.uniform1f(uShift, coreShift);
       ctx.uniform1f(uLift, coreLift);
-      ctx.uniform3f(uCam, -14.6, 3.4, 18.2);
-      lookAt(view, -14.6, 3.4, 18.2);
+      ctx.uniform3f(uCam, -16.8, 3.8, 20.6);
+      lookAt(view, -16.8, 3.8, 20.6);
       ctx.uniformMatrix4fv(uView, false, view);
       ctx.clearColor(0, 0, 0, 0);
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
