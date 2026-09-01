@@ -48,6 +48,11 @@ const STYLE_PROPS = [
   'transform-origin',
   'transform-box',
   'clip-path',
+  /* Area washes under the chart-desk plots are gradients whose stops read the
+     panel's `--sc`; without these two the atlas gets the geometry and none of
+     the colour. */
+  'stop-color',
+  'stop-opacity',
 ];
 
 export interface BoardAtlasState {
@@ -136,7 +141,7 @@ function paintCard(
   const titleEl = board.querySelector('.hero-board__title');
   const metaEl = board.querySelector('.hero-board__live');
   const dotEl = sample.querySelector('.hero-board__live-dot');
-  const panel = resolved(sample, 'background-color', light ? '#f4f6f8' : '#10141c');
+  const panel = resolved(sample, 'background-color', light ? '#f4f6f8' : '#05070c');
   /* Light faces get a hairline grey so the wall is not a dark frame on white
      glass. Dark faces keep the original 38% film — a pale rule on ink, not
      the sampled 12% the composer cards now wear in the light theme. */
@@ -158,7 +163,7 @@ function paintCard(
   /* Opaque ground first. The live card is a color-mix against transparent,
      and that alpha in the atlas is what let the world's pastel glass show
      through — empty coloured tiles instead of instruments. */
-  g2.fillStyle = light ? '#f4f6f8' : '#10141c';
+  g2.fillStyle = light ? '#f4f6f8' : '#05070c';
   g2.fillRect(x, y, w, h);
   if (panel && panel !== 'rgba(0, 0, 0, 0)' && panel !== 'transparent') {
     g2.fillStyle = panel;
