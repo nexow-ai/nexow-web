@@ -6,6 +6,16 @@ import Logo from './Logo.astro';
 import SocialLinks from './SocialLinks.astro';
 import DotField from './DotField.astro';
 
+interface Props {
+  /**
+   * Home world: follow the page theme so the close is white in light mode
+   * and black in dark, matching the rest of the room. Other pages keep the
+   * night slab.
+   */
+  followTheme?: boolean;
+}
+
+const { followTheme = false } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useContent(lang);
 const year = 2026;
@@ -18,18 +28,26 @@ const localize = (href: string) =>
 <footer
   id="footer"
   transition:animate="none"
-  class="relative overflow-hidden border-t border-transparent bg-ink-950 text-ink-300 dark:border-white/8 dark:bg-transparent"
+  class:list={[
+    'relative overflow-hidden border-t',
+    followTheme
+      ? 'border-ink-900/10 bg-transparent text-ink-600 dark:border-white/8 dark:text-ink-300'
+      : 'border-transparent bg-ink-950 text-ink-300 dark:border-white/8 dark:bg-transparent',
+  ]}
 >
-  {/* Light mode: scoped dark DotField. Dark mode uses Layout's page-wide field. */}
-  <DotField
-    tone="dark"
-    class="absolute inset-0 z-0 opacity-90 [mask-image:radial-gradient(85%_70%_at_50%_0%,black,transparent)] dark:hidden"
-  />
+  {/* Light mode night slab: scoped dark DotField. Hidden on the home world
+      and in dark mode, where the page-wide field already paints the ground. */}
+  {!followTheme && (
+    <DotField
+      tone="dark"
+      class="absolute inset-0 z-0 opacity-90 [mask-image:radial-gradient(85%_70%_at_50%_0%,black,transparent)] dark:hidden"
+    />
+  )}
   <div class="container-page relative z-10 py-16">
     <div class="grid gap-12 lg:grid-cols-[1.5fr_2fr]">
       <div class="max-w-sm">
-        <Logo lang={lang} tone="light" class="h-8" />
-        <p class="mt-5 text-sm leading-relaxed text-ink-400">{t.footer.tagline}</p>
+        <Logo lang={lang} tone={followTheme ? 'auto' : 'light'} class="h-8" />
+        <p class="mt-5 text-sm leading-relaxed text-ink-500 dark:text-ink-400">{t.footer.tagline}</p>
         <SocialLinks class="mt-6" align="start" layout="grid" />
       </div>
 
@@ -43,7 +61,10 @@ const localize = (href: string) =>
                   <li>
                     <a
                       href={localize(l.href)}
-                      class="text-sm text-ink-400 transition-colors hover:text-white"
+                      class:list={[
+                        'text-sm text-ink-500 transition-colors dark:text-ink-400',
+                        followTheme ? 'hover:text-ink-950 dark:hover:text-white' : 'hover:text-white',
+                      ]}
                       {...l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
                     >
                       {l.label}
@@ -63,10 +84,15 @@ const localize = (href: string) =>
           <h3 class="font-mono text-xs uppercase tracking-widest text-ink-500 dark:text-ink-400">
             {newsletter.eyebrow}
           </h3>
-          <p class="mt-3 font-display text-xl font-semibold tracking-tight text-white sm:text-2xl">
+          <p
+            class:list={[
+              'mt-3 font-display text-xl font-semibold tracking-tight sm:text-2xl',
+              followTheme ? 'text-ink-950 dark:text-white' : 'text-white',
+            ]}
+          >
             {newsletter.title}
           </p>
-          <p class="mt-2 text-sm leading-relaxed text-ink-400">{newsletter.subtitle}</p>
+          <p class="mt-2 text-sm leading-relaxed text-ink-500 dark:text-ink-400">{newsletter.subtitle}</p>
 
           <form
             id="newsletter-form"
@@ -91,12 +117,22 @@ const localize = (href: string) =>
                 required
                 maxlength="254"
                 placeholder={newsletter.placeholder}
-                class="h-11 w-full min-w-0 sm:flex-1 rounded-full bg-white/[0.04] px-4 text-sm text-white ring-1 ring-white/10 placeholder:text-ink-500 transition-[box-shadow,background-color] focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-brand-400/40 disabled:opacity-60"
+                class:list={[
+                  'h-11 w-full min-w-0 sm:flex-1 rounded-full px-4 text-sm ring-1 transition-[box-shadow,background-color] focus:outline-none focus:ring-2 focus:ring-brand-400/40 disabled:opacity-60',
+                  followTheme
+                    ? 'bg-ink-900/4 text-ink-950 ring-ink-900/10 placeholder:text-ink-400 focus:bg-ink-900/6 dark:bg-white/[0.04] dark:text-white dark:ring-white/10 dark:placeholder:text-ink-500 dark:focus:bg-white/[0.07]'
+                    : 'bg-white/[0.04] text-white ring-white/10 placeholder:text-ink-500 focus:bg-white/[0.07]',
+                ]}
               />
               <button
                 type="submit"
                 id="newsletter-submit"
-                class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-ink-950 transition-all duration-200 hover:bg-white/90 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+                class:list={[
+                  'inline-flex h-11 shrink-0 items-center justify-center rounded-full px-5 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60',
+                  followTheme
+                    ? 'bg-ink-950 text-white hover:bg-ink-900 dark:bg-white dark:text-ink-950 dark:hover:bg-white/90'
+                    : 'bg-white text-ink-950 hover:bg-white/90',
+                ]}
               >
                 {newsletter.submit}
               </button>
@@ -112,10 +148,19 @@ const localize = (href: string) =>
       )
     }
 
-    <div class="mt-14 border-t border-white/10 pt-8">
+    <div
+      class:list={[
+        'mt-14 border-t pt-8',
+        followTheme ? 'border-ink-900/10 dark:border-white/10' : 'border-white/10',
+      ]}
+    >
       <p class="text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-        <span class="font-medium text-ink-400">{SITE.legalName}</span>
-        <span class="mx-2 text-ink-700" aria-hidden="true">·</span>
+        <span class:list={['font-medium', followTheme ? 'text-ink-600 dark:text-ink-400' : 'text-ink-400']}>
+          {SITE.legalName}
+        </span>
+        <span class:list={['mx-2', followTheme ? 'text-ink-300 dark:text-ink-700' : 'text-ink-700']} aria-hidden="true">
+          ·
+        </span>
         <span>{SITE.address}</span>
       </p>
       <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

@@ -102,9 +102,9 @@ const sections = [
   world
 >
   {/*
-    One continuous interior, opening on the hero and never leaving the room.
-    The scenes run without a heading cadence or a band between them on purpose.
-    Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
+    One continuous interior, one tone. The page theme holds from the hero
+    through the footer — white in light mode, black in dark — with no invert
+    band. Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
   */}
   <World>
     <Hero lang={lang} />
@@ -121,7 +121,7 @@ const sections = [
     <Faq lang={lang} group="home-faq" appear />
     <CtaBand lang={lang} appear />
     <div data-world-scene class="world-close">
-      <Footer />
+      <Footer followTheme />
     </div>
   </World>
 </Layout>

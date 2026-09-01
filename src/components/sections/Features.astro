@@ -175,26 +175,6 @@ const surfaces = groups.reduce((n, g) => n + g.nodes.length, 0);
     z-index: 1;
   }
 
-  /* Soft well so the headline holds still and readable over the field. */
-  .world-copy {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .world-copy::before {
-    content: '';
-    position: absolute;
-    inset: -3rem -6rem;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 70% 62% at 50% 42%,
-      var(--w-surface, var(--color-ink-950)) 0%,
-      color-mix(in oklab, var(--w-surface, var(--color-ink-950)) 78%, transparent) 48%,
-      transparent 78%
-    );
-  }
-
   /* The map is a glass plate in the same room, not a white marketing card. */
   #features :global(.fm-plate) {
     --fm-detail-bg: var(--w-panel-2);
