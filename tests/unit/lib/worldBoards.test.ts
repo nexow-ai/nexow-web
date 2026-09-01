@@ -35,6 +35,8 @@ class FakeImage {
 function mock2d() {
   return {
     fillStyle: '',
+    strokeStyle: '',
+    lineWidth: 1,
     font: '',
     textAlign: 'left',
     textBaseline: 'alphabetic',
@@ -197,6 +199,8 @@ describe('buildBoardsAtlas', () => {
     expect(g2.drawImage).toHaveBeenCalled();
     expect(g2.fillText).toHaveBeenCalled();
     expect(g2.strokeRect).toHaveBeenCalledTimes(2);
+    expect(g2.strokeStyle).toBe('rgba(15, 18, 24, 0.09)');
+    expect(g2.lineWidth).toBe(0.5);
     expect(gl.createTexture).toHaveBeenCalled();
     expect(gl.texImage2D).toHaveBeenCalled();
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardsOn, 1);
@@ -268,6 +272,8 @@ describe('buildBoardsAtlas', () => {
     expect(gl.createTexture).not.toHaveBeenCalled();
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardLight, 0);
     expect(g2.drawImage).not.toHaveBeenCalled();
+    expect(g2.strokeStyle).toBe('rgba(255, 255, 255, 0.38)');
+    expect(g2.lineWidth).toBe(1);
   });
 
   it('skips a transparent panel fill and still draws the chrome', async () => {

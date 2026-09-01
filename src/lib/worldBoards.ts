@@ -137,7 +137,10 @@ function paintCard(
   const metaEl = board.querySelector('.hero-board__live');
   const dotEl = sample.querySelector('.hero-board__live-dot');
   const panel = resolved(sample, 'background-color', light ? '#f4f6f8' : '#10141c');
-  const line = resolved(sample, 'border-color', light ? 'rgba(15,18,24,0.12)' : 'rgba(255,255,255,0.12)');
+  /* Light faces get a hairline grey so the wall is not a dark frame on white
+     glass. Dark faces keep the original 38% film — a pale rule on ink, not
+     the sampled 12% the composer cards now wear in the light theme. */
+  const line = light ? 'rgba(15, 18, 24, 0.09)' : 'rgba(255, 255, 255, 0.38)';
   const titleFill = resolved(
     sample.querySelector('.hero-board__title') ?? titleEl,
     'color',
@@ -163,11 +166,12 @@ function paintCard(
   }
   g2.fillStyle = line;
   g2.fillRect(x, y + barH, w, 1);
-  /* The composer cards wear a 1px rule. Without it here the wall is a
-     stack of grounds, and the screens read as stickers. Hairline, inset
-     half a pixel so it lands on the pixel grid rather than straddling it. */
+  /* Without an outer rule the wall is a stack of grounds, and the screens
+     read as stickers. Hairline, inset half a pixel so it lands on the pixel
+     grid rather than straddling it. Light faces keep it half-weight so it
+     does not double the shader's edge into a dark frame. */
   g2.strokeStyle = line;
-  g2.lineWidth = 1;
+  g2.lineWidth = light ? 0.5 : 1;
   g2.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
 
   const cy = y + barH * 0.5;

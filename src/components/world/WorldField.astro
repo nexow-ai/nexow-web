@@ -835,7 +835,7 @@
 
       float toy = 1.0 - uBoardsOn;
       float inner = 1.0;
-      float inset = (1.0 - smoothstep(0.0, -0.055, sd));
+      float inset = (1.0 - smoothstep(0.0, mix(-0.055, -0.028, uLight), sd));
 
       /* ---- the cut ----
          A channel change, done the way a CRT does it: the picture collapses to
@@ -888,7 +888,7 @@
          it is the single thing that makes it read as a matte box instead of a
          pane: it draws a second border where there is no longer a frame to
          cast one. */
-      col *= 1.0 - inset * (0.16 - 0.08 * uLight) * (1.0 - 0.75 * uGlass);
+      col *= 1.0 - inset * (0.16 - 0.12 * uLight) * (1.0 - 0.75 * uGlass);
       /* The pane with nothing on it, kept so the content can be mixed back out
          of it below. One register against re-deriving the gradient after all
          thirty-six branches, and the only way to fade an interface out without
@@ -1091,11 +1091,12 @@
       vec3 shown = mix(uFog, col, max(glow * mix(uAlpha, 1.0, 0.85 * uLight), 0.62));
       /* Hairline after the dissolve, or the fog eats it. The rim above is a
          glint; this is the 1px the composer cards wear — a packed wall of ice
-         without it reads as one sheet. Ink on the light theme, a pale film
-         on the dark: a rule, not a glow. */
-      float hair = 1.0 - aastep(0.0048, abs(sd));
-      vec3 rule = mix(vec3(0.08, 0.11, 0.16), vec3(0.86, 0.90, 0.94), 1.0 - uLight);
-      gl_FragColor = vec4(mix(shown, rule, hair * mix(0.62, 0.42, uLight)), 1.0);
+         without it reads as one sheet. Light faces keep the thinner pale grey.
+         Dark faces get the original-weight ink-dark rule, still lighter than
+         the glass so the wall does not collapse to one sheet. */
+      float hair = 1.0 - aastep(mix(0.0048, 0.0024, uLight), abs(sd));
+      vec3 rule = mix(vec3(0.68, 0.72, 0.76), vec3(0.42, 0.46, 0.52), 1.0 - uLight);
+      gl_FragColor = vec4(mix(shown, rule, hair * mix(0.70, 0.22, uLight)), 1.0);
     }
   `;
 
