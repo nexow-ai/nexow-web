@@ -3065,6 +3065,10 @@ const NEWS = [
     width: 100%;
     height: auto;
     padding: 0.28rem 0.4rem 0.4rem;
+    /* Ambient loops (traces, meters, pings) run against this. 1 is the
+       authored period; 2 is slow enough that a wall of boards reads as a
+       field, not a strobe. Entrance draws and readout ticks do not use it. */
+    --hb-loop: 2;
     --pg-line: var(--w-line);
     --pg-ink: color-mix(in oklab, var(--w-text) 14%, transparent);
     --pg-ink-dim: color-mix(in oklab, var(--w-text) 8%, transparent);
@@ -3215,11 +3219,11 @@ const NEWS = [
     stroke-width: 0.9;
     stroke-linecap: round;
     stroke-dasharray: 3 4;
-    animation: hb-dash-flow 0.9s linear var(--d, 0s) infinite;
+    animation: hb-dash-flow calc(1.6s * var(--hb-loop, 1)) linear var(--d, 0s) infinite;
   }
   .dash-flow {
     stroke-dasharray: 3 4;
-    animation: hb-dash-flow 0.9s linear infinite;
+    animation: hb-dash-flow calc(1.6s * var(--hb-loop, 1)) linear infinite;
   }
   /* The accent rule is more specific and would keep its 3 3 pattern, which
      does not divide the 7px the flow travels — the dashes would jump once a
@@ -3238,7 +3242,7 @@ const NEWS = [
     stroke-width: 1.4;
     transform-box: fill-box;
     transform-origin: center;
-    animation: hb-ping-ring 2.6s ease-out infinite;
+    animation: hb-ping-ring calc(2.6s * var(--hb-loop, 1)) ease-in-out infinite;
     animation-delay: var(--d, 0s);
   }
   @keyframes hb-ping-ring {
@@ -3285,10 +3289,10 @@ const NEWS = [
   }
   .sweep {
     transform-origin: 76px 82px;
-    animation: hb-spin 5s linear infinite;
+    animation: hb-spin calc(5s * var(--hb-loop, 1)) linear infinite;
   }
   .spin-var {
-    animation: hb-spin var(--t, 10s) linear infinite;
+    animation: hb-spin calc(var(--t, 10s) * var(--hb-loop, 1)) linear infinite;
   }
   .spin-var.rev {
     animation-direction: reverse;
@@ -3299,7 +3303,7 @@ const NEWS = [
     }
   }
   .blip {
-    animation: hb-blip 5s linear var(--d, 0s) infinite;
+    animation: hb-blip calc(5s * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-blip {
     0% {
@@ -3348,7 +3352,7 @@ const NEWS = [
     fill: color-mix(in oklab, var(--w-text) 12%, transparent);
   }
   .horizon {
-    animation: hb-horizon 11s ease-in-out infinite alternate;
+    animation: hb-horizon calc(11s * var(--hb-loop, 1)) ease-in-out infinite alternate;
   }
   @keyframes hb-horizon {
     from {
@@ -3365,7 +3369,7 @@ const NEWS = [
     stroke-linecap: round;
   }
   .tape {
-    animation: hb-tape 7s ease-in-out infinite alternate;
+    animation: hb-tape calc(7s * var(--hb-loop, 1)) ease-in-out infinite alternate;
   }
   .tape.rev-tape {
     animation-direction: alternate-reverse;
@@ -3379,7 +3383,7 @@ const NEWS = [
     }
   }
   .hdg {
-    animation: hb-hdg 9s ease-in-out infinite alternate;
+    animation: hb-hdg calc(9s * var(--hb-loop, 1)) ease-in-out infinite alternate;
   }
   @keyframes hb-hdg {
     from {
@@ -3417,7 +3421,7 @@ const NEWS = [
     stroke-dasharray: 2 3;
   }
   .wobble {
-    animation: hb-wobble 12s ease-in-out infinite alternate;
+    animation: hb-wobble calc(12s * var(--hb-loop, 1)) ease-in-out infinite alternate;
   }
   @keyframes hb-wobble {
     from {
@@ -3447,7 +3451,7 @@ const NEWS = [
     fill: color-mix(in oklab, var(--color-accent-500) 55%, transparent);
   }
   .wf-row {
-    animation: hb-wf 1.9s linear var(--d, 0s) infinite;
+    animation: hb-wf calc(1.9s * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-wf {
     0% {
@@ -3472,7 +3476,7 @@ const NEWS = [
     stroke: var(--pg-br);
     stroke-width: 0.6;
     opacity: 0;
-    animation: hb-pulse 2.6s linear var(--d, 0s) infinite;
+    animation: hb-pulse calc(2.6s * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-pulse {
     0% {
@@ -3495,7 +3499,7 @@ const NEWS = [
   /* ---- network ---- */
 
   .pkt {
-    animation: hb-pkt var(--t, 1.8s) linear var(--d, 0s) infinite;
+    animation: hb-pkt calc(var(--t, 1.8s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-pkt {
     0% {
@@ -3514,7 +3518,7 @@ const NEWS = [
     }
   }
   .led {
-    animation: hb-led 2.4s linear var(--d, 0s) infinite;
+    animation: hb-led calc(2.4s * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-led {
     0%,
@@ -3552,7 +3556,7 @@ const NEWS = [
     fill: color-mix(in oklab, var(--color-brand-500) 8%, transparent);
   }
   .patrol {
-    animation: hb-patrol 9s linear infinite;
+    animation: hb-patrol calc(9s * var(--hb-loop, 1)) linear infinite;
   }
   @keyframes hb-patrol {
     0% {
@@ -3580,7 +3584,7 @@ const NEWS = [
     fill: none;
     stroke: var(--pg-br);
     stroke-width: 2.4;
-    animation: hb-cool 3.2s linear infinite;
+    animation: hb-cool calc(3.2s * var(--hb-loop, 1)) ease-in-out infinite;
   }
   @keyframes hb-cool {
     from {
@@ -3609,7 +3613,7 @@ const NEWS = [
     }
   }
   .needle {
-    animation: hb-needle var(--t, 6s) ease-in-out infinite alternate;
+    animation: hb-needle calc(var(--t, 6s) * var(--hb-loop, 1)) ease-in-out infinite alternate;
   }
   @keyframes hb-needle {
     from {
@@ -3622,7 +3626,7 @@ const NEWS = [
   /* Tape prints are rendered twice; one full set of travel per loop lands the
      wrap on identical pixels. */
   .tape-roll {
-    animation: hb-roll var(--t, 7s) linear infinite;
+    animation: hb-roll calc(var(--t, 7s) * var(--hb-loop, 1)) linear infinite;
   }
   @keyframes hb-roll {
     to {
@@ -3632,7 +3636,7 @@ const NEWS = [
   .fill-loop {
     transform-box: fill-box;
     transform-origin: left center;
-    animation: hb-fill-loop var(--t, 12s) linear infinite;
+    animation: hb-fill-loop calc(var(--t, 12s) * var(--hb-loop, 1)) linear infinite;
   }
   @keyframes hb-fill-loop {
     from {
@@ -3643,7 +3647,7 @@ const NEWS = [
     }
   }
   .hot {
-    animation: hb-hot 2.8s linear var(--d, 0s) infinite;
+    animation: hb-hot calc(2.8s * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-hot {
     0%,
@@ -3743,7 +3747,7 @@ const NEWS = [
   .draw-loop {
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
-    animation: hb-plot 9s linear infinite;
+    animation: hb-plot calc(9s * var(--hb-loop, 1)) linear infinite;
   }
   @keyframes hb-plot {
     0% {
@@ -3770,7 +3774,7 @@ const NEWS = [
   .eq-bar {
     transform-box: fill-box;
     transform-origin: center bottom;
-    animation: hb-eq var(--t, 1.2s) ease-in-out infinite alternate;
+    animation: hb-eq calc(var(--t, 1.2s) * var(--hb-loop, 1)) ease-in-out infinite alternate;
     animation-delay: var(--d, 0s);
   }
   @keyframes hb-eq {
@@ -3788,6 +3792,9 @@ const NEWS = [
    * below is a seamless infinite loop parameterised by `--t` (period) and
    * `--d` (phase), so one rule dresses a whole panel and the hero still ships
    * static SVG plus keyframes — no runtime JS behind the instruments.
+   *
+   * `--hb-loop` on the svg stretches the ambient motion (traces, meters,
+   * pings) without touching readout ticks or one-shot entrances.
    *
    * Every loop is written so its t=0 frame is a legible one: the atlas
    * (src/lib/worldBoards.ts) reveals a hidden board and snapshots it in the
@@ -3848,7 +3855,7 @@ const NEWS = [
   /* A print lands: the row lights, then decays. */
   .flash {
     opacity: 0;
-    animation: hb-flash var(--t, 3.4s) linear var(--d, 0s) infinite;
+    animation: hb-flash calc(var(--t, 3.4s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-flash {
     0% {
@@ -3876,7 +3883,7 @@ const NEWS = [
 
   /* A read head crossing a plot. */
   .scan {
-    animation: hb-scan var(--t, 7s) linear var(--d, 0s) infinite;
+    animation: hb-scan calc(var(--t, 7s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite;
   }
   @keyframes hb-scan {
     0% {
@@ -3897,7 +3904,7 @@ const NEWS = [
   .pulse-x {
     transform-box: fill-box;
     transform-origin: left center;
-    animation: hb-pulse-x var(--t, 5s) ease-in-out var(--d, 0s) infinite alternate;
+    animation: hb-pulse-x calc(var(--t, 5s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite alternate;
   }
   .pulse-x.from-right {
     transform-origin: right center;
@@ -3913,7 +3920,7 @@ const NEWS = [
 
   /* Anything that should breathe rather than blink. */
   .breathe {
-    animation: hb-breathe var(--t, 2.8s) ease-in-out var(--d, 0s) infinite alternate;
+    animation: hb-breathe calc(var(--t, 2.8s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite alternate;
   }
   @keyframes hb-breathe {
     from {
@@ -3926,7 +3933,7 @@ const NEWS = [
 
   /* A marker that drifts with the value it marks. */
   .bob {
-    animation: hb-bob var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate;
+    animation: hb-bob calc(var(--t, 6s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite alternate;
   }
   @keyframes hb-bob {
     from {
@@ -3939,7 +3946,7 @@ const NEWS = [
 
   /* An arc that keeps re-metering between two readings. */
   .arc-loop {
-    animation: hb-arc var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate;
+    animation: hb-arc calc(var(--t, 6s) * var(--hb-loop, 1)) ease-in-out var(--d, 0s) infinite alternate;
   }
   @keyframes hb-arc {
     from {
