@@ -68,6 +68,31 @@ const rnd = (i: number) => {
   const s = Math.sin(i * 127.1 + 311.7) * 43758.5453;
   return s - Math.floor(s);
 };
+/**
+ * A spark that closes on itself. Harmonics whose periods divide the window
+ * mean the last sample equals the one before the first, and the extra wrap
+ * point carries the line into the next copy — so two sets translated one
+ * width apart (.roll-x) run as one endless trace. Returns the path and the
+ * width of a set, which is also the distance the loop travels.
+ */
+const loopSpark = (seed: number, n: number, x0: number, y0: number, dx: number, amp: number) => {
+  const at = (i: number) => {
+    const a = ((i % n) / n) * Math.PI * 2;
+    return (
+      Math.sin(a + seed) * 0.56 +
+      Math.sin(2 * a + seed * 1.7) * 0.27 +
+      Math.sin(3 * a + seed * 2.3) * 0.16 +
+      Math.sin(5 * a + seed * 3.1) * 0.09
+    );
+  };
+  return {
+    d: Array.from(
+      { length: n + 1 },
+      (_, i) => `${i ? 'L' : 'M'}${f1(x0 + i * dx)} ${f1(y0 - at(i) * amp)}`,
+    ).join(''),
+    w: f1(n * dx),
+  };
+};
 
 /* ---- world landmask (equirectangular, 46×19, lat 84°N..51°S) ----
  * Rendered as one dotted stroke per land run: `stroke-dasharray: 0 <pitch>`
@@ -136,6 +161,8 @@ const ARCS = [
   'M134.7 69.3Q149 82 156.2 93.7',
 ];
 const GEO_PINGS = [0, 2, 4, 5];
+/** The second reading of each link — RTT never sits still. */
+const GEO_RTT_ALT = ['74ms', '92ms', '61ms', '66ms'];
 const GEO_LINKS = [
   ['NYC-LON', '72ms', 52],
   ['LON-DXB', '96ms', 40],
@@ -389,7 +416,10 @@ const netOutArea = `${netLine(NET_IN.map((v) => f1(v * 0.45)), 1)}L272 148L8 148
 const CANDLE_N = 18;
 const CANDLES = Array.from({ length: CANDLE_N }, (_, i) => {
   const a = (i / CANDLE_N) * Math.PI * 2;
-  return f1(64 + 21 * Math.sin(a) + 8.5 * Math.sin(2 * a + 1.1) + 4.5 * Math.sin(3 * a + 2.3));
+  const wave = 21 * Math.sin(a) + 8.5 * Math.sin(2 * a + 1.1) + 4.5 * Math.sin(3 * a + 2.3);
+  /* Grain is safe here: both sets read the same array, so whatever a bar is
+     it is again one window later. */
+  return f1(64 + wave + (rnd(i + 30) - 0.5) * 9);
 });
 const candleY = (v: number) => 86 - v * 0.52;
 const candleBodies = CANDLES.map((c, i) => {
@@ -439,10 +469,7 @@ const PNL_BTC = ['+1.84k', '+1.91k', '+1.78k'];
 const PNL_ETH = ['\u2212418', '\u2212392', '\u2212441'];
 
 /* ---- ai: throughput spark + latency histogram ---- */
-const SPARK = Array.from(
-  { length: 13 },
-  (_, i) => `${i ? 'L' : 'M'}${186 + i * 7} ${f1(34 - 12 * rnd(i + 9))}`,
-).join('');
+const SPARK = loopSpark(5.1, 12, 186, 28, 7, 6);
 const LAT_HIST = [14, 9, 5, 3, 2];
 const TOOL_ROWS = [
   ['search.markets()', '240ms ✓'],
@@ -482,10 +509,10 @@ const ddLine = NAV_SERIES.map((v, i) => {
   return `${i ? 'L' : 'M'}${f1(98 + i * 6)} ${f1(84 + (navPeak - v) * 0.85)}`;
 }).join('');
 const HOLDINGS = [
-  { s: 'NVDA', w: 8.4, pl: '+2.41%', up: true },
-  { s: 'MSFT', w: 6.2, pl: '+0.84%', up: true },
-  { s: 'BTC', w: 4.8, pl: '−1.22%', up: false },
-  { s: 'TLT', w: 3.9, pl: '+0.31%', up: true },
+  { s: 'NVDA', w: 8.4, pl: '+2.41%', alt: '+2.48%', up: true },
+  { s: 'MSFT', w: 6.2, pl: '+0.84%', alt: '+0.79%', up: true },
+  { s: 'BTC', w: 4.8, pl: '\u22121.22%', alt: '\u22121.14%', up: false },
+  { s: 'TLT', w: 3.9, pl: '+0.31%', alt: '+0.36%', up: true },
 ];
 
 /* ---- options: gamma exposure by strike, IV smile, greeks, P/C gauge ---- */
@@ -523,10 +550,7 @@ const CB_ROWS = [
   ['BOE', '5.25', 'HOLD'],
   ['BOJ', '0.10', '+10bp'],
 ];
-const dxySpark = Array.from(
-  { length: 10 },
-  (_, i) => `${i ? 'L' : 'M'}${f1(210 + i * 6.8)} ${f1(74 - 9 * rnd(i + 310))}`,
-).join('');
+const dxySpark = loopSpark(3.7, 10, 208, 70, 6.8, 6);
 
 /* ---- orderflow: rolling tape, DOM heat ladder, CVD, per-bar delta ----
  * The tape is 8 prints rendered twice inside a clip; the loop translates one
@@ -696,9 +720,7 @@ const PREDICT = [
   { n: 'GPT-5 THIS YR', p: 63, vol: '890k' },
   { n: 'LAL WIN TITLE', p: 29, vol: '640k' },
 ];
-const PREDICT_LINE = Array.from({ length: 24 }, (_, i) => 58 + i * 0.7 + (rnd(i + 200) - 0.5) * 8)
-  .map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 7.4)} ${f1(48 - (v - 50) * 0.7)}`)
-  .join('');
+const PREDICT_LINE = loopSpark(1.9, 23, 8, 34, 7.4, 12);
 const SPORTS_EVENTS = [
   ['12′', 'SALAH', '1–0'],
   ['31′', 'DIAZ', '2–0'],
@@ -712,9 +734,7 @@ const ENERGY_MIX = [
   { n: 'GAS', pct: 16, cls: 'stroke-dim' },
   { n: 'HYDRO', pct: 10, cls: 'stroke-br' },
 ];
-const ENERGY_LOAD = Array.from({ length: 20 }, (_, i) => 38 + Math.sin(i * 0.45) * 14 + rnd(i + 300) * 6)
-  .map((v, i) => `${i ? 'L' : 'M'}${f1(148 + i * 6.2)} ${f1(70 - v * 0.55)}`)
-  .join('');
+const ENERGY_LOAD = loopSpark(2.8, 20, 148, 56, 6.2, 12);
 const FLIGHTS = [
   ['BA112', 'LHR', 'JFK', 'on'],
   ['EK202', 'DXB', 'SFO', 'delay'],
@@ -728,7 +748,10 @@ const SHIPS = [
   ['MSC IRINA', 'MAL', '16.1kn'],
   ['CMA CGM', 'ATL', '19.0kn'],
 ];
+/** The second print of each speed — the log never reads the same twice. */
+const SHIP_ALT = ['14.4kn', '18.1kn', '16.3kn', '18.8kn'];
 const POKER_BOARD = ['A♠', 'K♠', 'T♥', '7♦'];
+const POKER_ACTION = ['UTG fold', 'HJ 2.5x', 'CO fold', 'BTN call', 'BB check'];
 const POKER_SEATS = [
   { n: 'BTN', stack: '84', act: false },
   { n: 'SB', stack: '62', act: false },
@@ -738,14 +761,9 @@ const POKER_SEATS = [
   { n: 'CO', stack: '71', act: false },
 ];
 const ESPORTS = [
-  { n: 'TEAM SPIRIT', k: 18, d: 9, gold: '24.1k' },
-  { n: 'G2', k: 11, d: 18, gold: '19.4k' },
+  { n: 'TEAM SPIRIT', k: 18, d: 9, gold: '24.1k', goldAlt: '24.3k' },
+  { n: 'G2', k: 11, d: 18, gold: '19.4k', goldAlt: '19.5k' },
 ];
-const spark = (seed: number, n: number, x0: number, y0: number, dx: number, amp: number) =>
-  Array.from({ length: n }, (_, i) => {
-    const y = y0 - (rnd(seed + i) * amp + Math.sin(i * 0.55 + seed) * amp * 0.45);
-    return `${i ? 'L' : 'M'}${f1(x0 + i * dx)} ${f1(y)}`;
-  }).join('');
 const FX_PAIRS = [
   { n: 'EURUSD', px: '1.0874', ch: '+0.18', up: true },
   { n: 'GBPUSD', px: '1.2712', ch: '+0.09', up: true },
@@ -762,8 +780,27 @@ const FX_CORR = [
   [-0.22, -0.18, 0.44, -0.12, 1],
 ];
 const FX_AX = ['EUR', 'GBP', 'JPY', 'AUD', 'CAD'];
-const FX_EUR = spark(11, 22, 8, 46, 5.6, 14);
-const FX_GBP = spark(19, 22, 8, 46, 5.6, 10);
+const FX_EUR = loopSpark(1.1, 21, 8, 42, 5.6, 11);
+const FX_GBP = loopSpark(2.7, 21, 8, 42, 5.6, 8);
+/** Two quotes per pair: the board ticks between them (.cyc2). */
+const FX_HEAD = [
+  { px: '1.0874', ch: '+0.18%' },
+  { px: '1.0879', ch: '+0.23%' },
+  { px: '1.0871', ch: '+0.15%' },
+  { px: '1.0876', ch: '+0.20%' },
+];
+const FX_TICK = FX_PAIRS.map((pair, i) => {
+  const step = i % 2 ? 3 : -2;
+  const dec = pair.px.split('.')[1].length;
+  const alt = (Number(pair.px) + step / 10 ** dec).toFixed(dec);
+  /* The quotes carry a typographic minus; parse and re-set it. */
+  const ch = Number(pair.ch.replace('\u2212', '-')) + step / 100;
+  return {
+    ...pair,
+    alt,
+    altCh: (ch < 0 ? '\u2212' : '+') + Math.abs(ch).toFixed(2),
+  };
+});
 const METALS = [
   { n: 'XAU', px: '2,418', ch: '+0.64', u: 'oz' },
   { n: 'XAG', px: '31.42', ch: '+1.12', u: 'oz' },
@@ -772,8 +809,26 @@ const METALS = [
   { n: 'BRENT', px: '82.15', ch: '+0.74', u: 'bbl' },
   { n: 'HH', px: '2.18', ch: '−1.40', u: 'mm' },
 ];
-const METAL_GOLD = spark(7, 20, 148, 48, 6.1, 16);
-const METAL_OIL = spark(23, 20, 148, 48, 6.1, 11);
+const METAL_GOLD = loopSpark(0.6, 20, 148, 48, 6.1, 15);
+const METAL_OIL = loopSpark(3.4, 20, 148, 48, 6.1, 10);
+/** Each metal quote steps between two prints, its own tick size. */
+const XAU_HEAD = ['2,418.4', '2,419.1', '2,417.6'];
+const METAL_TICK = METALS.map((m, i) => {
+  const raw = Number(m.px.replace(',', ''));
+  const dec = m.px.includes('.') ? m.px.split('.')[1].length : 0;
+  const alt = raw + (i % 2 ? 1 : -1) * (dec === 0 ? 2 : 10 ** -dec * 2);
+  return {
+    ...m,
+    alt: dec === 0 ? alt.toLocaleString('en-US') : alt.toFixed(dec),
+  };
+});
+const CHAT_ROOMS = [
+  { n: '#risk', c: [3, 4] },
+  { n: '#desk', c: [1, 2] },
+  { n: '#infra', c: [0, 1] },
+  { n: '#bots', c: [2, 3] },
+  { n: '#news', c: [8, 9] },
+];
 const CHAT_MSGS = [
   { r: '#risk', w: 'VAR breach 2.4% on ES', t: '0:12' },
   { r: '#desk', w: 'EURUSD spike into 1.0880', t: '0:18' },
@@ -788,20 +843,27 @@ const SERVERS = [
   { n: 'wrk-09', cpu: 67, mem: 82, st: 'ok' },
   { n: 'gpu-01', cpu: 94, mem: 71, st: 'hot' },
 ];
-const SRV_RPS = spark(31, 18, 168, 70, 5.6, 22);
+const SRV_RPS = loopSpark(1.7, 18, 168, 58, 5.6, 13);
 const DB_SLOW = [
   ['SELECT', 'fills', '182ms'],
   ['UPDATE', 'pos', '94ms'],
   ['COPY', 'ticks', '410ms'],
   ['JOIN', 'nav', '67ms'],
 ];
-const DB_LAG = spark(41, 16, 168, 52, 6.2, 14);
+const DB_LAG = loopSpark(2.1, 17, 168, 48, 6.2, 11);
 const BOTS = [
-  { n: 'mm-07', pnl: '+1.2k', st: 'run' },
-  { n: 'arb-3', pnl: '+418', st: 'run' },
-  { n: 'twap-1', pnl: '−62', st: 'halt' },
-  { n: 'tg-ops', pnl: '—', st: 'run' },
-  { n: 'liq-9', pnl: '+890', st: 'run' },
+  { n: 'mm-07', pnl: '+1.2k', alt: '+1.3k', st: 'run' },
+  { n: 'arb-3', pnl: '+418', alt: '+441', st: 'run' },
+  { n: 'twap-1', pnl: '\u221262', alt: '\u221258', st: 'halt' },
+  { n: 'tg-ops', pnl: '—', alt: '—', st: 'run' },
+  { n: 'liq-9', pnl: '+890', alt: '+904', st: 'run' },
+];
+const BOT_TICKS = [
+  'mm-07  BTC +2',
+  'arb-3  ETH 0',
+  'liq-9  SOL \u22121',
+  'tg-ops  ping',
+  'scan-4  news',
 ];
 const TV_CH = [
   { n: 'A', t: 'CNBC', v: '1.2M' },
@@ -809,7 +871,14 @@ const TV_CH = [
   { n: 'C', t: 'ESPN', v: '2.1M' },
   { n: 'D', t: 'NHK', v: '610k' },
 ];
-const VID_BIT = spark(53, 20, 8, 48, 6.4, 12);
+const VID_BIT = loopSpark(4.2, 20, 8, 42, 6.4, 11);
+/** Eight-band programme meter: each bar rides its own period. */
+const VU = Array.from({ length: 8 }, (_, i) => ({
+  x: f1(152 + i * 6.6),
+  s: f1(0.18 + rnd(i + 940) * 0.5),
+  t: f1(0.5 + rnd(i + 970) * 0.5),
+  d: f1(rnd(i + 990) * 0.6),
+}));
 const NEWS = [
   ['14:02', 'FED', 'Williams: cuts remain data-dependent'],
   ['13:51', 'OPEC', 'Output hold through Q4'],
@@ -944,27 +1013,54 @@ const NEWS = [
           )}
           {board.id === 'forex' && (
           <g>
-            <text class="lbl em" x="8" y="10">EURUSD  1.0874</text>
-            <text class="lbl up" x="92" y="10">+0.18%</text>
-            <text class="lbl dim xs" x="132" y="10">DXY 104.2 · TOK  LON  NY</text>
-            <path class="stroke-br draw" d={FX_EUR} pathLength="100" style="--d:0.2s" />
-            <path class="stroke-ac draw" d={FX_GBP} pathLength="100" style="--d:0.28s" />
-            <path class="ln dash thin" d="M8 32H130M8 46H130" />
-            <text class="lbl dim xs" x="8" y="60">EUR  GBP overlay · 4h</text>
-            {FX_PAIRS.map((p, pi) => (
-              <g class="fade" style={`--d:${(0.06 + pi * 0.04).toFixed(2)}s`}>
-                <text class="lbl xs" x={8 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.n}</text>
-                <text class:list={['lbl xs', p.up ? 'up' : 'dn']} x={44 + (pi % 2) * 70} y={76 + Math.floor(pi / 2) * 14}>{p.ch}</text>
+            {FX_HEAD.map((q, qi) => (
+              <g class:list={['cyc4', qi === 0 && 'lead']} style={`--t:3.4s;--d:${(qi * 0.85).toFixed(2)}s`}>
+                <text class="lbl em" x="8" y="10">EURUSD  {q.px}</text>
+                <text class="lbl up" x="92" y="10">{q.ch}</text>
               </g>
             ))}
+            <text class="lbl dim xs" x="132" y="10">DXY 104.2 · TOK  LON  NY</text>
+            <clipPath id="fx-clip">
+              <rect x="8" y="20" width="117" height="38" />
+            </clipPath>
+            <g clip-path="url(#fx-clip)">
+              <g class="roll-x" style={`--sx:-${FX_EUR.w}px;--t:17s`}>
+                {[0, 1].map((set) => (
+                  <g transform={`translate(${set * FX_EUR.w} 0)`}>
+                    <path class="stroke-br" d={FX_EUR.d} />
+                    <path class="stroke-ac" d={FX_GBP.d} />
+                  </g>
+                ))}
+              </g>
+            </g>
+            <path class="ln dash thin" d="M8 32H130M8 46H130" />
+            <text class="lbl dim xs" x="8" y="60">EUR  GBP overlay · 4h</text>
+            {FX_TICK.map((p, pi) => {
+              const y = 76 + Math.floor(pi / 2) * 14;
+              const t = 2.6 + pi * 0.34;
+              return (
+                <g class="fade" style={`--d:${(0.06 + pi * 0.04).toFixed(2)}s`}>
+                  <text class="lbl xs" x={8 + (pi % 2) * 70} y={y}>{p.n}</text>
+                  {[p.ch, p.altCh].map((v, vi) => (
+                    <text
+                      class:list={['lbl xs cyc2', vi === 0 && 'lead', p.up ? 'up' : 'dn']}
+                      x={44 + (pi % 2) * 70}
+                      y={y}
+                      style={`--t:${t.toFixed(2)}s;--d:${(vi * t * 0.5).toFixed(2)}s`}
+                    >{v}</text>
+                  ))}
+                </g>
+              );
+            })}
             <text class="lbl dim xs" x="8" y="126">SESS LON 61%  NY 22%</text>
             <rect class="track" x="8" y="130" width="130" height="5" rx="1" />
-            <rect class="f-br" x="8" y="130" width="79" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="8" y="130" width="79" height="5" rx="1" style="--s:0.74;--t:6.4s" />
             <text class="lbl dim xs" x="8" y="148">PIP 1.8 · SWAP −4.2</text>
             <text class="lbl dim xs" x="154" y="10">CORR  20D</text>
             {FX_AX.map((a, i) => (
               <text class="lbl dim xs" x={168 + i * 20} y="22">{a}</text>
             ))}
+            <rect class="f-br scan" x="166" y="26" width="20" height="92" rx="1" style="--sx:80px;--t:6.5s" />
             {FX_CORR.map((row, ri) => (
               <g>
                 <text class="lbl dim xs" x="154" y={36 + ri * 18}>{FX_AX[ri]}</text>
@@ -987,22 +1083,42 @@ const NEWS = [
           )}
           {board.id === 'metals' && (
           <g>
-            <text class="lbl em" x="8" y="10">XAU  2,418.4</text>
-            <text class="lbl up" x="86" y="10">+0.64%</text>
-            <text class="lbl dim xs" x="128" y="10">COMEX · AUG</text>
-            {METALS.map((m, mi) => (
-              <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
-                <text class="lbl xs" x="8" y={28 + mi * 16}>{m.n}</text>
-                <text class="lbl xs" x="44" y={28 + mi * 16}>{m.px}</text>
-                <text class:list={['lbl xs', m.ch.startsWith('+') ? 'up' : 'dn']} x="86" y={28 + mi * 16}>{m.ch}</text>
-                <text class="lbl dim xs" x="118" y={28 + mi * 16}>{m.u}</text>
-              </g>
+            {XAU_HEAD.map((px, xi) => (
+              <text class:list={['lbl em cyc3', xi === 0 && 'lead']} x="8" y="10" style={`--t:4.2s;--d:${(xi * 1.4).toFixed(1)}s`}>XAU  {px}</text>
             ))}
+            <text class="lbl up breathe" x="86" y="10" style="--t:3.4s">+0.64%</text>
+            <text class="lbl dim xs" x="128" y="10">COMEX · AUG</text>
+            {METAL_TICK.map((m, mi) => {
+              const y = 28 + mi * 16;
+              const t = 3.4 + mi * 0.42;
+              return (
+                <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
+                  <rect class="f-br flash" x="6" y={y - 8} width="130" height="11" rx="1" style={`--t:${t.toFixed(2)}s;--d:${(mi * 0.6).toFixed(2)}s`} />
+                  <text class="lbl xs" x="8" y={y}>{m.n}</text>
+                  {[m.px, m.alt].map((v, vi) => (
+                    <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="44" y={y} style={`--t:${t.toFixed(2)}s;--d:${(vi * t * 0.5).toFixed(2)}s`}>{v}</text>
+                  ))}
+                  <text class:list={['lbl xs', m.ch.startsWith('+') ? 'up' : 'dn']} x="86" y={y}>{m.ch}</text>
+                  <text class="lbl dim xs" x="118" y={y}>{m.u}</text>
+                </g>
+              );
+            })}
             <text class="lbl dim xs" x="8" y="134">AU/OIL  30.8 oz</text>
             <text class="lbl dim xs" x="8" y="148">INV −2.1% w/w</text>
             <text class="lbl dim xs" x="148" y="16">GOLD  OIL</text>
-            <path class="stroke-br draw" d={METAL_GOLD} pathLength="100" style="--d:0.2s" />
-            <path class="stroke-ac draw" d={METAL_OIL} pathLength="100" style="--d:0.3s" />
+            <clipPath id="mt-clip">
+              <rect x="148" y="20" width="122" height="46" />
+            </clipPath>
+            <g clip-path="url(#mt-clip)">
+              <g class="roll-x" style={`--sx:-${METAL_GOLD.w}px;--t:19s`}>
+                {[0, 1].map((set) => (
+                  <g transform={`translate(${set * METAL_GOLD.w} 0)`}>
+                    <path class="stroke-br" d={METAL_GOLD.d} />
+                    <path class="stroke-ac" d={METAL_OIL.d} />
+                  </g>
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M148 32H272M148 48H272" />
             <text class="lbl dim xs" x="148" y="90">WTI 78.40  BRT 82.15</text>
             <text class="lbl dim xs" x="148" y="104">CRACK 18.4</text>
@@ -1014,28 +1130,45 @@ const NEWS = [
           {board.id === 'chat' && (
           <g>
             <text class="lbl dim xs" x="8" y="10">ROOMS</text>
-            {['#risk', '#desk', '#infra', '#bots', '#news'].map((r, ri) => (
+            {CHAT_ROOMS.map((room, ri) => (
               <g>
                 <rect class={ri === 0 ? 'f-br' : 'f-soft'} x="8" y={16 + ri * 16} width="54" height="13" rx="2" />
-                <text class="lbl xs" x="12" y={25 + ri * 16}>{r}</text>
-                <text class="lbl dim xs" x="50" y={25 + ri * 16}>{[3, 1, 0, 2, 8][ri]}</text>
+                <rect class="f-br flash" x="8" y={16 + ri * 16} width="54" height="13" rx="2" style={`--t:5.2s;--d:${(ri * 1.04).toFixed(2)}s`} />
+                <text class="lbl xs" x="12" y={25 + ri * 16}>{room.n}</text>
+                {room.c.map((c, ci) => (
+                  <text class:list={['lbl dim xs cyc2', ci === 0 && 'lead']} x="50" y={25 + ri * 16} style={`--t:5.2s;--d:${(ri * 1.04 + ci * 2.6).toFixed(2)}s`}>{c}</text>
+                ))}
               </g>
             ))}
-            <text class="lbl dim xs" x="8" y="110">UNREAD 14</text>
+            {['UNREAD 14', 'UNREAD 15', 'UNREAD 17'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="110" style={`--t:5.2s;--d:${(vi * 1.73).toFixed(2)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="8" y="124">PAGED  2</text>
-            <text class="lbl up xs" x="8" y="140">VAR · live</text>
+            <text class="lbl up xs breathe" x="8" y="140" style="--t:2.2s">VAR · live</text>
             <text class="lbl dim xs" x="8" y="152">SLACK  TG  IRC</text>
-            <text class="lbl dim xs" x="76" y="10">#risk · 18 online</text>
-            {CHAT_MSGS.map((m, mi) => (
-              <g class="fade" style={`--d:${(0.08 + mi * 0.05).toFixed(2)}s`}>
-                <text class="lbl dim xs" x="76" y={26 + mi * 20}>{m.t}  {m.r}</text>
-                <text class="lbl xs" x="76" y={36 + mi * 20}>{m.w}</text>
-              </g>
+            {['#risk · 18 online', '#risk · 19 online'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="76" y="10" style={`--t:7.4s;--d:${(vi * 3.7).toFixed(1)}s`}>{v}</text>
             ))}
+            {/* The room scrolls: one set of messages of travel per loop, so a
+                line leaves the top exactly as its twin reaches its place. */}
+            <clipPath id="chat-clip">
+              <rect x="74" y="16" width="198" height="100" />
+            </clipPath>
+            <g clip-path="url(#chat-clip)">
+              <g class="tape-roll" style="--sh:-100px;--t:11s">
+                {CHAT_MSGS.concat(CHAT_MSGS).map((m, mi) => (
+                  <g>
+                    <text class="lbl dim xs" x="76" y={26 + mi * 20}>{m.t}  {m.r}</text>
+                    <text class="lbl xs" x="76" y={36 + mi * 20}>{m.w}</text>
+                  </g>
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M76 128H272" />
-            <text class="lbl dim xs" x="76" y="140">nexow-bot is typing…</text>
+            <text class="lbl dim xs" x="76" y="140">nexow-bot is typing</text>
+            <text class="lbl dim xs caret" x="176" y="140">▌</text>
             <rect class="track" x="76" y="146" width="160" height="6" rx="1" />
-            <rect class="f-br grow-x" x="76" y="146" width="72" height="6" rx="1" style="--d:0.4s" />
+            <rect class="f-br fill-loop" x="76" y="146" width="160" height="6" rx="1" style="--t:9s" />
           </g>
           )}
           {board.id === 'server' && (
@@ -1043,38 +1176,71 @@ const NEWS = [
             <text class="lbl em" x="8" y="10">48 NODES</text>
             <text class="lbl up" x="68" y="10">99.98%</text>
             <text class="lbl dim xs" x="110" y="10">EU-1 · 12ms</text>
-            {SERVERS.map((s, si) => (
-              <g class="fade" style={`--d:${(si * 0.05).toFixed(2)}s`}>
-                <text class="lbl xs" x="8" y={28 + si * 16}>{s.n}</text>
-                <rect class="track" x="52" y={22 + si * 16} width="70" height="5" rx="1" />
-                <rect class={s.st === 'hot' ? 'f-ac' : 'f-br'} x="52" y={22 + si * 16} width={s.cpu * 0.7} height="5" rx="1" />
-                <text class="lbl dim xs" x="126" y={28 + si * 16}>{s.cpu}%</text>
-                <text class:list={['lbl xs', s.st === 'hot' && 'dn']} x="148" y={28 + si * 16}>{s.st}</text>
-              </g>
+            {SERVERS.map((s, si) => {
+              const t = 4 + si * 0.6;
+              return (
+                <g class="fade" style={`--d:${(si * 0.05).toFixed(2)}s`}>
+                  <text class="lbl xs" x="8" y={28 + si * 16}>{s.n}</text>
+                  <rect class="track" x="52" y={22 + si * 16} width="70" height="5" rx="1" />
+                  <rect
+                    class:list={[s.st === 'hot' ? 'f-ac' : 'f-br', 'pulse-x']}
+                    x="52"
+                    y={22 + si * 16}
+                    width={s.cpu * 0.7}
+                    height="5"
+                    rx="1"
+                    style={`--s:${(1 - 9 / s.cpu).toFixed(2)};--t:${t.toFixed(1)}s;--d:${(si * 0.4).toFixed(1)}s`}
+                  />
+                  {[s.cpu, s.cpu - 4].map((v, vi) => (
+                    <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="126" y={28 + si * 16} style={`--t:${t.toFixed(1)}s;--d:${(vi * t * 0.5).toFixed(2)}s`}>{v}%</text>
+                  ))}
+                  <text class:list={['lbl xs', s.st === 'hot' && 'dn', s.st === 'hot' && 'breathe']} x="148" y={28 + si * 16} style={s.st === 'hot' ? `--t:${(1.4 + si * 0.2).toFixed(1)}s` : undefined}>{s.st}</text>
+                </g>
+              );
+            })}
+            {['P99  42ms · ERR 0.04%', 'P99  46ms · ERR 0.04%', 'P99  39ms · ERR 0.03%'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="120" style={`--t:4.8s;--d:${(vi * 1.6).toFixed(1)}s`}>{v}</text>
             ))}
-            <text class="lbl dim xs" x="8" y="120">P99  42ms · ERR 0.04%</text>
             <text class="lbl dim xs" x="8" y="134">DISK  61% · NET 4.2Gb</text>
             <text class="lbl dim xs" x="8" y="150">K8S  214 PODS</text>
-            <text class="lbl dim xs" x="168" y="16">RPS  18.4k</text>
-            <path class="stroke-br draw" d={SRV_RPS} pathLength="100" style="--d:0.22s" />
+            {['RPS  18.4k', 'RPS  18.9k', 'RPS  18.1k'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="168" y="16" style={`--t:3.3s;--d:${(vi * 1.1).toFixed(1)}s`}>{v}</text>
+            ))}
+            <clipPath id="srv-clip">
+              <rect x="168" y="38" width="100" height="40" />
+            </clipPath>
+            <g clip-path="url(#srv-clip)">
+              <g class="roll-x" style={`--sx:-${SRV_RPS.w}px;--t:12s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={SRV_RPS.d} transform={`translate(${set * SRV_RPS.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M168 48H272M168 70H272" />
             <text class="lbl dim xs" x="168" y="96">SAT  FRA  AMS</text>
-            <text class="lbl dim xs" x="168" y="112">GPU 94%  H100</text>
+            {['GPU 94%  H100', 'GPU 96%  H100', 'GPU 91%  H100'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="168" y="112" style={`--t:3.9s;--d:${(vi * 1.3).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="168" y="128">DEPLOY  14:02</text>
-            <text class="lbl dim xs" x="168" y="144">ALERTS  2 WARN</text>
+            <text class="lbl dim xs breathe" x="168" y="144" style="--t:2.6s">ALERTS  2 WARN</text>
           </g>
           )}
           {board.id === 'database' && (
           <g>
-            <text class="lbl em" x="8" y="10">12,418 QPS</text>
-            <text class="lbl up" x="80" y="10">HIT 98.4%</text>
+            {['12,418 QPS', '12,506 QPS', '12,364 QPS'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="10" style={`--t:2.7s;--d:${(vi * 0.9).toFixed(1)}s`}>{v}</text>
+            ))}
+            <text class="lbl up breathe" x="80" y="10" style="--t:3.2s">HIT 98.4%</text>
             <text class="lbl dim xs" x="136" y="10">PG 16 · A</text>
-            <text class="lbl dim xs" x="8" y="26">CONN  184 / 300</text>
+            {['CONN  184 / 300', 'CONN  191 / 300'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="8" y="26" style={`--t:5.4s;--d:${(vi * 2.7).toFixed(1)}s`}>{v}</text>
+            ))}
             <rect class="track" x="8" y="30" width="140" height="5" rx="1" />
-            <rect class="f-br" x="8" y="30" width="86" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="8" y="30" width="86" height="5" rx="1" style="--s:0.82;--t:5.4s" />
             <text class="lbl dim xs" x="8" y="48">SLOW  1s+</text>
             {DB_SLOW.map((q, qi) => (
               <g class="fade" style={`--d:${(0.08 + qi * 0.05).toFixed(2)}s`}>
+                <rect class="f-br flash" x="6" y={56 + qi * 14} width="130" height="11" rx="1" style={`--t:4.4s;--d:${(qi * 1.1).toFixed(2)}s`} />
                 <text class="lbl dim xs" x="8" y={64 + qi * 14}>{q[0]}</text>
                 <text class="lbl xs" x="48" y={64 + qi * 14}>{q[1]}</text>
                 <text class:list={['lbl xs', q[2].startsWith('4') && 'dn']} x="92" y={64 + qi * 14}>{q[2]}</text>
@@ -1084,24 +1250,48 @@ const NEWS = [
             <text class="lbl dim xs" x="8" y="142">BLOAT  idx_fills</text>
             <text class="lbl dim xs" x="8" y="154">VACUUM  02:10</text>
             <text class="lbl dim xs" x="168" y="16">REPL LAG</text>
-            <path class="stroke-br draw" d={DB_LAG} pathLength="100" style="--d:0.2s" />
+            <clipPath id="db-clip">
+              <rect x="168" y="24" width="104" height="40" />
+            </clipPath>
+            <g clip-path="url(#db-clip)">
+              <g class="roll-x" style={`--sx:-${DB_LAG.w}px;--t:13s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={DB_LAG.d} transform={`translate(${set * DB_LAG.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M168 36H272M168 52H272" />
-            <text class="lbl dim xs" x="168" y="80">LAG  18ms</text>
+            {['LAG  18ms', 'LAG  21ms', 'LAG  16ms'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="168" y="80" style={`--t:3.9s;--d:${(vi * 1.3).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="168" y="96">SLOTS  3</text>
-            <text class="lbl dim xs" x="168" y="112">READS  9.1k</text>
-            <text class="lbl dim xs" x="168" y="128">WRITES  3.3k</text>
+            {['READS  9.1k', 'READS  9.4k'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="168" y="112" style={`--t:4.6s;--d:${(vi * 2.3).toFixed(1)}s`}>{v}</text>
+            ))}
+            {['WRITES  3.3k', 'WRITES  3.5k'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="168" y="128" style={`--t:5.8s;--d:${(vi * 2.9).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="168" y="144">LOCKS  2</text>
           </g>
           )}
           {board.id === 'bots' && (
           <g>
-            <text class="lbl em" x="8" y="10">36 LIVE</text>
+            {['36 LIVE', '37 LIVE'].map((v, vi) => (
+              <text class:list={['lbl em cyc2', vi === 0 && 'lead']} x="8" y="10" style={`--t:8.4s;--d:${(vi * 4.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="56" y="10">TICK 80ms · KILL ARMED</text>
             {BOTS.map((b, bi) => (
               <g class="fade" style={`--d:${(bi * 0.05).toFixed(2)}s`}>
-                <circle class={b.st === 'run' ? 'f-brand' : 'f-accent'} cx="12" cy={26 + bi * 16} r="2.4" />
+                <circle class:list={[b.st === 'run' ? 'f-brand' : 'f-accent', 'led']} cx="12" cy={26 + bi * 16} r="2.4" style={`--d:${(bi * 0.44).toFixed(2)}s`} />
                 <text class="lbl xs" x="22" y={29 + bi * 16}>{b.n}</text>
-                <text class:list={['lbl xs', b.pnl.startsWith('+') && 'up', b.pnl.startsWith('−') && 'dn']} x="72" y={29 + bi * 16}>{b.pnl}</text>
+                {[b.pnl, b.alt].map((v, vi) => (
+                  <text
+                    class:list={['lbl xs cyc2', vi === 0 && 'lead', b.pnl.startsWith('+') && 'up', b.pnl.startsWith('\u2212') && 'dn']}
+                    x="72"
+                    y={29 + bi * 16}
+                    style={`--t:${(3.2 + bi * 0.4).toFixed(1)}s;--d:${(vi * (3.2 + bi * 0.4) * 0.5).toFixed(2)}s`}
+                  >{v}</text>
+                ))}
                 <text class="lbl dim xs" x="112" y={29 + bi * 16}>{b.st}</text>
               </g>
             ))}
@@ -1109,13 +1299,21 @@ const NEWS = [
             <text class="lbl dim xs" x="8" y="132">QUEUE  14</text>
             <text class="lbl dim xs" x="8" y="146">TG  1.2k msg/m</text>
             <text class="lbl dim xs" x="160" y="16">LAST TICK</text>
-            {['mm-07  BTC +2', 'arb-3  ETH 0', 'liq-9  SOL −1', 'tg-ops  ping', 'scan-4  news'].map((t, ti) => (
-              <text class="lbl dim xs" x="160" y={32 + ti * 14}>{t}</text>
-            ))}
+            {/* The tick feed runs: five lines of travel per loop. */}
+            <clipPath id="bot-clip">
+              <rect x="158" y="22" width="114" height="70" />
+            </clipPath>
+            <g clip-path="url(#bot-clip)">
+              <g class="tape-roll" style="--sh:-70px;--t:8s">
+                {BOT_TICKS.concat(BOT_TICKS).map((t, ti) => (
+                  <text class="lbl dim xs" x="160" y={32 + ti * 14}>{t}</text>
+                ))}
+              </g>
+            </g>
             <text class="lbl dim xs" x="160" y="112">EXCH  BIN  CME</text>
             <text class="lbl dim xs" x="160" y="128">RISK  18% used</text>
             <rect class="track" x="160" y="134" width="100" height="5" rx="1" />
-            <rect class="f-br" x="160" y="134" width="18" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="160" y="134" width="18" height="5" rx="1" style="--s:0.55;--t:4.2s" />
             <text class="lbl dim xs" x="160" y="152">HALT  twap-1</text>
           </g>
           )}
@@ -1129,9 +1327,19 @@ const NEWS = [
               return (
                 <g>
                   <rect class={ci === 0 ? 'frame' : 'ln'} x={x} y={y} width="72" height="42" rx="2" />
-                  {Array.from({ length: 5 }, (_, li) => (
-                    <path class="ln thin" d={`M${x + 4} ${y + 8 + li * 6}h${64}`} />
-                  ))}
+                  {/* Raster: nine lines on a six-pixel pitch, rolling exactly
+                      six, so the picture crawls the way a feed off-lock does. */}
+                  <clipPath id={`tv-${ci}`}>
+                    <rect x={x + 2} y={y + 2} width="68" height="38" rx="1" />
+                  </clipPath>
+                  <g clip-path={`url(#tv-${ci})`}>
+                    <g class="tape-roll" style={`--sh:-6px;--t:${(1.6 + ci * 0.35).toFixed(2)}s`}>
+                      {Array.from({ length: 9 }, (_, li) => (
+                        <path class="ln thin" d={`M${x + 4} ${y + 2 + li * 6}h${64}`} />
+                      ))}
+                    </g>
+                  </g>
+                  <rect class="f-br flash" x={x} y={y} width="72" height="42" rx="2" style={`--t:9s;--d:${(ci * 2.25).toFixed(2)}s`} />
                   <text class="lbl tag" x={x + 4} y={y + 10}>{c.n}</text>
                   <text class="lbl xs" x={x + 16} y={y + 10}>{c.t}</text>
                   <text class="lbl dim xs" x={x + 4} y={y + 38}>{c.v}</text>
@@ -1142,9 +1350,11 @@ const NEWS = [
             <text class="lbl dim xs" x="8" y="144">CC  ON  · LOUD −23</text>
             <text class="lbl dim xs" x="172" y="16">RUNDOWN</text>
             {['OPEN  0:40', 'MKT  4:00', 'WX   1:20', 'BRK  LIVE'].map((r, ri) => (
-              <text class="lbl dim xs" x="172" y={32 + ri * 14}>{r}</text>
+              <text class:list={['lbl dim xs', ri === 3 && 'breathe']} x="172" y={32 + ri * 14} style={ri === 3 ? '--t:1.6s' : undefined}>{r}</text>
             ))}
-            <text class="lbl dim xs" x="172" y="96">VIEW  4.8M</text>
+            {['VIEW  4.8M', 'VIEW  4.9M', 'VIEW  4.7M'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="172" y="96" style={`--t:6.6s;--d:${(vi * 2.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="172" y="112">SAT  2 UP</text>
             <text class="lbl dim xs" x="172" y="128">ISO  CAM-3</text>
             <text class="lbl dim xs" x="172" y="144">DVE  WIPE</text>
@@ -1152,16 +1362,29 @@ const NEWS = [
           )}
           {board.id === 'video' && (
           <g>
-            <text class="lbl em" x="8" y="10">6,214 LIVE</text>
+            {['6,214 LIVE', '6,231 LIVE', '6,208 LIVE'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="10" style={`--t:3.3s;--d:${(vi * 1.1).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl up" x="80" y="10">1080p60</text>
-            <text class="lbl dim xs" x="128" y="10">H264  8.4 Mbps</text>
-            <path class="stroke-br draw" d={VID_BIT} pathLength="100" style="--d:0.2s" />
+            {['H264  8.4 Mbps', 'H264  8.6 Mbps'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="128" y="10" style={`--t:4.4s;--d:${(vi * 2.2).toFixed(1)}s`}>{v}</text>
+            ))}
+            <clipPath id="vid-clip">
+              <rect x="8" y="20" width="128" height="38" />
+            </clipPath>
+            <g clip-path="url(#vid-clip)">
+              <g class="roll-x" style={`--sx:-${VID_BIT.w}px;--t:15s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={VID_BIT.d} transform={`translate(${set * VID_BIT.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M8 32H136M8 48H136" />
             <text class="lbl dim xs" x="8" y="64">BITRATE  DROP 0.2%</text>
             <text class="lbl dim xs" x="8" y="80">KEY  2s · GOP 60</text>
             <text class="lbl dim xs" x="8" y="96">AUDIO  −16 LUFS</text>
             <rect class="track" x="8" y="102" width="128" height="5" rx="1" />
-            <rect class="f-br" x="8" y="102" width="86" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="8" y="102" width="86" height="5" rx="1" style="--s:0.72;--t:3.6s" />
             <text class="lbl dim xs" x="8" y="122">CHAT  184/m</text>
             <text class="lbl dim xs" x="8" y="136">CLIP  0:14:22</text>
             <text class="lbl dim xs" x="8" y="150">REC  ISO + PGM</text>
@@ -1169,8 +1392,22 @@ const NEWS = [
             {['CAM A', 'OVERLAY', 'CHART', 'GUEST'].map((s, si) => (
               <g>
                 <rect class={si === 0 ? 'f-br' : 'panel'} x={152 + (si % 2) * 60} y={22 + Math.floor(si / 2) * 36} width="54" height="30" rx="2" />
+                <rect class="f-br flash" x={152 + (si % 2) * 60} y={22 + Math.floor(si / 2) * 36} width="54" height="30" rx="2" style={`--t:8s;--d:${(si * 2).toFixed(1)}s`} />
                 <text class="lbl xs" x={158 + (si % 2) * 60} y={40 + Math.floor(si / 2) * 36}>{s}</text>
               </g>
+            ))}
+            {/* Programme meter — the one thing on an encoder that never sits
+                still, so the panel has a pulse even between scene cuts. */}
+            {VU.map((bar) => (
+              <rect
+                class="f-br eq-bar"
+                x={bar.x}
+                y="92"
+                width="4.4"
+                height="12"
+                rx="0.4"
+                style={`--s:${bar.s};--t:${bar.t}s;--d:${bar.d}s`}
+              />
             ))}
             <text class="lbl dim xs" x="152" y="106">CDN  CF  FASTLY</text>
             <text class="lbl dim xs" x="152" y="122">HLS  4.1s</text>
@@ -1180,22 +1417,34 @@ const NEWS = [
           )}
           {board.id === 'news' && (
           <g>
-            <rect class="f-ac" x="8" y="6" width="44" height="10" rx="1" />
+            <rect class="f-ac breathe" x="8" y="6" width="44" height="10" rx="1" style="--t:1.4s" />
             <text class="lbl tag" x="12" y="13">BREAK</text>
             <text class="lbl em" x="58" y="14">FOMC  14:00 ET</text>
-            {NEWS.map((n, ni) => (
-              <g class="fade" style={`--d:${(0.06 + ni * 0.05).toFixed(2)}s`}>
-                <text class="lbl dim xs" x="8" y={32 + ni * 18}>{n[0]}</text>
-                <text class="lbl xs" x="36" y={32 + ni * 18}>{n[1]}</text>
-                <text class="lbl xs" x="64" y={32 + ni * 18}>{n[2]}</text>
+            {/* The wire runs. Five items of travel per loop, so a headline
+                leaves the top exactly as its twin takes its place. */}
+            <clipPath id="news-clip">
+              <rect x="6" y="20" width="266" height="90" />
+            </clipPath>
+            <g clip-path="url(#news-clip)">
+              <g class="tape-roll" style="--sh:-90px;--t:14s">
+                {NEWS.concat(NEWS).map((n, ni) => (
+                  <g>
+                    <rect class="f-br flash" x="6" y={22 + ni * 18} width="266" height="13" rx="1" style={`--t:14s;--d:${(ni * 2.8).toFixed(1)}s`} />
+                    <text class="lbl dim xs" x="8" y={32 + ni * 18}>{n[0]}</text>
+                    <text class="lbl xs" x="36" y={32 + ni * 18}>{n[1]}</text>
+                    <text class="lbl xs" x="64" y={32 + ni * 18}>{n[2]}</text>
+                  </g>
+                ))}
               </g>
-            ))}
+            </g>
             <path class="ln dash thin" d="M8 124H272" />
             <text class="lbl dim xs" x="8" y="136">REUT  BB  AFP  HN</text>
-            <text class="lbl dim xs" x="8" y="150">SENT +0.12  ·  84 items/h</text>
+            {['SENT +0.12  ·  84 items/h', 'SENT +0.14  ·  86 items/h', 'SENT +0.11  ·  83 items/h'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="150" style={`--t:5.1s;--d:${(vi * 1.7).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="176" y="136">MACRO  41%</text>
             <rect class="track" x="176" y="140" width="88" height="5" rx="1" />
-            <rect class="f-br" x="176" y="140" width="36" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="176" y="140" width="36" height="5" rx="1" style="--s:0.62;--t:5.6s" />
           </g>
           )}
           {board.id === 'chess' && (
@@ -1223,21 +1472,40 @@ const NEWS = [
               >{pc.p}</text>
             ))}
             <rect class="f-accent" x={f1(CHESS_X0 + 4 * CHESS_SQ)} y={f1(CHESS_Y0 + 4 * CHESS_SQ)} width="2.2" height={CHESS_SQ} opacity="0.55" />
+            {/* Last move: the highlight steps from the square a piece left to
+                the one it took, which is the only thing a board this size can
+                say about a game in progress. */}
+            {[[4, 3], [3, 4]].map(([c, r], hi) => (
+              <rect
+                class:list={['f-ac cyc2', hi === 0 && 'lead']}
+                x={f1(CHESS_X0 + c * CHESS_SQ)}
+                y={f1(CHESS_Y0 + r * CHESS_SQ)}
+                width={CHESS_SQ}
+                height={CHESS_SQ}
+                style={`--t:6.4s;--d:${(hi * 3.2).toFixed(1)}s`}
+              />
+            ))}
             <text class="lbl dim xs" x="148" y="16">W  2:14</text>
-            <text class="lbl em" x="148" y="32">B  0:47</text>
+            {['B  0:47', 'B  0:46', 'B  0:45', 'B  0:44'].map((v, vi) => (
+              <text class:list={['lbl em cyc4', vi === 0 && 'lead']} x="148" y="32" style={`--t:4s;--d:${vi}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="148" y="46">EVAL</text>
             <rect class="track" x="148" y="50" width="10" height="88" rx="1" />
-            <rect class="f-ink" x="148" y="50" width="10" height="38" rx="1" />
-            <rect class="f-br" x="148" y="88" width="10" height="50" rx="1" />
-            <text class="lbl xs" x="162" y="96">+0.8</text>
+            <rect class="f-ink" x="148" y="50" width="10" height="88" rx="1" />
+            <rect class="f-br eq-bar" x="148" y="88" width="10" height="50" rx="1" style="--s:0.72;--t:5.2s" />
+            {['+0.8', '+0.9'].map((v, vi) => (
+              <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="162" y="96" style={`--t:10.4s;--d:${(vi * 5.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="176" y="16">MOVES</text>
             {CHESS_MOVES.map((m, mi) => (
               <g class="fade" style={`--d:${(0.1 + mi * 0.06).toFixed(2)}s`}>
+                <rect class="f-br flash" x="174" y={20 + mi * 14} width="96" height="12" rx="1" style={`--t:6.4s;--d:${(mi * 1.6).toFixed(1)}s`} />
                 <text class="lbl dim xs" x="176" y={30 + mi * 14}>{m[0]}</text>
                 <text class="lbl xs" x="196" y={30 + mi * 14}>{m[1]}</text>
                 <text class="lbl xs" x="232" y={30 + mi * 14}>{m[2]}</text>
               </g>
             ))}
+            <text class="lbl xs caret" x="266" y="72">▌</text>
             <text class="lbl dim xs" x="176" y="96">Nxd5 was best</text>
             <text class="lbl dim xs" x="176" y="110">ACCURACY 94 · 91</text>
             <text class="lbl dim xs" x="176" y="124">BLITZ 3+2 · RATED</text>
@@ -1265,35 +1533,65 @@ const NEWS = [
                 style={`opacity:${s.black ? 0.88 : 0.95}`}
               />
             ))}
-            <text class="lbl dim xs" x="150" y="16">MOVE 147 · B</text>
+            {/* The game carries on: two stones land in turn, and a ring marks
+                whichever went down last. */}
+            {[{ c: 8, r: 3, black: true }, { c: 5, r: 9, black: false }].map((st, sti) => (
+              <g class:list={['cyc2', sti === 0 && 'lead']} style={`--t:7.2s;--d:${(sti * 3.6).toFixed(1)}s`}>
+                <circle class={st.black ? 'f-ink' : 'f-br'} cx={f1(GO_X0 + st.c * GO_S)} cy={f1(GO_Y0 + st.r * GO_S)} r="4.1" />
+                <circle class="ping-ring" cx={f1(GO_X0 + st.c * GO_S)} cy={f1(GO_Y0 + st.r * GO_S)} r="4.1" style={`--d:${(sti * 3.6).toFixed(1)}s`} />
+              </g>
+            ))}
+            {['MOVE 147 · B', 'MOVE 148 · W'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="150" y="16" style={`--t:7.2s;--d:${(vi * 3.6).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl" x="150" y="30">B 142  W 138</text>
             <text class="lbl dim xs" x="150" y="44">CAPT B 4 · W 7</text>
             <text class="lbl dim xs" x="150" y="58">KOMI 6.5</text>
             <text class="lbl dim xs" x="150" y="74">TERRITORY</text>
             <rect class="track" x="150" y="78" width="118" height="6" rx="1" />
-            <rect class="f-ink" x="150" y="78" width="64" height="6" rx="1" />
+            <rect class="f-ink pulse-x" x="150" y="78" width="64" height="6" rx="1" style="--s:0.88;--t:7.2s" />
             <text class="lbl dim xs" x="150" y="98">WIN B 61%</text>
             <rect class="track" x="150" y="102" width="118" height="5" rx="1" />
-            <rect class="f-br grow-x" x="150" y="102" width="72" height="5" rx="1" style="--d:0.3s" />
+            <rect class="f-br pulse-x" x="150" y="102" width="72" height="5" rx="1" style="--s:0.86;--t:5.4s" />
             <text class="lbl dim xs" x="150" y="122">BYOYOMI 3×30s</text>
-            <text class="lbl em xs" x="150" y="136">B 0:28</text>
+            {['B 0:28', 'B 0:27', 'B 0:26', 'B 0:25'].map((v, vi) => (
+              <text class:list={['lbl em xs cyc4', vi === 0 && 'lead']} x="150" y="136" style={`--t:4s;--d:${vi}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="150" y="150">9D · FOX · RATED</text>
           </g>
           )}
           {board.id === 'predict' && (
           <g>
             <text class="lbl em" x="8" y="10">FED CUT SEP</text>
-            <text class="lbl up" x="86" y="10">72¢</text>
-            <text class="lbl dim xs" x="118" y="10">VOL 4.2M</text>
-            <path class="stroke-br draw" d={PREDICT_LINE} pathLength="100" style="--d:0.2s" />
+            {['72¢', '73¢', '71¢'].map((v, vi) => (
+              <text class:list={['lbl up cyc3', vi === 0 && 'lead']} x="86" y="10" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
+            {['VOL 4.2M', 'VOL 4.3M'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="118" y="10" style={`--t:7.2s;--d:${(vi * 3.6).toFixed(1)}s`}>{v}</text>
+            ))}
+            <clipPath id="pm-clip">
+              <rect x="8" y="16" width="170" height="36" />
+            </clipPath>
+            <g clip-path="url(#pm-clip)">
+              <g class="roll-x" style={`--sx:-${PREDICT_LINE.w}px;--t:20s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={PREDICT_LINE.d} transform={`translate(${set * PREDICT_LINE.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M8 34H180" />
-            <text class="lbl dim xs" x="8" y="56">YES 72  NO 28 · SPREAD 1.4</text>
+            {['YES 72  NO 28 · SPREAD 1.4', 'YES 73  NO 27 · SPREAD 1.2'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="8" y="56" style={`--t:3.6s;--d:${(vi * 1.8).toFixed(1)}s`}>{v}</text>
+            ))}
             {PREDICT.map((m, mi) => (
               <g class="fade" style={`--d:${(0.08 + mi * 0.05).toFixed(2)}s`}>
+                <rect class="f-br flash" x="6" y={64 + mi * 16} width="264" height="11" rx="1" style={`--t:5.5s;--d:${(mi * 1.1).toFixed(1)}s`} />
                 <text class="lbl dim xs" x="8" y={72 + mi * 16}>{m.n}</text>
                 <rect class="track" x="108" y={66 + mi * 16} width="90" height="5" rx="1" />
-                <rect class="f-br" x="108" y={66 + mi * 16} width={m.p * 0.9} height="5" rx="1" />
-                <text class="lbl xs" x="204" y={72 + mi * 16}>{m.p}¢</text>
+                <rect class="f-br pulse-x" x="108" y={66 + mi * 16} width={m.p * 0.9} height="5" rx="1" style={`--s:${(1 - 3 / m.p).toFixed(2)};--t:${(4.2 + mi * 0.5).toFixed(1)}s;--d:${(mi * 0.4).toFixed(1)}s`} />
+                {[m.p, m.p + (mi % 2 ? 1 : -1)].map((v, vi) => (
+                  <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="204" y={72 + mi * 16} style={`--t:${(4.2 + mi * 0.5).toFixed(1)}s;--d:${(vi * (4.2 + mi * 0.5) * 0.5).toFixed(2)}s`}>{v}¢</text>
+                ))}
                 <text class="lbl dim xs" x="232" y={72 + mi * 16}>{m.vol}</text>
               </g>
             ))}
@@ -1302,49 +1600,73 @@ const NEWS = [
           )}
           {board.id === 'sports' && (
           <g>
-            <text class="lbl dim xs" x="8" y="12">EPL · ANFIELD · 67′</text>
+            {['EPL · ANFIELD · 67′', 'EPL · ANFIELD · 68′', 'EPL · ANFIELD · 69′'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="12" style={`--t:9s;--d:${(vi * 3).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl em" x="8" y="32">LIV  2</text>
             <text class="lbl em" x="86" y="32">MCI  1</text>
             <text class="lbl dim xs" x="8" y="46">xG 1.84 – 1.12 · SHOTS 12–8</text>
             <path class="frame" d="M8 54H168V150H8Z" />
             <path class="ln dash thin" d="M88 54V150M8 102H168" />
             <ellipse class="ln thin" cx="88" cy="102" rx="18" ry="12" />
-            <circle class="f-brand" cx="62" cy="78" r="2.2" />
-            <circle class="f-accent" cx="118" cy="96" r="2.2" />
-            <circle class="f-brand" cx="74" cy="120" r="2.2" />
-            <path class="stroke-br" d="M40 88L62 78L80 110" />
+            <circle class="f-brand drift" cx="62" cy="78" r="2.2" style="--dx:7px;--dy:-5px;--t:6s" />
+            <circle class="f-accent drift" cx="118" cy="96" r="2.2" style="--dx:-9px;--dy:6px;--t:7.4s" />
+            <circle class="f-brand drift" cx="74" cy="120" r="2.2" style="--dx:12px;--dy:-4px;--t:5.2s" />
+            <path class="stroke-br dash-flow" d="M40 88L62 78L80 110" />
+            {/* The ball, on the move that pass line describes. */}
+            <circle class="path-rider f-accent" r="2.4" style="offset-path: path('M40 88L62 78L80 110');--t:4.4s" />
             <text class="lbl dim xs" x="176" y="16">EVENTS</text>
             {SPORTS_EVENTS.map((e, ei) => (
               <g class="fade" style={`--d:${(0.1 + ei * 0.06).toFixed(2)}s`}>
+                <rect class="f-br flash" x="174" y={22 + ei * 16} width="96" height="12" rx="1" style={`--t:6.4s;--d:${(ei * 1.6).toFixed(1)}s`} />
                 <text class="lbl dim xs" x="176" y={32 + ei * 16}>{e[0]}</text>
                 <text class="lbl xs" x="200" y={32 + ei * 16}>{e[1]}</text>
-                <text class="lbl em xs" x="248" y={32 + ei * 16}>{e[2]}</text>
+                <text class:list={['lbl em xs', ei === 3 && 'breathe']} x="248" y={32 + ei * 16} style={ei === 3 ? '--t:1.5s' : undefined}>{e[2]}</text>
               </g>
             ))}
-            <text class="lbl dim xs" x="176" y="108">POSS 58–42</text>
+            {['POSS 58–42', 'POSS 59–41'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="176" y="108" style={`--t:6.8s;--d:${(vi * 3.4).toFixed(1)}s`}>{v}</text>
+            ))}
             <rect class="track" x="176" y="112" width="92" height="5" rx="1" />
-            <rect class="f-br" x="176" y="112" width="53" height="5" rx="1" />
+            <rect class="f-br pulse-x" x="176" y="112" width="53" height="5" rx="1" style="--s:0.9;--t:6.8s" />
             <text class="lbl dim xs" x="176" y="132">CORNERS 6–3</text>
-            <text class="lbl dim xs" x="176" y="146">NEXT xG 0.18</text>
+            {['NEXT xG 0.18', 'NEXT xG 0.21', 'NEXT xG 0.16'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="176" y="146" style={`--t:4.5s;--d:${(vi * 1.5).toFixed(1)}s`}>{v}</text>
+            ))}
           </g>
           )}
           {board.id === 'energy' && (
           <g>
-            <text class="lbl em" x="8" y="10">EU LOAD 312 GW</text>
-            <text class="lbl up" x="108" y="10">−4.2%</text>
+            {['EU LOAD 312 GW', 'EU LOAD 314 GW', 'EU LOAD 309 GW'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="10" style={`--t:4.2s;--d:${(vi * 1.4).toFixed(1)}s`}>{v}</text>
+            ))}
+            <text class="lbl up breathe" x="108" y="10" style="--t:3.8s">−4.2%</text>
             {ENERGY_MIX.map((m, mi) => (
               <g class="fade" style={`--d:${(mi * 0.05).toFixed(2)}s`}>
                 <text class="lbl dim xs" x="8" y={28 + mi * 16}>{m.n}</text>
                 <rect class="track" x="48" y={22 + mi * 16} width="86" height="5" rx="1" />
-                <rect class="f-br" x="48" y={22 + mi * 16} width={m.pct * 0.86} height="5" rx="1" />
-                <text class="lbl xs" x="140" y={28 + mi * 16}>{m.pct}%</text>
+                <rect class="f-br pulse-x" x="48" y={22 + mi * 16} width={m.pct * 0.86} height="5" rx="1" style={`--s:${(1 - 4 / m.pct).toFixed(2)};--t:${(5 + mi * 0.7).toFixed(1)}s;--d:${(mi * 0.5).toFixed(1)}s`} />
+                {[m.pct, m.pct + (mi % 2 ? 1 : -1)].map((v, vi) => (
+                  <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="140" y={28 + mi * 16} style={`--t:${(5 + mi * 0.7).toFixed(1)}s;--d:${(vi * (5 + mi * 0.7) * 0.5).toFixed(2)}s`}>{v}%</text>
+                ))}
               </g>
             ))}
-            <text class="lbl dim xs" x="8" y="120">PRICE 42 €/MWH</text>
+            {['PRICE 42 €/MWH', 'PRICE 44 €/MWH', 'PRICE 41 €/MWH'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="120" style={`--t:5.7s;--d:${(vi * 1.9).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="8" y="134">CO₂ 184 g/kWh</text>
             <text class="lbl dim xs" x="8" y="148">RESERVE 11.4 GW</text>
             <text class="lbl dim xs" x="148" y="16">24H LOAD</text>
-            <path class="stroke-br draw" d={ENERGY_LOAD} pathLength="100" style="--d:0.25s" />
+            <clipPath id="grid-clip">
+              <rect x="148" y="38" width="124" height="34" />
+            </clipPath>
+            <g clip-path="url(#grid-clip)">
+              <g class="roll-x" style={`--sx:-${ENERGY_LOAD.w}px;--t:24s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={ENERGY_LOAD.d} transform={`translate(${set * ENERGY_LOAD.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <path class="ln dash thin" d="M148 48H272M148 70H272" />
             <text class="lbl dim xs" x="148" y="90">PEAK 348 · 19:10</text>
             <text class="lbl dim xs" x="148" y="104">WIND 106 GW</text>
@@ -1355,13 +1677,16 @@ const NEWS = [
           )}
           {board.id === 'flights' && (
           <g>
-            <text class="lbl em" x="8" y="10">847 AIRBORNE</text>
+            {['847 AIRBORNE', '849 AIRBORNE', '844 AIRBORNE'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="10" style={`--t:3.9s;--d:${(vi * 1.3).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="96" y="10">DELAY 11%</text>
             {FLIGHTS.map((f, fi) => (
               <g class="fade" style={`--d:${(0.08 + fi * 0.05).toFixed(2)}s`}>
+                <rect class="f-br flash" x="6" y={20 + fi * 16} width="140" height="11" rx="1" style={`--t:6s;--d:${(fi * 1.2).toFixed(1)}s`} />
                 <text class="lbl xs" x="8" y={28 + fi * 16}>{f[0]}</text>
                 <text class="lbl dim xs" x="52" y={28 + fi * 16}>{f[1]}→{f[2]}</text>
-                <text class:list={['lbl xs', f[3] === 'on' && 'up', f[3] !== 'on' && 'dn']} x="124" y={28 + fi * 16}>{f[3]}</text>
+                <text class:list={['lbl xs', f[3] === 'on' && 'up', f[3] !== 'on' && 'dn', f[3] === 'hold' && 'breathe']} x="124" y={28 + fi * 16} style={f[3] === 'hold' ? '--t:1.3s' : undefined}>{f[3]}</text>
               </g>
             ))}
             <text class="lbl dim xs" x="8" y="120">GATES 12 OPEN</text>
@@ -1370,12 +1695,18 @@ const NEWS = [
             <text class="lbl dim xs" x="168" y="16">ROUTES</text>
             <path class="ln thin" d="M176 36Q210 24 248 40" />
             <path class="ln thin" d="M176 52Q220 70 252 48" />
-            <path class="stroke-br" d="M176 64Q200 88 246 72" />
+            <path class="stroke-br dash-flow" d="M176 64Q200 88 246 72" />
             <circle class="f-brand" cx="176" cy="36" r="2" />
             <circle class="f-brand" cx="248" cy="40" r="2" />
             <circle class="f-accent" cx="246" cy="72" r="2" />
+            {/* Traffic on those routes, at the speed the panel is drawn to. */}
+            <circle class="path-rider f-brand" r="1.8" style="offset-path: path('M176 36Q210 24 248 40');--t:7s" />
+            <circle class="path-rider f-accent" r="1.8" style="offset-path: path('M176 52Q220 70 252 48');--t:9s;--d:-3s" />
+            <circle class="path-rider f-brand" r="1.8" style="offset-path: path('M176 64Q200 88 246 72');--t:8s;--d:-5s" />
             <text class="lbl dim xs" x="168" y="104">JFK  LHR  DXB</text>
-            <text class="lbl dim xs" x="168" y="120">ETA SLIP +6m</text>
+            {['ETA SLIP +6m', 'ETA SLIP +8m'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="168" y="120" style={`--t:7.6s;--d:${(vi * 3.8).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="168" y="136">FUEL +2.1t</text>
             <text class="lbl dim xs" x="168" y="150">ADS-B  2.4s</text>
           </g>
@@ -1384,7 +1715,9 @@ const NEWS = [
           <g>
             <ellipse class="frame" cx="88" cy="78" rx="78" ry="46" />
             <ellipse class="ln thin" cx="88" cy="78" rx="58" ry="32" />
-            <text class="lbl dim xs" x="70" y="54">POT 84bb</text>
+            {['POT 84bb', 'POT 92bb', 'POT 104bb'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="70" y="54" style={`--t:9s;--d:${(vi * 3).toFixed(1)}s`}>{v}</text>
+            ))}
             {POKER_BOARD.map((c, ci) => (
               <g>
                 <rect class="panel" x={48 + ci * 22} y="64" width="18" height="24" rx="2" />
@@ -1393,6 +1726,8 @@ const NEWS = [
             ))}
             <rect class="panel lit" x="70" y="96" width="18" height="24" rx="2" />
             <text class="lbl xs" x="73" y="112">??</text>
+            {/* The action goes round: each seat lights on its turn, one sixth
+                of the hand apart, and the ring marks whoever is to act. */}
             {POKER_SEATS.map((s, si) => {
               const a = (si / 6) * Math.PI * 2 - Math.PI / 2;
               const x = 88 + Math.cos(a) * 72;
@@ -1400,42 +1735,61 @@ const NEWS = [
               return (
                 <g>
                   <circle class={s.act ? 'f-brand' : 'f-soft'} cx={f1(x)} cy={f1(y)} r="5" />
+                  <circle class="f-brand flash" cx={f1(x)} cy={f1(y)} r="5" style={`--t:9s;--d:${(si * 1.5).toFixed(1)}s`} />
+                  <circle class="ping-ring" cx={f1(x)} cy={f1(y)} r="5" style={`--t:9s;--d:${(si * 1.5).toFixed(1)}s`} />
                   <text class="lbl dim xs" x={f1(x - 10)} y={f1(y + 14)}>{s.n}</text>
                 </g>
               );
             })}
             <text class="lbl dim xs" x="176" y="16">NLH 6-MAX</text>
             <text class="lbl" x="176" y="32">HERO  A♣ Q♣</text>
-            <text class="lbl dim xs" x="176" y="46">EQ 61% · SPR 4.2</text>
-            <text class="lbl dim xs" x="176" y="62">ACTION</text>
-            {['UTG fold', 'HJ 2.5x', 'CO fold', 'BTN call', 'BB check'].map((a, ai) => (
-              <text class="lbl dim xs" x="176" y={76 + ai * 12}>{a}</text>
+            {['EQ 61% · SPR 4.2', 'EQ 58% · SPR 3.9'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="176" y="46" style={`--t:9s;--d:${(vi * 4.5).toFixed(1)}s`}>{v}</text>
             ))}
+            <text class="lbl dim xs" x="176" y="62">ACTION</text>
+            <clipPath id="pk-clip">
+              <rect x="174" y="68" width="98" height="60" />
+            </clipPath>
+            <g clip-path="url(#pk-clip)">
+              <g class="tape-roll" style="--sh:-60px;--t:9s">
+                {POKER_ACTION.concat(POKER_ACTION).map((a, ai) => (
+                  <text class="lbl dim xs" x="176" y={76 + ai * 12}>{a}</text>
+                ))}
+              </g>
+            </g>
             <text class="lbl dim xs" x="176" y="144">BB 2/4 · 6 LEFT</text>
           </g>
           )}
           {board.id === 'shipping' && (
           <g>
-            <text class="lbl em" x="8" y="10">12,418 TRACKED</text>
-            <text class="lbl dim xs" x="108" y="10">AIS  4s</text>
+            {['12,418 TRACKED', '12,431 TRACKED', '12,404 TRACKED'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="10" style={`--t:4.8s;--d:${(vi * 1.6).toFixed(1)}s`}>{v}</text>
+            ))}
+            <text class="lbl dim xs breathe" x="108" y="10" style="--t:2s">AIS  4s</text>
             {SHIPS.map((s, si) => (
               <g class="fade" style={`--d:${(si * 0.06).toFixed(2)}s`}>
+                <rect class="f-br flash" x="6" y={20 + si * 16} width="140" height="11" rx="1" style={`--t:6.4s;--d:${(si * 1.6).toFixed(1)}s`} />
                 <text class="lbl xs" x="8" y={28 + si * 16}>{s[0]}</text>
                 <text class="lbl dim xs" x="92" y={28 + si * 16}>{s[1]}</text>
-                <text class="lbl xs" x="128" y={28 + si * 16}>{s[2]}</text>
+                {[s[2], SHIP_ALT[si]].map((v, vi) => (
+                  <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="128" y={28 + si * 16} style={`--t:${(4.4 + si * 0.5).toFixed(1)}s;--d:${(vi * (4.4 + si * 0.5) * 0.5).toFixed(2)}s`}>{v}</text>
+                ))}
               </g>
             ))}
-            <text class="lbl dim xs" x="8" y="104">SUEZ WAIT 18h</text>
+            {['SUEZ WAIT 18h', 'SUEZ WAIT 19h'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="8" y="104" style={`--t:8.6s;--d:${(vi * 4.3).toFixed(2)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="8" y="118">MALACCA 214</text>
             <text class="lbl dim xs" x="8" y="132">PANAMA 41</text>
             <text class="lbl dim xs" x="8" y="148">BUNKER 612 $/t</text>
             <text class="lbl dim xs" x="176" y="16">LANES</text>
             <path class="ln thin" d="M180 36Q210 28 260 44" />
-            <path class="stroke-br" d="M180 52Q230 70 258 50" />
+            <path class="stroke-br dash-flow" d="M180 52Q230 70 258 50" />
             <path class="ln thin" d="M184 80Q220 92 256 78" />
-            <circle class="f-brand" cx="198" cy="40" r="2" />
-            <circle class="f-accent" cx="236" cy="64" r="2" />
-            <circle class="f-brand" cx="248" cy="82" r="2" />
+            {/* Hulls on the lanes — slow, the way the real plot moves. */}
+            <circle class="path-rider f-brand" r="2" style="offset-path: path('M180 36Q210 28 260 44');--t:22s" />
+            <circle class="path-rider f-accent" r="2" style="offset-path: path('M180 52Q230 70 258 50');--t:26s;--d:-9s" />
+            <circle class="path-rider f-brand" r="2" style="offset-path: path('M184 80Q220 92 256 78');--t:19s;--d:-14s" />
             <text class="lbl dim xs" x="176" y="110">TEU  24.1M</text>
             <text class="lbl dim xs" x="176" y="124">DELAY +1.4d</text>
             <text class="lbl dim xs" x="176" y="138">SC  38 vessels</text>
@@ -1444,14 +1798,28 @@ const NEWS = [
           )}
           {board.id === 'esports' && (
           <g>
-            <text class="lbl dim xs" x="8" y="12">DPC · GAME 2 · 28:14</text>
+            {['DPC · GAME 2 · 28:14', 'DPC · GAME 2 · 28:15', 'DPC · GAME 2 · 28:16', 'DPC · GAME 2 · 28:17'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc4', vi === 0 && 'lead']} x="8" y="12" style={`--t:4s;--d:${vi}s`}>{v}</text>
+            ))}
             {ESPORTS.map((t, ti) => (
               <g>
                 <text class="lbl em" x="8" y={32 + ti * 28}>{t.n}</text>
-                <text class="lbl xs" x="120" y={32 + ti * 28}>{t.k}/{t.d}</text>
-                <text class="lbl dim xs" x="168" y={32 + ti * 28}>{t.gold}</text>
+                {[`${t.k}/${t.d}`, `${t.k + 1}/${t.d}`].map((v, vi) => (
+                  <text class:list={['lbl xs cyc2', vi === 0 && 'lead']} x="120" y={32 + ti * 28} style={`--t:${(11 + ti * 3).toFixed(0)}s;--d:${(vi * (11 + ti * 3) * 0.5 + ti * 2).toFixed(1)}s`}>{v}</text>
+                ))}
+                {[t.gold, t.goldAlt].map((v, vi) => (
+                  <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="168" y={32 + ti * 28} style={`--t:${(3.4 + ti * 0.6).toFixed(1)}s;--d:${(vi * (3.4 + ti * 0.6) * 0.5).toFixed(2)}s`}>{v}</text>
+                ))}
                 <rect class="track" x="8" y={38 + ti * 28} width="160" height="5" rx="1" />
-                <rect class={ti === 0 ? 'f-br' : 'f-ac'} x="8" y={38 + ti * 28} width={ti === 0 ? 110 : 78} height="5" rx="1" />
+                <rect
+                  class:list={[ti === 0 ? 'f-br' : 'f-ac', 'pulse-x']}
+                  x="8"
+                  y={38 + ti * 28}
+                  width={ti === 0 ? 110 : 78}
+                  height="5"
+                  rx="1"
+                  style={`--s:${ti === 0 ? '0.88' : '0.8'};--t:${(6 + ti).toFixed(0)}s`}
+                />
               </g>
             ))}
             <text class="lbl dim xs" x="8" y="96">ROS  AEG  TOR  SWP</text>
@@ -1459,20 +1827,31 @@ const NEWS = [
             <rect class="f-soft" x="34" y="102" width="22" height="8" rx="1" />
             <rect class="f-br" x="60" y="102" width="22" height="8" rx="1" />
             <rect class="f-ac" x="86" y="102" width="22" height="8" rx="1" />
-            <text class="lbl dim xs" x="8" y="126">NET WORTH +4.7k</text>
+            {['NET WORTH +4.7k', 'NET WORTH +4.9k', 'NET WORTH +4.6k'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="8" y="126" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="8" y="140">TOWERS 6–3</text>
-            <text class="lbl dim xs" x="8" y="152">NEXT ROSHAN 2:40</text>
+            {['NEXT ROSHAN 2:40', 'NEXT ROSHAN 2:39', 'NEXT ROSHAN 2:38', 'NEXT ROSHAN 2:37'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc4', vi === 0 && 'lead']} x="8" y="152" style={`--t:4s;--d:${vi}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="188" y="16">DRAFT</text>
             {['AM', 'ES', 'SD', 'TIDE', 'CM'].map((h, hi) => (
-              <rect class="panel" x={188 + (hi % 3) * 28} y={24 + Math.floor(hi / 3) * 22} width="24" height="18" rx="2" />
+              <g>
+                <rect class="panel" x={188 + (hi % 3) * 28} y={24 + Math.floor(hi / 3) * 22} width="24" height="18" rx="2" />
+                <rect class="f-br flash" x={188 + (hi % 3) * 28} y={24 + Math.floor(hi / 3) * 22} width="24" height="18" rx="2" style={`--t:7.5s;--d:${(hi * 1.5).toFixed(1)}s`} />
+              </g>
             ))}
             {['AM', 'ES', 'SD', 'TIDE', 'CM'].map((h, hi) => (
               <text class="lbl dim xs" x={192 + (hi % 3) * 28} y={36 + Math.floor(hi / 3) * 22}>{h}</text>
             ))}
             <text class="lbl dim xs" x="188" y="84">VS  TA  LINA  AXE</text>
             <text class="lbl dim xs" x="188" y="100">OD  WR</text>
-            <text class="lbl dim xs" x="188" y="120">VIEW 184k</text>
-            <text class="lbl dim xs" x="188" y="136">ODDS 1.42</text>
+            {['VIEW 184k', 'VIEW 186k'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="188" y="120" style={`--t:5.2s;--d:${(vi * 2.6).toFixed(1)}s`}>{v}</text>
+            ))}
+            {['ODDS 1.42', 'ODDS 1.39', 'ODDS 1.44'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="188" y="136" style={`--t:4.2s;--d:${(vi * 1.4).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="188" y="152">BO3  1–0</text>
           </g>
           )}
@@ -1586,6 +1965,11 @@ const NEWS = [
             {ARCS.map((d, ai) => (
               <path class="arc" d={d} style={`--d:${(ai * 0.2).toFixed(1)}s`} />
             ))}
+            {/* Traffic on the great circles, not just a dashed line pretending
+                to carry it. */}
+            {ARCS.map((d, ai) => (
+              <circle class="path-rider f-brand" r="1.6" style={`offset-path: path('${d}');--t:${(5 + ai).toFixed(0)}s;--d:-${(ai * 1.3).toFixed(1)}s`} />
+            ))}
             {HUBS.map((h) => (
               <g>
                 <rect class="f-brand" x={h.x - 1.3} y={h.y - 1.3} width="2.6" height="2.6" />
@@ -1599,21 +1983,27 @@ const NEWS = [
             {GEO_LINKS.map((row, li) => (
               <g class="slide" style={`--d:${(li * 0.07).toFixed(2)}s`}>
                 <text class="lbl xs" x="174" y={24 + li * 12}>{row[0]}</text>
-                <text class="lbl dim xs" x="212" y={24 + li * 12}>{row[1]}</text>
+                {[row[1] as string, GEO_RTT_ALT[li]].map((v, vi) => (
+                  <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="212" y={24 + li * 12} style={`--t:${(3.8 + li * 0.5).toFixed(1)}s;--d:${(vi * (3.8 + li * 0.5) * 0.5).toFixed(2)}s`}>{v}</text>
+                ))}
                 <rect class="track" x="236" y={19.5 + li * 12} width="36" height="4" rx="1" />
-                <rect class="f-br" x="236" y={19.5 + li * 12} width={row[2] as number} height="4" rx="1" />
+                <rect class="f-br pulse-x" x="236" y={19.5 + li * 12} width={row[2] as number} height="4" rx="1" style={`--s:0.7;--t:${(3.8 + li * 0.5).toFixed(1)}s;--d:${(li * 0.4).toFixed(1)}s`} />
               </g>
             ))}
             <path class="ln thin" d="M174 76H272" />
             <text class="lbl dim xs" x="174" y="88">SAT REL 99.97%</text>
             <text class="lbl dim xs" x="174" y="99">PKT LOSS 0.02%</text>
             <text class="lbl dim xs" x="174" y="110">JITTER 1.8 ms</text>
-            <text class="lbl em" x="174" y="128">UTC 14:32:08</text>
+            {['UTC 14:32:08', 'UTC 14:32:09', 'UTC 14:32:10', 'UTC 14:32:11'].map((v, vi) => (
+              <text class:list={['lbl em cyc4', vi === 0 && 'lead']} x="174" y="128" style={`--t:4s;--d:${vi}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="174" y="140">NYC 09:32 · TYO 23:32</text>
             <text class="lbl dim xs" x="174" y="151">SYD 00:32 · LON 15:32</text>
-            <text class="lbl dim xs" x="6" y="118">AGG 4.2 Gb/s · 14 LINKS UP</text>
+            {['AGG 4.2 Gb/s · 14 LINKS UP', 'AGG 4.4 Gb/s · 14 LINKS UP'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="6" y="118" style={`--t:5.6s;--d:${(vi * 2.8).toFixed(1)}s`}>{v}</text>
+            ))}
             <path class="area fade" d={`${trafficLine}L166 152L6 152Z`} style="--d:0.4s" />
-            <path class="stroke-br draw" d={trafficLine} pathLength="100" style="--d:0.2s" />
+            <path class="stroke-br draw-loop" d={trafficLine} pathLength="100" />
           </g>
           )}
           {board.id === 'avionics' && (
@@ -1722,8 +2112,8 @@ const NEWS = [
               <path class="mesh-b draw" d={meshPaths[2]} pathLength="100" style="--d:0.1s" />
               <path class="mesh-m draw" d={meshPaths[1]} pathLength="100" style="--d:0.3s" />
               <path class="mesh-f draw" d={meshPaths[0]} pathLength="100" style="--d:0.5s" />
-              {meshVerts.map((v) => (
-                <circle class="f-brand pop" cx={v.X} cy={v.Y} r="1.1" style="--d:0.9s" />
+              {meshVerts.map((v, vi) => (
+                <circle class="f-brand led" cx={v.X} cy={v.Y} r="1.1" style={`--d:${(vi * 0.17).toFixed(2)}s`} />
               ))}
             </g>
             <path class="stroke-br" d="M22 140h16M22 140v-15M22 140l-8 7" />
@@ -1750,7 +2140,7 @@ const NEWS = [
             <text class="lbl dim xs" x="178" y="114">NORMALS ✓ · MANIFOLD ✓</text>
             <text class="lbl dim xs" x="178" y="126">DECIMATE 38%</text>
             <rect class="track" x="178" y="130" width="94" height="4" rx="1" />
-            <rect class="f-brand grow-x" x="178" y="130" width="36" height="4" rx="1" style="--d:0.5s" />
+            <rect class="f-brand fill-loop" x="178" y="130" width="94" height="4" rx="1" style="--t:11s" />
             <text class="lbl dim xs" x="178" y="146">AREA 12.41 · VOL 3.92</text>
             <text class="lbl dim xs" x="178" y="156">ISO 10303 · ORTHO</text>
           </g>
@@ -1812,7 +2202,8 @@ const NEWS = [
             {TOOL_ROWS.map((row, ti) => (
               <g class="slide" style={`--d:${(0.15 + ti * 0.14).toFixed(2)}s`}>
                 <rect class="panel" x="8" y={46 + ti * 15} width="140" height="12" rx="2" />
-                <circle class:list={[ti === 2 ? 'f-accent' : 'f-brand']} cx="15" cy={52 + ti * 15} r="1.7" />
+                <rect class="f-br flash" x="8" y={46 + ti * 15} width="140" height="12" rx="2" style={`--t:4.5s;--d:${(ti * 1.5).toFixed(1)}s`} />
+                <circle class:list={[ti === 2 ? 'f-accent' : 'f-brand', 'led']} cx="15" cy={52 + ti * 15} r="1.7" style={`--d:${(ti * 0.8).toFixed(1)}s`} />
                 <text class="lbl xs" x="21" y={54.5 + ti * 15}>{row[0]}</text>
                 <text class="lbl dim xs" x="112" y={54.5 + ti * 15}>{row[1]}</text>
               </g>
@@ -1826,16 +2217,33 @@ const NEWS = [
             <text class="lbl dim xs" x="14" y="151">reply…</text>
             <path class="f-brand" d="M170 145l6 3.5-6 3.5Z" />
             <text class="lbl dim xs" x="186" y="12">TOK/S</text>
-            <text class="lbl em" x="246" y="12">182</text>
-            <path class="stroke-br draw" d={SPARK} pathLength="100" style="--d:0.2s" />
-            <text class="lbl dim xs" x="186" y="48">LAT p50 320ms</text>
+            {['182', '186', '179'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="246" y="12" style={`--t:2.4s;--d:${(vi * 0.8).toFixed(1)}s`}>{v}</text>
+            ))}
+            <clipPath id="ai-clip">
+              <rect x="186" y="18" width="84" height="22" />
+            </clipPath>
+            <g clip-path="url(#ai-clip)">
+              <g class="roll-x" style={`--sx:-${SPARK.w}px;--t:8s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={SPARK.d} transform={`translate(${set * SPARK.w} 0)`} />
+                ))}
+              </g>
+            </g>
+            {['LAT p50 320ms', 'LAT p50 336ms'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc2', vi === 0 && 'lead']} x="186" y="48" style={`--t:4.6s;--d:${(vi * 2.3).toFixed(1)}s`}>{v}</text>
+            ))}
             {LAT_HIST.map((h, li2) => (
-              <rect class="f-br grow-y" x={252 + li2 * 4.5} y={50 - h} width="3" height={h} style={`--d:${(0.3 + li2 * 0.05).toFixed(2)}s`} />
+              <rect class="f-br eq-bar" x={252 + li2 * 4.5} y={50 - h} width="3" height={h} style={`--s:${(0.5 + li2 * 0.08).toFixed(2)};--t:${(1.1 + li2 * 0.2).toFixed(1)}s;--d:${(li2 * 0.15).toFixed(2)}s`} />
             ))}
             <path class="ln thin" d="M186 56H272" />
             <text class="lbl dim xs" x="186" y="68">CALLS 7 · TOOLS 3</text>
-            <text class="lbl dim xs" x="186" y="80">TOKENS 4,182</text>
-            <text class="lbl dim xs" x="186" y="92">COST $0.0041</text>
+            {['TOKENS 4,182', 'TOKENS 4,318', 'TOKENS 4,461'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="186" y="80" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
+            {['COST $0.0041', 'COST $0.0043', 'COST $0.0045'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="186" y="92" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="186" y="104">CACHE HIT 82%</text>
             <path class="ln thin" d="M186 110H272" />
             <text class="lbl dim xs" x="186" y="122">GUARDRAILS ✓</text>
@@ -1854,13 +2262,22 @@ const NEWS = [
             <text class="lbl em" x="176" y="44">ż = xy − βz</text>
             <text class="lbl dim xs" x="176" y="57">σ=10 · ρ=28 · β=8/3</text>
             <path class="ln thin" d="M176 63H272" />
-            <text class="lbl xs up" x="176" y="75">λ₁ +0.906</text>
-            <text class="lbl dim xs" x="228" y="75">t +41.2s</text>
+            <text class="lbl xs up breathe" x="176" y="75" style="--t:3.6s">λ₁ +0.906</text>
+            {['t +41.2s', 't +41.4s', 't +41.6s', 't +41.8s'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc4', vi === 0 && 'lead']} x="228" y="75" style={`--t:2s;--d:${(vi * 0.5).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="176" y="87">λ₂ 0.000 · λ₃ −14.57</text>
             <text class="lbl dim xs" x="176" y="99">D_KY 2.062 · CHAOTIC</text>
             <path class="ln thin" d="M176 105H272" />
             {XHIST.map((h, xi) => (
-              <rect class:list={['grow-y', xi === 3 || xi === 9 ? 'f-brand' : 'f-br']} x={176 + xi * 8} y={138 - h} width="6" height={h} style={`--d:${(0.2 + xi * 0.04).toFixed(2)}s`} />
+              <rect
+                class:list={['eq-bar', xi === 3 || xi === 9 ? 'f-brand' : 'f-br']}
+                x={176 + xi * 8}
+                y={138 - h}
+                width="6"
+                height={h}
+                style={`--s:${(0.62 + (xi % 3) * 0.1).toFixed(2)};--t:${(1.8 + (xi % 5) * 0.4).toFixed(1)}s;--d:${(xi * 0.11).toFixed(2)}s`}
+              />
             ))}
             <path class="ln thin" d="M176 139H272" />
             <text class="lbl dim xs" x="176" y="150">P(x) BIMODAL · N=4,200</text>
@@ -2003,9 +2420,16 @@ const NEWS = [
           )}
           {board.id === 'portfolio' && (
           <g>
-            <text class="lbl em" x="8" y="9">NAV 24.81M</text>
-            <text class="lbl up" x="60" y="9">+212k D</text>
+            {['NAV 24.81M', 'NAV 24.84M', 'NAV 24.79M'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="8" y="9" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
+            {['+212k D', '+228k D', '+204k D'].map((v, vi) => (
+              <text class:list={['lbl up cyc3', vi === 0 && 'lead']} x="60" y="9" style={`--t:3.6s;--d:${(vi * 1.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <circle class="ln thin" cx="46" cy="60" r="25" />
+            {/* A marker ring turning around the book — the one part of an
+                allocation that is allowed to move while the weights hold. */}
+            <circle class="ln thin spin-var" cx="46" cy="60" r="29" stroke-dasharray="2 7" style="--t:22s;transform-origin:46px 60px" />
             {ALLOC_SEGS.map((a, si) => (
               <circle
                 class:list={['seg', a.cls]}
@@ -2032,8 +2456,9 @@ const NEWS = [
             <path class="ln dash thin" d="M96 26H272M96 42H272M96 58H272" />
             <path class="area fade" d={`${navLine}L272 76L98 76Z`} style="--d:0.45s" />
             <path class="stroke-dim draw" d={benchLine} pathLength="100" style="--d:0.3s" />
-            <path class="stroke-br draw" d={navLine} pathLength="100" style="--d:0.15s" />
-            <rect class="f-accent" x="246" y="18" width="24" height="9" rx="1" />
+            <path class="stroke-br draw-loop" d={navLine} pathLength="100" />
+            <rect class="f-br scan" x="96" y="10" width="1.6" height="66" style="--sx:174px;--t:9s" />
+            <rect class="f-accent breathe" x="246" y="18" width="24" height="9" rx="1" style="--t:3.4s" />
             <text class="lbl tag" x="248.5" y="25">+24.1%</text>
             <text class="lbl dim xs" x="98" y="22">NAV vs BENCH · 30D</text>
             <path class="ln thin" d="M96 84H272" />
@@ -2043,11 +2468,14 @@ const NEWS = [
             <text class="lbl dim xs" x="98" y="112">POS · WEIGHT · P&L</text>
             {HOLDINGS.map((h, hi) => (
               <g class="slide" style={`--d:${(0.2 + hi * 0.07).toFixed(2)}s`}>
+                <rect class="f-br flash" x="96" y={117 + hi * 10} width="176" height="9" rx="1" style={`--t:5.6s;--d:${(hi * 1.4).toFixed(1)}s`} />
                 <text class="lbl xs" x="98" y={124 + hi * 10}>{h.s}</text>
                 <rect class="track" x="126" y={119.8 + hi * 10} width="56" height="4" rx="1" />
-                <rect class="f-br" x="126" y={119.8 + hi * 10} width={f1(h.w * 6.2)} height="4" rx="1" />
+                <rect class="f-br pulse-x" x="126" y={119.8 + hi * 10} width={f1(h.w * 6.2)} height="4" rx="1" style={`--s:0.86;--t:${(4.6 + hi * 0.6).toFixed(1)}s;--d:${(hi * 0.5).toFixed(1)}s`} />
                 <text class="lbl dim xs" x="188" y={124 + hi * 10}>{h.w}%</text>
-                <text class:list={['lbl', 'xs', h.up ? 'up' : 'dn']} x="224" y={124 + hi * 10}>{h.pl}</text>
+                {[h.pl, h.alt].map((v, vi) => (
+                  <text class:list={['lbl xs cyc2', vi === 0 && 'lead', h.up ? 'up' : 'dn']} x="224" y={124 + hi * 10} style={`--t:${(3.4 + hi * 0.5).toFixed(1)}s;--d:${(vi * (3.4 + hi * 0.5) * 0.5).toFixed(2)}s`}>{v}</text>
+                ))}
               </g>
             ))}
           </g>
@@ -2061,19 +2489,19 @@ const NEWS = [
             <path class="ln dash acc" d="M98 14V114" />
             {GEX.map((g3, gi3) => (
               <rect
-                class:list={['grow-y', g3 >= 0 ? 'f-br' : 'f-ac']}
+                class:list={['eq-bar', g3 >= 0 ? 'f-br' : 'f-ac']}
                 x={12 + gi3 * 9.4}
                 y={g3 >= 0 ? f1(44 - g3 * 0.75) : 44}
                 width="6"
                 height={f1(Math.abs(g3) * 0.75)}
                 rx="0.4"
-                style={`--d:${(gi3 * 0.04).toFixed(2)}s`}
+                style={`transform-origin:center ${g3 >= 0 ? 'bottom' : 'top'};--s:${(0.72 + (gi3 % 3) * 0.08).toFixed(2)};--t:${(2.6 + (gi3 % 4) * 0.5).toFixed(1)}s;--d:${(gi3 * 0.12).toFixed(2)}s`}
               />
             ))}
             <path class="ln dash thin" d="M44 16V66" />
             <text class="lbl dim xs" x="12" y="72">FLIP 5,180 · PIN 5,200</text>
-            <path class="stroke-br draw" d={smileLine} pathLength="100" style="--d:0.3s" />
-            <circle class="f-brand pop" cx="106" cy="101" r="1.6" style="--d:0.9s" />
+            <path class="stroke-br draw-loop" d={smileLine} pathLength="100" />
+            <circle class="f-brand led" cx="106" cy="101" r="1.6" style="--d:0.6s" />
             <text class="lbl dim xs" x="12" y="86">IV SMILE · RR25 −2.4 · FLY 0.8</text>
             <path class="stroke-ac draw" d={termLine} pathLength="100" style="--d:0.5s" />
             {['0D', '1M', '3M', '6M', '1Y'].map((tl, tli) => (
@@ -2087,24 +2515,28 @@ const NEWS = [
                 <text class="lbl xs" x="188" y={24 + gr * 12}>{row.v}</text>
                 <rect class="track" x="224" y={19.6 + gr * 12} width="48" height="4" rx="1" />
                 <rect
-                  class:list={['grow-x', row.neg ? 'f-ac' : 'f-br']}
+                  class:list={['pulse-x', row.neg ? 'f-ac' : 'f-br']}
                   x="224"
                   y={19.6 + gr * 12}
                   width={row.w}
                   height="4"
                   rx="1"
-                  style={`--d:${(0.2 + gr * 0.07).toFixed(2)}s`}
+                  style={`--s:0.74;--t:${(4.8 + gr * 0.6).toFixed(1)}s;--d:${(gr * 0.45).toFixed(2)}s`}
                 />
               </g>
             ))}
             <path class="ln thin" d="M176 74H272" />
-            <text class="lbl dim xs" x="176" y="86">IVR 62 · VIX 13.8</text>
+            {['IVR 62 · VIX 13.8', 'IVR 63 · VIX 13.9', 'IVR 61 · VIX 13.6'].map((v, vi) => (
+              <text class:list={['lbl dim xs cyc3', vi === 0 && 'lead']} x="176" y="86" style={`--t:4.2s;--d:${(vi * 1.4).toFixed(1)}s`}>{v}</text>
+            ))}
             <path class="ln" d="M199 124A25 25 0 0 1 249 124" />
             <path class="tickring thin" d="M199 124A25 25 0 0 1 249 124" stroke-dasharray="1 5.1" />
-            <path class="stroke-br" stroke-width="2.4" d="M199 124A25 25 0 0 1 224 99" />
+            <path class="stroke-br arc-loop" stroke-width="2.4" pathLength="100" d="M199 124A25 25 0 0 1 249 124" style="--a0:38;--a1:58;--t:8s" />
             <path class="needle stroke-ac" stroke-width="1.4" d="M224 124L224 103" style="transform-origin:224px 124px;--a0:-34deg;--a1:22deg;--t:8s" />
             <circle class="f-ink" cx="224" cy="124" r="1.8" />
-            <text class="lbl em" x="208" y="136">P/C 1.38</text>
+            {['P/C 1.38', 'P/C 1.42', 'P/C 1.34'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="208" y="136" style={`--t:8s;--d:${(vi * 2.67).toFixed(2)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="176" y="147">MAX PAIN 5,200</text>
             <text class="lbl dim xs" x="176" y="156">OI 2.4M · 0DTE 46%</text>
           </g>
@@ -2117,23 +2549,25 @@ const NEWS = [
             <text class="lbl dim xs" x="136" y="50">4.6</text>
             <text class="lbl dim xs" x="136" y="72">3.9</text>
             <path class="stroke-dim draw" d={curveLine(MACRO_AGO)} pathLength="100" style="--d:0.35s" />
-            <path class="stroke-br draw" d={curveLine(MACRO_NOW)} pathLength="100" style="--d:0.15s" />
+            <path class="stroke-br draw-loop" d={curveLine(MACRO_NOW)} pathLength="100" />
             {CURVE_X.map((cx2, ci3) => (
-              <circle class="f-brand pop" cx={cx2} cy={f1(84 - (MACRO_NOW[ci3] - 3.6) * 32)} r="1.3" style={`--d:${(0.6 + ci3 * 0.05).toFixed(2)}s`} />
+              <circle class="f-brand led" cx={cx2} cy={f1(84 - (MACRO_NOW[ci3] - 3.6) * 32)} r="1.3" style={`--d:${(ci3 * 0.34).toFixed(2)}s`} />
             ))}
             {[['3M', 12], ['1Y', 37], ['5Y', 82], ['10Y', 108], ['30Y', 138]].map(([tn, tx]) => (
               <text class="lbl dim xs" x={tx} y="96">{tn}</text>
             ))}
-            <text class="lbl xs dn" x="8" y="108">2s10s −24bp · INV 412d</text>
+            {['2s10s −24bp · INV 412d', '2s10s −26bp · INV 412d'].map((v, vi) => (
+              <text class:list={['lbl xs dn cyc2', vi === 0 && 'lead']} x="8" y="108" style={`--t:6.2s;--d:${(vi * 3.1).toFixed(1)}s`}>{v}</text>
+            ))}
             {CPI_PATH.map((v, cpi) => (
               <rect
-                class:list={['grow-y', v > 4 ? 'f-ac' : 'f-br']}
+                class:list={['eq-bar', v > 4 ? 'f-ac' : 'f-br']}
                 x={8 + cpi * 8.4}
                 y={f1(146 - v * 3.6)}
                 width="5.6"
                 height={f1(v * 3.6)}
                 rx="0.4"
-                style={`--d:${(0.15 + cpi * 0.04).toFixed(2)}s`}
+                style={`--s:0.93;--t:${(2.4 + (cpi % 4) * 0.5).toFixed(1)}s;--d:${(cpi * 0.13).toFixed(2)}s`}
               />
             ))}
             <path class="ln dash acc" d="M8 138.8H110" />
@@ -2141,21 +2575,35 @@ const NEWS = [
             <text class="lbl dim xs" x="154" y="10">POLICY RATES</text>
             {CB_ROWS.map((row, cb) => (
               <g class="slide" style={`--d:${(cb * 0.07).toFixed(2)}s`}>
+                <rect class="f-br flash" x="152" y={13 + cb * 11} width="120" height="10" rx="1" style={`--t:7.2s;--d:${(cb * 1.8).toFixed(1)}s`} />
                 <text class="lbl xs" x="154" y={21 + cb * 11}>{row[0]}</text>
                 <text class="lbl em xs" x="180" y={21 + cb * 11}>{row[1]}</text>
                 <text class:list={['lbl', 'xs', row[2] === 'HOLD' ? 'dim' : row[2].startsWith('−') ? 'dn' : 'up']} x="206" y={21 + cb * 11}>{row[2]}</text>
               </g>
             ))}
             <path class="ln thin" d="M154 60H272" />
-            <text class="lbl em" x="154" y="74">DXY 104.2</text>
-            <path class="stroke-br draw" d={dxySpark} pathLength="100" style="--d:0.4s" />
+            {['DXY 104.2', 'DXY 104.3', 'DXY 104.1'].map((v, vi) => (
+              <text class:list={['lbl em cyc3', vi === 0 && 'lead']} x="154" y="74" style={`--t:4.5s;--d:${(vi * 1.5).toFixed(1)}s`}>{v}</text>
+            ))}
+            <clipPath id="dxy-clip">
+              <rect x="208" y="60" width="64" height="20" />
+            </clipPath>
+            <g clip-path="url(#dxy-clip)">
+              <g class="roll-x" style={`--sx:-${dxySpark.w}px;--t:11s`}>
+                {[0, 1].map((set) => (
+                  <path class="stroke-br" d={dxySpark.d} transform={`translate(${set * dxySpark.w} 0)`} />
+                ))}
+              </g>
+            </g>
             <text class="lbl dim xs" x="154" y="88">US10Y 4.18 · BUND 2.42</text>
             <text class="lbl dim xs" x="154" y="99">OIL 82.4 · GOLD 2,412</text>
             <path class="ln thin" d="M154 106H272" />
             <text class="lbl dim xs" x="154" y="117">P(RECESSION 12M)</text>
-            <text class="lbl em" x="246" y="117">32%</text>
+            {['32%', '33%'].map((v, vi) => (
+              <text class:list={['lbl em cyc2', vi === 0 && 'lead']} x="246" y="117" style={`--t:8.4s;--d:${(vi * 4.2).toFixed(1)}s`}>{v}</text>
+            ))}
             <rect class="track" x="154" y="121" width="118" height="4" rx="1" />
-            <rect class="f-ac grow-x" x="154" y="121" width="38" height="4" rx="1" style="--d:0.4s" />
+            <rect class="f-ac pulse-x" x="154" y="121" width="38" height="4" rx="1" style="--s:0.82;--t:8.4s" />
             <text class="lbl dim xs" x="154" y="137">NOWCAST GDP +2.1%</text>
             <text class="lbl dim xs" x="154" y="148">FOMC −6d · NFP FRI · CPI −12d</text>
           </g>
@@ -2283,18 +2731,18 @@ const NEWS = [
           )}
           {board.id === 'risk' && (
           <g>
-            <rect class="f-accent" x="26" y="8" width="32" height="9" rx="1" />
+            <rect class="f-accent breathe" x="26" y="8" width="32" height="9" rx="1" style="--t:3s" />
             <text class="lbl tag" x="28.5" y="15">VaR −2.1%</text>
             <text class="lbl dim xs" x="100" y="12">1D P&L DIST</text>
             {DIST.map((h, di) => (
               <rect
-                class:list={['grow-y', di < 5 ? 'f-ac' : 'f-br']}
+                class:list={['eq-bar', di < 5 ? 'f-ac' : 'f-br']}
                 x={8 + di * 7.6}
                 y={f1(88 - h)}
                 width="5.5"
                 height={h}
                 rx="0.4"
-                style={`--d:${(di * 0.035).toFixed(2)}s`}
+                style={`--s:${(0.88 - (di % 3) * 0.05).toFixed(2)};--t:${(2.2 + (di % 5) * 0.4).toFixed(1)}s;--d:${(di * 0.09).toFixed(2)}s`}
               />
             ))}
             <path class="ln dash acc" d="M41 18V88" />
@@ -2305,12 +2753,13 @@ const NEWS = [
               <g class="fade" style={`--d:${(0.2 + fi2 * 0.08).toFixed(2)}s`}>
                 <text class="lbl xs" x="8" y={113 + fi2 * 11}>{fct.n}</text>
                 <rect
-                  class={fct.v >= 0 ? 'f-br' : 'f-ac'}
+                  class:list={[fct.v >= 0 ? 'f-br' : 'f-ac', 'pulse-x', fct.v < 0 && 'from-right']}
                   x={fct.v >= 0 ? 76 : f1(76 - Math.abs(fct.v) * 46)}
                   y={108.6 + fi2 * 11}
                   width={f1(Math.abs(fct.v) * 46)}
                   height="4.5"
                   rx="1"
+                  style={`--s:0.76;--t:${(4.4 + fi2 * 0.7).toFixed(1)}s;--d:${(fi2 * 0.5).toFixed(1)}s`}
                 />
                 <text class="lbl dim xs" x="126" y={113 + fi2 * 11}>{(fct.v >= 0 ? '+' : '−') + Math.abs(fct.v).toFixed(2)}</text>
               </g>
@@ -2322,7 +2771,7 @@ const NEWS = [
               </g>
             ))}
             {CORR.map((c, ci4) => (
-              <rect class:list={['pop', `w${c.k}`]} x={c.x} y={c.y} width="10.4" height="8.8" rx="1" style={`--d:${(0.1 + ci4 * 0.02).toFixed(2)}s`} />
+              <rect class:list={['wf-row', `w${c.k}`]} x={c.x} y={c.y} width="10.4" height="8.8" rx="1" style={`--d:${(ci4 * 0.07).toFixed(2)}s`} />
             ))}
             <text class="lbl dim xs" x="160" y="76">CORR AVG ρ 0.34 · MAX 0.92 ▲</text>
             <text class="lbl dim xs" x="160" y="90">STRESS</text>
@@ -2330,13 +2779,13 @@ const NEWS = [
               <g class="slide" style={`--d:${(0.15 + sri * 0.08).toFixed(2)}s`}>
                 <text class="lbl xs" x="160" y={101 + sri * 11}>{row.n}</text>
                 <rect class="track" x="204" y={96.6 + sri * 11} width="42" height="4" rx="1" />
-                <rect class="f-ac" x="204" y={96.6 + sri * 11} width={row.w} height="4" rx="1" />
+                <rect class="f-ac pulse-x" x="204" y={96.6 + sri * 11} width={row.w} height="4" rx="1" style={`--s:0.8;--t:${(5.2 + sri * 0.8).toFixed(1)}s;--d:${(sri * 0.6).toFixed(1)}s`} />
                 <text class="lbl xs dn" x="250" y={101 + sri * 11}>{row.v}</text>
               </g>
             ))}
             <text class="lbl dim xs" x="160" y="137">MARGIN 62% · GROSS 4.2x</text>
             <rect class="track" x="160" y="140" width="112" height="4" rx="1" />
-            <rect class="f-br grow-x" x="160" y="140" width="69" height="4" rx="1" style="--d:0.45s" />
+            <rect class="f-br pulse-x" x="160" y="140" width="69" height="4" rx="1" style="--s:0.88;--t:6.6s" />
             {[0, 1, 2, 3].map((li3) => (
               <circle class:list={['led', li3 === 3 ? 'f-accent' : 'f-brand']} cx={163 + li3 * 9} cy="152" r="1.8" style={`--d:${(li3 * 0.4).toFixed(1)}s`} />
             ))}
@@ -2348,14 +2797,18 @@ const NEWS = [
             <rect class="frame" x="8" y="10" width="176" height="82" rx="2" />
             <path class="ln dash thin" d="M8 34H184M8 58H184M52 10V92M96 10V92M140 10V92" />
             <path class="stroke-dim draw" d={btBenchLine} pathLength="100" style="--d:0.35s" />
-            <path class="stroke-br draw" d={btLine} pathLength="100" style="--d:0.15s" />
+            {/* The run replays: the equity curve keeps re-walking its history
+                under a read head, which is what a backtest looks like when it
+                is actually running. */}
+            <path class="stroke-br draw-loop" d={btLine} pathLength="100" />
+            <rect class="f-br scan" x="8" y="10" width="1.6" height="82" style="--sx:174px;--t:9s" />
             {TRADE_MARKS.map((ti2, tmi) => (
               <circle
-                class:list={['pop', tmi === 2 ? 'f-accent' : 'f-brand']}
+                class:list={['led', tmi === 2 ? 'f-accent' : 'f-brand']}
                 cx={f1(10 + ti2 * 4.4)}
                 cy={btY(btEq[ti2])}
                 r="1.4"
-                style={`--d:${(0.8 + tmi * 0.08).toFixed(2)}s`}
+                style={`--d:${(tmi * 0.48).toFixed(2)}s`}
               />
             ))}
             {['2016', '2018', '2020', '2022', '2024'].map((yr, yi) => (
@@ -2368,6 +2821,7 @@ const NEWS = [
             <text class="lbl dim xs" x="8" y="152">SLIPPAGE 0.8bp · FEES IN</text>
             {BT_STATS.map((row, bi2) => (
               <g class="fade" style={`--d:${(bi2 * 0.07).toFixed(2)}s`}>
+                <rect class="f-br flash" x="190" y={8 + bi2 * 12} width="82" height="10" rx="1" style={`--t:9s;--d:${(bi2 * 1.5).toFixed(1)}s`} />
                 <text class="lbl dim xs" x="192" y={16 + bi2 * 12}>{row[0]}</text>
                 <text class="lbl em xs" x="244" y={16 + bi2 * 12}>{row[1]}</text>
               </g>
@@ -2375,18 +2829,18 @@ const NEWS = [
             <path class="ln thin" d="M192 82H272" />
             <text class="lbl dim xs" x="192" y="92">MONTHLY P&L · 3Y</text>
             {MONTHS.map((m, mi3) => (
-              <rect class:list={['pop', `w${m.k}`]} x={m.x} y={m.y} width="5.8" height="6.4" rx="0.8" style={`--d:${(0.2 + mi3 * 0.015).toFixed(3)}s`} />
+              <rect class:list={['wf-row', `w${m.k}`]} x={m.x} y={m.y} width="5.8" height="6.4" rx="0.8" style={`--d:${(mi3 * 0.05).toFixed(2)}s`} />
             ))}
             <text class="lbl dim xs" x="192" y="132">WFO 4/5 WINDOWS</text>
             {[0, 1, 2, 3, 4].map((s2) => (
               <rect
-                class:list={[s2 < 3 ? 'f-br' : s2 === 3 ? 'f-br grow-x' : 'track']}
+                class:list={[s2 < 3 ? 'f-br' : s2 === 3 ? 'f-br fill-loop' : 'track']}
                 x={192 + s2 * 16.6}
                 y="136"
                 width="14"
                 height="5"
                 rx="1"
-                style={s2 === 3 ? '--d:0.5s' : undefined}
+                style={s2 === 3 ? '--t:6s' : undefined}
               />
             ))}
             <text class="lbl dim xs" x="192" y="152">OOS 1.71 · DECAY 12%</text>
@@ -2413,7 +2867,7 @@ const NEWS = [
     width: min(21rem, 36vw);
     margin: 0;
     overflow: hidden;
-    border: 1px solid var(--w-line);
+    border: 1px solid color-mix(in oklab, var(--w-text) 38%, transparent);
     border-radius: 0.4rem;
     background: color-mix(in oklab, var(--w-panel) 88%, transparent);
     box-shadow: 0 16px 36px -24px var(--w-shadow);
@@ -2798,7 +3252,7 @@ const NEWS = [
     .path-rider {
       display: initial;
       offset-rotate: 0deg;
-      animation: hb-offset 16s linear infinite;
+      animation: hb-offset var(--t, 16s) linear var(--d, 0s) infinite;
     }
   }
   @keyframes hb-offset {
