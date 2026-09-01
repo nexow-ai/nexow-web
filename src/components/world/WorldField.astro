@@ -1890,9 +1890,16 @@
     if (!scenes.length) return null;
 
     /** Opposite-tone scenes. `World` paints a solid box under each of these. */
-    const bands = scenes.filter(
+    const sceneInvert = scenes.map(
       (el) => el.classList.contains('tone-invert') || !!el.closest('.tone-invert'),
     );
+    const bands = scenes.filter((_, i) => sceneInvert[i]);
+    /* Answered once at setup rather than re-queried per frame: the DOM these
+     * point at is static for the life of the page. */
+    const sceneStage = scenes.map((el) =>
+      el.querySelector<HTMLElement>('[data-stage], [data-stages]'),
+    );
+    const sceneIsFeatures = scenes.map((el) => el.id === 'features');
 
     let gl: WebGLRenderingContext | null = null;
     try {
@@ -2531,18 +2538,73 @@
      * well above it, over the composer and the chips. */
     const headline = document.getElementById('hero-title');
 
+    /* ---- geometry cache ----
+     *
+     * The loop used to read the world's rect, all fifteen scene rects, the
+     * headline's rect and `document.scrollHeight` on *every* frame, and it read
+     * them after writing `root.style.opacity` — so each frame invalidated style
+     * and then forced a full layout to answer the next question. On a 34,000px
+     * document with 7,800 nodes that was the single most expensive thing the
+     * page did, and it did it whether or not anything had moved.
+     *
+     * Nothing here moves on scroll. A scene's position in the *document* only
+     * changes when the layout changes; where the viewport sits inside it is
+     * `scrollY`, which is free. So measure once, derive per frame, and
+     * re-measure only when something can actually have resized.
+     */
+    let geomTop = 0;
+    let geomBottom = 0;
+    let pageEnd = 0;
+    const sceneTop = new Float64Array(scenes.length);
+    const sceneBottom = new Float64Array(scenes.length);
+    const sceneHeight = new Float64Array(scenes.length);
+    let headX = 0;
+    let headTop = 0;
+    let headH = 0;
+    let geomDirty = true;
+
+    function measureGeometry() {
+      geomDirty = false;
+      const sy = window.scrollY;
+      const wr = world!.getBoundingClientRect();
+      geomTop = wr.top + sy;
+      geomBottom = wr.bottom + sy;
+      for (let i = 0; i < scenes.length; i++) {
+        const r = scenes[i].getBoundingClientRect();
+        sceneTop[i] = r.top + sy;
+        sceneBottom[i] = r.bottom + sy;
+        sceneHeight[i] = r.height;
+      }
+      if (headline) {
+        const r = headline.getBoundingClientRect();
+        headX = r.left + r.width * 0.5;
+        headTop = r.top + sy;
+        headH = r.height;
+      }
+      pageEnd = document.documentElement.scrollHeight;
+    }
+
+    const markGeometry = () => {
+      geomDirty = true;
+    };
+    /* Anything that can reflow the story: a resize, a font landing, an act
+     * growing as its copy reveals. One flag, paid off on the next frame. */
+    const geomRo = new ResizeObserver(markGeometry);
+    geomRo.observe(world!);
+    for (const scene of scenes) geomRo.observe(scene);
+
     /**
      * How far, in view-space units at camera distance `D`, the world must move
      * for its origin to land on the headline's centre. NDC offsets scaled by
      * the frustum's half-extents at that depth (vertical fov 0.85 rad).
      */
-    function headlineOffset(D: number): [number, number] {
+    function headlineOffset(D: number, sy: number): [number, number] {
       if (!headline) return [0, 0];
-      const r = headline.getBoundingClientRect();
       const { w: vw, h: vh } = viewBox();
       const half = Math.tan(0.425) * D;
-      const x = ((r.left + r.width * 0.5 - vw * 0.5) / (vw * 0.5)) * half * (vw / vh);
-      const y = ((vh * 0.5 - (r.top + r.height * 0.5)) / (vh * 0.5)) * half;
+      const top = headTop - sy;
+      const x = ((headX - vw * 0.5) / (vw * 0.5)) * half * (vw / vh);
+      const y = ((vh * 0.5 - (top + headH * 0.5)) / (vh * 0.5)) * half;
       return [x, y];
     }
 
@@ -2568,6 +2630,9 @@
     let onScreen = true;
     let t0 = 0;
     let last = 0;
+    let lastShown = '';
+    let lastInvert: boolean | null = null;
+    const pgPin = world!.querySelector('.pg-pin');
 
     function draw(now: number) {
       frame = 0;
@@ -2594,7 +2659,10 @@
         }
       }
 
-      const rect = world!.getBoundingClientRect();
+      if (geomDirty) measureGeometry();
+      const sy = window.scrollY;
+      const rectTop = geomTop - sy;
+      const rectBottom = geomBottom - sy;
       const { h: vh } = viewBox();
       const vv = window.visualViewport;
       // Middle of what the reader actually sees — visualViewport.offsetTop
@@ -2605,12 +2673,17 @@
       // Fade in at the top of the document. The world now runs through the
       // footer, so there is no exit fade onto a white slab — only a hold
       // if this instance of the world actually ends before the page does.
-      const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
-      const pageEnd = document.documentElement.scrollHeight;
-      const worldOwnsEnd = rect.bottom >= pageEnd - 12;
-      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      const enter = Math.min(1, Math.max(0, (vh - rectTop) / (vh * 0.5)));
+      const worldOwnsEnd = geomBottom >= pageEnd - 12;
+      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rectBottom / (vh * 0.6)));
       const presence = Math.min(enter, exit);
-      root.style.opacity = String(presence);
+      // Only when it actually moves: an identical write is cheap, but the
+      // rounded value changes on perhaps a tenth of the frames it is computed.
+      const shown = presence.toFixed(3);
+      if (shown !== lastShown) {
+        lastShown = shown;
+        root.style.opacity = shown;
+      }
 
       if (presence <= 0.001) {
         frame = requestAnimationFrame(draw);
@@ -2622,13 +2695,14 @@
       let a = 0;
       let local = 0;
       for (let i = 0; i < scenes.length; i++) {
-        const r = scenes[i].getBoundingClientRect();
-        if (r.top <= mid && r.bottom >= mid) {
+        const top = sceneTop[i] - sy;
+        const bottom = sceneBottom[i] - sy;
+        if (top <= mid && bottom >= mid) {
           a = i;
-          local = Math.min(1, Math.max(0, (mid - r.top) / Math.max(r.height, 1)));
+          local = Math.min(1, Math.max(0, (mid - top) / Math.max(sceneHeight[i], 1)));
           break;
         }
-        if (r.top > mid) break;
+        if (top > mid) break;
         a = i;
         local = 1;
       }
@@ -2674,7 +2748,7 @@
       /* Hero: centre the ring on the headline, both axes. Fades with the morph
        * as act 01's formation takes the scene column instead. */
       const hero = a === 0 ? 1 - morph : 0;
-      const [hx, hy] = hero > 0 ? headlineOffset(Math.hypot(cam.x, cam.y, cam.z)) : [0, 0];
+      const [hx, hy] = hero > 0 ? headlineOffset(Math.hypot(cam.x, cam.y, cam.z), sy) : [0, 0];
       coreShift = hx * hero + shiftFull * (a === 0 ? morph : 1);
       coreLift = hy * hero;
       ctx.uniform1f(uShift, coreShift);
@@ -2701,9 +2775,9 @@
          view switches too — that is how a single section shows every family.
          A clicked surface writes `data-fm-way` so the field (the green
          panels around the plate) follows the tab, not only the scroll. */
-      const stageEl = scenes[a].querySelector<HTMLElement>('[data-stage], [data-stages]');
+      const stageEl = sceneStage[a];
       const stage = Number(stageEl?.dataset.stage) || 0;
-      const onFeatures = scenes[a]?.id === 'features';
+      const onFeatures = sceneIsFeatures[a];
       const rawFm = onFeatures ? Number(scenes[a].dataset.fmWay) : NaN;
       const tabWay = Number.isFinite(rawFm)
         ? ((rawFm % WAY_COUNT) + WAY_COUNT) % WAY_COUNT
@@ -2742,11 +2816,12 @@
       /* Fog and glass snap to the box under the lens: pale screens on a
        * white box, dark screens on a black one. Last, so a `world--day`
        * repaint earlier in the frame cannot leave the page tone behind. */
-      const invert = !!(
-        scenes[a]?.classList.contains('tone-invert') || scenes[a]?.closest('.tone-invert')
-      );
-      applyGround(invert ? 1 : 0);
-      world!.querySelector('.pg-pin')?.classList.toggle('tone-invert', invert);
+      const invert = sceneInvert[a];
+      if (invert !== lastInvert) {
+        lastInvert = invert;
+        applyGround(invert ? 1 : 0);
+        pgPin?.classList.toggle('tone-invert', invert);
+      }
 
       // Composer charge eases toward its target; the send burst decays.
       charge += (chargeAim - charge) * (1 - Math.exp(-4 * dt));
@@ -2832,7 +2907,8 @@
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uLive, 0);
-      const [sx, sy] = headlineOffset(Math.hypot(-16.8, 3.8, 20.6));
+      if (geomDirty) measureGeometry();
+      const [sx, sy] = headlineOffset(Math.hypot(-16.8, 3.8, 20.6), window.scrollY);
       coreShift = sx;
       coreLift = sy;
       ctx.uniform1f(uShift, coreShift);
@@ -2851,12 +2927,12 @@
     /** Fade at the world's edges without redrawing. Reduced-motion only. */
     let stillGround = -1;
     function fadeStill() {
-      const rect = world!.getBoundingClientRect();
+      if (geomDirty) measureGeometry();
+      const sy = window.scrollY;
       const { h: vh } = viewBox();
-      const enter = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.5)));
-      const pageEnd = document.documentElement.scrollHeight;
-      const worldOwnsEnd = rect.bottom >= pageEnd - 12;
-      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, rect.bottom / (vh * 0.6)));
+      const enter = Math.min(1, Math.max(0, (vh - (geomTop - sy)) / (vh * 0.5)));
+      const worldOwnsEnd = geomBottom >= pageEnd - 12;
+      const exit = worldOwnsEnd ? 1 : Math.min(1, Math.max(0, (geomBottom - sy) / (vh * 0.6)));
       root.style.opacity = String(Math.min(enter, exit));
 
       /* The still frame is fixed to the viewport while the ground alternates
@@ -2865,9 +2941,9 @@
        * loop. */
       const mid = vh * 0.5;
       let ground = 0;
-      for (const band of bands) {
-        const br = band.getBoundingClientRect();
-        if (br.top > mid || br.bottom < mid) continue;
+      for (let i = 0; i < scenes.length; i++) {
+        if (!sceneInvert[i]) continue;
+        if (sceneTop[i] - sy > mid || sceneBottom[i] - sy < mid) continue;
         ground = 1;
         break;
       }
@@ -2951,7 +3027,9 @@
 
     function onResize() {
       resize();
+      markGeometry();
       if (still) {
+        measureGeometry();
         drawStill();
         fadeStill();
       }
@@ -2984,6 +3062,7 @@
       stop() {
         pause();
         io.disconnect();
+        geomRo.disconnect();
         window.removeEventListener('resize', onResize);
         window.visualViewport?.removeEventListener('resize', onResize);
         compactMq.removeEventListener('change', onResize);
