@@ -253,6 +253,42 @@ describe('buildBoardsAtlas', () => {
     expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 2, 12);
   });
 
+  it('treats a GPU that reports no max as the spec floor', async () => {
+    const g2 = mock2d();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
+      g2 as unknown as CanvasRenderingContext2D,
+    );
+    document.body.append(board({ id: 'trading', shown: true }));
+
+    const gl = mockGl({} as WebGLTexture, 0);
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext });
+    await buildBoardsAtlas(t);
+
+    expect(gl.texImage2D).toHaveBeenCalled();
+    expect(t.state.tex).toBeTruthy();
+  });
+
+  it('paints a smaller cell when the pointer is coarse', async () => {
+    const g2 = mock2d();
+    const canvases: HTMLCanvasElement[] = [];
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
+      this: HTMLCanvasElement,
+    ) {
+      canvases.push(this);
+      return g2 as unknown as CanvasRenderingContext2D;
+    });
+    document.body.append(...Array.from({ length: 12 }, (_, i) => board({ id: `b${i}` })));
+
+    const gl = mockGl();
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext, coarse: true });
+    await buildBoardsAtlas(t);
+
+    // Six columns of 288 px, not the 448 px desktop cell.
+    expect(canvases[0].width).toBe(1728);
+    expect(canvases[0].height).toBe(288);
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 2, 12);
+  });
+
   it('reuses an existing texture and marks a dark page as night', async () => {
     const g2 = mock2d();
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
