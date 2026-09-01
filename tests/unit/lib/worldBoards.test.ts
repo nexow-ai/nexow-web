@@ -39,6 +39,7 @@ function mock2d() {
     textAlign: 'left',
     textBaseline: 'alphabetic',
     fillRect: vi.fn(),
+    strokeRect: vi.fn(),
     beginPath: vi.fn(),
     arc: vi.fn(),
     fill: vi.fn(),
@@ -195,6 +196,7 @@ describe('buildBoardsAtlas', () => {
 
     expect(g2.drawImage).toHaveBeenCalled();
     expect(g2.fillText).toHaveBeenCalled();
+    expect(g2.strokeRect).toHaveBeenCalledTimes(2);
     expect(gl.createTexture).toHaveBeenCalled();
     expect(gl.texImage2D).toHaveBeenCalled();
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardsOn, 1);
@@ -283,6 +285,7 @@ describe('buildBoardsAtlas', () => {
     const t = target();
     await buildBoardsAtlas(t);
     expect(g2.fillRect).toHaveBeenCalled();
+    expect(g2.strokeRect).toHaveBeenCalled();
     expect(g2.fillText).toHaveBeenCalledWith('', expect.any(Number), expect.any(Number), expect.any(Number));
   });
 

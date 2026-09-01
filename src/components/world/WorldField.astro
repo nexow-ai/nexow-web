@@ -1088,7 +1088,14 @@
          theme dissolves far less: there the backdrop is near-white and the
          glass is white, so a fifth of the page mixed into every panel took
          away the little separation the panel had. */
-      gl_FragColor = vec4(mix(uFog, col, max(glow * mix(uAlpha, 1.0, 0.85 * uLight), 0.62)), 1.0);
+      vec3 shown = mix(uFog, col, max(glow * mix(uAlpha, 1.0, 0.85 * uLight), 0.62));
+      /* Hairline after the dissolve, or the fog eats it. The rim above is a
+         glint; this is the 1px the composer cards wear — a packed wall of ice
+         without it reads as one sheet. Ink on the light theme, a pale film
+         on the dark: a rule, not a glow. */
+      float hair = 1.0 - aastep(0.0048, abs(sd));
+      vec3 rule = mix(vec3(0.08, 0.11, 0.16), vec3(0.86, 0.90, 0.94), 1.0 - uLight);
+      gl_FragColor = vec4(mix(shown, rule, hair * mix(0.62, 0.42, uLight)), 1.0);
     }
   `;
 

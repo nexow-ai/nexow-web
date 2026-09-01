@@ -163,6 +163,12 @@ function paintCard(
   }
   g2.fillStyle = line;
   g2.fillRect(x, y + barH, w, 1);
+  /* The composer cards wear a 1px rule. Without it here the wall is a
+     stack of grounds, and the screens read as stickers. Hairline, inset
+     half a pixel so it lands on the pixel grid rather than straddling it. */
+  g2.strokeStyle = line;
+  g2.lineWidth = 1;
+  g2.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
 
   const cy = y + barH * 0.5;
   g2.beginPath();
