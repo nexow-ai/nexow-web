@@ -47,8 +47,13 @@ describe.skipIf(!built)('shipped payload', () => {
   it('ships one bounded stylesheet bundle', () => {
     /* 410 → 430: the hero dashboards (HeroDashboards.astro) grew from four
        sketches to twelve instrument panels, and the playground art picked up
-       weight alongside. */
-    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(430);
+       weight alongside.
+       430 → 440: those panels stopped being screenshots. The shared loop
+       vocabulary — value cyclers, print flashes, rolling plots, meters,
+       sweeps — is ~3 KB of keyframes and rules that dresses every board, and
+       is why the boards themselves grew markup without growing CSS per
+       board. */
+    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(440);
   });
 
   it('self-hosts its fonts, in woff2', () => {
@@ -59,9 +64,26 @@ describe.skipIf(!built)('shipped payload', () => {
   });
 
   it('keeps each page document within a sane size', () => {
+    /* The home pages are the big ones — around 815 KB, and rising to that from
+       ~600 KB when the hero stopped rendering sixteen of its dashboards and
+       started rendering all thirty-seven, which is also the world's channel
+       table (src/lib/worldBoards.ts rasterises them into the atlas the 3D
+       screens sample), and to ~860 KB when the boards started running —
+       ticking readouts are several copies of one number, and a plot that
+       scrolls draws its series twice.
+
+       900 → 1060: the twelve chart desks (×1/×2/×4/×8 grids of live plots
+       across stocks, commodities, indices, FX, crypto and macro) took the
+       list to forty-nine and the biggest page to ~1020 KB. Most of that is
+       mechanical rather than authored — an eight-up sheet is ~250 SVG nodes
+       and every one of them carries Astro's 24-byte scoped-style attribute,
+       which is a third of the board. It compresses to ~139 KB gzipped, which
+       is what actually crosses the wire. ~40 KB of headroom; another eight-up
+       sheet costs ~20 KB, so the next one wants the byte budget looked at
+       rather than the cap raised again. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
-      .filter((f) => fs.statSync(f).size > 900 * 1024)
+      .filter((f) => fs.statSync(f).size > 1060 * 1024)
       .map((f) => `${path.relative(DIST, f)} (${kb(fs.statSync(f).size)} KB)`);
     expect(oversized).toEqual([]);
   });

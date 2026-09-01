@@ -35,10 +35,13 @@ class FakeImage {
 function mock2d() {
   return {
     fillStyle: '',
+    strokeStyle: '',
+    lineWidth: 1,
     font: '',
     textAlign: 'left',
     textBaseline: 'alphabetic',
     fillRect: vi.fn(),
+    strokeRect: vi.fn(),
     beginPath: vi.fn(),
     arc: vi.fn(),
     fill: vi.fn(),
@@ -47,7 +50,7 @@ function mock2d() {
   };
 }
 
-function mockGl(tex: WebGLTexture | null = {} as WebGLTexture) {
+function mockGl(tex: WebGLTexture | null = {} as WebGLTexture, maxTex = 8192) {
   return {
     TEXTURE0: 0,
     TEXTURE1: 1,
@@ -60,6 +63,7 @@ function mockGl(tex: WebGLTexture | null = {} as WebGLTexture) {
     TEXTURE_WRAP_T: 8,
     LINEAR: 9,
     CLAMP_TO_EDGE: 10,
+    MAX_TEXTURE_SIZE: 11,
     createTexture: vi.fn(() => tex),
     activeTexture: vi.fn(),
     bindTexture: vi.fn(),
@@ -67,6 +71,8 @@ function mockGl(tex: WebGLTexture | null = {} as WebGLTexture) {
     texParameteri: vi.fn(),
     useProgram: vi.fn(),
     uniform1f: vi.fn(),
+    uniform3f: vi.fn(),
+    getParameter: vi.fn(() => maxTex),
   };
 }
 
@@ -137,6 +143,7 @@ function target(partial: Partial<BoardAtlasTarget> = {}): BoardAtlasTarget {
     prog: {} as WebGLProgram,
     uBoardsOn: {} as WebGLUniformLocation,
     uBoardLight: {} as WebGLUniformLocation,
+    uBoardGrid: {} as WebGLUniformLocation,
     state: { gen: 0, tex: null },
     ...partial,
   };
@@ -175,7 +182,7 @@ describe('buildBoardsAtlas', () => {
     expect((t.ctx as unknown as ReturnType<typeof mockGl>).createTexture).not.toHaveBeenCalled();
   });
 
-  it('paints shown and hidden cards onto a 4×4 atlas and uploads it', async () => {
+  it('paints shown and hidden cards onto one cell each and uploads the sheet', async () => {
     const g2 = mock2d();
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
       g2 as unknown as CanvasRenderingContext2D,
@@ -191,15 +198,95 @@ describe('buildBoardsAtlas', () => {
 
     expect(g2.drawImage).toHaveBeenCalled();
     expect(g2.fillText).toHaveBeenCalled();
+    expect(g2.strokeRect).toHaveBeenCalledTimes(2);
+    expect(g2.strokeStyle).toBe('rgba(15, 18, 24, 0.09)');
+    expect(g2.lineWidth).toBe(0.5);
     expect(gl.createTexture).toHaveBeenCalled();
     expect(gl.texImage2D).toHaveBeenCalled();
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardsOn, 1);
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardLight, 1);
+    // Two boards, so two columns of one row — and the shader is told so.
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 2, 1, 2);
     expect(t.state.tex).toBeTruthy();
     // Hidden board style is put back after the snapshot.
     expect(document.querySelector('[data-hero-board="radar"]')?.getAttribute('style')).toMatch(
       /opacity:\s*0/,
     );
+  });
+
+  it('wraps a long board list onto six columns, one cell per board', async () => {
+    const g2 = mock2d();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
+      g2 as unknown as CanvasRenderingContext2D,
+    );
+    document.body.append(
+      ...Array.from({ length: 15 }, (_, i) => board({ id: `b${i}`, shown: i < 4 })),
+    );
+
+    const gl = mockGl();
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext });
+    await buildBoardsAtlas(t);
+
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 3, 15);
+    // No board is painted twice to pad the tail of the last row.
+    expect(g2.drawImage).toHaveBeenCalledTimes(15);
+  });
+
+  it('shrinks the cell to whatever the GPU will hold', async () => {
+    const g2 = mock2d();
+    const canvases: HTMLCanvasElement[] = [];
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
+      this: HTMLCanvasElement,
+    ) {
+      canvases.push(this);
+      return g2 as unknown as CanvasRenderingContext2D;
+    });
+    document.body.append(...Array.from({ length: 12 }, (_, i) => board({ id: `b${i}` })));
+
+    const gl = mockGl({} as WebGLTexture, 1024);
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext });
+    await buildBoardsAtlas(t);
+
+    expect(canvases[0].width).toBeLessThanOrEqual(1024);
+    expect(canvases[0].height).toBeLessThanOrEqual(1024);
+    expect(canvases[0].width).toBeGreaterThan(0);
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 2, 12);
+  });
+
+  it('treats a GPU that reports no max as the spec floor', async () => {
+    const g2 = mock2d();
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
+      g2 as unknown as CanvasRenderingContext2D,
+    );
+    document.body.append(board({ id: 'trading', shown: true }));
+
+    const gl = mockGl({} as WebGLTexture, 0);
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext });
+    await buildBoardsAtlas(t);
+
+    expect(gl.texImage2D).toHaveBeenCalled();
+    expect(t.state.tex).toBeTruthy();
+  });
+
+  it('paints a smaller cell when the pointer is coarse', async () => {
+    const g2 = mock2d();
+    const canvases: HTMLCanvasElement[] = [];
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
+      this: HTMLCanvasElement,
+    ) {
+      canvases.push(this);
+      return g2 as unknown as CanvasRenderingContext2D;
+    });
+    document.body.append(...Array.from({ length: 12 }, (_, i) => board({ id: `b${i}` })));
+
+    const gl = mockGl();
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext, coarse: true });
+    await buildBoardsAtlas(t);
+
+    // Six columns of 288 px, not the 448 px desktop cell.
+    expect(canvases[0].width).toBe(1728);
+    expect(canvases[0].height).toBe(288);
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 2, 12);
   });
 
   it('reuses an existing texture and marks a dark page as night', async () => {
@@ -221,6 +308,8 @@ describe('buildBoardsAtlas', () => {
     expect(gl.createTexture).not.toHaveBeenCalled();
     expect(gl.uniform1f).toHaveBeenCalledWith(t.uBoardLight, 0);
     expect(g2.drawImage).not.toHaveBeenCalled();
+    expect(g2.strokeStyle).toBe('rgba(255, 255, 255, 0.38)');
+    expect(g2.lineWidth).toBe(1);
   });
 
   it('skips a transparent panel fill and still draws the chrome', async () => {
@@ -238,6 +327,7 @@ describe('buildBoardsAtlas', () => {
     const t = target();
     await buildBoardsAtlas(t);
     expect(g2.fillRect).toHaveBeenCalled();
+    expect(g2.strokeRect).toHaveBeenCalled();
     expect(g2.fillText).toHaveBeenCalledWith('', expect.any(Number), expect.any(Number), expect.any(Number));
   });
 
@@ -368,15 +458,22 @@ describe('buildBoardsAtlas', () => {
     expect(gl.texImage2D).toHaveBeenCalled();
   });
 
-  it('caps the atlas at sixteen boards', async () => {
+  it('gives every board its own cell — the sheet is not capped', async () => {
     const g2 = mock2d();
     vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
       g2 as unknown as CanvasRenderingContext2D,
     );
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 37; i++) {
       document.body.append(board({ id: `b${i}`, shown: i === 0 }));
     }
-    await buildBoardsAtlas(target());
-    expect(g2.fillText.mock.calls.filter((c) => String(c[0]).endsWith('title')).length).toBe(16);
+    const gl = mockGl();
+    const t = target({ ctx: gl as unknown as WebGLRenderingContext });
+    await buildBoardsAtlas(t);
+    const titles = g2.fillText.mock.calls
+      .map((c) => String(c[0]))
+      .filter((text) => text.endsWith('title'));
+    expect(titles.length).toBe(37);
+    expect(new Set(titles).size).toBe(37);
+    expect(gl.uniform3f).toHaveBeenCalledWith(t.uBoardGrid, 6, 7, 37);
   });
 });
