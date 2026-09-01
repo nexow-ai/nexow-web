@@ -613,14 +613,18 @@
       float px = (sz / max(-mv.z, 0.001)) * uProj[1][1] * uPix;
       vAA = clamp(1.4 / max(px, 1.0), 0.0015, 0.45);
       /* ---- the channel ----
-         Each screen holds one of the sixteen dashboards for half a minute or
-         so and then cuts to another. The dwell is long on purpose: this is a
-         wall of instruments being worked at, not a bank of TVs zapping
-         channels — but a wall that never changes at all is a photograph of
-         software, so the cuts stay, just rare.
+         Each screen holds a dashboard for seven seconds and then cuts to
+         another one, drawn at random from the whole sheet. This is a bank of
+         televisions being zapped: half a minute of dwell over a table of
+         sixteen pictures made a wall you could learn, and a background you
+         have learnt has stopped being a background and started being wallpaper
+         you notice repeating.
 
-         The dwell is per-screen, so the occasional cuts arrive scattered
-         rather than the whole wall changing at once.
+         Seven flat, not a per-screen spread. The scatter that matters is the
+         phase, not the period — aSeed pushes each screen almost six dwells
+         along the same clock, so the cuts arrive in a steady rain across the
+         wall rather than as one wave, and every panel still turns over at the
+         rate the eye was promised.
 
          Redrawn from the slot number rather than stepped to the next index —
          +1 would send a visible wave of the same picture around the ring, and
@@ -630,7 +634,7 @@
 
          Still offset by the formation, so each act keeps its own bias in the
          mix — connectors leaning to market and data screens, bots to alerts. */
-      float dwell = 26.0 + ho.x * 16.0;
+      float dwell = 7.0;
       float phase = (uTime + aSeed * 41.0) / dwell;
       float slot = mod(floor(phase), 61.0);
       vKind = fract(hash3(aId * 0.37 + slot * 2.71).z + uFormA * 0.17);
@@ -703,12 +707,17 @@
     uniform vec2 uRes;
     uniform float uDim;
     uniform float uDir;
-    /* The hero dashboards, rasterised from the DOM into a 4×4-cell atlas
-       (16 of the 19 boards — see buildBoardsAtlas). uBoardsOn is 0 until
-       that atlas is uploaded, then ramps to 1 from the frame loop so the
-       screens power on scattered; until then every panel is bare glass. */
+    /* The hero dashboards, rasterised from the DOM into one sheet — every
+       board in HeroDashboards, six to a row (see buildBoardsAtlas).
+       uBoardsOn is 0 until that atlas is uploaded, then ramps to 1 from the
+       frame loop so the screens power on scattered; until then every panel is
+       bare glass. */
     uniform sampler2D uBoards;
     uniform float uBoardsOn;
+    /* How to walk the sheet: (columns, rows, how many boards are on it). A
+       uniform rather than a constant because the board list owns that number
+       — the rasteriser reports the grid it actually laid out. */
+    uniform vec3 uBoardGrid;
     /* 1 if the atlas was rasterised on the light theme. Compared with uLight,
        so a board caught on an opposite-tone band redraws its ink in paper
        instead of vanishing into a ground it was never drawn for. */
@@ -998,7 +1007,7 @@
          Each cell is the whole instrument — ground, title bar, plot — so the
          wall is those cards standing in space, not a sketch dressed in a
          coloured frame. Until the atlas lands the panels stay bare glass. */
-      float kind = floor(vKind * 16.0);
+      float kind = min(floor(vKind * uBoardGrid.z), uBoardGrid.z - 1.0);
       if (uBoardsOn > 0.005) {
         float on = uBoardsOn;
         vec2 tuv = mix(
@@ -1007,7 +1016,16 @@
           uBoardsOn
         );
         float inB = aaband(0.0, 1.0, tuv.x) * aaband(0.0, 1.0, tuv.y);
-        vec2 auv = (vec2(mod(kind, 4.0), floor((kind + 0.5) * 0.25)) + clamp(tuv, vec2(0.0), vec2(1.0))) * 0.25;
+        /* Row first, then the column subtracted back out of it, so the two
+           can never disagree. mod() would divide by the column count a second
+           time, and the exact multiples are where an inexact reciprocal
+           lands on either side: kind 36 over six columns is row 5 to one of
+           them and row 6 to the other, which puts the cell a row out and the
+           column a sheet-width over. The half nudges the divide clear of that
+           boundary; the subtraction removes the second opinion. */
+        float brow = floor((kind + 0.5) / uBoardGrid.x);
+        vec2 auv = (vec2(kind - brow * uBoardGrid.x, brow)
+                 + clamp(tuv, vec2(0.0), vec2(1.0))) / uBoardGrid.xy;
         /* Negative LOD bias, and the coverage gained back: the boards are
            hairline strokes and 6px type, and an honest mip chain averages
            that ink to nothing two levels down — the one way these read as
@@ -1991,9 +2009,14 @@
     const uBoards = u('uBoards');
     const uBoardsOn = u('uBoardsOn');
     const uBoardLight = u('uBoardLight');
+    const uBoardGrid = u('uBoardGrid');
     /* Unit 1 — the core's stamp owns unit 0 and rebinds it every frame. */
     ctx.uniform1i(uBoards, 1);
     ctx.uniform1f(uBoardsOn, 0);
+    /* A single-cell sheet until the rasteriser reports the real one. Nothing
+       samples it while uBoardsOn is 0, but a zero in the divisor is how a
+       wall of NaN gets drawn on the one frame the order slips. */
+    ctx.uniform3f(uBoardGrid, 1, 1, 1);
     ctx.uniform1f(uN, count);
     for (let i = 0; i < WAY_COUNT; i++) {
       ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), WAY_RGB400[i]);
@@ -2331,7 +2354,15 @@
     const refreshBoards = () => {
       void import('../../lib/worldBoards')
         .then((m) =>
-          m.buildBoardsAtlas({ ctx, prog, uBoardsOn: null, uBoardLight, state: boards }),
+          m.buildBoardsAtlas({
+            ctx,
+            prog,
+            uBoardsOn: null,
+            uBoardLight,
+            uBoardGrid,
+            coarse,
+            state: boards,
+          }),
         )
         .then(() => {
           if (!boards.tex) return;

@@ -1,9 +1,16 @@
 /**
  * Rasterises the hero dashboards (HeroDashboards.astro) from the live
- * DOM into a 2048×1024 atlas of sixteen 512×256 cells, uploaded for the world's
- * screens to sample — the whole channel table in WorldField's fragment shader:
- * the wall runs the same instruments the cards around the composer do, and is
- * bare glass until this atlas lands.
+ * DOM into a grid atlas — one cell per board, six to a row — uploaded for the
+ * world's screens to sample: the whole channel table in WorldField's fragment
+ * shader, so the wall runs the same instruments the cards around the composer
+ * do, and is bare glass until this atlas lands.
+ *
+ * Every board gets a cell. It used to be the first sixteen, wrapped to fill a
+ * fixed 4×4 sheet, and with the wall now cutting channel every seven seconds
+ * that table came round often enough to read as a loop — a dozen panels drawn
+ * from sixteen pictures is the same wall twice. The grid the shader reads is a
+ * uniform (uBoardGrid: columns, rows, count) rather than a constant, so the
+ * board list is the only place the number lives.
  *
  * Each cell is the full card, not the SVG alone: panel ground, title bar,
  * live mark, then the instrument. The 3D screens used to dress a transparent
@@ -54,8 +61,25 @@ export interface BoardAtlasTarget {
   prog: WebGLProgram;
   uBoardsOn: WebGLUniformLocation | null;
   uBoardLight: WebGLUniformLocation | null;
+  /** (columns, rows, board count) — how the shader walks the sheet. */
+  uBoardGrid: WebGLUniformLocation | null;
+  /** Coarse pointer: smaller panels on screen, so smaller cells in the sheet. */
+  coarse?: boolean;
   state: BoardAtlasState;
 }
+
+/* ---- the sheet ----
+ * Six columns, and as many rows as the board list needs.
+ *
+ * A cell is 2:1 — the face the shader maps onto a panel — and 448 px across,
+ * which is about what a ×2 screen covers as it sweeps the lens, so the ink
+ * lands near 1:1 rather than being upscaled. On a coarse pointer the panels
+ * are smaller and the whole sheet is 288 px cells: under half the bytes, and
+ * a width that clears the 2048 limit the oldest mobile GL still reports.
+ */
+const COLS = 6;
+const CELL_WIDE = 448;
+const CELL_COARSE = 288;
 
 function snapshotBoard(svg: SVGSVGElement): string {
   const clone = svg.cloneNode(true) as SVGSVGElement;
@@ -182,10 +206,7 @@ function revealHidden(boards: HTMLElement[]): () => void {
 
 export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
   const { ctx, state } = t;
-  const boards = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-board]')).slice(
-    0,
-    16,
-  );
+  const boards = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-board]'));
   if (!boards.length) return;
   const gen = ++state.gen;
   /* A webfont that never settles used to stall this forever, and the wall
@@ -197,9 +218,20 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
   ]);
   if (gen !== state.gen) return;
   const restore = revealHidden(boards);
+  const cols = Math.min(COLS, boards.length);
+  const rows = Math.ceil(boards.length / cols);
+  /* Shrink to whatever this GPU will actually hold. The spec floor is far
+     below anything that runs this scene, but a sheet one pixel over the
+     driver's limit uploads as nothing at all — a wall of blank slabs with no
+     error to read. */
+  const maxTex = Number(ctx.getParameter(ctx.MAX_TEXTURE_SIZE)) || 2048;
+  const want = t.coarse ? CELL_COARSE : CELL_WIDE;
+  const fit = Math.min(1, maxTex / (cols * want), maxTex / (rows * want * 0.5));
+  const cellW = Math.max(64, Math.floor((want * fit) / 2) * 2);
+  const cellH = cellW / 2;
   const atlas = document.createElement('canvas');
-  atlas.width = 2048;
-  atlas.height = 1024;
+  atlas.width = cols * cellW;
+  atlas.height = rows * cellH;
   const g2 = atlas.getContext('2d');
   if (!g2) {
     restore();
@@ -207,11 +239,12 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
   }
   const light = !document.documentElement.classList.contains('dark');
   try {
-    /* Every one of the 16 cells must have a card. Fewer boards in the DOM
-       used to leave the back half of the atlas black, and those screens
-       read as empty slabs. Wrap what we have. */
-    for (let i = 0; i < 16; i++) {
-      const board = boards[i % boards.length];
+    /* One cell per board, in order. The tail of the last row is never
+       sampled — the shader picks from the count, not from the sheet — so a
+       board list that does not divide by six costs a few unread pixels
+       rather than a duplicate channel. */
+    for (let i = 0; i < boards.length; i++) {
+      const board = boards[i];
       const svg = board.querySelector<SVGSVGElement>('svg');
       const img = svg
         ? await new Promise<HTMLImageElement | null>((res) => {
@@ -222,8 +255,17 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
           })
         : null;
       if (gen !== state.gen) return;
-      paintCard(g2, board, img, (i % 4) * 512, Math.floor(i / 4) * 256, 512, 256, light);
-      // One board per macrotask — sixteen style walks in one frame is a hitch.
+      paintCard(
+        g2,
+        board,
+        img,
+        (i % cols) * cellW,
+        Math.floor(i / cols) * cellH,
+        cellW,
+        cellH,
+        light,
+      );
+      // One board per macrotask — a sheet of style walks in one frame is a hitch.
       await new Promise((res) => setTimeout(res, 0));
       if (gen !== state.gen) return;
     }
@@ -243,6 +285,9 @@ export async function buildBoardsAtlas(t: BoardAtlasTarget): Promise<void> {
   ctx.texParameteri(ctx.TEXTURE_2D, ctx.TEXTURE_WRAP_T, ctx.CLAMP_TO_EDGE);
   ctx.activeTexture(ctx.TEXTURE0);
   ctx.useProgram(t.prog);
+  /* Before the wall is told to light up, so the first lit frame already knows
+     how to walk the sheet it is sampling. */
+  ctx.uniform3f(t.uBoardGrid, cols, rows, boards.length);
   ctx.uniform1f(t.uBoardsOn, 1);
   ctx.uniform1f(t.uBoardLight, light ? 1 : 0);
 }
