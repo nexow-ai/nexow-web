@@ -59,6 +59,11 @@ describe.skipIf(!built)('shipped payload', () => {
   });
 
   it('keeps each page document within a sane size', () => {
+    /* The home pages are the big ones — around 815 KB, and rising to that from
+       ~600 KB when the hero stopped rendering sixteen of its dashboards and
+       started rendering all thirty-seven, which is also the world's channel
+       table (src/lib/worldBoards.ts rasterises them into the atlas the 3D
+       screens sample). ~85 KB of headroom left; another board costs ~5 KB. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
       .filter((f) => fs.statSync(f).size > 900 * 1024)

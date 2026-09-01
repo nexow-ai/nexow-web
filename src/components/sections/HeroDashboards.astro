@@ -381,20 +381,38 @@ const netInArea = `${netLine(NET_IN, 1)}L272 148L8 148Z`;
 const netOutArea = `${netLine(NET_IN.map((v) => f1(v * 0.45)), 1)}L272 148L8 148Z`;
 
 /* ---- trading: candles + EMA/VWAP + volume + RSI + book + positions ---- */
-const CANDLES = [38, 42, 40, 48, 55, 51, 58, 62, 57, 66, 70, 64, 74, 80, 76, 88, 94, 90];
+/* The session is a loop: the chart renders two sets of prints and slides
+ * exactly one (.roll-x), so the series has to close on itself or the wrap
+ * shows as a gap. Three harmonics over the window do that — the last bar's
+ * close is the first bar's open, and every derived line is a circular window
+ * of the same series, so they close too. */
+const CANDLE_N = 18;
+const CANDLES = Array.from({ length: CANDLE_N }, (_, i) => {
+  const a = (i / CANDLE_N) * Math.PI * 2;
+  return f1(64 + 21 * Math.sin(a) + 8.5 * Math.sin(2 * a + 1.1) + 4.5 * Math.sin(3 * a + 2.3));
+});
 const candleY = (v: number) => 86 - v * 0.52;
 const candleBodies = CANDLES.map((c, i) => {
-  const prev = i === 0 ? c - 7 : CANDLES[i - 1];
+  const prev = CANDLES[(i + CANDLE_N - 1) % CANDLE_N];
   const top = candleY(Math.max(c, prev));
   const h = Math.max(5, candleY(Math.min(c, prev)) - top + 4);
   return { x: 8 + i * 8.8, top, h, up: c >= prev };
 });
-const ema = CANDLES.map((c, i) => `${i ? 'L' : 'M'}${f1(8 + i * 8.8)} ${f1(candleY(c))}`).join(' ');
-let cum = 0;
-const vwap = CANDLES.map((c, i) => {
-  cum += c;
-  return `${i ? 'L' : 'M'}${f1(8 + i * 8.8)} ${f1(candleY(cum / (i + 1)))}`;
-}).join(' ');
+/** Circular mean over `w` bars — periodic in, periodic out. */
+const smooth = (w: number) =>
+  CANDLES.map((_, i) => {
+    let sum = 0;
+    for (let k = 0; k < w; k++) sum += CANDLES[(i + CANDLE_N - k) % CANDLE_N];
+    return sum / w;
+  });
+/** One point past the end (the next set's first bar) so the line crosses the
+ * seam instead of stopping a step short of it. */
+const wrapLine = (vals: number[]) =>
+  [...vals, vals[0]]
+    .map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 8.8)} ${f1(candleY(v))}`)
+    .join(' ');
+const ema = wrapLine(smooth(3));
+const vwap = wrapLine(smooth(7));
 const VOL = [10, 16, 8, 20, 14, 11, 22, 13, 9, 18, 15, 12, 21, 14, 10, 17, 24, 16];
 const RSI = [44, 48, 52, 47, 55, 58, 54, 61, 57, 63, 66, 60, 67, 71, 64, 69, 74, 68];
 const rsiPts = RSI.map((v, i) => `${i ? 'L' : 'M'}${f1(8 + i * 9.4)} ${f1(150 - (v - 20) * 0.63)}`).join('');
@@ -405,6 +423,20 @@ const BOOK = [
   { px: '67,236', bid: 0.5, ask: 0.5 },
   { px: '67,232', bid: 0.3, ask: 0.3 },
 ];
+/** One set of candles is `CANDLE_SET` wide; the chart draws two sets and
+ * travels exactly one, so the wrap lands on identical pixels (.roll-x). */
+const CANDLE_SET = f1(CANDLES.length * 8.8);
+/** The top-left readout, ticking. Prices and their change move together, so
+ * they cycle as one group rather than two stacks drifting apart. */
+const TICKS = [
+  { px: '67,241.2', ch: '+2.41%' },
+  { px: '67,246.8', ch: '+2.49%' },
+  { px: '67,238.4', ch: '+2.36%' },
+  { px: '67,244.0', ch: '+2.45%' },
+];
+const SPREADS = ['SPREAD 4.2 · DEPTH 84%', 'SPREAD 3.8 · DEPTH 86%', 'SPREAD 5.1 · DEPTH 81%'];
+const PNL_BTC = ['+1.84k', '+1.91k', '+1.78k'];
+const PNL_ETH = ['\u2212418', '\u2212392', '\u2212441'];
 
 /* ---- ai: throughput spark + latency histogram ---- */
 const SPARK = Array.from(
@@ -789,7 +821,15 @@ const NEWS = [
 
 <div class="hero-stage" data-hero-stage aria-hidden="true">
   {
-    BOARDS.slice(0, 16).map((board, i) => (
+    /* All of them, not the first sixteen. Four are on the stage at a time and
+       the rest are display:none — but they are also the world's channel table
+       (src/lib/worldBoards.ts rasterises every one into the atlas the 3D
+       screens sample), and sixteen boards across a wall that cuts every seven
+       seconds is a loop you can learn. The hidden ones are the reason the
+       wall reads as many instruments rather than a few on repeat, and they
+       cost nothing until the atlas build reveals them offscreen for one
+       snapshot each. */
+    BOARDS.map((board, i) => (
       <figure
         class:list={['hero-board', i < 4 && 'is-shown', i === 0 && 'is-current']}
         data-hero-board={board.id}
@@ -804,8 +844,12 @@ const NEWS = [
         <svg viewBox="0 0 280 158" fill="none" class="hero-board__svg" aria-hidden="true">
           {board.id === 'trading' && (
           <g>
-            <text class="lbl em" x="8" y="9">67,241.2</text>
-            <text class="lbl up" x="46" y="9">+2.41%</text>
+            {TICKS.map((tick, ti) => (
+              <g class:list={['cyc4', ti === 0 && 'lead']} style={`--t:3.6s;--d:${(ti * 0.9).toFixed(1)}s`}>
+                <text class="lbl em" x="8" y="9">{tick.px}</text>
+                <text class="lbl up" x="46" y="9">{tick.ch}</text>
+              </g>
+            ))}
             <text class="lbl dim xs" x="78" y="9">MARK 67,241.0 · 1H</text>
             {['68.2', '66.1', '64.0'].map((px, gi) => (
               <g>
@@ -816,45 +860,84 @@ const NEWS = [
             {['09', '12', '15', '18'].map((hr, hi) => (
               <text class="lbl dim xs" x={10 + hi * 44} y="96">{hr}:00</text>
             ))}
-            {candleBodies.map((c, ci) => (
-              <g class="grow-y" style={`--d:${(ci * 0.03).toFixed(2)}s`}>
-                <path class="wick" d={`M${c.x} ${c.top - 4}V${c.top + c.h + 4}`} />
-                <rect class:list={['body', c.up && 'up']} x={c.x - 2.6} y={c.top} width="5.2" height={c.h} rx="0.4" />
+            <clipPath id="px-clip">
+              <rect x="6" y="20" width="152" height="72" />
+            </clipPath>
+            {/* The session runs: two identical sets of prints travel exactly
+                one set per loop, so a bar leaves the left edge as its twin
+                enters on the right and nothing ever pops. */}
+            <g clip-path="url(#px-clip)">
+              <g class="roll-x" style={`--sx:-${CANDLE_SET}px;--t:22s`}>
+                {[0, 1].map((set) => (
+                  <g transform={`translate(${set * CANDLE_SET} 0)`}>
+                    {candleBodies.map((c, ci) => (
+                      <g class="grow-y" style={`--d:${(ci * 0.03).toFixed(2)}s`}>
+                        <path class="wick" d={`M${c.x} ${c.top - 4}V${c.top + c.h + 4}`} />
+                        <rect class:list={['body', c.up && 'up']} x={c.x - 2.6} y={c.top} width="5.2" height={c.h} rx="0.4" />
+                      </g>
+                    ))}
+                    <path class="stroke-dim draw" d={vwap} pathLength="100" style="--d:0.3s" />
+                    <path class="stroke-ac draw" d={ema} pathLength="100" style="--d:0.2s" />
+                    {VOL.map((h, vi) => (
+                      <rect
+                        class:list={['grow-y', candleBodies[vi].up ? 'f-br' : 'f-ac']}
+                        x={6.2 + vi * 8.8}
+                        y={90 - h * 0.4}
+                        width="5"
+                        height={h * 0.4}
+                        rx="0.3"
+                        style={`--d:${(0.15 + vi * 0.02).toFixed(2)}s`}
+                      />
+                    ))}
+                  </g>
+                ))}
               </g>
-            ))}
-            <path class="stroke-dim draw" d={vwap} pathLength="100" style="--d:0.3s" />
-            <path class="stroke-ac draw" d={ema} pathLength="100" style="--d:0.2s" />
-            <path class="ln dash acc" d="M6 39.2H158" />
-            <rect class="f-accent" x="158" y="34.8" width="21" height="9" rx="1" />
-            <text class="lbl tag" x="160.5" y="41.5">67241</text>
-            {VOL.map((h, vi) => (
-              <rect
-                class:list={['grow-y', candleBodies[vi].up ? 'f-br' : 'f-ac']}
-                x={6.2 + vi * 8.8}
-                y={90 - h * 0.4}
-                width="5"
-                height={h * 0.4}
-                rx="0.3"
-                style={`--d:${(0.15 + vi * 0.02).toFixed(2)}s`}
-              />
-            ))}
+            </g>
+            <g class="bob" style="--y0:1.5px;--y1:-3.5px;--t:5.5s">
+              <path class="ln dash acc dash-flow" d="M6 39.2H158" />
+              <rect class="f-accent" x="158" y="34.8" width="21" height="9" rx="1" />
+              <text class="lbl tag" x="160.5" y="41.5">67241</text>
+            </g>
             <text class="lbl dim xs" x="8" y="106">RSI(14) 61.4 · ATR 842 · L/S 1.24</text>
             <path class="ln dash thin" d="M8 116H176M8 144H176" />
-            <path class="stroke-br draw" d={rsiPts} pathLength="100" style="--d:0.35s" />
+            <path class="stroke-br draw-loop" d={rsiPts} pathLength="100" />
             <text class="lbl dim" x="184" y="9">BOOK</text>
             {BOOK.map((row, bi) => (
               <g class="fade" style={`--d:${(0.2 + bi * 0.05).toFixed(2)}s`}>
-                <rect class="f-br" x={248 - row.bid * 28} y={14 + bi * 13} width={row.bid * 28} height="10" rx="1" />
-                <rect class="f-ac" x="250" y={14 + bi * 13} width={row.ask * 28} height="10" rx="1" />
+                <rect class="f-br flash" x="184" y={14 + bi * 13} width="88" height="10" rx="1" style={`--t:4.2s;--d:${(bi * 0.62).toFixed(2)}s`} />
+                <rect
+                  class="f-br pulse-x from-right"
+                  x={248 - row.bid * 28}
+                  y={14 + bi * 13}
+                  width={row.bid * 28}
+                  height="10"
+                  rx="1"
+                  style={`--s:0.52;--t:${(2.6 + bi * 0.4).toFixed(1)}s;--d:${(bi * 0.3).toFixed(1)}s`}
+                />
+                <rect
+                  class="f-ac pulse-x"
+                  x="250"
+                  y={14 + bi * 13}
+                  width={row.ask * 28}
+                  height="10"
+                  rx="1"
+                  style={`--s:0.48;--t:${(3.1 + bi * 0.35).toFixed(2)}s;--d:${(0.4 + bi * 0.3).toFixed(1)}s`}
+                />
                 <text class="lbl" x="186" y={22 + bi * 13}>{row.px}</text>
               </g>
             ))}
-            <text class="lbl dim xs" x="184" y="88">SPREAD 4.2 · DEPTH 84%</text>
+            {SPREADS.map((sp, si) => (
+              <text class:list={['lbl dim xs cyc3', si === 0 && 'lead']} x="184" y="88" style={`--t:5.4s;--d:${(si * 1.8).toFixed(1)}s`}>{sp}</text>
+            ))}
             <text class="lbl dim" x="184" y="102">POS</text>
             <text class="lbl" x="184" y="114">BTC-PERP 0.42</text>
-            <text class="lbl up" x="250" y="114">+1.84k</text>
+            {PNL_BTC.map((v, vi) => (
+              <text class:list={['lbl up cyc3', vi === 0 && 'lead']} x="250" y="114" style={`--t:4.2s;--d:${(vi * 1.4).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl" x="184" y="126">ETH-PERP 2.10</text>
-            <text class="lbl dn" x="250" y="126">−418</text>
+            {PNL_ETH.map((v, vi) => (
+              <text class:list={['lbl dn cyc3', vi === 0 && 'lead']} x="250" y="126" style={`--t:4.8s;--d:${(vi * 1.6).toFixed(1)}s`}>{v}</text>
+            ))}
             <text class="lbl dim xs" x="184" y="140">FUND +0.0124% · 8h · OI 24.18B</text>
             <text class="lbl dim xs" x="184" y="151">VAR 2.4% · MARGIN 18% · A+</text>
           </g>
@@ -2411,6 +2494,47 @@ const NEWS = [
     }
   }
 
+  /* A rake of light across the glass, so the card itself has a pulse even
+     where the instrument on it is a table of numbers. Slot-phased with the
+     float so the four never sheen together. */
+  .hero-board.is-shown::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      104deg,
+      transparent 40%,
+      color-mix(in oklab, var(--w-text) 7%, transparent) 50%,
+      transparent 60%
+    );
+    pointer-events: none;
+    animation: hero-board-sheen 9s ease-in-out var(--sheen, 0s) infinite;
+  }
+  .hero-board[data-slot='1']::after {
+    --sheen: -2.2s;
+  }
+  .hero-board[data-slot='2']::after {
+    --sheen: -4.4s;
+  }
+  .hero-board[data-slot='3']::after {
+    --sheen: -6.6s;
+  }
+  @keyframes hero-board-sheen {
+    0% {
+      opacity: 0;
+      translate: -60% 0;
+    }
+    12%,
+    46% {
+      opacity: 1;
+    }
+    64%,
+    100% {
+      opacity: 0;
+      translate: 60% 0;
+    }
+  }
+
   .hero-board__bar {
     display: flex;
     align-items: center;
@@ -2426,6 +2550,16 @@ const NEWS = [
     border-radius: 50%;
     background: var(--color-brand-400);
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-brand-400) 22%, transparent);
+    animation: hero-dot-beat 2.4s ease-out infinite;
+  }
+  @keyframes hero-dot-beat {
+    0% {
+      box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-brand-400) 42%, transparent);
+    }
+    45%,
+    100% {
+      box-shadow: 0 0 0 5px color-mix(in oklab, var(--color-brand-400) 0%, transparent);
+    }
   }
 
   .hero-board__title {
@@ -2442,11 +2576,25 @@ const NEWS = [
   }
 
   .hero-board__live {
+    animation: hero-meta-blink 3.6s steps(1, end) infinite;
     color: var(--w-accent);
     font-family: var(--font-mono);
     font-size: 0.5rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  @keyframes hero-meta-blink {
+    0%,
+    88% {
+      opacity: 1;
+    }
+    94% {
+      opacity: 0.32;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   .hero-board__svg {
@@ -2609,6 +2757,12 @@ const NEWS = [
   .dash-flow {
     stroke-dasharray: 3 4;
     animation: hb-dash-flow 0.9s linear infinite;
+  }
+  /* The accent rule is more specific and would keep its 3 3 pattern, which
+     does not divide the 7px the flow travels — the dashes would jump once a
+     second. Restate the pitch the flow expects. */
+  .ln.dash.acc.dash-flow {
+    stroke-dasharray: 3 4;
   }
   @keyframes hb-dash-flow {
     to {
@@ -3165,6 +3319,188 @@ const NEWS = [
     }
   }
 
+  /* ---- live loops ----
+   * A board that only plays an entrance is a screenshot, and four of them
+   * ring the composer for as long as anyone reads the headline. Everything
+   * below is a seamless infinite loop parameterised by `--t` (period) and
+   * `--d` (phase), so one rule dresses a whole panel and the hero still ships
+   * static SVG plus keyframes — no runtime JS behind the instruments.
+   *
+   * Every loop is written so its t=0 frame is a legible one: the atlas
+   * (src/lib/worldBoards.ts) reveals a hidden board and snapshots it in the
+   * same task, which reads each animation at time zero.
+   */
+
+  /* Stacked readouts — N variants share one slot and exactly one is lit, so a
+     price ticks instead of sitting there. Phase each sibling by t/N. */
+  .cyc2,
+  .cyc3,
+  .cyc4 {
+    opacity: 0;
+    animation-duration: var(--t, 3.2s);
+    animation-delay: var(--d, 0s);
+    animation-timing-function: steps(1, end);
+    animation-iteration-count: infinite;
+  }
+  .cyc2 {
+    animation-name: hb-cyc2;
+  }
+  .cyc3 {
+    animation-name: hb-cyc3;
+  }
+  .cyc4 {
+    animation-name: hb-cyc4;
+  }
+  @keyframes hb-cyc2 {
+    0%,
+    49.9% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes hb-cyc3 {
+    0%,
+    33.2% {
+      opacity: 1;
+    }
+    33.4%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes hb-cyc4 {
+    0%,
+    24.9% {
+      opacity: 1;
+    }
+    25%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* A print lands: the row lights, then decays. */
+  .flash {
+    opacity: 0;
+    animation: hb-flash var(--t, 3.4s) linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-flash {
+    0% {
+      opacity: 0.8;
+    }
+    22% {
+      opacity: 0.3;
+    }
+    46%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Seamless travel: the content is rendered twice and one full set of travel
+     lands the wrap on identical pixels (the .tape-roll trick, sideways). */
+  .roll-x {
+    animation: hb-roll-x var(--t, 14s) linear infinite;
+  }
+  @keyframes hb-roll-x {
+    to {
+      transform: translateX(var(--sx, -100px));
+    }
+  }
+
+  /* A read head crossing a plot. */
+  .scan {
+    animation: hb-scan var(--t, 7s) linear var(--d, 0s) infinite;
+  }
+  @keyframes hb-scan {
+    0% {
+      opacity: 0;
+      transform: translateX(0);
+    }
+    7%,
+    88% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(var(--sx, 150px));
+    }
+  }
+
+  /* A meter that keeps rebalancing. */
+  .pulse-x {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: hb-pulse-x var(--t, 5s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  .pulse-x.from-right {
+    transform-origin: right center;
+  }
+  @keyframes hb-pulse-x {
+    from {
+      transform: scaleX(var(--s, 0.78));
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* Anything that should breathe rather than blink. */
+  .breathe {
+    animation: hb-breathe var(--t, 2.8s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes hb-breathe {
+    from {
+      opacity: 0.5;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* A marker that drifts with the value it marks. */
+  .bob {
+    animation: hb-bob var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes hb-bob {
+    from {
+      transform: translateY(var(--y0, 0px));
+    }
+    to {
+      transform: translateY(var(--y1, -5px));
+    }
+  }
+
+  /* An arc that keeps re-metering between two readings. */
+  .arc-loop {
+    animation: hb-arc var(--t, 6s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes hb-arc {
+    from {
+      stroke-dasharray: var(--a0, 12) 100;
+    }
+    to {
+      stroke-dasharray: var(--a1, 58) 100;
+    }
+  }
+
+  /* Slow drift for a whole scene — parallax on a map, a chart easing across
+     its frame. Paired with a clip so the edges never show. */
+  .drift {
+    animation: hb-drift var(--t, 18s) ease-in-out var(--d, 0s) infinite alternate;
+  }
+  @keyframes hb-drift {
+    from {
+      transform: translate(0, 0);
+    }
+    to {
+      transform: translate(var(--dx, -6px), var(--dy, 0px));
+    }
+  }
+
   .wick {
     stroke: color-mix(in oklab, var(--w-text) 28%, transparent);
     stroke-width: 1.2;
@@ -3218,8 +3554,14 @@ const NEWS = [
   @media (prefers-reduced-motion: reduce) {
     .hero-board,
     .hero-board.is-shown,
+    .hero-board.is-shown::after,
+    .hero-board__live-dot,
+    .hero-board__live,
     .hero-board__svg * {
       animation: none !important;
+    }
+    .hero-board.is-shown::after {
+      opacity: 0;
     }
     .hero-board.is-shown {
       opacity: 0.45;
@@ -3242,8 +3584,23 @@ const NEWS = [
     .nedge.pulse,
     .pkt,
     .path-rider,
+    .flash,
+    .scan,
     .caret {
       opacity: 0;
+    }
+    /* The cyclers are opacity:0 by default and lit by their keyframes; with
+       the animation off the whole stack would vanish, so the `lead` variant
+       (the one with no phase offset) stands in for the readout. */
+    .cyc2,
+    .cyc3,
+    .cyc4 {
+      opacity: 0;
+    }
+    .cyc2.lead,
+    .cyc3.lead,
+    .cyc4.lead {
+      opacity: 1;
     }
     .sweep .f-brand {
       opacity: 0.04;

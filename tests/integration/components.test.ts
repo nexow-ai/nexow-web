@@ -327,7 +327,17 @@ describe('Hero', () => {
     expect(html).toContain('data-hero-scene="macro"');
     expect(html).toContain('data-hero-scene="onchain"');
     expect(html).toContain('data-hero-scene="forex"');
-    expect((html.match(/data-hero-board="/g) ?? []).length).toBe(16);
+    /* Every board in the list renders, not just the four on the stage — the
+       hidden ones are the world's channel table (src/lib/worldBoards.ts). */
+    const ids = [...html.matchAll(/data-hero-board="([^"]+)"/g)].map((m) => m[1]);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBeGreaterThan(30);
+    /* And every chip's scene names one of them. A scene with no board silently
+       falls back to the first, which is how a dozen chips all opened on the
+       trading desk. */
+    for (const [, scene] of html.matchAll(/data-hero-scene="([^"]+)"/g)) {
+      expect(ids, `no board for scene ${scene}`).toContain(scene);
+    }
   });
 });
 
