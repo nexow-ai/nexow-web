@@ -50,7 +50,7 @@ export const SITE = {
   /** Support inbox. */
   supportEmail: 'support@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
-  x: '@nexowofficial',
+  x: '@xnexow',
   /** Chain NXW mints on — linked from the DAO / tokenomics sections. */
   solanaUrl: 'https://solana.com',
   /** Wallet used for Solana payments / holdings — linked beside Solana in DAO sections. */
@@ -83,42 +83,42 @@ function socialEnv(name: string): string | undefined {
 export const SOCIALS = [
   {
     label: 'X',
-    href: resolveSocialUrl(socialEnv('X_URL'), 'https://x.com/nexowofficial'),
+    href: resolveSocialUrl(socialEnv('X_URL'), 'https://x.com/xnexow'),
     icon: 'x-logo',
   },
   {
     label: 'Discord',
-    href: resolveSocialUrl(socialEnv('DISCORD_URL'), 'https://discord.gg/nexow'),
+    href: resolveSocialUrl(socialEnv('DISCORD_URL'), 'https://discord.gg/zgcSqk3Cw'),
     icon: 'discord',
   },
   {
     label: 'Telegram',
-    href: resolveSocialUrl(socialEnv('TELEGRAM_URL'), 'https://t.me/nexowofficial'),
+    href: resolveSocialUrl(socialEnv('TELEGRAM_URL'), 'https://t.me/+SEl5TPML3nM2Zjk0'),
     icon: 'telegram',
   },
   {
     label: 'TikTok',
-    href: resolveSocialUrl(socialEnv('TIKTOK_URL'), 'https://tiktok.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('TIKTOK_URL'), 'https://tiktok.com/@nexow.ai'),
     icon: 'tiktok',
   },
   {
     label: 'Instagram',
-    href: resolveSocialUrl(socialEnv('INSTAGRAM_URL'), 'https://instagram.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('INSTAGRAM_URL'), 'https://www.instagram.com/nexow.ai'),
     icon: 'instagram',
   },
   {
     label: 'LinkedIn',
-    href: resolveSocialUrl(socialEnv('LINKEDIN_URL'), 'https://linkedin.com/company/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('LINKEDIN_URL'), 'https://www.linkedin.com/company/nexow-ai/'),
     icon: 'linkedin',
   },
   {
     label: 'YouTube',
-    href: resolveSocialUrl(socialEnv('YOUTUBE_URL'), 'https://youtube.com/nexow-ai'),
+    href: resolveSocialUrl(socialEnv('YOUTUBE_URL'), 'https://www.youtube.com/channel/UCOUPVaMmws_HztU3NDC7zDg'),
     icon: 'youtube',
   },
   {
     label: 'Skool',
-    href: resolveSocialUrl(socialEnv('SKOOL_URL'), 'https://www.skool.com/nexow'),
+    href: resolveSocialUrl(socialEnv('SKOOL_URL'), 'https://www.skool.com/@nexow-inc-5282'),
     icon: 'skool',
   },
   {
