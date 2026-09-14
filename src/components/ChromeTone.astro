@@ -36,6 +36,8 @@
    * or it paints a white wash onto a black stripe (and the reverse). */
   const TOP = '#site-nav, .world__crown';
   const FOOT = '#tour-hud, .page-nav';
+  /* The section rail floats at the middle of the viewport's right edge. */
+  const MID = '#section-nav';
 
   let abort: AbortController | undefined;
   let ro: ResizeObserver | undefined;
@@ -49,13 +51,15 @@
     const y = window.scrollY;
     const top = invertedAt(y + CHROME_TOP_INSET, bands);
     const foot = invertedAt(y + window.innerHeight - CHROME_FOOT_INSET, bands);
-    const state = `${top}/${foot}`;
+    const mid = invertedAt(y + window.innerHeight * 0.5, bands);
+    const state = `${top}/${foot}/${mid}`;
     if (state === painted) return;
     painted = state;
 
     for (const el of document.querySelectorAll(TOP)) el.classList.toggle('chrome-invert', top);
     for (const el of document.querySelectorAll(FOOT)) el.classList.toggle('chrome-invert', foot);
-    document.dispatchEvent(new CustomEvent(CHROME_TONE_EVENT, { detail: { top, foot } }));
+    for (const el of document.querySelectorAll(MID)) el.classList.toggle('chrome-invert', mid);
+    document.dispatchEvent(new CustomEvent(CHROME_TONE_EVENT, { detail: { top, foot, mid } }));
   }
 
   const schedule = () => {
