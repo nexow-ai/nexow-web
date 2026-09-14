@@ -3549,9 +3549,15 @@ const CG_BY_ID = new Map(CG_BOARDS.map((b) => [b.spec.id, b]));
 </div>
 
 <style>
+  /* Not shown. The cards are the atlas the world's screens sample from
+     act 01 on (src/lib/worldBoards.ts); on the opening screen they were four
+     dashboards changing under the headline, and the hero is now the
+     headline, the crystal and the weave. They stay in the document so the
+     rasteriser can reveal them offscreen one at a time. */
   .hero-stage {
     position: absolute;
     inset: 0;
+    display: none;
     pointer-events: none;
     overflow: visible;
     z-index: 0;
