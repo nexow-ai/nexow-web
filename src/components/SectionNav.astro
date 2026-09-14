@@ -46,12 +46,12 @@ const { sections, label = 'On this page' } = Astro.props;
               data-section-link={s.id}
             >
               <span
-                class="section-nav__label max-w-[9.5rem] truncate text-end font-mono text-[0.65rem] font-medium uppercase tracking-[0.14em] transition-all duration-200"
+                class="section-nav__label max-w-[9.5rem] truncate text-end font-mono text-[0.65rem] font-medium uppercase tracking-[0.14em] transition-[opacity,transform] duration-200"
               >
                 {s.label}
               </span>
               <span class="section-nav__dot-slot relative z-10 flex size-3.5 shrink-0 items-center justify-center" aria-hidden="true">
-                <span class="section-nav__dot size-2.5 rounded-full border transition-all duration-200" />
+                <span class="section-nav__dot size-2.5 rounded-full border transition-[transform,box-shadow] duration-200" />
               </span>
             </a>
           </li>
@@ -67,8 +67,9 @@ const { sections, label = 'On this page' } = Astro.props;
   }
 
   .section-nav__label {
-    /* 42% measured below AA on the page background; 68% keeps it recessive. */
-    color: color-mix(in oklab, var(--color-ink-900) 68%, transparent);
+    /* 42% measured below AA on the page background; 68% keeps it recessive.
+       `--rail-fg` is the band behind this row (black on paper, white on ink). */
+    color: var(--rail-fg, color-mix(in oklab, var(--color-ink-900) 68%, transparent));
   }
 
   /* The rail is pinned to the viewport edge, but `container-page` caps at 80rem
@@ -85,14 +86,11 @@ const { sections, label = 'On this page' } = Astro.props;
       pointer-events: none;
       border-radius: 0.375rem;
       padding: 0.125rem 0.375rem;
-      background: color-mix(in oklab, white 88%, transparent);
+      background: var(--rail-chip, color-mix(in oklab, white 88%, transparent));
       backdrop-filter: blur(4px);
     }
     :global([dir='rtl']) .section-nav__label {
       transform: translateX(-0.5rem);
-    }
-    :global(.dark) .section-nav__label {
-      background: color-mix(in oklab, var(--color-ink-950) 88%, transparent);
     }
     .section-nav__list:hover .section-nav__label,
     .section-nav__list:focus-within .section-nav__label {
@@ -109,26 +107,23 @@ const { sections, label = 'On this page' } = Astro.props;
   :global([dir='rtl']) .section-nav__label {
     text-align: start;
   }
-  :global(.dark) .section-nav__label {
-    color: color-mix(in oklab, white 68%, transparent);
+
+  :global(html.dark) .section-nav__label {
+    color: var(--rail-fg, color-mix(in oklab, white 68%, transparent));
   }
 
   .section-nav__link:hover .section-nav__label,
   .section-nav__link:focus-visible .section-nav__label {
-    color: var(--color-ink-950);
-  }
-  :global(.dark) .section-nav__link:hover .section-nav__label,
-  :global(.dark) .section-nav__link:focus-visible .section-nav__label {
-    color: white;
+    color: var(--rail-fg-strong, var(--color-ink-950));
   }
 
   .section-nav__dot {
-    border-color: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
-    background: white;
+    border-color: var(--rail-dot-border, color-mix(in oklab, var(--color-ink-900) 28%, transparent));
+    background: var(--rail-dot-bg, white);
   }
-  :global(.dark) .section-nav__dot {
-    border-color: color-mix(in oklab, white 40%, transparent);
-    background: var(--color-ink-900);
+  :global(html.dark) .section-nav__dot {
+    border-color: var(--rail-dot-border, color-mix(in oklab, white 40%, transparent));
+    background: var(--rail-dot-bg, var(--color-ink-900));
   }
 
   /* The lit dot and label wear the section's own colour. On the home world
@@ -151,12 +146,7 @@ const { sections, label = 'On this page' } = Astro.props;
   }
 
   .section-nav__link[aria-current='true'] .section-nav__label {
-    color: var(--w-hue-700, var(--color-brand-700));
-  }
-  /* Pale on ink: the page's dark theme, or a dark band behind the rail. */
-  :global(.dark) .section-nav:not(.chrome-invert) .section-nav__link[aria-current='true'] .section-nav__label,
-  :global(html:not(.dark)) .section-nav.chrome-invert .section-nav__link[aria-current='true'] .section-nav__label {
-    color: var(--w-hue-300, var(--color-brand-300));
+    color: var(--rail-current, var(--w-hue-700, var(--color-brand-700)));
   }
 </style>
 
