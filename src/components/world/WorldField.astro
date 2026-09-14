@@ -2,20 +2,23 @@
 /**
  * The world the home page is staged inside.
  *
- * ONE IDEA: a single body of matter travels the whole page under one camera
- * that never cuts, and on every handover the screens go around the window
- * they are framing — they do not lerp through it. The white band after the
- * acts was a false floor — the camera dollies deeper into the same room, and
- * the remaining copy floats as glass in that volume. In the hero the matter
- * is a carousel; at each act it condenses into the thing that act explains;
- * past the gallery it becomes a receding atelier of surfaces, a vault, three
- * plan terraces, a rewards constellation, a reading stack, an aperture, then
- * a last quiet horizon. Each view switch restyles the screen chrome through
- * the full Tailwind spectrum — the product is infinitely themed, and the wall
- * proves it.
+ * ONE IDEA: a single crystal travels the whole page under one camera that
+ * never cuts, and every section stages it differently and in its own colour.
+ * Two fields share the stage with it and take turns. The screens — the
+ * hero's dashboards, rasterised into an atlas — stand only where a section
+ * is about the product's surfaces: a far gallery behind the headline, the
+ * card and its canvas in the playground acts, the atelier of the app, the
+ * plan terraces. Everywhere else they stand down, one at a time, and a field
+ * of luminous hairlines carries the section instead: wires docking into the
+ * hub, patrol circuits, a network, a helix, a horizon of waves, a vault, a
+ * constellation, an aperture. Each scene owns a colour family, and the
+ * crystal, the lines and the copy's rules walk from one to the next on the
+ * same beat the formations morph on.
  *
- * Sacrificed for it: the inverted marketing slab, a mint-only wall of
- * screens, and every stacked post-effect. The morph is still the whole show.
+ * Sacrificed for it: the carousel the reader stood inside, the braid of
+ * screens flying at the lens on every handover, the channel-zapping wall,
+ * the rainbow rim on the crystal. The hold is what you read; the handovers
+ * are what you barely notice.
  *
  * BUDGET (set before building, enforced by tests/build/payload.test.ts)
  *   · total shipped JS  < 150 KB   · any single script < 60 KB
@@ -45,7 +48,7 @@
 </div>
 
 <script>
-  import { WAY_RGB400, WAY_RGB600, WAY_COUNT } from '../../lib/widgetPalette';
+  import { TAILWIND_WAYS, WAY_COUNT, hexToRgb } from '../../lib/widgetPalette';
 
   /** Last formation index — must match the shader's form() tail. */
   const FORM_LAST = 14;
@@ -111,23 +114,51 @@
    * only while a scene is handing over and is still while its copy is read.
    * The last row is the exit, past the footer. */
   const LENS = [
-    { dist: 24.8, lift: 4.6, calm: 0.22, yaw: -1.12 }, // 0  hero
-    { dist: 28.6, lift: 3.8, calm: 0.44, yaw: -0.28 }, // 1  widget
-    { dist: 23.4, lift: 2.3, calm: 0.2, yaw: 0.62 }, // 2  canvas
-    { dist: 29.0, lift: 5.2, calm: 0.5, yaw: 1.28 }, // 3  connectors
-    { dist: 22.8, lift: 2.9, calm: 0.16, yaw: 2.02 }, // 4  bots
-    { dist: 27.4, lift: 5.6, calm: 0.46, yaw: 2.68 }, // 5  agents
-    { dist: 23.0, lift: 2.1, calm: 0.22, yaw: 3.32 }, // 6  dao
-    { dist: 29.6, lift: 6.2, calm: 0.54, yaw: 3.88 }, // 7  use cases
-    { dist: 23.2, lift: 3.8, calm: 0.26, yaw: 4.52 }, // 8  features
-    { dist: 27.8, lift: 2.7, calm: 0.5, yaw: 5.08 }, // 9  privacy
-    { dist: 24.0, lift: 1.9, calm: 0.3, yaw: 5.62 }, // 10 plans
-    { dist: 28.4, lift: 5.0, calm: 0.48, yaw: 6.08 }, // 11 rewards
-    { dist: 23.6, lift: 2.8, calm: 0.36, yaw: 6.52 }, // 12 faq
-    { dist: 22.2, lift: 1.7, calm: 0.2, yaw: 6.98 }, // 13 cta
-    { dist: 23.4, lift: 2.4, calm: 0.14, yaw: 7.42 }, // 14 footer
-    { dist: 24.2, lift: 2.8, calm: 0.18, yaw: 7.85 }, //    exit
+    { dist: 27.6, lift: 3.2, calm: 0.3, yaw: -1.12 }, // 0  hero
+    { dist: 28.4, lift: 3.0, calm: 0.4, yaw: -0.36 }, // 1  widget
+    { dist: 26.8, lift: 3.6, calm: 0.34, yaw: 0.42 }, // 2  canvas
+    { dist: 27.0, lift: 4.2, calm: 0.5, yaw: 1.16 }, // 3  connectors
+    { dist: 26.2, lift: 3.4, calm: 0.46, yaw: 1.88 }, // 4  bots
+    { dist: 27.4, lift: 4.6, calm: 0.5, yaw: 2.56 }, // 5  agents
+    { dist: 26.6, lift: 2.6, calm: 0.46, yaw: 3.22 }, // 6  dao
+    { dist: 28.8, lift: 5.0, calm: 0.54, yaw: 3.84 }, // 7  use cases
+    { dist: 28.0, lift: 3.4, calm: 0.36, yaw: 4.48 }, // 8  features
+    { dist: 27.2, lift: 3.0, calm: 0.5, yaw: 5.06 }, // 9  privacy
+    { dist: 28.6, lift: 2.8, calm: 0.4, yaw: 5.62 }, // 10 plans
+    { dist: 27.6, lift: 4.2, calm: 0.5, yaw: 6.12 }, // 11 rewards
+    { dist: 27.0, lift: 2.6, calm: 0.46, yaw: 6.58 }, // 12 faq
+    { dist: 26.4, lift: 2.2, calm: 0.4, yaw: 7.02 }, // 13 cta
+    { dist: 27.8, lift: 2.4, calm: 0.3, yaw: 7.44 }, // 14 footer
+    { dist: 28.6, lift: 2.8, calm: 0.3, yaw: 7.85 }, //    exit
   ];
+
+  /* Where the wall stands. 1 is every screen on its seat, 0 is none. The
+   * matter only shows where a section is about the product's surfaces — the
+   * hero's carousel, the widget and its canvas, the app's atelier, the plan
+   * terraces. Everywhere else it stands down, one screen at a time, and the
+   * lines carry the section. A wall that is sometimes absent is the only
+   * kind that is ever noticed when it is there. */
+  const SHOW = [0.8, 1, 1, 0, 0, 0, 0, 0, 0.78, 0, 0.8, 0, 0, 0, 0, 0];
+  /* How much of the line field each scene draws, as a share of the lines. */
+  const LSHOW = [0.18, 0.8, 1, 1, 0.36, 1, 0.3, 0.7, 0.5, 0.6, 0.7, 0.55, 0.5, 1, 0.12, 0.12];
+  /* One family per scene, an index into TAILWIND_WAYS: cyan for the opening,
+   * indigo and violet for the two playground acts, sky for the wires, amber
+   * for the bots, fuchsia for the agents, the brand teal for the token, rose
+   * for the gallery, blue for the app, purple for the vault, emerald for the
+   * plans, gold for the rewards, slate for the reading, teal for the door and
+   * sky for the horizon. Interpolated on the beat, so the room's colour walks
+   * with the reader instead of cutting at a boundary — the crystal, the
+   * lines and the copy's rules all wear it. */
+  const HUE = [12, 3, 9, 7, 2, 6, 0, 1, 14, 18, 13, 16, 5, 0, 7, 7];
+  /* Two shades per family: the colour itself and the light that runs along
+   * it. On ink the run lifts toward white; on paper it deepens. */
+  const lift = (c: [number, number, number], k: number): [number, number, number] => [
+    c[0] + (1 - c[0]) * k,
+    c[1] + (1 - c[1]) * k,
+    c[2] + (1 - c[2]) * k,
+  ];
+  const HUE_DARK = TAILWIND_WAYS.map((w) => [hexToRgb(w.c400), lift(hexToRgb(w.c300), 0.45)]);
+  const HUE_LIGHT = TAILWIND_WAYS.map((w) => [hexToRgb(w.c600), hexToRgb(w.c700)]);
 
   /* How much glass, at rest and at the calmest. Clearing a panel's interface
    * leaves the object: a tinted pane with a sheen, a rim and a glint that
@@ -178,24 +209,22 @@
     /* The share of the field that stands down in the scene being read, 0..1.
        Some sections want a wall of screens; most want a suggestion of one. */
     uniform float uThin;
-    /* 1 while the loop is running, 0 for the one composed reduced-motion
-       frame. Only the channel cut reads it — everything else is already still
-       in that frame because the clock is. */
-    uniform float uLive;
+    /* Presence, 0..1: how much of the wall this scene draws at all. */
+    uniform float uShow;
     uniform vec3 uCam;
+    /* How much further back the hero's gallery stands: 1 on a wide screen,
+       more on a phone, whose lens stands nearer and would otherwise have a
+       ×3 screen the width of the viewport behind the kicker. */
+    uniform float uFar;
     /** Half the backing-store height, in device pixels. Feeds edge antialiasing. */
     uniform float uPix;
 
-    varying float vTone;
     varying float vGlow;
     varying float vLight;
     varying float vFres;
     varying float vSpec;
     varying float vKind;
-    varying float vSeed;
     varying float vAA;
-    varying float vT;
-    varying float vSwitch;
     varying vec2 vUv;
 
     vec3 hash3(float i) {
@@ -210,38 +239,31 @@
       vec3 h = hash3(i);
 
       if (f < 0.5) {
-        /* 0 — THE CAROUSEL (hero): screens standing on concentric rings that
-           turn slowly around the headline.
-
-           A ring, not a scatter, because the headline sits dead centre and a
-           ring is the one arrangement that leaves the middle empty while still
-           filling the frame — the type reads through the hole, and the screens
-           orbit it. Three bands at different radii, each turning at its own
-           rate, so the wall has depth instead of moving as one cylinder.
-
-           The camera sits ~22 out and the outer band reaches 17, so the near
-           side of the ring passes between the lens and the title and fades out
-           on the near plane: screens genuinely sweep past you. */
-        /* Two shells, not three. Three spread 160 screens so thin that no one
-           of them had a readable circumference — the eye had nothing to trace,
-           which is why the ring read as a scatter. Two puts ~27 screens in
-           every row of every shell, close enough to spaced to be a wall. */
+        /* 0 — THE GALLERY (hero): a wide, shallow arc of screens standing
+           well behind the headline, facing the lens, drifting. It used to be
+           a carousel the reader stood inside — two shells around the title
+           whose near side swept between the lens and the type at viewport
+           size. Behind is the whole point: the opening screen is the
+           headline, the crystal beside it, and a distant wall of the product
+           turning slowly under them. Centred on the far side of the origin
+           from wherever the lens is, so the arc is always the backdrop. */
         float bands = 2.0;
         float band = mod(i, bands);
         float idx = floor(i / bands);
         float per = ceil(n / bands);
-
-        /* Two shells, two ranks. At 36 the third row was a leftover of the
-           160-panel wall and just stacked screens on top of each other. */
-        float R = 12.0 + band * 4.2;
-        float spin = t * 0.48 + uMorph * 4.2;
-        float th = (idx / per) * 6.2831 + spin + band * 3.1416 / per;
-
         float rows = 2.0;
         float row = mod(idx, rows);
-        float y = (row - 0.5) * 4.4;
-
-        return vec3(cos(th) * R, y, sin(th) * R);
+        float col = floor(idx / rows);
+        float perRow = max(1.0, ceil(per / rows));
+        float R = (17.0 + band * 4.5) * uFar;
+        float base = atan(-uCam.x, -uCam.z);
+        /* A shallow arc, so its ends stay as far from the lens as its middle
+           and every screen on it reads at the same small size. */
+        float th = base + ((col + 0.5) / perRow - 0.5) * 1.6 + band * 0.5 / perRow
+                 + sin(t * 0.05 + band * 1.7) * 0.08 + uMorph * 0.6;
+        /* Below the headline's line, so the wall is under the type. */
+        float y = (row - 0.5) * 5.4 + band * 1.2 - 4.0;
+        return vec3(sin(th) * R, y, cos(th) * R);
       }
       if (f < 1.5) {
         /* 1 — WIDGET: the matter condenses into one card.
@@ -468,11 +490,12 @@
       vec3 pa = form(uFormA, aId, uN, aSeed, uTime);
       vec3 pb = form(uFormB, aId, uN, aSeed, uTime);
 
-      /* Three sizes: ×1, ×2, ×4. Weighted so ×1 is the field, ×2 the
-         common feature, ×4 the rare one that anchors a corner. Its own
-         hash, not aSeed, which already owns the fly-by and the tone. */
+      /* Three sizes: ×1, ×2, ×3. Weighted so ×1 is the field, ×2 the
+         common feature, ×3 the rare one that anchors a corner. It used to
+         reach ×4, and a ×4 near the lens was a screen the size of the
+         viewport crossing the headline. Its own hash, not aSeed. */
       float roll = hash3(aId + 57.3).x;
-      float scale = roll < 0.38 ? 1.0 : roll < 0.78 ? 2.0 : 4.0;
+      float scale = roll < 0.46 ? 1.0 : roll < 0.84 ? 2.0 : 3.0;
 
       /* Stagger the morph per instance so the change reads as matter flowing
          rather than every point cutting on the same frame. */
@@ -481,42 +504,16 @@
       m = m * m * (3.0 - 2.0 * m);
       vec3 p = mix(pa, pb, m);
 
-      /* Around the window, not through it.
-         A straight mix() is a cross-fade watched from outside — the screens
-         slide through the HTML card they are supposed to be framing. At the
-         midpoint they swing around the Y axis instead, half of them clockwise,
-         so the wall braids around the copy. A lateral wrap sends another band
-         past the left and right of the window; a minority still take the
-         fly-by toward the lens. The hold is what you read; this is what you
-         feel on the way out. */
+      /* Handover: a soft scatter, never a braid. Each screen lifts a little
+         way off its seat along its own hash and settles onto the next one, so
+         the wall reads as re-forming — nothing flies at the lens, nothing
+         swings through the copy. It used to braid: a half-turn around the
+         window, a fly-by at the eye, a wrap past the sides. The hold is what
+         you read; this is what you barely notice on the way out. */
       float bloom = sin(m * 3.14159265);
-      float way = mix(-1.0, 1.0, step(0.5, aSeed));
-      float swing = bloom * way * 3.15;
-      float cs = cos(swing);
-      float ss = sin(swing);
-      float ox = p.x;
-      float oz = p.z;
-      p.x = ox * cs - oz * ss;
-      p.z = ox * ss + oz * cs;
-      /* Expand off the window so the braid goes around the copy, not through it. */
-      float expand = 1.0 + bloom * 0.72;
-      p.x *= expand;
-      p.z *= expand;
-      p.y += bloom * (fract(aSeed * 5.73) - 0.5) * 5.2;
-
-      vec3 toCam = uCam - p;
-      float toCamL = length(toCam);
-      vec3 toEyeM = toCam / max(toCamL, 0.001);
-      vec3 sideDir = normalize(cross(toEyeM, vec3(0.0, 1.0, 0.0)) + vec3(1e-4, 0.0, 0.0));
-      /* Three paths around the window: fly at the lens, wrap the sides, or
-         vault over / under it. ×4s stay off the fly-by so a feature screen
-         never walls the frame. */
-      float flyby = step(0.72, aSeed) * (1.0 - step(3.5, scale)) * max(1.0 - uThin * 0.7, 0.5);
-      float side = step(0.40, aSeed) * (1.0 - step(0.72, aSeed));
-      float over = step(0.16, aSeed) * (1.0 - step(0.40, aSeed));
-      p += toEyeM * bloom * flyby * toCamL * 0.92;
-      p += sideDir * bloom * side * way * 9.2;
-      p.y += bloom * over * way * 8.0;
+      vec3 hd = hash3(aId + 23.1) - 0.5;
+      p += hd * bloom * 2.6;
+      p.y += bloom * 0.8;
 
       /* The hero's one interaction: what you type charges the matter. It winds
          up and tightens as the composer fills, and the send throws a shockwave
@@ -545,25 +542,22 @@
          them readable as panels while still letting them tumble. */
       vec3 toEye = normalize(uCam - p);
       vec3 ho = hash3(aId + 91.7);
-      float yaw = ho.x * 6.2831 + uTime * (0.14 + aSeed * 0.18) + bloom * way * 1.45;
-      float pitch = (ho.y - 0.5) * 1.15 + bloom * (ho.z - 0.5) * 0.85;
+      float yaw = ho.x * 6.2831 + uTime * (0.04 + aSeed * 0.05) + bloom * (ho.z - 0.5) * 0.6;
+      float pitch = (ho.y - 0.5) * 0.7 + bloom * (ho.z - 0.5) * 0.3;
       vec3 nrm = vec3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw));
       /* Heavily biased to the eye. At 0.55 the panels tumbled freely and the
          crowd read as confetti; near-facing, a field of them reads as ranks of
          screens receding, which is the thing this is meant to look like. The
          residual tilt is what still lets them catch the key light. */
-      nrm = normalize(mix(nrm, toEye, 0.82));
+      nrm = normalize(mix(nrm, toEye, 0.86));
 
-      /* Except in the hero, where they stand on the ring facing out of it like
-         the screens on a carousel. This is the whole reason the circle reads as
-         a circle: a screen at the side of the ring is caught edge-on and opens
-         up as it comes round, so the wall turns as one object. Eye-facing
-         panels cannot do that — they present the same face at every angle,
-         which is why the ring used to read as a scatter however cleanly it was
-         placed. The radial is free to know: every ring here is centred on the
-         Y axis, so it falls out of the position. The small pull back toward the
-         eye stops the edge-on screens collapsing to a hairline. */
-      vec3 radial = normalize(vec3(p.x, 0.0, p.z) + vec3(1e-4, 0.0, 0.0));
+      /* Except in the hero, where they stand on the arc facing its centre,
+         like screens on a gallery wall: the ones at the ends of the arc are
+         caught at an angle and open up as the wall drifts, so it turns as one
+         object. The radial is free to know — the arc is centred on the Y
+         axis, so it falls out of the position. The pull toward the eye stops
+         the end screens collapsing to a hairline. */
+      vec3 radial = -normalize(vec3(p.x, 0.0, p.z) + vec3(1e-4, 0.0, 0.0));
       nrm = normalize(mix(nrm, normalize(mix(radial, toEye, 0.62)), heroness));
 
       /* Basis built off world +Y, so every panel shares a horizon and the set
@@ -578,11 +572,15 @@
       /* Density, per scene. uThin retires a share of them, chosen by a hash
          that never changes, so the same screens leave and come back. */
       float vis = smoothstep(uThin, uThin + 0.16, ho.z + 0.16);
+      /* Presence, per scene. Where the lines carry the section the wall
+         stands down entirely — one screen at a time along its own hash, so a
+         handover is screens leaving rather than a wall switching off. */
+      vis *= smoothstep(ho.x * 0.88, ho.x * 0.88 + 0.12, uShow);
       float unit = 1.32;
       float sz = unit * scale * vis * (1.0 + k * 0.08 + burst * 0.12);
-      /* ×4s sit a little toward the eye so they occupy their own plane
+      /* ×3s sit a little toward the eye so they occupy their own plane
          instead of slicing through the ×1s. */
-      vec3 world = p + toEye * step(3.5, scale) * 0.7 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
+      vec3 world = p + toEye * step(2.5, scale) * 0.5 + aCorner.x * sz * right + aCorner.y * sz * 0.62 * up;
 
       vec4 mv = uView * vec4(world, 1.0);
       /* Slide the world into the scene column so it frames the copy rather
@@ -612,41 +610,12 @@
          a step() widened by it is a step() that no longer stairsteps. */
       float px = (sz / max(-mv.z, 0.001)) * uProj[1][1] * uPix;
       vAA = clamp(1.4 / max(px, 1.0), 0.0015, 0.45);
-      /* ---- the channel ----
-         Each screen holds a dashboard for seven seconds and then cuts to
-         another one, drawn at random from the whole sheet. This is a bank of
-         televisions being zapped: half a minute of dwell over a table of
-         sixteen pictures made a wall you could learn, and a background you
-         have learnt has stopped being a background and started being wallpaper
-         you notice repeating.
-
-         Seven flat, not a per-screen spread. The scatter that matters is the
-         phase, not the period — aSeed pushes each screen almost six dwells
-         along the same clock, so the cuts arrive in a steady rain across the
-         wall rather than as one wave, and every panel still turns over at the
-         rate the eye was promised.
-
-         Redrawn from the slot number rather than stepped to the next index —
-         +1 would send a visible wave of the same picture around the ring, and
-         two neighbours would stay neighbours for the life of the page. The
-         slot wraps at 61 to keep the hash argument small: this is sin() hashing
-         in a float, and it goes flat long before an hour of uptime does.
-
-         Still offset by the formation, so each act keeps its own bias in the
-         mix — connectors leaning to market and data screens, bots to alerts. */
-      float dwell = 7.0;
-      float phase = (uTime + aSeed * 41.0) / dwell;
-      float slot = mod(floor(phase), 61.0);
-      vKind = fract(hash3(aId * 0.37 + slot * 2.71).z + uFormA * 0.17);
-      /* 1 on the frame the picture changes, gone about 0.2s later. The fragment
-         shader spends this on the collapse; here it only has to be a ramp.
-         Zero for the reduced-motion still, which must not catch a screen
-         halfway through a cut and render it as a broken one. */
-      vSwitch = uLive * (1.0 - smoothstep(0.0, 0.26 / dwell, fract(phase)));
-      vSeed = aSeed;
-      /* Per-screen clock. Same offset that placed it, so a wall of screens
-         animates out of phase instead of pulsing as one. */
-      vT = uTime + aSeed * 37.0;
+      /* ---- the picture ----
+         One board per screen, for the life of the page. The wall used to cut
+         channel every seven seconds, CRT collapse and all, and a bank of
+         screens that keeps zapping is a bank of screens asking to be
+         watched. Held still, it is a room. */
+      vKind = fract(hash3(aId * 0.37 + 2.71).z);
 
       /* Fog. Additive blending means fading alpha to 0 *is* fading to the
          ground colour, so distance falloff costs one smoothstep and buys the
@@ -656,10 +625,6 @@
       /* Near fade. Soft enough that a ×4 still reads when it sweeps the lens
          — the old curve put large screens out before they arrived. */
       vGlow *= smoothstep(sz * 0.4, 1.1 + sz * 0.85, dist);
-      /* Then flare on the approach, before that fade takes over, so a panel
-         sweeping the lens still reads as an object going past rather than one
-         quietly winking out. */
-      vGlow *= 1.0 + 0.55 * smoothstep(12.0, 5.5, dist);
       /* A screen standing down goes out as it shrinks, so the cull below
          retires it entirely rather than leaving a sliver in the frame. */
       vGlow *= vis;
@@ -671,9 +636,6 @@
       if (vGlow < 0.03) {
         gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
       }
-      /* Which of the two accents this screen owns. Stable for its whole life:
-         a screen that changed colour mid-morph read as a glitch. */
-      vTone = fract(aSeed * 7.31);
       vUv = aCorner;
     }
   `;
@@ -694,12 +656,6 @@
     /* 1 on the light theme, 0 on the dark. The glass, the type and the frame
        invert with it; the accents darken so they still hold on a pale surface. */
     uniform float uLight;
-    /* View-switch colourway. uWay rotates the 22-family Tailwind table so
-       every beat restyles the chrome; uStudio tints glass toward that family
-       once the story leaves the dark theatre. */
-    uniform float uWay;
-    uniform float uStudio;
-    uniform vec3 uPal[22];
     /* Backing-store size, the copy column's hold-back, and 1 for RTL. This
        used to be a CSS mask on the canvas, which cost a full-screen offscreen
        layer on every frame and a re-rasterisation on every change; here it
@@ -722,49 +678,13 @@
        so a board caught on an opposite-tone band redraws its ink in paper
        instead of vanishing into a ground it was never drawn for. */
     uniform float uBoardLight;
-    varying float vTone;
     varying float vGlow;
     varying float vLight;
     varying float vFres;
     varying float vSpec;
     varying float vKind;
-    varying float vSeed;
     varying float vAA;
-    varying float vT;
-    varying float vSwitch;
     varying vec2 vUv;
-
-    float rnd(float i) {
-      return fract(sin(i * 78.233) * 43758.5453);
-    }
-
-    /* Tailwind 400s, uploaded once. WebGL 1 only allows a const or a loop
-       index into a uniform array, so the pick is a 22-step scan. */
-    vec3 tw(float i) {
-      int k = int(mod(floor(i), 22.0));
-      if (k == 0) return uPal[0];
-      if (k == 1) return uPal[1];
-      if (k == 2) return uPal[2];
-      if (k == 3) return uPal[3];
-      if (k == 4) return uPal[4];
-      if (k == 5) return uPal[5];
-      if (k == 6) return uPal[6];
-      if (k == 7) return uPal[7];
-      if (k == 8) return uPal[8];
-      if (k == 9) return uPal[9];
-      if (k == 10) return uPal[10];
-      if (k == 11) return uPal[11];
-      if (k == 12) return uPal[12];
-      if (k == 13) return uPal[13];
-      if (k == 14) return uPal[14];
-      if (k == 15) return uPal[15];
-      if (k == 16) return uPal[16];
-      if (k == 17) return uPal[17];
-      if (k == 18) return uPal[18];
-      if (k == 19) return uPal[19];
-      if (k == 20) return uPal[20];
-      return uPal[21];
-    }
 
     /* step(), widened to the width of a pixel. Every edge below goes through
        this; a hard step() on content this small stairsteps, and jagged chart
@@ -777,45 +697,10 @@
       return aastep(lo, x) * (1.0 - aastep(hi, x));
     }
 
-    /* Rounded rectangle, in panel space. The screen is 0.62 as tall as it is
-       wide, so distances are corrected to physical units before the radius is
-       applied; otherwise every pill is rounder on its sides than its ends.
-       The radius is clamped so a thin bar can never invert. */
-    float rect(vec2 p, vec2 c, vec2 hs, float r) {
-      vec2 hp = hs * vec2(1.0, 0.62);
-      r = min(r, min(hp.x, hp.y));
-      vec2 d = abs((p - c) * vec2(1.0, 0.62)) - (hp - r);
-      float sd = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0) - r;
-      return 1.0 - aastep(0.0, sd);
-    }
-
-    float disc(vec2 p, vec2 c, float r) {
-      return 1.0 - aastep(r, length((p - c) * vec2(1.0, 0.62)));
-    }
-
-    float sdSeg(vec2 p, vec2 a, vec2 b) {
-      vec2 pa = p - a;
-      vec2 ba = b - a;
-      float h = clamp(dot(pa, ba) / max(dot(ba, ba), 1e-5), 0.0, 1.0);
-      return length(pa - ba * h);
-    }
-
-    vec3 loadRx(vec3 p, float a) {
-      float c = cos(a);
-      float si = sin(a);
-      return vec3(p.x, c * p.y - si * p.z, si * p.y + c * p.z);
-    }
-
-    vec3 loadRy(vec3 p, float a) {
-      float c = cos(a);
-      float si = sin(a);
-      return vec3(c * p.x + si * p.z, p.y, -si * p.x + c * p.z);
-    }
-
     void main() {
       /* Shallow card, always. The thick family-tinted pill was the toy
          tablet; glass cards share the composer's radius whether the atlas
-         has landed or the loader is still spinning. */
+         has landed or the pane is still bare. */
       float rr = 0.016;
       vec2 cd = abs(vUv) - (0.5 - rr);
       float sd = length(max(cd, 0.0)) + min(max(cd.x, cd.y), 0.0) - rr;
@@ -833,37 +718,10 @@
          paint a surface-coloured rectangle over whatever is behind it. */
       if (glow < 0.04) discard;
 
-      float toy = 1.0 - uBoardsOn;
-      float inner = 1.0;
       float inset = (1.0 - smoothstep(0.0, mix(-0.055, -0.028, uLight), sd));
 
-      /* ---- the cut ----
-         A channel change, done the way a CRT does it: the picture collapses to
-         a bright slit and springs back open with something else on it.
-
-         Squeezing the *coordinate* is what compresses the picture. At 0.22 the
-         panel's whole 0..1 range maps to a band a fifth as tall, so all
-         thirty-six screens and the chrome above them collapse together and
-         every content guard below clips itself to the slit without knowing
-         anything about this. One divide, and the bezel — which is drawn off
-         vUv and sd, not uv — stays a solid object while its screen misbehaves.
-
-         Squared, so the collapse snaps and the reopen eases. */
-      float cut = vSwitch * vSwitch;
       vec2 uv = vUv + 0.5;
-      uv.y = 0.5 + (uv.y - 0.5) / mix(1.0, 0.22, cut);
-      float t = vT;
-      float s = vSeed;
 
-      /* ---- palette ----
-         Each screen owns one Tailwind family. uWay rotates the table on every
-         view switch, so a full scroll walks slate→rose rather than sitting
-         on mint. The complement is +11 around the wheel — designed pairs,
-         not muddy RGB. Shade varies per seed (300–700 territory). */
-      float fam = mod(floor(vTone * 22.0) + uWay, 22.0);
-      float shade = mix(0.78, 1.16, fract(s * 5.13));
-      vec3 accent = tw(fam) * shade;
-      vec3 accent2 = tw(fam + 11.0) * mix(0.86, 1.08, fract(s * 3.71));
       /* paper is what type and rules are drawn in: soft white on the dark
          theme, ink on the light. lightest is the highlight colour, white on
          both, which is what the sheen and the glint are made of. */
@@ -902,107 +760,6 @@
          of this — there the pane is already brighter than the page. */
       bare += lightest * (0.05 + 0.12 * vLight) * uGlass * (1.0 - uLight);
 
-      /* ---- glassy loaders ----
-         Per-panel pick from the instance seed: gyroscope, a tumbling cube,
-         or a 2D rounded progress. Same ice material, three silhouettes,
-         so the wall is one glass coming on — not eighteen copies. */
-      {
-        vec2 lp = (uv - 0.5) * vec2(1.0, 1.61);
-        float a0 = t * 1.18 + s * 6.2832;
-        float a1 = t * 0.74 + s * 2.1 + 1.05;
-        float c0 = cos(a0);
-        float s0 = sin(a0);
-        float c1 = cos(a1);
-        float s1 = sin(a1);
-        vec3 ice = mix(vec3(0.62, 0.82, 0.94), vec3(0.16, 0.28, 0.40), 1.0 - uLight);
-        vec3 hi = mix(vec3(1.0), vec3(0.10, 0.13, 0.18), uLight);
-        vec3 load = vec3(0.0);
-        float pick = floor(fract(s * 7.13) * 3.0);
-
-        if (pick < 0.5) {
-          vec2 r0 = vec2(c0 * lp.x - s0 * lp.y, s0 * lp.x + c0 * lp.y);
-          vec2 r1 = vec2(c1 * lp.x - s1 * lp.y, s1 * lp.x + c1 * lp.y);
-          float eq = 1.0 - aastep(0.0065, abs(length(lp) - 0.168));
-          float gy = 1.0 - aastep(0.0055, abs(length(r0 * vec2(1.0, 2.45)) - 0.168));
-          float gx = 1.0 - aastep(0.0055, abs(length(r1 * vec2(2.25, 1.0)) - 0.168));
-          float spin = atan(lp.y, lp.x);
-          float glint = pow(max(sin(spin - a0 * 2.2), 0.0), 16.0);
-          vec2 coreP = r0;
-          float dia = abs(coreP.x) + abs(coreP.y) * 0.70;
-          float core = 1.0 - aastep(0.050, dia);
-          float facet = mix(0.42, 1.0, aastep(0.0, coreP.x));
-          load = ice * (eq * 0.55 + gy * 0.38 + gx * 0.38);
-          load += hi * glint * (eq * 0.85 + gy * 0.35);
-          load += ice * core * (0.28 + 0.50 * facet);
-          load += hi * core * pow(max(1.0 - dia / 0.050, 0.0), 2.2) * 0.55;
-          float orbit = 1.0 - aastep(0.014, length(lp - vec2(c0, s0) * 0.168));
-          load += hi * orbit * 0.75;
-        } else if (pick < 1.5) {
-          float pitch = 0.52 + s * 0.35;
-          vec3 q0 = loadRy(loadRx(vec3(-1.0, -1.0, -1.0) * 0.10, pitch), a0);
-          vec3 q1 = loadRy(loadRx(vec3( 1.0, -1.0, -1.0) * 0.10, pitch), a0);
-          vec3 q2 = loadRy(loadRx(vec3(-1.0,  1.0, -1.0) * 0.10, pitch), a0);
-          vec3 q3 = loadRy(loadRx(vec3( 1.0,  1.0, -1.0) * 0.10, pitch), a0);
-          vec3 q4 = loadRy(loadRx(vec3(-1.0, -1.0,  1.0) * 0.10, pitch), a0);
-          vec3 q5 = loadRy(loadRx(vec3( 1.0, -1.0,  1.0) * 0.10, pitch), a0);
-          vec3 q6 = loadRy(loadRx(vec3(-1.0,  1.0,  1.0) * 0.10, pitch), a0);
-          vec3 q7 = loadRy(loadRx(vec3( 1.0,  1.0,  1.0) * 0.10, pitch), a0);
-          vec2 p0 = vec2(q0.x, q0.y * 0.72 + q0.z * 0.22);
-          vec2 p1 = vec2(q1.x, q1.y * 0.72 + q1.z * 0.22);
-          vec2 p2 = vec2(q2.x, q2.y * 0.72 + q2.z * 0.22);
-          vec2 p3 = vec2(q3.x, q3.y * 0.72 + q3.z * 0.22);
-          vec2 p4 = vec2(q4.x, q4.y * 0.72 + q4.z * 0.22);
-          vec2 p5 = vec2(q5.x, q5.y * 0.72 + q5.z * 0.22);
-          vec2 p6 = vec2(q6.x, q6.y * 0.72 + q6.z * 0.22);
-          vec2 p7 = vec2(q7.x, q7.y * 0.72 + q7.z * 0.22);
-          float d = sdSeg(lp, p0, p1);
-          d = min(d, sdSeg(lp, p2, p3));
-          d = min(d, sdSeg(lp, p4, p5));
-          d = min(d, sdSeg(lp, p6, p7));
-          d = min(d, sdSeg(lp, p0, p2));
-          d = min(d, sdSeg(lp, p1, p3));
-          d = min(d, sdSeg(lp, p4, p6));
-          d = min(d, sdSeg(lp, p5, p7));
-          d = min(d, sdSeg(lp, p0, p4));
-          d = min(d, sdSeg(lp, p1, p5));
-          d = min(d, sdSeg(lp, p2, p6));
-          d = min(d, sdSeg(lp, p3, p7));
-          float wire = 1.0 - aastep(0.0075, d);
-          float hull = 1.0 - aastep(0.11, max(abs(lp.x), abs(lp.y) / 0.72) * (1.15 - 0.12 * c0));
-          load = ice * (wire * 0.85 + hull * 0.08);
-          load += hi * wire * (0.45 + 0.40 * pow(max(c0, 0.0), 4.0));
-          load += hi * (1.0 - aastep(0.013, length(p7))) * 0.55;
-        } else {
-          float rad = 0.155;
-          float track = 1.0 - aastep(0.013, abs(length(lp) - rad));
-          float ang = atan(lp.y, lp.x);
-          float sweep = 0.55 + 5.2 * (0.5 + 0.5 * sin(t * 0.85 + s * 4.0));
-          float from = -1.5707963;
-          float aN = mod(ang - from + 6.2831853, 6.2831853);
-          float onArc = aastep(0.0, aN) * (1.0 - aastep(sweep, aN));
-          float arc = track * onArc;
-          vec2 head = vec2(cos(from + sweep), sin(from + sweep)) * rad;
-          vec2 tail = vec2(cos(from), sin(from)) * rad;
-          float caps = (1.0 - aastep(0.015, length(lp - head)))
-                     + (1.0 - aastep(0.015, length(lp - tail)));
-          float tickR = 1.0 - aastep(0.006, abs(length(lp) - 0.188));
-          float tick = tickR * (
-            aaband(-0.04, 0.04, ang)
-            + aaband(-0.04, 0.04, ang - 1.5708)
-            + aaband(-0.04, 0.04, ang + 1.5708)
-            + aaband(-0.04, 0.04, abs(ang) - 3.1416)
-          );
-          load = ice * (track * 0.18 + arc * 0.72 + caps * 0.55 + tick * 0.22);
-          load += hi * (arc * 0.25 + caps * 0.65);
-          float bar = abs(lp.y + 0.22) / 0.62;
-          float rail = (1.0 - aastep(0.016, bar)) * aaband(-0.16, 0.16, lp.x);
-          float fill = aaband(-0.16, -0.16 + 0.32 * (0.22 + 0.78 * fract(t * 0.16 + s)), lp.x);
-          load += ice * rail * 0.20;
-          load += hi * rail * fill * 0.70;
-        }
-        col += load * toy * inner;
-      }
-
       /* ---- the screens: the hero's cards, full-face from the atlas ----
          Each cell is the whole instrument — ground, title bar, plot — so the
          wall is those cards standing in space, not a sketch dressed in a
@@ -1040,20 +797,6 @@
         col = mix(col, inkB, inB * on);
       }
 
-      /* The rest of the cut: the glass goes dark behind the collapsing picture,
-         interference bars cross it, and the slit it collapsed into flares.
-         Clipped to the inner mask so none of it touches the frame.
-         cut is constant across the panel — a per-instance value that only
-         travels as a varying — so this branch is instance-coherent, which is
-         the one kind a GPU does not pay for. */
-      if (cut > 0.001) {
-        float bars = rnd(floor(vUv.y * 52.0) * 3.7 + s * 11.0);
-        float slit = 1.0 - aastep(0.06 + 0.20 * (1.0 - vSwitch), abs(vUv.y));
-        col = mix(col, glassDark, inner * cut * 0.55);
-        col += mix(accent, lightest, 0.5) * inner * cut * (0.10 + 0.34 * bars);
-        col += lightest * inner * cut * slit * 0.55;
-      }
-
       /* ---- clear the glass ----
          Back toward the bare pane. Ninety-six live interfaces is ninety-six
          things asking to be read: charts moving, dots pulsing, channels
@@ -1062,9 +805,6 @@
          panel is the difference between a quiet field and a murky one — the
          panel keeps its surface, its edges and its place in the depth order,
          and simply stops broadcasting.
-
-         After the cut, so a channel change is damped along with everything
-         else: a flash is the loudest thing a screen can do.
 
          A light ice film stays over the live cards so the wall is glass,
          not a sheet of printed paper. */
@@ -1192,9 +932,9 @@
       float up = dir.y * 0.5 + 0.5;
       /* Floor and zenith have to stay a long way apart or every facet
          samples the same pale value and the solid reads as a wireframe. */
-      vec3 floorC = mix(mix(uFog, uC1 * 0.35, 0.55), vec3(0.62, 0.70, 0.74), uLight);
-      vec3 zenith = mix(mix(uC3 * 1.25, vec3(0.55, 0.82, 0.96), 0.40),
-                        vec3(0.88, 0.93, 0.97), uLight);
+      vec3 floorC = mix(mix(uFog, uC1 * 0.35, 0.55), mix(vec3(0.66, 0.72, 0.76), uC1, 0.25), uLight);
+      vec3 zenith = mix(mix(uC3 * 1.15, vec3(0.92, 0.96, 1.0), 0.35),
+                        mix(vec3(0.90, 0.94, 0.98), uC3, 0.2), uLight);
       vec3 hemi = mix(floorC, zenith, up * up);
       vec3 key = normalize(vec3(-0.35, 0.85, 0.42));
       vec3 fill = normalize(vec3(0.72, 0.18, 0.48));
@@ -1228,19 +968,21 @@
       }
 
       vec3 trans = glassEnv(rd);
-      /* Dispersion only on the grazing faces, where a real prism splits.
-         Cheap: a rim tint, not three extra environment walks. */
+      /* A lighter rim of the same family on the grazing faces — the place a
+         real prism would split, kept to one hue so the stone is never a
+         rainbow. */
       float disp = 1.0 - ndv;
-      trans += vec3(0.18, 0.02, -0.14) * disp * disp;
+      trans += (uC3 - uC1) * 0.5 * disp * disp;
 
-      /* Beer–Lambert through a teal melt. Dark theme keeps a deep crystal
-         body; light theme still drinks a little, or facing facets vanish
-         into the page. */
-      vec3 sigma = mix(vec3(0.72, 0.16, 0.34), vec3(0.72, 0.28, 0.42), uLight);
+      /* Beer–Lambert through the section's own melt: the body absorbs the
+         hue's complement, so what comes through is the room's colour. Dark
+         theme keeps a deep crystal body; light theme still drinks a little,
+         or facing facets vanish into the page. */
+      vec3 sigma = (1.0 - uC1) * mix(1.15, 0.85, uLight) + 0.10;
       float thick = mix(0.55, 1.35, 1.0 - ndv);
       if (!gl_FrontFacing) thick += 0.45;
       trans *= exp(-sigma * thick);
-      vec3 volume = mix(uC1, uC3, 0.28);
+      vec3 volume = uC1;
       trans = mix(trans, trans * mix(volume, vec3(1.0), 0.45), 0.38);
       /* Neighbouring faces must land on different values. Flat shading
          already gave us the normal; a wide Lambert range on the transmitted
@@ -1277,26 +1019,25 @@
       float walk = pow(max(sin(dot(n, vec3(0.62, 0.28, 0.38)) * 3.2 + uTime * 0.65), 0.0), 14.0);
       body += vec3(1.0) * walk * mix(0.16, 0.07, uLight);
 
-      /* Neon arrises. The same edge field as the old machined line, worn as
-         LED strip: a wide soft halo that blooms onto the glass and a hot
-         near-white core along the cut itself. The hue is a slow walk — each
-         facet seeds its own colour off its normal, the position term slides
-         the colour along the edge like light travelling a tube, and time
-         carries the whole spectrum around the solid. The cosine palette
-         keeps every stop saturated; a lerped RGB rainbow would grey out
-         between stops. */
+      /* Lit arrises. The same edge field as the old machined line, worn as
+         LED strip: a wide soft halo that blooms onto the glass and a hot core
+         along the cut itself. One family, not a spectrum — the strip runs the
+         section's hue, and the light travelling it is that hue lifted toward
+         white. Each facet seeds its own phase off its normal, the position
+         term slides the light along the edge like a tube, and time carries
+         it around the solid. */
       float ed = min(min(vE.x, vE.y), vE.z);
       float inset = 1.0 - smoothstep(0.025, 0.15, ed);
       float line = 1.0 - smoothstep(0.003, 0.020, ed);
       float halo = 1.0 - smoothstep(0.0, 0.10, ed);
-      float hue = fract(
+      float ph = fract(
         dot(vON, vec3(0.24, 0.38, 0.31)) * 0.45
         + (vObj.x + vObj.y * 0.72 + vObj.z * 0.41) * 0.20
         + uTime * 0.055);
-      vec3 neon = 0.55 + 0.45 * cos(6.2832 * (hue + vec3(0.0, 0.33, 0.67)));
+      vec3 neon = mix(uC1, uC3, 0.5 + 0.5 * sin(ph * 6.2832));
       /* LEDs breathe; a strip at constant power reads as paint. Offset by
-         hue so the pulse travels the rim instead of blinking the solid. */
-      float breath = 0.80 + 0.20 * sin(uTime * 1.8 + hue * 6.2832);
+         phase so the pulse travels the rim instead of blinking the solid. */
+      float breath = 0.80 + 0.20 * sin(uTime * 1.8 + ph * 6.2832);
       body = mix(body, body * mix(volume, vec3(0.72), 0.45), inset * 0.30);
       body += neon * halo * halo * breath * mix(0.85, 0.50, uLight);
       body += mix(neon, vec3(1.0), 0.42) * line * breath * (1.35 + spec * 0.9 - 0.30 * uLight);
@@ -1338,6 +1079,265 @@
          ONE_MINUS_SRC_ALPHA, so a facing pane over empty stage is a*body
          rather than a*a*body. */
       gl_FragColor = vec4(body * alpha, alpha);
+    }
+  `;
+
+
+  /* ------------------------------------------------------------------ *
+   * The lines.
+   *
+   * Where the wall stands down, this is the section: a field of luminous
+   * hairlines drawn as one instanced strip and placed — like the screens —
+   * by a closed-form function of the line index, so a scene change is a
+   * mix() and nothing is ever re-uploaded. Each line carries a pulse of
+   * light along its length; that travelling light is the animation, and it
+   * is all of it. Orbits around the crystal in the hero, a stream flowing
+   * into the widget, a ruled floor under the canvas, wires docking into the
+   * hub, patrol circuits, a network, a helix, a horizon of waves, a
+   * corridor, a vault, three rails, a constellation, reading rules, an
+   * aperture, a horizon. Coloured by the section.
+   *
+   * The strip is widened in clip space off the projected tangent, so a line
+   * is the same two pixels wide at any distance — depth is carried by fog
+   * and by the curve itself, never by a fat near segment.
+   * ------------------------------------------------------------------ */
+  const LINE_SEG = 56;
+  const LINES_WIDE = 28;
+  const LINES_NARROW = 18;
+  /** Half the strip's width, in device pixels. The glow falls off inside it. */
+  const LINE_HALF_PX = 5;
+
+  const LINE_VERT = glsl`
+    precision highp float;
+    attribute vec2 aStrip;
+    attribute float aLine;
+    attribute float aLSeed;
+    uniform mat4 uProj;
+    uniform mat4 uView;
+    uniform float uN;
+    uniform float uFormA;
+    uniform float uFormB;
+    uniform float uMorph;
+    uniform float uTime;
+    uniform float uShift;
+    uniform float uLift;
+    /* Share of the lines this scene draws, 0..1, walked on the beat. */
+    uniform float uShow;
+    /* Half the strip's width, in clip units per axis. */
+    uniform vec2 uHalf;
+    /* Where the core stands: the orbits and the wires are centred on it. */
+    uniform vec3 uCore;
+    varying float vA;
+    varying float vU;
+    varying float vSide;
+    varying float vPh;
+
+    vec3 hash3(float i) {
+      return fract(sin(vec3(i * 12.9898, i * 78.233, i * 37.719)) * 43758.5453);
+    }
+    vec3 rotX(vec3 p, float a) {
+      float c = cos(a);
+      float s = sin(a);
+      return vec3(p.x, c * p.y - s * p.z, s * p.y + c * p.z);
+    }
+    vec3 rotY(vec3 p, float a) {
+      float c = cos(a);
+      float s = sin(a);
+      return vec3(c * p.x + s * p.z, p.y, -s * p.x + c * p.z);
+    }
+    vec3 rotZ(vec3 p, float a) {
+      float c = cos(a);
+      float s = sin(a);
+      return vec3(c * p.x - s * p.y, s * p.x + c * p.y, p.z);
+    }
+    vec3 bez(vec3 a, vec3 b, vec3 c, float u) {
+      return mix(mix(a, b, u), mix(b, c, u), u);
+    }
+
+    /* Fifteen formations, one per scene. a is the line's share of the
+       field, h its own hash; both are stable for the life of the page. */
+    vec3 curve(float f, float j, float n, float u, float t) {
+      float a = j / n;
+      vec3 h = hash3(j + 3.7);
+      if (f < 0.5) {
+        /* 0 — ORBITS: an armillary around the crystal, rings on their own
+           tilts, close enough to read as its instrument. */
+        float r = 2.3 + h.x * 1.8;
+        float th = u * 6.2831 + t * (0.08 + h.x * 0.08) + h.z * 6.2831;
+        vec3 c = vec3(cos(th) * r, 0.0, sin(th) * r);
+        c = rotX(c, 1.2 + (h.y - 0.5) * 0.9);
+        c = rotZ(c, h.z * 2.6 - 0.4);
+        return uCore + c;
+      }
+      if (f < 1.5) {
+        /* 1 — STREAM: the sentence, flowing in from the left into the card. */
+        float sp = 1.0 - u * 0.85;
+        return vec3(
+          mix(-24.0, -1.0, u),
+          (h.y - 0.5) * 14.0 * sp + sin(u * 7.0 + t * 0.9 + j) * 0.5 * sp,
+          (h.z - 0.5) * 10.0 * sp + 2.0
+        );
+      }
+      if (f < 2.5) {
+        /* 2 — GRID: the canvas floor, ruled both ways. */
+        float g = mod(j, 2.0);
+        float k = floor(j / 2.0);
+        float s = (k / ceil(n / 2.0) - 0.5) * 30.0;
+        float y = -5.2 + sin(u * 9.0 + t * 0.4 + k) * 0.12;
+        if (g < 0.5) return vec3(mix(-17.0, 17.0, u), y, s * 0.7);
+        return vec3(s, y, mix(-14.0, 10.0, u));
+      }
+      if (f < 3.5) {
+        /* 3 — WIRES: from a ring of sources, curving in to dock at the hub. */
+        float th = a * 6.2831 + t * 0.05;
+        vec3 o = vec3(cos(th) * 14.0, (h.y - 0.5) * 7.0, sin(th) * 14.0 * 0.6);
+        vec3 mid = o * 0.5 + vec3(0.0, (h.z - 0.5) * 5.0 + 1.0, 0.0);
+        return bez(o, mid, uCore, u);
+      }
+      if (f < 4.5) {
+        /* 4 — PATROL: circuits around the solid that watches — a few
+           rings at different tilts, like the shells of an atom. */
+        float r = 3.6 + h.x * 3.2;
+        float th = u * 6.2831 + t * (0.10 + h.y * 0.12) + j;
+        vec3 c = vec3(cos(th) * r, 0.0, sin(th) * r);
+        c = rotX(c, 0.35 + (h.z - 0.5) * 0.5);
+        c = rotY(c, a * 6.2831);
+        return uCore + c;
+      }
+      if (f < 5.5) {
+        /* 5 — NETWORK: chords between six agents, pulled through the core. */
+        float na = mod(j, 6.0);
+        float nb = mod(na + 1.0 + mod(floor(j / 6.0), 5.0), 6.0);
+        float ta = na / 6.0 * 6.2831 + t * 0.13;
+        float tb = nb / 6.0 * 6.2831 + t * 0.13;
+        vec3 A = vec3(cos(ta) * 7.2, sin(ta) * 7.2 * 0.44, sin(ta * 2.0) * 1.7);
+        vec3 B = vec3(cos(tb) * 7.2, sin(tb) * 7.2 * 0.44, sin(tb * 2.0) * 1.7);
+        vec3 mid = (A + B) * 0.22 + vec3(0.0, (h.z - 0.5) * 2.0, 0.0);
+        return bez(A, mid, B, u);
+      }
+      if (f < 6.5) {
+        /* 6 — LEDGER: strands climbing the token. */
+        float th = u * 6.2831 * 2.2 + a * 6.2831 + t * 0.28;
+        float R = 4.4 + (h.x - 0.5) * 0.6;
+        return vec3(cos(th) * R, (u - 0.5) * 14.0, sin(th) * R);
+      }
+      if (f < 7.5) {
+        /* 7 — HORIZON: waves receding, the widest thing on the page. */
+        float x = mix(-28.0, 28.0, u);
+        return vec3(
+          x,
+          -3.5 - a * 2.5 + sin(x * 0.32 + t * 0.55 + a * 9.0) * 0.8 + sin(x * 0.11 - t * 0.25 + a * 3.0) * 1.3,
+          -4.0 - a * 18.0
+        );
+      }
+      if (f < 8.5) {
+        /* 8 — CORRIDOR: the hall's own edges, running to the vanishing point. */
+        float th = a * 6.2831 + 0.3;
+        float r = 8.5 + h.x * 5.0;
+        vec3 o = vec3(cos(th) * r * 1.5, sin(th) * r * 0.8, 9.0);
+        return mix(o, vec3(o.x * 0.08, o.y * 0.08, -70.0), u);
+      }
+      if (f < 9.5) {
+        /* 9 — VAULT: a cage of latitudes you are inside of. */
+        float lat = (a - 0.5) * 2.8;
+        float R = 8.0;
+        float r = cos(lat) * R;
+        float th = u * 6.2831 + t * 0.06 * (mod(j, 2.0) * 2.0 - 1.0);
+        return rotZ(vec3(cos(th) * r, sin(lat) * R, sin(th) * r), 0.35);
+      }
+      if (f < 10.5) {
+        /* 10 — RAILS: the floor under each of the three terraces. */
+        float g = mod(j, 3.0);
+        float k = floor(j / 3.0);
+        vec3 base = vec3((g - 1.0) * 6.4, (1.0 - g) * 1.6 - 2.6, g * 3.1);
+        return base + vec3(mix(-3.2, 3.2, u), (k - 4.0) * 0.16, (k - 4.0) * 0.9);
+      }
+      if (f < 11.5) {
+        /* 11 — CONSTELLATION: arcs across a sky of rewards, wide enough
+           that the copy sits inside the sphere rather than under a knot. */
+        vec3 A = normalize(h - 0.5 + 0.001) * 12.0;
+        vec3 B = normalize(hash3(j + 71.0) - 0.5 + 0.001) * 12.0;
+        vec3 mid = normalize(A + B + 0.001) * 15.0;
+        return rotY(bez(A, mid, B, u), t * 0.05);
+      }
+      if (f < 12.5) {
+        /* 12 — READING: quiet rules behind the stack. */
+        float x = mix(-16.0, 16.0, u);
+        return vec3(x, (a - 0.5) * 12.0 + sin(x * 0.2 + t * 0.3 + j) * 0.2, -6.0 + (h.z - 0.5) * 8.0);
+      }
+      if (f < 13.5) {
+        /* 13 — APERTURE: rays from the door. */
+        float th = a * 6.2831 + t * 0.04;
+        vec3 d = normalize(vec3(cos(th), sin(th) * 0.7, 0.3 + h.x * 0.5));
+        return d * mix(2.6, 22.0, u);
+      }
+      /* 14 — REST: a horizon, low and flat. */
+      return vec3(mix(-32.0, 32.0, u), -6.0 - a * 3.0, -4.0 - a * 10.0);
+    }
+
+    void main() {
+      float u = aStrip.x;
+      /* Staggered like the screens, so a scene change is lines flowing one
+         after another rather than a field cutting on one frame. */
+      float lead = aLSeed * 0.35;
+      float m = clamp((uMorph - lead) / max(1.0 - lead, 0.35), 0.0, 1.0);
+      m = m * m * (3.0 - 2.0 * m);
+      vec3 p0 = mix(curve(uFormA, aLine, uN, u, uTime), curve(uFormB, aLine, uN, u, uTime), m);
+      vec3 p1 = mix(
+        curve(uFormA, aLine, uN, u + 0.02, uTime),
+        curve(uFormB, aLine, uN, u + 0.02, uTime),
+        m
+      );
+      vec4 v0 = uView * vec4(p0, 1.0);
+      vec4 v1 = uView * vec4(p1, 1.0);
+      v0.xy += vec2(uShift, uLift);
+      v1.xy += vec2(uShift, uLift);
+      vec4 c0 = uProj * v0;
+      vec4 c1 = uProj * v1;
+      /* The tangent on screen, measured in half-widths per axis so the
+         normal is a true right angle whatever the aspect. */
+      vec2 dir = normalize((c1.xy / c1.w - c0.xy / c0.w) / uHalf + vec2(1e-6, 0.0));
+      vec2 nrm = vec2(-dir.y, dir.x) * uHalf;
+      gl_Position = vec4(c0.xy + nrm * aStrip.y * c0.w, c0.zw);
+
+      float ends = smoothstep(0.0, 0.10, u) * smoothstep(1.0, 0.90, u);
+      float dist = -v0.z;
+      float fog = smoothstep(75.0, 8.0, dist) * smoothstep(1.5, 4.0, dist);
+      /* Which lines a scene draws: the first uShow of the field. */
+      float a = aLine / uN;
+      float on = smoothstep(a - 0.03, a + 0.03, uShow);
+      vA = ends * fog * on;
+      vU = u;
+      vSide = aStrip.y;
+      /* The pulse's phase, wrapped here in highp: raw seconds in a mediump
+         fragment quantise within minutes on fp16 mobiles. */
+      vPh = mod(uTime * 1.3 - aLSeed * 6.2831, 6.2831);
+      if (vA < 0.01 || c0.w < 0.05) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+    }
+  `;
+
+  const LINE_FRAG = glsl`
+    precision mediump float;
+    uniform vec3 uHue;
+    uniform vec3 uHue2;
+    uniform float uLight;
+    varying float vA;
+    varying float vU;
+    varying float vSide;
+    varying float vPh;
+    void main() {
+      float d = vSide * vSide;
+      /* A hairline with a soft halo — the halo is what makes it light rather
+         than a stroke. */
+      float core = exp(-d * 10.0);
+      float halo = exp(-d * 2.4) * 0.30;
+      /* The light travelling the line: two pulses a length, drifting along. */
+      float run = pow(max(sin(vU * 12.566 - vPh), 0.0), 24.0);
+      float a = (core * (0.42 + 0.58 * run) + halo * (0.5 + 0.5 * run)) * vA;
+      a *= mix(1.0, 0.78, uLight);
+      vec3 col = mix(uHue, uHue2, run * 0.85);
+      /* Premultiplied, over a clear canvas: light on ink, ink on paper. */
+      gl_FragColor = vec4(col * a, a);
     }
   `;
 
@@ -1731,10 +1731,14 @@
    * the same `mesh` describe one solid that reshapes itself between them.
    */
     const OBJECTS = [
-    /* hero — a cut-glass hub in the carousel hole. The headline sits on
-       top of it (HTML, above the canvas); the crystal is the thing the
-       screens are orbiting, and the first solid the reader meets. */
-    { mesh: 2, scale: 2.05, spin: 0.12, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* hero — a cut-glass hub beside the headline, fully in view. It used
+       to sit at the world's origin, which the hero centres on the title —
+       so the first solid the reader met was the one hidden behind the type,
+       a shard poking out between two lines. The position is rewritten by
+       `resize()` for the layout: to the right of the kicker on a wide
+       screen, gone on a phone where the headline owns the width and the
+       crystal first forms at act 01. */
+    { mesh: 2, scale: 1.55, spin: 0.12, sy: 1, pulse: 0, pos: [9.4, -3.4, 0], vs: 1 },
     /* 01 say it — the sentence, as a solid, floating above the card the
        screens are condensing into. Offset because the formation here is a flat
        slab through the origin: left at the centre the block is simply inside
@@ -1760,17 +1764,18 @@
        rather than a disc sitting there. Both faces carry the favicon X, so
        the far side of the flip is still the token and not a blank. */
     { mesh: 5, scale: 1.95, spin: 0.38, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    /* 07 point it anywhere — smaller, sharper, calmer. Lifted clear of the
-       gallery cards. */
-    { mesh: 1, scale: 1.45, spin: 0.16, sy: 1, pulse: 0, pos: [0, 4.6, 0] },
+    /* 07 point it anywhere — smaller, sharper, calmer. Beside the centred
+       title, in the lens's own frame, so it is never behind the words. */
+    { mesh: 1, scale: 1.3, spin: 0.16, sy: 1, pulse: 0, pos: [11, 4.4, 0], vs: 1 },
     /* 08 the app — a thin board, the surfaces laid out as a floor you walk. */
     { mesh: 0, scale: 2.35, spin: 0.11, sy: 0.12, pulse: 0, pos: [0, 3.6, 0] },
     /* 09 privacy — the hub, a volume you are inside. */
     { mesh: 2, scale: 1.7, spin: 0.2, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    /* 10 plans — the token, the thing the tiers are built around. */
-    { mesh: 5, scale: 1.75, spin: 0.28, sy: 1, pulse: 0, pos: [0, 0, 0] },
+    /* 10 plans — the token, the thing the tiers are built around. Beside
+       the title rather than behind it. */
+    { mesh: 5, scale: 1.65, spin: 0.28, sy: 1, pulse: 0, pos: [10.5, 2.4, 0], vs: 1 },
     /* 11 rewards — the token again, a prize in the constellation. */
-    { mesh: 5, scale: 1.55, spin: 0.3, sy: 1, pulse: 0, pos: [0, 0.4, 0] },
+    { mesh: 5, scale: 1.5, spin: 0.3, sy: 1, pulse: 0, pos: [11, 3.4, 0], vs: 1 },
     /* 12 faq — a quieter board, the stack of answers. */
     { mesh: 0, scale: 1.8, spin: 0.1, sy: 0.18, pulse: 0, pos: [0, 3.2, 0] },
     /* 13 cta — the diamond, an opening. */
@@ -1779,7 +1784,16 @@
     { mesh: 1, scale: 0.85, spin: 0.08, sy: 1, pulse: 0, pos: [0, 5.2, 0] },
     /* Exit keyframe: the last solid leaves the frame. */
     { mesh: 1, scale: 0, spin: 0.04, sy: 1, pulse: 0, pos: [0, 10.2, 0] },
-  ];
+  ] as {
+    mesh: number;
+    scale: number;
+    spin: number;
+    sy: number;
+    pulse: number;
+    pos: number[];
+    /** Staged in the lens's frame (right, up, toward the lens) when set. */
+    vs?: number;
+  }[];
 
   /** Y-rotation, X-rotation and a non-uniform scale, composed. */
   function modelMatrix(
@@ -2007,7 +2021,8 @@
     const uCharge = u('uCharge');
     const uBurst = u('uBurst');
     const uThin = u('uThin');
-    const uLive = u('uLive');
+    const uShow = u('uShow');
+    const uFar = u('uFar');
     const uCam = u('uCam');
     const uPix = u('uPix');
     const uC1 = u('uC1');
@@ -2015,8 +2030,6 @@
     const uC3 = u('uC3');
     const uFog = u('uFog');
     const uLight = u('uLight');
-    const uWay = u('uWay');
-    const uStudio = u('uStudio');
     const uRes = u('uRes');
     const uDim = u('uDim');
     const uDir = u('uDir');
@@ -2032,14 +2045,202 @@
        wall of NaN gets drawn on the one frame the order slips. */
     ctx.uniform3f(uBoardGrid, 1, 1, 1);
     ctx.uniform1f(uN, count);
-    for (let i = 0; i < WAY_COUNT; i++) {
-      ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), WAY_RGB400[i]);
-    }
-    ctx.uniform1f(uWay, 0);
-    ctx.uniform1f(uStudio, 0);
+    ctx.uniform1f(uShow, 1);
 
     const proj = new Float32Array(16);
     const view = new Float32Array(16);
+
+    /** The screens' attribute state, as the instanced draw expects it. The
+        other two programs share the attribute slots and each hands them back
+        through this before the next frame's wall is drawn. */
+    function bindScreens() {
+      ctx.useProgram(prog);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, quadBuf);
+      ctx.enableVertexAttribArray(aCorner);
+      ctx.vertexAttribPointer(aCorner, 2, ctx.FLOAT, false, 0, 0);
+      instanced!.vertexAttribDivisorANGLE(aCorner, 0);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, instBuf);
+      ctx.enableVertexAttribArray(aId);
+      ctx.vertexAttribPointer(aId, 1, ctx.FLOAT, false, 8, 0);
+      instanced!.vertexAttribDivisorANGLE(aId, 1);
+      ctx.enableVertexAttribArray(aSeed);
+      ctx.vertexAttribPointer(aSeed, 1, ctx.FLOAT, false, 8, 4);
+      instanced!.vertexAttribDivisorANGLE(aSeed, 1);
+    }
+
+    /* ---- the lines: their own program, one instanced strip ---- */
+    const lineCount = coarse || window.innerWidth < 900 ? LINES_NARROW : LINES_WIDE;
+    const lvs = compile(ctx, ctx.VERTEX_SHADER, LINE_VERT);
+    const lfs = compile(ctx, ctx.FRAGMENT_SHADER, LINE_FRAG);
+    const lineProg = ctx.createProgram();
+    let linesReady = false;
+    let stripBuf: WebGLBuffer | null = null;
+    let lineInstBuf: WebGLBuffer | null = null;
+    let lAStrip = -1;
+    let lALine = -1;
+    let lASeed = -1;
+    const lu: Record<string, WebGLUniformLocation | null> = {};
+    if (lvs && lfs && lineProg) {
+      ctx.attachShader(lineProg, lvs);
+      ctx.attachShader(lineProg, lfs);
+      ctx.linkProgram(lineProg);
+      if (!ctx.getProgramParameter(lineProg, ctx.LINK_STATUS)) {
+        console.error('[world] line program failed to link:', ctx.getProgramInfoLog(lineProg));
+      } else {
+        ctx.deleteShader(lvs);
+        ctx.deleteShader(lfs);
+        /* One strip: (u, side) down the line and across it. */
+        const strip = new Float32Array((LINE_SEG + 1) * 4);
+        for (let s = 0; s <= LINE_SEG; s++) {
+          strip[s * 4] = s / LINE_SEG;
+          strip[s * 4 + 1] = -1;
+          strip[s * 4 + 2] = s / LINE_SEG;
+          strip[s * 4 + 3] = 1;
+        }
+        stripBuf = ctx.createBuffer();
+        ctx.bindBuffer(ctx.ARRAY_BUFFER, stripBuf);
+        ctx.bufferData(ctx.ARRAY_BUFFER, strip, ctx.STATIC_DRAW);
+        const linst = new Float32Array(lineCount * 2);
+        let ls = 0x2545f491;
+        for (let i = 0; i < lineCount; i++) {
+          ls = (ls * 1664525 + 1013904223) >>> 0;
+          linst[i * 2] = i;
+          linst[i * 2 + 1] = ls / 4294967296;
+        }
+        lineInstBuf = ctx.createBuffer();
+        ctx.bindBuffer(ctx.ARRAY_BUFFER, lineInstBuf);
+        ctx.bufferData(ctx.ARRAY_BUFFER, linst, ctx.STATIC_DRAW);
+        lAStrip = ctx.getAttribLocation(lineProg, 'aStrip');
+        lALine = ctx.getAttribLocation(lineProg, 'aLine');
+        lASeed = ctx.getAttribLocation(lineProg, 'aLSeed');
+        for (const n of [
+          'uProj', 'uView', 'uN', 'uFormA', 'uFormB', 'uMorph', 'uTime', 'uShift', 'uLift',
+          'uShow', 'uHalf', 'uCore', 'uHue', 'uHue2', 'uLight',
+        ]) {
+          lu[n] = ctx.getUniformLocation(lineProg, n);
+        }
+        ctx.useProgram(lineProg);
+        ctx.uniform1f(lu.uN, lineCount);
+        bindScreens();
+        linesReady = true;
+      }
+    }
+
+    /** The section's colour this frame, and the light that runs it. */
+    const hue: [number, number, number] = [0, 0, 0];
+    const hue2: [number, number, number] = [0, 0, 0];
+    let hueKey = -1;
+
+    /**
+     * Mix two families into `hue`/`hue2`, from the shade set the ground under
+     * the lens wants — 400s on ink, 600s on paper. Also written to the world
+     * as `--w-hue`, so the copy's rules and the composer's focus ring wear
+     * the same colour as the crystal; quantised to 8 bits and only written
+     * when it moves, which is a handful of style writes per handover.
+     */
+    function blendHue(famA: number, famB: number, k: number) {
+      const set = coreLight < 0.5 ? HUE_DARK : HUE_LIGHT;
+      const A = set[famA] ?? set[0];
+      const B = set[famB] ?? set[0];
+      for (let i = 0; i < 3; i++) {
+        hue[i] = A[0][i] + (B[0][i] - A[0][i]) * k;
+        hue2[i] = A[1][i] + (B[1][i] - A[1][i]) * k;
+      }
+      const r = Math.round(hue[0] * 255);
+      const g = Math.round(hue[1] * 255);
+      const b = Math.round(hue[2] * 255);
+      const key = (r << 16) | (g << 8) | b;
+      if (key === hueKey) return;
+      hueKey = key;
+      world!.style.setProperty('--w-hue', `rgb(${r} ${g} ${b})`);
+    }
+
+    /**
+     * A keyframe's position in world space. `vs` keyframes are staged in the
+     * lens's own frame — right, up, toward the lens, read off the view
+     * matrix — so a solid can stand beside centred copy whatever the
+     * camera's yaw is on that scene. On a phone the copy is centred and
+     * full-width, so a solid beside it is a solid behind it; there the
+     * staged solids go to the top corner of the frame instead, and small.
+     */
+    const posA = [0, 0, 0];
+    const posB = [0, 0, 0];
+    function objPos(o: (typeof OBJECTS)[number], out: number[]) {
+      if (!o.vs) {
+        out[0] = o.pos[0];
+        out[1] = o.pos[1];
+        out[2] = o.pos[2];
+        return out;
+      }
+      const x = compact ? (o.pos[0] < 0 ? -2.2 : 2.2) : o.pos[0];
+      const y = compact ? 5.0 : o.pos[1];
+      const z = o.pos[2];
+      out[0] = view[0] * x + view[1] * y + view[2] * z;
+      out[1] = view[4] * x + view[5] * y + view[6] * z;
+      out[2] = view[8] * x + view[9] * y + view[10] * z;
+      return out;
+    }
+
+    /** Where the core stands at this point of the story — the lines' centre. */
+    const stageAt = [0, 0, 0];
+    function stagePos(scene: number, morph: number) {
+      const m = Math.min(1, Math.max(0, morph));
+      const e = m * m * (3 - 2 * m);
+      objPos(OBJECTS[Math.min(scene, OBJECTS.length - 1)], posA);
+      objPos(OBJECTS[Math.min(scene + 1, OBJECTS.length - 1)], posB);
+      for (let i = 0; i < 3; i++) stageAt[i] = posA[i] + (posB[i] - posA[i]) * e;
+      return stageAt;
+    }
+
+    /**
+     * Draw the lines. After the screens, depth-tested against them and never
+     * writing depth, so a line passes behind a screen and never through it;
+     * before the core, which is drawn over everything.
+     */
+    function drawLines(
+      seconds: number,
+      scene: number,
+      morph: number,
+      show: number,
+      core: number[],
+    ) {
+      if (!linesReady || show <= 0.001) return;
+      ctx.useProgram(lineProg);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, stripBuf);
+      ctx.enableVertexAttribArray(lAStrip);
+      ctx.vertexAttribPointer(lAStrip, 2, ctx.FLOAT, false, 0, 0);
+      instanced!.vertexAttribDivisorANGLE(lAStrip, 0);
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, lineInstBuf);
+      ctx.enableVertexAttribArray(lALine);
+      ctx.vertexAttribPointer(lALine, 1, ctx.FLOAT, false, 8, 0);
+      instanced!.vertexAttribDivisorANGLE(lALine, 1);
+      ctx.enableVertexAttribArray(lASeed);
+      ctx.vertexAttribPointer(lASeed, 1, ctx.FLOAT, false, 8, 4);
+      instanced!.vertexAttribDivisorANGLE(lASeed, 1);
+      ctx.uniformMatrix4fv(lu.uProj, false, proj);
+      ctx.uniformMatrix4fv(lu.uView, false, view);
+      ctx.uniform1f(lu.uFormA, Math.min(scene, FORM_LAST));
+      ctx.uniform1f(lu.uFormB, Math.min(scene + 1, FORM_LAST));
+      ctx.uniform1f(lu.uMorph, morph);
+      ctx.uniform1f(lu.uTime, seconds);
+      ctx.uniform1f(lu.uShift, coreShift);
+      ctx.uniform1f(lu.uLift, coreLift);
+      ctx.uniform1f(lu.uShow, show);
+      ctx.uniform2f(lu.uHalf, (LINE_HALF_PX * 2 * dpr) / canvas!.width, (LINE_HALF_PX * 2 * dpr) / canvas!.height);
+      ctx.uniform3f(lu.uCore, core[0], core[1], core[2]);
+      ctx.uniform3fv(lu.uHue, hue);
+      ctx.uniform3fv(lu.uHue2, hue2);
+      ctx.uniform1f(lu.uLight, coreLight);
+      ctx.enable(ctx.BLEND);
+      ctx.blendFunc(ctx.ONE, ctx.ONE_MINUS_SRC_ALPHA);
+      ctx.depthMask(false);
+      instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, (LINE_SEG + 1) * 2, lineCount);
+      ctx.depthMask(true);
+      ctx.disable(ctx.BLEND);
+      ctx.disableVertexAttribArray(lALine);
+      ctx.disableVertexAttribArray(lASeed);
+      bindScreens();
+    }
 
     /* ---- the core: its own program, geometry and uniforms ---- */
     const cvs = compile(ctx, ctx.VERTEX_SHADER, CORE_VERT);
@@ -2170,9 +2371,7 @@
       }
     }
 
-    /** Colours for the core, refreshed with the theme alongside the screens'. */
-    let coreC1: [number, number, number] = [0, 0, 0];
-    let coreC3: [number, number, number] = [0, 0, 0];
+    /** The ground under the core, refreshed with the theme alongside the screens'. */
     let coreFog: [number, number, number] = [0, 0, 0];
     let coreLight = 0;
 
@@ -2212,13 +2411,7 @@
      * during a hold — where by design nothing else moves — it was the only
      * thing that could answer them.
      */
-    function drawCore(
-      seconds: number,
-      scene: number,
-      morph: number,
-      flow = scene + morph,
-      accentC1: [number, number, number] = coreC1,
-    ) {
+    function drawCore(seconds: number, scene: number, morph: number, flow = scene + morph) {
       if (!coreReady) return;
 
       const m = Math.min(1, Math.max(0, morph));
@@ -2245,9 +2438,12 @@
        * where the last keyframe's zero scale retires it. */
       const morphing = from.mesh !== to.mesh && m > 0.001 && m < 0.999;
       const beat = 1 + lerp(from.pulse, to.pulse) * 0.14 * Math.sin(seconds * 3.1);
-      const sx = lerp(from.scale, to.scale) * beat;
+      const corner = compact ? lerp(from.vs ? 0.62 : 1, to.vs ? 0.62 : 1) : 1;
+      const sx = lerp(from.scale, to.scale) * beat * corner;
       if (sx < 0.01) return;
-      for (let i = 0; i < 3; i++) corePos[i] = lerp(from.pos[i], to.pos[i]);
+      objPos(from, posA);
+      objPos(to, posB);
+      for (let i = 0; i < 3; i++) corePos[i] = lerp(posA[i], posB[i]);
 
       ctx.useProgram(coreProg);
       const pair = morphing ? morphPair(from.mesh, to.mesh) : null;
@@ -2302,8 +2498,8 @@
       ctx.uniform1f(cuShift, coreShift);
       ctx.uniform1f(cuLift, coreLift);
       ctx.uniform3f(cuCam, cam.x, cam.y, cam.z);
-      ctx.uniform3fv(cuC1, accentC1);
-      ctx.uniform3fv(cuC3, coreC3);
+      ctx.uniform3fv(cuC1, hue);
+      ctx.uniform3fv(cuC3, hue2);
       ctx.uniform3fv(cuFog, coreFog);
       ctx.uniform1f(cuLight, coreLight);
       ctx.uniform1f(cuAlpha, 1);
@@ -2336,17 +2532,7 @@
       if (cAPosB >= 0) ctx.disableVertexAttribArray(cAPosB);
       if (cANrmB >= 0) ctx.disableVertexAttribArray(cANrmB);
       if (cAEdgeB >= 0) ctx.disableVertexAttribArray(cAEdgeB);
-      ctx.useProgram(prog);
-      ctx.bindBuffer(ctx.ARRAY_BUFFER, quadBuf);
-      ctx.enableVertexAttribArray(aCorner);
-      ctx.vertexAttribPointer(aCorner, 2, ctx.FLOAT, false, 0, 0);
-      ctx.bindBuffer(ctx.ARRAY_BUFFER, instBuf);
-      ctx.enableVertexAttribArray(aId);
-      ctx.vertexAttribPointer(aId, 1, ctx.FLOAT, false, 8, 0);
-      instanced!.vertexAttribDivisorANGLE(aId, 1);
-      ctx.enableVertexAttribArray(aSeed);
-      ctx.vertexAttribPointer(aSeed, 1, ctx.FLOAT, false, 8, 4);
-      instanced!.vertexAttribDivisorANGLE(aSeed, 1);
+      bindScreens();
     }
 
     /* ---- the dashboard atlas ----
@@ -2412,17 +2598,6 @@
     let pageLight = 0;
     let invertLight = 1;
 
-    /** Accent family follows the ground, not the page: 600s on light, 400s on ink. */
-    let palDark: boolean | null = null;
-    function usePalette(dark: boolean) {
-      if (palDark === dark) return;
-      palDark = dark;
-      const pal = dark ? WAY_RGB400 : WAY_RGB600;
-      for (let i = 0; i < WAY_COUNT; i++) {
-        ctx.uniform3fv(ctx.getUniformLocation(prog, `uPal[${i}]`), pal[i]);
-      }
-    }
-
     /** `t` is 0 on the page's own tone, 1 on an opposite-tone box. */
     function applyGround(t: number) {
       const fog = t ? invertFog : pageFog;
@@ -2431,7 +2606,6 @@
       ctx.useProgram(prog);
       ctx.uniform3fv(uFog, fog);
       ctx.uniform1f(uLight, coreLight);
-      usePalette(coreLight < 0.5);
     }
 
     function paintTheme() {
@@ -2452,10 +2626,6 @@
       invertLight = isDark ? 1 : 0;
       coreLight = pageLight;
       ctx.uniform1f(uLight, coreLight);
-      palDark = null;
-      usePalette(isDark);
-      coreC1 = readColor(probe, '--color-brand-400');
-      coreC3 = readColor(probe, '--color-accent-400');
       coreFog = pageFog;
       /* The dashboard atlas bakes the page theme's resolved colours, so it
          follows the theme — but only the theme: paintTheme also runs on the
@@ -2514,9 +2684,10 @@
       canvas!.height = Math.floor(h * dpr);
       ctx.viewport(0, 0, canvas!.width, canvas!.height);
       /* Portrait phones see a tall frustum at the desktop fov, which pushes
-       * the carousel into a thin band. A tighter vertical fov keeps the ring
-       * a ring. */
+       * the gallery into a thin band. A tighter vertical fov keeps it a wall. */
       const fov = h > w * 1.15 ? 0.7 : 0.85;
+      ctx.useProgram(prog);
+      ctx.uniform1f(uFar, compact ? 1.5 : 1);
       perspective(proj, fov, w / h, 0.1, 140);
       ctx.uniformMatrix4fv(uProj, false, proj);
       // Half the backing-store height; the shader turns it into a pixel width.
@@ -2528,6 +2699,11 @@
        * (`ActCopyBlock`), so the formations and the solids can sit where the
        * eye expects them. */
       shiftFull = 0;
+      /* The hero's crystal: beside the kicker on a wide screen, where the
+       * headline leaves the right third of the stage empty; absent on a
+       * phone, where the headline owns the width and there is nowhere it
+       * would not be behind type — it first forms at act 01 instead. */
+      OBJECTS[0].scale = compact ? 0 : 1.55;
     }
     resize();
     ctx.uniform1f(uDir, document.documentElement.dir === 'rtl' ? 1 : 0);
@@ -2705,10 +2881,21 @@
         a = i;
         local = 1;
       }
-      // The hold: the first 38% of a scene is still, so the copy can be read.
-      // The rest is the travel — screens going around the window on their
-      // way to the next formation. 62% of still was a page that only moved
-      // in the last beat of every act, which is why the scroll felt empty.
+      /* The hero is measured from the top of the page, not from the middle
+       * of the viewport. It is exactly one viewport tall, so the middle sits
+       * halfway down it before the reader has scrolled at all — and the old
+       * reading put the opening screen 43% into its exit before anyone had
+       * touched the page: the crystal was already halfway to being the
+       * widget's cube, the wall already half gone. Now the top of the page
+       * is local 0, and local 1 is the moment the middle crosses into act
+       * 01, which is where the mid-based reading takes over. */
+      if (a === 0) {
+        const l0 = Math.min(0.9, (vh * 0.5) / Math.max(sceneHeight[0], 1));
+        local = Math.min(1, Math.max(0, (local - l0) / (1 - l0)));
+      }
+      // The hold: the first 12% of a scene is still, so the copy can be read.
+      // The rest is the travel — screens leaving their seats on their way to
+      // the next formation.
       const morph = Math.min(1, Math.max(0, (local - 0.12) / 0.88));
 
       /* One clock for the whole page, not two.
@@ -2770,10 +2957,11 @@
          around the window, then settles for the next hold. */
       const sweep = Math.sin(beat * Math.PI);
 
-      /* Colourway + studio lift. Stage beats (the FeatureMap walk) count as
-         view switches too — that is how a single section shows every family.
-         A clicked surface writes `data-fm-way` so the field (the green
-         panels around the plate) follows the tab, not only the scroll. */
+      /* The section's colour. Each scene owns a family (HUE); the frame
+         wears the mix of this scene's and the next on the same beat the
+         matter morphs on, so the crystal and the lines change colour as the
+         reader travels and never at a cut. On the features act a clicked
+         surface writes `data-fm-way`, and the room follows the tab. */
       const stageEl = sceneStage[a];
       const stage = Number(stageEl?.dataset.stage) || 0;
       const onFeatures = sceneIsFeatures[a];
@@ -2781,12 +2969,21 @@
       const tabWay = Number.isFinite(rawFm)
         ? ((rawFm % WAY_COUNT) + WAY_COUNT) % WAY_COUNT
         : stage;
-      ctx.uniform1f(uWay, onFeatures ? tabWay : a + stage);
-      const pal = coreLight < 0.5 ? WAY_RGB400 : WAY_RGB600;
-      const frameC1 = onFeatures ? (pal[tabWay] ?? coreC1) : coreC1;
-      ctx.uniform3fv(uC1, frameC1);
+      const famA = onFeatures ? tabWay : HUE[Math.min(a, HUE.length - 1)];
+      const famB = sceneIsFeatures[a + 1] ? tabWay : HUE[Math.min(a + 1, HUE.length - 1)];
+      blendHue(famA, famB, beat);
+      ctx.uniform3fv(uC1, hue);
       const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
-      ctx.uniform1f(uStudio, studio);
+      /* Presence, both fields, on the beat. */
+      const showA = SHOW[Math.min(a, SHOW.length - 1)];
+      const showB = SHOW[Math.min(a + 1, SHOW.length - 1)];
+      const show = showA + (showB - showA) * beat;
+      ctx.uniform1f(uShow, show);
+      /* No orbits in the hero on a phone: there is no crystal for them
+       * to ring, and the headline owns the width they would cross. */
+      const lshowA = compact && a === 0 ? 0 : LSHOW[Math.min(a, LSHOW.length - 1)];
+      const lshowB = LSHOW[Math.min(a + 1, LSHOW.length - 1)];
+      const lshow = lshowA + (lshowB - lshowA) * beat;
 
       /* Calm dissolves the screens further into the backdrop and stands a
        * share of them down. Both, rather than one harder: alpha alone leaves
@@ -2807,7 +3004,6 @@
         world!.classList.toggle('world--day', dayOn);
         paintTheme();
       }
-      if (dayOn) world!.style.setProperty('--w-way', String(onFeatures ? tabWay : a + stage));
       /* Later copy sits in the middle; hold the screens back a little more
          than the acts, so a FeatureMap title is not struck through. */
       if (a >= 8) ctx.uniform1f(uDim, compact ? 0.82 : a >= 14 ? 0.92 : 0.62);
@@ -2827,7 +3023,6 @@
       burst *= Math.exp(-2.2 * dt);
       ctx.uniform1f(uCharge, charge);
       ctx.uniform1f(uBurst, burst);
-      ctx.uniform1f(uLive, 1);
 
       /* The wall powers on: once the atlas lands, the ramp sweeps past each
          screen's own threshold (see FRAG) over a couple of seconds. Linear,
@@ -2847,13 +3042,17 @@
        * During the beat the lens dollies in and yaws with the screens as they
        * go around the window, then settles for the hold. Pointer parallax is
        * added to the *aim*, not to the camera, so it inherits the same inertia. */
-      const ang = shotYaw + sweep * 1.05 + ptrX * 0.22;
+      /* The mid-beat sweep is a breath now, not a swoop: a third of a unit
+       * of dolly and a few degrees of yaw. The old lens dived 1.4 units and
+       * swung a radian on every handover, which is most of what made the
+       * page feel like the wall was flying around the reader. */
+      const ang = shotYaw + sweep * 0.3 + ptrX * 0.18;
       const dist =
         shotDist * (compact ? LENS_COMPACT_DIST : 1) * 1.04 +
-        Math.sin(seconds * 0.28) * 0.9 -
-        sweep * 1.4;
+        Math.sin(seconds * 0.28) * 0.6 -
+        sweep * 0.35;
       const aimX = Math.sin(ang) * dist;
-      const aimY = shotLift * (compact ? LENS_COMPACT_LIFT : 1) + ptrY * 2.4 + sweep * 1.85;
+      const aimY = shotLift * (compact ? LENS_COMPACT_LIFT : 1) + ptrY * 1.8 + sweep * 0.5;
       const aimZ = Math.cos(ang) * dist;
 
       if (!camPrimed) {
@@ -2885,17 +3084,22 @@
         ctx.bindTexture(ctx.TEXTURE_2D, boards.tex);
         ctx.activeTexture(ctx.TEXTURE0);
       }
-      if (count > 0) instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      if (count > 0 && show > 0.001) {
+        instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      }
+      drawLines(seconds, a, morph, lshow, stagePos(a, morph));
       ctx.clear(ctx.DEPTH_BUFFER_BIT);
-      drawCore(seconds, a, morph, a + local, frameC1);
+      drawCore(seconds, a, morph, a + local);
       frame = requestAnimationFrame(draw);
     }
 
-    /** One composed frame, for reduced-motion visitors. Never loops. */
+    /** One composed frame, for reduced-motion visitors: the hero at rest.
+        Never loops. It used to be composed a third of the way into act 01,
+        which put the widget's cube behind the headline for the whole visit. */
     function drawStill() {
       ctx.uniform1f(uFormA, 0);
       ctx.uniform1f(uFormB, 1);
-      ctx.uniform1f(uMorph, 0.34);
+      ctx.uniform1f(uMorph, 0);
       ctx.uniform1f(uTime, 6);
       /* Composed at the hero's own presence, thinned a little further: a still
        * frame is looked at rather than scrolled past, and every screen in it
@@ -2905,7 +3109,9 @@
       ctx.uniform1f(uGlass, GLASS_BASE + 0.28 * GLASS_CALM);
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
-      ctx.uniform1f(uLive, 0);
+      ctx.uniform1f(uShow, SHOW[0]);
+      blendHue(HUE[0], HUE[1], 0);
+      ctx.uniform3fv(uC1, hue);
       if (geomDirty) measureGeometry();
       const [sx, sy] = headlineOffset(Math.hypot(-16.8, 3.8, 20.6), window.scrollY);
       coreShift = sx;
@@ -2919,8 +3125,9 @@
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
       ctx.useProgram(prog);
       if (count > 0) instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
+      drawLines(6, 0, 0, compact ? 0 : LSHOW[0], stagePos(0, 0));
       ctx.clear(ctx.DEPTH_BUFFER_BIT);
-      drawCore(6, 1, 0.34);
+      drawCore(6, 0, 0);
     }
 
     /** Fade at the world's edges without redrawing. Reduced-motion only. */
@@ -3084,6 +3291,9 @@
         for (const p of morphCache.values()) ctx.deleteBuffer(p.buf);
         morphCache.clear();
         if (coreProg) ctx.deleteProgram(coreProg);
+        if (stripBuf) ctx.deleteBuffer(stripBuf);
+        if (lineInstBuf) ctx.deleteBuffer(lineInstBuf);
+        if (lineProg) ctx.deleteProgram(lineProg);
         probeInvert.remove();
         ctx.getExtension('WEBGL_lose_context')?.loseContext();
       },
