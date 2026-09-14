@@ -1,6 +1,7 @@
 ## Summary
 
 <!-- What does this change, and why? -->
+<!-- Target `dev`. `stg` and `main` only accept the promote path. -->
 
 ## Type
 

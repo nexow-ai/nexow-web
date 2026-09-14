@@ -91,11 +91,31 @@ tests/                 unit, integration, build, e2e
 - **Brand tokens** (color, type) live in `src/styles/global.css` under
   `@theme`. Do not introduce a parallel palette.
 
+## Branch promotion
+
+Work lands only along this path:
+
+```
+feature/*  →  PR  →  dev  →  PR  →  stg  →  clone  →  main
+```
+
+- Open feature PRs into **`dev`**. That review is typecheck only.
+- **`stg`** only accepts `dev`. That PR is the production gate
+  (coverage, build, Playwright).
+- **`main`** is a clone of `stg`, then semantic-release cuts a minor.
+- Do not push directly to `stg` or `main`. The husky `pre-push` hook
+  and CI reject those updates.
+
+Releases and changelog are commit-driven. See the README
+[Branch promotion](README.md#branch-promotion) and
+[Releasing](README.md#releasing) sections.
+
 ## Pull requests
 
-1. Fork the repository and branch from `main`.
+1. Fork the repository and branch from `dev`.
 2. Keep the change focused. Prefer several small PRs over one mixed one.
-3. Use [Conventional Commits](https://www.conventionalcommits.org/):
+3. Use [Conventional Commits](https://www.conventionalcommits.org/) — the
+   message is what semantic-release uses to bump the version:
 
    ```
    feat(i18n): add Korean help-page CTAs
