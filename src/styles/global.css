@@ -293,8 +293,12 @@
    * Track stays transparent in light (page white shows through). Dark needs
    * an explicit ink fill: browsers paint the gutter from `color-scheme`, and
    * a transparent track on a light scheme stays a white strip. */
-  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-600) 55%, transparent);
-  --scrollbar-thumb-hover: var(--color-brand-600);
+  /* On the home world the thumb wears the section under the lens:
+   * `WorldField` writes --w-hue-300 … --w-hue-700 on <html> and moves them
+   * across every handover, so the scrollbar changes colour with the crystal.
+   * Elsewhere the steps are unset and the brand shows through. */
+  --scrollbar-thumb: color-mix(in oklab, var(--w-hue-600, var(--color-brand-600)) 55%, transparent);
+  --scrollbar-thumb-hover: var(--w-hue-600, var(--color-brand-600));
   --scrollbar-track: transparent;
 
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
@@ -336,8 +340,8 @@ html:not(.dark) .chrome-invert {
   --text-muted: var(--color-ink-400);
   --glyph: var(--color-brand-300);
 
-  --scrollbar-thumb: color-mix(in oklab, var(--color-brand-400) 45%, transparent);
-  --scrollbar-thumb-hover: var(--color-brand-400);
+  --scrollbar-thumb: color-mix(in oklab, var(--w-hue-400, var(--color-brand-400)) 45%, transparent);
+  --scrollbar-thumb-hover: var(--w-hue-400, var(--color-brand-400));
   --scrollbar-track: var(--color-ink-950);
 
   /* Cold nebula — teal / indigo / sky, no magenta. Saturated cores read as
