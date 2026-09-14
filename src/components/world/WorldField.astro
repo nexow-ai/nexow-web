@@ -142,7 +142,7 @@
   /* How much of the thread field each scene draws, as a share of the
    * threads. The hero weaves all of them; every other scene is a sketch —
    * a dozen or two hairlines, never a wall of them. */
-  const LSHOW = [1, 0.25, 0.21, 0.25, 0.09, 0.25, 0.09, 0.17, 0.13, 0.13, 0.13, 0.15, 0.09, 0.19, 0.04, 0.04];
+  const LSHOW = [1, 0.19, 0.16, 0.19, 0.07, 0.19, 0.07, 0.13, 0.1, 0.1, 0.1, 0.11, 0.07, 0.14, 0.03, 0.03];
   /* One family per scene, an index into TAILWIND_WAYS: cyan for the opening,
    * indigo and violet for the two playground acts, sky for the wires, amber
    * for the bots, fuchsia for the agents, the brand teal for the token, rose
@@ -156,9 +156,14 @@
    * so a line is a gradient rather than a flat stroke: indigo to sky, violet
    * to fuchsia, sky to teal, amber to rose, and so on. */
   const HUE_B = [3, 7, 6, 0, 1, 9, 13, 8, 12, 15, 12, 2, 7, 3, 14, 14];
-  /* The hero's own palette: the six stops its threads are woven from, teal
-   * through cyan, blue and violet to fuchsia and rose. */
-  const WEAVE = [0, 12, 14, 9, 6, 1];
+  /* The hero's own palette: the twelve stops its threads are woven from, a
+   * walk around the wheel from emerald through teal, cyan, sky, blue,
+   * indigo, violet, purple, fuchsia and pink to rose and orange — every
+   * neighbour an analogue of the last, so the sash is many colours and
+   * still one cloth. Each thread also picks its own shade between two rows
+   * (400 and 300 on ink, 500 and 600 on paper), which is where the
+   * tonalities come from. */
+  const WEAVE = [13, 0, 12, 7, 14, 3, 9, 18, 6, 15, 1, 8];
   /* Two shades per family: the colour itself and the light that runs along
    * it. On ink the run lifts toward white; on paper it deepens. */
   const lift = (c: [number, number, number], k: number): [number, number, number] => [
@@ -1111,10 +1116,10 @@
    * and by the curve itself, never by a fat near segment.
    * ------------------------------------------------------------------ */
   const LINE_SEG = 56;
-  const LINES_WIDE = 96;
-  const LINES_NARROW = 56;
+  const LINES_WIDE = 128;
+  const LINES_NARROW = 72;
   /** Half the strip's width, in device pixels. The glow falls off inside it. */
-  const LINE_HALF_PX = 2.5;
+  const LINE_HALF_PX = 2;
 
   const LINE_VERT = glsl`
     precision highp float;
@@ -1146,10 +1151,11 @@
     uniform vec3 uFwd;
     /* 1 on a phone: the weave drops under the composer and narrows. */
     uniform float uCompact;
-    /* The scene's two tones and the hero's six-stop weave. */
+    /* The scene's two tones and the hero's twelve-stop weave, in two shades. */
     uniform vec3 uHueA;
     uniform vec3 uHueB;
-    uniform vec3 uGrad[6];
+    uniform vec3 uGrad[12];
+    uniform vec3 uGradB[12];
     varying float vA;
     varying float vU;
     varying float vSide;
@@ -1177,12 +1183,18 @@
     vec3 bez(vec3 a, vec3 b, vec3 c, float u) {
       return mix(mix(a, b, u), mix(b, c, u), u);
     }
-    /* The weave's gradient. A uniform array indexed by a variable is fine
-       in a vertex shader, which is why the colour is decided here. */
+    /* The weave's gradient, in each of its two shades. A uniform array
+       indexed by a variable is fine in a vertex shader, which is why the
+       colour is decided here. */
     vec3 grad(float g) {
-      float s = clamp(g, 0.0, 0.999) * 5.0;
+      float s = clamp(g, 0.0, 0.999) * 11.0;
       int k = int(floor(s));
       return mix(uGrad[k], uGrad[k + 1], fract(s));
+    }
+    vec3 gradB(float g) {
+      float s = clamp(g, 0.0, 0.999) * 11.0;
+      int k = int(floor(s));
+      return mix(uGradB[k], uGradB[k + 1], fract(s));
     }
 
     /* Fifteen formations, one per scene. a is the thread's share of the
@@ -1208,7 +1220,10 @@
         float tw = x * 0.11 + t * 0.12 + 0.6;
         float w = (5.6 + 1.4 * sin(x * 0.09 + t * 0.05)) * (1.0 - uCompact * 0.45);
         float off = v * w + 0.35 * sin(x * 0.45 + h.x * 6.2831 + t * 0.35);
-        col = grad(a + 0.12 * sin(x * 0.10 + t * 0.08 + h.y * 2.0));
+        /* Its place on the wheel drifts along the sash and in time; its
+           shade is its own, so neighbouring threads of one hue still differ. */
+        float g = a + 0.10 * sin(x * 0.10 + t * 0.08 + h.y * 2.0) + 0.06 * sin(x * 0.23 - t * 0.05);
+        col = mix(grad(g), gradB(g), h.y);
         return uRight * x + uUp * (cy + off * cos(tw)) + uFwd * (off * sin(tw) * 0.8 + (h.y - 0.5) * 0.6);
       }
       if (f < 1.5) {
@@ -1380,8 +1395,8 @@
       /* A hairline — a pixel of core and a faint halo. The halo is what
          makes it light rather than a stroke; kept faint so a bundle of
          them is silk, not neon. */
-      float core = exp(-d * 14.0);
-      float halo = exp(-d * 2.6) * 0.16;
+      float core = exp(-d * 18.0);
+      float halo = exp(-d * 3.0) * 0.14;
       /* The light travelling the thread: one pulse a length, drifting. */
       float run = pow(max(sin(vU * 6.2832 - vPh), 0.0), 20.0);
       float a = (core * (0.34 + 0.50 * run) + halo * (0.5 + 0.5 * run)) * vA;
@@ -1831,8 +1846,10 @@
     { mesh: 0, scale: 1.8, spin: 0.1, sy: 0.18, pulse: 0, pos: [0, 3.2, 0] },
     /* 13 cta — the diamond, an opening. */
     { mesh: 1, scale: 1.5, spin: 0.18, sy: 1, pulse: 0, pos: [0, 0, 0] },
-    /* 14 foot — rising out. */
-    { mesh: 1, scale: 0.85, spin: 0.08, sy: 1, pulse: 0, pos: [0, 5.2, 0] },
+    /* 14 foot — gone. The footer is its own band, and a solid rising over
+       its column headings was a solid over the words; the diamond closes
+       in place at the door instead. */
+    { mesh: 1, scale: 0, spin: 0.08, sy: 1, pulse: 0, pos: [0, 0, 0] },
     /* Exit keyframe: the last solid leaves the frame. */
     { mesh: 1, scale: 0, spin: 0.04, sy: 1, pulse: 0, pos: [0, 10.2, 0] },
   ] as {
@@ -2171,7 +2188,10 @@
         ]) {
           lu[n] = ctx.getUniformLocation(lineProg, n);
         }
-        for (let k = 0; k < 6; k++) lu[`uGrad${k}`] = ctx.getUniformLocation(lineProg, `uGrad[${k}]`);
+        for (let k = 0; k < 12; k++) {
+          lu[`uGrad${k}`] = ctx.getUniformLocation(lineProg, `uGrad[${k}]`);
+          lu[`uGradB${k}`] = ctx.getUniformLocation(lineProg, `uGradB[${k}]`);
+        }
         ctx.useProgram(lineProg);
         ctx.uniform1f(lu.uN, lineCount);
         bindScreens();
@@ -2186,12 +2206,16 @@
     const hueP: [number, number, number] = [0, 0, 0];
     let hueKey = -1;
 
-    /** The hero's weave, from the shade set the ground wants. */
+    /** The hero's weave, in the two shades the ground wants. */
     function uploadWeave() {
       if (!linesReady) return;
-      const set = coreLight < 0.5 ? HUE_DARK : HUE_LIGHT;
+      const dark = coreLight < 0.5;
       ctx.useProgram(lineProg);
-      for (let k = 0; k < 6; k++) ctx.uniform3fv(lu[`uGrad${k}`], set[WEAVE[k]][0]);
+      for (let k = 0; k < 12; k++) {
+        const w = TAILWIND_WAYS[WEAVE[k]];
+        ctx.uniform3fv(lu[`uGrad${k}`], hexToRgb(dark ? w.c400 : w.c500));
+        ctx.uniform3fv(lu[`uGradB${k}`], hexToRgb(dark ? w.c300 : w.c600));
+      }
       bindScreens();
     }
 
