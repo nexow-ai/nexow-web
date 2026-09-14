@@ -43,18 +43,25 @@
   --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* Brand — teal (primary, from the app) */
-  --color-brand-50: #eafff9;
-  --color-brand-100: #cbfef0;
-  --color-brand-200: #9dfae2;
-  --color-brand-300: #5cf0d0;
-  --color-brand-400: #2adfba;
-  --color-brand-500: #10c5a3;
-  --color-brand-600: #06a086;
-  --color-brand-700: #0a806d;
-  --color-brand-800: #0d6458;
-  --color-brand-900: #10534a;
-  --color-brand-950: #02322e;
+  /* Brand — ember (primary). A vivid coral-orange, the one warm colour in a
+   * cool room: it is what makes the palette read as alive rather than as
+   * software. The app's teal it replaced (#2adfba / #10c5a3) was pale on
+   * ink and grey on paper, and the same mint on every eyebrow, chip and
+   * button was the repetition the page was accused of. Contrast is tuned
+   * per step: 300 is the text shade on ink (10:1), 600 the eyebrow shade on
+   * paper (4.9:1), 700 the link shade on paper (6.7:1). The agents act keeps
+   * the teal for its rig (see ActAgents.astro). */
+  --color-brand-50: #fff3ec;
+  --color-brand-100: #ffe2d2;
+  --color-brand-200: #ffc3a6;
+  --color-brand-300: #ff9b70;
+  --color-brand-400: #ff7038;
+  --color-brand-500: #ff4d14;
+  --color-brand-600: #d63200;
+  --color-brand-700: #b02a00;
+  --color-brand-800: #8c2405;
+  --color-brand-900: #732109;
+  --color-brand-950: #3f0f03;
 
   /* Accent — indigo (from the PWA theme colour #6366f1) */
   --color-accent-50: #eef1ff;
@@ -291,9 +298,12 @@
   --scrollbar-track: transparent;
 
   /* Gradient stops — identical in light and dark (Launch app / text-gradient).
-   * Teal → sky → indigo; plasma stays for auroras & glows, not these CTAs. */
+   * Ember → plasma → indigo: a warm-to-cool sweep that stays saturated the
+   * whole way. Sky was the middle stop when the brand was teal; between
+   * ember and indigo it lands on a grey mauve, and plasma is the stop that
+   * does not. */
   --grad-a: var(--color-brand-600);
-  --grad-b: var(--color-sky-500);
+  --grad-b: var(--color-plasma-500);
   --grad-c: var(--color-accent-600);
 
   /* Aurora backdrop hues — the drifting blobs behind heroes, CTA bands and
