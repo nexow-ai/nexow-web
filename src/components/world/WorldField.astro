@@ -145,17 +145,17 @@
   const LSHOW = [1, 0.19, 0.16, 0.19, 0.07, 0.19, 0.07, 0.13, 0.1, 0.1, 0.1, 0.11, 0.07, 0.14, 0.03, 0.03];
   /* One family per scene, an index into TAILWIND_WAYS: cyan for the opening,
    * indigo and violet for the two playground acts, sky for the wires, amber
-   * for the bots, fuchsia for the agents, the brand teal for the token, rose
-   * for the gallery, blue for the app, purple for the vault, emerald for the
-   * plans, gold for the rewards, slate for the reading, teal for the door and
-   * sky for the horizon. Interpolated on the beat, so the room's colour walks
+   * for the bots, fuchsia for the agents, the brand's ember for the token,
+   * rose for the gallery, blue for the app, purple for the vault, emerald for
+   * the plans, gold for the rewards, slate for the reading, ember for the
+   * door and sky for the horizon. Interpolated on the beat, so the room's colour walks
    * with the reader instead of cutting at a boundary — the crystal, the
    * lines and the copy's rules all wear it. */
-  const HUE = [12, 3, 9, 7, 2, 6, 0, 1, 14, 18, 13, 16, 5, 0, 7, 7];
+  const HUE = [12, 3, 9, 7, 2, 6, 8, 1, 14, 18, 13, 16, 5, 8, 7, 7];
   /* The second tone each scene's threads run to — an analogue of the first,
    * so a line is a gradient rather than a flat stroke: indigo to sky, violet
    * to fuchsia, sky to teal, amber to rose, and so on. */
-  const HUE_B = [3, 7, 6, 0, 1, 9, 13, 8, 12, 15, 12, 2, 7, 3, 14, 14];
+  const HUE_B = [3, 7, 6, 0, 1, 9, 2, 8, 12, 15, 12, 2, 7, 1, 14, 14];
   /* The hero's own palette: the twelve stops its threads are woven from, a
    * walk around the wheel from emerald through teal, cyan, sky, blue,
    * indigo, violet, purple, fuchsia and pink to rose and orange — every
@@ -173,6 +173,15 @@
   ];
   const HUE_DARK = TAILWIND_WAYS.map((w) => [hexToRgb(w.c400), lift(hexToRgb(w.c300), 0.45)]);
   const HUE_LIGHT = TAILWIND_WAYS.map((w) => [hexToRgb(w.c600), hexToRgb(w.c700)]);
+  /* The five steps the page reads, 300 to 700. Written to the document as
+   * --w-hue-300 … --w-hue-700, which `World.astro` maps onto the brand tokens
+   * inside the world and `SectionNav` reads for the rail: every brand-coloured
+   * accent in a section wears that section's hue, in the shade its ground
+   * wants, and all of them cross to the next hue together. */
+  const HUE_STEPS = TAILWIND_WAYS.map((w) =>
+    [w.c300, w.c400, w.c500, w.c600, w.c700].map((c) => hexToRgb(c)),
+  );
+  const HUE_STEP_NAMES = ['300', '400', '500', '600', '700'];
 
   /* How much glass, at rest and at the calmest. Clearing a panel's interface
    * leaves the object: a tinted pane with a sheen, a rim and a glint that
@@ -2221,11 +2230,13 @@
 
     /**
      * Mix two families into `hue`/`hue2`, from the shade set the ground under
-     * the lens wants — 400s on ink, 600s on paper. Also written to the world
-     * as `--w-hue`, so the copy's rules and the composer's focus ring wear
-     * the same colour as the crystal; quantised to 8 bits and only written
-     * when it moves, which is a handful of style writes per handover.
+     * the lens wants — 400s on ink, 600s on paper. The same mix is written to
+     * the document as five shade steps, so the page's own accents — eyebrows,
+     * beat labels, chips, the rail — wear the crystal's colour in whatever
+     * shade their band needs. Quantised to 8 bits and only written when it
+     * moves: a handover is a few dozen style writes, a hold is none.
      */
+    const docStyle = document.documentElement.style;
     function blendHue(famA: number, famB: number, k: number, pairA = famA, pairB = famB) {
       const set = coreLight < 0.5 ? HUE_DARK : HUE_LIGHT;
       const A = set[famA] ?? set[0];
@@ -2237,13 +2248,17 @@
         hue2[i] = A[1][i] + (B[1][i] - A[1][i]) * k;
         hueP[i] = PA[0][i] + (PB[0][i] - PA[0][i]) * k;
       }
-      const r = Math.round(hue[0] * 255);
-      const g = Math.round(hue[1] * 255);
-      const b = Math.round(hue[2] * 255);
-      const key = (r << 16) | (g << 8) | b;
+      const SA = HUE_STEPS[famA] ?? HUE_STEPS[0];
+      const SB = HUE_STEPS[famB] ?? HUE_STEPS[0];
+      const key = Math.round(k * 255) | (famA << 8) | (famB << 13);
       if (key === hueKey) return;
       hueKey = key;
-      world!.style.setProperty('--w-hue', `rgb(${r} ${g} ${b})`);
+      for (let s = 0; s < 5; s++) {
+        const r = Math.round((SA[s][0] + (SB[s][0] - SA[s][0]) * k) * 255);
+        const g = Math.round((SA[s][1] + (SB[s][1] - SA[s][1]) * k) * 255);
+        const b = Math.round((SA[s][2] + (SB[s][2] - SA[s][2]) * k) * 255);
+        docStyle.setProperty(`--w-hue-${HUE_STEP_NAMES[s]}`, `rgb(${r} ${g} ${b})`);
+      }
     }
 
     /**
@@ -3076,10 +3091,18 @@
         : stage;
       const famA = onFeatures ? tabWay : HUE[Math.min(a, HUE.length - 1)];
       const famB = sceneIsFeatures[a + 1] ? tabWay : HUE[Math.min(a + 1, HUE.length - 1)];
+      /* The colour holds while the section is read and crosses over in the
+       * last half-viewport before the boundary, whatever the section's
+       * height. It used to ride the formation beat, which starts a tenth of
+       * the way in — so a section was only ever its own colour for a moment
+       * at the top. A section is one colour; the handover is the seam. */
+      const toEnd = sceneBottom[a] - (sy + vh * 0.5);
+      const hk = Math.min(1, Math.max(0, 1 - toEnd / (vh * 0.5)));
+      const hueBeat = hk * hk * (3 - 2 * hk);
       blendHue(
         famA,
         famB,
-        beat,
+        hueBeat,
         onFeatures ? tabWay : HUE_B[Math.min(a, HUE_B.length - 1)],
         sceneIsFeatures[a + 1] ? tabWay : HUE_B[Math.min(a + 1, HUE_B.length - 1)],
       );

@@ -131,24 +131,32 @@ const { sections, label = 'On this page' } = Astro.props;
     background: var(--color-ink-900);
   }
 
+  /* The lit dot and label wear the section's own colour. On the home world
+     `WorldField` writes the hue under the lens as --w-hue-300 … --w-hue-700
+     on the document and moves them across a handover, so the rail changes
+     colour with the crystal; elsewhere the fallbacks are the brand. The
+     transitions only matter for the jump when the current section changes —
+     the colour itself already travels a frame at a time. */
   .section-nav__link:hover .section-nav__dot,
   .section-nav__link:focus-visible .section-nav__dot {
-    border-color: var(--color-brand-500);
-    background: color-mix(in oklab, var(--color-brand-500) 80%, transparent);
+    border-color: var(--w-hue-500, var(--color-brand-500));
+    background: color-mix(in oklab, var(--w-hue-500, var(--color-brand-500)) 80%, transparent);
   }
 
   .section-nav__link[aria-current='true'] .section-nav__dot {
     transform: scale(1.25);
-    border-color: var(--color-brand-500);
-    background: var(--color-brand-500);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-brand-500) 22%, transparent);
+    border-color: var(--w-hue-500, var(--color-brand-500));
+    background: var(--w-hue-500, var(--color-brand-500));
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--w-hue-500, var(--color-brand-500)) 22%, transparent);
   }
 
   .section-nav__link[aria-current='true'] .section-nav__label {
-    color: var(--color-brand-700);
+    color: var(--w-hue-700, var(--color-brand-700));
   }
-  :global(.dark) .section-nav__link[aria-current='true'] .section-nav__label {
-    color: var(--color-brand-300);
+  /* Pale on ink: the page's dark theme, or a dark band behind the rail. */
+  :global(.dark) .section-nav:not(.chrome-invert) .section-nav__link[aria-current='true'] .section-nav__label,
+  :global(html:not(.dark)) .section-nav.chrome-invert .section-nav__link[aria-current='true'] .section-nav__label {
+    color: var(--w-hue-300, var(--color-brand-300));
   }
 </style>
 
