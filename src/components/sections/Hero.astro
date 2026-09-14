@@ -310,11 +310,13 @@ const D = {
       box-shadow 0.3s var(--ease-out-expo);
   }
 
+  /* The ring wears the room's colour (`--w-hue`, written by the world as
+     the reader scrolls), brand teal until the world has said otherwise. */
   .hero__composer:focus-within {
-    border-color: color-mix(in oklab, var(--color-brand-400) 55%, transparent);
+    border-color: color-mix(in oklab, var(--w-hue, var(--color-brand-400)) 55%, transparent);
     box-shadow:
       0 24px 60px -30px var(--w-shadow),
-      0 0 0 1px color-mix(in oklab, var(--color-brand-400) 35%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--w-hue, var(--color-brand-400)) 35%, transparent);
   }
 
   /* `Icon.astro` renders the svg, so it never carries this file's scope hash and
@@ -692,11 +694,22 @@ const D = {
       chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip === active)));
     };
 
+    /* Which four cards are on the stage. Only the card the chip names
+     * changes when the composer moves on — into whichever slot's turn it is
+     * — so a tick swaps one card, not all four. Four cards cutting together
+     * every three seconds was most of what made the opening screen restless. */
+    let shown: string[] = [];
+    let turn = 0;
     const applyBoards = (scene: string) => {
       if (!boards.length || !boardIds.length) return;
       const current = boardIds.includes(scene) ? scene : boardIds[0];
-      const start = boardIds.indexOf(current);
-      const shown = [0, 1, 2, 3].map((offset) => boardIds[(start + offset) % boardIds.length]);
+      if (!shown.length) {
+        const start = boardIds.indexOf(current);
+        shown = [0, 1, 2, 3].map((offset) => boardIds[(start + offset) % boardIds.length]);
+      } else if (!shown.includes(current)) {
+        shown[turn] = current;
+        turn = (turn + 1) % shown.length;
+      }
       boards.forEach((board) => {
         const id = board.dataset.heroBoard ?? '';
         const slot = shown.indexOf(id);
@@ -754,7 +767,7 @@ const D = {
       if (reduced || paused || dirty || document.hidden || !chips.length) return;
       cycleTimer = window.setTimeout(() => {
         void showChip((index + 1) % chips.length, true).then(armCycle);
-      }, 3200 + Math.random() * 1800);
+      }, 5200 + Math.random() * 2400);
     };
 
     chips.forEach((chip, i) => {
