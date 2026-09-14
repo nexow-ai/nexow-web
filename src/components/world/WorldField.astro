@@ -138,9 +138,11 @@
    * terraces. Everywhere else it stands down, one screen at a time, and the
    * lines carry the section. A wall that is sometimes absent is the only
    * kind that is ever noticed when it is there. */
-  const SHOW = [0.8, 1, 1, 0, 0, 0, 0, 0, 0.78, 0, 0.8, 0, 0, 0, 0, 0];
-  /* How much of the line field each scene draws, as a share of the lines. */
-  const LSHOW = [0.18, 0.8, 1, 1, 0.36, 1, 0.3, 0.7, 0.5, 0.6, 0.7, 0.55, 0.5, 1, 0.12, 0.12];
+  const SHOW = [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  /* How much of the thread field each scene draws, as a share of the
+   * threads. The hero weaves all of them; every other scene is a sketch —
+   * a dozen or two hairlines, never a wall of them. */
+  const LSHOW = [1, 0.25, 0.21, 0.25, 0.09, 0.25, 0.09, 0.17, 0.13, 0.13, 0.13, 0.15, 0.09, 0.19, 0.04, 0.04];
   /* One family per scene, an index into TAILWIND_WAYS: cyan for the opening,
    * indigo and violet for the two playground acts, sky for the wires, amber
    * for the bots, fuchsia for the agents, the brand teal for the token, rose
@@ -150,6 +152,13 @@
    * with the reader instead of cutting at a boundary — the crystal, the
    * lines and the copy's rules all wear it. */
   const HUE = [12, 3, 9, 7, 2, 6, 0, 1, 14, 18, 13, 16, 5, 0, 7, 7];
+  /* The second tone each scene's threads run to — an analogue of the first,
+   * so a line is a gradient rather than a flat stroke: indigo to sky, violet
+   * to fuchsia, sky to teal, amber to rose, and so on. */
+  const HUE_B = [3, 7, 6, 0, 1, 9, 13, 8, 12, 15, 12, 2, 7, 3, 14, 14];
+  /* The hero's own palette: the six stops its threads are woven from, teal
+   * through cyan, blue and violet to fuchsia and rose. */
+  const WEAVE = [0, 12, 14, 9, 6, 1];
   /* Two shades per family: the colour itself and the light that runs along
    * it. On ink the run lifts toward white; on paper it deepens. */
   const lift = (c: [number, number, number], k: number): [number, number, number] => [
@@ -1102,10 +1111,10 @@
    * and by the curve itself, never by a fat near segment.
    * ------------------------------------------------------------------ */
   const LINE_SEG = 56;
-  const LINES_WIDE = 28;
-  const LINES_NARROW = 18;
+  const LINES_WIDE = 96;
+  const LINES_NARROW = 56;
   /** Half the strip's width, in device pixels. The glow falls off inside it. */
-  const LINE_HALF_PX = 5;
+  const LINE_HALF_PX = 2.5;
 
   const LINE_VERT = glsl`
     precision highp float;
@@ -1117,20 +1126,35 @@
     uniform float uN;
     uniform float uFormA;
     uniform float uFormB;
+    /* The share of the threads each of the two formations draws, so a
+       formation spreads whatever it is given over its whole shape. */
+    uniform float uShareA;
+    uniform float uShareB;
     uniform float uMorph;
     uniform float uTime;
     uniform float uShift;
     uniform float uLift;
-    /* Share of the lines this scene draws, 0..1, walked on the beat. */
+    /* Share of the threads drawn this frame, walked on the beat. */
     uniform float uShow;
     /* Half the strip's width, in clip units per axis. */
     uniform vec2 uHalf;
-    /* Where the core stands: the orbits and the wires are centred on it. */
+    /* Where the core stands: the wires and the circuits are centred on it. */
     uniform vec3 uCore;
+    /* The lens's frame, for the shapes that lie across the screen. */
+    uniform vec3 uRight;
+    uniform vec3 uUp;
+    uniform vec3 uFwd;
+    /* 1 on a phone: the weave drops under the composer and narrows. */
+    uniform float uCompact;
+    /* The scene's two tones and the hero's six-stop weave. */
+    uniform vec3 uHueA;
+    uniform vec3 uHueB;
+    uniform vec3 uGrad[6];
     varying float vA;
     varying float vU;
     varying float vSide;
     varying float vPh;
+    varying vec3 vCol;
 
     vec3 hash3(float i) {
       return fract(sin(vec3(i * 12.9898, i * 78.233, i * 37.719)) * 43758.5453);
@@ -1153,21 +1177,39 @@
     vec3 bez(vec3 a, vec3 b, vec3 c, float u) {
       return mix(mix(a, b, u), mix(b, c, u), u);
     }
+    /* The weave's gradient. A uniform array indexed by a variable is fine
+       in a vertex shader, which is why the colour is decided here. */
+    vec3 grad(float g) {
+      float s = clamp(g, 0.0, 0.999) * 5.0;
+      int k = int(floor(s));
+      return mix(uGrad[k], uGrad[k + 1], fract(s));
+    }
 
-    /* Fifteen formations, one per scene. a is the line's share of the
-       field, h its own hash; both are stable for the life of the page. */
-    vec3 curve(float f, float j, float n, float u, float t) {
-      float a = j / n;
+    /* Fifteen formations, one per scene. a is the thread's share of the
+       formation's own field, h its hash; both are stable for the life of
+       the page. Each also decides its colour, into col. */
+    vec3 curve(float f, float j, float n, float share, float u, float t, out vec3 col) {
+      float a = min(j / max(n * share, 1.0), 1.0);
       vec3 h = hash3(j + 3.7);
+      /* Two tones along the thread, phased per thread. */
+      col = mix(uHueA, uHueB, 0.5 + 0.5 * sin(u * 3.1416 + h.z * 6.2831 + t * 0.2));
       if (f < 0.5) {
-        /* 0 — ORBITS: an armillary around the crystal, rings on their own
-           tilts, close enough to read as its instrument. */
-        float r = 2.3 + h.x * 1.8;
-        float th = u * 6.2831 + t * (0.08 + h.x * 0.08) + h.z * 6.2831;
-        vec3 c = vec3(cos(th) * r, 0.0, sin(th) * r);
-        c = rotX(c, 1.2 + (h.y - 0.5) * 0.9);
-        c = rotZ(c, h.z * 2.6 - 0.4);
-        return uCore + c;
+        /* 0 — THE WEAVE (hero): a sash of silk threads across the stage,
+           rising from the lower left to behind the crystal on the right and
+           twisting about its own axis on the way, so the threads cross one
+           another and the colour turns over like the sheen on cloth. Built
+           in the lens's frame so it lies across the screen whatever the
+           yaw. Every thread has its own colour off the six-stop gradient,
+           drifting slowly along the sash. */
+        float x = mix(-36.0, 36.0, u);
+        float v = (a - 0.5) * 2.0;
+        float cy = -5.2 - uCompact * 3.4 + x * 0.16 * (1.0 - uCompact * 0.5)
+                 + 2.4 * sin(x * 0.13 + t * 0.10) + 0.8 * sin(x * 0.31 - t * 0.07);
+        float tw = x * 0.11 + t * 0.12 + 0.6;
+        float w = (5.6 + 1.4 * sin(x * 0.09 + t * 0.05)) * (1.0 - uCompact * 0.45);
+        float off = v * w + 0.35 * sin(x * 0.45 + h.x * 6.2831 + t * 0.35);
+        col = grad(a + 0.12 * sin(x * 0.10 + t * 0.08 + h.y * 2.0));
+        return uRight * x + uUp * (cy + off * cos(tw)) + uFwd * (off * sin(tw) * 0.8 + (h.y - 0.5) * 0.6);
       }
       if (f < 1.5) {
         /* 1 — STREAM: the sentence, flowing in from the left into the card. */
@@ -1182,7 +1224,7 @@
         /* 2 — GRID: the canvas floor, ruled both ways. */
         float g = mod(j, 2.0);
         float k = floor(j / 2.0);
-        float s = (k / ceil(n / 2.0) - 0.5) * 30.0;
+        float s = (k / ceil(n * share / 2.0) - 0.5) * 30.0;
         float y = -5.2 + sin(u * 9.0 + t * 0.4 + k) * 0.12;
         if (g < 0.5) return vec3(mix(-17.0, 17.0, u), y, s * 0.7);
         return vec3(s, y, mix(-14.0, 10.0, u));
@@ -1250,7 +1292,7 @@
         float g = mod(j, 3.0);
         float k = floor(j / 3.0);
         vec3 base = vec3((g - 1.0) * 6.4, (1.0 - g) * 1.6 - 2.6, g * 3.1);
-        return base + vec3(mix(-3.2, 3.2, u), (k - 4.0) * 0.16, (k - 4.0) * 0.9);
+        return base + vec3(mix(-3.2, 3.2, u), (k - 2.0) * 0.16, (k - 2.0) * 0.9);
       }
       if (f < 11.5) {
         /* 11 — CONSTELLATION: arcs across a sky of rewards, wide enough
@@ -1277,17 +1319,25 @@
 
     void main() {
       float u = aStrip.x;
-      /* Staggered like the screens, so a scene change is lines flowing one
-         after another rather than a field cutting on one frame. */
+      /* Staggered like the screens, so a scene change is threads flowing
+         one after another rather than a field cutting on one frame. */
       float lead = aLSeed * 0.35;
       float m = clamp((uMorph - lead) / max(1.0 - lead, 0.35), 0.0, 1.0);
       m = m * m * (3.0 - 2.0 * m);
-      vec3 p0 = mix(curve(uFormA, aLine, uN, u, uTime), curve(uFormB, aLine, uN, u, uTime), m);
-      vec3 p1 = mix(
-        curve(uFormA, aLine, uN, u + 0.02, uTime),
-        curve(uFormB, aLine, uN, u + 0.02, uTime),
+      vec3 ca;
+      vec3 cb;
+      vec3 cx;
+      vec3 p0 = mix(
+        curve(uFormA, aLine, uN, uShareA, u, uTime, ca),
+        curve(uFormB, aLine, uN, uShareB, u, uTime, cb),
         m
       );
+      vec3 p1 = mix(
+        curve(uFormA, aLine, uN, uShareA, u + 0.02, uTime, cx),
+        curve(uFormB, aLine, uN, uShareB, u + 0.02, uTime, cx),
+        m
+      );
+      vCol = mix(ca, cb, m);
       vec4 v0 = uView * vec4(p0, 1.0);
       vec4 v1 = uView * vec4(p1, 1.0);
       v0.xy += vec2(uShift, uLift);
@@ -1303,7 +1353,7 @@
       float ends = smoothstep(0.0, 0.10, u) * smoothstep(1.0, 0.90, u);
       float dist = -v0.z;
       float fog = smoothstep(75.0, 8.0, dist) * smoothstep(1.5, 4.0, dist);
-      /* Which lines a scene draws: the first uShow of the field. */
+      /* Which threads a scene draws: the first uShow of the field. */
       float a = aLine / uN;
       float on = smoothstep(a - 0.03, a + 0.03, uShow);
       vA = ends * fog * on;
@@ -1311,31 +1361,32 @@
       vSide = aStrip.y;
       /* The pulse's phase, wrapped here in highp: raw seconds in a mediump
          fragment quantise within minutes on fp16 mobiles. */
-      vPh = mod(uTime * 1.3 - aLSeed * 6.2831, 6.2831);
+      vPh = mod(uTime * 1.1 - aLSeed * 6.2831, 6.2831);
       if (vA < 0.01 || c0.w < 0.05) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
     }
   `;
 
   const LINE_FRAG = glsl`
     precision mediump float;
-    uniform vec3 uHue;
-    uniform vec3 uHue2;
+    uniform vec3 uHueL;
     uniform float uLight;
     varying float vA;
     varying float vU;
     varying float vSide;
     varying float vPh;
+    varying vec3 vCol;
     void main() {
       float d = vSide * vSide;
-      /* A hairline with a soft halo — the halo is what makes it light rather
-         than a stroke. */
-      float core = exp(-d * 10.0);
-      float halo = exp(-d * 2.4) * 0.30;
-      /* The light travelling the line: two pulses a length, drifting along. */
-      float run = pow(max(sin(vU * 12.566 - vPh), 0.0), 24.0);
-      float a = (core * (0.42 + 0.58 * run) + halo * (0.5 + 0.5 * run)) * vA;
-      a *= mix(1.0, 0.78, uLight);
-      vec3 col = mix(uHue, uHue2, run * 0.85);
+      /* A hairline — a pixel of core and a faint halo. The halo is what
+         makes it light rather than a stroke; kept faint so a bundle of
+         them is silk, not neon. */
+      float core = exp(-d * 14.0);
+      float halo = exp(-d * 2.6) * 0.16;
+      /* The light travelling the thread: one pulse a length, drifting. */
+      float run = pow(max(sin(vU * 6.2832 - vPh), 0.0), 20.0);
+      float a = (core * (0.34 + 0.50 * run) + halo * (0.5 + 0.5 * run)) * vA;
+      a *= mix(1.0, 0.8, uLight);
+      vec3 col = mix(vCol, uHueL, run * 0.7);
       /* Premultiplied, over a clear canvas: light on ink, ink on paper. */
       gl_FragColor = vec4(col * a, a);
     }
@@ -1738,7 +1789,7 @@
        `resize()` for the layout: to the right of the kicker on a wide
        screen, gone on a phone where the headline owns the width and the
        crystal first forms at act 01. */
-    { mesh: 2, scale: 1.55, spin: 0.12, sy: 1, pulse: 0, pos: [9.4, -3.4, 0], vs: 1 },
+    { mesh: 2, scale: 1.8, spin: 0.12, sy: 1, pulse: 0, pos: [9.6, -3.2, 0], vs: 1 },
     /* 01 say it — the sentence, as a solid, floating above the card the
        screens are condensing into. Offset because the formation here is a flat
        slab through the origin: left at the centre the block is simply inside
@@ -2114,11 +2165,13 @@
         lALine = ctx.getAttribLocation(lineProg, 'aLine');
         lASeed = ctx.getAttribLocation(lineProg, 'aLSeed');
         for (const n of [
-          'uProj', 'uView', 'uN', 'uFormA', 'uFormB', 'uMorph', 'uTime', 'uShift', 'uLift',
-          'uShow', 'uHalf', 'uCore', 'uHue', 'uHue2', 'uLight',
+          'uProj', 'uView', 'uN', 'uFormA', 'uFormB', 'uShareA', 'uShareB', 'uMorph', 'uTime',
+          'uShift', 'uLift', 'uShow', 'uHalf', 'uCore', 'uRight', 'uUp', 'uFwd', 'uHueA', 'uHueB',
+          'uHueL', 'uLight', 'uCompact',
         ]) {
           lu[n] = ctx.getUniformLocation(lineProg, n);
         }
+        for (let k = 0; k < 6; k++) lu[`uGrad${k}`] = ctx.getUniformLocation(lineProg, `uGrad[${k}]`);
         ctx.useProgram(lineProg);
         ctx.uniform1f(lu.uN, lineCount);
         bindScreens();
@@ -2126,10 +2179,21 @@
       }
     }
 
-    /** The section's colour this frame, and the light that runs it. */
+    /** The section's colour this frame, the light that runs it, and the
+        second tone its threads run to. */
     const hue: [number, number, number] = [0, 0, 0];
     const hue2: [number, number, number] = [0, 0, 0];
+    const hueP: [number, number, number] = [0, 0, 0];
     let hueKey = -1;
+
+    /** The hero's weave, from the shade set the ground wants. */
+    function uploadWeave() {
+      if (!linesReady) return;
+      const set = coreLight < 0.5 ? HUE_DARK : HUE_LIGHT;
+      ctx.useProgram(lineProg);
+      for (let k = 0; k < 6; k++) ctx.uniform3fv(lu[`uGrad${k}`], set[WEAVE[k]][0]);
+      bindScreens();
+    }
 
     /**
      * Mix two families into `hue`/`hue2`, from the shade set the ground under
@@ -2138,13 +2202,16 @@
      * the same colour as the crystal; quantised to 8 bits and only written
      * when it moves, which is a handful of style writes per handover.
      */
-    function blendHue(famA: number, famB: number, k: number) {
+    function blendHue(famA: number, famB: number, k: number, pairA = famA, pairB = famB) {
       const set = coreLight < 0.5 ? HUE_DARK : HUE_LIGHT;
       const A = set[famA] ?? set[0];
       const B = set[famB] ?? set[0];
+      const PA = set[pairA] ?? A;
+      const PB = set[pairB] ?? B;
       for (let i = 0; i < 3; i++) {
         hue[i] = A[0][i] + (B[0][i] - A[0][i]) * k;
         hue2[i] = A[1][i] + (B[1][i] - A[1][i]) * k;
+        hueP[i] = PA[0][i] + (PB[0][i] - PA[0][i]) * k;
       }
       const r = Math.round(hue[0] * 255);
       const g = Math.round(hue[1] * 255);
@@ -2204,6 +2271,8 @@
       show: number,
       core: number[],
     ) {
+      const sa = Math.min(scene, LSHOW.length - 1);
+      const sb = Math.min(scene + 1, LSHOW.length - 1);
       if (!linesReady || show <= 0.001) return;
       ctx.useProgram(lineProg);
       ctx.bindBuffer(ctx.ARRAY_BUFFER, stripBuf);
@@ -2221,6 +2290,8 @@
       ctx.uniformMatrix4fv(lu.uView, false, view);
       ctx.uniform1f(lu.uFormA, Math.min(scene, FORM_LAST));
       ctx.uniform1f(lu.uFormB, Math.min(scene + 1, FORM_LAST));
+      ctx.uniform1f(lu.uShareA, Math.max(LSHOW[sa], 0.02));
+      ctx.uniform1f(lu.uShareB, Math.max(LSHOW[sb], 0.02));
       ctx.uniform1f(lu.uMorph, morph);
       ctx.uniform1f(lu.uTime, seconds);
       ctx.uniform1f(lu.uShift, coreShift);
@@ -2228,9 +2299,14 @@
       ctx.uniform1f(lu.uShow, show);
       ctx.uniform2f(lu.uHalf, (LINE_HALF_PX * 2 * dpr) / canvas!.width, (LINE_HALF_PX * 2 * dpr) / canvas!.height);
       ctx.uniform3f(lu.uCore, core[0], core[1], core[2]);
-      ctx.uniform3fv(lu.uHue, hue);
-      ctx.uniform3fv(lu.uHue2, hue2);
+      ctx.uniform3f(lu.uRight, view[0], view[4], view[8]);
+      ctx.uniform3f(lu.uUp, view[1], view[5], view[9]);
+      ctx.uniform3f(lu.uFwd, view[2], view[6], view[10]);
+      ctx.uniform3fv(lu.uHueA, hue);
+      ctx.uniform3fv(lu.uHueB, hueP);
+      ctx.uniform3fv(lu.uHueL, hue2);
       ctx.uniform1f(lu.uLight, coreLight);
+      ctx.uniform1f(lu.uCompact, compact ? 1 : 0);
       ctx.enable(ctx.BLEND);
       ctx.blendFunc(ctx.ONE, ctx.ONE_MINUS_SRC_ALPHA);
       ctx.depthMask(false);
@@ -2606,6 +2682,7 @@
       ctx.useProgram(prog);
       ctx.uniform3fv(uFog, fog);
       ctx.uniform1f(uLight, coreLight);
+      uploadWeave();
     }
 
     function paintTheme() {
@@ -2627,6 +2704,7 @@
       coreLight = pageLight;
       ctx.uniform1f(uLight, coreLight);
       coreFog = pageFog;
+      uploadWeave();
       /* The dashboard atlas bakes the page theme's resolved colours, so it
          follows the theme — but only the theme: paintTheme also runs on the
          day-band handover, which never touches the hero boards' tokens. The
@@ -2635,7 +2713,10 @@
       const themeKey = isDark ? 'dark' : 'light';
       if (boardsTheme !== themeKey) {
         boardsTheme = themeKey;
-        setTimeout(refreshBoards, boards.tex ? 150 : 400);
+        /* Nothing on the opening screen samples the atlas any more, so the
+           first build waits well clear of the page's entrance — the wall
+           first appears at act 01, a couple of screens down. */
+        setTimeout(refreshBoards, boards.tex ? 150 : 1800);
       }
     }
     /* Opaque and depth-tested rather than additive. Screens occlude; they do
@@ -2703,7 +2784,7 @@
        * headline leaves the right third of the stage empty; absent on a
        * phone, where the headline owns the width and there is nowhere it
        * would not be behind type — it first forms at act 01 instead. */
-      OBJECTS[0].scale = compact ? 0 : 1.55;
+      OBJECTS[0].scale = compact ? 0 : 1.8;
     }
     resize();
     ctx.uniform1f(uDir, document.documentElement.dir === 'rtl' ? 1 : 0);
@@ -2971,7 +3052,13 @@
         : stage;
       const famA = onFeatures ? tabWay : HUE[Math.min(a, HUE.length - 1)];
       const famB = sceneIsFeatures[a + 1] ? tabWay : HUE[Math.min(a + 1, HUE.length - 1)];
-      blendHue(famA, famB, beat);
+      blendHue(
+        famA,
+        famB,
+        beat,
+        onFeatures ? tabWay : HUE_B[Math.min(a, HUE_B.length - 1)],
+        sceneIsFeatures[a + 1] ? tabWay : HUE_B[Math.min(a + 1, HUE_B.length - 1)],
+      );
       ctx.uniform3fv(uC1, hue);
       const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
       /* Presence, both fields, on the beat. */
@@ -2979,9 +3066,7 @@
       const showB = SHOW[Math.min(a + 1, SHOW.length - 1)];
       const show = showA + (showB - showA) * beat;
       ctx.uniform1f(uShow, show);
-      /* No orbits in the hero on a phone: there is no crystal for them
-       * to ring, and the headline owns the width they would cross. */
-      const lshowA = compact && a === 0 ? 0 : LSHOW[Math.min(a, LSHOW.length - 1)];
+      const lshowA = LSHOW[Math.min(a, LSHOW.length - 1)];
       const lshowB = LSHOW[Math.min(a + 1, LSHOW.length - 1)];
       const lshow = lshowA + (lshowB - lshowA) * beat;
 
@@ -3110,7 +3195,7 @@
       ctx.uniform1f(uCharge, 0);
       ctx.uniform1f(uBurst, 0);
       ctx.uniform1f(uShow, SHOW[0]);
-      blendHue(HUE[0], HUE[1], 0);
+      blendHue(HUE[0], HUE[1], 0, HUE_B[0], HUE_B[1]);
       ctx.uniform3fv(uC1, hue);
       if (geomDirty) measureGeometry();
       const [sx, sy] = headlineOffset(Math.hypot(-16.8, 3.8, 20.6), window.scrollY);
@@ -3125,7 +3210,7 @@
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT);
       ctx.useProgram(prog);
       if (count > 0) instanced!.drawArraysInstancedANGLE(ctx.TRIANGLE_STRIP, 0, 4, count);
-      drawLines(6, 0, 0, compact ? 0 : LSHOW[0], stagePos(0, 0));
+      drawLines(6, 0, 0, LSHOW[0], stagePos(0, 0));
       ctx.clear(ctx.DEPTH_BUFFER_BIT);
       drawCore(6, 0, 0);
     }
