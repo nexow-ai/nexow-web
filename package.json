@@ -2,6 +2,23 @@
   "name": "nexow-web",
   "type": "module",
   "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Nexow, Inc.",
+    "email": "hello@nexow.ai",
+    "url": "https://nexow.ai"
+  },
+  "homepage": "https://nexow.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nexow-ai/nexow-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nexow-ai/nexow-web/issues",
+    "email": "hello@nexow.ai"
+  },
+  "description": "Marketing site for Nexow — copyright Nexow, Inc. (nexow.ai).",
   "engines": {
     "node": ">=22.12.0"
   },

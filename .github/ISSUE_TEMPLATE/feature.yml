@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest an improvement to the marketing site.
+title: '[feat] '
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Large product ideas for the Nexow app belong in the product, not here.
+        This form is for **nexow-web** (the public site).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      placeholder: What is missing or awkward today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      placeholder: What should we add or change?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Home / landing
+        - Features / plans
+        - Community / connectors
+        - Blog / changelog
+        - i18n / locale
+        - Legal / security pages
+        - SEO / a11y / performance
+        - Docs / contributing
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Notices
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: I understand contributions are assigned to Nexow, Inc. under the CLA.
+          required: true
