@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.1.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.1.0...v1.1.1-dev.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **world:** pin the wash to ember, indigo and plasma ([46dfd0a](https://github.com/nexow-ai/nexow-web/commit/46dfd0a9bafc6b3f805658c1060091daa3bd9033))
+
+# [1.1.0](https://github.com/nexow-ai/nexow-web/compare/v1.0.0...v1.1.0) (2026-09-15)
+
+
+### Bug Fixes
+
+* **world:** keep the colour wash above the ink plates ([dacafb4](https://github.com/nexow-ai/nexow-web/commit/dacafb41a5deada5b5964c0c8b5930831b069147))
+
 ## [1.0.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.0.0...v1.0.1-dev.1) (2026-09-15)
 
 
