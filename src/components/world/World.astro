@@ -15,11 +15,12 @@
  * case this creates: light-theme chrome floating over the world before the
  * first scroll.
  *
- * Four layers, and the order matters:
- *   1. .world__bands   solid page-tone / invert boxes (behind the matter).
- *   2. .world-field    the WebGL screens, clear-alpha, fixed to the viewport.
- *   3. .world__crown   header fade.
- *   4. .world__content the story, no opaque ground, always above the matter.
+ * Five layers, and the order matters:
+ *   1. .world ink      the element's own black/white plate (back of the stack).
+ *   2. .world__bands   solid page-tone / invert boxes (still ink, still back).
+ *   3. .world__wash    the colour wash — above ink, below the matter.
+ *   4. .world-field    the WebGL screens, clear-alpha, fixed to the viewport.
+ *   5. .world__crown   header fade, then .world__content (the story).
  *
  * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
  * field paints under the content and over the ink instead of over the header.
@@ -36,6 +37,7 @@ import WorldField from './WorldField.astro';
 
 <div class="world">
   <div class="world__bands" aria-hidden="true"></div>
+  <div class="world__wash" aria-hidden="true"></div>
   <WorldField />
   {/* Header band. The header is transparent until 8px of scroll and the world
       runs to the top of the document, so without this the panels cross the nav
@@ -322,12 +324,13 @@ import WorldField from './WorldField.astro';
 
   /* A wash that sits between the ink and the matter: enough colour that the
    * world is not a black rectangle before WebGL has painted a frame, and it is
-   * also exactly what a no-WebGL visitor keeps. */
-  .world::before {
-    content: '';
+   * also exactly what a no-WebGL visitor keeps. Must paint *above* `.world`
+   * and `.world__bands` — those solid plates used to share this z-index and
+   * cover the wash the moment JS built the boxes. */
+  .world__wash {
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
     background:
       radial-gradient(
@@ -356,7 +359,7 @@ import WorldField from './WorldField.astro';
     position: fixed;
     inset-inline: 0;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     height: 8rem;
     pointer-events: none;
     background: linear-gradient(
@@ -387,7 +390,7 @@ import WorldField from './WorldField.astro';
 
   .world__content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
 
   /* Later beats used to be marketing slabs (mint wash, white FAQ plate,

@@ -34,9 +34,11 @@
  *
  * Stacking inside `World.astro` — load-bearing:
  *
- *     .world          z-index: 0, opaque ink   ← what axe measures against
- *       .world-field  z-index: 1, this canvas  ← the matter, additive
- *       .world__content z-index: 2             ← hero + acts, always on top
+ *     .world            z-index: 0, opaque ink   ← what axe measures against
+ *       .world__bands   z-index: 0               ← invert / page boxes
+ *       .world__wash    z-index: 1               ← colour wash, above ink
+ *       .world-field    z-index: 2, this canvas  ← the matter, additive
+ *       .world__content z-index: 3               ← hero + acts, always on top
  *
  * The canvas is `position: fixed`: one viewport-sized surface for the whole
  * page. It fades in at the top of the document and holds through the footer.
@@ -3461,7 +3463,7 @@
   .world-field {
     position: fixed;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     width: 100dvw;
     height: 100dvh;
     pointer-events: none;
