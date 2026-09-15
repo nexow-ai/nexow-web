@@ -177,6 +177,30 @@ const TICKS = [0, 1, 2, 3].map((i) => ({ i, angle: i * 90 }));
 </Act>
 
 <style>
+  /* This act keeps the teal. The brand moved to ember everywhere else, but
+     the rig below — the sphere, the harness, the tool loop — was drawn in
+     mint light and is the one place it earns its keep. Every brand step the
+     rig reads is re-pinned here, and so are the world's accents, which are
+     resolved on `.world` and would not follow a token override on their
+     own. */
+  :global(#bots-agents) {
+    --color-brand-200: #9dfae2;
+    --color-brand-300: #5cf0d0;
+    --color-brand-400: #2adfba;
+    --color-brand-500: #10c5a3;
+    --color-brand-600: #06a086;
+    --color-brand-700: #0a806d;
+    --w-accent: #06a086;
+    --w-accent-2: #06a086;
+    --w-hue: #06a086;
+  }
+
+  :global(html.dark #bots-agents) {
+    --w-accent: #5cf0d0;
+    --w-accent-2: #2adfba;
+    --w-hue: #2adfba;
+  }
+
   .a-scene {
     /* Everything below is sized off one length so the whole rig scales as a
      * unit — and so `translateZ` has something real to work with, which a

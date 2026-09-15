@@ -1,0 +1,99 @@
+name: Release
+
+# Commit-driven releases: semantic-release reads the Conventional Commits since
+# the last release, determines the next version, regenerates CHANGELOG.md, tags,
+# and creates a GitHub Release. The "[skip actions]" in its release commit prevents
+# the Release workflow from re-triggering itself while the follow-up Deploy still
+# ships the version bump.
+#   - push to dev:  +0.0.1 prerelease (e.g. 0.1.0 → 0.1.1-dev.1). GitHub
+#                   Releases are marked Pre-release. See .releaserc.cjs.
+#   - push to main: +0.1.0 stable (e.g. 0.1.0 → 0.2.0), then back-merges
+#                   main into dev so both branches share the same baseline.
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >
+      github.event_name == 'workflow_dispatch'
+      || !contains(github.event.head_commit.message, '[skip actions]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Allow only the stg clone or a release commit on main
+        if: github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          login="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}" --jq '.author.login // empty')"
+          message="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}" --jq '.commit.message')"
+
+          if [ "$login" = "github-actions[bot]" ]; then
+            if printf '%s\n' "$message" | grep -q '^chore(release):' \
+              && printf '%s\n' "$message" | grep -q '\[skip actions\]'; then
+              echo "OK: release commit on main"
+              exit 0
+            fi
+            if printf '%s\n' "$message" | grep -q '^chore: promote stg to main'; then
+              echo "OK: stg → main clone"
+              exit 0
+            fi
+          fi
+
+          if printf '%s\n' "$message" | grep -qE '^Merge pull request #[0-9]+ from [^[:space:]]+/stg$'; then
+            echo "OK: stg → main via promote PR"
+            exit 0
+          fi
+
+          echo "::error::Direct pushes to main are not allowed. Promote via stg → main."
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Authenticate git for release + back-merge pushes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.21
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy the released site
+        if: github.ref_name == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run Deploy --ref main -f environment=main

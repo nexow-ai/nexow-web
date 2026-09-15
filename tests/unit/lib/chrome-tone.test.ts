@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { invertedAt, type ToneBand } from '../../../src/lib/chrome-tone';
+import { invertedAt, surfaceAt, type ToneBand } from '../../../src/lib/chrome-tone';
 
 const bands: ToneBand[] = [
   { top: 800, bottom: 1600 },
@@ -21,5 +21,17 @@ describe('invertedAt', () => {
 
   it('is false on an empty page', () => {
     expect(invertedAt(400, [])).toBe(false);
+  });
+});
+
+describe('surfaceAt', () => {
+  it('is paper on a light page-tone stretch and ink on its invert band', () => {
+    expect(surfaceAt(400, false, bands)).toBe('paper');
+    expect(surfaceAt(1200, false, bands)).toBe('ink');
+  });
+
+  it('is ink on a dark page-tone stretch and paper on its invert band', () => {
+    expect(surfaceAt(400, true, bands)).toBe('ink');
+    expect(surfaceAt(1200, true, bands)).toBe('paper');
   });
 });

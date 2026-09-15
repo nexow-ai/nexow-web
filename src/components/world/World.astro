@@ -171,13 +171,35 @@ import WorldField from './WorldField.astro';
   .world {
     position: relative;
     z-index: 0;
+    /* The section's colour is the brand inside the world. `WorldField`
+     * writes the hue the crystal wears as five shade steps on the document
+     * (--w-hue-300 … --w-hue-700) and they are mapped onto the brand tokens
+     * here, so every brand-coloured accent in a section — eyebrows, beat
+     * labels, chips, icons, rules — is that section's colour, in the shade
+     * its ground wants, and crosses to the next colour with the crystal. The
+     * ember fallbacks hold before the first frame and without JavaScript.
+     * The gradient buttons keep the brand: their stops resolve on the root. */
+    --color-brand-50: color-mix(in oklab, var(--w-hue-400, #ff7038) 12%, white);
+    --color-brand-100: color-mix(in oklab, var(--w-hue-400, #ff7038) 22%, white);
+    --color-brand-200: color-mix(in oklab, var(--w-hue-400, #ff7038) 45%, white);
+    --color-brand-300: var(--w-hue-300, #ff9b70);
+    --color-brand-400: var(--w-hue-400, #ff7038);
+    --color-brand-500: var(--w-hue-500, #ff4d14);
+    --color-brand-600: var(--w-hue-600, #d63200);
+    --color-brand-700: var(--w-hue-700, #b02a00);
+    --color-brand-800: color-mix(in oklab, var(--w-hue-700, #b02a00) 78%, black);
+    --color-brand-900: color-mix(in oklab, var(--w-hue-700, #b02a00) 60%, black);
+    --color-brand-950: color-mix(in oklab, var(--w-hue-700, #b02a00) 42%, black);
+    --w-hue: var(--color-brand-500);
     --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
     --w-text-4: var(--color-ink-500);
-    --w-accent: var(--color-brand-600);
-    --w-accent-2: var(--color-brand-600);
+    /* 700, not 600: the amber and yellow sections' 600s fall short of AA
+     * for eyebrow-sized type on paper. */
+    --w-accent: var(--color-brand-700);
+    --w-accent-2: var(--color-brand-700);
     --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
     --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
     --w-panel: rgba(255, 255, 255, 0.84);
@@ -192,6 +214,7 @@ import WorldField from './WorldField.astro';
   }
 
   :global(.dark) .world {
+    --w-hue: var(--color-brand-400);
     --w-surface: #000000;
     --w-band: #ffffff;
     --w-text: #fff;
@@ -225,13 +248,14 @@ import WorldField from './WorldField.astro';
    * the field) so the screens stay visible; this wrapper only flips type.
    * Transparent here beats the opaque `html.dark .tone-invert` in global.css. */
   :global(html.dark) .world :global(.tone-invert) {
+    --w-hue: var(--color-brand-500);
     --w-surface: #ffffff;
     --w-text: var(--color-ink-950);
     --w-text-2: var(--color-ink-600);
     --w-text-3: var(--color-ink-800);
     --w-text-4: var(--color-ink-500);
-    --w-accent: var(--color-brand-600);
-    --w-accent-2: var(--color-brand-600);
+    --w-accent: var(--color-brand-700);
+    --w-accent-2: var(--color-brand-700);
     --w-line: color-mix(in oklab, var(--color-ink-900) 12%, transparent);
     --w-line-soft: color-mix(in oklab, var(--color-ink-900) 7%, transparent);
     --w-panel: rgba(255, 255, 255, 0.84);
@@ -247,6 +271,7 @@ import WorldField from './WorldField.astro';
   }
 
   :global(html:not(.dark)) .world :global(.tone-invert) {
+    --w-hue: var(--color-brand-400);
     --w-surface: #000000;
     --w-text: #fff;
     --w-text-2: var(--color-ink-200);

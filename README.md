@@ -1,63 +1,89 @@
 # nexow-web
 
-Marketing site & landing page for [Nexow](https://x.nexow.ai) — the AI-native
-dashboard builder for markets. Built with **Astro** (static output), **Tailwind
-CSS v4**, and self-hosted fonts. Optimized for SEO and GEO (generative /
-answer-engine optimization).
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/nexow-ai/nexow-web/actions/workflows/ci.yml/badge.svg)](https://github.com/nexow-ai/nexow-web/actions/workflows/ci.yml)
+[![Nexow, Inc.](https://img.shields.io/badge/copyright-Nexow%2C%20Inc.-111.svg)](NOTICE)
+
+Public marketing site for **[Nexow](https://x.nexow.ai)** — describe what you
+need, get live widgets on a canvas. This repository is the
+[nexow.ai](https://nexow.ai) website: landing pages, features, plans,
+community, connectors, legal docs, and the blog.
+
+**Copyright © 2026 [Nexow, Inc.](https://nexow.ai)**  
+Open source under the [Apache License 2.0](LICENSE). Ownership, trademarks,
+and brand stay with Nexow, Inc. Forks and reuse must keep the
+[NOTICE](NOTICE) attribution. See [TRADEMARKS.md](TRADEMARKS.md).
+
+The product application is **not** this repo. It runs at
+[x.nexow.ai](https://x.nexow.ai).
 
 ## Stack
 
 - **Astro 7** — static site generation, near-zero client JS
 - **Tailwind CSS v4** (`@tailwindcss/vite`) with a custom brand token system
-- **@astrojs/sitemap** — i18n sitemap with hreflang alternates
+- **@astrojs/sitemap** — i18n sitemap with `hreflang` alternates
 - **@astrojs/mdx** + content collections — the blog
 - Self-hosted variable fonts (Space Grotesk, Inter, JetBrains Mono)
+- **Bun** as the package manager (`bun.lock`)
 
 ## Features
 
-- **Bilingual (EN / ES)** — English at `/`, Spanish at `/es/`, wired with
-  `hreflang` + canonical tags and an i18n sitemap.
-- **Full marketing site** — home, features, pricing, about, blog, privacy, 404.
-- **SEO** — per-page titles/descriptions, Open Graph + Twitter cards, canonical
-  URLs, JSON-LD (`Organization`, `WebSite`, `SoftwareApplication`, `FAQPage`,
-  `BlogPosting`).
-- **GEO** — `llms.txt` summary for answer engines and an AI-crawler-friendly
-  `robots.txt`.
-- **Design** — hybrid light hero + dark product showcases, animated widget mock,
-  scroll-reveal (progressively enhanced; content is visible without JS).
+- **17 locales** — English at `/`, others at `/{lang}/`, with `hreflang`,
+  canonical tags, and an i18n sitemap
+- **Full marketing site** — home, features, community, connectors, plans,
+  about, blog, changelog, help, legal, privacy, security
+- **SEO** — per-page titles and descriptions, Open Graph + Twitter cards,
+  canonical URLs, JSON-LD (`Organization`, `WebSite`, `SoftwareApplication`,
+  `FAQPage`, `BlogPosting`)
+- **GEO** — `llms.txt` for answer engines and an AI-crawler-friendly
+  `robots.txt`
+- **Design** — hybrid light hero + dark product showcases, scroll-reveal
+  (progressively enhanced; content is visible without JS)
 
 ## Commands
 
+Requires Node.js 22.16+ (see `.nvmrc`) and [Bun](https://bun.sh) 1.2+.
+
 ```bash
 bun install
-bun run dev        # dev server at http://localhost:4321
-bun run build      # static build to ./dist
-bun run preview    # preview the production build
-bun run check      # astro + TypeScript diagnostics
+bun run content:sync   # generate the Astro content store
+bun run dev            # http://localhost:4321
+bun run build          # static output in ./dist
+bun run preview        # preview the production build
+bun run check          # astro + TypeScript diagnostics
+bun run test           # vitest (syncs content first)
+bun run test:e2e       # Playwright (builds first)
+bun run deploy:dev     # Cloudflare Pages, `dev` branch
+bun run deploy:stg     # Cloudflare Pages, `stg` branch
+bun run deploy:prod    # Cloudflare Pages, `main` (nexow.ai)
 ```
 
 ## Structure
 
 ```
 src/
-  components/          UI + section components (Hero, Features, …)
-    pages/            per-route page bodies, rendered by both locales
-    sections/         landing-page sections
-  content/blog/<lang>/  blog posts (Markdown/MDX)
-  i18n/               config, utils, content dictionary, blog helpers
-  layouts/            Layout.astro, BlogPost.astro
-  pages/              routes (EN at root, ES under /es/)
-  styles/global.css   Tailwind v4 theme + design tokens
-public/               logos, favicons, og.png, robots.txt, llms.txt
-scripts/              one-off asset + OG image generators
+  components/            UI, page bodies, landing sections
+  content/blog/<lang>/   blog posts (Markdown / MDX)
+  i18n/                  locales, legal copy, routing helpers
+  layouts/               Layout.astro, BlogPost.astro
+  lib/                   shared TypeScript
+  pages/                 EN at root, other locales under /{lang}/
+  styles/global.css      Tailwind v4 theme + design tokens
+public/                  logos, favicons, og.png, robots.txt, llms.txt
+scripts/                 asset generators, content-store, release back-merge
+tests/                   unit, integration, build, e2e
+.github/workflows/       CI, Deploy, Release, promote, sync
+CHANGELOG.md             generated by semantic-release — do not edit
 ```
 
 ## Editing content
 
-- **Copy** lives in `src/i18n/content.ts` (typed, `en` + `es`). Section
-  components read from it by locale — no copy is hard-coded in markup.
-- **Blog posts** are Markdown/MDX under `src/content/blog/en/` and
-  `src/content/blog/es/`. Use matching slugs across locales so hreflang aligns.
+- **Copy** lives in `src/i18n/locales/<lang>.ts`. English is the source of
+  truth — new strings must be added to every locale.
+- **Legal documents** live in `src/i18n/legal-en.ts` and
+  `src/i18n/legal/<lang>.ts`.
+- **Blog posts** are Markdown/MDX under `src/content/blog/<lang>/`. Use
+  matching slugs across locales so `hreflang` aligns.
 - **Brand tokens** (colors, fonts) live in `src/styles/global.css` under
   `@theme`.
 
@@ -70,5 +96,140 @@ bun run scripts/make-og.mjs           # regenerate public/og.png
 
 ## Deployment
 
-Static output in `dist/` — deploy to any static host (Netlify, Cloudflare Pages,
-Vercel, S3…). The production domain is set in `astro.config.mjs` (`site`).
+Static output in `dist/` — Cloudflare Pages via the **Deploy** workflow
+(`wrangler pages deploy --project-name=nexow-web`). Production `site` is
+set in `astro.config.mjs` to `https://nexow.ai`.
+
+| Branch | Pages branch | Role |
+| --- | --- | --- |
+| `dev` | `dev` | Integration preview |
+| `stg` | `stg` | Staging, production-gate preview |
+| `main` | `main` | Production — [nexow.ai](https://nexow.ai) |
+
+Release commits include `[skip actions]` so they do not loop Deploy /
+Release. After a stable cut on `main`, Release dispatches Deploy
+explicitly.
+
+## Branch promotion
+
+Work lands only along this path:
+
+```
+feature/*  →  PR  →  dev  →  PR  →  stg  →  clone  →  main
+```
+
+**Who can open a PR**
+
+- Into **`dev`**: any feature branch.
+- Into **`stg`**: only `dev`. The **Branch promotion** workflow closes
+  anything else.
+- Into **`main`**: only `stg`. Anything else is closed.
+
+**No direct commits** on `main` or `stg`. `.husky/pre-push` rejects
+`git push` to those branches. Open a `dev` → `stg` PR instead.
+
+**After `dev` → `stg` merges**, **Sync stg to main** clones `stg` onto
+`main` with a merge commit (`chore: promote stg to main`). This org does
+not let GitHub Actions open PRs, so the clone is a bot push, not a
+`stg` → `main` pull request. Site code stays identical. `main` may then
+add a `chore(release):` commit; that version bump comes back onto `dev`
+on the next release back-merge.
+
+**CI** is split so a `dev` review is not blocked by Playwright:
+
+| Event | What runs |
+| --- | --- |
+| PR into `dev` | Typecheck only (`bun run check`) |
+| PR into `stg` | Typecheck + coverage + build + built-output tests + Playwright |
+| Push to `stg` / `main` | No suite — already gated on the `stg` PR. Deploy (and the `main` release) proceed from that result. |
+
+Native GitHub rulesets / classic branch protection need Pro/Team on a
+private repo (this org is on Free), so the hook + workflows are the
+enforce path. After upgrading, add matching rulesets (block direct
+pushes / force-pushes on `main` and `stg`, require the promotion check)
+so the server rejects them too.
+
+## Releasing
+
+Releases are **commit-driven** via
+[semantic-release](https://semantic-release.gitbook.io/) — there is no
+manual changelog or version bump. Commit messages follow
+[Conventional Commits](https://www.conventionalcommits.org/) (`feat:`,
+`fix:`, `chore:`, …) and are linted locally by husky + commitlint.
+Version math lives in `.releaserc.cjs`.
+
+| Promote | Bump | Example |
+| --- | --- | --- |
+| **`dev`** (every releasable push) | **+0.0.1** patch, as a prerelease | `0.1.0` → `0.1.1-dev.1` → `0.1.1-dev.2` |
+| **`stg` → `main`** (the clone) | **+0.1.0** minor, stable | `0.1.0` → `0.2.0` |
+
+`stg` does not cut a version of its own. The +0.1.0 happens when **Sync
+stg to main** clones `stg` onto `main` and Release runs there.
+
+- **`dev`** is the **prerelease** line. GitHub Releases are marked
+  Pre-release. Further pushes on the same patch keep incrementing the
+  `-dev.N` suffix until the next +0.0.1.
+- **`main`** is the **stable** line. That +0.1.0 publishes on the default
+  channel, then back-merges `main` into `dev` so both branches share the
+  same baseline. `package.json` / `CHANGELOG.md` conflicts during that
+  back-merge are resolved in CI by keeping `dev`'s package contents while
+  adopting `main`'s released version.
+
+While the site is pre-1.0, neither line cuts a **major**. Reserve
+`1.0.0` for a deliberate stable launch — change `.releaserc.cjs` when
+you are ready to promote majors again.
+
+Never edit `CHANGELOG.md` by hand. The public `/changelog` page is a
+separate marketing surface (release blog posts), not this file.
+
+## Contributing
+
+We welcome issues and pull requests. Please read
+**[CONTRIBUTING.md](CONTRIBUTING.md)** (also at [contribution.md](contribution.md))
+before you start.
+
+By contributing you agree to the **[CLA](CLA.md)**: copyright in your
+contribution is assigned to **Nexow, Inc.** so this project stays company
+property while remaining Apache-2.0.
+
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security policy](SECURITY.md)
+- [Trademark policy](TRADEMARKS.md)
+
+## License, ownership, and attribution
+
+```
+Copyright 2026 Nexow, Inc.
+
+Licensed under the Apache License, Version 2.0.
+```
+
+| | |
+| --- | --- |
+| Legal entity | **Nexow, Inc.** |
+| Brand | [nexow.ai](https://nexow.ai) · [x.nexow.ai](https://x.nexow.ai) |
+| Address | 2810 N Church St STE 89080, Wilmington, DE 19802, United States |
+| License | [Apache License 2.0](LICENSE) |
+| Required notice | [NOTICE](NOTICE) — **must** ship with every fork and redistributed copy |
+| Trademarks | [TRADEMARKS.md](TRADEMARKS.md) — not licensed |
+
+The Apache License grants a copyright and patent license to use this Work.
+It does **not** transfer ownership of the project, and it does **not** grant
+rights in the Nexow name, logo, or other marks.
+
+If you fork or reuse this repository, keep `LICENSE` and `NOTICE`, credit
+Nexow, Inc., and do not present your fork as an official Nexow product.
+
+Suggested credit:
+
+```
+Based on nexow-web by Nexow, Inc. (https://nexow.ai)
+Copyright 2026 Nexow, Inc. Licensed under Apache-2.0.
+```
+
+## Contact
+
+- General: [hello@nexow.ai](mailto:hello@nexow.ai)
+- Support: [support@nexow.ai](mailto:support@nexow.ai)
+- Partners: [partners@nexow.ai](mailto:partners@nexow.ai)
+- Legal pages: [nexow.ai/legal](https://nexow.ai/legal)

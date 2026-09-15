@@ -1,0 +1,16 @@
+# Block direct pushes to the promote branches. CI (semantic-release) skips this.
+# Promote via pull request only: feature → dev → stg (stg auto-promotes to main).
+
+if [ -n "${CI:-}" ]; then
+  exit 0
+fi
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/stg)
+      echo "error: direct pushes to '${remote_ref#refs/heads/}' are blocked."
+      echo "Open a pull request from dev → stg instead (stg auto-promotes to main)."
+      exit 1
+      ;;
+  esac
+done

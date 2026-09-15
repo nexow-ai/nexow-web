@@ -1,32 +1,38 @@
 name: Deploy
 
+# Ship Cloudflare Pages for whichever promote branch just moved.
+#   push to dev  → Pages branch `dev`
+#   push to stg  → Pages branch `stg`
+#   push to main → Pages branch `main` (production, nexow.ai)
 on:
   push:
-    branches: [main, dev]
+    branches: [main, stg, dev]
   workflow_dispatch:
     inputs:
-      branch:
+      environment:
         description: Pages branch to deploy
         type: choice
-        options: [main, dev]
+        options: [main, stg, dev]
         default: main
 
-# One in-flight deploy per target branch; newer pushes cancel the older one.
 concurrency:
-  group: deploy-${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
+  group: deploy-${{ github.event_name == 'workflow_dispatch' && inputs.environment || github.ref_name }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: write
 
 jobs:
   deploy:
     name: Cloudflare Pages
-    env:
-      PAGES_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.ref_name }}
+    if: >
+      github.event_name == 'workflow_dispatch'
+      || !contains(github.event.head_commit.message, '[skip actions]')
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    permissions:
-      contents: read
-      deployments: write
-
+    env:
+      PAGES_BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 

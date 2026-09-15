@@ -13,7 +13,7 @@ export const THEME_STORAGE_KEY = 'nexow-theme';
 /** `<meta name="theme-color">` per theme — browser chrome tint. */
 export const THEME_COLORS: Record<Theme, string> = {
   dark: '#08090d',
-  light: '#06a086',
+  light: '#d63200',
 };
 
 /** The favicon that reads against the browser's own chrome. */
