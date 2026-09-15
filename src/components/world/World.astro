@@ -209,9 +209,10 @@ import WorldField from './WorldField.astro';
     --w-shadow: rgba(15, 23, 42, 0.22);
     --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
     /* Wash strength: the colour behind the matter. Quieter on a light page.
-     * Stops are the first-paint cloth (ember → indigo → plasma), not the
-     * remapped brand tokens — WorldField writes --w-hue-* to the document
-     * and those used to pull the hero from this gradient into cyan. */
+     * Stops start as the first-paint cloth (ember → indigo → plasma).
+     * WorldField walks them onto each later section's hue on the same beat
+     * the crystal crosses — it must not use --color-brand-*, or the hero
+     * flashes cyan the moment the first frame writes --w-hue-*. */
     --w-wash: 0.45;
     --w-wash-a: #ff4d14;
     --w-wash-b: var(--color-accent-600, var(--color-accent-500));
