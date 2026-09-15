@@ -5,12 +5,15 @@
  * Behaviour only, no markup. It measures the `.tone-invert` bands once per
  * layout, then stamps `.chrome-invert` on the header bar, the tour's transport
  * and the corner arrows whenever the band behind that edge of the viewport is
- * the opposite tone to the page. The section rail is tall enough to sit on
- * two bands at once, so each stop is stamped from the tone behind its own
- * row. Each component decides what that means for its own paint: Tailwind's
- * `dark:` variant flips inside `.chrome-invert` the same way it does inside
- * `.tone-invert` (see `styles/global.css`), and the hand-written glass rules
- * carry the second branch.
+ * the opposite tone to the page. Each component decides what that means for
+ * its own paint: Tailwind's `dark:` variant flips inside `.chrome-invert` the
+ * same way it does inside `.tone-invert` (see `styles/global.css`), and the
+ * hand-written glass rules carry the second branch.
+ *
+ * The section rail colours itself from the current section — it must not
+ * receive `.chrome-invert`. That class on a `fixed inset-y-0` landmark
+ * paints a dark slab down the right edge (the Tailwind `dark:` tokens and
+ * the invert palette both treat it as a surface).
  *
  * Why the chrome needs telling at all: the page theme does not change as the
  * story runs, so a header and a transport coloured from it are drawn in the
@@ -28,8 +31,6 @@
     CHROME_TONE_EVENT,
     CHROME_TOP_INSET,
     invertedAt,
-    surfaceAt,
-    type ChromeSurface,
     type ToneBand,
   } from '../lib/chrome-tone';
 
@@ -40,12 +41,9 @@
    * or it paints a white wash onto a black stripe (and the reverse). */
   const TOP = '#site-nav, .world__crown';
   const FOOT = '#tour-hud, .page-nav';
-  /* The section rail floats at the middle of the viewport's right edge. */
-  const MID = '#section-nav';
 
   let abort: AbortController | undefined;
   let ro: ResizeObserver | undefined;
-  let themeMo: MutationObserver | undefined;
   let raf = 0;
   let bands: ToneBand[] = [];
   /** The last pair painted, so a scroll inside one band costs one comparison. */
@@ -54,72 +52,15 @@
   function paint() {
     raf = 0;
     const y = window.scrollY;
-    const pageDark = document.documentElement.classList.contains('dark');
     const top = invertedAt(y + CHROME_TOP_INSET, bands);
     const foot = invertedAt(y + window.innerHeight - CHROME_FOOT_INSET, bands);
-    const mid = invertedAt(y + window.innerHeight * 0.5, bands);
-
-    /* The rail is tall enough to sit on two bands at once. Each stop reads
-       the tone behind its own row; the nav itself still follows the midline
-       so the vertical track flips with the middle of the list. */
-    const rail = document.querySelector(MID);
-    const links = rail
-      ? Array.from(rail.querySelectorAll<HTMLElement>('[data-section-link]'))
-      : [];
-    const linkInvert = links.map((link) => {
-      const box = link.getBoundingClientRect();
-      return invertedAt(y + box.top + box.height * 0.5, bands);
-    });
-    const linkTone = links.map((link) => {
-      const box = link.getBoundingClientRect();
-      return surfaceAt(y + box.top + box.height * 0.5, pageDark, bands);
-    });
-
-    const state = `${pageDark}/${top}/${foot}/${mid}/${linkTone.join('')}`;
+    const state = `${top}/${foot}`;
     if (state === painted) return;
     painted = state;
 
     for (const el of document.querySelectorAll(TOP)) el.classList.toggle('chrome-invert', top);
     for (const el of document.querySelectorAll(FOOT)) el.classList.toggle('chrome-invert', foot);
-    for (const el of document.querySelectorAll(MID)) el.classList.toggle('chrome-invert', mid);
-    links.forEach((link, i) => {
-      link.classList.toggle('chrome-invert', linkInvert[i]);
-      applyRailTone(link, linkTone[i]);
-    });
-    document.dispatchEvent(new CustomEvent(CHROME_TONE_EVENT, { detail: { top, foot, mid } }));
-  }
-
-  const RAIL = {
-    ink: {
-      fg: 'color-mix(in oklab, white 68%, transparent)',
-      strong: '#ffffff',
-      current: 'var(--w-hue-300, var(--color-brand-300))',
-      dotBorder: 'color-mix(in oklab, white 40%, transparent)',
-      dotBg: 'var(--color-ink-900)',
-      chip: 'color-mix(in oklab, var(--color-ink-950) 88%, transparent)',
-    },
-    paper: {
-      fg: 'color-mix(in oklab, var(--color-ink-900) 68%, transparent)',
-      strong: 'var(--color-ink-950)',
-      current: 'var(--w-hue-700, var(--color-brand-700))',
-      dotBorder: 'color-mix(in oklab, var(--color-ink-900) 28%, transparent)',
-      dotBg: '#ffffff',
-      chip: 'color-mix(in oklab, white 88%, transparent)',
-    },
-  } as const;
-
-  function applyRailTone(link: HTMLElement, tone: ChromeSurface) {
-    /* Rewriting the same custom props restarts `transition` on the label
-       and the colour never arrives — ResizeObserver remesures often. */
-    if (link.dataset.tone === tone && link.style.getPropertyValue('--rail-fg')) return;
-    const t = RAIL[tone];
-    link.dataset.tone = tone;
-    link.style.setProperty('--rail-fg', t.fg);
-    link.style.setProperty('--rail-fg-strong', t.strong);
-    link.style.setProperty('--rail-current', t.current);
-    link.style.setProperty('--rail-dot-border', t.dotBorder);
-    link.style.setProperty('--rail-dot-bg', t.dotBg);
-    link.style.setProperty('--rail-chip', t.chip);
+    document.dispatchEvent(new CustomEvent(CHROME_TONE_EVENT, { detail: { top, foot } }));
   }
 
   const schedule = () => {
@@ -130,17 +71,8 @@
    * the page can have grown under it — a lazy image, a font, an act that pins. */
   function measure() {
     const y = window.scrollY;
-    /* On the home world the painted boxes are the source of truth — one per
-       scene, including acts that share a wrapper. Elsewhere the content
-       wrappers themselves mark the invert. Skip zero-size theme probes. */
-    const paintedBands = document.querySelectorAll<HTMLElement>('.world__band--invert');
-    const sources = paintedBands.length
-      ? paintedBands
-      : [...document.querySelectorAll<HTMLElement>('.tone-invert')].filter(
-          (el) => !el.classList.contains('pg-pin') && !el.closest('.world-field'),
-        );
-    bands = [...sources]
-      .filter((el) => el.offsetHeight > 0)
+    bands = [...document.querySelectorAll<HTMLElement>('.tone-invert')]
+      .filter((el) => el.offsetHeight > 0 && !el.closest('.world-field') && !el.classList.contains('pg-pin'))
       .map((el) => {
         const box = el.getBoundingClientRect();
         return { top: box.top + y, bottom: box.bottom + y };
@@ -154,8 +86,6 @@
     abort = undefined;
     ro?.disconnect();
     ro = undefined;
-    themeMo?.disconnect();
-    themeMo = undefined;
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
     bands = [];
@@ -171,17 +101,9 @@
 
     window.addEventListener('scroll', schedule, { passive: true, signal });
     window.addEventListener('resize', measure, { passive: true, signal });
-    /* Theme toggle flips ink/paper without a scroll. */
-    themeMo = new MutationObserver(schedule);
-    themeMo.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
     if ('ResizeObserver' in window) {
       ro = new ResizeObserver(measure);
       ro.observe(document.documentElement);
-      const worldBands = document.querySelector('.world__bands');
-      if (worldBands) ro.observe(worldBands);
     }
   }
 
