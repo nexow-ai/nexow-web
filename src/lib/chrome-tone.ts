@@ -42,3 +42,16 @@ export const CHROME_FOOT_INSET = 48;
 export function invertedAt(y: number, bands: ToneBand[]): boolean {
   return bands.some((band) => y >= band.top && y < band.bottom);
 }
+
+/** The painted ground at `y`: ink is a dark band, paper is a light one. */
+export type ChromeSurface = 'ink' | 'paper';
+
+/**
+ * Page theme XOR invert band. A dark page is ink until it crosses a
+ * `.tone-invert` band; a light page is paper until it does. The section
+ * rail colours from this so type is black on white and white on black,
+ * regardless of which theme the page is in.
+ */
+export function surfaceAt(y: number, pageDark: boolean, bands: ToneBand[]): ChromeSurface {
+  return pageDark !== invertedAt(y, bands) ? 'ink' : 'paper';
+}

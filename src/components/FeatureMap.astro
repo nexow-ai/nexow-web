@@ -50,7 +50,7 @@ function iconPath(icon: string) {
 <div
   class="feature-map relative mx-auto w-full max-w-6xl"
   data-feature-map
-  style="--fm-way:#14b8a6;--fm-way-400:#2dd4bf;--fm-way-600:#0d9488;--fm-pair:#f97316"
+  style="--fm-way:#f97316;--fm-way-400:#fb923c;--fm-way-600:#ea580c;--fm-pair:#3b82f6"
 >
   <p class="mb-6 text-center font-mono text-xs tracking-wide text-ink-500 dark:text-ink-400">
     {hint}
@@ -588,7 +588,11 @@ function iconPath(icon: string) {
           btn.setAttribute('aria-pressed', on ? 'true' : 'false');
           btn.classList.toggle('is-on', on);
           idleCls.forEach((c) => btn.classList.toggle(c, !on));
-          if (on) paintWay(i);
+          /* The walk starts at orange, the brand's own family, rather than
+           * at teal — the plate is the first thing on the product band and
+           * opening it on the old corporate mint was one more instance of
+           * the colour the page was asked to stop repeating. */
+          if (on) paintWay(i + 8);
 
           const icon = btn.querySelector<HTMLElement>('[data-fm-node-icon]');
           if (icon) {

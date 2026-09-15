@@ -102,9 +102,15 @@ const sections = [
   world
 >
   {/*
-    One continuous interior, one tone. The page theme holds from the hero
-    through the footer — white in light mode, black in dark — with no invert
-    band. Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
+    One continuous interior in four bands. The story (hero and the seven
+    acts) sits on the page tone; the product (features, privacy, plans) on
+    the opposite tone; the close (rewards, FAQ, CTA) back on the page tone;
+    and the footer opposite again. On the dark theme that is black, white,
+    black, white; on the light theme white, black, white, black. A
+    `.tone-invert` wrapper is the whole mechanism: the world paints the
+    ground under its field, every `dark:` utility inside flips, and
+    `ChromeTone` re-tones the fixed chrome as each band passes under it.
+    Order is load-bearing: `WorldField` maps scene *i* to formation *i*.
   */}
   <World>
     <Hero lang={lang} />
@@ -114,13 +120,15 @@ const sections = [
     <ActAgents lang={lang} />
     <ActDao lang={lang} />
     <ActUseCases lang={lang} />
-    <Features lang={lang} />
-    <Privacy lang={lang} />
-    <Plans lang={lang} />
+    <div class="tone-invert">
+      <Features lang={lang} />
+      <Privacy lang={lang} />
+      <Plans lang={lang} />
+    </div>
     <RewardsTeaser lang={lang} />
     <Faq lang={lang} group="home-faq" appear />
     <CtaBand lang={lang} appear />
-    <div data-world-scene class="world-close">
+    <div data-world-scene class="world-close tone-invert">
       <Footer followTheme />
     </div>
   </World>

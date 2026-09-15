@@ -1,7 +1,24 @@
 {
   "name": "nexow-web",
   "type": "module",
-  "version": "0.1.0",
+  "version": "1.0.0-dev.1",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Nexow, Inc.",
+    "email": "hello@nexow.ai",
+    "url": "https://nexow.ai"
+  },
+  "homepage": "https://nexow.ai",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nexow-ai/nexow-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nexow-ai/nexow-web/issues",
+    "email": "hello@nexow.ai"
+  },
+  "description": "Marketing site for Nexow — copyright Nexow, Inc. (nexow.ai).",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -22,7 +39,12 @@
     "test:e2e": "astro build && playwright test",
     "test:e2e:ui": "playwright test --ui",
     "links:check": "node scripts/check-external-links.mjs",
+    "release": "semantic-release",
+    "prepare": "husky",
     "deploy": "astro build && wrangler pages deploy dist --project-name=nexow-web --branch=main",
+    "deploy:dev": "astro build && wrangler pages deploy dist --project-name=nexow-web --branch=dev",
+    "deploy:stg": "astro build && wrangler pages deploy dist --project-name=nexow-web --branch=stg",
+    "deploy:prod": "astro build && wrangler pages deploy dist --project-name=nexow-web --branch=main",
     "cf:serve": "astro build && wrangler dev"
   },
   "dependencies": {
@@ -44,11 +66,18 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@axe-core/playwright": "^4.12.1",
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@playwright/test": "^1.62.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
     "@types/jsdom": "^28.0.3",
     "@vitest/coverage-v8": "^4.1.10",
     "axe-core": "^4.12.1",
+    "husky": "^9.1.7",
     "jsdom": "^30.0.1",
+    "semantic-release": "^25.0.5",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
     "wrangler": "^4.106.0"

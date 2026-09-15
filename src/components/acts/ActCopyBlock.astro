@@ -90,10 +90,13 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3', '--k4', '--k5'];
     color: var(--w-accent-2);
   }
 
+  /* The rule and the lit beat wear the section's own colour: `--w-hue` is
+     written on the world by WorldField as the crystal changes, brand teal
+     until it has. Type keeps the world's accent for contrast. */
   .act-copy__rule {
     width: 1.75rem;
     height: 1px;
-    background: linear-gradient(90deg, var(--color-brand-400), transparent);
+    background: linear-gradient(90deg, var(--w-hue, var(--color-brand-400)), transparent);
   }
 
   .act-copy__title {
@@ -125,7 +128,11 @@ const RAMPS = ['--k0', '--k1', '--k2', '--k3', '--k4', '--k5'];
     gap: 0.15rem;
     padding-inline-start: 0.9rem;
     border-inline-start: 2px solid
-      color-mix(in oklab, var(--color-brand-400) calc(var(--lit, 1) * 100%), var(--w-line));
+      color-mix(
+        in oklab,
+        var(--w-hue, var(--color-brand-400)) calc(var(--lit, 1) * 100%),
+        var(--w-line)
+      );
     /* Never fades below 0.55: an unlit beat is dimmer, never unreadable. */
     opacity: calc(0.55 + 0.45 * var(--lit, 1));
     transition: opacity 0.35s var(--ease-out-expo);

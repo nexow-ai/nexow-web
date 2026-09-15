@@ -130,9 +130,24 @@ describe.each(SAMPLE_LANGS)('home page in %s', (lang) => {
     }
   });
 
-  it('stays on the page theme with no invert bands', async () => {
+  it('alternates tone in four bands: story, product, close, footer', async () => {
     const html = await render(pageFor('/', lang) as never, localizePath('/', lang));
-    expect(html).not.toMatch(/class="[^"]*tone-invert/);
+    /* Two invert wrappers, and only two: the product band (features, privacy,
+       plans) and the footer's close. The story and the close between them
+       stay on the page tone, so the page reads black / white / black / white
+       on the dark theme and the mirror on the light one. */
+    const bands = [...html.matchAll(/<div\b[^>]*\bclass="([^"]*\btone-invert\b[^"]*)"/g)].map(
+      (m) => m[1],
+    );
+    expect(bands).toHaveLength(2);
+    expect(bands[1]).toContain('world-close');
+    const product = html.search(/<div\b[^>]*\bclass="tone-invert"/);
+    expect(product).toBeGreaterThan(0);
+    expect(product).toBeGreaterThan(html.indexOf('id="use-cases"'));
+    expect(html.indexOf('id="features"')).toBeGreaterThan(product);
+    expect(html.indexOf('id="plans"')).toBeGreaterThan(product);
+    expect(html.indexOf('id="rewards"')).toBeGreaterThan(html.indexOf('id="plans"'));
+    expect(html.indexOf('id="rewards"')).toBeLessThan(html.indexOf('world-close tone-invert'));
   });
 });
 

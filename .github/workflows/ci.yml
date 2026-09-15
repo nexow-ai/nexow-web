@@ -1,27 +1,89 @@
 name: CI
 
+# Test depth follows the promote path:
+#   PR → dev   typecheck only (fast feedback)
+#   PR → stg   typecheck + coverage + build + e2e (the production gate)
+#   push       no suite — stg already ran it, main just clones stg
 on:
   push:
-    branches: [main]
+    branches: [main, stg, dev]
   pull_request:
+    branches: [main, stg, dev]
   workflow_dispatch:
 
-# A newer push to the same ref supersedes an in-flight run.
+permissions:
+  contents: read
+  pull-requests: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: check · test · build
+  promotion:
+    name: Reject direct pushes
+    if: >
+      github.event_name == 'push'
+      && contains(fromJSON('["main","stg"]'), github.ref_name)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require a promote PR or the stg → main clone
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.sha }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          login="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}" --jq '.author.login // empty')"
+          message="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}" --jq '.commit.message')"
+
+          if [ "$BRANCH" = "main" ] && [ "$login" = "github-actions[bot]" ]; then
+            if printf '%s\n' "$message" | grep -q '^chore(release):' \
+              && printf '%s\n' "$message" | grep -q '\[skip actions\]'; then
+              echo "OK: release commit on main"
+              exit 0
+            fi
+            if printf '%s\n' "$message" | grep -q '^chore: promote stg to main'; then
+              echo "OK: stg → main clone"
+              exit 0
+            fi
+          fi
+
+          expected_head="stg"
+          if [ "$BRANCH" = "stg" ]; then
+            expected_head="dev"
+          fi
+
+          matched="0"
+          for _ in 1 2 3 4 5; do
+            matched="$(
+              gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" \
+                --jq "[.[] | select(.merged_at != null) | select(.base.ref == \"${BRANCH}\") | select(.head.ref == \"${expected_head}\")] | length"
+            )"
+            if [ "$matched" != "0" ]; then
+              echo "OK: ${expected_head} → ${BRANCH} via promote PR"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "::error::Direct pushes to ${BRANCH} are not allowed. Promote via ${expected_head} → ${BRANCH}."
+          exit 1
+
+  checks:
+    name: Checks
+    needs: [promotion]
+    if: >
+      always()
+      && (needs.promotion.result == 'success' || needs.promotion.result == 'skipped')
+      && (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch')
+      && (github.event_name == 'workflow_dispatch' || github.base_ref == 'dev' || github.base_ref == 'stg')
     runs-on: ubuntu-latest
     timeout-minutes: 20
-
     steps:
       - uses: actions/checkout@v4
 
-      # Node satisfies the `engines` field and runs scripts/*.mjs; Bun is the
-      # package manager the lockfile belongs to.
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -33,28 +95,28 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # The content layer's data store is generated, not committed; every later
-      # step needs it to resolve `astro:content` and the blog hero images.
       - name: Sync content collections
         run: bun run content:sync
 
       - name: Type-check
         run: bun run check
 
+      # Full suite only on the stg gate (or a manual dispatch). PRs into `dev`
+      # stop after typecheck so review is not blocked for the browser run.
       - name: Test with coverage
+        if: github.event_name == 'workflow_dispatch' || github.base_ref == 'stg'
         run: bunx vitest run --coverage
 
       - name: Build
+        if: github.event_name == 'workflow_dispatch' || github.base_ref == 'stg'
         run: bun run build
 
-      # Link integrity, sitemap coverage and asset presence over the real
-      # output — these skip themselves when dist/ is absent, so they only
-      # mean anything here, after the build.
       - name: Test built output
+        if: github.event_name == 'workflow_dispatch' || github.base_ref == 'stg'
         run: bun run test:build
 
       - name: Upload coverage report
-        if: always()
+        if: always() && (github.event_name == 'workflow_dispatch' || github.base_ref == 'stg')
         uses: actions/upload-artifact@v4
         with:
           name: coverage
@@ -64,10 +126,13 @@ jobs:
 
   e2e:
     name: browser
+    needs: [promotion]
+    if: >
+      always()
+      && (needs.promotion.result == 'success' || needs.promotion.result == 'skipped')
+      && (github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.base_ref == 'stg'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # The build is a prerequisite either way; running in parallel with `verify`
-    # keeps total wall-clock down rather than chaining the two.
     steps:
       - uses: actions/checkout@v4
 
@@ -82,8 +147,6 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      # The full browser, not Playwright's headless shell: the shell has no View
-      # Transitions API, so Astro's ClientRouter hangs and every click looks dead.
       - name: Install Chromium
         run: bunx playwright install --with-deps chromium
 
@@ -104,3 +167,21 @@ jobs:
           path: playwright-report/
           retention-days: 14
           if-no-files-found: ignore
+
+  gate:
+    name: CI gate
+    needs: [promotion, checks, e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require no failures
+        run: |
+          set -euo pipefail
+          promo='${{ needs.promotion.result }}'
+          checks='${{ needs.checks.result }}'
+          e2e='${{ needs.e2e.result }}'
+          echo "promotion=${promo} checks=${checks} e2e=${e2e}"
+          if [ "$promo" = failure ] || [ "$checks" = failure ] || [ "$e2e" = failure ]; then
+            echo "::error::CI failed (promotion=${promo} checks=${checks} e2e=${e2e})"
+            exit 1
+          fi
