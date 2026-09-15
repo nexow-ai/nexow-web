@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.2.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.2.0...v1.2.1-dev.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **home:** colour the rail from the section it sits on ([fbff40c](https://github.com/nexow-ai/nexow-web/commit/fbff40cb2de74f6bb2ff0ff49e360b7b5d2068cc))
+
+
+### Features
+
+* **world:** walk the wash onto each section's hue ([5d6cc48](https://github.com/nexow-ai/nexow-web/commit/5d6cc48be41236d2c7dda0f9a4170b447537be0e))
+
 # [1.2.0](https://github.com/nexow-ai/nexow-web/compare/v1.1.0...v1.2.0) (2026-09-15)
 
 
