@@ -1,0 +1,61 @@
+name: Branch promotion
+
+# Enforce the promote path. Native GitHub rulesets / classic branch protection
+# need Pro/Team on a private repo (this org is on Free), so this workflow plus
+# the local husky pre-push hook are the enforce path:
+#
+#   feature/* → dev → stg → main
+#
+# Illegal PRs into stg/main are closed. Direct local pushes are blocked by
+# .husky/pre-push. Once Pro is available, add matching rulesets (block direct
+# pushes / force-pushes, require this check) so the server rejects them too.
+#
+# Uses pull_request_target so the check runs from the base branch workflow even
+# when the head branch omits this file. Only reads github.base_ref / head_ref —
+# no checkout of untrusted PR code.
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+    branches: [main, stg]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  guard:
+    name: Enforce promotion path
+    runs-on: ubuntu-latest
+    steps:
+      - name: Allow only the promote path
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+          PR: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          reject() {
+            local message="$1"
+            echo "::error::${message}"
+            gh pr close "$PR" --comment "${message} This PR was closed because \`main\` and \`stg\` only accept the promote path (\`dev\` → \`stg\` → \`main\`)."
+            exit 1
+          }
+
+          case "$BASE" in
+            stg)
+              if [ "$HEAD" != "dev" ]; then
+                reject "PRs into stg must come from dev (got '${HEAD}' → stg)."
+              fi
+              ;;
+            main)
+              if [ "$HEAD" != "stg" ]; then
+                reject "PRs into main must come from stg (got '${HEAD}' → main)."
+              fi
+              ;;
+            *)
+              reject "Unexpected base branch '${BASE}'."
+              ;;
+          esac
+          echo "OK: $HEAD → $BASE"

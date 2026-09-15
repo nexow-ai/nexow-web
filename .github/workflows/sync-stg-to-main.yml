@@ -1,0 +1,94 @@
+name: Sync stg to main
+
+# After a `dev` → `stg` merge lands, clone `stg` onto `main` with a merge
+# commit. The org blocks Actions from opening PRs, so this is a direct push
+# (the only actor that may update `main` besides the release bot).
+#
+# Full tests already ran on the `dev` → `stg` PR. Main does not run them again.
+on:
+  push:
+    branches: [stg]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+  actions: write
+
+concurrency:
+  group: sync-stg-to-main
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: Clone stg onto main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Merge stg into main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          subject="$(git log -1 --pretty=%s "$SHA")"
+          matched="0"
+          if printf '%s\n' "$subject" | grep -qE '^Merge pull request #[0-9]+ from [^[:space:]]+/dev$'; then
+            matched="1"
+          else
+            for _ in 1 2 3 4 5; do
+              matched="$(
+                gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" \
+                  --jq '[.[] | select(.merged_at != null) | select(.base.ref == "stg") | select(.head.ref == "dev")] | length' \
+                  || echo 0
+              )"
+              if [ "$matched" != "0" ]; then
+                break
+              fi
+              sleep 2
+            done
+          fi
+
+          if [ "$matched" = "0" ]; then
+            echo "Skipping main clone: this stg push is not a merged dev → stg PR (${subject})."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch origin main stg
+
+          if git merge-base --is-ancestor origin/stg origin/main; then
+            echo "main already contains stg — nothing to promote"
+            exit 0
+          fi
+
+          git checkout -B main origin/main
+          if ! git merge origin/stg --no-ff -m "chore: promote stg to main"; then
+            unresolved="$(git diff --name-only --diff-filter=U)"
+            echo "Promote merge conflicted in:"
+            printf '%s\n' "$unresolved"
+            extra="$(printf '%s\n' "$unresolved" | grep -Ev '^(CHANGELOG\.md|package\.json)$' || true)"
+            if [ -n "$extra" ]; then
+              echo "::error::Promote has non-release conflicts — resolve by hand:" >&2
+              printf '%s\n' "$extra" >&2
+              exit 1
+            fi
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              git checkout --theirs -- "$file"
+              git add -- "$file"
+            done <<< "$unresolved"
+            git commit --no-edit
+          fi
+          git push origin main
+          gh workflow run Deploy --ref main -f environment=main
+          gh workflow run Release --ref main || echo "Release dispatch skipped (workflow_dispatch not on main yet)"
