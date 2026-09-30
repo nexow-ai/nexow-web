@@ -1067,8 +1067,9 @@ import { uk } from './locales/uk';
 import { ms } from './locales/ms';
 import { el } from './locales/el';
 import { tr } from './locales/tr';
+import { pl } from './locales/pl';
 
-export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, nl, pt, zh, ja, ar, he, ko, ru, uk, ms, el, tr };
+export const content: Record<Lang, SiteContent> = { en, es, fr, it, de, nl, pt, zh, ja, ar, he, ko, ru, uk, ms, el, tr, pl };
 
 /**
  * Deep-merge locale content onto English so incomplete translations still
