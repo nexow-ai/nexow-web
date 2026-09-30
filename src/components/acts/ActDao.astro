@@ -38,6 +38,7 @@ interface Props {
 const { lang } = Astro.props;
 const c = useContent(lang);
 const copy = c.home.acts!.dao;
+const art = c.home.art!.dao;
 
 /** The ballot on the table: the community page's own preview proposal, so the two never disagree. */
 const dao = c.communityPage.dao;
@@ -73,10 +74,10 @@ const EDGES = [-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8];
 
 /** The payout ledger: three weeks paid, the next one already on the clock. */
 const WEEKS = [
-  { label: 'week −3', state: 'paid' },
-  { label: 'week −2', state: 'paid' },
-  { label: 'week −1', state: 'paid' },
-  { label: 'this week', state: 'due', due: true },
+  { label: art.weekAgo.replace('{n}', '3'), state: 'paid' },
+  { label: art.weekAgo.replace('{n}', '2'), state: 'paid' },
+  { label: art.weekAgo.replace('{n}', '1'), state: 'paid' },
+  { label: art.thisWeek, state: 'due', due: true },
 ];
 ---
 
@@ -165,8 +166,8 @@ const WEEKS = [
       {/* The ledger: one cell per week, the next one already on the clock. */}
       <div class="d-ledger">
         <p class="d-ledger-head">
-          <span>dividends</span>
-          <span class="d-ledger-chain"><span class="d-sol">◎</span> solana · weekly · on-chain</span>
+          <span>{art.ledger}</span>
+          <span class="d-ledger-chain"><span class="d-sol">◎</span> {art.chain}</span>
         </p>
         <ol class="d-weeks">
           {
@@ -174,7 +175,7 @@ const WEEKS = [
               <li class="d-week" data-due={w.due ? '' : undefined} style={`--i:${i}`}>
                 <span class="d-week-dot" />
                 <span class="d-week-label">{w.label}</span>
-                <span class="d-week-state">{w.state}</span>
+                <span class="d-week-state">{w.state === 'paid' ? art.paid : art.due}</span>
               </li>
             ))
           }

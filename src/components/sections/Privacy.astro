@@ -10,7 +10,10 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).home.privacy;
+const home = useContent(lang).home;
+const t = home.privacy;
+const art = home.art!.privacy;
+const labels = home.art!.security;
 const securityHref = localizePath('/security', lang);
 ---
 
@@ -88,7 +91,7 @@ const securityHref = localizePath('/security', lang);
 
       <!-- Visual: animated trust-boundary diagram + workspace panel -->
       <div class="reveal relative min-w-0" data-motion="lag">
-        <SecurityDiagram />
+        <SecurityDiagram labels={labels} />
 
         <div
           data-motion="breathe tilt"
@@ -97,31 +100,31 @@ const securityHref = localizePath('/security', lang);
         >
           <div class="flex items-center gap-2 border-b border-ink-900/8 px-4 py-3 dark:border-white/8">
             <Icon name="lock" class="size-4 text-brand-700 dark:text-brand-300" />
-            <span class="font-mono text-xs text-ink-500 dark:text-ink-400">settings · workspace security</span>
-            <span class="ml-auto rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:bg-brand-400/12 dark:text-brand-300">scoped</span>
+            <span class="font-mono text-xs text-ink-500 dark:text-ink-400">{art.chrome}</span>
+            <span class="ml-auto rounded-full bg-brand-50 px-2 py-0.5 font-mono text-[0.65rem] text-brand-700 dark:bg-brand-400/12 dark:text-brand-300">{art.scoped}</span>
           </div>
           <div class="space-y-3 p-5 font-mono text-xs">
             <div class="flex items-center justify-between">
-              <span class="text-ink-500 dark:text-ink-400">credential vault</span>
-              <span class="text-ink-700 dark:text-ink-200">encrypted</span>
+              <span class="text-ink-500 dark:text-ink-400">{art.vault}</span>
+              <span class="text-ink-700 dark:text-ink-200">{art.encrypted}</span>
             </div>
             <div class="h-px bg-ink-900/8 dark:bg-white/8"></div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500 dark:text-ink-400">widget runtime</span>
-              <span class="inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-300"><span class="size-1.5 rounded-full bg-brand-500"></span>sandboxed</span>
+              <span class="text-ink-500 dark:text-ink-400">{art.runtime}</span>
+              <span class="inline-flex items-center gap-1.5 text-brand-700 dark:text-brand-300"><span class="size-1.5 rounded-full bg-brand-500"></span>{art.sandboxed}</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500 dark:text-ink-400">widgets · versions · logs</span>
-              <span class="text-ink-700 dark:text-ink-200">workspace history</span>
+              <span class="text-ink-500 dark:text-ink-400">{art.history}</span>
+              <span class="text-ink-700 dark:text-ink-200">{art.historyValue}</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500 dark:text-ink-400">connections</span>
-              <span class="text-ink-700 dark:text-ink-200">least privilege</span>
+              <span class="text-ink-500 dark:text-ink-400">{art.connections}</span>
+              <span class="text-ink-700 dark:text-ink-200">{art.leastPrivilege}</span>
             </div>
             <div class="h-px bg-ink-900/8 dark:bg-white/8"></div>
             <div class="flex items-center justify-between">
-              <span class="text-ink-500 dark:text-ink-400">sync status</span>
-              <span class="text-lg font-bold text-brand-700 dark:text-brand-300">ready</span>
+              <span class="text-ink-500 dark:text-ink-400">{art.sync}</span>
+              <span class="text-lg font-bold text-brand-700 dark:text-brand-300">{art.ready}</span>
             </div>
           </div>
         </div>

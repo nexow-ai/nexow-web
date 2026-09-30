@@ -4,13 +4,19 @@
  * orbiting control nodes with scroll-friendly idle animation.
  */
 import { ICON_PATHS } from './icon-paths';
+import type { HomeArtCopy } from '../i18n/content';
+
+interface Props {
+  labels: HomeArtCopy['security'];
+}
+const { labels } = Astro.props;
 
 const NODES = [
-  { label: 'vault', icon: 'lock', angle: -90, delay: '0s' },
-  { label: 'runtime', icon: 'cpu', angle: -18, delay: '0.35s' },
-  { label: 'scopes', icon: 'layers', angle: 54, delay: '0.7s' },
-  { label: 'access', icon: 'plug', angle: 126, delay: '1.05s' },
-  { label: 'sync', icon: 'sync', angle: 198, delay: '1.4s' },
+  { label: labels.vault, icon: 'lock', angle: -90, delay: '0s' },
+  { label: labels.runtime, icon: 'cpu', angle: -18, delay: '0.35s' },
+  { label: labels.scopes, icon: 'layers', angle: 54, delay: '0.7s' },
+  { label: labels.access, icon: 'plug', angle: 126, delay: '1.05s' },
+  { label: labels.sync, icon: 'sync', angle: 198, delay: '1.4s' },
 ] as const;
 
 const CX = 260;

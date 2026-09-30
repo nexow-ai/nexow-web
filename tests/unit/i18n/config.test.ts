@@ -4,15 +4,15 @@ import { ICON_PATHS } from '../../../src/components/icon-paths';
 import { LANGS, PREFIXED_LANGS } from '../../helpers/locales';
 
 describe('languages', () => {
-  it('ships 17 locales with English as the default', () => {
-    expect(LANGS).toHaveLength(17);
+  it('ships 18 locales with English as the default', () => {
+    expect(LANGS).toHaveLength(18);
     expect(defaultLang).toBe('en');
     expect(languages[defaultLang]).toBe('English');
   });
 
   it('lists English first so it heads every language switcher', () => {
     expect(LANGS[0]).toBe('en');
-    expect(PREFIXED_LANGS).toHaveLength(16);
+    expect(PREFIXED_LANGS).toHaveLength(17);
     expect(PREFIXED_LANGS).not.toContain('en');
   });
 

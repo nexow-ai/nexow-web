@@ -35,6 +35,7 @@ export default defineConfig({
       'ms',
       'el',
       'tr',
+      'pl',
     ],
     routing: {
       prefixDefaultLocale: false,
@@ -76,6 +77,7 @@ export default defineConfig({
           ms: 'ms',
           el: 'el',
           tr: 'tr',
+          pl: 'pl',
         },
       },
     }),
