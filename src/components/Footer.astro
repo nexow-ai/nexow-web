@@ -48,7 +48,7 @@ const localize = (href: string) =>
       <div class="max-w-sm">
         <Logo lang={lang} tone={followTheme ? 'auto' : 'light'} class="h-8" />
         <p class="mt-5 text-sm leading-relaxed text-ink-500 dark:text-ink-400">{t.footer.tagline}</p>
-        <SocialLinks class="mt-6" align="start" layout="grid" />
+        <SocialLinks class="mt-6" align="start" layout="grid" label={t.footer.socialLabel} />
       </div>
 
       <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">

@@ -35,6 +35,114 @@ export interface ActCopy {
   beats: { label: string; detail: string }[];
 }
 
+/** See `home.art`. Keep translations about as short as the English: they sit in fixed-size SVG. */
+export interface HomeArtCopy {
+  followLabel: string;
+  bots: {
+    chrome: string;
+    watching: string;
+    fired: string;
+    source: string;
+    sourceName: string;
+    processor: string;
+    signal: string;
+    conditionTrue: string;
+    caption: string;
+  };
+  dao: { ledger: string; chain: string; weekAgo: string; thisWeek: string; paid: string; due: string };
+  privacy: {
+    chrome: string;
+    scoped: string;
+    vault: string;
+    encrypted: string;
+    runtime: string;
+    sandboxed: string;
+    history: string;
+    historyValue: string;
+    connections: string;
+    leastPrivilege: string;
+    sync: string;
+    ready: string;
+  };
+  security: { vault: string; runtime: string; scopes: string; access: string; sync: string };
+  playground: {
+    tools: { add: string; layout: string; undo: string; lock: string; sync: string };
+    toolbar: string;
+    mosaic: string;
+    generating: string;
+    local: string;
+    outside: string;
+    clear: string;
+    streak: string;
+    days: string;
+    goal: string;
+    moodboard: string;
+    layers: string;
+    saved: string;
+    mood: { hero: string; type: string; ink: string; sky: string };
+    palette: string;
+    habits: string;
+    heatDays: string[];
+    habitsBest: string;
+    memory: string;
+    pairs: string;
+    airQuality: string;
+    good: string;
+    notes: string;
+    journal: string[];
+    orderBook: string;
+    positions: string;
+    funding: string;
+    next: string;
+    tape: string;
+    quakeMap: string;
+    magnitude: string;
+    depth: string;
+    events: string;
+    region: string;
+    chileCoast: string;
+    feltReports: string;
+    feltWindow: string;
+    feltPeak: string;
+    alerts: string;
+    tsunamiWatch: string;
+    aftershocks: string;
+    watchlist: string;
+    live: string;
+    tickers: string;
+    last: string;
+    trend: string;
+    sectors: string;
+    movers: string;
+    earnings: string;
+    soon: string;
+    etfFlows: string;
+    flowIn: string;
+    flowOut: string;
+    topStories: string;
+    ago: string;
+    headlines: string[];
+    sentiment: string;
+    bull: string;
+    neutral: string;
+    bear: string;
+    keywords: string;
+    keywordList: string[];
+    briefing: string;
+    desk: string;
+    briefingLines: string[];
+    briefingFoot: string;
+    sources: string;
+    screen: string;
+    workspacesLabel: string;
+    activeTab: string;
+    tabs: string[];
+    activeWorkspace: string;
+    workspaces: string[];
+    dock: { copilot: string; community: string; notices: string; messages: string };
+  };
+}
+
 export interface Faq {
   q: string;
   a: string;
@@ -412,6 +520,8 @@ export interface SiteContent {
     tourPace?: string;
     /** One-time hint beside the pace button until the visitor uses it once. */
     tourPaceHint?: string;
+    /** Aria label on the now-playing YouTube link (see `TourHud.astro`). */
+    tourYoutube?: string;
     /** Language switcher summary (see `Header.astro`). */
     switchLang?: string;
     /** Landmark name for the desktop header nav. */
@@ -428,6 +538,8 @@ export interface SiteContent {
     columns: { title: string; links: NavLink[] }[];
     rights: string;
     disclaimer: string;
+    /** Landmark name for the footer's social links. */
+    socialLabel?: string;
     /** Live service-health badge next to the footer clock. */
     status?: string;
     /**
@@ -676,6 +788,12 @@ export interface SiteContent {
       faq: string;
       footer: string;
     };
+    /**
+     * Words drawn inside the home page's diagrams and mocks. Tickers, venue
+     * names and units stay in the markup; only readable words live here.
+     * Optional so locales fall back to English through `useContent`.
+     */
+    art?: HomeArtCopy;
   };
   features: {
     meta: { title: string; description: string };

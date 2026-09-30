@@ -35,6 +35,7 @@ const tourTrack = t.nav.tourTrack ?? 'Play a different song';
 const tourTrackHint = t.nav.tourTrackHint ?? 'Change Me';
 const tourLeft = t.nav.tourLeft ?? 'Time left';
 const tourControls = t.nav.tourControls ?? 'Tour controls';
+const tourYoutube = t.nav.tourYoutube ?? 'Open on YouTube';
 const tourPace = t.nav.tourPace ?? 'Scroll speed';
 /** One-time label beside the pace control — shown after the track hint. */
 const tourPaceHint = t.nav.tourPaceHint ?? 'Go Faster';
@@ -60,7 +61,7 @@ const themeToLight = t.nav.themeToLight ?? 'Switch to light mode';
         class="tour-hud__now-youtube"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Open on YouTube"
+        aria-label={tourYoutube}
         data-tour-control
         hidden
       >

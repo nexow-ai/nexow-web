@@ -80,7 +80,8 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const t = useContent(lang).home.hero;
+const home = useContent(lang).home;
+const t = home.hero;
 const defaultPromptUrl = promptAppUrl(t.promptExample);
 /** Two sentences stay two lines, even when the viewport could fit one. */
 const title = t.title.includes('\n')
@@ -196,7 +197,7 @@ const D = {
     <p class="enter hero__note" style={`--enter-delay:${D.note}`}>{t.note}</p>
 
     <div class="enter hero__socials" style={`--enter-delay:${D.socials}`}>
-      <SocialLinks landmark={false} label="Follow Nexow" />
+      <SocialLinks landmark={false} label={home.art!.followLabel} />
     </div>
   </div>
 

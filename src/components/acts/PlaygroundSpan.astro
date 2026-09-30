@@ -20,7 +20,8 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
-const prompt = useContent(lang).home.hero.promptExample;
+const home = useContent(lang).home;
+const prompt = home.hero.promptExample;
 ---
 
 <div class="pg-span">
@@ -28,7 +29,7 @@ const prompt = useContent(lang).home.hero.promptExample;
     <div class="container-page pg-pin__in">
       <div class="pg-pin__grid">
         <div class="pg-pin__gap"></div>
-        <PlaygroundArt prompt={prompt} />
+        <PlaygroundArt prompt={prompt} ui={home.art!.playground} />
       </div>
     </div>
   </div>

@@ -770,6 +770,11 @@ html:not(.dark) .tone-invert {
   --page-slide: -1;
   --dir: -1;
 }
+/* SVG art is laid out by coordinate, not reading order: `text-anchor="start"`
+   stays the left edge. Arabic and Hebrew runs still shape right to left. */
+[dir='rtl'] svg text {
+  direction: ltr;
+}
 
 @keyframes nexow-page-out-start {
   to { transform: translate3d(calc(-100% * var(--page-slide)), 0, 0); }
