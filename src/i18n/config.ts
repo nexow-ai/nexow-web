@@ -17,6 +17,7 @@ export const languages = {
   ms: 'Bahasa Melayu',
   el: 'Ελληνικά',
   tr: 'Türkçe',
+  pl: 'Polski',
 } as const;
 
 export type Lang = keyof typeof languages;
