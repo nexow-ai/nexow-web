@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+# [1.4.0](https://github.com/nexow-ai/nexow-web/compare/v1.3.0...v1.4.0) (2026-09-30)
+
+
+### Features
+
+* **i18n:** add Polish ([455bb51](https://github.com/nexow-ai/nexow-web/commit/455bb51e0043113a2572ba0ba38615d441cced35))
+* **i18n:** translate the words drawn on the home page ([d456794](https://github.com/nexow-ai/nexow-web/commit/d456794cbbc03153f7e07fabbc7a39416c4184ca))
+
 ## [1.3.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.3.0...v1.3.1-dev.1) (2026-09-30)
 
 
