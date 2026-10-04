@@ -50,8 +50,12 @@
   /** …and for this long, it stops until the next input. */
   const IDLE_STOP_MS = 15000;
 
-  /** Radius of the object, as a share of the hero's smaller side. */
-  const SIZE: Record<Exclude<Variant, 'none'>, number> = { a: 0.17, b: 0.18, c: 0.12 };
+  /** The object's half-height in CSS px: at most this, at least the floor,
+   *  and never more than ~0.62 of the headline's height. */
+  const RADIUS_MAX = 90;
+  const RADIUS_MIN = 44;
+  /** Clear space kept between the object and any block of copy. */
+  const GAP = 28;
 
   function pickVariant(): Variant {
     const q = new URLSearchParams(window.location.search).get('crystal');
@@ -468,17 +472,77 @@
     }
     paintTheme();
 
-    /* ---- size and placement ---- */
+    /* ---- size and placement ----
+     * Never on the copy. The object stands beside the headline, on its end
+     * side, at the height of its two lines; if that column is too narrow it
+     * shrinks, then tries the space above the headline, and if there is no
+     * room anywhere (a phone, a narrow tablet) it is simply not drawn. */
     const coarse = window.matchMedia('(pointer: coarse)').matches;
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const title = hero.querySelector<HTMLElement>('#hero-title');
+    const copy = ['#hero-title', '.hero__kicker', '#forge', '.hero__examples']
+      .map((sel) => hero.querySelector<HTMLElement>(sel))
+      .filter((el): el is HTMLElement => !!el);
+    const header = document.querySelector<HTMLElement>('header');
     let cssW = 1;
     let cssH = 1;
     let renderScale = 1;
-    /** Where the object stands, in NDC: the centre of the headline. */
+    /** Where the object stands, in NDC, and its half-height in CSS px. */
     let anchorX = 0;
     let anchorY = 0;
-    let radiusPx = 100;
+    let radiusPx = 0;
+    let placed = false;
+
+    type Box = { l: number; t: number; r: number; b: number };
+    /** An element's ink box in hero space. The headline is measured by its
+     *  text, not its element, whose 24ch box is wider than the words. */
+    function boxOf(el: HTMLElement, h: DOMRect): Box {
+      let r = el.getBoundingClientRect();
+      if (el === title) {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const tr = range.getBoundingClientRect();
+        if (tr.width > 0) r = tr;
+      }
+      return { l: r.left - h.left, t: r.top - h.top, r: r.right - h.left, b: r.bottom - h.top };
+    }
+
+    function place() {
+      placed = false;
+      if (!title) return;
+      const h = hero!.getBoundingClientRect();
+      const blocks = copy.map((el) => boxOf(el, h));
+      const t = blocks[0];
+      const rtl = document.documentElement.dir === 'rtl';
+      /* Clear of the fixed header, and of the section rail on wide screens. */
+      const top = (header?.offsetHeight ?? 72) + 12;
+      const inset = cssW >= 1024 ? 96 : 20;
+      const fits = (cx: number, cy: number, r: number) =>
+        cx - r >= inset &&
+        cx + r <= cssW - inset &&
+        cy - r >= top &&
+        blocks.every((b) => cx + r + GAP <= b.l || cx - r - GAP >= b.r || cy + r + GAP <= b.t || cy - r - GAP >= b.b);
+      const maxR = Math.min(RADIUS_MAX, (t.b - t.t) * 0.62);
+      const spots = (r: number): [number, number][] => [
+        /* Beside the headline, on its end side, level with its two lines. */
+        [rtl ? t.l - GAP - r - 1 : t.r + GAP + r + 1, (t.t + t.b) / 2],
+        /* Above it, centred. */
+        [(t.l + t.r) / 2, t.t - GAP - r - 1],
+      ];
+      for (let r = maxR; r >= RADIUS_MIN; r -= 4) {
+        for (const [cx, cy] of spots(r)) {
+          if (!fits(cx, cy, r)) continue;
+          anchorX = (cx / cssW) * 2 - 1;
+          anchorY = 1 - (cy / cssH) * 2;
+          radiusPx = r;
+          placed = true;
+          /* The slot, in hero px — what the e2e suite checks against the copy. */
+          root.dataset.crystalBox = [cx - r, cy - r, cx + r, cy + r].map(Math.round).join(',');
+          return;
+        }
+      }
+      delete root.dataset.crystalBox;
+    }
 
     function resize() {
       cssW = Math.max(1, hero!.clientWidth);
@@ -488,13 +552,7 @@
       canvas!.width = Math.max(1, Math.round(cssW * dpr));
       canvas!.height = Math.max(1, Math.round(cssH * dpr));
       gl!.viewport(0, 0, canvas!.width, canvas!.height);
-      if (title) {
-        const h = hero!.getBoundingClientRect();
-        const r = title.getBoundingClientRect();
-        anchorX = ((r.left + r.width / 2 - h.left) / cssW) * 2 - 1;
-        anchorY = 1 - ((r.top + r.height / 2 - h.top) / cssH) * 2;
-      }
-      radiusPx = SIZE[variant as 'a' | 'b' | 'c'] * Math.min(cssW, cssH * 1.15);
+      place();
       if (isMesh) {
         perspective(proj, FOVY, cssW / cssH, 0.1, 50);
         gl!.uniformMatrix4fv(u('uProj'), false, proj);
@@ -522,6 +580,7 @@
       const g = gl!;
       g.clearColor(0, 0, 0, 0);
       g.clear(g.COLOR_BUFFER_BIT | (variant === 'b' ? g.DEPTH_BUFFER_BIT : 0));
+      if (!placed) return;
       const t = clock;
       if (isMesh) {
         const half = Math.tan(FOVY / 2) * CAM_Z;
@@ -529,12 +588,14 @@
         if (variant === 'a') {
           model(mdl, t * 0.16 + ptrX * 0.25, 0.32 + Math.sin(t * 0.21) * 0.06 - ptrY * 0.12, scale);
         } else {
-          /* A sway, not a spin: the mark stays readable, and is never seen
-             from behind as a mirror image of itself. */
-          model(mdl, Math.sin(t * 0.32) * 0.62 + ptrX * 0.2, Math.sin(t * 0.23) * 0.1 - ptrY * 0.1, scale);
+          /* A sway, not a spin, and a narrow one: at rest the mark faces the
+             reader, and it never turns more than ~20° away (cos 20° ≈ 0.94),
+             so the spike and the short stroke always read as two branches
+             of an X rather than collapsing into one bar. */
+          model(mdl, Math.sin(t * 0.3) * 0.26 + ptrX * 0.08, Math.sin(t * 0.23) * 0.08 - ptrY * 0.06, scale);
         }
         g.uniformMatrix4fv(u('uModel'), false, mdl);
-        g.uniform2f(u('uOff'), anchorX, anchorY + Math.sin(t * 0.4) * 0.008);
+        g.uniform2f(u('uOff'), anchorX, anchorY);
         if (variant === 'a') {
           /* Back faces first, then the front: the far edges sit behind. */
           g.enable(g.CULL_FACE);
@@ -546,14 +607,18 @@
           g.drawArrays(g.TRIANGLES, 0, vertexCount);
         }
       } else {
-        const span = 2.6;
-        const rx = (radiusPx / cssW) * 2;
-        const ry = (radiusPx / cssH) * 2;
-        /* The orb leans toward the pointer, a few percent of the hero at
-           most; with no pointer it drifts on its own, just as slowly. */
-        const driftX = coarse ? Math.sin(t * 0.13) * 0.03 : ptrX * 0.06;
-        const driftY = coarse ? Math.sin(t * 0.17 + 1) * 0.02 : ptrY * 0.05;
-        g.uniform2f(u('uCenter'), anchorX + driftX, anchorY + ry * 0.2 + driftY);
+        /* The glass is half the slot and its halo fills the rest, so the
+           glow stops where the clear space around the copy does. */
+        const span = 1.7;
+        const orb = radiusPx * 0.52;
+        const rx = (orb / cssW) * 2;
+        const ry = (orb / cssH) * 2;
+        /* The orb leans toward the pointer by a tenth of its slot at most;
+           with no pointer it drifts on its own, just as slowly. */
+        const lean = radiusPx * 0.1;
+        const dx = coarse ? Math.sin(t * 0.13) : ptrX;
+        const dy = coarse ? Math.sin(t * 0.17 + 1) : ptrY;
+        g.uniform2f(u('uCenter'), anchorX + ((dx * lean) / cssW) * 2, anchorY + ((dy * lean) / cssH) * 2);
         g.uniform2f(u('uHalf'), rx * span, ry * span);
         g.uniform1f(u('uSpan'), span);
         g.uniform1f(u('uBreath'), 0.9 + 0.1 * Math.sin(t * 0.5));
@@ -564,7 +629,7 @@
 
     function frame(now: number) {
       raf = 0;
-      if (!onScreen || fade <= 0 || document.hidden) return;
+      if (!onScreen || fade <= 0 || document.hidden || !placed) return;
       const idleFor = now - lastInput;
       if (idleFor > IDLE_STOP_MS) return;
       /* Calm: half the frames once nothing has moved for a while. */
@@ -605,7 +670,7 @@
     }
 
     function wake() {
-      if (still || raf || !onScreen || fade <= 0 || document.hidden) return;
+      if (still || raf || !placed || !onScreen || fade <= 0 || document.hidden) return;
       lastTick = 0;
       raf = requestAnimationFrame(frame);
     }
@@ -658,6 +723,7 @@
     const ro = new ResizeObserver(() => {
       resize();
       draw();
+      wake();
     });
     ro.observe(hero);
     if (title) ro.observe(title);
