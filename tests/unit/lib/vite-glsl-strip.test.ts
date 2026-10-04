@@ -53,7 +53,7 @@ describe('glslStrip plugin', () => {
 
   it('strips only tagged literals and drops the tag', () => {
     const code = `const glsl = String.raw;\nconst A = ${tagged('/* x */ a;')};\nconst B = \`/* keep */ b;\`;`;
-    const out = transform(code, '/src/components/world/WorldField.astro?astro&type=script&index=0&lang.ts');
+    const out = transform(code, '/src/components/sections/HeroCrystal.astro?astro&type=script&index=0&lang.ts');
     expect(out?.code).toBe('const glsl = String.raw;\nconst A = `a;`;\nconst B = `/* keep */ b;`;');
   });
 

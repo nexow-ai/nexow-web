@@ -1,10 +1,10 @@
 /**
  * Strips comments and indentation out of `glsl`-tagged template literals.
  *
- * The shaders in `WorldField.astro` are documented as heavily as the code
+ * The shaders in `HeroCrystal.astro` are documented as heavily as the code
  * around them, and a template literal is opaque to the minifier: every comment
- * and every level of indentation inside one ships as-is. Before this, that
- * commentary was a third of the WorldField script — bytes the payload budget
+ * and every level of indentation inside one ships as-is. Unstripped, that
+ * commentary is a large share of the script — bytes the payload budget
  * in `tests/build/payload.test.ts` counts against the page. This keeps the
  * source exactly as written and ships only the GLSL.
  *

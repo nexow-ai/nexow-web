@@ -149,11 +149,11 @@ const { sections, label = 'On this page' } = Astro.props;
   }
 
   /* The lit dot and label wear the section's own colour. On the home world
-     `WorldField` writes the hue under the lens as --w-hue-300 … --w-hue-700
-     on the document and moves them across a handover, so the rail changes
-     colour with the crystal; elsewhere the fallbacks are the brand. The
+     `World.astro` writes the section's hue as --w-hue-300 … --w-hue-700 on
+     the document and moves them across a handover, so the rail changes
+     colour at the seam; elsewhere the fallbacks are the brand. The
      transitions only matter for the jump when the current section changes —
-     the colour itself already travels a frame at a time. */
+     the colour itself already travels in small steps. */
   .section-nav__link:hover .section-nav__dot,
   .section-nav__link:focus-visible .section-nav__dot {
     border-color: var(--w-hue-500, var(--color-brand-500));

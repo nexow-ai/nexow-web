@@ -9,17 +9,10 @@
  *
  * What is left is what the reader actually needs before they scroll: the
  * headline, the promise, one thing to type into, a row of starter chips, and
- * a way down — over the world's crystal and its weave of coloured threads.
- * The SVG dashboards are still rendered here, hidden: they are the atlas the
- * world's screens sample from act 01 on. The composer cycles
- * through those examples so the opening screen keeps showing what “anything”
- * looks like. Everything else is still on the page — the product is shown
- * six times over in the acts below.
- *
- * The composer is not decoration. Typing into it charges the matter behind the
- * headline (`data-world-charge`, read by `WorldField`), and sending throws a
- * shockwave through it (`nexow:world-send`), so the one interaction in the hero
- * is also the page's thesis: your words give the material a shape.
+ * a way down — over one quiet object (`HeroCrystal`) and the world's dark
+ * wash. The composer cycles through the examples so the opening screen keeps
+ * showing what “anything” looks like. Everything else is still on the page —
+ * the product is shown six times over in the acts below.
  *
  * Follows the page theme. The rest of the world does too: one room, one
  * tone — white in light mode, black in dark — from the hero through the
@@ -30,48 +23,7 @@ import { useContent } from '../../i18n/content';
 import { promptAppUrl } from '../../lib/appDeepLinks';
 import Icon from '../Icon.astro';
 import SocialLinks from '../SocialLinks.astro';
-import HeroDashboards from './HeroDashboards.astro';
-
-/** Icon → dashboard scene in HeroDashboards. Locale-agnostic. */
-const SCENE_BY_ICON: Record<string, string> = {
-  candlestick: 'trading',
-  lineChart: 'eq4',
-  radar: 'geo',
-  cloudSun: 'orbit',
-  grid: 'network',
-  flame: 'neural',
-  newspaper: 'news',
-  rocket: 'avionics',
-  activity: 'signals',
-  earth: 'macro',
-  target: 'predict',
-  wallet: 'portfolio',
-  play: 'go',
-  music: 'video',
-  databaseZap: 'onchain',
-  database: 'database',
-  heart: 'signals',
-  mapPin: 'flights',
-  creditCard: 'portfolio',
-  github: 'ai',
-  users: 'chat',
-  sun: 'energy',
-  monitor: 'tv',
-  banknote: 'forex',
-  hourglass: 'math',
-  pen: 'ai',
-  signal: 'signals',
-  wheat: 'sports',
-  trophy: 'chess',
-  layers: 'model3d',
-  gem: 'cmd4',
-  factory: 'metals',
-  server: 'server',
-  cpu: 'server',
-  bot: 'bots',
-  chat: 'chat',
-  youtube: 'tv',
-};
+import HeroCrystal from './HeroCrystal.astro';
 
 /** First row of chips; the rest sit behind “more”. */
 const HERO_EXAMPLES_VISIBLE = 10;
@@ -104,11 +56,10 @@ const D = {
 ---
 
 <section id="hero" class="hero" data-world-scene aria-labelledby="hero-title">
-  {/* A soft well of ink under the type. The matter passes behind the headline
-      at full strength; without this the brightest instances cross the glyphs
-      and the first line of the page becomes the least readable thing on it. */}
+  <HeroCrystal />
+  {/* A soft well of ink under the type, over the object, so whichever look
+      `?crystal=` picks never competes with the first line of the page. */}
   <div class="hero__veil" aria-hidden="true"></div>
-  <HeroDashboards />
 
   <div class="container-page hero__inner">
     <h1
@@ -147,7 +98,6 @@ const D = {
           rows="1"
           maxlength="500"
           placeholder={t.promptPlaceholder}
-          data-world-charge
           class="hero__input"
         >{t.promptExample}</textarea>
         <button type="submit" class="hero__send">
@@ -170,7 +120,6 @@ const D = {
               type="button"
               data-prompt-example
               data-prompt={example.prompt}
-              data-hero-scene={SCENE_BY_ICON[example.icon] ?? 'ai'}
               aria-pressed="false"
               title={example.prompt}
               class:list={['hero__chip', i >= HERO_EXAMPLES_VISIBLE && 'hero__chip--extra']}
@@ -689,45 +638,15 @@ const D = {
     const chips = Array.from(form.parentElement?.querySelectorAll<HTMLButtonElement>('[data-prompt-example]') ?? []);
     const examplesRoot = form.parentElement?.querySelector<HTMLElement>('.hero__examples');
     const more = examplesRoot?.querySelector<HTMLButtonElement>('[data-hero-more]');
-    const boards = Array.from(document.querySelectorAll<HTMLElement>('[data-hero-board]'));
-    const boardIds = boards.map((board) => board.dataset.heroBoard ?? '').filter(Boolean);
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const markActive = (active: HTMLButtonElement | null) => {
       chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip === active)));
     };
 
-    /* Which four cards are on the stage. Only the card the chip names
-     * changes when the composer moves on — into whichever slot's turn it is
-     * — so a tick swaps one card, not all four. Four cards cutting together
-     * every three seconds was most of what made the opening screen restless. */
-    let shown: string[] = [];
-    let turn = 0;
-    const applyBoards = (scene: string) => {
-      if (!boards.length || !boardIds.length) return;
-      const current = boardIds.includes(scene) ? scene : boardIds[0];
-      if (!shown.length) {
-        const start = boardIds.indexOf(current);
-        shown = [0, 1, 2, 3].map((offset) => boardIds[(start + offset) % boardIds.length]);
-      } else if (!shown.includes(current)) {
-        shown[turn] = current;
-        turn = (turn + 1) % shown.length;
-      }
-      boards.forEach((board) => {
-        const id = board.dataset.heroBoard ?? '';
-        const slot = shown.indexOf(id);
-        const on = slot !== -1;
-        board.classList.toggle('is-shown', on);
-        board.classList.toggle('is-current', id === current);
-        if (on) board.dataset.slot = String(slot);
-        else board.removeAttribute('data-slot');
-      });
-    };
-
-    const applyPrompt = (prompt: string, scene: string, chip: HTMLButtonElement | null) => {
+    const applyPrompt = (prompt: string, chip: HTMLButtonElement | null) => {
       input.value = prompt;
       markActive(chip);
-      applyBoards(scene);
       syncLinks();
       autosize();
       input.dispatchEvent(new Event('input', { bubbles: true }));
@@ -752,16 +671,15 @@ const D = {
       if (!chip || swapping) return;
       index = next;
       const prompt = chip.dataset.prompt ?? '';
-      const scene = chip.dataset.heroScene ?? 'ai';
       if (animate && !reduced) {
         swapping = true;
         input.classList.add('is-swap');
         await wait(280);
-        applyPrompt(prompt, scene, chip);
+        applyPrompt(prompt, chip);
         input.classList.remove('is-swap');
         swapping = false;
       } else {
-        applyPrompt(prompt, scene, chip);
+        applyPrompt(prompt, chip);
       }
     };
 
@@ -802,17 +720,13 @@ const D = {
       const match = chips.find((chip) => chip.dataset.prompt === value) ?? null;
       dirty = !match;
       markActive(match);
-      if (match) {
-        index = chips.indexOf(match);
-        applyBoards(match.dataset.heroScene ?? 'ai');
-      }
+      if (match) index = chips.indexOf(match);
       syncLinks();
       autosize();
     });
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      document.dispatchEvent(new CustomEvent('nexow:world-send'));
       window.open(promptUrl(input.value.trim()), '_blank', 'noopener,noreferrer');
     });
 
@@ -822,7 +736,6 @@ const D = {
     });
 
     const seed = chips.find((chip) => chip.dataset.prompt === input.value.trim());
-    applyBoards(seed?.dataset.heroScene ?? 'ai');
     markActive(seed ?? null);
     autosize();
     window.addEventListener('resize', autosize);

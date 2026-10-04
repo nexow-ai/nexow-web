@@ -308,36 +308,18 @@ describe('Hero', () => {
     const html = await render(Hero, '/', { props: { lang: 'en' } });
     expect(html).toContain('data-prompt-example');
     expect(html).toContain('data-hero-more');
-    expect(html).toContain('data-hero-board="trading"');
-    expect(html).toContain('data-hero-scene="trading"');
     expect((html.match(/data-prompt-example/g) ?? []).length).toBeGreaterThan(16);
   });
 
-  it('renders hero boards and routes chips to the desk scenes', async () => {
+  it('mounts one hero object and no dashboard atlas', async () => {
     const html = await render(Hero, '/', { props: { lang: 'en' } });
-    expect(html).toContain('data-hero-board="trading"');
-    expect(html).toContain('data-hero-board="forex"');
-    expect(html).toContain('data-hero-board="metals"');
-    expect(html).toContain('data-hero-board="chat"');
-    expect(html).toContain('data-hero-board="server"');
-    expect(html).toContain('data-hero-board="database"');
-    expect(html).toContain('data-hero-board="bots"');
-    expect(html).toContain('data-hero-board="tv"');
-    expect(html).toContain('data-hero-scene="portfolio"');
-    expect(html).toContain('data-hero-scene="macro"');
-    expect(html).toContain('data-hero-scene="onchain"');
-    expect(html).toContain('data-hero-scene="forex"');
-    /* Every board in the list renders, not just the four on the stage — the
-       hidden ones are the world's channel table (src/lib/worldBoards.ts). */
-    const ids = [...html.matchAll(/data-hero-board="([^"]+)"/g)].map((m) => m[1]);
-    expect(new Set(ids).size).toBe(ids.length);
-    expect(ids.length).toBeGreaterThan(30);
-    /* And every chip's scene names one of them. A scene with no board silently
-       falls back to the first, which is how a dozen chips all opened on the
-       trading desk. */
-    for (const [, scene] of html.matchAll(/data-hero-scene="([^"]+)"/g)) {
-      expect(ids, `no board for scene ${scene}`).toContain(scene);
-    }
+    /* The object is the hero's own canvas (HeroCrystal), picked at runtime
+       by ?crystal=. The hidden dashboards were only ever the world's atlas,
+       and the atlas is gone with the world field. */
+    expect((html.match(/data-hero-crystal/g) ?? []).length).toBe(1);
+    expect(html).not.toContain('data-hero-board');
+    expect(html).not.toContain('data-hero-scene');
+    expect(html).not.toContain('data-world-charge');
   });
 });
 
