@@ -52,7 +52,8 @@ test.describe('hero object', () => {
     expect(w / css).toBeLessThanOrEqual(isMobile ? 1.01 : 1.51);
   });
 
-  test('stops drawing once the hero has scrolled away', async ({ page }) => {
+  test('stops drawing once the hero has scrolled away', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'a phone has no room beside or above the headline');
     await page.goto('/', { waitUntil: 'load' });
     await expect.poll(() => draws(page)).toBeGreaterThan(0);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight / 2));
@@ -64,7 +65,8 @@ test.describe('hero object', () => {
   });
 
   for (const variant of ['b', 'c'] as const) {
-    test(`renders variant ${variant} from ?crystal=`, async ({ page }) => {
+    test(`renders variant ${variant} from ?crystal=`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'a phone has no room beside or above the headline');
       const errors: string[] = [];
       page.on('console', (m) => {
         if (m.type() === 'error') errors.push(m.text());
@@ -89,10 +91,54 @@ test.describe('hero object', () => {
   });
 });
 
+test.describe('hero object placement', () => {
+  /* Never on the copy, at any width: beside the headline when there is
+     room, above it otherwise, and not at all on a narrow phone. */
+  for (const width of [1440, 1280, 1024, 390]) {
+    test(`keeps clear of the headline and the composer at ${width}px`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'widths are set explicitly');
+      await page.setViewportSize({ width, height: 900 });
+      for (const variant of ['a', 'b', 'c'] as const) {
+        await page.goto(`/?crystal=${variant}`, { waitUntil: 'load' });
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForTimeout(300);
+        const result = await page.evaluate(() => {
+          const root = document.querySelector<HTMLElement>('[data-hero-crystal]')!;
+          const box = root.dataset.crystalBox?.split(',').map(Number);
+          if (!box) return { placed: false, hits: [] as string[] };
+          const h = root.parentElement!.getBoundingClientRect();
+          const hits: string[] = [];
+          for (const sel of ['#hero-title', '.hero__kicker', '#forge', '.hero__examples']) {
+            const el = document.querySelector(sel);
+            if (!el) continue;
+            let r = el.getBoundingClientRect();
+            if (sel === '#hero-title') {
+              const range = document.createRange();
+              range.selectNodeContents(el);
+              r = range.getBoundingClientRect();
+            }
+            const [l, t, rr, b] = box;
+            const overlap = l < r.right - h.left && rr > r.left - h.left && t < r.bottom - h.top && b > r.top - h.top;
+            if (overlap) hits.push(sel);
+          }
+          return { placed: true, hits, height: box[3] - box[1] };
+        });
+        expect(result.hits, `${variant} at ${width}px overlaps the copy`).toEqual([]);
+        if (width >= 1280) {
+          expect(result.placed, `${variant} has room at ${width}px`).toBe(true);
+          expect(result.height).toBeGreaterThanOrEqual(88);
+          expect(result.height).toBeLessThanOrEqual(180);
+        }
+      }
+    });
+  }
+});
+
 test.describe('hero object under reduced motion', () => {
   test.use({ contextOptions: { reducedMotion: 'reduce' } });
 
-  test('draws one still frame and never loops', async ({ page }) => {
+  test('draws one still frame and never loops', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'a phone has no room beside or above the headline');
     await page.addInitScript(countDraws);
     await page.goto('/', { waitUntil: 'load' });
     await expect.poll(() => draws(page)).toBeGreaterThan(0);
