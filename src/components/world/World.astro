@@ -114,6 +114,28 @@
 
   let bandRo: ResizeObserver | null = null;
   let stageMo: MutationObserver | null = null;
+  let restIo: IntersectionObserver | null = null;
+
+  /**
+   * Parks every CSS animation in a scene that is off screen. The acts'
+   * mocks loop dozens of keyframes — several on width, height, margins and
+   * stroke offsets — and a running animation restyles (and often relayouts)
+   * its element on every frame whether anyone can see it or not. That was
+   * most of the page's idle main-thread time. `.world-rest` marks the
+   * inactive state, so with no script, or before the first callback,
+   * everything plays.
+   */
+  function watchRest(root: HTMLElement) {
+    restIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.classList.toggle('world-rest', !e.isIntersecting);
+      },
+      /* Inset by a hair: a scene whose edge only touches the viewport (act
+         01 under a full-height hero) counts as intersecting otherwise. */
+      { rootMargin: '-2px 0px' },
+    );
+    for (const el of root.querySelectorAll('[data-world-scene], .pg-span')) restIo.observe(el);
+  }
 
   /**
    * One solid box per section, painted under the wash so it keeps showing on
@@ -236,6 +258,9 @@
     bandRo = null;
     stageMo?.disconnect();
     stageMo = null;
+    restIo?.disconnect();
+    restIo = null;
+    for (const el of document.querySelectorAll('.world-rest')) el.classList.remove('world-rest');
     world?.style.removeProperty('--w-wash-a');
     world?.style.removeProperty('--w-wash-b');
     world?.style.removeProperty('--w-wash-c');
@@ -269,6 +294,7 @@
         attributeFilter: ['data-fm-way', 'data-stage'],
       });
     }
+    watchRest(world);
     window.addEventListener('resize', syncBands, { passive: true });
     window.addEventListener('scroll', scheduleTone, { passive: true });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -516,6 +542,15 @@
   .world__content {
     position: relative;
     z-index: 3;
+  }
+
+  /* A scene off screen keeps its animations' phase and stops spending
+   * frames on them (see `watchRest`). */
+  .world :global(.world-rest),
+  .world :global(.world-rest *),
+  .world :global(.world-rest *::before),
+  .world :global(.world-rest *::after) {
+    animation-play-state: paused !important;
   }
 
   /* Later beats used to be marketing slabs (mint wash, white FAQ plate,
