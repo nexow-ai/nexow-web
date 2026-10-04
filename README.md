@@ -229,7 +229,7 @@ Copyright 2026 Nexow, Inc. Licensed under Apache-2.0.
 
 ## Contact
 
-- General: [hello@nexow.ai](mailto:hello@nexow.ai)
+- General: [admin@nexow.ai](mailto:admin@nexow.ai)
 - Support: [support@nexow.ai](mailto:support@nexow.ai)
 - Partners: [partners@nexow.ai](mailto:partners@nexow.ai)
 - Legal pages: [nexow.ai/legal](https://nexow.ai/legal)

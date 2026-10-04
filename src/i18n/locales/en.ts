@@ -2348,7 +2348,7 @@ export const en: SiteContent = {
       title: 'Prefer email directly?',
       body: 'We reply from the addresses below. Partnership and Partner-plan requests go to partners@.',
       channels: [
-        { label: 'General', value: 'hello@nexow.ai', href: 'mailto:hello@nexow.ai' },
+        { label: 'General', value: 'admin@nexow.ai', href: 'mailto:admin@nexow.ai' },
         { label: 'Support', value: 'support@nexow.ai', href: 'mailto:support@nexow.ai' },
         { label: 'Partners', value: 'partners@nexow.ai', href: 'mailto:partners@nexow.ai' },
       ],

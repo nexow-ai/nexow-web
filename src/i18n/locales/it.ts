@@ -2389,8 +2389,8 @@ export const it: SiteContent = {
       channels: [
         {
           label: 'Generale',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Supporto',

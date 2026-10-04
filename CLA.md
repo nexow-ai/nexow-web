@@ -104,4 +104,4 @@ that owns the Project is:
 Wilmington, DE 19802  
 United States  
 
-<hello@nexow.ai> · <https://nexow.ai>
+<admin@nexow.ai> · <https://nexow.ai>

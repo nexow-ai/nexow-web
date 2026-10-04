@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "author": {
     "name": "Nexow, Inc.",
-    "email": "hello@nexow.ai",
+    "email": "admin@nexow.ai",
     "url": "https://nexow.ai"
   },
   "homepage": "https://nexow.ai",
@@ -16,7 +16,7 @@
   },
   "bugs": {
     "url": "https://github.com/nexow-ai/nexow-web/issues",
-    "email": "hello@nexow.ai"
+    "email": "admin@nexow.ai"
   },
   "description": "Marketing site for Nexow — copyright Nexow, Inc. (nexow.ai).",
   "engines": {

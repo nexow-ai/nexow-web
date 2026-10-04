@@ -41,5 +41,5 @@ assets as the face of a fork is not permitted.
 
 ## Questions
 
-Trademark questions: <hello@nexow.ai>  
+Trademark questions: <admin@nexow.ai>  
 Legal entity: Nexow, Inc., 2810 N Church St STE 89080, Wilmington, DE 19802, United States

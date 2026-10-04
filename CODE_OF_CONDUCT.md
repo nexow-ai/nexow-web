@@ -58,7 +58,7 @@ at an online or offline event.
 
 ## Enforcement
 
-Report incidents to <hello@nexow.ai>. All complaints will be reviewed and
+Report incidents to <admin@nexow.ai>. All complaints will be reviewed and
 investigated promptly and fairly. Nexow, Inc. is obligated to respect the
 privacy and security of the reporter of any incident.
 
