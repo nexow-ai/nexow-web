@@ -9,9 +9,9 @@
  *
  * What is left is what the reader actually needs before they scroll: the
  * headline, the promise, one thing to type into, a row of starter chips, and
- * a way down — over one quiet object (`HeroCrystal`) and the world's dark
- * wash. The composer cycles through the examples so the opening screen keeps
- * showing what “anything” looks like. Everything else is still on the page —
+ * a way down — over nothing but the world's dark wash. The composer cycles
+ * through the examples so the opening screen keeps showing what “anything”
+ * looks like. Everything else is still on the page —
  * the product is shown six times over in the acts below.
  *
  * Follows the page theme. The rest of the world does too: one room, one
@@ -23,7 +23,6 @@ import { useContent } from '../../i18n/content';
 import { promptAppUrl } from '../../lib/appDeepLinks';
 import Icon from '../Icon.astro';
 import SocialLinks from '../SocialLinks.astro';
-import HeroCrystal from './HeroCrystal.astro';
 
 /** First row of chips; the rest sit behind “more”. */
 const HERO_EXAMPLES_VISIBLE = 10;
@@ -56,9 +55,8 @@ const D = {
 ---
 
 <section id="hero" class="hero" data-world-scene aria-labelledby="hero-title">
-  <HeroCrystal />
-  {/* A soft well of ink under the type, over the object, so whichever look
-      `?crystal=` picks never competes with the first line of the page. */}
+  {/* A soft well of ink under the type, so the wash's brightest corner
+      never sits behind the first line of the page. */}
   <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="container-page hero__inner">

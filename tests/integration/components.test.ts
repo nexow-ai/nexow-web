@@ -311,12 +311,12 @@ describe('Hero', () => {
     expect((html.match(/data-prompt-example/g) ?? []).length).toBeGreaterThan(16);
   });
 
-  it('mounts one hero object and no dashboard atlas', async () => {
+  it('renders no canvas, object or dashboard atlas', async () => {
     const html = await render(Hero, '/', { props: { lang: 'en' } });
-    /* The object is the hero's own canvas (HeroCrystal), picked at runtime
-       by ?crystal=. The hidden dashboards were only ever the world's atlas,
-       and the atlas is gone with the world field. */
-    expect((html.match(/data-hero-crystal/g) ?? []).length).toBe(1);
+    /* The hero stands on the world's wash alone. The hidden dashboards were
+       only ever the world field's atlas, and went with it. */
+    expect(html).not.toContain('<canvas');
+    expect(html).not.toContain('data-hero-crystal');
     expect(html).not.toContain('data-hero-board');
     expect(html).not.toContain('data-hero-scene');
     expect(html).not.toContain('data-world-charge');

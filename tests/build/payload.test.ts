@@ -32,18 +32,17 @@ const fonts = assets.filter((f) => /\.(woff2?|ttf|otf)$/.test(f));
 
 describe.skipIf(!built)('shipped payload', () => {
   it('ships a small amount of JavaScript — there is no framework runtime here', () => {
-    /* 150 → 100: the full-page world field (~50 KB) and its dashboard-atlas
-       rasteriser went, replaced by the hero's single object (~12 KB). ~80 KB
-       today. */
-    expect(kb(sizeOf(scripts)), `total JS is ${kb(sizeOf(scripts))} KB`).toBeLessThan(100);
+    /* 150 → 80: the full-page world field (~50 KB), its dashboard-atlas
+       rasteriser and the hero object that briefly replaced them are gone;
+       there is no WebGL left. ~69 KB today. */
+    expect(kb(sizeOf(scripts)), `total JS is ${kb(sizeOf(scripts))} KB`).toBeLessThan(80);
   });
 
   it('keeps every individual script small enough to parse cheaply', () => {
-    /* Back to the 60 KB the world was budgeted at, now with room to spare:
-       the biggest script is ~12 KB since the world field (~67 KB at the end)
-       gave way to the hero's single object. */
+    /* 70 → 20: the world field's chunk (~67 KB at the end) was the only
+       big one; with no WebGL left the biggest script is ~12 KB. */
     for (const file of scripts) {
-      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(60);
+      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(20);
     }
   });
 
@@ -56,9 +55,9 @@ describe.skipIf(!built)('shipped payload', () => {
        sweeps — is ~3 KB of keyframes and rules that dresses every board, and
        is why the boards themselves grew markup without growing CSS per
        board.
-       440 → 425: the hero dashboards are gone with the atlas they fed;
+       440 → 420: the hero dashboards are gone with the atlas they fed;
        ~414 KB today. */
-    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(425);
+    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(420);
   });
 
   it('self-hosts its fonts, in woff2', () => {
@@ -72,10 +71,10 @@ describe.skipIf(!built)('shipped payload', () => {
     /* The home pages used to be the big ones — past 1 MB, most of it the
        forty-nine hidden SVG dashboards the world field rasterised into its
        atlas. With the atlas gone the home page is ~530 KB and the biggest
-       page is a connectors catalogue at ~630 KB. 1060 → 700 holds that. */
+       page is a connectors catalogue at ~615 KB. 1060 → 650 holds that. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
-      .filter((f) => fs.statSync(f).size > 700 * 1024)
+      .filter((f) => fs.statSync(f).size > 650 * 1024)
       .map((f) => `${path.relative(DIST, f)} (${kb(fs.statSync(f).size)} KB)`);
     expect(oversized).toEqual([]);
   });
