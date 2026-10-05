@@ -2394,13 +2394,13 @@ export const pt: SiteContent = {
         },
         {
           label: 'Suporte',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Parceiros',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
       ],
     },

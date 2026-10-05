@@ -2349,8 +2349,8 @@ export const en: SiteContent = {
       body: 'We reply from the addresses below. Partnership and Partner-plan requests go to partners@.',
       channels: [
         { label: 'General', value: 'admin@nexow.ai', href: 'mailto:admin@nexow.ai' },
-        { label: 'Support', value: 'support@nexow.ai', href: 'mailto:support@nexow.ai' },
-        { label: 'Partners', value: 'partners@nexow.ai', href: 'mailto:partners@nexow.ai' },
+        { label: 'Support', value: 'admin@nexow.ai', href: 'mailto:admin@nexow.ai' },
+        { label: 'Partners', value: 'admin@nexow.ai', href: 'mailto:admin@nexow.ai' },
       ],
     },
   },

@@ -2450,13 +2450,13 @@ export const ru: SiteContent = {
         },
         {
           label: 'Поддержка',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Партнёры',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
       ],
     },

@@ -2084,13 +2084,13 @@ export const el = {
         },
         {
           label: 'Υποστήριξη',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Συνεργάτες',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
       ],
     },

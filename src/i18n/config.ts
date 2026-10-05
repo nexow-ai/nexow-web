@@ -47,9 +47,9 @@ export const SITE = {
   contactUrl: 'https://x.nexow.ai/api/contact',
   email: 'admin@nexow.ai',
   /** Partnership / sales inbox. */
-  partnersEmail: 'partners@nexow.ai',
+  partnersEmail: 'admin@nexow.ai',
   /** Support inbox. */
-  supportEmail: 'support@nexow.ai',
+  supportEmail: 'admin@nexow.ai',
   /** @username for Open Graph / meta tags (X). */
   x: '@xnexow',
   /** Chain NXW mints on — linked from the DAO / tokenomics sections. */

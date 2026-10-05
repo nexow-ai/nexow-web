@@ -161,5 +161,5 @@ Do not file public issues for vulnerabilities. See [SECURITY.md](SECURITY.md).
 ## Questions
 
 - Product / site: <admin@nexow.ai>
-- Support: <support@nexow.ai>
+- Support: <admin@nexow.ai>
 - Legal: see [https://nexow.ai/legal](https://nexow.ai/legal)
