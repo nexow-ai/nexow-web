@@ -2426,8 +2426,8 @@ export const ko: SiteContent = {
       channels: [
         {
           label: '일반',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: '지원',

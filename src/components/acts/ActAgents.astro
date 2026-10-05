@@ -8,10 +8,9 @@
  * real vocabulary; they are also what `AgentRunDiagram` uses, so the two stay
  * consistent if either is edited.
  *
- * The scene is a genuine 3D construction — CSS 3D, not WebGL. `WorldField`
- * already owns the page's only GL context and its budget (see the note at the
- * top of that file); a second canvas here would cost more than the whole act.
- * Everything below is transforms and opacity inside one `preserve-3d` context,
+ * The scene is a genuine 3D construction — CSS 3D, not WebGL. The page's only
+ * GL context is the hero's object, and it stops once the hero scrolls away; a
+ * canvas here would cost more than the whole act. Everything below is transforms and opacity inside one `preserve-3d` context,
  * so it composites on the GPU and parks itself when the act scrolls away.
  *
  * Two constructions are worth knowing before editing:

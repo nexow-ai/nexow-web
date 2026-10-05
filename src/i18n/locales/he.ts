@@ -2443,8 +2443,8 @@ export const he: SiteContent = {
       channels: [
         {
           label: 'כללי',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'תמיכה',

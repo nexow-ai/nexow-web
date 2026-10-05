@@ -7,7 +7,6 @@ import mdx from '@astrojs/mdx';
 import { satteri } from '@astrojs/markdown-satteri';
 
 import { markdownFigure } from './src/lib/markdown-figure.mjs';
-import { glslStrip } from './src/lib/vite-glsl-strip.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -50,9 +49,7 @@ export default defineConfig({
   },
 
   vite: {
-    // `glslStrip` ships the world's shaders without their commentary; see
-    // `src/lib/vite-glsl-strip.mjs`.
-    plugins: [tailwindcss(), glslStrip()],
+    plugins: [tailwindcss()],
   },
 
   integrations: [

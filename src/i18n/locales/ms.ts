@@ -2079,8 +2079,8 @@ export const ms = {
       channels: [
         {
           label: 'Umum',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Sokongan',

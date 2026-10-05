@@ -1,12 +1,20 @@
 name: Sync stg to main
 
-# After a `dev` → `stg` merge lands, clone `stg` onto `main` with a merge
-# commit. The org blocks Actions from opening PRs, so this is a direct push
-# (the only actor that may update `main` besides the release bot).
+# After a `dev` → `stg` merge has deployed to stg successfully, clone that
+# commit onto `main` with a merge commit. The org blocks Actions from opening
+# PRs, so this is a direct push (the only actor that may update `main` besides
+# the release bot).
 #
 # Full tests already ran on the `dev` → `stg` PR. Main does not run them again.
 on:
-  push:
+  # Gated on stg: only a Deploy that SUCCEEDED on stg promotes, so a merge that
+  # breaks the stg deploy (or is cancelled) never reaches production. Fix stg,
+  # then re-run its Deploy (or dispatch this workflow by hand) to promote.
+  # `workflow_run` only fires for workflow files on the default branch: this
+  # gate takes effect once this file has itself been promoted to main.
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
     branches: [stg]
   workflow_dispatch:
 
@@ -22,6 +30,12 @@ concurrency:
 jobs:
   promote:
     name: Clone stg onto main
+    # A dispatch promotes the current stg; a workflow_run only after a
+    # successful stg Deploy started by a push (re-runs keep that event).
+    if: >
+      github.event_name == 'workflow_dispatch'
+      || (github.event.workflow_run.conclusion == 'success'
+          && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +48,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          SHA: ${{ github.sha }}
+          # The commit the stg Deploy shipped, not whatever stg points at now.
+          SHA: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
 
@@ -66,13 +81,13 @@ jobs:
           git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git fetch origin main stg
 
-          if git merge-base --is-ancestor origin/stg origin/main; then
+          if git merge-base --is-ancestor "$SHA" origin/main; then
             echo "main already contains stg — nothing to promote"
             exit 0
           fi
 
           git checkout -B main origin/main
-          if ! git merge origin/stg --no-ff -m "chore: promote stg to main"; then
+          if ! git merge "$SHA" --no-ff -m "chore: promote stg to main"; then
             unresolved="$(git diff --name-only --diff-filter=U)"
             echo "Promote merge conflicted in:"
             printf '%s\n' "$unresolved"
@@ -92,3 +107,26 @@ jobs:
           git push origin main
           gh workflow run Deploy --ref main -f environment=main
           gh workflow run Release --ref main || echo "Release dispatch skipped (workflow_dispatch not on main yet)"
+
+  blocked:
+    name: Report a blocked promotion
+    if: >
+      github.event_name == 'workflow_run'
+      && github.event.workflow_run.event == 'push'
+      && github.event.workflow_run.conclusion != 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain why main was not updated
+        env:
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          echo "::warning::stg Deploy for ${SHA} ended '${CONCLUSION}' — main was NOT updated. Fix stg, then re-run that Deploy or dispatch 'Sync stg to main'. Run: ${RUN_URL}"
+          {
+            echo "### Promotion to main blocked"
+            echo ""
+            echo "The stg Deploy for \`${SHA}\` ended **${CONCLUSION}**, so stg was not cloned onto main."
+            echo ""
+            echo "Fix stg, then re-run [that Deploy](${RUN_URL}) or dispatch **Sync stg to main**."
+          } >> "$GITHUB_STEP_SUMMARY"

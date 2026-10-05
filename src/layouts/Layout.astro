@@ -103,8 +103,10 @@ const railLabel = sectionNavLabel ?? chrome.onThisPage ?? 'On this page';
       {skipLabel}
     </a>
 
-    {/* Dot field backdrop — light/dark ink via DotField tone inheritance. */}
-    <DotField class="fixed inset-0 z-0" />
+    {/* Dot field backdrop — light/dark ink via DotField tone inheritance.
+        Not on a world page: the world's opaque ink covers the viewport from
+        the header to the footer, so the field would draw every frame unseen. */}
+    {!world && <DotField class="fixed inset-0 z-0" />}
 
     <Header switchRoute={head.noindex ? '/' : route} availableLangs={availableLangs} />
 

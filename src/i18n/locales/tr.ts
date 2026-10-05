@@ -2079,8 +2079,8 @@ export const tr = {
       channels: [
         {
           label: 'Genel',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'Destek',
