@@ -19,8 +19,9 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
-.env.production
+# .env is tracked and encrypted with git-crypt.
+.env.*
+!.env.example
 
 # macOS-specific files
 .DS_Store
