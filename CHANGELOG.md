@@ -2,6 +2,26 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.4.1-dev.2](https://github.com/nexow-ai/nexow-web/compare/v1.4.1-dev.1...v1.4.1-dev.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* **hero:** keep the hero object clear of the headline and the composer ([ba1cd37](https://github.com/nexow-ai/nexow-web/commit/ba1cd37cdd9341db4fdcc9766e86b9a7a0f08184))
+
+
+### Features
+
+* **hero:** replace the page-wide world field with one object in the hero ([045216f](https://github.com/nexow-ai/nexow-web/commit/045216f1d36a93db0dbf82a96a1e5bfae792734e))
+
+
+### Performance Improvements
+
+* **layout:** skip the dot field under the home world ([b4728cb](https://github.com/nexow-ai/nexow-web/commit/b4728cb793e5889ab1be1377210f161666ab72fd))
+* **world:** pause the animations of scenes that are off screen ([6a6120a](https://github.com/nexow-ai/nexow-web/commit/6a6120a3f3c1ab6acd3503a4965790aacc1ffbf9))
+
+## [1.4.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.4.0...v1.4.1-dev.1) (2026-10-05)
+
 # [1.4.0](https://github.com/nexow-ai/nexow-web/compare/v1.3.0...v1.4.0) (2026-09-30)
 
 
