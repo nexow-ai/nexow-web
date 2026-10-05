@@ -1,48 +1,41 @@
 ---
 /**
  * The theatre the home story plays inside — hero, acts, and the rest of the
- * page through the footer. The camera never cuts; the white band after the
- * use cases was a false floor and is gone.
+ * page through the footer. One room: the hero is scene 0, and the later
+ * sections (surfaces, privacy, plans, rewards, FAQ, CTA, footer) are later
+ * beats of the same space.
  *
- * The hero used to sit outside this stage, on the page's own light surface,
- * with the WebGL world only fading in once the acts began. That put the whole
- * point of the page one screen below the fold. The hero is now scene 0 of the
- * same world, and the later sections (surfaces, privacy, plans, rewards, FAQ,
- * CTA, footer) are later beats of the same room.
+ * Theme tokens still flip; only the ink behind the room changes. `global.css`
+ * repaints the header for the one case this creates: light-theme chrome
+ * floating over the world before the first scroll.
  *
- * Theme tokens still flip. The field is the same volume in both themes; only
- * the ink behind it changes. `global.css` repaints the header for the one
- * case this creates: light-theme chrome floating over the world before the
- * first scroll.
+ * There is no WebGL here any more, and no canvas. The fixed, full-page field —
+ * screens, hairlines and a crystal that changed shape every section — is
+ * gone, and the hero stands on the wash alone.
  *
- * Five layers, and the order matters:
+ * Four layers, and the order matters:
  *   1. .world ink      the element's own black/white plate (back of the stack).
  *   2. .world__bands   solid page-tone / invert boxes (still ink, still back).
- *   3. .world__wash    the colour wash — above ink, below the matter.
- *   4. .world-field    the WebGL screens, clear-alpha, fixed to the viewport.
- *   5. .world__crown   header fade, then .world__content (the story).
+ *   3. .world__wash    the colour wash — above ink, below the content.
+ *   4. .world__crown   header fade, then .world__content (the story).
  *
  * `z-index: 0` here is load-bearing: it makes this a stacking context, so the
- * field paints under the content and over the ink instead of over the header.
+ * wash paints under the content and over the ink instead of over the header.
  * Nothing here may set `overflow`, which would break the `position: sticky`
  * every act depends on.
  *
- * Every direct child that the camera should treat as a beat carries
- * `data-world-scene`; `WorldField` reads them in document order and maps scene
- * *i* to formation *i*. Adding a scene without adding a formation leaves the
- * matter holding its last shape — safe, but the act will not have its own.
+ * Every direct child that is a beat of the story carries `data-world-scene`;
+ * the script below reads them in document order and maps scene *i* to colour
+ * family *i* (`src/lib/worldTone.ts`).
  */
-import WorldField from './WorldField.astro';
 ---
 
 <div class="world">
   <div class="world__bands" aria-hidden="true"></div>
   <div class="world__wash" aria-hidden="true"></div>
-  <WorldField />
   {/* Header band. The header is transparent until 8px of scroll and the world
-      runs to the top of the document, so without this the panels cross the nav
-      labels. Sits on the field's layer and after it, so it darkens the world
-      without touching the content above. */}
+      runs to the top of the document, so without this the content crosses the
+      nav labels. */}
   <div class="world__crown" aria-hidden="true"></div>
   <div class="world__content">
     <slot />
@@ -50,14 +43,22 @@ import WorldField from './WorldField.astro';
 </div>
 
 <script>
+  import {
+    HUE_STEP_NAMES,
+    familyOf,
+    handover,
+    hueSteps,
+    sceneAt,
+    washStops,
+    wrapWay,
+  } from '../../lib/worldTone';
+
   /**
    * Pointer parallax for the DOM scenes.
    *
-   * `WorldField` already moves its camera with the cursor. Without this the six
-   * act scenes stay locked flat to the screen while the world behind them
-   * drifts, and the two layers read as unrelated pictures rather than one
-   * space. This writes `--mx` and `--my` (-1…1, damped) onto the world; each
-   * act scene turns them into a shift of its own `perspective-origin`, which is
+   * The act scenes are CSS 3D constructions; without this they sit locked
+   * flat to the screen. This writes `--mx` and `--my` (-1…1, damped) onto each
+   * act scene, which turns them into a shift of its own `perspective-origin`,
    * the one way to look around a CSS 3D scene without touching the transforms
    * the scroll ramps already compose.
    *
@@ -99,18 +100,52 @@ import WorldField from './WorldField.astro';
     if (!raf) raf = requestAnimationFrame(tick);
   }
 
+  /* ---- scenes, measured in document space ----
+   * A scene's place in the document only changes when the layout does, so it
+   * is measured on resize and read back on scroll for free. */
+  let world: HTMLElement | null = null;
+  let scenes: HTMLElement[] = [];
+  let sceneTop = new Float64Array(0);
+  let sceneBottom = new Float64Array(0);
+  let sceneInvert: boolean[] = [];
+  let features: HTMLElement | null = null;
+  let pgPin: Element | null = null;
+
   let bandRo: ResizeObserver | null = null;
+  let stageMo: MutationObserver | null = null;
+  let restIo: IntersectionObserver | null = null;
 
   /**
-   * One solid box per section, painted *under* the field so the matter keeps
-   * showing on both tones. Page-tone boxes and invert boxes abut — no fade.
+   * Parks every CSS animation in a scene that is off screen. The acts'
+   * mocks loop dozens of keyframes — several on width, height, margins and
+   * stroke offsets — and a running animation restyles (and often relayouts)
+   * its element on every frame whether anyone can see it or not. That was
+   * most of the page's idle main-thread time. `.world-rest` marks the
+   * inactive state, so with no script, or before the first callback,
+   * everything plays.
+   */
+  function watchRest(root: HTMLElement) {
+    restIo = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.classList.toggle('world-rest', !e.isIntersecting);
+      },
+      /* Inset by a hair: a scene whose edge only touches the viewport (act
+         01 under a full-height hero) counts as intersecting otherwise. */
+      { rootMargin: '-2px 0px' },
+    );
+    for (const el of root.querySelectorAll('[data-world-scene], .pg-span')) restIo.observe(el);
+  }
+
+  /**
+   * One solid box per section, painted under the wash so it keeps showing on
+   * both tones. Page-tone boxes and invert boxes abut — no fade. Measures the
+   * scenes for the tone on the way.
    */
   function syncBands() {
-    const world = document.querySelector('.world');
+    world = document.querySelector<HTMLElement>('.world');
     const content = world?.querySelector('.world__content');
     const bands = world?.querySelector('.world__bands');
-    if (!(world instanceof HTMLElement)) return;
-    if (!(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
+    if (!world || !(content instanceof HTMLElement) || !(bands instanceof HTMLElement)) return;
     /* One box per world scene, not per content wrapper: acts 01 and 02 live
      * in the same span so the mock can pin across both, but they are still
      * opposite tones. */
@@ -121,37 +156,146 @@ import WorldField from './WorldField.astro';
       bands.appendChild(document.createElement('div'));
     }
     while (bands.children.length > kids.length) bands.lastElementChild?.remove();
-    const worldTop = world.getBoundingClientRect().top + window.scrollY;
+    const sy = window.scrollY;
+    const worldTop = world.getBoundingClientRect().top + sy;
+    scenes = kids;
+    sceneTop = new Float64Array(kids.length);
+    sceneBottom = new Float64Array(kids.length);
+    sceneInvert = [];
     kids.forEach((kid, i) => {
       const rect = kid.getBoundingClientRect();
       const band = bands.children[i] as HTMLElement;
       const invert = kid.classList.contains('tone-invert') || !!kid.closest('.tone-invert');
       band.className = invert ? 'world__band world__band--invert' : 'world__band';
-      band.style.top = `${Math.round(rect.top + window.scrollY - worldTop)}px`;
+      band.style.top = `${Math.round(rect.top + sy - worldTop)}px`;
       band.style.height = `${Math.round(rect.height)}px`;
+      sceneTop[i] = rect.top + sy;
+      sceneBottom[i] = rect.bottom + sy;
+      sceneInvert.push(invert);
     });
+    features = kids.find((el) => el.id === 'features') ?? null;
+    pgPin = world.querySelector('.pg-pin');
+    scheduleTone();
+  }
+
+  /* ---- the section's colour, on scroll ---- */
+  let toneRaf = 0;
+  let hueKey = '';
+  let washKey = '';
+  let dayOn: boolean | null = null;
+  let lastInvert: boolean | null = null;
+  const docStyle = document.documentElement.style;
+
+  /** The features act lets a clicked surface pick the room's colour. */
+  function featuresWay() {
+    if (!features) return 0;
+    const raw = Number(features.dataset.fmWay);
+    if (Number.isFinite(raw)) return wrapWay(raw);
+    return Number(features.querySelector<HTMLElement>('[data-stage]')?.dataset.stage) || 0;
+  }
+
+  function paintTone() {
+    toneRaf = 0;
+    if (!world || !scenes.length) return;
+    const vv = window.visualViewport;
+    const vh = vv?.height ?? window.innerHeight;
+    const mid = window.scrollY + (vv?.offsetTop ?? 0) + vh * 0.5;
+    const { index: a, local } = sceneAt(sceneTop, sceneBottom, mid);
+    const way = featuresWay();
+    const A = familyOf(a, scenes[a] === features ? way : null);
+    const B = familyOf(a + 1, scenes[a + 1] && scenes[a + 1] === features ? way : null);
+    const k = handover(sceneBottom[a], mid, vh);
+
+    /* Quantised, and written only when it moves: a hold is no writes at all,
+       a handover is a few dozen. */
+    const hk = `${A.fam}|${B.fam}|${k}`;
+    if (hk !== hueKey) {
+      hueKey = hk;
+      hueSteps(A.fam, B.fam, k).forEach((c, s) =>
+        docStyle.setProperty(`--w-hue-${HUE_STEP_NAMES[s]}`, c),
+      );
+    }
+    const wk = `${a}|${A.fam}|${A.pair}|${B.fam}|${B.pair}|${k}`;
+    if (wk !== washKey) {
+      washKey = wk;
+      washStops(a, A, B, k).forEach((c, s) => world!.style.setProperty(`--w-wash-${'abc'[s]}`, c));
+    }
+
+    /* Studio beats (features onward) lift the room; the use-cases act hands
+       over to them on its way out. */
+    const morph = Math.min(1, Math.max(0, (local - 0.12) / 0.88));
+    const studio = a >= 8 ? 1 : a === 7 ? morph : 0;
+    const day = studio > 0.45;
+    if (day !== dayOn) {
+      dayOn = day;
+      world.classList.toggle('world--day', day);
+    }
+
+    /* The playground mock pins across two opposite-tone acts and follows
+       the box under it. */
+    const invert = !!sceneInvert[a];
+    if (invert !== lastInvert) {
+      lastInvert = invert;
+      pgPin?.classList.toggle('tone-invert', invert);
+    }
+  }
+
+  function scheduleTone() {
+    if (!toneRaf) toneRaf = requestAnimationFrame(paintTone);
   }
 
   function teardownWorld() {
     window.removeEventListener('pointermove', onPointer);
     window.removeEventListener('resize', syncBands);
+    window.removeEventListener('scroll', scheduleTone);
     if (raf) cancelAnimationFrame(raf);
+    if (toneRaf) cancelAnimationFrame(toneRaf);
     raf = 0;
+    toneRaf = 0;
     targets = [];
     bandRo?.disconnect();
     bandRo = null;
+    stageMo?.disconnect();
+    stageMo = null;
+    restIo?.disconnect();
+    restIo = null;
+    for (const el of document.querySelectorAll('.world-rest')) el.classList.remove('world-rest');
+    world?.style.removeProperty('--w-wash-a');
+    world?.style.removeProperty('--w-wash-b');
+    world?.style.removeProperty('--w-wash-c');
+    world = null;
+    scenes = [];
+    features = null;
+    pgPin = null;
+    hueKey = '';
+    washKey = '';
+    dayOn = null;
+    lastInvert = null;
   }
 
   function initWorld() {
     teardownWorld();
     syncBands();
-    const content = document.querySelector('.world__content');
+    if (!world) return;
+    /* Synchronous on load, so the first paint already wears the hero's hue. */
+    paintTone();
+    const content = world.querySelector('.world__content');
     if (content) {
       bandRo = new ResizeObserver(syncBands);
       bandRo.observe(content);
       for (const kid of content.querySelectorAll('[data-world-scene]')) bandRo.observe(kid);
     }
+    if (features) {
+      stageMo = new MutationObserver(scheduleTone);
+      stageMo.observe(features, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ['data-fm-way', 'data-stage'],
+      });
+    }
+    watchRest(world);
     window.addEventListener('resize', syncBands, { passive: true });
+    window.addEventListener('scroll', scheduleTone, { passive: true });
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (window.matchMedia('(pointer: coarse)').matches) return;
     targets = Array.from(document.querySelectorAll<HTMLElement>('.world .act-scene'));
@@ -173,13 +317,13 @@ import WorldField from './WorldField.astro';
   .world {
     position: relative;
     z-index: 0;
-    /* The section's colour is the brand inside the world. `WorldField`
-     * writes the hue the crystal wears as five shade steps on the document
+    /* The section's colour is the brand inside the world. The script above
+     * writes each section's hue as five shade steps on the document
      * (--w-hue-300 … --w-hue-700) and they are mapped onto the brand tokens
      * here, so every brand-coloured accent in a section — eyebrows, beat
      * labels, chips, icons, rules — is that section's colour, in the shade
-     * its ground wants, and crosses to the next colour with the crystal. The
-     * ember fallbacks hold before the first frame and without JavaScript.
+     * its ground wants, and crosses to the next colour at the seam. The
+     * ember fallbacks hold before the script runs and without JavaScript.
      * The gradient buttons keep the brand: their stops resolve on the root. */
     --color-brand-50: color-mix(in oklab, var(--w-hue-400, #ff7038) 12%, white);
     --color-brand-100: color-mix(in oklab, var(--w-hue-400, #ff7038) 22%, white);
@@ -208,11 +352,11 @@ import WorldField from './WorldField.astro';
     --w-panel-2: color-mix(in oklab, var(--color-ink-900) 4%, transparent);
     --w-shadow: rgba(15, 23, 42, 0.22);
     --w-rail: color-mix(in oklab, var(--color-ink-900) 28%, transparent);
-    /* Wash strength: the colour behind the matter. Quieter on a light page.
-     * Stops start as the first-paint cloth (ember → indigo → plasma).
-     * WorldField walks them onto each later section's hue on the same beat
-     * the crystal crosses — it must not use --color-brand-*, or the hero
-     * flashes cyan the moment the first frame writes --w-hue-*. */
+    /* Wash strength: the colour behind the content. Quieter on a light page.
+     * Stops start as the first-paint cloth (ember → indigo → plasma). The
+     * script walks them onto each later section's hue at the seam — it must
+     * not use --color-brand-*, or the hero flashes cyan the moment the first
+     * paint writes --w-hue-*. */
     --w-wash: 0.45;
     --w-wash-a: #ff4d14;
     --w-wash-b: var(--color-accent-600, var(--color-accent-500));
@@ -254,7 +398,7 @@ import WorldField from './WorldField.astro';
   }
 
   /* Opposite of the page theme. Ground is painted on `.world__bands` (under
-   * the field) so the screens stay visible; this wrapper only flips type.
+   * the wash) so the wash stays visible; this wrapper only flips type.
    * Transparent here beats the opaque `html.dark .tone-invert` in global.css. */
   :global(html.dark) .world :global(.tone-invert) {
     --w-hue: var(--color-brand-500);
@@ -329,11 +473,10 @@ import WorldField from './WorldField.astro';
     background: #ffffff;
   }
 
-  /* A wash that sits between the ink and the matter: enough colour that the
-   * world is not a black rectangle before WebGL has painted a frame, and it is
-   * also exactly what a no-WebGL visitor keeps. Must paint *above* `.world`
-   * and `.world__bands` — those solid plates used to share this z-index and
-   * cover the wash the moment JS built the boxes. */
+  /* A wash that sits between the ink and the content: enough colour that the
+   * world is not a flat black rectangle, with or without JavaScript. Must
+   * paint *above* `.world` and `.world__bands` — those solid plates used to
+   * share this z-index and cover the wash the moment JS built the boxes. */
   .world__wash {
     position: absolute;
     inset: 0;
@@ -357,7 +500,7 @@ import WorldField from './WorldField.astro';
       );
   }
 
-  /* Softens the field under the nav. Colour must match the band behind the
+  /* Softens the content under the nav. Colour must match the band behind the
    * header — page surface on page bands, invert surface on invert bands —
    * otherwise the crown reads as a white/black gradient across a solid stripe.
    * `.chrome-invert` is stamped by `ChromeTone` while the band under the bar
@@ -400,9 +543,18 @@ import WorldField from './WorldField.astro';
     z-index: 3;
   }
 
+  /* A scene off screen keeps its animations' phase and stops spending
+   * frames on them (see `watchRest`). */
+  .world :global(.world-rest),
+  .world :global(.world-rest *),
+  .world :global(.world-rest *::before),
+  .world :global(.world-rest *::after) {
+    animation-play-state: paused !important;
+  }
+
   /* Later beats used to be marketing slabs (mint wash, white FAQ plate,
    * opaque rewards ink, footer night). Inside the world they are glass
-   * holds — the field shows through, type uses the world's tokens. */
+   * holds — the wash shows through, type uses the world's tokens. */
   .world :global(#features),
   .world :global(#privacy),
   .world :global(#plans),

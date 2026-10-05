@@ -72,7 +72,7 @@
   function measure() {
     const y = window.scrollY;
     bands = [...document.querySelectorAll<HTMLElement>('.tone-invert')]
-      .filter((el) => el.offsetHeight > 0 && !el.closest('.world-field') && !el.classList.contains('pg-pin'))
+      .filter((el) => el.offsetHeight > 0 && !el.classList.contains('pg-pin'))
       .map((el) => {
         const box = el.getBoundingClientRect();
         return { top: box.top + y, bottom: box.bottom + y };

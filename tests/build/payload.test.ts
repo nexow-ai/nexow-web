@@ -32,15 +32,17 @@ const fonts = assets.filter((f) => /\.(woff2?|ttf|otf)$/.test(f));
 
 describe.skipIf(!built)('shipped payload', () => {
   it('ships a small amount of JavaScript — there is no framework runtime here', () => {
-    expect(kb(sizeOf(scripts)), `total JS is ${kb(sizeOf(scripts))} KB`).toBeLessThan(150);
+    /* 150 → 80: the full-page world field (~50 KB), its dashboard-atlas
+       rasteriser and the hero object that briefly replaced them are gone;
+       there is no WebGL left. ~69 KB today. */
+    expect(kb(sizeOf(scripts)), `total JS is ${kb(sizeOf(scripts))} KB`).toBeLessThan(80);
   });
 
   it('keeps every individual script small enough to parse cheaply', () => {
-    /* 65 → 70: the WorldField chunk had crept to 65.9 on its own, and the
-       dashboard-atlas hookup (the rasteriser itself is a deferred chunk,
-       `worldBoards`) put it at ~67. */
+    /* 70 → 20: the world field's chunk (~67 KB at the end) was the only
+       big one; with no WebGL left the biggest script is ~12 KB. */
     for (const file of scripts) {
-      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(70);
+      expect(kb(fs.statSync(file).size), path.basename(file)).toBeLessThan(20);
     }
   });
 
@@ -52,8 +54,10 @@ describe.skipIf(!built)('shipped payload', () => {
        vocabulary — value cyclers, print flashes, rolling plots, meters,
        sweeps — is ~3 KB of keyframes and rules that dresses every board, and
        is why the boards themselves grew markup without growing CSS per
-       board. */
-    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(440);
+       board.
+       440 → 420: the hero dashboards are gone with the atlas they fed;
+       ~414 KB today. */
+    expect(kb(sizeOf(styles)), `total CSS is ${kb(sizeOf(styles))} KB`).toBeLessThan(420);
   });
 
   it('self-hosts its fonts, in woff2', () => {
@@ -64,26 +68,13 @@ describe.skipIf(!built)('shipped payload', () => {
   });
 
   it('keeps each page document within a sane size', () => {
-    /* The home pages are the big ones — around 815 KB, and rising to that from
-       ~600 KB when the hero stopped rendering sixteen of its dashboards and
-       started rendering all thirty-seven, which is also the world's channel
-       table (src/lib/worldBoards.ts rasterises them into the atlas the 3D
-       screens sample), and to ~860 KB when the boards started running —
-       ticking readouts are several copies of one number, and a plot that
-       scrolls draws its series twice.
-
-       900 → 1060: the twelve chart desks (×1/×2/×4/×8 grids of live plots
-       across stocks, commodities, indices, FX, crypto and macro) took the
-       list to forty-nine and the biggest page to ~1020 KB. Most of that is
-       mechanical rather than authored — an eight-up sheet is ~250 SVG nodes
-       and every one of them carries Astro's 24-byte scoped-style attribute,
-       which is a third of the board. It compresses to ~139 KB gzipped, which
-       is what actually crosses the wire. ~40 KB of headroom; another eight-up
-       sheet costs ~20 KB, so the next one wants the byte budget looked at
-       rather than the cap raised again. */
+    /* The home pages used to be the big ones — past 1 MB, most of it the
+       forty-nine hidden SVG dashboards the world field rasterised into its
+       atlas. With the atlas gone the home page is ~530 KB and the biggest
+       page is a connectors catalogue at ~615 KB. 1060 → 650 holds that. */
     const pages = walk(DIST).filter((f) => f.endsWith('.html'));
     const oversized = pages
-      .filter((f) => fs.statSync(f).size > 1060 * 1024)
+      .filter((f) => fs.statSync(f).size > 650 * 1024)
       .map((f) => `${path.relative(DIST, f)} (${kb(fs.statSync(f).size)} KB)`);
     expect(oversized).toEqual([]);
   });
