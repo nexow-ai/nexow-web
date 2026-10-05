@@ -2385,20 +2385,10 @@ export const de: SiteContent = {
     },
     aside: {
       title: 'Lieber direkt per E-Mail?',
-      body: 'Wir antworten von den Adressen unten. Partnerschafts- und Partner-Plan-Anfragen gehen an partners@.',
+      body: 'Wir antworten von den Adressen unten.',
       channels: [
         {
           label: 'Allgemein',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Support',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Partner',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

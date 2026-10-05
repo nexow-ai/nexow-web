@@ -2440,20 +2440,10 @@ export const ar: SiteContent = {
     },
     aside: {
       title: 'تفضل البريد المباشر؟',
-      body: 'نرد من العناوين أدناه. تذهب طلبات الشراكة وخطة Partner إلى partners@.',
+      body: 'نرد من العناوين أدناه.',
       channels: [
         {
           label: 'عام',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'الدعم',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'الشركاء',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

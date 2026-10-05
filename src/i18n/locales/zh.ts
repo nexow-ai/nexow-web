@@ -2381,20 +2381,10 @@ export const zh: SiteContent = {
     },
     aside: {
       title: '更想直接发邮件？',
-      body: '我们会从下列地址回复。合作与 Partner 方案的请求请发至 partners@。',
+      body: '我们会从下列地址回复。',
       channels: [
         {
           label: '综合',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: '支持',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: '合作伙伴',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

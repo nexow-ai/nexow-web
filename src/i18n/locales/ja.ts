@@ -2385,20 +2385,10 @@ export const ja: SiteContent = {
     },
     aside: {
       title: '直接メールを送りますか？',
-      body: '以下のアドレスから返信します。パートナーシップおよび Partner プランのご相談は partners@ へ。',
+      body: '以下のアドレスから返信します。',
       channels: [
         {
           label: '全般',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'サポート',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'パートナー',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

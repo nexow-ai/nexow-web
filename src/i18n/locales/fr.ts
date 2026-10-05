@@ -2385,20 +2385,10 @@ export const fr: SiteContent = {
     },
     aside: {
       title: 'Vous préférez l’e-mail direct ?',
-      body: 'Nous répondons depuis les adresses ci-dessous. Les demandes de partenariat et de plan Partner vont à partners@.',
+      body: 'Nous répondons depuis l’adresse ci-dessous.',
       channels: [
         {
           label: 'Général',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Support',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Partenaires',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

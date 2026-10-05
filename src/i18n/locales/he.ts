@@ -2439,20 +2439,10 @@ export const he: SiteContent = {
     },
     aside: {
       title: 'מעדיפים אימייל ישיר?',
-      body: 'אנחנו משיבים מהכתובות שלמטה. פניות לשיתוף פעולה ולתוכנית Partner מגיעות ל-partners@.',
+      body: 'אנחנו משיבים מהכתובות שלמטה.',
       channels: [
         {
           label: 'כללי',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'תמיכה',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'שותפים',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

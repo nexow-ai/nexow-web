@@ -2075,20 +2075,10 @@ export const tr = {
     },
     aside: {
       title: 'Doğrudan e-posta mı tercih edersiniz?',
-      body: 'Aşağıdaki adreslerden yanıtlıyoruz. İş birliği ve Partner planı talepleri partners@ adresine gider.',
+      body: 'Aşağıdaki adreslerden yanıtlıyoruz.',
       channels: [
         {
           label: 'Genel',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Destek',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'İş ortakları',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },

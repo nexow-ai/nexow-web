@@ -2385,20 +2385,10 @@ export const uk: SiteContent = {
     },
     aside: {
       title: 'Бажаєте написати напряму?',
-      body: 'Ми відповідаємо з адрес нижче. Запити щодо партнерства та плану Partner ідуть на partners@.',
+      body: 'Ми відповідаємо з адрес нижче.',
       channels: [
         {
           label: 'Загальне',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Підтримка',
-          value: 'admin@nexow.ai',
-          href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Партнери',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
         },
