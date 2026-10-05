@@ -58,6 +58,8 @@ bun run deploy:stg     # Cloudflare Pages, `stg` branch
 bun run deploy:prod    # Cloudflare Pages, `main` (nexow.ai)
 ```
 
+`.env` is committed encrypted with git-crypt. On a new machine, install git-crypt and run `git-crypt unlock ~/.config/git-crypt/nexow.ai/nexow-web.key` once. The working tree stays plaintext; the blob in git is ciphertext. Plaintext `.env.*` overrides stay gitignored, and the key file is never committed.
+
 ## Structure
 
 ```
@@ -229,7 +231,7 @@ Copyright 2026 Nexow, Inc. Licensed under Apache-2.0.
 
 ## Contact
 
-- General: [hello@nexow.ai](mailto:hello@nexow.ai)
+- General: [admin@nexow.ai](mailto:admin@nexow.ai)
 - Support: [support@nexow.ai](mailto:support@nexow.ai)
 - Partners: [partners@nexow.ai](mailto:partners@nexow.ai)
 - Legal pages: [nexow.ai/legal](https://nexow.ai/legal)

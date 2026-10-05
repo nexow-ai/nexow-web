@@ -41,7 +41,8 @@ or rewrite the brand.
 git clone https://github.com/nexow-ai/nexow-web.git
 cd nexow-web
 bun install
-cp .env.example .env   # optional; social URLs have published fallbacks
+# .env is in git, encrypted. Once per machine:
+# git-crypt unlock ~/.config/git-crypt/nexow.ai/nexow-web.key
 bun run content:sync
 bun run dev            # http://localhost:4321
 ```
@@ -159,6 +160,6 @@ Do not file public issues for vulnerabilities. See [SECURITY.md](SECURITY.md).
 
 ## Questions
 
-- Product / site: <hello@nexow.ai>
+- Product / site: <admin@nexow.ai>
 - Support: <support@nexow.ai>
 - Legal: see [https://nexow.ai/legal](https://nexow.ai/legal)

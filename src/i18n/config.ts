@@ -45,7 +45,7 @@ export const SITE = {
   waitlistUrl: 'https://x.nexow.ai/api/newsletter',
   /** Contact form (Nuxt API on the app host). Routes by inquiry type server-side. */
   contactUrl: 'https://x.nexow.ai/api/contact',
-  email: 'hello@nexow.ai',
+  email: 'admin@nexow.ai',
   /** Partnership / sales inbox. */
   partnersEmail: 'partners@nexow.ai',
   /** Support inbox. */

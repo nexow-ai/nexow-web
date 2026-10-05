@@ -5,4 +5,4 @@ contact_links:
     about: Account, billing, or app questions — not this marketing-site repo.
   - name: Security report
     url: https://github.com/nexow-ai/nexow-web/blob/main/SECURITY.md
-    about: Do not file public issues for vulnerabilities. Email hello@nexow.ai.
+    about: Do not file public issues for vulnerabilities. Email admin@nexow.ai.

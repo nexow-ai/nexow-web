@@ -2385,8 +2385,8 @@ export const zh: SiteContent = {
       channels: [
         {
           label: '综合',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: '支持',

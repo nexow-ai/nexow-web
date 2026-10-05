@@ -2444,8 +2444,8 @@ export const ar: SiteContent = {
       channels: [
         {
           label: 'عام',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'الدعم',

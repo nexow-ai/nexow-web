@@ -2389,8 +2389,8 @@ export const ja: SiteContent = {
       channels: [
         {
           label: '全般',
-          value: 'hello@nexow.ai',
-          href: 'mailto:hello@nexow.ai',
+          value: 'admin@nexow.ai',
+          href: 'mailto:admin@nexow.ai',
         },
         {
           label: 'サポート',
