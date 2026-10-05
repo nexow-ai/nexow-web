@@ -2,6 +2,8 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.4.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.4.0...v1.4.1-dev.1) (2026-10-05)
+
 # [1.4.0](https://github.com/nexow-ai/nexow-web/compare/v1.3.0...v1.4.0) (2026-09-30)
 
 
