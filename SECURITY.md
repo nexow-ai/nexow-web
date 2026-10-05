@@ -16,7 +16,7 @@ against the production sites listed above.
 
 **Do not** open a public GitHub issue for a security problem.
 
-Email **<hello@nexow.ai>** with the subject line `Security report`.
+Email **<admin@nexow.ai>** with the subject line `Security report`.
 Include:
 
 - A description of the issue and its impact

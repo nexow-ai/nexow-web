@@ -155,7 +155,7 @@ const t = useContent(lang).waitlist!;
         // Fallback: open mailto so intent isn’t lost if the API is unreachable.
         const subject = encodeURIComponent('Nexow billing waitlist');
         const body = encodeURIComponent(`Please add ${email} to the billing waitlist.`);
-        window.location.href = `mailto:hello@nexow.ai?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:admin@nexow.ai?subject=${subject}&body=${body}`;
         setStatus(status, labels.success, 'ok');
       } finally {
         submit.disabled = false;
