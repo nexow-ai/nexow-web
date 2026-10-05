@@ -2072,22 +2072,12 @@ export const pl = {
     },
     aside: {
       title: 'Wolisz napisać bezpośrednio?',
-      body: 'Odpowiadamy z poniższych adresów. Zapytania o współpracę i plan Partner kieruj na partners@.',
+      body: 'Odpowiadamy z poniższych adresów.',
       channels: [
         {
           label: 'Ogólne',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Wsparcie',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: 'Partnerzy',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },

@@ -2385,22 +2385,12 @@ export const nl: SiteContent = {
     },
     aside: {
       title: 'Liever direct mailen?',
-      body: 'We antwoorden vanaf onderstaande adressen. Samenwerkings- en Partner-planaanvragen gaan naar partners@.',
+      body: 'We antwoorden vanaf onderstaande adressen.',
       channels: [
         {
           label: 'Algemeen',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Support',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: 'Partners',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },

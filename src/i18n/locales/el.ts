@@ -2075,22 +2075,12 @@ export const el = {
     },
     aside: {
       title: 'Προτιμάτε απευθείας email;',
-      body: 'Απαντάμε από τις παρακάτω διευθύνσεις. Τα αιτήματα συνεργασίας και του πλάνου Partner πηγαίνουν στο partners@.',
+      body: 'Απαντάμε από τις παρακάτω διευθύνσεις.',
       channels: [
         {
           label: 'Γενικά',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Υποστήριξη',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: 'Συνεργάτες',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },

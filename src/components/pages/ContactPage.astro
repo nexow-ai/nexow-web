@@ -142,9 +142,9 @@ const sections = [
    *  routing (server/utils/contact.ts). Kept in sync with that table. */
   function inboxFor(type: string, form: HTMLFormElement): string {
     if (type === 'partnership' || type === 'sales') {
-      return form.dataset.partners || 'partners@nexow.ai';
+      return form.dataset.partners || 'admin@nexow.ai';
     }
-    if (type === 'support') return form.dataset.support || 'support@nexow.ai';
+    if (type === 'support') return form.dataset.support || 'admin@nexow.ai';
     return form.dataset.hello || 'admin@nexow.ai';
   }
 

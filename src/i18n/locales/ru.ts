@@ -2441,22 +2441,12 @@ export const ru: SiteContent = {
     },
     aside: {
       title: 'Предпочитаете написать напрямую?',
-      body: 'Мы отвечаем с адресов ниже. Запросы по партнёрству и плану Partner идут на partners@.',
+      body: 'Мы отвечаем с адресов ниже.',
       channels: [
         {
           label: 'Общее',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Поддержка',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: 'Партнёры',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },

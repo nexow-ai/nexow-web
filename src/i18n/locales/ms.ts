@@ -2075,22 +2075,12 @@ export const ms = {
     },
     aside: {
       title: 'Lebih suka e-mel terus?',
-      body: 'Kami membalas daripada alamat di bawah. Permintaan perkongsian dan pelan Partner pergi ke partners@.',
+      body: 'Kami membalas daripada alamat di bawah.',
       channels: [
         {
           label: 'Umum',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: 'Sokongan',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: 'Rakan kongsi',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },
