@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.5.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.5.0...v1.5.1-dev.1) (2026-10-14)
+
+
+### Bug Fixes
+
+* **contact:** list a single address in the contact aside ([7bff0ba](https://github.com/nexow-ai/nexow-web/commit/7bff0ba28e5d40b07abff9efcd214134b3774803))
+* **contact:** route support and partners to admin@nexow.ai ([55ec5e2](https://github.com/nexow-ai/nexow-web/commit/55ec5e25e74925689d0f7a9869bf748843ed535b))
+
 # [1.5.0](https://github.com/nexow-ai/nexow-web/compare/v1.4.0...v1.5.0) (2026-10-05)
 
 
