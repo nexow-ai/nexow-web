@@ -2422,22 +2422,12 @@ export const ko: SiteContent = {
     },
     aside: {
       title: '이메일로 직접 보내시겠어요?',
-      body: '아래 주소에서 답변드립니다. 파트너십 및 Partner 요금제 문의는 partners@로 보내주세요.',
+      body: '아래 주소에서 답변드립니다.',
       channels: [
         {
           label: '일반',
           value: 'admin@nexow.ai',
           href: 'mailto:admin@nexow.ai',
-        },
-        {
-          label: '지원',
-          value: 'support@nexow.ai',
-          href: 'mailto:support@nexow.ai',
-        },
-        {
-          label: '파트너',
-          value: 'partners@nexow.ai',
-          href: 'mailto:partners@nexow.ai',
         },
       ],
     },
