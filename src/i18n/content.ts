@@ -870,7 +870,7 @@ export interface SiteContent {
     /** Toggle label for the category/status filter panel. */
     filters: string;
     all: string;
-    categories: { finance: string; wallets: string; services: string; data: string; socials: string };
+    categories: { finance: string; ai: string; wallets: string; services: string; data: string; socials: string };
     status: { all: string; live: string; soon: string };
     /** Trading-capable vs data/read-only connectors. */
     capability: { all: string; trading: string; readonly: string };

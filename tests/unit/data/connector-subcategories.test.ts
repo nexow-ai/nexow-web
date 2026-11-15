@@ -11,10 +11,11 @@ import { ICON_PATHS } from '../../../src/components/icon-paths';
 import { useContent } from '../../../src/i18n/content';
 import { LANGS } from '../../helpers/locales';
 
-const CATEGORIES: ConnectorCategory[] = ['finance', 'wallets', 'services', 'data', 'socials'];
+const CATEGORIES: ConnectorCategory[] = ['finance', 'ai', 'wallets', 'services', 'data', 'socials'];
 
 const emptyByCategory = (): Record<ConnectorCategory, ConnectorSubcategory[]> => ({
   finance: [],
+  ai: [],
   wallets: [],
   services: [],
   data: [],

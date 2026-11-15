@@ -2189,7 +2189,7 @@ export const en: SiteContent = {
     searchPlaceholder: 'Search connectors…',
     filters: 'Filters',
     all: 'All',
-    categories: { finance: 'Finance', wallets: 'Wallets', services: 'Services', data: 'Data', socials: 'Socials' },
+    categories: { finance: 'Finance', ai: 'AI', wallets: 'Wallets', services: 'Services', data: 'Data', socials: 'Socials' },
     status: { all: 'All', live: 'Live', soon: 'Soon' },
     capability: { all: 'All', trading: 'Trading', readonly: 'Data only' },
     filterSubcategories: 'Type',
@@ -2197,6 +2197,9 @@ export const en: SiteContent = {
     filterAssets: 'Assets',
     filterAlpha: 'Name',
     kinds: {
+      llm: 'Model provider',
+      model_router: 'Model router',
+      generative_media: 'Generative media',
       broker: 'Broker',
       exchange: 'Exchange',
       prediction: 'Prediction market',
@@ -2207,6 +2210,7 @@ export const en: SiteContent = {
       nosql: 'NoSQL database',
       warehouse: 'Data warehouse',
       vector: 'Vector database',
+      sheet: 'Spreadsheet',
       messaging: 'Messaging',
       social: 'Social network',
       video: 'Video',
@@ -2416,10 +2420,6 @@ export const en: SiteContent = {
     ctaBody: 'Email support or send a contact form — we read every message.',
     cta: 'Contact us',
   },
-  securityPage: {
-    meta: {
-      title: 'Security & Trust — Nexow',
-      description:
   surfacesStrip: {
     eyebrow: 'One account, three apps',
     title: 'Take your canvas anywhere',
@@ -2860,6 +2860,10 @@ export const en: SiteContent = {
       ctaSecondary: 'Open the web app',
     },
   },
+  securityPage: {
+    meta: {
+      title: 'Security & Trust — Nexow',
+      description:
         'SOC 2 Type II, ISO/IEC 27001, 27017 and 27018 certified, GDPR compliant — plus how Nexow scopes widgets, credentials, versions and sync with a sandboxed runtime and least-privilege connectors.',
     },
     hero: {
@@ -3013,16 +3017,16 @@ export const en: SiteContent = {
       ],
       ctaPrimary: 'Build a trading desk',
       ctaSecondary: 'See connectors',
-    },
-    founders: {
-      meta: {
-        title: 'Nexow for founders',
       steps: ['Describe the desk you want.','Nexow wires live market data and lays out the widgets.','Open it, tweak it with a follow-up prompt, and let bots watch it.'],
       video: {
         slug: 'for-traders',
         alt: 'Building a crypto desk from one prompt',
         caption: 'A trading desk, built while you watch.',
       },
+    },
+    founders: {
+      meta: {
+        title: 'Nexow for founders',
         description:
           'Spin up a founder HQ from one prompt — pipeline, launch checklist, content calendar and MRR on a single canvas.',
       },
@@ -3041,16 +3045,16 @@ export const en: SiteContent = {
       ],
       ctaPrimary: 'Build founder HQ',
       ctaSecondary: 'See examples',
-    },
-    builders: {
-      meta: {
-        title: 'Nexow for builders',
       steps: ['Say what you want to track, in plain language.','Nexow connects your tools and builds the dashboard.','Share a live screen with your team or investors.'],
       video: {
         slug: 'for-founders',
         alt: 'Building a founder dashboard from one prompt',
         caption: 'One screen for the numbers that matter.',
       },
+    },
+    builders: {
+      meta: {
+        title: 'Nexow for builders',
         description:
           'Ship interactive widgets, bots and agents on a sandboxed canvas — then publish to a community marketplace.',
       },
@@ -3069,16 +3073,16 @@ export const en: SiteContent = {
       ],
       ctaPrimary: 'Start building',
       ctaSecondary: 'Join community',
-    },
-  },
-  privacyPage,
-  termsPage,
       steps: ['Describe the widget, wire or bot you need.','Nexow writes it, tests it and shows every step.','Publish it to the marketplace or remake someone else’s.'],
       video: {
         slug: 'for-builders',
         alt: 'Building a widget from one prompt',
         caption: 'From idea to a shipped widget.',
       },
+    },
+  },
+  privacyPage,
+  termsPage,
   cookiesPage,
   legalPage,
   acceptableUsePage,

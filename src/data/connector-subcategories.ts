@@ -37,6 +37,12 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     // Kind chip: PayPal / Plaid / Adyen (and similar) have empty assets.
     { key: 'payments', icon: 'creditCard', labelFrom: 'kinds' },
   ],
+  // AI → what the venue is: a model lab, a one-key router, or an image/video platform.
+  ai: [
+    { key: 'llm', icon: 'sparkles', labelFrom: 'kinds' },
+    { key: 'model_router', icon: 'network', labelFrom: 'kinds' },
+    { key: 'generative_media', icon: 'wand', labelFrom: 'kinds' },
+  ],
   wallets: [{ key: 'wallet', icon: 'wallet', labelFrom: 'kinds' }],
   services: [
     { key: 'browser', icon: 'earth', labelFrom: 'kinds' },
@@ -55,6 +61,7 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
     { key: 'nosql', icon: 'files', labelFrom: 'kinds' },
     { key: 'warehouse', icon: 'database', labelFrom: 'kinds' },
     { key: 'vector', icon: 'sparkles', labelFrom: 'kinds' },
+    { key: 'sheet', icon: 'grid', labelFrom: 'kinds' },
     { key: 'analytics', icon: 'chartPie', labelFrom: 'kinds' },
   ],
   socials: [
@@ -69,6 +76,7 @@ export const SUBCATEGORIES_BY_CATEGORY: Record<ConnectorCategory, ConnectorSubca
 
 const CATEGORY_ORDER: ConnectorCategory[] = [
   'finance',
+  'ai',
   'wallets',
   'services',
   'data',

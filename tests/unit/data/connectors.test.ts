@@ -13,7 +13,7 @@ import { SUBCATEGORIES_BY_CATEGORY } from '../../../src/data/connector-subcatego
 import { useContent } from '../../../src/i18n/content';
 import { LANGS } from '../../helpers/locales';
 
-const CATEGORIES: ConnectorCategory[] = ['finance', 'wallets', 'services', 'data', 'socials'];
+const CATEGORIES: ConnectorCategory[] = ['finance', 'ai', 'wallets', 'services', 'data', 'socials'];
 const STATUSES: ConnectorStatus[] = ['live', 'soon'];
 const LOGO_FITS: ConnectorLogoFit[] = ['cover', 'contain'];
 
