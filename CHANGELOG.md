@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.5.1-dev.2](https://github.com/nexow-ai/nexow-web/compare/v1.5.1-dev.1...v1.5.1-dev.2) (2026-11-15)
+
+
+### Features
+
+* **video:** add lazy AppVideo component and video cache headers ([0a8ff76](https://github.com/nexow-ai/nexow-web/commit/0a8ff76d0df887bb18d82664a1f64704a817cf8e))
+
 ## [1.5.1-dev.1](https://github.com/nexow-ai/nexow-web/compare/v1.5.0...v1.5.1-dev.1) (2026-10-14)
 
 
