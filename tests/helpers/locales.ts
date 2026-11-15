@@ -11,6 +11,9 @@ export const PREFIXED_LANGS = LANGS.filter((l) => l !== defaultLang);
 export const CANONICAL_ROUTES = [
   '/',
   '/features',
+  '/web',
+  '/desktop',
+  '/mobile',
   '/community',
   '/connectors',
   '/plans',

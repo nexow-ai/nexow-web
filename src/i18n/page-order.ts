@@ -14,6 +14,9 @@ import { localizePath } from './utils';
 export const PAGE_ORDER: string[] = [
   '/',
   '/features',
+  '/web',
+  '/desktop',
+  '/mobile',
   '/community',
   '/connectors',
   '/plans',

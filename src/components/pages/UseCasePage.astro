@@ -9,6 +9,7 @@ import PageHero from '../PageHero.astro';
 import CtaBand from '../sections/CtaBand.astro';
 import Button from '../Button.astro';
 import Icon from '../Icon.astro';
+import AppVideo from '../AppVideo.astro';
 
 interface Props {
   lang: Lang;
@@ -40,6 +41,18 @@ const sections = [
     subtitle={t.hero.subtitle}
   />
 
+  {
+    t.video && (
+      <section class="container-page pb-10">
+        <div class="mx-auto max-w-4xl">
+          <AppVideo slug={t.video.slug} alt={t.video.alt} frame="browser" title="nexow" eager>
+            {t.video.caption}
+          </AppVideo>
+        </div>
+      </section>
+    )
+  }
+
   <section id="prompt" class="container-page scroll-mt-20 pb-12">
     <div class="reveal mx-auto max-w-2xl">
       <div class="rounded-2xl border border-ink-900/10 bg-white p-5 shadow-sm sm:p-6 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/40">
@@ -51,6 +64,19 @@ const sections = [
           </Button>
         </div>
       </div>
+
+      {
+        t.steps && (
+          <ol class="mt-10 grid gap-3 sm:grid-cols-3">
+            {t.steps.map((s, i) => (
+              <li class="rounded-xl border border-ink-900/10 p-4 text-sm leading-relaxed text-ink-700 dark:border-white/10 dark:text-ink-300">
+                <span class="font-mono text-xs text-brand-700 dark:text-brand-300">0{i + 1}</span>
+                <p class="mt-1.5">{s}</p>
+              </li>
+            ))}
+          </ol>
+        )
+      }
 
       <ul class="mt-10 space-y-4">
         {

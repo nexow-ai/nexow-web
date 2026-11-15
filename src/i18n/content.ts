@@ -491,6 +491,31 @@ export interface UseCaseItem {
   recipe: string;
 }
 
+export interface SurfaceChapter {
+  id: string;
+  icon: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  points: string[];
+  /** Recording slug — public/video/<slug>.{webm,mp4,webp}. */
+  video: { slug: string; alt: string; caption: string };
+  /** Honest availability chip, e.g. “Experimental”. Omit for live features. */
+  status?: string;
+}
+
+export interface SurfacePageContent {
+  /** One line for the cross-links on the home and features pages. */
+  summary: string;
+  meta: { title: string; description: string };
+  hero: { badge: string; title: string; subtitle: string; video: { slug: string; alt: string } };
+  cta: { label: string; note: string };
+  chapters: SurfaceChapter[];
+  ctaTitle: string;
+  ctaBody: string;
+  ctaSecondary: string;
+}
+
 export interface SiteContent {
   nav: {
     links: NavLink[];
@@ -773,6 +798,7 @@ export interface SiteContent {
      * Optional so locales fall back to English through `useContent`.
      */
     rail?: {
+      surfaces?: string;
       hero: string;
       widget: string;
       canvas: string;
@@ -957,6 +983,10 @@ export interface SiteContent {
     ctaBody: string;
     cta: string;
   };
+  /** Heading above the cross-links to the three surface pages. */
+  surfacesStrip?: { eyebrow: string; title: string; subtitle: string; cta: string };
+  /** Per-surface product tours (web app, desktop app, mobile app). Each chapter pairs copy with a real recording. */
+  surfacePages?: Record<'web' | 'desktop' | 'mobile', SurfacePageContent>;
   securityPage?: {
     meta: { title: string; description: string };
     hero: { badge: string; title: string; subtitle: string };
@@ -1024,6 +1054,9 @@ export interface UseCaseLandingContent {
   hero: { badge: string; title: string; subtitle: string };
   prompt: string;
   points: string[];
+  /** Prompt → build → run walkthrough shown beside a real recording. */
+  steps?: string[];
+  video?: { slug: string; alt: string; caption: string };
   ctaPrimary: string;
   ctaSecondary: string;
 }

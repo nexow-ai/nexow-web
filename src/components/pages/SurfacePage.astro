@@ -1,0 +1,115 @@
+---
+/**
+ * One product tour per surface (web, desktop, mobile): a hero recording, then a chapter per
+ * feature, each pairing copy with a real recording. Copy lives in `surfacePages` (en.ts).
+ */
+import { SITE, type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { en } from '../../i18n/locales/en';
+import { getPageBadgeIcon } from '../../i18n/page-badge-icons';
+import { localizePath } from '../../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+import AppVideo from '../AppVideo.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import PageHero from '../PageHero.astro';
+import CtaBand from '../sections/CtaBand.astro';
+
+interface Props {
+  lang: Lang;
+  surface: 'web' | 'desktop' | 'mobile';
+}
+const { lang, surface } = Astro.props;
+const t = (useContent(lang).surfacePages ?? en.surfacePages!)[surface];
+const route = `/${surface}`;
+
+const FRAME = { web: 'browser', desktop: 'desktop', mobile: 'phone' } as const;
+// Where the primary button goes. Store and release URLs are the one thing copy cannot hold.
+const PRIMARY_HREF = {
+  web: SITE.appUrl,
+  desktop: 'https://github.com/nexow-ai/nexow-desktop/releases',
+  mobile: SITE.appUrl,
+}[surface];
+const frame = FRAME[surface];
+const phone = frame === 'phone';
+
+const sections = [
+  ...t.chapters.map((c) => ({ id: c.id, label: c.eyebrow })),
+  { id: 'cta', label: t.cta.label },
+];
+---
+
+<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description} sections={sections}>
+  <PageHero
+    badge={t.hero.badge}
+    icon={getPageBadgeIcon(route)}
+    title={t.hero.title}
+    subtitle={t.hero.subtitle}
+  />
+
+  <section class="container-page pb-6">
+    <div class:list={['mx-auto flex flex-col items-center gap-6', phone ? 'max-w-sm' : 'max-w-5xl']}>
+      <AppVideo slug={t.hero.video.slug} alt={t.hero.video.alt} frame={frame} title="nexow" eager class="w-full" />
+      <div class="flex flex-col items-center gap-3 sm:flex-row">
+        <Button href={PRIMARY_HREF} size="lg" external iconRight="arrow">{t.cta.label}</Button>
+        <p class="font-mono text-xs text-ink-500 dark:text-ink-400">{t.cta.note}</p>
+      </div>
+    </div>
+  </section>
+
+  {
+    t.chapters.map((c, i) => (
+      <section id={c.id} class="scroll-mt-20 py-14 sm:py-20">
+        <div class="container-page">
+          <div
+            class:list={[
+              'mx-auto grid max-w-6xl items-center gap-10 lg:gap-16',
+              phone ? 'lg:grid-cols-[1fr_20rem]' : 'lg:grid-cols-2',
+            ]}
+          >
+            <div class:list={['reveal', i % 2 === 1 && 'lg:order-2']}>
+              <span class="inline-flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-wider text-brand-700 dark:text-brand-300">
+                <Icon name={c.icon} class="size-4" />
+                {c.eyebrow}
+                {c.status && (
+                  <span class="rounded-full border border-brand-500/25 px-2 py-0.5 text-[0.65rem] normal-case tracking-normal">
+                    {c.status}
+                  </span>
+                )}
+              </span>
+              <h2 class="mt-3 text-balance font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl dark:text-white">
+                {c.title}
+              </h2>
+              <p class="mt-4 text-lg leading-relaxed text-ink-600 dark:text-ink-300">{c.body}</p>
+              <ul class="mt-6 space-y-3">
+                {c.points.map((p) => (
+                  <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-700 sm:text-base dark:text-ink-300">
+                    <span class="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 ring-1 ring-brand-200/80 dark:bg-brand-400/12 dark:text-brand-300 dark:ring-brand-400/25">
+                      <Icon name="check" class="size-3.5" />
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class:list={['reveal', i % 2 === 1 && 'lg:order-1']}>
+              <AppVideo slug={c.video.slug} alt={c.video.alt} frame={frame} title="nexow" class="w-full">
+                {c.video.caption}
+              </AppVideo>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+    <CtaBand
+      lang={lang}
+      title={t.ctaTitle}
+      subtitle={t.ctaBody}
+      primary={t.cta.label}
+      primaryHref={PRIMARY_HREF}
+      secondary={t.ctaSecondary}
+      secondaryHref={localizePath(surface === 'web' ? '/plans' : '/web', lang)}
+    />
+</Layout>

@@ -56,6 +56,9 @@ export const en: SiteContent = {
           { label: 'For traders', href: '/for/traders' },
           { label: 'For founders', href: '/for/founders' },
           { label: 'For builders', href: '/for/builders' },
+          { label: 'Web app', href: '/web' },
+          { label: 'Desktop app', href: '/desktop' },
+          { label: 'Mobile app', href: '/mobile' },
         ],
       },
       {
@@ -1000,6 +1003,7 @@ export const en: SiteContent = {
       secondary: 'Explore features',
     },
     rail: {
+      surfaces: 'Apps',
       hero: 'Hero',
       widget: 'Widget',
       canvas: 'Canvas',
@@ -2416,6 +2420,446 @@ export const en: SiteContent = {
     meta: {
       title: 'Security & Trust — Nexow',
       description:
+  surfacesStrip: {
+    eyebrow: 'One account, three apps',
+    title: 'Take your canvas anywhere',
+    subtitle: 'The same widgets and data, in the browser, in a native window and on your phone.',
+    cta: 'Take the tour',
+  },
+  surfacePages: {
+    web: {
+      summary: 'Prompt-to-widget builds, wires, 90+ connectors, Copilot and Kwami, bots, a marketplace and live collaboration.',
+      meta: {
+        title: 'Nexow for web — Describe it, see it built, run it live',
+        description:
+          'The full Nexow web app on a free-form canvas: prompt-to-widget builds, wires, 90+ connectors, Copilot and Kwami voice, bots, cloud machines, a marketplace and live collaboration.',
+      },
+      hero: {
+        badge: 'Web app',
+        title: 'Say what you need. Watch it get built.',
+        subtitle:
+          'The Nexow web app turns a sentence into a live widget, places it on a free-form canvas, wires it to real data and keeps it running. Everything below is a real recording of the app.',
+        video: {
+          slug: 'web-hero',
+          alt: 'Recording of the Nexow web app building a widget from a prompt and placing it on the canvas',
+        },
+      },
+      cta: { label: 'Open the web app', note: 'Runs in any modern browser — no install.' },
+      chapters: [
+        {
+          id: 'build',
+          icon: 'wand',
+          eyebrow: 'Say it',
+          title: 'A sentence in, a working widget out',
+          body: 'Describe what you want in plain language. Nexow reads the docs, probes the endpoints, writes the widget, verifies it and repairs what breaks — and you watch every step.',
+          points: [
+            'A visible tool loop instead of a spinner: docs, probes, code, checks, fixes.',
+            'Every build is a version with its own chat, so you can roll back or fork.',
+            'A design contract is agreed before files change, so edits stay on brief.',
+          ],
+          video: {
+            slug: 'web-build',
+            alt: 'A widget being generated from a prompt, with the build steps streaming in',
+            caption: 'From prompt to a verified widget in one stream.',
+          },
+        },
+        {
+          id: 'canvas',
+          icon: 'layers',
+          eyebrow: 'Arrange it',
+          title: 'A free-form canvas, not a rigid grid',
+          body: 'Drag widgets anywhere, resize them, group them into mosaics or tabs, and keep several screens in one workspace. Sticky notes, shapes, arrows and images sit right beside live widgets.',
+          points: [
+            'Workspaces hold screens; screens hold widgets, groups and board elements.',
+            'Auto-layout presets, zoom and undo keep large screens tidy.',
+            'Screen tabs preview their content on hover.',
+          ],
+          video: {
+            slug: 'web-canvas',
+            alt: 'Widgets being dragged, resized and grouped on the free-form canvas',
+            caption: 'Drag, group, zoom — the canvas goes where you do.',
+          },
+        },
+        {
+          id: 'wires',
+          icon: 'link',
+          eyebrow: 'Wire it',
+          title: 'Make widgets talk to each other',
+          body: 'A wire is an event graph between widgets. Describe it in English or drag between ports, then pan and zoom a map of how your screen is connected.',
+          points: [
+            'Two-way, loop-free, multi-hop wiring between widgets.',
+            'A wire can carry a connection, a bot or an agent.',
+            'Each wire has its own code, versions and a test harness.',
+          ],
+          video: {
+            slug: 'web-wires',
+            alt: 'A zoomable wiring map with widgets linked by wires',
+            caption: 'A click on one widget moves another.',
+          },
+        },
+        {
+          id: 'data',
+          icon: 'plug',
+          eyebrow: 'Feed it',
+          title: '90+ connectors, and data that works on day one',
+          body: 'Brokers, exchanges, prediction markets, wallets, databases and socials plug in with scoped credentials. Keyless open data means your first widgets show something real before you connect anything.',
+          points: [
+            'Scoped, least-privilege credentials per connector.',
+            'Browser-direct calls where the venue allows it.',
+            'Widgets can call each other and publish their own endpoints.',
+          ],
+          video: {
+            slug: 'web-connectors',
+            alt: 'The connector catalogue and a widget filling with live data',
+            caption: 'Connect a venue and the widget goes live.',
+          },
+        },
+        {
+          id: 'copilot',
+          icon: 'sparkles',
+          eyebrow: 'Talk to it',
+          title: 'Copilot and Kwami run the app for you',
+          body: 'Ask Copilot to search the web, read your connections, build widgets or rearrange a screen. Turn on Kwami, a 3D voice companion, and drive the whole app hands-free.',
+          points: [
+            'Fast, balanced and deep reasoning modes.',
+            '“Hey Kwami” wake word, spoken confirmations and a live conversation tree.',
+            'Connect Claude Code, Codex or Cursor to your workspace over MCP.',
+          ],
+          video: {
+            slug: 'web-copilot',
+            alt: 'Copilot and the Kwami voice companion operating the app',
+            caption: 'Say it, and the app does it.',
+          },
+        },
+        {
+          id: 'automate',
+          icon: 'bot',
+          eyebrow: 'Watch it',
+          title: 'Bots and agents keep working when the tab is closed',
+          body: 'Bots are cloud automations for markets and wallets: rule-based alerts and actions, no model in the loop. Agents are general-purpose, with memory, skills and tools of their own.',
+          points: [
+            'Mission Control shows every bot and its recent runs.',
+            'Alerts reach your inbox, push, a widget or your own database.',
+            'Deploying agents to Cloudflare is coming soon.',
+          ],
+          video: {
+            slug: 'web-automate',
+            alt: 'Mission Control listing bots and agents with their recent runs',
+            caption: 'One fleet view for everything that runs without you.',
+          },
+        },
+        {
+          id: 'machines',
+          icon: 'cpu',
+          eyebrow: 'Go further',
+          title: 'Computers and phones as widgets',
+          body: 'Drop a streamed Windows, Ubuntu or Kali machine onto the canvas, or a cloud Android phone with an optional real number. Embed any web page, from a plain iframe to a remote browser.',
+          points: [
+            'Machines are metered by the minute.',
+            'Cloud phones are on the Sponsor plan.',
+            'Remote browsers start only when you ask.',
+          ],
+          video: {
+            slug: 'web-machines',
+            alt: 'A streamed cloud PC and a cloud Android phone running as widgets on the canvas',
+            caption: 'A whole computer, sitting next to your charts.',
+          },
+          status: 'Sponsor plan',
+        },
+        {
+          id: 'share',
+          icon: 'store',
+          eyebrow: 'Share it',
+          title: 'A marketplace and a community built in',
+          body: 'Publish a widget, screen, workspace, bot, agent or theme, free or priced in USDC, and keep the lineage when others remake it. Follow creators, join live rooms and message friends.',
+          points: [
+            'No platform cut on marketplace sales.',
+            'Phone-shaped community cards, reels and live sessions.',
+            'The DAO runs on devnet while it is tested.',
+          ],
+          video: {
+            slug: 'web-marketplace',
+            alt: 'Browsing the marketplace and the community feed',
+            caption: 'Find it, remake it, publish your own.',
+          },
+        },
+        {
+          id: 'collab',
+          icon: 'users',
+          eyebrow: 'Together',
+          title: 'Edit the same screen, live',
+          body: 'Invite people onto a screen and watch cursors, presence and edits arrive in real time. Roles decide who can change what, and friends can even edit private widget data.',
+          points: [
+            'Live cursors, roles and presence.',
+            'A shared AI credit cap for the session.',
+            'Public profiles and embeddable screens for everyone else.',
+          ],
+          video: {
+            slug: 'web-collab',
+            alt: 'Two people editing the same screen with live cursors',
+            caption: 'Everyone on the same canvas, at the same time.',
+          },
+        },
+        {
+          id: 'private',
+          icon: 'shield',
+          eyebrow: 'Keep it',
+          title: 'Capture it, lock it, own it',
+          body: 'Record a screen, tab or single widget, or export a whole screen as a bundle. Privacy mode, an App Lock PIN, a devices ledger and your own Anthropic key keep you in control.',
+          points: [
+            'Screenshots and video up to 10 minutes, with a camera bubble.',
+            'Encrypted backup and cloud-sync or private mode.',
+            'Bring your own Anthropic key.',
+          ],
+          video: {
+            slug: 'web-private',
+            alt: 'Recording a screen and opening the privacy settings',
+            caption: 'Your workspace, on your terms.',
+          },
+        },
+      ],
+      ctaTitle: 'See it on your own data',
+      ctaBody: 'Start free, describe your first widget and watch it build.',
+      ctaSecondary: 'See the plans',
+    },
+    desktop: {
+      summary: 'The full canvas in a native window for macOS, Windows and Linux, plus a Save to Nexow browser extension.',
+      meta: {
+        title: 'Nexow for desktop — The whole canvas in a native window',
+        description:
+          'The Nexow desktop app wraps the full web experience in a native shell for macOS, Windows and Linux, with persistent sign-in, native permissions and a Save to Nexow browser extension.',
+      },
+      hero: {
+        badge: 'Desktop app',
+        title: 'The whole canvas, in its own window',
+        subtitle:
+          'The Nexow desktop app gives the full app a native home on macOS, Windows and Linux, so your dashboards live beside your other apps instead of in a tab.',
+        video: {
+          slug: 'desktop-hero',
+          alt: 'The Nexow desktop app running a canvas in a native window',
+        },
+      },
+      cta: { label: 'Download for desktop', note: 'macOS (Apple silicon), Windows x64 and Linux x86_64.' },
+      chapters: [
+        {
+          id: 'native',
+          icon: 'monitor',
+          eyebrow: 'Native',
+          title: 'Your canvas, always one click away',
+          body: 'A native Qt and Rust shell hosts the same app you know from the web. Sign in once and stay signed in, and links open in your regular browser.',
+          points: [
+            'Persistent sign-in across launches.',
+            'Outside links open in your default browser.',
+            'Downloads land in your Downloads folder.',
+          ],
+          video: {
+            slug: 'desktop-native',
+            alt: 'Launching the Nexow desktop app and landing straight on the canvas',
+            caption: 'Launch, and you are back on your canvas.',
+          },
+        },
+        {
+          id: 'permissions',
+          icon: 'lock',
+          eyebrow: 'Permissions',
+          title: 'Mic, camera and screen, scoped to Nexow',
+          body: 'Voice with Kwami, camera bubbles and screen capture need real device access. The desktop app grants those to Nexow only, so everything else stays out of reach.',
+          points: [
+            'Microphone for voice and the Kwami wake word.',
+            'Screen capture for recordings up to 10 minutes.',
+            'Native notifications for alerts and bot runs.',
+          ],
+          video: {
+            slug: 'desktop-permissions',
+            alt: 'Recording the screen and talking to Kwami from the desktop app',
+            caption: 'Voice and capture work without extra setup.',
+          },
+        },
+        {
+          id: 'platforms',
+          icon: 'globe',
+          eyebrow: 'Everywhere',
+          title: 'One app on macOS, Windows and Linux',
+          body: 'Builds ship as a .dmg for Apple silicon, a Windows x64 archive and a Linux AppImage. The desktop app is young, and builds are not code-signed yet, so your system may ask you to confirm the first launch.',
+          points: [
+            'macOS arm64 (.dmg), Windows x64 (.zip), Linux x86_64 (AppImage).',
+            'Downloads are also offered in Settings under This device.',
+            'Early release — expect rapid updates.',
+          ],
+          video: {
+            slug: 'desktop-platforms',
+            alt: 'The desktop app download page in Settings',
+            caption: 'Pick your platform and go.',
+          },
+          status: 'Early release',
+        },
+        {
+          id: 'extension',
+          icon: 'save',
+          eyebrow: 'Capture',
+          title: 'Save anything to Nexow from your browser',
+          body: 'A small Chrome and Edge extension adds Save to Nexow to the toolbar and the right-click menu, so a page, link or image lands on a board of your choice.',
+          points: [
+            'No host permissions and no credentials.',
+            'Works on pages, links and media.',
+            'Not in the extension stores yet.',
+          ],
+          video: {
+            slug: 'desktop-extension',
+            alt: 'Right-clicking a page and saving it to a Nexow board',
+            caption: 'Right-click, pick a board, done.',
+          },
+          status: 'Not in stores yet',
+        },
+      ],
+      ctaTitle: 'Give your canvas a home',
+      ctaBody: 'Download the desktop app, or start in the browser and switch any time.',
+      ctaSecondary: 'Open the web app',
+    },
+    mobile: {
+      summary: 'An immersive community feed, a phone-side builder, native home-screen widgets, share-in, messages and push.',
+      meta: {
+        title: 'Nexow for mobile — Build, browse and glance from your phone',
+        description:
+          'The Nexow mobile app for iOS and Android: an immersive community feed, a prompt-to-widget builder, native home-screen widgets, share-in from other apps, messages, calendars and push.',
+      },
+      hero: {
+        badge: 'Mobile app',
+        title: 'Your widgets, in your pocket',
+        subtitle:
+          'The Nexow mobile app shares one account with the web. Build a widget by talking to your phone, browse the community, and pin live data to your home screen.',
+        video: {
+          slug: 'mobile-hero-phone',
+          alt: 'The Nexow mobile app: the community feed, the builder and a home-screen widget',
+        },
+      },
+      cta: { label: 'Get the mobile app', note: 'iOS and Android. One account across web and phone.' },
+      chapters: [
+        {
+          id: 'feed',
+          icon: 'users',
+          eyebrow: 'Discover',
+          title: 'A community feed made for thumbs',
+          body: 'Browse a dense mosaic of widgets, screens and posts, or switch to the immersive full-screen feed that remembers where you stopped. Running widgets play right inside posts.',
+          points: [
+            'Following and Discover scopes with content filters.',
+            'Eight post kinds, from text to bots, agents and themes.',
+            'Reactions, comments, hashtags and link previews.',
+          ],
+          video: {
+            slug: 'mobile-feed-phone',
+            alt: 'Scrolling the mosaic and the immersive feed on a phone',
+            caption: 'Tap a tile and the widget runs.',
+          },
+        },
+        {
+          id: 'build',
+          icon: 'wand',
+          eyebrow: 'Build',
+          title: 'Describe a widget, and it builds on your phone',
+          body: 'The same prompt-to-widget builder as the web, streaming progress with an estimate and a Stop button. Builds survive backgrounding, and the app re-attaches when you return.',
+          points: [
+            'Improve any widget with a follow-up prompt.',
+            'Template gallery, version history and a source view.',
+            'A small game keeps you busy while a build runs.',
+          ],
+          video: {
+            slug: 'mobile-build-phone',
+            alt: 'Building a widget from a prompt on a phone',
+            caption: 'Prompt, wait a moment, tap to run.',
+          },
+        },
+        {
+          id: 'home',
+          icon: 'grid',
+          eyebrow: 'Glance',
+          title: 'Live widgets on your home screen',
+          body: 'Pin a list, sparkline, countdown or quote glance from any widget you built, on iOS with WidgetKit and on Android with Jetpack Glance.',
+          points: [
+            'Read-only tokens you can revoke at any time.',
+            'Native stores clear when you switch accounts.',
+            'Teach a widget to publish a glance with one Improve turn.',
+          ],
+          video: {
+            slug: 'mobile-home-phone',
+            alt: 'Adding a Nexow widget to a phone home screen',
+            caption: 'Your data, one glance from the home screen.',
+          },
+        },
+        {
+          id: 'share',
+          icon: 'send',
+          eyebrow: 'Share in',
+          title: 'Send anything to Nexow from any app',
+          body: 'Use the system share sheet to send text or images straight into a post or message. Drafts survive sign-in and an app restart.',
+          points: [
+            'iOS share extension and Android share intents.',
+            'Universal links open x.nexow.ai posts and widgets in the app.',
+            'Boards and saved links keep what you find.',
+          ],
+          video: {
+            slug: 'mobile-share-phone',
+            alt: 'Sharing an image from the photo library into Nexow',
+            caption: 'Share sheet to post in two taps.',
+          },
+        },
+        {
+          id: 'messages',
+          icon: 'chat',
+          eyebrow: 'Talk',
+          title: 'Messages and shared calendars',
+          body: 'Direct and group chats with stickers and attachments, plus shared calendars with events and attendees, live alongside your widgets.',
+          points: [
+            'Group editing, media threads and message actions.',
+            'Shared private calendars with attendees.',
+            'Follow requests and grouped notifications.',
+          ],
+          video: {
+            slug: 'mobile-messages-phone',
+            alt: 'A group chat and a shared calendar in the mobile app',
+            caption: 'Plan and chat without leaving the app.',
+          },
+        },
+        {
+          id: 'push',
+          icon: 'bell',
+          eyebrow: 'Stay in the loop',
+          title: 'Push you control',
+          body: 'Notifications arrive only after you switch them on, with per-account controls and queued delivery, so alerts from your bots reach you wherever you are.',
+          points: [
+            'An explicit Enable button, no surprise prompts.',
+            'Per-account notification preferences.',
+            'Reduced-motion and large-text support throughout.',
+          ],
+          video: {
+            slug: 'mobile-push-phone',
+            alt: 'Turning on push notifications and receiving an alert',
+            caption: 'Alerts on your terms.',
+          },
+        },
+        {
+          id: 'connect',
+          icon: 'plug',
+          eyebrow: 'Connect',
+          title: 'Your connections, kept safe',
+          body: 'Add a venue from the same catalogue as the web. Keys go straight into the secure vault, and a diagnostics screen tells you when something is off. Plans and billing are in the app too.',
+          points: [
+            'A connect form per venue, generated from the web catalogue.',
+            'Connector diagnostics when a key stops working.',
+            'Sign in with Apple, Google, GitHub or email, with two-factor.',
+          ],
+          video: {
+            slug: 'mobile-connect-phone',
+            alt: 'Adding a connection from the mobile app',
+            caption: 'Connect once, use it everywhere.',
+          },
+        },
+      ],
+      ctaTitle: 'Carry your canvas with you',
+      ctaBody: 'Sign in on your phone with the account you already use on the web.',
+      ctaSecondary: 'Open the web app',
+    },
+  },
         'SOC 2 Type II, ISO/IEC 27001, 27017 and 27018 certified, GDPR compliant — plus how Nexow scopes widgets, credentials, versions and sync with a sandboxed runtime and least-privilege connectors.',
     },
     hero: {
@@ -2573,6 +3017,12 @@ export const en: SiteContent = {
     founders: {
       meta: {
         title: 'Nexow for founders',
+      steps: ['Describe the desk you want.','Nexow wires live market data and lays out the widgets.','Open it, tweak it with a follow-up prompt, and let bots watch it.'],
+      video: {
+        slug: 'for-traders',
+        alt: 'Building a crypto desk from one prompt',
+        caption: 'A trading desk, built while you watch.',
+      },
         description:
           'Spin up a founder HQ from one prompt — pipeline, launch checklist, content calendar and MRR on a single canvas.',
       },
@@ -2595,6 +3045,12 @@ export const en: SiteContent = {
     builders: {
       meta: {
         title: 'Nexow for builders',
+      steps: ['Say what you want to track, in plain language.','Nexow connects your tools and builds the dashboard.','Share a live screen with your team or investors.'],
+      video: {
+        slug: 'for-founders',
+        alt: 'Building a founder dashboard from one prompt',
+        caption: 'One screen for the numbers that matter.',
+      },
         description:
           'Ship interactive widgets, bots and agents on a sandboxed canvas — then publish to a community marketplace.',
       },
@@ -2617,6 +3073,12 @@ export const en: SiteContent = {
   },
   privacyPage,
   termsPage,
+      steps: ['Describe the widget, wire or bot you need.','Nexow writes it, tests it and shows every step.','Publish it to the marketplace or remake someone else’s.'],
+      video: {
+        slug: 'for-builders',
+        alt: 'Building a widget from one prompt',
+        caption: 'From idea to a shipped widget.',
+      },
   cookiesPage,
   legalPage,
   acceptableUsePage,

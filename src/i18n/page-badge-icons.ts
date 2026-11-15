@@ -4,6 +4,9 @@
  */
 export const PAGE_BADGE_ICONS: Record<string, string> = {
   '/features': 'sparkles',
+  '/web': 'globe',
+  '/desktop': 'monitor',
+  '/mobile': 'grid',
   '/community': 'users',
   '/community-rules': 'handshake',
   '/connectors': 'plug',
