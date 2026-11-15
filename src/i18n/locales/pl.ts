@@ -2237,7 +2237,7 @@ export const pl = {
       },
       {
         icon: 'landmark',
-        standard: 'RODO',
+        standard: 'GDPR',
         status: 'Zgodność',
         body: 'Umowa powierzenia przetwarzania danych, opublikowana lista podmiotów przetwarzających, prawa osób, których dane dotyczą, oraz terminy zgłaszania naruszeń dla wszystkich w UE i Wielkiej Brytanii.',
       },

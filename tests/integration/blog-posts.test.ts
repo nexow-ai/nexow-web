@@ -33,7 +33,7 @@ function moduleFor(lang: Lang): RouteModule {
 
 describe('blog post routes', () => {
   it('ships a dynamic route per locale', () => {
-    expect(Object.keys(routeModules)).toHaveLength(17);
+    expect(Object.keys(routeModules)).toHaveLength(18);
   });
 
   it('generates one path per published post, in every locale', async () => {
@@ -120,7 +120,7 @@ describe('article kind and body figures', () => {
   });
 
   it('advertises hreflang only for locales that publish the post', async () => {
-    // Translations land after the English original, so enumerating all 17
+    // Translations land after the English original, so enumerating all 18
     // locales would point crawlers at pages that 404.
     for (const path of englishPaths) {
       const slug = path.params.slug;
