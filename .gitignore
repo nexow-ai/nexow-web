@@ -38,3 +38,6 @@ scratchpad/
 # playwright artifacts
 test-results/
 playwright-report/
+
+# raw screen captures (encoded into public/video by scripts/encode-videos.mjs)
+media-src/
