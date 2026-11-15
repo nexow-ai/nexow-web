@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.5.1-dev.3](https://github.com/nexow-ai/nexow-web/compare/v1.5.1-dev.2...v1.5.1-dev.3) (2026-11-15)
+
+
+### Bug Fixes
+
+* **i18n:** register Polish in redirects and use GDPR and brand spelling ([7728dd7](https://github.com/nexow-ai/nexow-web/commit/7728dd743b15474f990689ee9dba540a0a6404a7))
+
+
+### Features
+
+* **connectors:** add AI model providers, generative media and spreadsheet connectors ([df5d9bd](https://github.com/nexow-ai/nexow-web/commit/df5d9bdfc8d33e2df7e5a8e2341c62c61d9a9950))
+* **site:** add web, desktop and mobile product pages with cross-links and use-case demos ([45ff0f4](https://github.com/nexow-ai/nexow-web/commit/45ff0f48e86de86b1c397ed2db62427f2ec893e5))
+* **video:** show a placeholder until a recording is encoded ([4b5bf24](https://github.com/nexow-ai/nexow-web/commit/4b5bf24dc018995af2cc04e6d87e644add95d367))
+
 ## [1.5.1-dev.2](https://github.com/nexow-ai/nexow-web/compare/v1.5.1-dev.1...v1.5.1-dev.2) (2026-11-15)
 
 
