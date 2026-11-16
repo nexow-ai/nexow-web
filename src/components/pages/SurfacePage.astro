@@ -33,19 +33,59 @@ const PRIMARY_HREF = {
 const frame = FRAME[surface];
 const phone = frame === 'phone';
 
+const OTHERS = (['web', 'desktop', 'mobile'] as const).map((key) => ({
+  key,
+  href: localizePath(`/${key}`, lang),
+  label: (useContent(lang).surfacePages ?? en.surfacePages!)[key].hero.badge,
+}));
+const OS = { web: 'Web', desktop: 'macOS, Windows, Linux', mobile: 'iOS, Android' }[surface];
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `${SITE.name} ${t.hero.badge}`,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: OS,
+  url: `${SITE.url}${localizePath(route, lang)}`,
+  description: t.meta.description,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+
 const sections = [
   ...t.chapters.map((c) => ({ id: c.id, label: c.eyebrow })),
   { id: 'cta', label: t.cta.label },
 ];
 ---
 
-<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description} sections={sections}>
+<Layout lang={lang} route={route} title={t.meta.title} description={t.meta.description} sections={sections} schema={[appSchema]}>
   <PageHero
     badge={t.hero.badge}
     icon={getPageBadgeIcon(route)}
     title={t.hero.title}
     subtitle={t.hero.subtitle}
   />
+
+  <nav aria-label={t.hero.badge} class="container-page -mt-6 pb-8">
+    <ul class="mx-auto flex max-w-md justify-center gap-2">
+      {
+        OTHERS.map((o) => (
+          <li>
+            <a
+              href={o.href}
+              aria-current={o.key === surface ? 'page' : undefined}
+              class:list={[
+                'inline-flex rounded-full px-4 py-1.5 text-sm font-medium ring-1 transition-colors',
+                o.key === surface
+                  ? 'bg-brand-500/15 text-brand-700 ring-brand-400/30 dark:text-brand-300'
+                  : 'text-ink-500 ring-ink-900/10 hover:text-ink-700 dark:text-ink-400 dark:ring-white/10',
+              ]}
+            >
+              {o.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 
   <section class="container-page pb-6">
     <div class:list={['mx-auto flex flex-col items-center gap-6', phone ? 'max-w-sm' : 'max-w-5xl']}>
