@@ -79,8 +79,8 @@ describe('getPageNeighbours', () => {
     const { prev, next } = getPageNeighbours('/features', 'es', t);
     expect(prev).toEqual({ route: '/', href: '/es', label: expect.any(String) });
     expect(next).toEqual({
-      route: '/community',
-      href: '/es/community',
+      route: '/web',
+      href: '/es/web',
       label: expect.any(String),
     });
   });

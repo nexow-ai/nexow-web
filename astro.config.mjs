@@ -88,6 +88,7 @@ export default defineConfig({
     '/it/pricing': '/it/plans',
     '/de/pricing': '/de/plans',
     '/pt/pricing': '/pt/plans',
+    '/pl/pricing': '/pl/plans',
     '/nl/pricing': '/nl/plans',
     '/zh/pricing': '/zh/plans',
     '/ja/pricing': '/ja/plans',

@@ -15,6 +15,9 @@ import BotFlowMock from '../BotFlowMock.astro';
 import CommunityMock from '../CommunityMock.astro';
 import PrivacyMock from '../PrivacyMock.astro';
 import CtaBand from '../sections/CtaBand.astro';
+import SurfacesStrip from '../sections/SurfacesStrip.astro';
+import AppVideo from '../AppVideo.astro';
+import { existsSync } from 'node:fs';
 
 interface Props {
   lang: Lang;
@@ -24,12 +27,15 @@ const t = useContent(lang).features;
 const home = useContent(lang).home.hero;
 const explore = useContent(lang).connectorsPage.exploreCta;
 const badgeIcon = getPageBadgeIcon('/features');
+/** A real recording replaces the decorative mock once `features-<group>` is encoded. */
+const recorded = (id: string) => existsSync(`public/video/features-${id}.mp4`);
 
 /** Stable ids across locales (group order matches `en`). */
 const GROUP_IDS = ['widgets', 'workspace', 'connectors', 'automate', 'network', 'account'] as const;
 
 const sections = [
   { id: 'hero', label: t.hero.badge },
+  { id: 'surfaces', label: useContent(lang).surfacesStrip?.eyebrow ?? 'Apps' },
   ...t.groups.map((group, i) => ({
     id: GROUP_IDS[i] ?? `group-${i + 1}`,
     label: group.title,
@@ -106,6 +112,8 @@ const sections = [
     <div class="hairline-gold absolute inset-x-0 bottom-0"></div>
   </section>
 
+  <SurfacesStrip lang={lang} />
+
   <!-- Feature pillars (zig-zag, each paired with an animated visual) -->
   <div>
     {
@@ -165,12 +173,18 @@ const sections = [
                      the single mobile column and push the copy past the viewport. -->
                 <div class:list={['reveal min-w-0 lg:sticky lg:top-28', reverse && 'lg:order-1']}>
                   <div class="animate-float rounded-3xl ring-1 ring-brand-200/60 ring-offset-4 ring-offset-white dark:ring-offset-ink-950">
-                    {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
-                    {i === 1 && <CanvasMock />}
-                    {i === 2 && <ConnectMock lang={lang} />}
-                    {i === 3 && <BotFlowMock />}
-                    {i === 4 && <CommunityMock />}
-                    {i === 5 && <PrivacyMock />}
+                    {recorded(GROUP_IDS[i] ?? '') ? (
+                      <AppVideo slug={`features-${GROUP_IDS[i]}`} alt={group.title} frame="browser" title="nexow" />
+                    ) : (
+                      <>
+                        {i === 0 && <PlaygroundMock promptExample={home.promptExample} />}
+                        {i === 1 && <CanvasMock />}
+                        {i === 2 && <ConnectMock lang={lang} />}
+                        {i === 3 && <BotFlowMock />}
+                        {i === 4 && <CommunityMock />}
+                        {i === 5 && <PrivacyMock />}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

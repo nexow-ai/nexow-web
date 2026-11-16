@@ -15,6 +15,7 @@
 /ms/r/*  /ms/invite?code=:splat  302
 /nl/r/*  /nl/invite?code=:splat  302
 /pt/r/*  /pt/invite?code=:splat  302
+/pl/r/*  /pl/invite?code=:splat  302
 /ru/r/*  /ru/invite?code=:splat  302
 /tr/r/*  /tr/invite?code=:splat  302
 /uk/r/*  /uk/invite?code=:splat  302

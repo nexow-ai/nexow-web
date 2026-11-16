@@ -1,0 +1,130 @@
+---
+/**
+ * A real product recording: muted, looping, lazy. Clips live in public/video/<slug>.{webm,mp4}
+ * with a public/video/<slug>.webp poster (see scripts/encode-videos.mjs). It plays only while
+ * on screen, and shows the poster alone under prefers-reduced-motion.
+ */
+interface Props {
+  slug: string;
+  alt: string;
+  frame?: 'browser' | 'desktop' | 'phone' | 'none';
+  width?: number;
+  height?: number;
+  title?: string;
+  eager?: boolean;
+  class?: string;
+}
+const {
+  slug,
+  alt,
+  frame = 'browser',
+  width = frame === 'phone' ? 540 : 1600,
+  height = frame === 'phone' ? 1170 : 1000,
+  title,
+  eager = false,
+  class: className = '',
+} = Astro.props;
+
+import { existsSync } from 'node:fs';
+
+const base = `/video/${slug}`;
+// Until the recording is encoded into public/video, show an honest placeholder instead of a
+// broken player (and keep the build's emitted-asset check meaningful).
+const recorded = existsSync(`public${base}.mp4`) && existsSync(`public${base}.webm`);
+const shell = {
+  browser: 'rounded-2xl border border-ink-900/10 dark:border-white/10 shadow-2xl shadow-ink-950/10 dark:shadow-black/50',
+  desktop: 'rounded-xl border border-ink-900/15 dark:border-white/15 shadow-2xl shadow-ink-950/15 dark:shadow-black/60',
+  phone: 'mx-auto max-w-[17rem] rounded-[2.4rem] border-[6px] border-ink-950 shadow-2xl shadow-ink-950/25 dark:border-ink-800 dark:shadow-black/60',
+  none: '',
+}[frame];
+---
+
+<figure class:list={['app-video relative', className]} data-app-video>
+  <div class:list={['relative overflow-hidden bg-ink-100 dark:bg-ink-900', shell]}>
+    {
+      (frame === 'browser' || frame === 'desktop') && (
+        <div class="flex items-center gap-2 border-b border-ink-900/8 bg-white px-4 py-2.5 dark:border-white/8 dark:bg-ink-950" aria-hidden="true">
+          <span class="size-2.5 rounded-full bg-rose-500/80" />
+          <span class="size-2.5 rounded-full bg-amber-400/80" />
+          <span class="size-2.5 rounded-full bg-emerald-400/80" />
+          {title && <span class="ml-3 font-mono text-xs text-ink-500 dark:text-ink-400">{title}</span>}
+        </div>
+      )
+    }
+    {!recorded && (
+      <div
+        class="flex items-center justify-center bg-gradient-to-br from-brand-500/15 via-transparent to-sky-400/15 font-mono text-xs text-ink-500 dark:text-ink-400"
+        style={`aspect-ratio:${width}/${height}`}
+        role="img"
+        aria-label={alt}
+      >
+        Recording coming soon
+      </div>
+    )}
+    {recorded && (<video
+      class="block h-auto w-full"
+      width={width}
+      height={height}
+      poster={`${base}.webp`}
+      muted
+      loop
+      playsinline
+      preload={eager ? 'metadata' : 'none'}
+      aria-label={alt}
+      data-app-video-el
+    >
+      <source src={`${base}.webm`} type="video/webm" />
+      <source src={`${base}.mp4`} type="video/mp4" />
+    </video>)}
+    {recorded && <button
+      type="button"
+      class="absolute bottom-3 right-3 hidden rounded-full border border-ink-900/10 bg-white/90 px-3 py-1.5 font-mono text-[0.65rem] text-ink-700 shadow-sm backdrop-blur dark:border-white/10 dark:bg-ink-950/80 dark:text-ink-200"
+      aria-pressed="false"
+      data-app-video-toggle
+    >
+      Pause
+    </button>}
+  </div>
+  <figcaption class="mt-3 text-center font-mono text-xs text-ink-500 dark:text-ink-400"><slot /></figcaption>
+</figure>
+
+<script>
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function initAppVideos() {
+    const roots = document.querySelectorAll<HTMLElement>('[data-app-video]:not([data-ready])');
+    if (!roots.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (v.dataset.paused === '1') continue;
+          if (e.isIntersecting && !reduce()) void v.play().catch(() => {});
+          else v.pause();
+        }
+      },
+      { rootMargin: '120px' },
+    );
+    roots.forEach((root) => {
+      root.dataset.ready = '1';
+      const v = root.querySelector<HTMLVideoElement>('[data-app-video-el]');
+      const btn = root.querySelector<HTMLButtonElement>('[data-app-video-toggle]');
+      if (!v || reduce()) return;
+      v.preload = 'metadata';
+      io.observe(v);
+      if (btn) {
+        btn.classList.remove('hidden');
+        btn.addEventListener('click', () => {
+          const off = v.dataset.paused !== '1';
+          v.dataset.paused = off ? '1' : '0';
+          btn.setAttribute('aria-pressed', String(off));
+          btn.textContent = off ? 'Play' : 'Pause';
+          if (off) v.pause();
+          else void v.play().catch(() => {});
+        });
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initAppVideos);
+</script>

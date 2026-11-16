@@ -10,6 +10,9 @@ import { expect, test, type Page } from '@playwright/test';
 const ROUTES = [
   '/',
   '/features',
+  '/web',
+  '/desktop',
+  '/mobile',
   '/connectors',
   '/plans',
   '/community',

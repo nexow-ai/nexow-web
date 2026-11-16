@@ -1,7 +1,7 @@
 // AUTO-GENERATED from the Nexow app connector catalog. Do not edit by hand.
 // Regenerate with scratchpad/gen-connectors.mjs.
 
-export type ConnectorCategory = 'finance' | 'wallets' | 'services' | 'data' | 'socials';
+export type ConnectorCategory = 'finance' | 'ai' | 'wallets' | 'services' | 'data' | 'socials';
 export type ConnectorStatus = 'live' | 'soon';
 export type ConnectorLogoFit = 'cover' | 'contain';
 
@@ -134,7 +134,7 @@ export const CONNECTORS: Connector[] = [
     "logo": "/connectors/bitmex.png",
     "banner": "/connectors/banners/bitmex.webp",
     "logoFit": "cover",
-    "notes": "Pioneer crypto derivatives exchange. Perpetual swaps and dated futures on BTC/ETH and altcoins (Bitcoin is XBT). Public market data is keyless; trading needs an API key, with a full Testnet demo."
+    "notes": "Pioneer crypto exchange, now SPOT only — it settled its perpetual swaps and dated futures in September 2026 (those symbols still serve history). Underscored pairs, and Bitcoin is XBT: XBT_USDT, ETH_USDT, SOL_USDT. Public market data is keyless; trading needs an API key, with a full Testnet demo."
   },
   {
     "id": "bluesky",
@@ -257,6 +257,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "US brokerage API for Schwab accounts, including market data and order workflows through the Schwab developer platform."
   },
   {
+    "id": "anthropic",
+    "name": "Claude",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://claude.com/",
+    "logo": "/connectors/anthropic.png",
+    "banner": "/connectors/banners/anthropic.webp",
+    "logoFit": "cover",
+    "notes": "Anthropic's Claude models — the AI that builds your widgets, wires and Copilot answers. Bring your own Anthropic API key to run generation privately from this browser (the key goes straight to Anthropic), or use Nexow's platform credits."
+  },
+  {
     "id": "clickhouse",
     "name": "ClickHouse",
     "category": "data",
@@ -350,6 +364,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/databento.webp",
     "logoFit": "cover",
     "notes": "Developer-first market data API for historical and live tick, order book, bar, and reference data across equities, futures, options, FX, and crypto datasets."
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.deepseek.com/",
+    "logo": "/connectors/deepseek.png",
+    "banner": "/connectors/banners/deepseek.webp",
+    "logoFit": "cover",
+    "notes": "DeepSeek's chat and reasoning models through an OpenAI-compatible API, at a low price per token. Save your own API key here — it is checked against the API when you add it."
   },
   {
     "id": "deribit",
@@ -513,6 +541,48 @@ export const CONNECTORS: Connector[] = [
     "notes": "Retail FX/CFD broker with REST and FIX APIs. Covers major/minor/exotic FX pairs plus index and commodity CFDs. REST auth uses a persistent access token from Trading Station Web."
   },
   {
+    "id": "gemini",
+    "name": "Gemini",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://ai.google.dev/",
+    "logo": "/connectors/gemini.png",
+    "banner": "/connectors/banners/gemini.webp",
+    "logoFit": "cover",
+    "notes": "Google's Gemini models through the Gemini API (Google AI Studio) — long-context chat and reasoning, image generation and Veo video. Save your own API key here — it is checked against the API when you add it."
+  },
+  {
+    "id": "google_sheets",
+    "name": "Google Sheets",
+    "category": "data",
+    "kind": "sheet",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.google.com/sheets/about/",
+    "logo": "/connectors/google_sheets.svg",
+    "banner": "",
+    "logoFit": "contain",
+    "notes": "Your own Google spreadsheets read as tables — ctx.data.sheet({ spreadsheet, sheet, range }) returns { columns, rows, rowCount } like a SQL result, and ctx.data.sheetTabs({ spreadsheet }) lists a file's tabs. Connect a service-account JSON key (then share the file with its client_email) for private spreadsheets, or a plain Google API key for files shared as \"anyone with the link can view\". Read-only."
+  },
+  {
+    "id": "xai",
+    "name": "Grok",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://x.ai/api",
+    "logo": "/connectors/xai.png",
+    "banner": "/connectors/banners/xai.webp",
+    "logoFit": "cover",
+    "notes": "xAI's Grok models for chat and reasoning with real-time knowledge, plus image generation, through the xAI API. Save your own API key here — it is checked against the API when you add it."
+  },
+  {
     "id": "hackernews",
     "name": "Hacker News",
     "category": "socials",
@@ -525,6 +595,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "",
     "logoFit": "cover",
     "notes": "Read the front page, search stories, or follow a user's submissions via the Algolia HN Search API. Keyless — no signup. Read from a widget with ctx.data.feed({ provider: 'hackernews' }) or ({ query: '...' })."
+  },
+  {
+    "id": "higgsfield",
+    "name": "Higgsfield",
+    "category": "ai",
+    "kind": "generative_media",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://higgsfield.ai/",
+    "logo": "/connectors/higgsfield.png",
+    "banner": "/connectors/banners/higgsfield.webp",
+    "logoFit": "cover",
+    "notes": "Generative image and video platform for creators — cinematic image-to-video, camera motion presets and Higgsfield's own Soul image model, through the Higgsfield Cloud API. Add your API key ID and secret — they are checked against the API when you add them."
   },
   {
     "id": "hyperliquid",
@@ -632,6 +716,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/kalshi.webp",
     "logoFit": "cover",
     "notes": "CFTC-regulated event-contract exchange. Binary YES/NO markets priced in cents (the implied probability). Public market data — markets and candlesticks — is keyless; account and trading need an API key id plus its RSA private key. Live updates are polled off the candlesticks endpoint. Every call routes through the Nexow server (Kalshi's REST has no CORS and signs each private call with your RSA key). Has a demo (mock-funds) environment with its own account."
+  },
+  {
+    "id": "kimi",
+    "name": "Kimi",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://www.kimi.com/",
+    "logo": "/connectors/kimi.png",
+    "banner": "/connectors/banners/kimi.webp",
+    "logoFit": "cover",
+    "notes": "Moonshot AI's Kimi models — long-context chat, coding and agentic tool use — through an OpenAI-compatible API. Save your own API key here — it is checked against the API when you add it."
   },
   {
     "id": "kraken",
@@ -909,6 +1007,20 @@ export const CONNECTORS: Connector[] = [
     "notes": "Free open-source weather API — forecasts, historical weather, and marine data. Fully keyless; no signup required. Ideal for dry-run widgets that need weather context."
   },
   {
+    "id": "openai",
+    "name": "OpenAI",
+    "category": "ai",
+    "kind": "llm",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://openai.com/",
+    "logo": "/connectors/openai.png",
+    "banner": "/connectors/banners/openai.webp",
+    "logoFit": "cover",
+    "notes": "GPT models for chat, reasoning and code, plus image (GPT Image) and video (Sora) generation through the OpenAI API. Save your own API key here — it is checked against the API when you add it."
+  },
+  {
     "id": "openaq",
     "name": "OpenAQ",
     "category": "services",
@@ -921,6 +1033,20 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/openaq.webp",
     "logoFit": "cover",
     "notes": "Open air-quality data from government and research monitors worldwide. Free API key from the OpenAQ Explorer."
+  },
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "category": "ai",
+    "kind": "model_router",
+    "status": "live",
+    "trading": false,
+    "assets": [],
+    "url": "https://openrouter.ai/",
+    "logo": "/connectors/openrouter.png",
+    "banner": "/connectors/banners/openrouter.webp",
+    "logoFit": "cover",
+    "notes": "One API key for hundreds of models from every major lab — Claude, GPT, Gemini, Grok, DeepSeek, Llama and more — with automatic fallbacks and unified billing. Save your own API key here — it is checked against the API when you add it."
   },
   {
     "id": "opensky",
@@ -979,25 +1105,6 @@ export const CONNECTORS: Connector[] = [
     "banner": "/connectors/banners/pinecone.webp",
     "logoFit": "cover",
     "notes": "Managed vector database connector for querying embeddings and metadata from Pinecone indexes."
-  },
-  {
-    "id": "polygon_io",
-    "name": "Polygon.io",
-    "category": "data",
-    "kind": "data",
-    "status": "live",
-    "trading": false,
-    "assets": [
-      "equities",
-      "indices",
-      "fx",
-      "crypto"
-    ],
-    "url": "https://polygon.io/",
-    "logo": "/connectors/polygon_io.jpg",
-    "banner": "",
-    "logoFit": "cover",
-    "notes": "Market data only. Strong US equities/options coverage; good for backtesting feeds."
   },
   {
     "id": "polymarket",

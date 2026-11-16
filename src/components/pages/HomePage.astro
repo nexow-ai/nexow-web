@@ -12,6 +12,7 @@ import ActAgents from '../acts/ActAgents.astro';
 import ActDao from '../acts/ActDao.astro';
 import ActUseCases from '../acts/ActUseCases.astro';
 import Features from '../sections/Features.astro';
+import SurfacesStrip from '../sections/SurfacesStrip.astro';
 import Privacy from '../sections/Privacy.astro';
 import Plans from '../sections/Plans.astro';
 import RewardsTeaser from '../sections/RewardsTeaser.astro';
@@ -83,6 +84,7 @@ const sections = [
   { id: 'bots-agents', label: rail?.agents ?? 'Agents' },
   { id: 'dao', label: rail?.dao ?? 'DAO' },
   { id: 'use-cases', label: rail?.useCases ?? 'Use cases' },
+  { id: 'surfaces', label: rail?.surfaces ?? 'Apps' },
   { id: 'features', label: rail?.features ?? 'Features' },
   { id: 'privacy', label: rail?.privacy ?? 'Privacy' },
   { id: 'plans', label: rail?.plans ?? 'Plans' },
@@ -121,6 +123,7 @@ const sections = [
     <ActDao lang={lang} />
     <ActUseCases lang={lang} />
     <div class="tone-invert">
+      <SurfacesStrip lang={lang} />
       <Features lang={lang} />
       <Privacy lang={lang} />
       <Plans lang={lang} />

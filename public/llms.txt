@@ -34,12 +34,16 @@
 - AI models: Anthropic Claude via the Anthropic SDK — Claude Opus 4.8 (default), Sonnet 4.6 and Haiku 4.5.
 - Plans: free forever to build (locally with your own key, or with 10,000 AI credits reserved on a free account). Paid plans — Supporter ($9.99/mo, 50K credits, 30 bots, 10 agents) and Sponsor ($69.99/mo, 800K credits, 300 bots, 100 agents) — plus Partner (custom, for teams). Yearly billing gives two months free. Paid checkout and platform credits are coming soon.
 - Status: public preview live (canvas, codegen, connectors, cloud bots, agents & Copilot, marketplace, accounts & sync, community & reputation). Roadmap: premium widgets & strategy signals, paid checkout & platform credits, reward credits, templates/workflows.
+- Apps: web (x.nexow.ai), desktop (macOS, Windows, Linux; early release) and mobile (iOS, Android), one account across all three.
 - App: https://x.nexow.ai
 
 ## Pages
 
 - [Home](https://nexow.ai/): clear overview, examples, how it works, core features, a bots & agents deep-dive (#bots-agents — bot vs agent, anatomy of a run, eight use cases), optional connectors, privacy, plans, FAQ.
 - [Features](https://nexow.ai/features): generate, run, connect, automate, network, own.
+- [Web app](https://nexow.ai/web): product tour of the web app with recordings — prompt-to-widget builds, free-form canvas, wires, connectors, Copilot and Kwami voice, bots and agents, cloud PCs and phones (Sponsor), marketplace, community, live collaboration, privacy.
+- [Desktop app](https://nexow.ai/desktop): the web app in a native shell for macOS (Apple silicon), Windows x64 and Linux x86_64. EARLY RELEASE, builds are not code-signed yet. The Save to Nexow Chrome/Edge extension is not in the stores yet.
+- [Mobile app](https://nexow.ai/mobile): iOS and Android app sharing the web account — community mosaic and immersive feed, phone-side widget builder, native home-screen widgets (WidgetKit, Jetpack Glance), share-in, messages, calendars and push.
 - [Connectors](https://nexow.ai/connectors): searchable gallery of all 83 services — 45 live today.
 - [Plans](https://nexow.ai/plans): Free, Supporter, Sponsor, Partner (monthly or yearly).
 - [About](https://nexow.ai/about): mission and values.

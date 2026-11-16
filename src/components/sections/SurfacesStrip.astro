@@ -1,0 +1,65 @@
+---
+/** Three cards linking to the web, desktop and mobile product tours. */
+import { type Lang } from '../../i18n/config';
+import { useContent } from '../../i18n/content';
+import { en } from '../../i18n/locales/en';
+import { localizePath } from '../../i18n/utils';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+  id?: string;
+}
+const { lang, id = 'surfaces' } = Astro.props;
+const c = useContent(lang);
+const strip = c.surfacesStrip ?? en.surfacesStrip!;
+const pages = c.surfacePages ?? en.surfacePages!;
+const cards = (
+  [
+    ['web', 'globe'],
+    ['desktop', 'monitor'],
+    ['mobile', 'grid'],
+  ] as const
+).map(([key, icon]) => ({ key, icon, href: localizePath(`/${key}`, lang), page: pages[key] }));
+---
+
+<section {id} class="relative scroll-mt-20 py-16 sm:py-20" aria-labelledby={`${id}-title`}>
+  <div class="container-page">
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <span class="eyebrow text-brand-700 dark:text-brand-300">{strip.eyebrow}</span>
+      <h2
+        id={`${id}-title`}
+        class="mt-3 text-balance font-display text-3xl font-semibold tracking-tight text-ink-950 sm:text-4xl dark:text-white"
+      >
+        {strip.title}
+      </h2>
+      <p class="mt-3 text-lg text-ink-600 dark:text-ink-300">{strip.subtitle}</p>
+    </div>
+    <ul class="reveal-stagger mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-3">
+      {
+        cards.map((card) => (
+          <li>
+            <a
+              href={card.href}
+              class="group flex h-full flex-col rounded-2xl border border-ink-900/10 p-5 transition-colors hover:border-brand-500/40 dark:border-white/10"
+            >
+              <span class="inline-flex size-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-400/12 dark:text-brand-300">
+                <Icon name={card.icon} class="size-5" />
+              </span>
+              <h3 class="mt-4 font-display text-lg font-semibold text-ink-950 dark:text-white">
+                {card.page.hero.badge}
+              </h3>
+              <p class="mt-1.5 flex-1 text-sm leading-relaxed text-ink-600 dark:text-ink-300">
+                {card.page.summary}
+              </p>
+              <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 dark:text-brand-300">
+                {strip.cta}
+                <Icon name="arrow" class="size-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

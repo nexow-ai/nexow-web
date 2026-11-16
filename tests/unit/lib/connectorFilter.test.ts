@@ -243,7 +243,7 @@ describe('filterConnectors over the real catalog', () => {
   });
 
   it('agrees with the catalog when filtering by category', () => {
-    for (const category of ['finance', 'wallets', 'services', 'data', 'socials'] as const) {
+    for (const category of ['finance', 'ai', 'wallets', 'services', 'data', 'socials'] as const) {
       const result = filterConnectors(catalog, state({ category }));
       expect(result.map((r) => r.connector.id)).toEqual(
         CONNECTORS.filter((c) => c.category === category).map((c) => c.id),

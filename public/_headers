@@ -21,6 +21,10 @@
 /audio/*
   Cache-Control: public, max-age=604800
 
+# Product recordings — encoded once per slug, re-encode under a new name to bust.
+/video/*
+  Cache-Control: public, max-age=2592000
+
 # Security headers on every response.
 /*
   X-Content-Type-Options: nosniff
