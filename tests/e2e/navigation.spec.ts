@@ -228,7 +228,7 @@ test.describe('page-to-page slide', () => {
     const directions = await recordDirections(page);
 
     await page.locator('.page-nav__btn--prev').click();
-    await expect(page).toHaveURL(/\/features\/?$/, SWAP);
+    await expect(page).toHaveURL(/\/mobile\/?$/, SWAP);
 
     await page.locator('.page-nav__btn--next').click();
     await expect(page).toHaveURL(/\/community\/?$/, SWAP);
