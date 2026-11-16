@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here. This file is generated from the commit history by semantic-release — do not edit it by hand.
 
+## [1.5.1-dev.4](https://github.com/nexow-ai/nexow-web/compare/v1.5.1-dev.3...v1.5.1-dev.4) (2026-11-16)
+
+
+### Features
+
+* **site:** add a surface switcher and app structured data to the product pages ([c0684dc](https://github.com/nexow-ai/nexow-web/commit/c0684dc1d191967888b50b82cca589b681f2bf83))
+
 ## [1.5.1-dev.3](https://github.com/nexow-ai/nexow-web/compare/v1.5.1-dev.2...v1.5.1-dev.3) (2026-11-15)
 
 
